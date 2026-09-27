@@ -107,6 +107,16 @@ def fetch_timeseries():
     return out
 
 
+def write_csv(days):
+    """data.csv: the full daily history as a spreadsheet-friendly download."""
+    lines = ["date,people,boats,uncontrolled_landings"]
+    for d in days:
+        u = "" if d.get("uncontrolled") is None else str(d["uncontrolled"])
+        lines.append(f"{d['date']},{d['migrants']},{d['boats']},{u}")
+    (ROOT / "data.csv").write_text("\n".join(lines) + "\n")
+    print("Saved data.csv")
+
+
 def main():
     data = load()
     days = {d["date"]: d for d in data.get("days", [])}
@@ -153,6 +163,7 @@ def main():
     data["source"] = PUB
     DATA.write_text(json.dumps(data, indent=1) + "\n")
     print(f"Saved {len(ordered)} days, latest {latest}")
+    write_csv(ordered)
 
     try:
         from og_image import draw

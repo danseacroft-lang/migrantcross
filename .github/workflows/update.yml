@@ -22,6 +22,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.json og-image.png index.html
+          git add data.json data.csv og-image.png index.html
           git diff --cached --quiet || git commit -m "Update crossing figures"
           git push

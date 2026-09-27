@@ -12,6 +12,9 @@ A one-page site showing how many people cross the English Channel in small boats
 - `og-image.png` – the preview picture X shows when someone shares the link; redrawn each morning with the latest figure
 - `scripts/og_image.py` – draws `og-image.png`
 - `data.json` – the figures the page displays
+- `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
+- `manifest.webmanifest`, `icon-192.png`, `icon-512.png` – let visitors add the site to their home screen as an app
+- `experimental.html` – the stripped-back beta version
 - `scripts/update.py` – fetches the latest figures from GOV.UK and updates `data.json`
 - `.github/workflows/update.yml` – runs the update script every day at 10:30 UTC
 
