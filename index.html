@@ -155,6 +155,12 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .about a{color:var(--blue);text-decoration:none}
 .empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:15px}
 
+.site-footer{display:grid;gap:8px;justify-items:center;text-align:center;padding-top:20px;border-top:.5px solid var(--sep);font-size:13px;line-height:1.45;color:var(--label2)}
+.site-footer p{margin:0;max-width:52ch}
+.site-footer a{color:var(--blue);text-decoration:none}
+.site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 10px;font-size:15px}
+.site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
+
 @media (max-width:600px){
   h1{font-size:28px}
   .brand svg{width:52px;height:52px}
@@ -241,6 +247,12 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <p>Each day's arrivals figure is usually published the following morning, so the latest day is normally yesterday.</p>
     </div>
   </section>
+
+  <footer class="site-footer">
+    <nav aria-label="Legal"><a href="privacy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="privacy.html">Terms of Use</a></nav>
+    <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
+    <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
+  </footer>
 </div>
 
 <script>
