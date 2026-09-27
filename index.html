@@ -42,6 +42,7 @@
   --green:#248A3D;  --green-bg:rgba(52,199,89,.14);
   --orange:#C93400; --orange-bg:rgba(255,149,0,.16);
   --red:#D70015;    --red-bg:rgba(255,59,48,.14);
+  --indigo:#5856D6; --indigo-bg:rgba(88,86,214,.14);
   --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18);
   --material:rgba(255,255,255,.78);
   --shadow:0 8px 30px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.06);
@@ -57,6 +58,7 @@
     --green:#30D158; --green-bg:rgba(48,209,88,.18);
     --orange:#FF9F0A; --orange-bg:rgba(255,159,10,.18);
     --red:#FF453A; --red-bg:rgba(255,69,58,.18);
+    --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
     --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18);
     --material:rgba(44,44,46,.78);
     --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
@@ -70,6 +72,7 @@
   --green:#30D158; --green-bg:rgba(48,209,88,.18);
   --orange:#FF9F0A; --orange-bg:rgba(255,159,10,.18);
   --red:#FF453A; --red-bg:rgba(255,69,58,.18);
+  --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
   --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18);
   --material:rgba(44,44,46,.78);
   --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
@@ -118,6 +121,10 @@ h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balan
 .banner[data-level="calm"] .b-icon{background:var(--green-bg);color:var(--green)}
 .banner[data-level="moderate"] .b-icon{background:var(--orange-bg);color:var(--orange)}
 .banner[data-level="rough"] .b-icon{background:var(--red-bg);color:var(--red)}
+.banner[data-level="history"] .b-icon{background:var(--indigo-bg);color:var(--indigo)}
+.b-close.fade-in{animation:closeIn .35s ease-out both}
+@keyframes closeIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.chip b.num{font-variant-numeric:tabular-nums}
 .b-icon svg{width:24px;height:24px}
 .b-body{display:grid;gap:2px;min-width:0}
 .b-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--label2)}
@@ -202,7 +209,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   .more:hover{background:var(--fill)}
 }
 @media (prefers-reduced-motion:reduce){
-  .banner,.banner.leaving{animation:none}
+  .banner,.banner.leaving,.b-close.fade-in{animation:none}
 }
 </style>
 </head>
@@ -237,6 +244,22 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <div class="outlook" id="outlook"></div>
     </div>
     <button type="button" class="b-close" id="bClose" aria-label="Dismiss Channel conditions">
+      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    </button>
+  </div>
+
+  <!-- On this day notification -->
+  <div class="banner" id="otd" role="region" aria-label="On this day" data-level="history" hidden>
+    <div class="b-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M12 13.2v3.6M10.2 15h3.6" stroke-width="1.8"/></svg>
+    </div>
+    <div class="b-body">
+      <div class="b-top"><span>On this day</span><span id="otdDate"></span></div>
+      <div class="b-title" id="otdTitle"></div>
+      <div class="b-text" id="otdText"></div>
+      <div class="outlook" id="otdYears" aria-label="The same date in earlier years"></div>
+    </div>
+    <button type="button" class="b-close" id="otdClose" aria-label="Dismiss On this day" hidden>
       <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
     </button>
   </div>
@@ -655,6 +678,58 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
   });
 
+  /* =========== On this day =========== */
+  const dFull = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",...UTC});
+  function renderOnThisDay(){
+    const box = $("otd");
+    const today = new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});   // YYYY-MM-DD
+    if(store.get("otdDismissed") === today){ box.hidden = true; return; }
+    const mmdd = today.slice(5);
+    const byDate = new Map(sorted.map(d=>[d.date, d]));
+    const first = sorted[0].date, lastDate = sorted[sorted.length-1].date;
+    const years = [];
+    for(let y = +today.slice(0,4) - 1; y >= +first.slice(0,4); y--){
+      const iso = y + "-" + mmdd;
+      if(iso < first || iso > lastDate) continue;
+      if(new Date(iso+"T00:00:00Z").toISOString().slice(0,10) !== iso) continue;   // 29 Feb in a non-leap year
+      // Days missing between reported days had no detected crossings
+      years.push(byDate.get(iso) || {date:iso, migrants:0, boats:0});
+    }
+    if(!years.length){ box.hidden = true; return; }
+
+    const main = years[0];
+    $("otdDate").textContent = main.date.slice(0,4);
+    if(main.migrants > 0){
+      $("otdTitle").textContent = fmt(main.migrants) + (main.migrants===1 ? " person crossed" : " people crossed");
+      $("otdText").textContent = dFull.format(parse(main.date)) + " · " + fmt(main.boats) + (main.boats===1 ? " boat" : " boats");
+    } else {
+      $("otdTitle").textContent = "No crossings detected";
+      $("otdText").textContent = dFull.format(parse(main.date));
+    }
+    const chips = $("otdYears"); chips.textContent = "";
+    years.slice(1, 9).forEach(d=>{
+      const c = document.createElement("div"); c.className = "chip";
+      const y = document.createElement("span"); y.textContent = d.date.slice(0,4);
+      const n = document.createElement("b"); n.className = "num"; n.textContent = fmt(d.migrants);
+      c.append(y, n); chips.append(c);
+    });
+    chips.hidden = years.length < 2;
+
+    box.hidden = false;
+    // The close button appears after 10 seconds
+    const btn = $("otdClose");
+    btn.hidden = true;
+    clearTimeout(renderOnThisDay.t);
+    renderOnThisDay.t = setTimeout(()=>{ btn.hidden = false; btn.classList.add("fade-in"); }, 10000);
+  }
+  $("otdClose").addEventListener("click", ()=>{
+    const box = $("otd");
+    store.set("otdDismissed", new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"}));
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){ box.hidden = true; return; }
+    box.classList.add("leaving");
+    box.addEventListener("animationend", ()=>{ box.hidden = true; box.classList.remove("leaving"); }, {once:true});
+  });
+
   function load(data){
     meta = data;
     sorted = (data.days||[]).filter(d=>d && d.date).sort((a,b)=>a.date<b.date?-1:1);
@@ -665,7 +740,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("records").innerHTML = '<li class="empty">No figures yet.</li>';
       return;
     }
-    renderSummary(); setRange(range); drawList(); renderRecords();
+    renderSummary(); setRange(range); drawList(); renderRecords(); renderOnThisDay();
     $("shareBtn").disabled = false;
     document.querySelector(".seg").hidden = sorted.length < 15;
   }
