@@ -296,8 +296,11 @@ def main():
 
     data["days"] = merge(data, ts, last7, now.strftime("%Y-%m-%d"))
     year_totals(data, data["days"])
-    from extras import update_all
-    update_all(data["days"])   # sex and age, petitions, prediction: each optional
+    try:
+        from extras import update_all
+        update_all(data["days"])   # sex and age, petitions, prediction: each optional
+    except Exception as e:  # noqa: BLE001 - never let the extras stop the daily figures
+        print("Extras skipped:", e)
     data["checkedAt"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     data["source"] = PUB
     publish(data)
