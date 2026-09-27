@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Daily count of people crossing the English Channel in small boats, from provisional Home Office data.">
+<title>Channel Crossings Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EEF2F3;
+  --surface:#FFFFFF;
+  --ink:#15212C;
+  --muted:#586775;
+  --line:#D3DBE0;
+  --grid:#E3E9EC;
+  --sea:#1E5F74;
+  --sea-soft:#9DBFCB;
+  --signal:#C77700;
+  --good:#2D7A4F;
+  --bad:#A33B2B;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0E161D;--surface:#15212B;--ink:#E4ECF0;--muted:#93A4B1;--line:#26343F;--grid:#1C2933;
+    --sea:#6FB3C8;--sea-soft:#2F5968;--signal:#F0A63A;--good:#6CC08F;--bad:#E57C6B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0E161D;--surface:#15212B;--ink:#E4ECF0;--muted:#93A4B1;--line:#26343F;--grid:#1C2933;
+  --sea:#6FB3C8;--sea-soft:#2F5968;--signal:#F0A63A;--good:#6CC08F;--bad:#E57C6B;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:28px 48px;display:grid;gap:28px}
+header{display:grid;gap:6px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font:700 clamp(34px,6vw,54px)/1 var(--display);letter-spacing:.01em;margin:0;text-wrap:balance}
+.status{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;color:var(--muted);font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--mono);padding:6px 9px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--good)}
+.pill.stale .dot{background:var(--signal)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stat{background:var(--surface);padding:18px 20px;display:grid;gap:4px;align-content:start}
+.stat .k{font:500 12px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:600 44px/1 var(--display);font-variant-numeric:tabular-nums}
+.stat .s{font-size:14px;color:var(--muted)}
+.delta.down{color:var(--good)}.delta.up{color:var(--bad)}
+section{display:grid;gap:12px}
+h2{font:600 24px/1.1 var(--display);margin:0;letter-spacing:.01em}
+.sub{color:var(--muted);font-size:14px;margin:0;max-width:65ch}
+.chart-box{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 8px 4px;overflow-x:auto}
+svg text{font-family:var(--mono);fill:var(--muted)}
+.table-box{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;min-width:520px}
+th,td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left}
+th{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+td{font-family:var(--mono);font-size:14px}
+tr:last-child td{border-bottom:0}
+tr.zero td{color:var(--muted)}
+tr.peak td:nth-child(2){color:var(--signal);font-weight:500}
+.notes{font-size:14px;color:var(--muted);display:grid;gap:8px;max-width:70ch}
+.notes p{margin:0}
+.notes a{color:var(--sea)}
+.empty{padding:28px 20px;color:var(--muted);text-align:center}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:12px/1 var(--mono);color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Dover Strait · Small boat arrivals</div>
+    <h1>Channel Crossings Tracker</h1>
+    <div class="status">
+      <span class="pill" id="freshness"><span class="dot"></span><span id="freshText">Loading data…</span></span>
+      <span id="sourceLine">Provisional Home Office figures, refreshed each morning.</span>
+    </div>
+  </header>
+
+  <div class="stats" id="stats">
+    <div class="stat"><div class="k">Latest day</div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div></div>
+    <div class="stat"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div></div>
+    <div class="stat"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div></div>
+  </div>
+
+  <section>
+    <h2>People arriving per day</h2>
+    <p class="sub">Each bar is one day, for the most recent 60 days. Days with no bar had no detected crossings, which usually means bad weather in the Channel.</p>
+    <div class="legend"><span><i style="background:var(--sea)"></i>People arrived</span><span><i style="background:var(--signal)"></i>Highest day shown</span></div>
+    <div class="chart-box" id="chart"><div class="empty">Waiting for data…</div></div>
+  </section>
+
+  <section>
+    <h2>Daily figures</h2>
+    <p class="sub">The most recent 31 days. The full history is in <a href="data.json" style="color:var(--sea)">data.json</a>.</p>
+    <div class="table-box">
+      <table>
+        <thead><tr><th>Date</th><th>People</th><th>Boats</th><th>People per boat</th><th>Uncontrolled landings</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="5" class="empty">Waiting for data…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="notes">
+    <h2>About the numbers</h2>
+    <p>Figures come from the Home Office's daily <a href="https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats" target="_blank" rel="noopener">small boat activity</a> page. They are provisional operational data and can be revised, including downwards. Finalised figures appear in the quarterly Immigration System Statistics.</p>
+    <p>Counts are people detected arriving in small boats (dinghies, RHIBs, kayaks). They exclude arrivals hidden in vehicles or on larger vessels, and anyone who arrived undetected. An uncontrolled landing is a boat that reached the shore without being intercepted at sea.</p>
+    <p>The daily figure for a given day is usually published the following morning, so "latest day" is normally yesterday.</p>
+  </section>
+</div>
+
+<script>
+(function(){
+  const fmt = n => Number(n).toLocaleString("en-GB");
+  const dFmt = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",timeZone:"UTC"});
+  const dLong = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"UTC"});
+  const $ = id => document.getElementById(id);
+  let days = [], meta = null;
+
+  function parse(iso){return new Date(iso+"T00:00:00Z")}
+
+  function render(){
+    if(!days.length){return}
+    const sorted = days.slice().sort((a,b)=>a.date<b.date?-1:1);
+    const last = sorted[sorted.length-1];
+
+    // Freshness
+    const pill = $("freshness");
+    const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
+    $("freshText").textContent = "Figures to " + dFmt.format(parse(last.date));
+    pill.classList.toggle("stale", ageDays > 3);
+    if(meta && meta.checkedAt){
+      const c = new Date(meta.checkedAt);
+      $("sourceLine").textContent = "Provisional Home Office figures. Last checked " +
+        c.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + ".";
+    }
+
+    // Latest day
+    $("latestV").textContent = fmt(last.migrants);
+    $("latestS").textContent = dLong.format(parse(last.date)) + " · " + fmt(last.boats) + (last.boats===1?" boat":" boats");
+
+    // Last 7 days
+    const week = sorted.slice(-7);
+    const wSum = week.reduce((s,d)=>s+d.migrants,0);
+    const wBoats = week.reduce((s,d)=>s+d.boats,0);
+    $("weekV").textContent = fmt(wSum);
+    $("weekS").textContent = dFmt.format(parse(week[0].date)) + " to " + dFmt.format(parse(last.date)) + " · " + fmt(wBoats) + " boats";
+
+    // Year to date
+    const yr = last.date.slice(0,4);
+    $("ytdK").textContent = yr + " so far";
+    if(meta && meta.ytdBase != null && meta.ytdBaseDate && meta.ytdBaseDate.slice(0,4)===yr){
+      const add = sorted.filter(d=>d.date>meta.ytdBaseDate && d.date.slice(0,4)===yr).reduce((s,d)=>s+d.migrants,0);
+      const ytd = meta.ytdBase + add;
+      $("ytdV").textContent = fmt(ytd);
+      if(meta.prevYearSamePoint){
+        const pct = Math.round((ytd/meta.prevYearSamePoint - 1)*100);
+        const cls = pct<0?"down":"up";
+        $("ytdS").innerHTML = '<span class="delta '+cls+'">'+(pct<0?"↓ ":"↑ ")+Math.abs(pct)+'%</span> on '+(+yr-1)+' at the same point ('+fmt(meta.prevYearSamePoint)+')';
+      } else {
+        $("ytdS").textContent = "Running total of reported arrivals";
+      }
+    } else {
+      $("ytdV").textContent = "–";
+      $("ytdS").textContent = "Year total not yet available";
+    }
+
+    drawChart(sorted.slice(-60));
+    drawTable(sorted.slice(-31));
+  }
+
+  function drawChart(sorted){
+    const W = Math.max(640, sorted.length*26+70), H = 280;
+    const m = {t:18,r:16,b:40,l:52};
+    const iw = W-m.l-m.r, ih = H-m.t-m.b;
+    const maxV = Math.max(...sorted.map(d=>d.migrants), 10);
+    const step = niceStep(maxV/4);
+    const top = Math.ceil(maxV/step)*step;
+    const y = v => m.t + ih - (v/top)*ih;
+    const bw = iw/sorted.length;
+    const peak = sorted.reduce((a,b)=>b.migrants>a.migrants?b:a, sorted[0]);
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="Bar chart of people arriving per day">';
+    for(let v=0; v<=top; v+=step){
+      s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--grid)" stroke-width="1"/>';
+      s += '<text x="'+(m.l-8)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+fmt(v)+'</text>';
+    }
+    const labelEvery = Math.ceil(sorted.length/14);
+    sorted.forEach((d,i)=>{
+      const x = m.l + i*bw + bw*0.15, w = bw*0.7;
+      const h = (d.migrants/top)*ih;
+      const isPeak = d===peak && d.migrants>0;
+      if(d.migrants>0){
+        s += '<rect x="'+x.toFixed(1)+'" y="'+y(d.migrants).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" rx="2" fill="'+(isPeak?'var(--signal)':'var(--sea)')+'"><title>'+dLong.format(parse(d.date))+': '+fmt(d.migrants)+' people, '+d.boats+' boats</title></rect>';
+      } else {
+        s += '<rect x="'+x.toFixed(1)+'" y="'+(y(0)-2)+'" width="'+w.toFixed(1)+'" height="2" fill="var(--sea-soft)"/>';
+      }
+      if(isPeak){
+        s += '<text x="'+(x+w/2).toFixed(1)+'" y="'+(y(d.migrants)-6).toFixed(1)+'" text-anchor="middle" font-size="11" style="fill:var(--ink)">'+fmt(d.migrants)+'</text>';
+      }
+      if(i%labelEvery===0 || i===sorted.length-1){
+        const dt = parse(d.date);
+        s += '<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-m.b+16)+'" text-anchor="middle" font-size="11">'+dt.getUTCDate()+'</text>';
+        if(i===0 || dt.getUTCDate()<=labelEvery){
+          s += '<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-m.b+30)+'" text-anchor="middle" font-size="10">'+dt.toLocaleString("en-GB",{month:"short",timeZone:"UTC"})+'</text>';
+        }
+      }
+    });
+    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(0)+'" y2="'+y(0)+'" stroke="var(--muted)" stroke-width="1"/>';
+    s += '</svg>';
+    $("chart").innerHTML = s;
+    const box = $("chart"); box.scrollLeft = box.scrollWidth;
+  }
+
+  function niceStep(raw){
+    const p = Math.pow(10, Math.floor(Math.log10(raw)));
+    const n = raw/p;
+    return (n<=1?1:n<=2?2:n<=5?5:10)*p;
+  }
+
+  function drawTable(sorted){
+    const peak = sorted.reduce((a,b)=>b.migrants>a.migrants?b:a, sorted[0]);
+    $("rows").innerHTML = sorted.slice().reverse().map(d=>{
+      const cls = d.migrants===0 ? "zero" : (d===peak ? "peak" : "");
+      const ppb = d.boats ? (d.migrants/d.boats).toFixed(0) : "–";
+      return '<tr class="'+cls+'"><td>'+dLong.format(parse(d.date))+'</td><td>'+fmt(d.migrants)+'</td><td>'+fmt(d.boats)+'</td><td>'+ppb+'</td><td>'+(d.uncontrolled==null?"–":fmt(d.uncontrolled))+'</td></tr>';
+    }).join("");
+  }
+
+  const SEED = {"ytdBase": 18565, "ytdBaseDate": "2026-09-23", "prevYearSamePoint": 32188, "checkedAt": "2026-09-27T08:20:00Z", "source": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats", "days": [{"date": "2026-09-19", "migrants": 0, "boats": 0, "uncontrolled": 0}, {"date": "2026-09-20", "migrants": 0, "boats": 0, "uncontrolled": 0}, {"date": "2026-09-21", "migrants": 150, "boats": 3, "uncontrolled": 1}, {"date": "2026-09-22", "migrants": 154, "boats": 3, "uncontrolled": 1}, {"date": "2026-09-23", "migrants": 781, "boats": 10, "uncontrolled": 0}, {"date": "2026-09-24", "migrants": 44, "boats": 1, "uncontrolled": 0}, {"date": "2026-09-25", "migrants": 0, "boats": 0, "uncontrolled": 0}]};
+  function load(data){
+    meta = data;
+    days = (data.days || []).filter(d => d && d.date);
+    render();
+  }
+  async function start(){
+    try{
+      const r = await fetch("data.json", {cache:"no-store"});
+      if(!r.ok) throw new Error(r.status);
+      load(await r.json());
+    }catch(e){
+      load(SEED);
+    }
+  }
+  start();
+})();
+</script>
+</body>
+</html>
