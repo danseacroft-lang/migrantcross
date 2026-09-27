@@ -16,6 +16,12 @@ html{-webkit-text-size-adjust:100%}
 body{margin:0 auto;max-width:560px;background:var(--bg);color:var(--fg);font:17px/1.45 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
   padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 h1{font-size:24px;margin:0}
+.title{display:flex;align-items:center;gap:10px}
+.beta{appearance:none;border:0;cursor:pointer;font:600 12px/1 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--bar);padding:6px 10px;border-radius:999px;position:relative}
+.beta::after{content:"";position:absolute;inset:-9px -4px}
+.beta:focus-visible{outline:2px solid var(--bar);outline-offset:2px}
+.beta-note{margin:8px 0 4px}
+[hidden]{display:none!important}
 h2{font-size:17px;margin:28px 0 8px}
 p{margin:0}
 .muted{color:var(--muted);font-size:15px}
@@ -35,7 +41,8 @@ footer{margin-top:28px;display:grid;gap:6px}
 </style>
 </head>
 <body>
-<h1>Channel Crossings</h1>
+<div class="title"><h1>Channel Crossings</h1><button type="button" class="beta" id="betaBtn" aria-expanded="false" aria-controls="betaNote">Beta</button></div>
+<p class="muted beta-note" id="betaNote" hidden>You're trying an experimental, stripped-back version of Channel Crossings. It may change or disappear while we test it.</p>
 <p class="muted">Basic version · <a href="./">Back to the full site</a></p>
 
 <p class="muted" id="latestLabel" style="margin-top:20px">Latest day</p>
@@ -60,6 +67,11 @@ footer{margin-top:28px;display:grid;gap:6px}
 </footer>
 
 <script>
+document.getElementById("betaBtn").addEventListener("click", function(){
+  var note = document.getElementById("betaNote"), open = note.hidden;
+  note.hidden = !open;
+  this.setAttribute("aria-expanded", String(open));
+});
 (async function(){
   var $ = function(id){ return document.getElementById(id); };
   var fmt = function(n){ return Number(n).toLocaleString("en-GB"); };
