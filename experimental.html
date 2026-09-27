@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Channel Crossings, basic version: daily small boat arrivals from Home Office figures.">
 <meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <title>Channel Crossings · Basic</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://channelcrossings.world/">
 <style>
 :root{--fg:#000;--muted:#6e6e73;--line:#d2d2d7;--bar:#007AFF;--bg:#fff}
-@media (prefers-color-scheme:dark){:root{--fg:#f5f5f7;--muted:#98989d;--line:#38383a;--bar:#0A84FF;--bg:#000}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--fg:#f5f5f7;--muted:#98989d;--line:#38383a;--bar:#0A84FF;--bg:#000}}
+:root[data-theme="dark"]{color-scheme:dark;--fg:#f5f5f7;--muted:#98989d;--line:#38383a;--bar:#0A84FF;--bg:#000}
+:root[data-theme="light"]{color-scheme:light}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0 auto;max-width:560px;background:var(--bg);color:var(--fg);font:17px/1.45 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
