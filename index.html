@@ -2,257 +2,526 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Daily count of people crossing the English Channel in small boats, from provisional Home Office data.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Daily count of people crossing the English Channel in small boats, from provisional Home Office data, with current Channel conditions.">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Crossings">
 <title>Channel Crossings Tracker</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
+/* Apple Human Interface Guidelines: system font, system colours, grouped inset layout */
 :root{
-  --bg:#EEF2F3;
-  --surface:#FFFFFF;
-  --ink:#15212C;
-  --muted:#586775;
-  --line:#D3DBE0;
-  --grid:#E3E9EC;
-  --sea:#1E5F74;
-  --sea-soft:#9DBFCB;
-  --signal:#C77700;
-  --good:#2D7A4F;
-  --bad:#A33B2B;
-  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
-  --body:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --bg:#F2F2F7;                       /* systemGroupedBackground */
+  --card:#FFFFFF;                     /* secondarySystemGroupedBackground */
+  --fill:rgba(118,118,128,.12);       /* tertiarySystemFill */
+  --label:#000000;
+  --label2:rgba(60,60,67,.6);         /* secondaryLabel */
+  --label3:rgba(60,60,67,.3);         /* tertiaryLabel */
+  --sep:rgba(60,60,67,.29);           /* separator */
+  --blue:#007AFF;
+  --green:#248A3D;  --green-bg:rgba(52,199,89,.14);
+  --orange:#C93400; --orange-bg:rgba(255,149,0,.16);
+  --red:#D70015;    --red-bg:rgba(255,59,48,.14);
+  --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18);
+  --material:rgba(255,255,255,.78);
+  --shadow:0 8px 30px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.06);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --round:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#0E161D;--surface:#15212B;--ink:#E4ECF0;--muted:#93A4B1;--line:#26343F;--grid:#1C2933;
-    --sea:#6FB3C8;--sea-soft:#2F5968;--signal:#F0A63A;--good:#6CC08F;--bad:#E57C6B;
+    --bg:#000000; --card:#1C1C1E; --fill:rgba(118,118,128,.24);
+    --label:#FFFFFF; --label2:rgba(235,235,245,.6); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.6);
+    --blue:#0A84FF;
+    --green:#30D158; --green-bg:rgba(48,209,88,.18);
+    --orange:#FF9F0A; --orange-bg:rgba(255,159,10,.18);
+    --red:#FF453A; --red-bg:rgba(255,69,58,.18);
+    --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18);
+    --material:rgba(44,44,46,.78);
+    --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#0E161D;--surface:#15212B;--ink:#E4ECF0;--muted:#93A4B1;--line:#26343F;--grid:#1C2933;
-  --sea:#6FB3C8;--sea-soft:#2F5968;--signal:#F0A63A;--good:#6CC08F;--bad:#E57C6B;
+  --bg:#000000; --card:#1C1C1E; --fill:rgba(118,118,128,.24);
+  --label:#FFFFFF; --label2:rgba(235,235,245,.6); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.6);
+  --blue:#0A84FF;
+  --green:#30D158; --green-bg:rgba(48,209,88,.18);
+  --orange:#FF9F0A; --orange-bg:rgba(255,159,10,.18);
+  --red:#FF453A; --red-bg:rgba(255,69,58,.18);
+  --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18);
+  --material:rgba(44,44,46,.78);
+  --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);margin:0}
-.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:28px 48px;display:grid;gap:28px}
-header{display:grid;gap:6px}
-.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-h1{font:700 clamp(34px,6vw,54px)/1 var(--display);letter-spacing:.01em;margin:0;text-wrap:balance}
-.status{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;color:var(--muted);font-size:14px}
-.pill{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--mono);padding:6px 9px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--good)}
-.pill.stale .dot{background:var(--signal)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
-.stat{background:var(--surface);padding:18px 20px;display:grid;gap:4px;align-content:start}
-.stat .k{font:500 12px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.stat .v{font:600 44px/1 var(--display);font-variant-numeric:tabular-nums}
-.stat .s{font-size:14px;color:var(--muted)}
-.delta.down{color:var(--good)}.delta.up{color:var(--bad)}
-section{display:grid;gap:12px}
-h2{font:600 24px/1.1 var(--display);margin:0;letter-spacing:.01em}
-.sub{color:var(--muted);font-size:14px;margin:0;max-width:65ch}
-.chart-box{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 8px 4px;overflow-x:auto}
-svg text{font-family:var(--mono);fill:var(--muted)}
-.table-box{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px}
-table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;min-width:520px}
-th,td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--grid)}
-th:first-child,td:first-child{text-align:left}
-th{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
-td{font-family:var(--mono);font-size:14px}
-tr:last-child td{border-bottom:0}
-tr.zero td{color:var(--muted)}
-tr.peak td:nth-child(2){color:var(--signal);font-weight:500}
-.notes{font-size:14px;color:var(--muted);display:grid;gap:8px;max-width:70ch}
-.notes p{margin:0}
-.notes a{color:var(--sea)}
-.empty{padding:28px 20px;color:var(--muted);text-align:center}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font:12px/1 var(--mono);color:var(--muted)}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--label);font:17px/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:720px;margin:0 auto;padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));padding-block:max(12px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));display:grid;gap:28px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Large title header */
+header{display:grid;gap:4px;padding-top:24px}
+.overline{font-size:13px;font-weight:600;color:var(--label2);letter-spacing:-.005em;text-transform:uppercase}
+h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balance}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:15px;color:var(--label2);margin-top:4px}
+.fresh{display:inline-flex;align-items:center;gap:6px}
+.fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
+.fresh.stale i{background:var(--orange)}
+.link-btn{appearance:none;border:0;background:none;padding:0;min-height:44px;color:var(--blue);font:inherit;cursor:pointer}
+
+/* Notification banner (iOS style) */
+.banner{position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 48px 14px 14px;border-radius:22px;background:var(--material);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes drop{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
+.banner.leaving{animation:lift .25s ease-in both}
+@keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
+.b-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--fill);color:var(--label2)}
+.banner[data-level="calm"] .b-icon{background:var(--green-bg);color:var(--green)}
+.banner[data-level="moderate"] .b-icon{background:var(--orange-bg);color:var(--orange)}
+.banner[data-level="rough"] .b-icon{background:var(--red-bg);color:var(--red)}
+.b-icon svg{width:24px;height:24px}
+.b-body{display:grid;gap:2px;min-width:0}
+.b-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--label2)}
+.b-title{font-weight:600;font-size:17px;letter-spacing:-.024em}
+.b-text{font-size:15px;color:var(--label2);letter-spacing:-.016em}
+.b-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
+.b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
+.b-close svg{width:10px;height:10px}
+.b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
+.outlook{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+.outlook::-webkit-scrollbar{display:none}
+.chip{flex:none;display:grid;gap:1px;padding:6px 10px;border-radius:10px;background:var(--fill);font-size:13px;min-width:72px}
+.chip b{font-weight:600;font-size:13px}
+.chip span{color:var(--label2)}
+.chip[data-level="calm"] b{color:var(--green)}
+.chip[data-level="moderate"] b{color:var(--orange)}
+.chip[data-level="rough"] b{color:var(--red)}
+
+/* Grouped inset sections */
+section{display:grid;gap:8px;min-width:0}
+.sec-title{display:flex;justify-content:space-between;align-items:end;gap:12px;padding-inline:4px}
+h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
+.footnote{font-size:13px;line-height:1.38;color:var(--label2);letter-spacing:-.006em;padding-inline:16px;margin:0}
+.card{background:var(--card);border-radius:12px;overflow:hidden}
+
+/* Summary tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tile{background:var(--card);border-radius:12px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
+.tile .k{font-size:13px;font-weight:600;color:var(--label2);letter-spacing:-.005em}
+.tile .v{font:700 34px/1.15 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.tile .s{font-size:13px;color:var(--label2);overflow-wrap:anywhere}
+.delta{font-weight:600}
+.delta.down{color:var(--green)}.delta.up{color:var(--red)}
+
+/* Segmented control */
+.seg{position:relative;display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--fill);border-radius:9px;padding:2px;min-width:180px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--label);font:500 13px/1 var(--font);letter-spacing:-.005em;height:32px;padding:0 12px;border-radius:7px;cursor:pointer;touch-action:manipulation;position:relative;z-index:1}
+.seg button[aria-pressed="true"]{background:var(--card);font-weight:600;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+
+/* Chart */
+.chart-card{padding:14px 12px 10px;display:grid;gap:6px}
+.readout{padding-inline:4px;min-height:48px}
+.readout .rv{font:700 28px/1.15 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.readout .rd{font-size:15px;color:var(--label2)}
+.chart{width:100%;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:pointer;border-radius:8px}
+.chart:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.chart svg{display:block;width:100%;height:auto}
+.chart svg text{font-family:var(--font);fill:var(--label2)}
+
+/* Inset grouped list */
+.list{list-style:none;margin:0;padding:0}
+.list li{display:grid;grid-template-columns:1fr auto;gap:1px 12px;align-items:center;min-height:60px;padding:10px 16px;position:relative}
+.list li + li::before{content:"";position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
+.list .d{font-size:17px}
+.list .n{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.list .m{grid-column:1 / -1;font-size:15px;color:var(--label2)}
+.list li.zero .n,.list li.zero .d{color:var(--label2);font-weight:400}
+.list li.peak .n{color:var(--orange)}
+.more{appearance:none;border:0;background:var(--card);color:var(--blue);font:400 17px/1 var(--font);letter-spacing:-.022em;min-height:44px;width:100%;border-radius:12px;cursor:pointer}
+.more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.about{padding:4px 16px}
+.about p{margin:12px 0;font-size:15px;line-height:1.45;color:var(--label2);letter-spacing:-.016em}
+.about a{color:var(--blue);text-decoration:none}
+.empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:15px}
+
+@media (max-width:600px){
+  h1{font-size:30px}
+  .tiles{grid-template-columns:1fr 1fr}
+  .tile:first-child{grid-column:1 / -1}
+  .sec-title{flex-direction:column;align-items:stretch}
+  .seg{width:100%}
+}
+@media (hover:hover){
+  .b-close:hover span{background:var(--label3);color:var(--label)}
+  .more:hover{background:var(--fill)}
+}
+@media (prefers-reduced-motion:reduce){
+  .banner,.banner.leaving{animation:none}
+}
 </style>
 </head>
 <body>
-
-
 <div class="wrap">
   <header>
-    <div class="eyebrow">Dover Strait · Small boat arrivals</div>
-    <h1>Channel Crossings Tracker</h1>
-    <div class="status">
-      <span class="pill" id="freshness"><span class="dot"></span><span id="freshText">Loading data…</span></span>
-      <span id="sourceLine">Provisional Home Office figures, refreshed each morning.</span>
+    <div class="overline">Small boat arrivals</div>
+    <h1>Channel Crossings</h1>
+    <div class="meta">
+      <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span></span>
+      <button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button>
     </div>
   </header>
 
-  <div class="stats" id="stats">
-    <div class="stat"><div class="k">Latest day</div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div></div>
-    <div class="stat"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div></div>
-    <div class="stat"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div></div>
+  <!-- Channel conditions notification -->
+  <div class="banner" id="banner" role="status" aria-live="polite" data-level="loading" hidden>
+    <div class="b-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 13c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 17.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/></svg>
+    </div>
+    <div class="b-body">
+      <div class="b-top"><span>Channel conditions</span><span id="bTime"></span></div>
+      <div class="b-title" id="bTitle">Checking the weather…</div>
+      <div class="b-text" id="bText"></div>
+      <div class="outlook" id="outlook"></div>
+    </div>
+    <button type="button" class="b-close" id="bClose" aria-label="Dismiss Channel conditions">
+      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    </button>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="k">Latest day</div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div></div>
+    <div class="tile"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div></div>
+    <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div></div>
   </div>
 
   <section>
-    <h2>People arriving per day</h2>
-    <p class="sub">Each bar is one day, for the most recent 60 days. Days with no bar had no detected crossings, which usually means bad weather in the Channel.</p>
-    <div class="legend"><span><i style="background:var(--sea)"></i>People arrived</span><span><i style="background:var(--signal)"></i>Highest day shown</span></div>
-    <div class="chart-box" id="chart"><div class="empty">Waiting for data…</div></div>
+    <div class="sec-title">
+      <h2>Arrivals per Day</h2>
+      <div class="seg" role="group" aria-label="Days shown">
+        <button type="button" data-range="14" aria-pressed="false">14 Days</button>
+        <button type="button" data-range="30" aria-pressed="false">30 Days</button>
+        <button type="button" data-range="90" aria-pressed="false">90 Days</button>
+      </div>
+    </div>
+    <div class="card chart-card">
+      <div class="readout" aria-live="polite"><div class="rv" id="rv">–</div><div class="rd" id="rd"></div></div>
+      <div class="chart" id="chart"><div class="empty">Loading figures…</div></div>
+    </div>
+    <p class="footnote">Tap or drag across the chart to see each day.</p>
   </section>
 
   <section>
-    <h2>Daily figures</h2>
-    <p class="sub">The most recent 31 days. The full history is in <a href="data.json" style="color:var(--sea)">data.json</a>.</p>
-    <div class="table-box">
-      <table>
-        <thead><tr><th>Date</th><th>People</th><th>Boats</th><th>People per boat</th><th>Uncontrolled landings</th></tr></thead>
-        <tbody id="rows"><tr><td colspan="5" class="empty">Waiting for data…</td></tr></tbody>
-      </table>
-    </div>
+    <div class="sec-title"><h2>Day by Day</h2></div>
+    <div class="card"><ul class="list" id="list"><li class="empty">Loading figures…</li></ul></div>
+    <button type="button" class="more" id="more" hidden>Show More Days</button>
   </section>
 
-  <section class="notes">
-    <h2>About the numbers</h2>
-    <p>Figures come from the Home Office's daily <a href="https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats" target="_blank" rel="noopener">small boat activity</a> page. They are provisional operational data and can be revised, including downwards. Finalised figures appear in the quarterly Immigration System Statistics.</p>
-    <p>Counts are people detected arriving in small boats (dinghies, RHIBs, kayaks). They exclude arrivals hidden in vehicles or on larger vessels, and anyone who arrived undetected. An uncontrolled landing is a boat that reached the shore without being intercepted at sea.</p>
-    <p>The daily figure for a given day is usually published the following morning, so "latest day" is normally yesterday.</p>
+  <section>
+    <div class="sec-title"><h2>About the Numbers</h2></div>
+    <div class="card about">
+      <p>Arrivals come from the Home Office's daily <a href="https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats" target="_blank" rel="noopener">small boat activity</a> page. They are provisional and can be revised, including downwards. Finalised figures appear in the quarterly Immigration System Statistics.</p>
+      <p>Counts are people detected arriving in small boats. They exclude arrivals hidden in vehicles or on larger vessels, and anyone who arrived undetected. An uncontrolled landing is a boat that reached the shore without being intercepted at sea.</p>
+      <p>Channel conditions use <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> wind and wave forecasts for the middle of the Dover Strait. Crossings cluster on calm days. This site rates conditions as calm (wind under 12 mph and waves under 0.5 m), moderate (wind under 18 mph and waves under 1 m) or rough. These bands are a rough guide, not an official forecast.</p>
+      <p>Each day's arrivals figure is usually published the following morning, so the latest day is normally yesterday.</p>
+    </div>
   </section>
 </div>
 
 <script>
 (function(){
-  const fmt = n => Number(n).toLocaleString("en-GB");
-  const dFmt = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",timeZone:"UTC"});
-  const dLong = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"UTC"});
   const $ = id => document.getElementById(id);
-  let days = [], meta = null;
+  const fmt = n => Number(n).toLocaleString("en-GB");
+  const UTC = {timeZone:"UTC"};
+  const dShort = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short",...UTC});
+  const dMid = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"long",...UTC});
+  const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
+  const parse = iso => new Date(iso+"T00:00:00Z");
+  const store = {
+    get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+    set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  };
 
-  function parse(iso){return new Date(iso+"T00:00:00Z")}
+  /* =========== Channel conditions =========== */
+  const LAT = 51.0, LON = 1.55;   // mid Dover Strait
+  const CALM = {wind:12, wave:0.5}, MOD = {wind:18, wave:1.0};
+  const LEVELS = {
+    calm:     {title:"Calm: crossings likely",        word:"Calm"},
+    moderate: {title:"Moderate: some crossings possible", word:"Moderate"},
+    rough:    {title:"Rough: crossings unlikely",     word:"Rough"}
+  };
+  function rate(wind, wave){
+    if(wind==null || wave==null) return null;
+    if(wind < CALM.wind && wave < CALM.wave) return "calm";
+    if(wind < MOD.wind && wave < MOD.wave) return "moderate";
+    return "rough";
+  }
+  const median = a => { const s=a.filter(v=>v!=null).sort((x,y)=>x-y); return s.length ? s[Math.floor(s.length/2)] : null; };
 
-  function render(){
-    if(!days.length){return}
-    const sorted = days.slice().sort((a,b)=>a.date<b.date?-1:1);
-    const last = sorted[sorted.length-1];
+  let wx = null;
+  const banner = $("banner");
+  const todayKey = () => new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
 
-    // Freshness
-    const pill = $("freshness");
-    const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
-    $("freshText").textContent = "Figures to " + dFmt.format(parse(last.date));
-    pill.classList.toggle("stale", ageDays > 3);
-    if(meta && meta.checkedAt){
-      const c = new Date(meta.checkedAt);
-      $("sourceLine").textContent = "Provisional Home Office figures. Last checked " +
-        c.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + ".";
-    }
-
-    // Latest day
-    $("latestV").textContent = fmt(last.migrants);
-    $("latestS").textContent = dLong.format(parse(last.date)) + " · " + fmt(last.boats) + (last.boats===1?" boat":" boats");
-
-    // Last 7 days
-    const week = sorted.slice(-7);
-    const wSum = week.reduce((s,d)=>s+d.migrants,0);
-    const wBoats = week.reduce((s,d)=>s+d.boats,0);
-    $("weekV").textContent = fmt(wSum);
-    $("weekS").textContent = dFmt.format(parse(week[0].date)) + " to " + dFmt.format(parse(last.date)) + " · " + fmt(wBoats) + " boats";
-
-    // Year to date
-    const yr = last.date.slice(0,4);
-    $("ytdK").textContent = yr + " so far";
-    if(meta && meta.ytdBase != null && meta.ytdBaseDate && meta.ytdBaseDate.slice(0,4)===yr){
-      const add = sorted.filter(d=>d.date>meta.ytdBaseDate && d.date.slice(0,4)===yr).reduce((s,d)=>s+d.migrants,0);
-      const ytd = meta.ytdBase + add;
-      $("ytdV").textContent = fmt(ytd);
-      if(meta.prevYearSamePoint){
-        const pct = Math.round((ytd/meta.prevYearSamePoint - 1)*100);
-        const cls = pct<0?"down":"up";
-        $("ytdS").innerHTML = '<span class="delta '+cls+'">'+(pct<0?"↓ ":"↑ ")+Math.abs(pct)+'%</span> on '+(+yr-1)+' at the same point ('+fmt(meta.prevYearSamePoint)+')';
-      } else {
-        $("ytdS").textContent = "Running total of reported arrivals";
-      }
-    } else {
-      $("ytdV").textContent = "–";
-      $("ytdS").textContent = "Year total not yet available";
-    }
-
-    drawChart(sorted.slice(-60));
-    drawTable(sorted.slice(-31));
+  function dismissedFor(level){
+    const v = store.get("wxDismissed");
+    return v === todayKey() + ":" + level;
   }
 
-  function drawChart(sorted){
-    const W = Math.max(640, sorted.length*26+70), H = 280;
-    const m = {t:18,r:16,b:40,l:52};
-    const iw = W-m.l-m.r, ih = H-m.t-m.b;
-    const maxV = Math.max(...sorted.map(d=>d.migrants), 10);
-    const step = niceStep(maxV/4);
-    const top = Math.ceil(maxV/step)*step;
-    const y = v => m.t + ih - (v/top)*ih;
-    const bw = iw/sorted.length;
-    const peak = sorted.reduce((a,b)=>b.migrants>a.migrants?b:a, sorted[0]);
-    let s = '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="Bar chart of people arriving per day">';
-    for(let v=0; v<=top; v+=step){
-      s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--grid)" stroke-width="1"/>';
-      s += '<text x="'+(m.l-8)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+fmt(v)+'</text>';
+  async function loadWeather(){
+    const common = "latitude="+LAT+"&longitude="+LON+"&timezone=Europe%2FLondon&forecast_days=4";
+    try{
+      const [w, m] = await Promise.all([
+        fetch("https://api.open-meteo.com/v1/forecast?"+common+"&current=wind_speed_10m,wind_gusts_10m&hourly=wind_speed_10m&wind_speed_unit=mph").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+        fetch("https://marine-api.open-meteo.com/v1/marine?"+common+"&current=wave_height&hourly=wave_height").then(r=>{ if(!r.ok) throw 0; return r.json(); })
+      ]);
+      const wind = w.current.wind_speed_10m, gust = w.current.wind_gusts_10m, wave = m.current.wave_height;
+      // Outlook: typical overnight-to-midday conditions, when most departures happen
+      const days = [];
+      const times = w.hourly.time;
+      const byDay = {};
+      times.forEach((t,i)=>{
+        const d = t.slice(0,10), h = +t.slice(11,13);
+        if(h>12) return;
+        (byDay[d] = byDay[d] || {w:[],v:[]});
+        byDay[d].w.push(w.hourly.wind_speed_10m[i]);
+        const mi = m.hourly.time.indexOf(t);
+        byDay[d].v.push(mi>=0 ? m.hourly.wave_height[mi] : null);
+      });
+      Object.keys(byDay).sort().slice(1,4).forEach(d=>{
+        const mw = median(byDay[d].w), mv = median(byDay[d].v);
+        days.push({date:d, wind:mw, wave:mv, level:rate(mw,mv)});
+      });
+      wx = {wind, gust, wave, level:rate(wind,wave), time:w.current.time, days};
+      renderWeather();
+    }catch(e){
+      wx = {error:true};
+      renderWeather();
     }
-    const labelEvery = Math.ceil(sorted.length/14);
-    sorted.forEach((d,i)=>{
-      const x = m.l + i*bw + bw*0.15, w = bw*0.7;
-      const h = (d.migrants/top)*ih;
+  }
+
+  function renderWeather(){
+    if(!wx) return;
+    if(wx.error){
+      banner.dataset.level = "error";
+      $("bTitle").textContent = "Conditions unavailable";
+      $("bText").textContent = "The weather service didn't respond. Try reloading the page later.";
+      $("outlook").textContent = "";
+      $("bTime").textContent = "";
+      showBanner(!dismissedFor("error"));
+      return;
+    }
+    const L = wx.level ? LEVELS[wx.level] : null;
+    banner.dataset.level = wx.level || "error";
+    $("bTitle").textContent = L ? L.title : "Conditions unavailable";
+    $("bText").textContent = "Wind " + Math.round(wx.wind) + " mph, gusting " + Math.round(wx.gust) + " mph. Waves " + (wx.wave==null ? "–" : wx.wave.toFixed(1) + " m") + ".";
+    $("bTime").textContent = "Now · " + wx.time.slice(11,16);
+    const ol = $("outlook"); ol.textContent = "";
+    wx.days.forEach(d=>{
+      const c = document.createElement("div"); c.className = "chip"; c.dataset.level = d.level || "";
+      const n = document.createElement("span");
+      n.textContent = new Date(d.date+"T12:00:00Z").toLocaleDateString("en-GB",{weekday:"short",timeZone:"UTC"});
+      const b = document.createElement("b"); b.textContent = d.level ? LEVELS[d.level].word : "–";
+      c.append(n,b); ol.append(c);
+    });
+    ol.setAttribute("aria-label","Outlook for the next three days");
+    showBanner(!dismissedFor(wx.level));
+  }
+
+  function showBanner(on){
+    banner.hidden = !on;
+    banner.classList.remove("leaving");
+    $("showWeather").hidden = on;
+  }
+
+  $("bClose").addEventListener("click", ()=>{
+    store.set("wxDismissed", todayKey() + ":" + (wx && !wx.error ? wx.level : "error"));
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce){ showBanner(false); $("showWeather").focus(); return; }
+    banner.classList.add("leaving");
+    banner.addEventListener("animationend", ()=>{ showBanner(false); $("showWeather").focus(); }, {once:true});
+  });
+  $("showWeather").addEventListener("click", ()=>{
+    store.set("wxDismissed","");
+    showBanner(true);
+  });
+
+  /* =========== Arrivals =========== */
+  let sorted = [], meta = null;
+  let range = window.matchMedia("(max-width:600px)").matches ? 14 : 30;
+  let selected = null, listCount = 14, geom = null;
+
+  function renderSummary(){
+    const last = sorted[sorted.length-1];
+    const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
+    $("freshText").textContent = "Figures to " + dMid.format(parse(last.date));
+    $("fresh").classList.toggle("stale", ageDays > 3);
+
+    $("latestV").textContent = fmt(last.migrants);
+    $("latestS").textContent = dMid.format(parse(last.date)) + " · " + fmt(last.boats) + (last.boats===1?" boat":" boats");
+
+    const week = sorted.slice(-7);
+    $("weekV").textContent = fmt(week.reduce((s,d)=>s+d.migrants,0));
+    $("weekS").textContent = dShort.format(parse(week[0].date)) + " – " + dShort.format(parse(last.date));
+
+    const yr = last.date.slice(0,4);
+    $("ytdK").textContent = yr + " So Far";
+    if(meta && meta.ytdBase != null && meta.ytdBaseDate && meta.ytdBaseDate.slice(0,4)===yr){
+      const ytd = meta.ytdBase + sorted.filter(d=>d.date>meta.ytdBaseDate && d.date.slice(0,4)===yr).reduce((s,d)=>s+d.migrants,0);
+      $("ytdV").textContent = fmt(ytd);
+      const s = $("ytdS"); s.textContent = "";
+      if(meta.prevYearSamePoint){
+        const pct = Math.round((ytd/meta.prevYearSamePoint-1)*100);
+        const sp = document.createElement("span");
+        sp.className = "delta " + (pct<0?"down":"up");
+        sp.textContent = (pct<0?"↓ ":"↑ ") + Math.abs(pct) + "%";
+        s.append(sp, " on " + (+yr-1));
+      } else s.textContent = "Running total";
+    } else {
+      $("ytdV").textContent = "–"; $("ytdS").textContent = "Not yet available";
+    }
+  }
+
+  function niceStep(raw){ const p=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; }
+
+  function drawChart(){
+    const box = $("chart");
+    const data = sorted.slice(-range);
+    const W = Math.max(280, Math.round(box.clientWidth || 320));
+    const H = Math.round(Math.min(280, Math.max(190, W*0.48)));
+    const m = {t:20, r:4, b:32, l:36};
+    const iw = W-m.l-m.r, ih = H-m.t-m.b;
+    const maxV = Math.max(...data.map(d=>d.migrants), 10);
+    const step = niceStep(maxV/4), top = Math.ceil(maxV/step)*step;
+    const y = v => m.t + ih - (v/top)*ih;
+    const slot = iw/data.length;
+    const bw = Math.max(1.5, slot*(slot>14 ? .62 : slot>6 ? .74 : .86));
+    const peak = data.reduce((a,b)=>b.migrants>a.migrants?b:a, data[0]);
+    const sel = data.find(d=>d.date===selected) || data[data.length-1];
+    selected = sel.date; geom = {m, slot, data};
+
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Bar chart of arrivals per day, last '+data.length+' days">';
+    for(let v=0; v<=top; v+=step){
+      s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--sep)" stroke-width=".5"'+(v?' stroke-dasharray="2 3"':'')+'/>';
+      s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+(v>=1000?(v/1000)+'k':v)+'</text>';
+    }
+    const si = data.indexOf(sel);
+    s += '<rect x="'+(m.l+si*slot).toFixed(1)+'" y="'+m.t+'" width="'+slot.toFixed(1)+'" height="'+ih+'" rx="4" fill="var(--fill)"/>';
+    const every = Math.ceil(data.length/Math.max(3, Math.floor(iw/46)));
+    data.forEach((d,i)=>{
+      const x = m.l + i*slot + (slot-bw)/2;
       const isPeak = d===peak && d.migrants>0;
+      const r = Math.min(bw/2, 4);
       if(d.migrants>0){
-        s += '<rect x="'+x.toFixed(1)+'" y="'+y(d.migrants).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" rx="2" fill="'+(isPeak?'var(--signal)':'var(--sea)')+'"><title>'+dLong.format(parse(d.date))+': '+fmt(d.migrants)+' people, '+d.boats+' boats</title></rect>';
+        const h = Math.max((d.migrants/top)*ih, 2);
+        s += '<rect x="'+x.toFixed(1)+'" y="'+(y(0)-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+r.toFixed(1)+'" fill="'+(isPeak?'var(--bar-peak)':'var(--bar)')+'" opacity="'+(d===sel||!selected?1:.85)+'"/>';
       } else {
-        s += '<rect x="'+x.toFixed(1)+'" y="'+(y(0)-2)+'" width="'+w.toFixed(1)+'" height="2" fill="var(--sea-soft)"/>';
+        s += '<rect x="'+x.toFixed(1)+'" y="'+(y(0)-2)+'" width="'+bw.toFixed(1)+'" height="2" rx="1" fill="var(--bar-zero)"/>';
       }
       if(isPeak){
-        s += '<text x="'+(x+w/2).toFixed(1)+'" y="'+(y(d.migrants)-6).toFixed(1)+'" text-anchor="middle" font-size="11" style="fill:var(--ink)">'+fmt(d.migrants)+'</text>';
+        const lx = Math.min(Math.max(x+bw/2, m.l+14), W-m.r-14);
+        s += '<text x="'+lx.toFixed(1)+'" y="'+(y(d.migrants)-6).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="600" style="fill:var(--label)">'+fmt(d.migrants)+'</text>';
       }
-      if(i%labelEvery===0 || i===sorted.length-1){
+      const fromEnd = data.length-1-i;
+      if(fromEnd % every === 0){
         const dt = parse(d.date);
-        s += '<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-m.b+16)+'" text-anchor="middle" font-size="11">'+dt.getUTCDate()+'</text>';
-        if(i===0 || dt.getUTCDate()<=labelEvery){
-          s += '<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-m.b+30)+'" text-anchor="middle" font-size="10">'+dt.toLocaleString("en-GB",{month:"short",timeZone:"UTC"})+'</text>';
-        }
+        const cx = Math.min(Math.max(x+bw/2, m.l+10), W-m.r-12);
+        s += '<text x="'+cx.toFixed(1)+'" y="'+(H-m.b+15)+'" text-anchor="middle" font-size="11">'+dt.getUTCDate()+'</text>';
+        if(fromEnd===0 || dt.getUTCDate()<=every || i<every)
+          s += '<text x="'+cx.toFixed(1)+'" y="'+(H-m.b+28)+'" text-anchor="middle" font-size="10">'+dt.toLocaleString("en-GB",{month:"short",...UTC})+'</text>';
       }
     });
-    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(0)+'" y2="'+y(0)+'" stroke="var(--muted)" stroke-width="1"/>';
     s += '</svg>';
-    $("chart").innerHTML = s;
-    const box = $("chart"); box.scrollLeft = box.scrollWidth;
+    box.innerHTML = s;
+    $("rv").textContent = fmt(sel.migrants) + (sel.migrants===1?" person":" people");
+    let t = dMid.format(parse(sel.date)) + " · " + fmt(sel.boats) + (sel.boats===1?" boat":" boats");
+    if(sel.uncontrolled) t += " · " + sel.uncontrolled + " uncontrolled";
+    $("rd").textContent = t;
   }
 
-  function niceStep(raw){
-    const p = Math.pow(10, Math.floor(Math.log10(raw)));
-    const n = raw/p;
-    return (n<=1?1:n<=2?2:n<=5?5:10)*p;
+  function pickAt(clientX){
+    const svg = $("chart").querySelector("svg"); if(!svg || !geom) return;
+    const r = svg.getBoundingClientRect();
+    const x = (clientX - r.left) * (svg.viewBox.baseVal.width / r.width);
+    const i = Math.max(0, Math.min(geom.data.length-1, Math.floor((x-geom.m.l)/geom.slot)));
+    if(geom.data[i].date !== selected){ selected = geom.data[i].date; drawChart(); }
   }
+  const chartEl = $("chart"); let dragging = false;
+  chartEl.addEventListener("pointerdown", e=>{ dragging=true; pickAt(e.clientX); });
+  chartEl.addEventListener("pointermove", e=>{ if(dragging || e.pointerType==="mouse") pickAt(e.clientX); });
+  addEventListener("pointerup", ()=>dragging=false);
+  addEventListener("pointercancel", ()=>dragging=false);
+  chartEl.tabIndex = 0;
+  chartEl.addEventListener("keydown", e=>{
+    if(!geom) return;
+    const i = geom.data.findIndex(d=>d.date===selected);
+    const n = e.key==="ArrowLeft" ? Math.max(0,i-1) : e.key==="ArrowRight" ? Math.min(geom.data.length-1,i+1) : null;
+    if(n==null) return; e.preventDefault(); selected = geom.data[n].date; drawChart();
+  });
 
-  function drawTable(sorted){
-    const peak = sorted.reduce((a,b)=>b.migrants>a.migrants?b:a, sorted[0]);
-    $("rows").innerHTML = sorted.slice().reverse().map(d=>{
-      const cls = d.migrants===0 ? "zero" : (d===peak ? "peak" : "");
-      const ppb = d.boats ? (d.migrants/d.boats).toFixed(0) : "–";
-      return '<tr class="'+cls+'"><td>'+dLong.format(parse(d.date))+'</td><td>'+fmt(d.migrants)+'</td><td>'+fmt(d.boats)+'</td><td>'+ppb+'</td><td>'+(d.uncontrolled==null?"–":fmt(d.uncontrolled))+'</td></tr>';
-    }).join("");
+  function setRange(n){
+    range = n;
+    document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.range===n)));
+    if(sorted.length) drawChart();
   }
+  document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click", ()=>setRange(+b.dataset.range)));
 
-  const SEED = {"ytdBase": 18565, "ytdBaseDate": "2026-09-23", "prevYearSamePoint": 32188, "checkedAt": "2026-09-27T08:20:00Z", "source": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats", "days": [{"date": "2026-09-19", "migrants": 0, "boats": 0, "uncontrolled": 0}, {"date": "2026-09-20", "migrants": 0, "boats": 0, "uncontrolled": 0}, {"date": "2026-09-21", "migrants": 150, "boats": 3, "uncontrolled": 1}, {"date": "2026-09-22", "migrants": 154, "boats": 3, "uncontrolled": 1}, {"date": "2026-09-23", "migrants": 781, "boats": 10, "uncontrolled": 0}, {"date": "2026-09-24", "migrants": 44, "boats": 1, "uncontrolled": 0}, {"date": "2026-09-25", "migrants": 0, "boats": 0, "uncontrolled": 0}]};
+  let rt;
+  if("ResizeObserver" in window){
+    let lastW = 0;
+    new ResizeObserver(en=>{ const w=Math.round(en[0].contentRect.width); if(w && w!==lastW && sorted.length){ lastW=w; clearTimeout(rt); rt=setTimeout(drawChart,60); } }).observe(chartEl);
+  } else addEventListener("resize", ()=>{ clearTimeout(rt); rt=setTimeout(drawChart,100); });
+
+  function drawList(){
+    const recent = sorted.slice().reverse();
+    const peak = sorted.slice(-range).reduce((a,b)=>b.migrants>a.migrants?b:a, sorted[0]);
+    const ul = $("list"); ul.textContent = "";
+    recent.slice(0, listCount).forEach(d=>{
+      const li = document.createElement("li");
+      if(d.migrants===0) li.className = "zero"; else if(d===peak) li.className = "peak";
+      const a = document.createElement("span"); a.className = "d"; a.textContent = dList.format(parse(d.date));
+      const b = document.createElement("span"); b.className = "n"; b.textContent = fmt(d.migrants);
+      const c = document.createElement("span"); c.className = "m";
+      if(d.migrants===0) c.textContent = "No crossings detected";
+      else {
+        const p = [fmt(d.boats) + (d.boats===1?" boat":" boats")];
+        if(d.boats) p.push(Math.round(d.migrants/d.boats) + " per boat");
+        if(d.uncontrolled) p.push(d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings"));
+        c.textContent = p.join(" · ");
+      }
+      li.append(a,b,c); ul.append(li);
+    });
+    $("more").hidden = listCount >= recent.length;
+  }
+  $("more").addEventListener("click", ()=>{ listCount += 30; drawList(); });
+
   function load(data){
     meta = data;
-    days = (data.days || []).filter(d => d && d.date);
-    render();
-  }
-  async function start(){
-    try{
-      const r = await fetch("data.json", {cache:"no-store"});
-      if(!r.ok) throw new Error(r.status);
-      load(await r.json());
-    }catch(e){
-      load(SEED);
+    sorted = (data.days||[]).filter(d=>d && d.date).sort((a,b)=>a.date<b.date?-1:1);
+    if(!sorted.length){
+      $("freshText").textContent = "No figures yet";
+      $("chart").innerHTML = '<div class="empty">No figures yet.</div>';
+      $("list").innerHTML = '<li class="empty">No figures yet.</li>';
+      return;
     }
+    renderSummary(); setRange(range); drawList();
+    document.querySelector(".seg").hidden = sorted.length < 15;
   }
-  start();
+
+  const SEED = {"ytdBase":18565,"ytdBaseDate":"2026-09-23","prevYearSamePoint":32188,"checkedAt":"2026-09-27T08:20:00Z","days":[{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0}]};
+
+  (async function start(){
+    try{
+      const r = await fetch("data.json",{cache:"no-store"});
+      if(!r.ok) throw 0;
+      load(await r.json());
+    }catch(e){ load(SEED); }
+  })();
+  loadWeather();
+  setInterval(loadWeather, 30*60*1000);   // refresh conditions every 30 minutes
 })();
 </script>
 </body>
