@@ -12,7 +12,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `og-image.png` – the preview picture X shows when someone shares the link; redrawn each morning with the latest figure
 - `scripts/og_image.py` – draws `og-image.png`
 - `data.json` – the full daily history, loaded in the background
-- `recent.json` – the last 90 days and totals, used by the embed widget and beta page
+- `recent.json` – the last 90 days and totals, used by the embed widget
 - `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
 - `how-it-works.html` – sources, definitions, downloads and the embed code
 - `embed.html` – the small "latest figure" box other sites can embed
@@ -20,7 +20,6 @@ A one-page site showing how many people cross the English Channel in small boats
 - `robots.txt`, `sitemap.xml` – help search engines find and index the site
 - `week-card.png` – the "Week in numbers" picture, redrawn daily for the last full week
 - `manifest.webmanifest`, `icon-192.png`, `icon-512.png` – let visitors add the site to their home screen as an app
-- `experimental.html` – the stripped-back beta version
 - `scripts/update.py` – fetches the latest figures from GOV.UK and updates `data.json`
 - `.github/workflows/update.yml` – runs the update script every day at 10:30 UTC
 

@@ -3,9 +3,9 @@
    used only when there is no connection. Icons and other fixed files: served
    from the saved copy straight away and refreshed in the background.
    Weather requests go straight to Open-Meteo and are never saved. */
-const CACHE = "cc-v1";
+const CACHE = "cc-v2";
 const CORE = [
-  "./", "index.html", "experimental.html", "how-it-works.html", "privacy.html",
+  "./", "index.html", "how-it-works.html", "privacy.html",
   "recent.json", "favicon.svg", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png"
 ];
 
