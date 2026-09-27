@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Daily count of people crossing the English Channel in small boats, from provisional Home Office data, with current Channel conditions.">
+<meta name="description" content="No small boat crossings of the Channel were detected on Sat 26 September. 2026 so far: 18,609. Daily Home Office figures, records and Channel conditions.">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="format-detection" content="telephone=no">
@@ -26,6 +26,26 @@
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
 <meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-09-26">
 <link rel="canonical" href="https://channelcrossings.world/">
+<!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Channel Crossings: daily small boat arrivals to the UK",
+  "description": "Daily number of people detected crossing the English Channel to the UK in small boats, with boats and uncontrolled landings, from provisional Home Office figures since 2018. Updated every day.",
+  "url": "https://channelcrossings.world/",
+  "sameAs": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
+  "isBasedOn": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
+  "license": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "isAccessibleForFree": true,
+  "keywords": ["English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
+  "creator": {"@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "email": "x.chancrossings@gmail.com"},
+  "temporalCoverage": "2018-01-01/2026-09-26",
+  "spatialCoverage": "English Channel, United Kingdom",
+  "dateModified": "2026-09-26",
+  "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://channelcrossings.world/data.csv"}]
+}
+</script>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -36,7 +56,7 @@
   --card:#FFFFFF;                     /* secondarySystemGroupedBackground */
   --fill:rgba(118,118,128,.12);       /* tertiarySystemFill */
   --label:#000000;
-  --label2:rgba(60,60,67,.6);         /* secondaryLabel */
+  --label2:rgba(60,60,67,.74);         /* secondaryLabel */
   --label3:rgba(60,60,67,.3);         /* tertiaryLabel */
   --sep:rgba(60,60,67,.29);           /* separator */
   --blue:#007AFF;
@@ -80,8 +100,10 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--label);font:17px/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px}
+/* On iPhone, follow the Larger Text setting (Settings › Accessibility › Display & Text Size) */
+@supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
+body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 .wrap{max-width:720px;margin:0 auto;padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));padding-block:max(12px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));display:grid;gap:28px}
 .num{font-variant-numeric:tabular-nums}
 
@@ -94,7 +116,7 @@ header{display:grid;gap:4px;padding-top:24px}
 .share-btn svg{width:22px;height:22px}
 .share-btn:disabled{opacity:.4;cursor:default}
 .share-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--material);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:15px;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
+.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--material);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* Records */
@@ -102,12 +124,12 @@ header{display:grid;gap:4px;padding-top:24px}
 .list.records li + li::before{left:62px}
 .records .ri{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#fff;grid-column:1;grid-row:1 / 3;align-self:center}
 .records .ri svg{width:18px;height:18px}
-.records .rl{font-size:17px;grid-column:2;grid-row:1;text-align:left}
-.records .rv{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;grid-column:3;grid-row:1 / 3;align-self:center;white-space:nowrap}
-.records .rs{font-size:15px;color:var(--label2);grid-column:2;grid-row:2;text-align:left}
-.overline{font-size:13px;font-weight:600;color:var(--label2);letter-spacing:-.005em;text-transform:uppercase}
+.records .rl{font-size:1rem;grid-column:2;grid-row:1;text-align:left}
+.records .rv{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;grid-column:3;grid-row:1 / 3;align-self:center;white-space:nowrap}
+.records .rs{font-size:.882rem;color:var(--label2);grid-column:2;grid-row:2;text-align:left}
+.overline{font-size:.765rem;font-weight:600;color:var(--label2);letter-spacing:-.005em;text-transform:uppercase}
 h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balance}
-.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:15px;color:var(--label2);margin-top:4px}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.882rem;color:var(--label2);margin-top:4px}
 .fresh{display:inline-flex;align-items:center;gap:6px}
 .fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .fresh.stale i{background:var(--orange)}
@@ -128,17 +150,17 @@ h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balan
 .chip b.num{font-variant-numeric:tabular-nums}
 .b-icon svg{width:24px;height:24px}
 .b-body{display:grid;gap:2px;min-width:0}
-.b-top{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:var(--label2)}
-.b-title{font-weight:600;font-size:17px;letter-spacing:-.024em}
-.b-text{font-size:15px;color:var(--label2);letter-spacing:-.016em}
+.b-top{display:flex;justify-content:space-between;gap:8px;font-size:.765rem;color:var(--label2)}
+.b-title{font-weight:600;font-size:1rem;letter-spacing:-.024em}
+.b-text{font-size:.882rem;color:var(--label2);letter-spacing:-.016em}
 .b-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
 .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
 .b-close svg{width:10px;height:10px}
 .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
 .outlook{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
 .outlook::-webkit-scrollbar{display:none}
-.chip{flex:none;display:grid;gap:1px;padding:6px 10px;border-radius:10px;background:var(--fill);font-size:13px;min-width:72px}
-.chip b{font-weight:600;font-size:13px}
+.chip{flex:none;display:grid;gap:1px;padding:6px 10px;border-radius:10px;background:var(--fill);font-size:.765rem;min-width:72px}
+.chip b{font-weight:600;font-size:.765rem}
 .chip span{color:var(--label2)}
 .chip[data-level="calm"] b{color:var(--green)}
 .chip[data-level="moderate"] b{color:var(--orange)}
@@ -148,15 +170,15 @@ h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balan
 section{display:grid;gap:8px;min-width:0}
 .sec-title{display:flex;justify-content:space-between;align-items:end;gap:12px;padding-inline:4px}
 h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
-.footnote{font-size:13px;line-height:1.38;color:var(--label2);letter-spacing:-.006em;padding-inline:16px;margin:0}
+.footnote{font-size:.765rem;line-height:1.38;color:var(--label2);letter-spacing:-.006em;padding-inline:16px;margin:0}
 .card{background:var(--card);border-radius:12px;overflow:hidden}
 
 /* Summary tiles */
 .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .tile{background:var(--card);border-radius:12px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
-.tile .k{font-size:13px;font-weight:600;color:var(--label2);letter-spacing:-.005em}
+.tile .k{font-size:.765rem;font-weight:600;color:var(--label2);letter-spacing:-.005em}
 .tile .v{font:700 34px/1.15 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
-.tile .s{font-size:13px;color:var(--label2);overflow-wrap:anywhere}
+.tile .s{font-size:.765rem;color:var(--label2);overflow-wrap:anywhere}
 .delta{font-weight:600}
 .delta.down{color:var(--green)}.delta.up{color:var(--red)}
 .newtag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--blue);color:#fff;font-size:11px;font-weight:600;letter-spacing:.02em;vertical-align:1px}
@@ -168,6 +190,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .list li.tap:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;border-radius:8px}
 .busy{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bar-peak);margin-right:7px;vertical-align:1px}
 .newdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue);margin-left:7px;vertical-align:1px}
+.rev{color:var(--orange);font-weight:500}
 @media (hover:hover){.list li.tap:hover{background:var(--fill)}}
 
 /* Segmented control */
@@ -180,7 +203,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .chart-card{padding:14px 12px 10px;display:grid;gap:6px}
 .readout{padding-inline:4px;min-height:48px}
 .readout .rv{font:700 28px/1.15 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
-.readout .rd{font-size:15px;color:var(--label2)}
+.readout .rd{font-size:.882rem;color:var(--label2)}
 .chart{width:100%;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:pointer;border-radius:8px}
 .chart:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .chart svg{display:block;width:100%;height:auto}
@@ -190,20 +213,20 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .list{list-style:none;margin:0;padding:0}
 .list li{display:grid;grid-template-columns:1fr auto;gap:1px 12px;align-items:center;min-height:60px;padding:10px 16px;position:relative}
 .list li + li::before{content:"";position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
-.list .d{font-size:17px}
-.list .n{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
-.list .m{grid-column:1 / -1;font-size:15px;color:var(--label2)}
+.list .d{font-size:1rem}
+.list .n{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.list .m{grid-column:1 / -1;font-size:.882rem;color:var(--label2)}
 .list li.zero .n,.list li.zero .d{color:var(--label2);font-weight:400}
 .list li.peak .n{color:var(--orange)}
 .more{appearance:none;border:0;background:var(--card);color:var(--blue);font:400 17px/1 var(--font);letter-spacing:-.022em;min-height:44px;width:100%;border-radius:12px;cursor:pointer}
 .more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
-.empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:15px}
+.empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:.882rem}
 
-.site-footer{display:grid;gap:8px;justify-items:center;text-align:center;padding-top:20px;border-top:.5px solid var(--sep);font-size:13px;line-height:1.45;color:var(--label2)}
+.site-footer{display:grid;gap:8px;justify-items:center;text-align:center;padding-top:20px;border-top:.5px solid var(--sep);font-size:.765rem;line-height:1.45;color:var(--label2)}
 .site-footer p{margin:0;max-width:52ch}
 .site-footer a{color:var(--blue);text-decoration:none}
-.site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 10px;font-size:15px}
+.site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 10px;font-size:.882rem}
 .site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
 
 @media (max-width:600px){
@@ -312,12 +335,14 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <footer class="site-footer">
-    <nav aria-label="Site links"><a href="privacy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="privacy.html">Terms of Use</a><span aria-hidden="true">·</span><a href="experimental.html">Try an experimental version</a><span aria-hidden="true">·</span><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+    <nav aria-label="Site links"><a href="how-it-works.html">How it works</a><span aria-hidden="true">·</span><a href="privacy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="privacy.html">Terms of Use</a><span aria-hidden="true">·</span><a href="experimental.html">Try an experimental version</a><span aria-hidden="true">·</span><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
     <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
     <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
   </footer>
 </div>
 
+<!-- Latest figures, rebuilt every morning by scripts/update.py so the page shows them instantly -->
+<script id="seed" type="application/json">{"ytdBase":11821,"ytdBaseDate":"2026-06-28","fullYear":true,"checkedAt":"2026-09-27T11:23:59Z","days":[{"date":"2026-06-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-06-30","migrants":63,"boats":1,"uncontrolled":null},{"date":"2026-07-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-08","migrants":249,"boats":4,"uncontrolled":null},{"date":"2026-07-09","migrants":81,"boats":1,"uncontrolled":null},{"date":"2026-07-10","migrants":255,"boats":3,"uncontrolled":null},{"date":"2026-07-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-14","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-15","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-22","migrants":172,"boats":3,"uncontrolled":null},{"date":"2026-07-23","migrants":366,"boats":3,"uncontrolled":null},{"date":"2026-07-24","migrants":103,"boats":2,"uncontrolled":null},{"date":"2026-07-25","migrants":240,"boats":5,"uncontrolled":null},{"date":"2026-07-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-27","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-28","migrants":26,"boats":1,"uncontrolled":null},{"date":"2026-07-29","migrants":752,"boats":9,"uncontrolled":null},{"date":"2026-07-30","migrants":72,"boats":1,"uncontrolled":null},{"date":"2026-07-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-01","migrants":326,"boats":4,"uncontrolled":null},{"date":"2026-08-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-03","migrants":35,"boats":1,"uncontrolled":null},{"date":"2026-08-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-08","migrants":258,"boats":4,"uncontrolled":null},{"date":"2026-08-09","migrants":423,"boats":5,"uncontrolled":null},{"date":"2026-08-10","migrants":230,"boats":1,"uncontrolled":null},{"date":"2026-08-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-14","migrants":93,"boats":1,"uncontrolled":null},{"date":"2026-08-15","migrants":82,"boats":1,"uncontrolled":null},{"date":"2026-08-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-17","migrants":250,"boats":3,"uncontrolled":null},{"date":"2026-08-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-22","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-23","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-24","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-25","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-27","migrants":494,"boats":7,"uncontrolled":null},{"date":"2026-08-28","migrants":122,"boats":3,"uncontrolled":null},{"date":"2026-08-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-30","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-06","migrants":625,"boats":8,"uncontrolled":null},{"date":"2026-09-07","migrants":143,"boats":2,"uncontrolled":null},{"date":"2026-09-08","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-09","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-10","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-14","migrants":144,"boats":2,"uncontrolled":null},{"date":"2026-09-15","migrants":55,"boats":1,"uncontrolled":null},{"date":"2026-09-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-26","migrants":0,"boats":0,"uncontrolled":0}],"prevYearSamePoint":32188}</script>
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -513,7 +538,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       } else s.textContent = "Running total";
       // Daily average across the days of the year so far
       const dayOfYear = Math.round((parse(last.date) - parse(yr+"-01-01"))/864e5) + 1;
-      if(meta.ytdBaseDate === yr+"-01-00") $("ytdAvg").textContent = "Average " + fmt(Math.round(ytd/dayOfYear)) + " a day";
+      if(meta.ytdBaseDate === yr+"-01-00" || meta.fullYear) $("ytdAvg").textContent = "Average " + fmt(Math.round(ytd/dayOfYear)) + " a day";
     } else {
       $("ytdV").textContent = "–"; $("ytdS").textContent = "Not yet available";
     }
@@ -537,7 +562,11 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     const sel = data.find(d=>d.date===selected) || data[data.length-1];
     selected = sel.date; geom = {m, slot, data};
 
-    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Bar chart of arrivals per day, last '+data.length+' days">';
+    const total = data.reduce((s2,d)=>s2+d.migrants,0);
+    const summary = "Bar chart of people arriving per day, " + dShort.format(parse(data[0].date)) + " to " + dShort.format(parse(data[data.length-1].date)) + ". "
+      + fmt(total) + " people in total. " + (peak.migrants ? "Busiest day " + dMid.format(parse(peak.date)) + " with " + fmt(peak.migrants) + ". " : "")
+      + data.filter(d=>d.migrants===0).length + " days without crossings.";
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+summary+'">';
     for(let v=0; v<=top; v+=step){
       s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--sep)" stroke-width=".5"'+(v?' stroke-dasharray="2 3"':'')+'/>';
       s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+(v>=1000?(v/1000)+'k':v)+'</text>';
@@ -574,6 +603,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     let t = dMid.format(parse(sel.date)) + " · " + fmt(sel.boats) + (sel.boats===1?" boat":" boats");
     if(sel.boats) t += " · " + Math.round(sel.migrants/sel.boats) + " per boat";
     if(sel.uncontrolled) t += " · " + sel.uncontrolled + " uncontrolled";
+    if(sel.revised) t += " · revised from " + fmt(sel.revised.from);
     $("rd").textContent = t;
   }
 
@@ -639,6 +669,12 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
         if(d.boats) p.push(Math.round(d.migrants/d.boats) + " per boat");
         if(d.uncontrolled) p.push(d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings"));
         c.textContent = p.join(" · ");
+      }
+      if(d.revised){
+        const rv = document.createElement("span"); rv.className = "rev";
+        rv.textContent = "Revised from " + fmt(d.revised.from);
+        rv.title = "The Home Office updated this figure on " + dMid.format(parse(d.revised.on));
+        c.append(" · ", rv);
       }
       li.append(a,b,c); ul.append(li);
     });
@@ -833,7 +869,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     box.addEventListener("animationend", ()=>{ box.hidden = true; box.classList.remove("leaving"); }, {once:true});
   });
 
-  function load(data){
+  let seenChecked = false;
+  function load(data, full){
     meta = data;
     sorted = (data.days||[]).filter(d=>d && d.date).sort((a,b)=>a.date<b.date?-1:1);
     if(!sorted.length){
@@ -843,35 +880,48 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("records").innerHTML = '<li class="empty">No figures yet.</li>';
       return;
     }
-    // "New since your last visit": compare with the latest date this browser saw last time
+    // "New since your last visit": compare with the latest date this browser saw last time (once per visit)
     const latest = sorted[sorted.length-1].date;
-    const seen = store.get("lastSeenLatest");
-    newSince = (seen && /^\d{4}-\d{2}-\d{2}$/.test(seen) && seen < latest) ? seen : null;
-    store.set("lastSeenLatest", latest);
+    if(!seenChecked){
+      const seen = store.get("lastSeenLatest");
+      newSince = (seen && /^\d{4}-\d{2}-\d{2}$/.test(seen) && seen < latest) ? seen : null;
+      store.set("lastSeenLatest", latest);
+      seenChecked = true;
+    }
 
-    // Busiest 5% of days, once there is a long enough history to judge by
-    if(sorted.length >= 365){
+    // Busiest 5% of days, once the full history is here to judge by
+    if(full && sorted.length >= 365){
       const vals = sorted.map(d=>d.migrants).sort((a,b)=>a-b);
       busyMin = Math.max(1, vals[Math.floor(vals.length*0.95)]);
     } else busyMin = Infinity;
 
-    renderSummary(); setRange(range); drawList(); renderRecords(); renderOnThisDay();
+    renderSummary(); setRange(range); drawList();
+    if(full){ renderRecords(); renderOnThisDay(); }
     $("shareBtn").disabled = false;
     document.querySelector(".seg").hidden = sorted.length < 15;
   }
 
-  const SEED = {"ytdBase":18565,"ytdBaseDate":"2026-09-23","prevYearSamePoint":32188,"checkedAt":"2026-09-27T08:20:00Z","days":[{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0}]};
+  // 1. Show the figures built into the page straight away (updated daily by the site's update job)
+  let seed = null;
+  try{ seed = JSON.parse($("seed").textContent); }catch(e){ /* no built-in figures */ }
+  if(seed && seed.days && seed.days.length) load(seed, false);
 
+  // 2. Fetch the full history since 2018 in the background for Records, On this day and busy days
   (async function start(){
     try{
-      const r = await fetch("data.json",{cache:"no-store"});
+      const r = await fetch("data.json");
       if(!r.ok) throw 0;
-      load(await r.json());
-    }catch(e){ load(SEED); }
+      load(await r.json(), true);
+    }catch(e){
+      if(!seed) $("freshText").textContent = "Couldn't load the figures. Try reloading the page.";
+      $("records").innerHTML = '<li class="empty">Records need an internet connection.</li>';
+    }
   })();
   loadWeather();
   setInterval(loadWeather, 30*60*1000);   // refresh conditions every 30 minutes
 })();
+// Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
+if("serviceWorker" in navigator){ addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
 </script>
 </body>
 </html>

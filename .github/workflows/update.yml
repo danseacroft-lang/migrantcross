@@ -16,12 +16,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pandas lxml odfpy requests pillow
+      - run: pip install pandas lxml odfpy requests pillow requests-oauthlib
       - run: python scripts/update.py
-      - name: Commit new figures
+      - name: Publish new figures
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.json data.csv og-image.png index.html
+          git add data.json recent.json data.csv og-image.png week-card.png index.html
           git diff --cached --quiet || git commit -m "Update crossing figures"
           git push
+      # Posts to X only once the four X keys are added under Settings > Secrets and variables > Actions
+      - name: Post to X
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          python scripts/post_x.py
+          if [ -f x_state.json ]; then
+            git add x_state.json
+            git diff --cached --quiet || { git commit -m "Record X post"; git push; }
+          fi

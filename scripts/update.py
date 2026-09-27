@@ -1,26 +1,32 @@
-"""Fetch the Home Office small boat figures and update data.json.
+"""Fetch the Home Office small boat figures and rebuild the site's data files.
 
 Runs daily from the GitHub Action in .github/workflows/update.yml.
 Two sources, both provisional Home Office data:
   1. The weekly time-series spreadsheet (.ods), daily figures since 2018.
   2. The "last 7 days" page, updated every day.
 The 7-day page wins where the two overlap, because it is newer.
+
+Outputs (see publish()):
+  data.json    full daily history, loaded in the background by the page
+  recent.json  last 90 days plus totals: tiny, for the embed widget and beta page
+  data.csv     the full history as a spreadsheet download
+  index.html   latest figures built into the page so they show instantly,
+               plus an up-to-date description and dataset date for Google
+  og-image.png link preview picture; week-card.png weekly summary picture
 """
 import io
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-
-import pandas as pd
-import requests
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data.json"
 PUB = "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats"
 LAST7 = PUB + "/migrants-detected-crossing-the-english-channel-in-small-boats-last-7-days"
 HEADERS = {"User-Agent": "channel-crossings-tracker (GitHub Action)"}
+RECENT_DAYS = 90
 
 
 def load():
@@ -29,7 +35,10 @@ def load():
     return {"days": []}
 
 
+# ---------------------------------------------------------------- fetching
+
 def to_int(v):
+    import pandas as pd
     try:
         if pd.isna(v):
             return 0
@@ -40,6 +49,8 @@ def to_int(v):
 
 
 def fetch_last7():
+    import pandas as pd
+    import requests
     html = requests.get(LAST7, headers=HEADERS, timeout=60).text
     tables = pd.read_html(io.StringIO(html))
     out = {}
@@ -67,6 +78,8 @@ def fetch_last7():
 
 def fetch_timeseries():
     """Best effort: the spreadsheet's layout can change, so failures are non-fatal."""
+    import pandas as pd
+    import requests
     page = requests.get(PUB, headers=HEADERS, timeout=60).text
     m = re.search(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.ods', page)
     if not m:
@@ -76,7 +89,6 @@ def fetch_timeseries():
     sheets = pd.read_excel(io.BytesIO(raw), engine="odf", sheet_name=None, header=None)
     out = {}
     for name, df in sheets.items():
-        # Find the header row: one that mentions a date and migrants.
         hdr = None
         for i in range(min(len(df), 30)):
             row = [str(x).lower() for x in df.iloc[i].tolist()]
@@ -107,43 +119,43 @@ def fetch_timeseries():
     return out
 
 
-def write_csv(days):
-    """data.csv: the full daily history as a spreadsheet-friendly download."""
-    lines = ["date,people,boats,uncontrolled_landings"]
-    for d in days:
-        u = "" if d.get("uncontrolled") is None else str(d["uncontrolled"])
-        lines.append(f"{d['date']},{d['migrants']},{d['boats']},{u}")
-    (ROOT / "data.csv").write_text("\n".join(lines) + "\n")
-    print("Saved data.csv")
+# ---------------------------------------------------------------- merging
 
+def merge(data, ts, last7, today):
+    """Combine stored days with fresh figures and flag any revised days."""
+    old = {d["date"]: d for d in data.get("days", [])}
+    days = {k: dict(v) for k, v in old.items()}
 
-def main():
-    data = load()
-    days = {d["date"]: d for d in data.get("days", [])}
-
-    try:
-        ts = fetch_timeseries()
-    except Exception as e:  # noqa: BLE001
-        print("Time series skipped:", e)
-        ts = {}
     for k, v in ts.items():
         prev = days.get(k, {})
         if prev.get("uncontrolled") is not None:
             v["uncontrolled"] = prev["uncontrolled"]
         days[k] = v
-
-    last7 = fetch_last7()
-    if not last7:
-        print("Could not read the last-7-days table", file=sys.stderr)
-        sys.exit(1)
     days.update(last7)
 
-    ordered = sorted(days.values(), key=lambda d: d["date"])
+    revised = 0
+    for k, d in days.items():
+        before = old.get(k)
+        if not before:
+            continue
+        if d["migrants"] != before["migrants"]:
+            # Keep the first published figure if a day is revised more than once
+            first = before.get("revised", {}).get("from", before["migrants"])
+            if d["migrants"] == first:
+                d.pop("revised", None)          # revised back to the original figure
+            else:
+                d["revised"] = {"from": first, "on": today}
+                revised += 1
+        elif before.get("revised"):
+            d["revised"] = before["revised"]    # unchanged today: keep the earlier note
+    if revised:
+        print(f"{revised} day(s) revised")
+    return sorted(days.values(), key=lambda d: d["date"])
+
+
+def year_totals(data, ordered):
     latest = ordered[-1]["date"]
     year = latest[:4]
-
-    # Year to date: exact if we hold every day of the year, otherwise keep the
-    # reported base total and add the days after it.
     have_full_year = any(d["date"] <= f"{year}-01-07" for d in ordered if d["date"].startswith(year))
     if have_full_year:
         data["ytdBase"] = 0
@@ -158,27 +170,118 @@ def main():
         data["ytdBaseDate"] = f"{year}-01-00"
         data.pop("prevYearSamePoint", None)
 
-    data["days"] = ordered
-    data["checkedAt"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    data["source"] = PUB
-    DATA.write_text(json.dumps(data, indent=1) + "\n")
-    print(f"Saved {len(ordered)} days, latest {latest}")
+
+# ---------------------------------------------------------------- outputs
+
+def dump_days(days):
+    """Compact JSON with one day per line: small to download, readable in diffs."""
+    return "[\n" + ",\n".join(json.dumps(d, separators=(",", ":")) for d in days) + "\n]"
+
+
+def recent_view(data, n=RECENT_DAYS):
+    """The last n days plus a year-to-date base, so totals work without the full history."""
+    days = data["days"]
+    recent = days[-n:]
+    year = days[-1]["date"][:4]
+    start = recent[0]["date"]
+    base_date = data.get("ytdBaseDate", f"{year}-01-00")
+    base = data.get("ytdBase", 0)
+    if start[:4] == year and start > base_date:
+        before = sum(d["migrants"] for d in days if base_date < d["date"] < start and d["date"][:4] == year)
+        base, base_date = base + before, (date.fromisoformat(start) - timedelta(days=1)).isoformat()
+    out = {
+        "ytdBase": base,
+        "ytdBaseDate": base_date,
+        "fullYear": data.get("ytdBaseDate") == f"{year}-01-00",
+        "checkedAt": data.get("checkedAt"),
+        "days": recent,
+    }
+    if data.get("prevYearSamePoint"):
+        out["prevYearSamePoint"] = data["prevYearSamePoint"]
+    return out
+
+
+def write_csv(days):
+    lines = ["date,people,boats,uncontrolled_landings"]
+    for d in days:
+        u = "" if d.get("uncontrolled") is None else str(d["uncontrolled"])
+        lines.append(f"{d['date']},{d['migrants']},{d['boats']},{u}")
+    (ROOT / "data.csv").write_text("\n".join(lines) + "\n")
+
+
+def nice_date(iso):
+    d = date.fromisoformat(iso)
+    return f"{d.strftime('%a')} {d.day} {d.strftime('%B')}"
+
+
+def update_page(data, recent):
+    """Build the latest figures, description and dataset date into index.html."""
+    page = ROOT / "index.html"
+    html = page.read_text()
+    last = data["days"][-1]
+    latest = last["date"]
+
+    seed = json.dumps(recent, separators=(",", ":")).replace("</", "<\\/")
+    html = re.sub(r'(<script id="seed" type="application/json">).*?(</script>)',
+                  lambda m: m.group(1) + seed + m.group(2), html, count=1, flags=re.S)
+
+    n = last["migrants"]
+    ytd = recent["ytdBase"] + sum(d["migrants"] for d in recent["days"] if d["date"] > recent["ytdBaseDate"] and d["date"][:4] == latest[:4])
+    lead = (f"{n:,} {'person' if n == 1 else 'people'} crossed the Channel in small boats on {nice_date(latest)}."
+            if n else f"No small boat crossings of the Channel were detected on {nice_date(latest)}.")
+    desc = f"{lead} {latest[:4]} so far: {ytd:,}. Daily Home Office figures, records and Channel conditions."
+    html = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', html, count=1)
+
+    html = re.sub(r'"dateModified":\s*"[^"]*"', f'"dateModified": "{latest}"', html, count=1)
+    html = re.sub(r'"temporalCoverage":\s*"[^"]*"', f'"temporalCoverage": "{data["days"][0]["date"]}/{latest}"', html, count=1)
+    html = re.sub(r"og-image\.png(\?v=[0-9-]*)?", "og-image.png?v=" + latest, html)
+    page.write_text(html)
+
+
+def publish(data):
+    """Write every output file from data (with data['days'] already merged)."""
+    ordered = data["days"]
+    DATA.write_text(
+        json.dumps({k: v for k, v in data.items() if k != "days"}, indent=1)[:-2]
+        + ',\n "days": ' + dump_days(ordered) + "\n}\n"
+    )
+    recent = recent_view(data)
+    (ROOT / "recent.json").write_text(json.dumps(recent, separators=(",", ":")) + "\n")
     write_csv(ordered)
+    update_page(data, recent)
+    print(f"Saved {len(ordered)} days, latest {ordered[-1]['date']}")
 
     try:
-        from og_image import draw
+        from og_image import draw, draw_week
         draw(data)
-        print("Saved og-image.png")
-        # Stamp the preview image link with the latest date, so X and other
-        # sites fetch the new picture instead of showing a cached old one.
-        page = ROOT / "index.html"
-        html = page.read_text()
-        stamped = re.sub(r"og-image\.png(\?v=[0-9-]*)?", "og-image.png?v=" + latest, html)
-        if stamped != html:
-            page.write_text(stamped)
-    except Exception as e:  # noqa: BLE001 - the preview image is optional
-        print("Preview image skipped:", e)
+        draw_week(data)
+        print("Saved og-image.png and week-card.png")
+    except Exception as e:  # noqa: BLE001 - the pictures are optional
+        print("Pictures skipped:", e)
+
+
+def main():
+    data = load()
+    now = datetime.now(timezone.utc)
+    try:
+        ts = fetch_timeseries()
+    except Exception as e:  # noqa: BLE001
+        print("Time series skipped:", e)
+        ts = {}
+    last7 = fetch_last7()
+    if not last7:
+        print("Could not read the last-7-days table", file=sys.stderr)
+        sys.exit(1)
+
+    data["days"] = merge(data, ts, last7, now.strftime("%Y-%m-%d"))
+    year_totals(data, data["days"])
+    data["checkedAt"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    data["source"] = PUB
+    publish(data)
 
 
 if __name__ == "__main__":
-    main()
+    if "--publish-only" in sys.argv:   # rebuild outputs from data.json without fetching
+        publish(load())
+    else:
+        main()

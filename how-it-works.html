@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="How Channel Crossings works: where the daily small boat figures come from, when they update, what they count, and how to download or embed them.">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>How It Works · Channel Crossings</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://channelcrossings.world/how-it-works.html">
+<style>
+:root{
+  --bg:#F2F2F7; --card:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.74);
+  --sep:rgba(60,60,67,.22); --fill:rgba(118,118,128,.12); --blue:#007AFF; --orange:#C93400; --code:#F2F2F7;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
+    --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --blue:#0A84FF; --orange:#FF9F0A; --code:#2C2C2E;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
+  --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --blue:#0A84FF; --orange:#FF9F0A; --code:#2C2C2E;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px}
+@supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
+body{
+  margin:0; background:var(--bg); color:var(--label);
+  font:1rem/1.45 var(--font); letter-spacing:-.022em; -webkit-font-smoothing:antialiased;
+  padding-block:max(24px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));
+  padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap{max-width:680px; margin:0 auto; display:grid; gap:12px}
+.home-btn{
+  display:inline-flex; align-items:center; gap:6px; text-decoration:none; justify-self:start;
+  font:600 .882rem/1 var(--font); color:var(--blue);
+  min-height:44px; padding:0 18px 0 12px; border-radius:22px; background:var(--fill); margin-bottom:12px;
+}
+.home-btn svg{width:18px; height:18px}
+.home-btn:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
+h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0}
+.lead{color:var(--label2); margin:4px 0 16px}
+section{background:var(--card); border-radius:12px; padding:18px 18px 6px}
+h2{font:600 1rem/1.3 var(--font); margin:0 0 8px}
+p,li{font-size:.882rem; line-height:1.55; margin:0 0 12px}
+ul{margin:0 0 12px; padding-left:20px}
+a{color:var(--blue); text-decoration:none}
+strong{font-weight:600}
+.rev{color:var(--orange); font-weight:500}
+.dot{display:inline-block; width:8px; height:8px; border-radius:50%; vertical-align:1px}
+code{font:.8rem/1.5 var(--mono)}
+pre{background:var(--code); border-radius:10px; padding:12px; margin:0 0 10px; overflow-x:auto; white-space:pre-wrap; word-break:break-all}
+.copy{appearance:none; border:0; border-radius:10px; background:var(--fill); color:var(--blue); font:600 .882rem/1 var(--font); min-height:44px; padding:0 16px; margin-bottom:14px; cursor:pointer}
+.copy:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
+.embed-preview{border:0; border-radius:12px; width:100%; max-width:340px; height:190px; display:block; margin:0 0 14px}
+footer{font-size:.765rem; color:var(--label2); text-align:center; margin-top:12px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="home-btn" href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    Home
+  </a>
+  <h1>How It Works</h1>
+  <p class="lead">Where the figures come from, what they count, and how to use them.</p>
+
+  <section>
+    <h2>Where the figures come from</h2>
+    <p>Every figure comes from the Home Office's <a href="https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats">small boat activity</a> page on GOV.UK. We use two parts of it:</p>
+    <ul>
+      <li><strong>Last 7 days:</strong> updated every day, and the source of the newest figures.</li>
+      <li><strong>Time series:</strong> daily figures back to 1 January 2018, updated on Fridays.</li>
+    </ul>
+    <p>The Home Office describes these figures as provisional. Final, checked figures appear later in the quarterly Immigration System Statistics. Channel Crossings is independent and not linked to the UK Government.</p>
+  </section>
+
+  <section>
+    <h2>When it updates</h2>
+    <p>The site checks for new figures every day at 10:30 UTC (11:30 UK summer time). The Home Office usually publishes a day's figure the following morning, so the latest day shown is normally yesterday. At weekends and on bank holidays the figures can arrive later.</p>
+  </section>
+
+  <section>
+    <h2>What is counted</h2>
+    <ul>
+      <li><strong>People:</strong> people detected arriving in the UK in small boats such as dinghies and inflatable boats, including those picked up at sea and brought ashore.</li>
+      <li><strong>Boats:</strong> the number of small boats those people arrived in.</li>
+      <li><strong>Uncontrolled landings:</strong> boats that reached the shore without being intercepted at sea. The Home Office only includes these in its daily page, so our count starts from 19 September 2026.</li>
+    </ul>
+    <p>The figures leave out people who arrive hidden in vehicles or on larger vessels, and anyone who arrives undetected. Days with no crossings are usually down to bad weather.</p>
+  </section>
+
+  <section>
+    <h2>Revised figures</h2>
+    <p>The Home Office sometimes corrects a day's figure after first publishing it. When that happens, the site shows the new figure with a note such as <span class="rev">Revised from 412</span>, so changes are never made silently.</p>
+  </section>
+
+  <section>
+    <h2>Totals, records and busy days</h2>
+    <ul>
+      <li><strong>Year so far</strong> adds up every day since 1 January. The comparison with last year uses the same date range last year.</li>
+      <li><strong>Records</strong> are worked out from the daily figures since 2018.</li>
+      <li>An orange dot <span class="dot" style="background:#FF9500"></span> marks one of the busiest 5% of days since 2018.</li>
+      <li>A blue dot <span class="dot" style="background:var(--blue)"></span> marks figures that are new since your last visit. Your phone or computer remembers this, not us.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Channel conditions</h2>
+    <p>The weather notice uses <a href="https://open-meteo.com/">Open-Meteo</a> wind and wave forecasts for the middle of the Dover Strait. Crossings cluster on calm days, so the site rates conditions as <strong>calm</strong> (wind under 12 mph and waves under 0.5 m), <strong>moderate</strong> (wind under 18 mph and waves under 1 m) or <strong>rough</strong>.</p>
+    <p><strong>This is a rough guide for context, not a marine forecast.</strong> Never use it to decide whether it is safe to go to sea.</p>
+  </section>
+
+  <section>
+    <h2>Download the data</h2>
+    <p><a href="data.csv" download="channel-crossings-daily.csv">Download every day since 2018 as a CSV file</a>. It has four columns: date, people, boats and uncontrolled landings. It's refreshed every morning.</p>
+    <p>You're welcome to use the figures. Please credit the Home Office as the source: "Contains public sector information licensed under the Open Government Licence v3.0."</p>
+  </section>
+
+  <section id="embed">
+    <h2>Put the latest figure on your site</h2>
+    <p>Paste this into your web page to show a small box with the latest figure, which updates by itself:</p>
+    <iframe class="embed-preview" src="embed.html" title="Channel Crossings latest figures" loading="lazy"></iframe>
+    <pre><code id="snippet">&lt;iframe src="https://channelcrossings.world/embed.html" width="340" height="190" style="border:0;border-radius:12px" title="Channel Crossings latest figures" loading="lazy"&gt;&lt;/iframe&gt;</code></pre>
+    <button type="button" class="copy" id="copyBtn">Copy Code</button>
+  </section>
+
+  <section>
+    <h2>Use it like an app</h2>
+    <p>On iPhone, tap the Share button in Safari, then <strong>Add to Home Screen</strong>. On Android, use <strong>Install app</strong> or <strong>Add to Home screen</strong> in the browser menu. The site then opens full-screen, and pages you've visited open even without a signal, showing the last figures you saw.</p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>Spotted a problem, or have a question? Email <a href="mailto:x.chancrossings@gmail.com">x.chancrossings@gmail.com</a>.</p>
+  </section>
+
+  <footer><a href="privacy.html">Privacy Policy &amp; Terms of Use</a></footer>
+</main>
+<script>
+document.getElementById("copyBtn").addEventListener("click", async function(){
+  const btn = this, text = document.getElementById("snippet").textContent;
+  try{ await navigator.clipboard.writeText(text); btn.textContent = "Copied"; }
+  catch(e){
+    const r = document.createRange(); r.selectNodeContents(document.getElementById("snippet"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    btn.textContent = "Selected. Copy it from the menu";
+  }
+  setTimeout(()=>{ btn.textContent = "Copy Code"; }, 2500);
+});
+</script>
+</body>
+</html>
