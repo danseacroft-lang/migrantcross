@@ -105,7 +105,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px}
 /* On iPhone, follow the Larger Text setting (Settings › Accessibility › Display & Text Size) */
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
 body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-.wrap{max-width:720px;margin:0 auto;padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));padding-block:max(12px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));display:grid;gap:28px}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));padding-block:max(12px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));display:grid;gap:28px}
 .num{font-variant-numeric:tabular-nums}
 
 /* Large title header */
@@ -182,7 +182,54 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .card{background:var(--card);border-radius:12px;overflow:hidden}
 
 /* Summary tiles */
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.esttag{display:inline-block;margin-left:4px;padding:2px 7px;border-radius:999px;background:var(--indigo-bg);color:var(--indigo);font-size:11px;font-weight:600;letter-spacing:.02em;vertical-align:1px}
+/* Dashboard: notices side by side, then a board of cards */
+.notices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
+.notices:not(:has(.banner:not([hidden]))){display:none}
+.board{display:grid;gap:28px 20px;align-items:start;grid-template-columns:minmax(0,1fr)}
+.board > section{min-width:0}
+@media (min-width:760px){
+  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "gender records" "petitions days"}
+}
+@media (min-width:1080px){
+  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "records petitions days"}
+}
+@media (min-width:760px){
+  .area-chart{grid-area:chart}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}.area-days{grid-area:days}
+}
+.card.pad{padding:16px}
+.seg.seg-sm{min-width:0}
+.seg button{white-space:nowrap}
+/* Arrivals by sex and age */
+.g-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.g-total{font:700 28px/1.1 var(--round);font-variant-numeric:tabular-nums}
+.g-period{font-size:.765rem;color:var(--label2)}
+.stack{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--fill)}
+.stack i{display:block;height:100%}
+.stack .m,.legend .m{background:var(--blue)}
+.stack .f,.legend .f{background:var(--indigo)}
+.stack .u,.legend .u{background:var(--label3)}
+.legend{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.legend li{display:flex;align-items:center;gap:8px;font-size:.882rem}
+.legend li i{width:10px;height:10px;border-radius:3px;flex:none}
+.legend li b{margin-left:auto;font-weight:600;font-variant-numeric:tabular-nums}
+.legend li span.pc{color:var(--label2);font-variant-numeric:tabular-nums;min-width:3.2em;text-align:right}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;padding-top:12px;border-top:.5px solid var(--sep)}
+.facts div{display:grid;gap:1px}
+.facts b{font:700 22px/1.15 var(--round);font-variant-numeric:tabular-nums}
+.facts span{font-size:.765rem;color:var(--label2)}
+/* Petitions */
+.petitions li{grid-template-columns:1fr auto}
+.petitions a.pt{color:var(--label);text-decoration:none;font-size:.882rem;font-weight:600;line-height:1.3}
+.petitions a.pt:hover{color:var(--blue)}
+.petitions .pn{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;font-size:.882rem}
+.petitions .pm{grid-column:1 / -1;font-size:.765rem;color:var(--label2);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.petitions .pbar{grid-column:1 / -1;height:4px;border-radius:2px;background:var(--fill);overflow:hidden;margin-top:4px}
+.petitions .pbar i{display:block;height:100%;background:var(--blue);border-radius:2px}
+.chipst{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:600}
+.chipst.open{background:var(--green-bg);color:var(--green)}
+.chipst.closed{background:var(--fill);color:var(--label2)}
 .tile{background:var(--card);border-radius:12px;padding:14px 16px;display:grid;gap:2px;align-content:start;min-width:0}
 .tile .k{font-size:.765rem;font-weight:600;color:var(--label2);letter-spacing:-.005em}
 .tile .v{font:700 34px/1.15 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
@@ -242,7 +289,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   .brand > svg{width:44px;height:44px}
   .brand{gap:12px}
   .tiles{grid-template-columns:1fr 1fr}
-  .tile:first-child{grid-column:1 / -1}
+  .tile:first-child,.tile-fc{grid-column:1 / -1}
   .sec-title{flex-direction:column;align-items:stretch}
   .seg{width:100%}
 }
@@ -279,6 +326,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     </div>
   </header>
 
+  <div class="notices">
   <!-- Channel conditions notification -->
   <div class="banner" id="banner" role="status" aria-live="polite" data-level="loading" hidden>
     <div class="b-icon" aria-hidden="true">
@@ -310,14 +358,19 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
     </button>
   </div>
+  </div>
 
   <div class="tiles">
     <div class="tile"><div class="k">Latest day <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
     <div class="tile"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div><div class="s" id="weekD"></div></div>
     <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div><div class="prog" id="ytdProg" hidden><i id="ytdFill"></i><b id="ytdMark"></b></div><div class="s" id="ytdAvg"></div></div>
+    <div class="tile"><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div></div>
+    <div class="tile"><div class="k">Since Burnham became PM</div><div class="v" id="burV">–</div><div class="s" id="burS">&nbsp;</div><div class="s" id="burA"></div></div>
+    <div class="tile tile-fc" id="fcTile"><div class="k"><span id="fcK">Tomorrow</span> <span class="esttag">Estimate</span></div><div class="v" id="fcV">–</div><div class="s" id="fcS">&nbsp;</div><div class="s" id="fcC"></div></div>
   </div>
 
-  <section>
+  <div class="board">
+  <section class="area-chart">
     <div class="sec-title">
       <h2>Arrivals per Day</h2>
       <div class="seg" role="group" aria-label="Days shown">
@@ -333,29 +386,57 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     <p class="footnote">Tap or drag across the chart to see each day.</p>
   </section>
 
-  <section>
+  <section class="area-gender">
+    <div class="sec-title">
+      <h2>Sex and Age</h2>
+      <div class="seg seg-sm" role="group" aria-label="Period" id="gSeg">
+        <button type="button" data-g="lastYear" aria-pressed="true">Last Year</button>
+        <button type="button" data-g="since2018" aria-pressed="false">Since 2018</button>
+      </div>
+    </div>
+    <div class="card pad">
+      <div class="g-head"><span class="g-total" id="gTotal">–</span><span class="g-period" id="gPeriod"></span></div>
+      <div class="stack" id="gStack" role="img" aria-label=""><i class="m" id="gM"></i><i class="f" id="gF"></i><i class="u" id="gU"></i></div>
+      <ul class="legend" id="gLegend"></ul>
+      <div class="facts">
+        <div><b id="gMen">–</b><span>adult men</span></div>
+        <div><b id="gKids">–</b><span>aged 17 and under</span></div>
+      </div>
+    </div>
+    <p class="footnote" id="gNote">Home Office quarterly statistics.</p>
+  </section>
+
+  <section class="area-records">
     <div class="sec-title"><h2>Records</h2></div>
     <div class="card"><ul class="list records" id="records"><li class="empty">Loading figures…</li></ul></div>
     <p class="footnote" id="recordsNote"></p>
   </section>
 
-  <section>
+  <section class="area-petitions">
+    <div class="sec-title"><h2>Petitions</h2></div>
+    <div class="card"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
+    <p class="footnote">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
+  </section>
+
+  <section class="area-days">
     <div class="sec-title"><h2>Day by Day</h2></div>
     <div class="card"><ul class="list" id="list"><li class="empty">Loading figures…</li></ul></div>
     <button type="button" class="more" id="more" hidden>Show More Days</button>
     <p class="footnote" id="busyNote" hidden><span class="busy" aria-hidden="true"></span>One of the busiest 5% of days since 2018. Tap a day to see it on the chart.</p>
   </section>
+  </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <footer class="site-footer">
     <nav aria-label="Site links"><a href="how-it-works.html">How it works</a><span aria-hidden="true">·</span><a href="privacy.html">Privacy Policy</a><span aria-hidden="true">·</span><a href="privacy.html">Terms of Use</a><span aria-hidden="true">·</span><a href="experimental.html">Try an experimental version</a><span aria-hidden="true">·</span><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
     <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
-    <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
+    <p><strong>Licence:</strong> All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
+    <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. No personal data is stored or collected through browser cookies.</p>
   </footer>
 </div>
 
 <!-- Latest figures, rebuilt every morning by scripts/update.py so the page shows them instantly -->
-<script id="seed" type="application/json">{"ytdBase":11821,"ytdBaseDate":"2026-06-28","fullYear":true,"checkedAt":"2026-09-27T11:23:59Z","days":[{"date":"2026-06-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-06-30","migrants":63,"boats":1,"uncontrolled":null},{"date":"2026-07-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-08","migrants":249,"boats":4,"uncontrolled":null},{"date":"2026-07-09","migrants":81,"boats":1,"uncontrolled":null},{"date":"2026-07-10","migrants":255,"boats":3,"uncontrolled":null},{"date":"2026-07-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-14","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-15","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-22","migrants":172,"boats":3,"uncontrolled":null},{"date":"2026-07-23","migrants":366,"boats":3,"uncontrolled":null},{"date":"2026-07-24","migrants":103,"boats":2,"uncontrolled":null},{"date":"2026-07-25","migrants":240,"boats":5,"uncontrolled":null},{"date":"2026-07-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-27","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-28","migrants":26,"boats":1,"uncontrolled":null},{"date":"2026-07-29","migrants":752,"boats":9,"uncontrolled":null},{"date":"2026-07-30","migrants":72,"boats":1,"uncontrolled":null},{"date":"2026-07-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-01","migrants":326,"boats":4,"uncontrolled":null},{"date":"2026-08-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-03","migrants":35,"boats":1,"uncontrolled":null},{"date":"2026-08-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-08","migrants":258,"boats":4,"uncontrolled":null},{"date":"2026-08-09","migrants":423,"boats":5,"uncontrolled":null},{"date":"2026-08-10","migrants":230,"boats":1,"uncontrolled":null},{"date":"2026-08-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-14","migrants":93,"boats":1,"uncontrolled":null},{"date":"2026-08-15","migrants":82,"boats":1,"uncontrolled":null},{"date":"2026-08-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-17","migrants":250,"boats":3,"uncontrolled":null},{"date":"2026-08-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-22","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-23","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-24","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-25","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-27","migrants":494,"boats":7,"uncontrolled":null},{"date":"2026-08-28","migrants":122,"boats":3,"uncontrolled":null},{"date":"2026-08-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-30","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-06","migrants":625,"boats":8,"uncontrolled":null},{"date":"2026-09-07","migrants":143,"boats":2,"uncontrolled":null},{"date":"2026-09-08","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-09","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-10","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-14","migrants":144,"boats":2,"uncontrolled":null},{"date":"2026-09-15","migrants":55,"boats":1,"uncontrolled":null},{"date":"2026-09-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-26","migrants":0,"boats":0,"uncontrolled":0}],"prevYearSamePoint":32188}</script>
+<script id="seed" type="application/json">{"ytdBase":11821,"ytdBaseDate":"2026-06-28","fullYear":true,"checkedAt":"2026-09-27T11:23:59Z","days":[{"date":"2026-06-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-06-30","migrants":63,"boats":1,"uncontrolled":null},{"date":"2026-07-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-08","migrants":249,"boats":4,"uncontrolled":null},{"date":"2026-07-09","migrants":81,"boats":1,"uncontrolled":null},{"date":"2026-07-10","migrants":255,"boats":3,"uncontrolled":null},{"date":"2026-07-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-14","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-15","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-22","migrants":172,"boats":3,"uncontrolled":null},{"date":"2026-07-23","migrants":366,"boats":3,"uncontrolled":null},{"date":"2026-07-24","migrants":103,"boats":2,"uncontrolled":null},{"date":"2026-07-25","migrants":240,"boats":5,"uncontrolled":null},{"date":"2026-07-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-27","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-28","migrants":26,"boats":1,"uncontrolled":null},{"date":"2026-07-29","migrants":752,"boats":9,"uncontrolled":null},{"date":"2026-07-30","migrants":72,"boats":1,"uncontrolled":null},{"date":"2026-07-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-01","migrants":326,"boats":4,"uncontrolled":null},{"date":"2026-08-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-03","migrants":35,"boats":1,"uncontrolled":null},{"date":"2026-08-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-08","migrants":258,"boats":4,"uncontrolled":null},{"date":"2026-08-09","migrants":423,"boats":5,"uncontrolled":null},{"date":"2026-08-10","migrants":230,"boats":1,"uncontrolled":null},{"date":"2026-08-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-14","migrants":93,"boats":1,"uncontrolled":null},{"date":"2026-08-15","migrants":82,"boats":1,"uncontrolled":null},{"date":"2026-08-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-17","migrants":250,"boats":3,"uncontrolled":null},{"date":"2026-08-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-22","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-23","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-24","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-25","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-27","migrants":494,"boats":7,"uncontrolled":null},{"date":"2026-08-28","migrants":122,"boats":3,"uncontrolled":null},{"date":"2026-08-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-30","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-06","migrants":625,"boats":8,"uncontrolled":null},{"date":"2026-09-07","migrants":143,"boats":2,"uncontrolled":null},{"date":"2026-09-08","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-09","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-10","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-14","migrants":144,"boats":2,"uncontrolled":null},{"date":"2026-09-15","migrants":55,"boats":1,"uncontrolled":null},{"date":"2026-09-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-26","migrants":0,"boats":0,"uncontrolled":0}],"prevYearSamePoint":32188,"periods":{"labour":{"from":"2024-07-05","people":83323,"boats":1369,"days":814},"burnham":{"from":"2026-07-20","people":6140,"boats":84,"days":69}},"extras":{"gender":{"source":"https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx","latestQuarter":"2026 Q2","period":"year ending June 2026","lastYear":{"sex":{"Male":26973,"Female":5260,"Unknown":1141},"age":{"17 and under":4993,"18 to 24":10637,"25 to 39":14341,"40 and over":2263,"Unknown":1140},"adultMen":23110,"total":33374},"since2018":{"sex":{"Male":174171,"Female":26077,"Unknown":4269},"age":{"17 and under":32306,"18 to 24":66808,"25 to 39":86529,"40 and over":14924,"Unknown":3950},"adultMen":148786,"total":204517},"updatedAt":"2026-09-27T18:15:08Z"},"petitions":{"petitions":[{"id":778181,"title":"Deploy the Royal Navy to turn illegal small boats back to France","signatures":249,"state":"open","closes":"2027-03-04","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/778181"},{"id":777795,"title":"Ban all alternative remittance systems to disrupt small boat smuggling networks","signatures":116,"state":"open","closes":"2027-02-18","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/777795"},{"id":731131,"title":"End all EU fishing rights in UK waters until France stops small boats","signatures":2273,"state":"closed","closes":"2026-02-11","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/731131"},{"id":760177,"title":"End the 2023 \u00a3476m deal with France to stop the migrants crossing the channel","signatures":996,"state":"closed","closes":"2026-09-16","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/760177"},{"id":732995,"title":"Ban UK Border Force from picking up migrants in the Channel","signatures":850,"state":"closed","closes":"2026-02-13","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/732995"},{"id":736491,"title":"Detain all illegal immigrants and put in camping sites on airfields","signatures":498,"state":"closed","closes":"2026-02-20","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/736491"},{"id":741099,"title":"Withdraw from ECHR & stop processing asylum claims until Channel crossings stop","signatures":398,"state":"closed","closes":"2026-04-01","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/741099"},{"id":739957,"title":"Reinstate the policy to deport asylum seekers to Rwanda","signatures":336,"state":"closed","closes":"2026-03-16","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/739957"},{"id":749745,"title":"Seek to establish an audit with France on expenditure securing our borders","signatures":249,"state":"closed","closes":"2026-06-22","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/749745"},{"id":728872,"title":"Do not fund officers to patrol French beaches for illegal small boat crossings","signatures":176,"state":"closed","closes":"2025-12-26","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/728872"}],"updatedAt":"2026-09-27T18:15:12Z"},"forecast":{"days":[{"date":"2026-09-27","band":"calm","wind":12,"wave":0.3,"low":63,"typical":172,"high":310,"chance":0.77,"basis":35,"window":120,"afterRough":false},{"date":"2026-09-28","band":"moderate","wind":12,"wave":0.6,"low":0,"typical":0,"high":26,"chance":0.27,"basis":56,"window":120,"afterRough":false}],"updatedAt":"2026-09-27T18:15:14Z"}}}</script>
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -882,6 +963,92 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     box.addEventListener("animationend", ()=>{ box.hidden = true; box.classList.remove("leaving"); }, {once:true});
   });
 
+  /* =========== Dashboard extras: since Labour / Burnham, prediction, sex and age, petitions =========== */
+  let extras = {};
+  const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
+
+  function periodTotals(key){
+    const start = PERIODS[key];
+    if(sorted.length && sorted[0].date <= start){
+      const span = sorted.filter(d=>d.date >= start);
+      return {people: span.reduce((s,d)=>s+d.migrants,0), boats: span.reduce((s,d)=>s+d.boats,0), days: span.length};
+    }
+    return meta && meta.periods && meta.periods[key] ? meta.periods[key] : null;   // built-in totals until the full history loads
+  }
+  function renderPeriods(){
+    [["labour","lab","since 5 Jul 2024"],["burnham","bur","since 20 Jul 2026"]].forEach(([key,id,since])=>{
+      const t = periodTotals(key);
+      if(!t){ $(id+"V").textContent = "–"; return; }
+      $(id+"V").textContent = fmt(t.people);
+      $(id+"S").textContent = "in " + fmt(t.boats) + (t.boats===1?" boat · ":" boats · ") + since;
+      $(id+"A").textContent = t.days ? "Average " + fmt(Math.round(t.people/t.days)) + " a day" : "";
+    });
+  }
+
+  function renderForecast(){
+    const fc = extras.forecast && extras.forecast.days || [];
+    const todayISO = new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
+    const tomorrowISO = new Date(Date.parse(todayISO+"T12:00:00Z") + 864e5).toISOString().slice(0,10);
+    let f = fc.find(d=>d.date===tomorrowISO), label = "Tomorrow";
+    if(!f){ f = fc.find(d=>d.date===todayISO); label = "Today"; }
+    if(!f){ $("fcK").textContent = "Arrivals estimate"; $("fcV").textContent = "–"; $("fcS").textContent = "No estimate available right now"; $("fcC").textContent = ""; return; }
+    $("fcK").textContent = label + " · " + dShort.format(parse(f.date));
+    $("fcV").textContent = f.high === 0 ? "0" : fmt(f.low) + "–" + fmt(f.high);
+    $("fcS").textContent = (f.typical ? "Most likely around " + fmt(f.typical) : "Most likely none") + " · " + f.band + " conditions";
+    $("fcC").textContent = Math.round(f.chance*100) + "% of " + f.basis + " similar days had crossings";
+    $("fcTile").title = "Rough estimate from the weather forecast and arrivals on days with similar weather in the last " + f.window + " days. Not an official forecast.";
+  }
+
+  let gPeriod = "lastYear";
+  function renderGender(){
+    const g = extras.gender; if(!g){ $("gNote").textContent = "Figures by sex and age aren't available right now."; return; }
+    const t = g[gPeriod]; if(!t || !t.total) return;
+    const pc = n => (n/t.total*100);
+    const rows = [["m","Male",t.sex.Male],["f","Female",t.sex.Female],["u","Not recorded",t.sex.Unknown]];
+    $("gTotal").textContent = fmt(t.total);
+    $("gPeriod").textContent = gPeriod==="lastYear" ? "small boat arrivals, " + g.period : "small boat arrivals since 2018";
+    $("gM").style.width = pc(t.sex.Male)+"%"; $("gF").style.width = pc(t.sex.Female)+"%"; $("gU").style.width = pc(t.sex.Unknown)+"%";
+    $("gStack").setAttribute("aria-label", rows.map(r=>r[1]+" "+Math.round(pc(r[2]))+"%").join(", "));
+    const ul = $("gLegend"); ul.textContent = "";
+    rows.forEach(([cls,name,n])=>{
+      const li = document.createElement("li");
+      li.innerHTML = '<i class="'+cls+'"></i>';
+      const a = document.createElement("span"); a.textContent = name;
+      const b = document.createElement("b"); b.textContent = fmt(n);
+      const c = document.createElement("span"); c.className = "pc"; c.textContent = pc(n).toFixed(0) + "%";
+      li.append(a,b,c); ul.append(li);
+    });
+    $("gMen").textContent = pc(t.adultMen).toFixed(0) + "%";
+    $("gKids").textContent = pc(t.age["17 and under"]).toFixed(0) + "%";
+    $("gNote").textContent = "Home Office quarterly statistics, latest to " + g.latestQuarter.replace(" Q"," quarter ") + ". Updated every three months.";
+  }
+  document.querySelectorAll("#gSeg button").forEach(b=>b.addEventListener("click", ()=>{
+    gPeriod = b.dataset.g;
+    document.querySelectorAll("#gSeg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    renderGender();
+  }));
+
+  function renderPetitions(){
+    const list = extras.petitions && extras.petitions.petitions || [];
+    const ul = $("petitions"); ul.textContent = "";
+    if(!list.length){ ul.innerHTML = '<li class="empty">No current petitions found.</li>'; return; }
+    list.slice(0,6).forEach(p=>{
+      const li = document.createElement("li");
+      const a = document.createElement("a"); a.className = "pt"; a.href = p.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = p.title;
+      const n = document.createElement("span"); n.className = "pn"; n.textContent = fmt(p.signatures);
+      const m = document.createElement("span"); m.className = "pm";
+      const chip = document.createElement("span"); chip.className = "chipst " + (p.state==="open"?"open":"closed"); chip.textContent = p.state==="open" ? "Open" : "Closed";
+      const target = p.signatures >= 10000 ? 100000 : 10000;
+      const closes = p.closes ? dShort.format(parse(p.closes)) + " " + p.closes.slice(0,4) : "";
+      if(p.state==="open") m.append(chip, fmt(Math.max(0,target-p.signatures)) + " more for " + (target===10000?"a government response":"a debate") + (closes ? " · until " + closes : ""));
+      else m.append(chip, closes);
+      if(p.response) m.append(" · Government responded");
+      const bar = document.createElement("span"); bar.className = "pbar";
+      const fill = document.createElement("i"); fill.style.width = Math.min(100, p.signatures/target*100).toFixed(1) + "%"; bar.append(fill);
+      li.append(a, n, m, bar); ul.append(li);
+    });
+  }
+
   let seenChecked = false;
   function load(data, full){
     meta = data;
@@ -909,6 +1076,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     } else busyMin = Infinity;
 
     renderSummary(); setRange(range); drawList();
+    if(data.extras){ extras = data.extras; renderForecast(); renderGender(); renderPetitions(); }
+    renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); }
     $("shareBtn").disabled = false;
     document.querySelector(".seg").hidden = sorted.length < 15;

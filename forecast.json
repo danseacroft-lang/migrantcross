@@ -1,0 +1,31 @@
+{
+ "days": [
+  {
+   "date": "2026-09-27",
+   "band": "calm",
+   "wind": 12,
+   "wave": 0.3,
+   "low": 63,
+   "typical": 172,
+   "high": 310,
+   "chance": 0.77,
+   "basis": 35,
+   "window": 120,
+   "afterRough": false
+  },
+  {
+   "date": "2026-09-28",
+   "band": "moderate",
+   "wind": 12,
+   "wave": 0.6,
+   "low": 0,
+   "typical": 0,
+   "high": 26,
+   "chance": 0.27,
+   "basis": 56,
+   "window": 120,
+   "afterRough": false
+  }
+ ],
+ "updatedAt": "2026-09-27T18:15:14Z"
+}

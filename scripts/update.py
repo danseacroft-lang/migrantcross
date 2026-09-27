@@ -13,6 +13,7 @@ Outputs (see publish()):
   index.html   latest figures built into the page so they show instantly,
                plus an up-to-date description and dataset date for Google
   og-image.png link preview picture; week-card.png weekly summary picture
+  gender.json, petitions.json, forecast.json: see scripts/extras.py
 """
 import io
 import json
@@ -198,6 +199,21 @@ def recent_view(data, n=RECENT_DAYS):
     }
     if data.get("prevYearSamePoint"):
         out["prevYearSamePoint"] = data["prevYearSamePoint"]
+    out["periods"] = period_totals(days)
+    return out
+
+
+# Dates for the "since" totals. Labour took office on 5 July 2024 (Keir Starmer);
+# Andy Burnham became Prime Minister on 20 July 2026.
+PERIODS = {"labour": "2024-07-05", "burnham": "2026-07-20"}
+
+
+def period_totals(days):
+    out = {}
+    for key, start in PERIODS.items():
+        span = [d for d in days if d["date"] >= start]
+        out[key] = {"from": start, "people": sum(d["migrants"] for d in span),
+                    "boats": sum(d["boats"] for d in span), "days": len(span)}
     return out
 
 
@@ -221,7 +237,12 @@ def update_page(data, recent):
     last = data["days"][-1]
     latest = last["date"]
 
-    seed = json.dumps(recent, separators=(",", ":")).replace("</", "<\\/")
+    extras = {}
+    for key, name in (("gender", "gender.json"), ("petitions", "petitions.json"), ("forecast", "forecast.json")):
+        f = ROOT / name
+        if f.exists():
+            extras[key] = json.loads(f.read_text())
+    seed = json.dumps({**recent, "extras": extras}, separators=(",", ":")).replace("</", "<\\/")
     html = re.sub(r'(<script id="seed" type="application/json">).*?(</script>)',
                   lambda m: m.group(1) + seed + m.group(2), html, count=1, flags=re.S)
 
@@ -275,6 +296,8 @@ def main():
 
     data["days"] = merge(data, ts, last7, now.strftime("%Y-%m-%d"))
     year_totals(data, data["days"])
+    from extras import update_all
+    update_all(data["days"])   # sex and age, petitions, prediction: each optional
     data["checkedAt"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     data["source"] = PUB
     publish(data)
