@@ -11,6 +11,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Crossings">
 <title>Channel Crossings Tracker</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 /* Apple Human Interface Guidelines: system font, system colours, grouped inset layout */
 :root{
@@ -66,6 +68,9 @@ body{margin:0;background:var(--bg);color:var(--label);font:17px/1.35 var(--font)
 
 /* Large title header */
 header{display:grid;gap:4px;padding-top:24px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{width:60px;height:60px;flex:none;border-radius:50%;box-shadow:0 2px 8px rgba(0,122,255,.25)}
+.brand-text{display:grid;gap:2px;min-width:0}
 .overline{font-size:13px;font-weight:600;color:var(--label2);letter-spacing:-.005em;text-transform:uppercase}
 h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balance}
 .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:15px;color:var(--label2);margin-top:4px}
@@ -151,7 +156,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:15px}
 
 @media (max-width:600px){
-  h1{font-size:30px}
+  h1{font-size:28px}
+  .brand svg{width:52px;height:52px}
   .tiles{grid-template-columns:1fr 1fr}
   .tile:first-child{grid-column:1 / -1}
   .sec-title{flex-direction:column;align-items:stretch}
@@ -169,8 +175,13 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 <body>
 <div class="wrap">
   <header>
-    <div class="overline">Small boat arrivals</div>
-    <h1>Channel Crossings</h1>
+    <div class="brand">
+      <svg viewBox="0 0 400 400" role="img" aria-label="Channel Crossings logo"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg>
+      <div class="brand-text">
+        <div class="overline">Daily tracker</div>
+        <h1>Channel Crossings</h1>
+      </div>
+    </div>
     <div class="meta">
       <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span></span>
       <button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button>
