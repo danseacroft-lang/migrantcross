@@ -144,7 +144,7 @@ h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balan
 .link-btn{appearance:none;border:0;background:none;padding:0;min-height:44px;color:var(--blue);font:inherit;cursor:pointer}
 
 /* Notification banner (iOS style) */
-.banner{position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 48px 14px 14px;border-radius:22px;background:var(--material);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both}
+.banner{position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 48px 14px 14px;border-radius:22px;background:var(--card);box-shadow:var(--shadow);animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both}
 @keyframes drop{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
 .banner.leaving{animation:lift .25s ease-in both}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
@@ -167,6 +167,7 @@ h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balan
 .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
 .outlook{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
 .outlook::-webkit-scrollbar{display:none}
+#otdYears{-webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent);padding-right:24px}
 .chip{flex:none;display:grid;gap:1px;padding:6px 10px;border-radius:10px;background:var(--fill);font-size:.765rem;min-width:72px}
 .chip b{font-weight:600;font-size:.765rem}
 .chip span{color:var(--label2)}
@@ -178,6 +179,7 @@ h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balan
 section{display:grid;gap:8px;min-width:0}
 .sec-title{display:flex;justify-content:space-between;align-items:end;gap:12px;padding-inline:4px}
 h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
+.footnote a{color:var(--blue);text-decoration:none}
 .footnote{font-size:.765rem;line-height:1.38;color:var(--label2);letter-spacing:-.006em;padding-inline:16px;margin:0}
 .card{background:var(--card);border-radius:12px;overflow:hidden}
 
@@ -273,7 +275,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .list .m{grid-column:1 / -1;font-size:.882rem;color:var(--label2)}
 .list li.zero .n,.list li.zero .d{color:var(--label2);font-weight:400}
 .list li.peak .n{color:var(--orange)}
-.more{appearance:none;border:0;background:var(--card);color:var(--blue);font:400 17px/1 var(--font);letter-spacing:-.022em;min-height:44px;width:100%;border-radius:12px;cursor:pointer}
+.more{appearance:none;border:0;background:var(--card);color:var(--blue);font:400 1rem/1 var(--font);letter-spacing:-.022em;min-height:44px;width:100%;border-radius:12px;cursor:pointer}
 .more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
 .empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:.882rem}
@@ -373,7 +375,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   <section class="area-chart">
     <div class="sec-title">
       <h2>Arrivals per Day</h2>
-      <div class="seg" role="group" aria-label="Days shown">
+      <div class="seg" id="rangeSeg" role="group" aria-label="Days shown">
         <button type="button" data-range="14" aria-pressed="false">14 Days</button>
         <button type="button" data-range="30" aria-pressed="false">30 Days</button>
         <button type="button" data-range="90" aria-pressed="false">90 Days</button>
@@ -723,10 +725,10 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 
   function setRange(n){
     range = n;
-    document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.range===n)));
+    document.querySelectorAll("#rangeSeg button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.range===n)));
     if(sorted.length) drawChart();
   }
-  document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click", ()=>setRange(+b.dataset.range)));
+  document.querySelectorAll("#rangeSeg button").forEach(b=>b.addEventListener("click", ()=>setRange(+b.dataset.range)));
 
   let rt;
   if("ResizeObserver" in window){
@@ -1080,7 +1082,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); }
     $("shareBtn").disabled = false;
-    document.querySelector(".seg").hidden = sorted.length < 15;
+    $("rangeSeg").hidden = sorted.length < 15;
   }
 
   // 1. Show the figures built into the page straight away (updated daily by the site's update job)
@@ -1101,6 +1103,13 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   })();
   loadWeather();
   setInterval(loadWeather, 30*60*1000);   // refresh conditions every 30 minutes
+
+  // Keep "Updated … ago" current, and reload when someone comes back to a tab left open for hours
+  const openedAt = Date.now();
+  setInterval(()=>{ if(sorted.length && !document.hidden) renderSummary(); }, 60*1000);
+  document.addEventListener("visibilitychange", ()=>{
+    if(!document.hidden && Date.now() - openedAt > 3*60*60*1000) location.reload();
+  });
 })();
 // Day / Night switch (like HypaSpeed). Follows the phone's own setting until tapped, then remembers the choice.
 (function(){
