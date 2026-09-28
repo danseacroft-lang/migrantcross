@@ -42,7 +42,8 @@ STRONG = re.compile(
     re.I)
 # ...and must not be about something else that happens to share the words
 BLOCK = re.compile(r"channel 4|channel 5|tv channel|youtube channel|channel swim|swim the channel|"
-                   r"channel islands|jersey|guernsey|sky channel", re.I)
+                   r"channel islands|jersey|guernsey|sky channel|"
+                   r"^track |in charts|in numbers|explained|explainer|at a glance|key facts", re.I)   # explainers, not news
 
 
 def text(el, tag, ns=None):
