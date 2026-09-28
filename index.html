@@ -237,6 +237,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 
 /* Summary tiles */
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile .cost{margin-top:6px;padding-top:6px;border-top:.5px solid var(--sep)}
+.tile .cost b{color:var(--label);font-weight:600;font-variant-numeric:tabular-nums}
 .esttag{display:inline-block;margin-left:4px;padding:2px 7px;border-radius:999px;background:var(--indigo-bg);color:var(--indigo);font-size:11px;font-weight:600;letter-spacing:.02em;vertical-align:1px}
 /* Dashboard: notices side by side, then a board of cards */
 .notices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
@@ -466,7 +468,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     <div class="tile"><div class="k">Latest day <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
     <div class="tile"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div><div class="s" id="weekD"></div></div>
     <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div><div class="prog" id="ytdProg" hidden><i id="ytdFill"></i><b id="ytdMark"></b></div><div class="s" id="ytdAvg"></div></div>
-    <div class="tile"><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div></div>
+    <div class="tile"><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div><div class="s cost" id="labC" title="Rough estimate: people arrived since 5 July 2024 × average asylum support cost per person a year (£4.0bn ÷ 106,771 people, 2024–25). See How it works."></div></div>
     <div class="tile"><div class="k">Since Burnham became PM</div><div class="v" id="burV">–</div><div class="s" id="burS">&nbsp;</div><div class="s" id="burA"></div></div>
     <div class="tile tile-fc" id="fcTile"><div class="k"><span id="fcK">Tomorrow</span> <span class="esttag">Estimate</span></div><div class="v" id="fcV">–</div><div class="s" id="fcS">&nbsp;</div><div class="s" id="fcC"></div></div>
   </div>
@@ -1228,6 +1230,10 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
     return meta && meta.periods && meta.periods[key] ? meta.periods[key] : null;   // built-in totals until the full history loads
   }
+  // Average asylum support cost per person a year: £4.0bn spent in 2024–25 (NAO, Dec 2025)
+  // ÷ 106,771 people receiving asylum support at the end of March 2025 (Home Office)
+  const SUPPORT_PER_PERSON = 4.0e9 / 106771;
+  const money = v => v >= 1e9 ? "£" + (v/1e9).toFixed(1) + "bn" : "£" + Math.round(v/1e6) + "m";
   function renderPeriods(){
     [["labour","lab","since 5 Jul 2024"],["burnham","bur","since 20 Jul 2026"]].forEach(([key,id,since])=>{
       const t = periodTotals(key);
@@ -1235,6 +1241,11 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $(id+"V").textContent = fmt(t.people);
       $(id+"S").textContent = "in " + fmt(t.boats) + (t.boats===1?" boat · ":" boats · ") + since;
       $(id+"A").textContent = t.days ? "Average " + fmt(Math.round(t.people/t.days)) + " a day" : "";
+      if(key === "labour"){
+        $("labC").textContent = "";
+        const b = document.createElement("b"); b.textContent = money(t.people * SUPPORT_PER_PERSON);
+        $("labC").append("Est. annual taxpayer cost: ", b);
+      }
     });
   }
 
