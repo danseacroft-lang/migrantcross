@@ -1333,14 +1333,23 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
-  // When the next figures are expected: the update job runs daily at 10:30 UK winter time (10:30 UTC)
+  // When the next figures are expected: the update job runs daily at 10:30 UK time
   // and takes a few minutes, so it's shown as an approximate London time
+  // 10:30 UK time on the given day (09:30 UTC in summer, 10:30 UTC in winter)
+  function runTime(base){
+    const r = base ? new Date(base) : new Date();
+    for(const h of [9, 10]){
+      r.setUTCHours(h, 30, 0, 0);
+      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === "10:30") return r;
+    }
+    return r;
+  }
   function nextUpdateText(){
-    const now = new Date(), run = new Date(now);
-    run.setUTCHours(10, 30, 0, 0);
+    const now = new Date();
+    let run = runTime(now);
     const doneToday = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;
     if(now >= run && !doneToday && now - run < 3*60*60*1000) return "Next update due any minute";
-    if(now >= run) run.setUTCDate(run.getUTCDate() + 1);
+    if(now >= run) run = runTime(now.getTime() + 864e5);
     const time = run.toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
     const day = run.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) === now.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) ? "today" : "tomorrow";
     return "Next update: " + day + " ~" + time;
@@ -1407,9 +1416,9 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("records").innerHTML = '<li class="empty">Records need an internet connection.</li>';
     }
   })();
-  // "Data sync is pending": from the daily update time (10:30 UTC) for up to an hour, or until
+  // "Data sync is pending": from the daily update time (10:30 UK time) for up to an hour, or until
   // the new figures arrive. While it shows, the page checks for the new figures every 2 minutes.
-  function runTime(){ const r = new Date(); r.setUTCHours(10, 30, 0, 0); return r; }
+
   function syncPending(){
     const now = new Date(), run = runTime();
     const done = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;

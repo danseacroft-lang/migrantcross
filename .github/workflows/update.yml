@@ -2,7 +2,10 @@ name: Update crossing figures
 
 on:
   schedule:
-    - cron: "30 10 * * *"   # every day at 10:30 UTC (11:30 UK summer time)
+    # 10:30 UK time all year. GitHub schedules run in UTC, so both times are listed and
+    # the check below keeps the one that is 10:30 in the UK today (09:30 UTC in summer).
+    - cron: "30 9 * * *"
+    - cron: "30 10 * * *"
   workflow_dispatch:         # lets you run it by hand from the Actions tab
 
 permissions:
@@ -13,12 +16,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Only run at 10:30 UK time
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$(TZ=Europe/London date +%z)" = "+0100" ]; then want="30 9 * * *"; else want="30 10 * * *"; fi
+          checked=$(python3 -c "import json;print(json.load(open('data.json')).get('checkedAt','')[:10])" 2>/dev/null || true)
+          if [ "${{ github.event.schedule }}" = "$want" ]; then go=true
+          # Summer back-up: the later run catches up if the 10:30 one didn't update today
+          elif [ "${{ github.event.schedule }}" = "30 10 * * *" ] && [ "$checked" != "$(date -u +%F)" ]; then go=true
+          else go=false; echo "Not 10:30 UK time today, skipping"; fi
+          echo "go=$go" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@v5
+        if: steps.gate.outputs.go == 'true'
         with:
           python-version: "3.12"
-      - run: pip install pandas lxml odfpy requests pillow openpyxl
-      - run: python scripts/update.py
+      - if: steps.gate.outputs.go == 'true'
+        run: pip install pandas lxml odfpy requests pillow openpyxl
+      - if: steps.gate.outputs.go == 'true'
+        run: python scripts/update.py
       - name: Publish new figures
+        if: steps.gate.outputs.go == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
