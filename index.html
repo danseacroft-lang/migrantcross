@@ -142,12 +142,12 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
              radial-gradient(30vmax 30vmax at 60% 45%,var(--orb-a),transparent 70%)}
 /* Frosted glass boxes: the page (and the flag) shows through, softly blurred, with a fine glass edge */
 .banner,.news,.card,.tile,.more,.tip{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
-.banner,.news,.card,.tile,.more,.tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.banner,.news,.card,.tile,.more,.tip{background:var(--glass)!important;-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .seg{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.more,.tip{background:var(--card)}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.more,.tip{background:var(--card)!important}}
 /* Reduce Transparency: solid boxes and bar, fainter pictures */
 @media (prefers-reduced-transparency:reduce){
-  .banner,.news,.card,.tile,.more,.tip{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .banner,.news,.card,.tile,.more,.tip{background:var(--card)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
   .seg{-webkit-backdrop-filter:none;backdrop-filter:none}
   .topbar.scrolled{background:var(--bar-solid);-webkit-backdrop-filter:none;backdrop-filter:none}
   .flag{opacity:calc(var(--flag-o)*.5)}
