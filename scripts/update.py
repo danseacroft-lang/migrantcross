@@ -1,6 +1,8 @@
 """Fetch the Home Office small boat figures and rebuild the site's data files.
 
-Runs daily from the GitHub Action in .github/workflows/update.yml.
+Runs every 30 minutes through the day from .github/workflows/update.yml. Each run
+reads the 7-day page and stops unless there are new or changed figures, or today's
+full update hasn't run yet.
 Two sources, both provisional Home Office data:
   1. The weekly time-series spreadsheet (.ods), daily figures since 2018.
   2. The "last 7 days" page, updated every day.
@@ -281,18 +283,30 @@ def publish(data):
         print("Pictures skipped:", e)
 
 
+def unchanged(data, last7, now):
+    """True when the 7-day page matches what we hold and today's full update has already run."""
+    held = {d["date"]: d for d in data.get("days", [])}
+    same = all(k in held and all(held[k].get(f) == v.get(f) for f in ("migrants", "boats", "uncontrolled"))
+               for k, v in last7.items())
+    return same and (data.get("checkedAt") or "")[:10] == now.strftime("%Y-%m-%d")
+
+
 def main():
     data = load()
     now = datetime.now(timezone.utc)
+    last7 = fetch_last7()
+    if not last7:
+        print("Could not read the last-7-days table", file=sys.stderr)
+        sys.exit(1)
+    # Frequent checks: stop here if nothing new has been published (no files change, nothing republished)
+    if unchanged(data, last7, now):
+        print("No new figures")
+        return
     try:
         ts = fetch_timeseries()
     except Exception as e:  # noqa: BLE001
         print("Time series skipped:", e)
         ts = {}
-    last7 = fetch_last7()
-    if not last7:
-        print("Could not read the last-7-days table", file=sys.stderr)
-        sys.exit(1)
 
     data["days"] = merge(data, ts, last7, now.strftime("%Y-%m-%d"))
     year_totals(data, data["days"])

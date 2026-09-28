@@ -1446,30 +1446,38 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
-  // When the next figures are expected. The update job runs daily at 10:30 UK time
-  // (09:30 UTC in summer, 10:30 UTC in winter) and can start a little late, hence "~".
-  function runTime(base, ukHour){
-    const r = base ? new Date(base) : new Date(), want = String(ukHour || 10).padStart(2,"0") + ":30";
-    for(const h of [ukHour-1 || 9, ukHour || 10]){
+  // When the site next checks. The update job looks at the Home Office page every 30 minutes
+  // from 07:00 to 18:30 UTC (8am-7:30pm UK in summer). "~" because GitHub can start it a little late.
+  const ukTime = d => d.toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
+  const ukDay = d => d.toLocaleDateString("en-GB", {timeZone:"Europe/London"});
+  function nextCheck(now){
+    const t = new Date(now);
+    t.setUTCSeconds(0, 0);
+    t.setUTCMinutes(t.getUTCMinutes() < 30 ? 30 : 60);
+    if(t.getUTCHours() < 7 || t.getUTCHours() > 18 || (t.getUTCHours() === 18 && t.getUTCMinutes() > 30)){
+      if(t.getUTCHours() > 7) t.setUTCDate(t.getUTCDate() + 1);
+      t.setUTCHours(7, 0, 0, 0);
+    }
+    return t;
+  }
+  // 10:30 UK time today (09:30 UTC in summer, 10:30 UTC in winter): when the Home Office usually publishes
+  function runTime(){
+    const r = new Date();
+    for(const h of [9, 10]){
       r.setUTCHours(h, 30, 0, 0);
-      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === want) return r;
+      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === "10:30") return r;
     }
     return r;
   }
-  const CHECKS = [10, 13, 16];   // UK times the site checks for new figures (10:30, 13:30, 16:30)
+  // Yesterday's figure is in (UK date)
+  function haveYesterday(){
+    if(!sorted.length) return false;
+    const y = new Date(Date.parse(new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"})+"T12:00:00Z") - 864e5).toISOString().slice(0,10);
+    return sorted[sorted.length-1].date >= y;
+  }
   function nextUpdateText(){
-    const now = new Date();
-    let run = runTime(now);
-    const doneToday = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;
-    if(now >= run && !doneToday && now - run < 3*60*60*1000) return "Next update due any minute";
-    if(now >= run){
-      // later checks today pick up figures published late; otherwise tomorrow morning
-      const later = CHECKS.slice(1).map(h=>runTime(now, h)).find(t=>t > now);
-      run = later || runTime(now.getTime() + 864e5);
-    }
-    const time = run.toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
-    const day = run.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) === now.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) ? "today" : "tomorrow";
-    return "Next update: " + day + " ~" + time;
+    const now = new Date(), t = nextCheck(now);
+    return "Next check: " + (ukDay(t) === ukDay(now) ? "~" + ukTime(t) : "tomorrow ~" + ukTime(t));
   }
   let nextShown = false;
   function flashNextUpdate(){
@@ -1535,11 +1543,10 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   })();
 
   // "Data sync is pending": from the daily update time (10:30 UK time) for up to an hour, or until
-  // the new figures arrive. While it shows, the page checks for the new figures every 2 minutes.
+  // yesterday's figure arrives. While it shows, the page checks for the new figures every 2 minutes.
   function syncPending(){
     const now = new Date(), run = runTime();
-    const done = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;
-    return now >= run && now - run < 60*60*1000 && !done;
+    return now >= run && now - run < 60*60*1000 && !haveYesterday();
   }
   let lastPoll = 0;
   async function checkSync(){
@@ -1554,7 +1561,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       const r = await fetch("data.json", {cache:"no-cache"});
       if(!r.ok) return;
       const d = await r.json();
-      if(d.checkedAt && (!meta.checkedAt || new Date(d.checkedAt) > new Date(meta.checkedAt))){
+      const dl = d.days && d.days.length ? d.days[d.days.length-1].date : "";
+      if(dl > sorted[sorted.length-1].date){
         load(d, true);
         $("syncNote").hidden = true;
         $("syncDot").hidden = true; $("fresh").classList.remove("syncing");
