@@ -212,6 +212,25 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .spin{animation:spin 1s linear infinite;transform-origin:50% 50%}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}}
+/* Animated weather icon in the conditions card */
+.wi{overflow:visible}
+.wi .rays{transform-box:view-box;transform-origin:12px 12px;animation:spin 14s linear infinite}
+.wi .cl{animation:wxDrift 4s ease-in-out infinite alternate}
+.wi .rd{animation:wiFall 1s linear infinite}
+.wi .rd:nth-of-type(2){animation-delay:-.33s}.wi .rd:nth-of-type(3){animation-delay:-.66s}
+.wi .sf{animation:wiFall 2.4s linear infinite}
+.wi .sf:nth-of-type(2){animation-delay:-.8s}.wi .sf:nth-of-type(3){animation-delay:-1.6s}
+.wi .bolt{animation:wiFlash 2.6s ease-in-out infinite}
+.wi .fg{animation:wiSlide 3s ease-in-out infinite alternate}
+.wi .fg:nth-of-type(2){animation-delay:-1.5s}
+.wi .glow{animation:wiGlow 3s ease-in-out infinite}
+.wi .wv{animation:wiSlide 2.4s ease-in-out infinite alternate}
+.wi .wv:nth-of-type(2){animation-delay:-.8s}.wi .wv:nth-of-type(3){animation-delay:-1.6s}
+@keyframes wiFall{from{transform:translateY(-2px);opacity:0}30%{opacity:1}to{transform:translateY(5px);opacity:0}}
+@keyframes wiFlash{0%,62%,78%,100%{opacity:1}68%,72%{opacity:.15}}
+@keyframes wiSlide{from{transform:translateX(-1.5px)}to{transform:translateX(1.5px)}}
+@keyframes wiGlow{0%,100%{opacity:1}50%{opacity:.6}}
+@media (prefers-reduced-motion:reduce){.wi *{animation:none!important}}
 /* Current weather picture, faded into the corner of the conditions card */
 .banner{overflow:hidden;isolation:isolate}
 .wx-art{position:absolute;bottom:-16px;right:-6px;width:230px;height:170px;z-index:0;pointer-events:none;opacity:var(--wx-o);
@@ -505,7 +524,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   <!-- Channel conditions notification -->
   <div class="banner" id="banner" role="status" aria-live="polite" data-level="loading" hidden>
     <div class="wx-art" id="wxArt" aria-hidden="true"></div>
-    <div class="b-icon" aria-hidden="true">
+    <div class="b-icon" id="bIcon" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 13c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 17.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/></svg>
     </div>
     <div class="b-body">
@@ -737,6 +756,28 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       + '</defs>' + g + '</svg>';
   }
 
+  // Small animated icon for the current weather (uses the card's level colour)
+  const WAVES_ICON = '<svg class="wi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="wv" d="M2 8.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path class="wv" d="M2 13c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path class="wv" d="M2 17.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/></svg>';
+  function wxIcon(kind, day){
+    const cloud = '<path class="cl" d="M7 18h10a3.6 3.6 0 0 0 .3-7.2A5.2 5.2 0 0 0 7.4 9.6 4.2 4.2 0 0 0 7 18z"/>';
+    const sun = '<circle cx="12" cy="12" r="4"/><g class="rays"><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g>';
+    const moon = '<path class="glow" fill="currentColor" stroke="none" d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z"/>';
+    const small = day ? '<g transform="translate(8 -3) scale(.6)"><circle cx="12" cy="12" r="4"/><g class="rays"><path d="M12 3v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 7l1.4-1.4"/></g></g>'
+                      : '<g transform="translate(8 -3) scale(.6)"><path class="glow" fill="currentColor" stroke="none" d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z"/></g>';
+    const rain = (n, cls) => [0,1,2].slice(0,n).map(i => cls==="sf" ? '<circle class="sf" cx="'+(8.5+i*3.5)+'" cy="21" r=".9" fill="currentColor" stroke="none"/>' : '<path class="rd" d="M'+(9+i*3.5)+' 19.5l-.8 2"/>').join("");
+    let g;
+    if(kind==="clear") g = day ? sun : moon;
+    else if(kind==="partly") g = small + cloud;
+    else if(kind==="cloudy") g = '<path class="cl" style="animation-delay:-2s" d="M14 11.5h4.5a2.6 2.6 0 0 0 .2-5.2 3.8 3.8 0 0 0-7.2-.8" opacity=".6"/>' + cloud;
+    else if(kind==="fog") g = '<path d="M7 12h10a3.6 3.6 0 0 0 .3-7.2A5.2 5.2 0 0 0 7.4 3.6 4.2 4.2 0 0 0 7 12z"/><path class="fg" d="M4 16h16"/><path class="fg" d="M6 20h12"/>';
+    else if(kind==="drizzle") g = '<g transform="translate(0 -3)">' + cloud + '</g>' + rain(2, "rd");
+    else if(kind==="rain") g = '<g transform="translate(0 -3)">' + cloud + '</g>' + rain(3, "rd");
+    else if(kind==="snow") g = '<g transform="translate(0 -3)">' + cloud + '</g>' + rain(3, "sf");
+    else if(kind==="storm") g = '<g transform="translate(0 -3)">' + cloud + '</g><path class="bolt" d="M12.5 15.5l-2 3.5h3l-1.5 3.5" stroke-width="1.8"/>';
+    else return WAVES_ICON;
+    return '<svg class="wi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + g + '</svg>';
+  }
+
   function renderWeather(){
     if(!wx) return;
     if(wx.error){
@@ -746,6 +787,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("outlook").textContent = "";
       $("bTime").textContent = "";
       $("wxArt").innerHTML = "";
+      $("bIcon").innerHTML = WAVES_ICON;
       showBanner(!dismissedFor("error"));
       return;
     }
@@ -754,6 +796,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     $("bTitle").textContent = L ? L.title : "Conditions unavailable";
     const kind = wxKind(wx.code);
     $("wxArt").innerHTML = kind ? wxArt(kind, wx.day) : "";
+    $("bIcon").innerHTML = kind ? wxIcon(kind, wx.day) : WAVES_ICON;
     const sky = kind ? (kind==="clear" && !wx.day ? "Clear night" : WX_WORDS[kind]) + (wx.temp!=null ? ", " + Math.round(wx.temp) + "°C. " : ". ") : "";
     $("bText").textContent = sky + "Wind " + Math.round(wx.wind) + " mph, gusting " + Math.round(wx.gust) + " mph. Waves " + (wx.wave==null ? "–" : wx.wave.toFixed(1) + " m") + ".";
     $("bTime").textContent = "Now · " + wx.time.slice(11,16);
