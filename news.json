@@ -1,10 +1,10 @@
 {
- "checkedAt": "2026-09-28T18:25:41Z",
+ "checkedAt": "2026-09-28T19:21:18Z",
  "feeds": {
   "https://feeds.bbci.co.uk/news/uk/rss.xml": 29,
   "https://feeds.bbci.co.uk/news/politics/rss.xml": 61,
   "https://feeds.skynews.com/feeds/rss/uk.xml": 10,
-  "https://feeds.skynews.com/feeds/rss/politics.xml": 6,
+  "https://feeds.skynews.com/feeds/rss/politics.xml": 5,
   "https://www.theguardian.com/uk/immigration/rss": 20,
   "https://www.telegraph.co.uk/news/rss.xml": 119,
   "https://www.gbnews.com/feeds/news.rss": 30,
@@ -16,13 +16,6 @@
    "url": "https://www.gbnews.com/politics/video-migrant-crisis-shabana-mahmoods-refugee-scheme-timing",
    "source": "GB News",
    "published": "2026-09-28T18:09:45Z",
-   "breaking": true
-  },
-  {
-   "title": "Labour MP branded 'out of touch' after comparing Epping migrant hotel protesters to terror group Palestine Action",
-   "url": "https://www.gbnews.com/politics/stella-creasy-labour-conference-epping-migrant-hotel-palestine-action",
-   "source": "GB News",
-   "published": "2026-09-28T15:40:17Z",
    "breaking": true
   }
  ]
