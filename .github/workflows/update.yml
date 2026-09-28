@@ -2,10 +2,15 @@ name: Update crossing figures
 
 on:
   schedule:
-    # 10:30 UK time all year. GitHub schedules run in UTC, so both times are listed and
-    # the check below keeps the one that is 10:30 in the UK today (09:30 UTC in summer).
+    # 10:30, 13:30 and 16:30 UK time all year (the later two catch figures the Home Office
+    # publishes late, e.g. weekend figures on a Monday). GitHub schedules run in UTC, so both
+    # summer and winter times are listed and the check below keeps the right ones.
     - cron: "30 9 * * *"
     - cron: "30 10 * * *"
+    - cron: "30 12 * * *"
+    - cron: "30 13 * * *"
+    - cron: "30 15 * * *"
+    - cron: "30 16 * * *"
   workflow_dispatch:         # lets you run it by hand from the Actions tab
 
 permissions:
@@ -18,16 +23,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Only run at 10:30 UK time
+      - name: Only run at 10:30, 13:30 and 16:30 UK time
         id: gate
         run: |
           if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=true" >> "$GITHUB_OUTPUT"; exit 0; fi
-          if [ "$(TZ=Europe/London date +%z)" = "+0100" ]; then want="30 9 * * *"; else want="30 10 * * *"; fi
+          utc_hour=$(echo "${{ github.event.schedule }}" | awk '{print $2}')
+          if [ "$(TZ=Europe/London date +%z)" = "+0100" ]; then uk_hour=$((utc_hour + 1)); else uk_hour=$utc_hour; fi
           checked=$(python3 -c "import json;print(json.load(open('data.json')).get('checkedAt','')[:10])" 2>/dev/null || true)
-          if [ "${{ github.event.schedule }}" = "$want" ]; then go=true
-          # Summer back-up: the later run catches up if the 10:30 one didn't update today
-          elif [ "${{ github.event.schedule }}" = "30 10 * * *" ] && [ "$checked" != "$(date -u +%F)" ]; then go=true
-          else go=false; echo "Not 10:30 UK time today, skipping"; fi
+          case "$uk_hour" in
+            10|13|16) go=true ;;
+            # Summer back-up: 11:30 catches up if the 10:30 run didn't update today
+            11) if [ "$checked" != "$(date -u +%F)" ]; then go=true; else go=false; fi ;;
+            *) go=false ;;
+          esac
+          [ "$go" = true ] || echo "Not a scheduled UK time today, skipping"
           echo "go=$go" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@v5
         if: steps.gate.outputs.go == 'true'

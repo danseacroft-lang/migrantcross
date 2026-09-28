@@ -1448,20 +1448,25 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 
   // When the next figures are expected. The update job runs daily at 10:30 UK time
   // (09:30 UTC in summer, 10:30 UTC in winter) and can start a little late, hence "~".
-  function runTime(base){
-    const r = base ? new Date(base) : new Date();
-    for(const h of [9, 10]){
+  function runTime(base, ukHour){
+    const r = base ? new Date(base) : new Date(), want = String(ukHour || 10).padStart(2,"0") + ":30";
+    for(const h of [ukHour-1 || 9, ukHour || 10]){
       r.setUTCHours(h, 30, 0, 0);
-      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === "10:30") return r;
+      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === want) return r;
     }
     return r;
   }
+  const CHECKS = [10, 13, 16];   // UK times the site checks for new figures (10:30, 13:30, 16:30)
   function nextUpdateText(){
     const now = new Date();
     let run = runTime(now);
     const doneToday = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;
     if(now >= run && !doneToday && now - run < 3*60*60*1000) return "Next update due any minute";
-    if(now >= run) run = runTime(now.getTime() + 864e5);
+    if(now >= run){
+      // later checks today pick up figures published late; otherwise tomorrow morning
+      const later = CHECKS.slice(1).map(h=>runTime(now, h)).find(t=>t > now);
+      run = later || runTime(now.getTime() + 864e5);
+    }
     const time = run.toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
     const day = run.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) === now.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) ? "today" : "tomorrow";
     return "Next update: " + day + " ~" + time;
