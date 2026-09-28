@@ -67,6 +67,7 @@
   --indigo:#5856D6; --indigo-bg:rgba(88,86,214,.14);
   --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18); --boat:#DB7100;
   --material:rgba(255,255,255,.78);
+  --bar-glass:rgba(242,242,247,.72); --bar-solid:#F2F2F7;
   --shadow:0 8px 30px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.06);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;
@@ -83,6 +84,8 @@
     --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
     --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
     --material:rgba(44,44,46,.78);
+    --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
+  --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
     --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
   }
 }
@@ -97,6 +100,7 @@
   --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
   --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
   --material:rgba(44,44,46,.78);
+  --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
   --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
 }
 *{box-sizing:border-box}
@@ -105,14 +109,20 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px}
 /* On iPhone, follow the Larger Text setting (Settings › Accessibility › Display & Text Size) */
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
 body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-.wrap{max-width:1240px;margin:0 auto;padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));padding-block:max(12px, env(safe-area-inset-top, 0px)) max(40px, env(safe-area-inset-bottom, 0px));display:grid;gap:28px}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));padding-block:12px max(40px, env(safe-area-inset-bottom, 0px));display:grid;gap:28px}
 .num{font-variant-numeric:tabular-nums}
 
-/* Large title header */
-header{display:grid;gap:4px;padding-top:24px}
-.brand{display:flex;align-items:center;gap:14px}
-.brand > svg{width:60px;height:60px;flex:none;border-radius:50%;box-shadow:0 2px 8px rgba(0,122,255,.25)}
-.brand-text{display:grid;gap:2px;min-width:0;flex:1}
+/* Frosted top bar: clear at the top of the page, frosted glass once the page scrolls under it */
+html{scroll-padding-top:84px}
+.topbar{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top, 0px);background:transparent;border-bottom:.5px solid transparent;transition:background-color .25s ease,border-color .25s ease,-webkit-backdrop-filter .25s ease,backdrop-filter .25s ease}
+.topbar.scrolled{background:var(--bar-glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom-color:var(--sep)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.topbar.scrolled{background:var(--bar-solid)}}
+.topbar-in{max-width:1240px;margin:0 auto;min-height:64px;padding:8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px));display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1;color:inherit;text-decoration:none}
+.brand > svg{width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 8px rgba(0,122,255,.25)}
+.brand-text{display:grid;gap:1px;min-width:0}
+.bar-actions{display:flex;align-items:center;gap:8px;flex:none}
+.top-sentinel{position:absolute;top:0;height:1px;width:1px}
 .share-btn{flex:none;align-self:center;width:44px;height:44px;border-radius:50%;border:0;background:var(--fill);color:var(--blue);display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .share-btn svg{width:22px;height:22px}
 .share-btn:disabled{opacity:.4;cursor:default}
@@ -129,16 +139,18 @@ header{display:grid;gap:4px;padding-top:24px}
 .records .rv{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;grid-column:3;grid-row:1 / 3;align-self:center;white-space:nowrap}
 .records .rs{font-size:.882rem;color:var(--label2);grid-column:2;grid-row:2;text-align:left}
 .overline{font-size:.765rem;font-weight:600;color:var(--label2);letter-spacing:-.005em;text-transform:uppercase}
-h1{font:700 34px/1.12 var(--font);letter-spacing:.012em;margin:0;text-wrap:balance}
-.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:.882rem;color:var(--label2);margin-top:4px}
-.theme-btn{position:relative;margin-left:auto;display:inline-flex;align-items:center;gap:6px;appearance:none;border:0;cursor:pointer;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;height:34px;padding:0 14px 0 11px;border-radius:17px;touch-action:manipulation}
+h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta-row{display:flex;margin:-12px 0 -16px}
+.meta-row:not(:has(:not([hidden]))){display:none}
+.theme-btn{position:relative;display:inline-flex;align-items:center;gap:6px;appearance:none;border:0;cursor:pointer;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;height:34px;padding:0 14px 0 11px;border-radius:17px;touch-action:manipulation}
 .theme-btn::after{content:"";position:absolute;inset:-5px 0}
 .theme-btn svg{width:16px;height:16px;flex:none}
 .theme-btn .sun{color:#FF9500}
 .theme-btn .moon{color:var(--indigo)}
 .theme-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.theme-btn:hover{background:var(--label3)}}
-.fresh{display:inline-flex;align-items:center;gap:6px}
+.fresh{display:flex;align-items:center;gap:6px;font-size:.765rem;color:var(--label2);min-width:0}
+#freshText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .fresh.stale i{background:var(--orange)}
 .link-btn{appearance:none;border:0;background:none;padding:0;min-height:44px;color:var(--blue);font:inherit;cursor:pointer}
@@ -309,13 +321,24 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
 
 @media (max-width:600px){
-  h1{font-size:26px}
-  .brand > svg{width:44px;height:44px}
-  .brand{gap:12px}
+  .topbar-in{min-height:56px;gap:8px}
+  .brand > svg{width:34px;height:34px}
+  .brand{gap:9px}
+  h1{font-size:1.06rem}
+  .theme-btn{width:44px;height:44px;padding:0;justify-content:center;border-radius:50%}
+  .theme-btn #themeLabel{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .theme-btn svg{width:20px;height:20px}
   .tiles{grid-template-columns:1fr 1fr}
   .tile:first-child,.tile-fc{grid-column:1 / -1}
   .sec-title{flex-direction:column;align-items:stretch}
   .seg{width:100%}
+}
+@media (max-width:360px){
+  .topbar-in{gap:6px}
+  .bar-actions{gap:6px}
+  .theme-btn,.share-btn{width:40px;height:40px}
+  .brand > svg{width:30px;height:30px}
+  h1{font-size:1rem}
 }
 @media (hover:hover){
   .b-close:hover span{background:var(--label3);color:var(--label)}
@@ -327,28 +350,30 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
+<div class="top-sentinel" id="topSentinel" aria-hidden="true"></div>
+<header class="topbar" id="topbar">
+  <div class="topbar-in">
     <div class="brand">
       <svg viewBox="0 0 400 400" role="img" aria-label="Channel Crossings logo"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg>
       <div class="brand-text">
-        <div class="overline">Daily tracker</div>
         <h1>Channel Crossings</h1>
+        <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span></span>
       </div>
-      <button type="button" class="share-btn" id="shareBtn" aria-label="Share today's figures" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>
-      </button>
     </div>
-    <div class="meta">
-      <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span></span>
-      <button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button>
+    <div class="bar-actions">
       <button type="button" class="theme-btn" id="themeToggle" aria-pressed="false" aria-label="Switch between day and night theme">
         <svg class="sun" id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
         <svg class="moon" id="iconMoon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>
         <span id="themeLabel">Day</span>
       </button>
+      <button type="button" class="share-btn" id="shareBtn" aria-label="Share today's figures" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>
+      </button>
     </div>
-  </header>
+  </div>
+</header>
+<div class="wrap">
+  <div class="meta-row"><button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button></div>
 
   <div class="notices">
   <!-- Channel conditions notification -->
@@ -615,7 +640,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   function renderSummary(){
     const last = sorted[sorted.length-1];
     const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
-    let fresh = "Figures to " + dMid.format(parse(last.date));
+    let fresh = "Figures to " + dShort.format(parse(last.date));
     if(meta && meta.checkedAt && !isNaN(new Date(meta.checkedAt))) fresh += " · Updated " + ago(meta.checkedAt);
     $("freshText").textContent = fresh;
     $("fresh").classList.toggle("stale", ageDays > 3);
@@ -1265,6 +1290,12 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   });
   sys.addEventListener("change", show);
   show();
+})();
+// Top bar: clear at the top, frosted glass once the page scrolls beneath it
+(function(){
+  const bar = document.getElementById("topbar"), mark = document.getElementById("topSentinel");
+  if("IntersectionObserver" in window) new IntersectionObserver(e=>bar.classList.toggle("scrolled", !e[0].isIntersecting)).observe(mark);
+  else bar.classList.add("scrolled");
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
