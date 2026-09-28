@@ -123,7 +123,7 @@ body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font)
 
 /* Union flag in the top corner, fading into the page */
 body{position:relative}
-.flag{position:absolute;top:0;right:0;width:min(820px,70vw);aspect-ratio:2/1;z-index:0;pointer-events:none;opacity:var(--flag-o);
+.flag{position:fixed;top:0;right:0;width:min(820px,70vw);aspect-ratio:2/1;z-index:0;pointer-events:none;opacity:var(--flag-o);
   -webkit-mask-image:linear-gradient(to left,#000 15%,rgba(0,0,0,.5) 55%,transparent 92%),linear-gradient(to bottom,#000 10%,rgba(0,0,0,.45) 55%,transparent 95%);
   -webkit-mask-composite:source-in;
           mask-image:linear-gradient(to left,#000 15%,rgba(0,0,0,.5) 55%,transparent 92%),linear-gradient(to bottom,#000 10%,rgba(0,0,0,.45) 55%,transparent 95%);
