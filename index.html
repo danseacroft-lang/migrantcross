@@ -386,6 +386,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .rep-head .sub{font-size:.882rem;color:var(--label2)}
 .dots svg{display:block;width:100%;height:auto}
+.dots .boats{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 .dots .dd{transition:opacity .15s ease}
 .dots.hovering .dd:not(.on){opacity:.3}
 .dots{animation:fadeIn .35s ease-out}
@@ -1075,17 +1076,17 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       s += '<path class="dd" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
     });
     const dotsH = rows*pitch;
-    // Boats: small hull icons, wrapped and centred
-    const bp = 16, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
+    // Boats: one boat emoji each (the device draws its own, e.g. Apple's on iPhone and Mac), wrapped and centred
+    const bp = 22, bh = 24, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
     let b2 = "";
     for(let i=0; i<boats; i++){
       const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
-      const x = (W - n*bp)/2 + c*bp + 2, yy = dotsH + 18 + rr*18;
-      b2 += '<use href="#hull" x="' + x.toFixed(1) + '" y="' + yy + '"/>';
+      const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
+      b2 += '<text x="' + x.toFixed(1) + '" y="' + yy + '">\u{1F6A4}</text>';
     }
-    const H = Math.ceil(dotsH + (boats ? 18 + brows*18 : 0)) || 20;
+    if(b2) b2 = '<g class="boats" font-size="17" text-anchor="middle">' + b2 + '</g>';
+    const H = Math.ceil(dotsH + (boats ? 14 + brows*bh : 0)) || 20;
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + fmt(people) + ' dots for ' + fmt(people) + ' people and ' + fmt(boats) + ' boat icons, ' + from + ' to ' + to + '">'
-      + '<defs><symbol id="hull" viewBox="0 0 12 14" width="12" height="14"><path d="M6 0 L7 5 L11 8 L9.5 13 L2.5 13 L1 8 L5 5 Z" fill="var(--boat)"/></symbol></defs>'
       + (people ? '<g fill="var(--bar)">' + s + '</g>' : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
       + b2 + '</svg>';
     box.style.animation = "none"; box.offsetWidth; box.style.animation = "";
