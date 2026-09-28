@@ -256,11 +256,10 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
 .outlook{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
 .outlook::-webkit-scrollbar{display:none}
-#outlook,#otdYears{-webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent);padding-right:24px}
+#otdYears{-webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent);padding-right:24px}
 .chip{flex:none;display:grid;gap:1px;padding:6px 10px;border-radius:10px;background:var(--fill);font-size:.765rem;min-width:72px}
 .chip b{font-weight:600;font-size:.765rem}
 .chip span{color:var(--label2)}
-.chip small{font-size:.65rem;color:var(--label2);font-variant-numeric:tabular-nums;white-space:nowrap}
 .chip[data-level="calm"] b{color:var(--green)}
 .chip[data-level="moderate"] b{color:var(--orange)}
 .chip[data-level="rough"] b{color:var(--red)}
@@ -844,10 +843,10 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   }
 
   async function loadWeather(){
-    const common = "latitude="+LAT+"&longitude="+LON+"&timezone=Europe%2FLondon&forecast_days=8";
+    const common = "latitude="+LAT+"&longitude="+LON+"&timezone=Europe%2FLondon&forecast_days=4";
     try{
       const [w, m] = await Promise.all([
-        fetch("https://api.open-meteo.com/v1/forecast?"+common+"&current=wind_speed_10m,wind_gusts_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=precipitation_sum&wind_speed_unit=mph").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+        fetch("https://api.open-meteo.com/v1/forecast?"+common+"&current=wind_speed_10m,wind_gusts_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&wind_speed_unit=mph").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
         fetch("https://marine-api.open-meteo.com/v1/marine?"+common+"&current=wave_height&hourly=wave_height").then(r=>{ if(!r.ok) throw 0; return r.json(); })
       ]);
       const wind = w.current.wind_speed_10m, gust = w.current.wind_gusts_10m, wave = m.current.wave_height;
@@ -863,10 +862,9 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
         const mi = m.hourly.time.indexOf(t);
         byDay[d].v.push(mi>=0 ? m.hourly.wave_height[mi] : null);
       });
-      const rain = {}; (w.daily && w.daily.time || []).forEach((t,i)=>{ rain[t] = w.daily.precipitation_sum[i]; });
-      Object.keys(byDay).sort().slice(1,8).forEach(d=>{
+      Object.keys(byDay).sort().slice(1,4).forEach(d=>{
         const mw = median(byDay[d].w), mv = median(byDay[d].v);
-        days.push({date:d, wind:mw, wave:mv, rain:rain[d], level:rate(mw,mv)});
+        days.push({date:d, wind:mw, wave:mv, level:rate(mw,mv)});
       });
       wx = {wind, gust, wave, level:rate(wind,wave), time:w.current.time, days, code:w.current.weather_code, day:w.current.is_day !== 0, temp:w.current.temperature_2m};
       renderWeather();
@@ -962,12 +960,9 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       const n = document.createElement("span");
       n.textContent = new Date(d.date+"T12:00:00Z").toLocaleDateString("en-GB",{weekday:"short",timeZone:"UTC"});
       const b = document.createElement("b"); b.textContent = d.level ? LEVELS[d.level].word : "–";
-      const x = document.createElement("small");
-      x.textContent = (d.wind!=null ? Math.round(d.wind) + " mph" : "–") + (d.rain!=null ? " · " + (d.rain < 0.5 ? "dry" : Math.round(d.rain) + " mm") : "");
-      c.title = "Wind " + (d.wind!=null ? Math.round(d.wind) + " mph" : "–") + ", waves " + (d.wave!=null ? d.wave.toFixed(1) + " m" : "–") + (d.rain!=null ? ", rain " + d.rain.toFixed(1) + " mm" : "") + " (overnight to midday)";
-      c.append(n,b,x); ol.append(c);
+      c.append(n,b); ol.append(c);
     });
-    ol.setAttribute("aria-label","Outlook for the next seven days");
+    ol.setAttribute("aria-label","Outlook for the next three days");
     showBanner(!dismissedFor(wx.level));
   }
 
