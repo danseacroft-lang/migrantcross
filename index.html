@@ -191,6 +191,12 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .b-icon svg{width:24px;height:24px}
 .b-body{display:grid;gap:2px;min-width:0;position:relative;z-index:1}
 .b-icon{position:relative;z-index:1}
+/* Daily update in progress */
+.banner.sync{padding-right:14px}
+.banner.sync .b-icon{background:rgba(0,122,255,.12);color:var(--blue)}
+.spin{animation:spin 1s linear infinite;transform-origin:50% 50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
 /* Current weather picture, faded into the corner of the conditions card */
 .banner{overflow:hidden;isolation:isolate}
 .wx-art{position:absolute;bottom:-16px;right:-6px;width:230px;height:170px;z-index:0;pointer-events:none;opacity:var(--wx-o);
@@ -411,6 +417,17 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   <div class="meta-row"><button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button></div>
 
   <div class="notices">
+  <!-- Shown while the daily update is running -->
+  <div class="banner sync" id="syncNote" role="status" aria-live="polite" hidden>
+    <div class="b-icon" aria-hidden="true">
+      <svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-9 9" /></svg>
+    </div>
+    <div class="b-body">
+      <div class="b-top"><span>Daily update</span><span id="syncTime"></span></div>
+      <div class="b-title">Data sync is pending</div>
+      <div class="b-text">Update in process…</div>
+    </div>
+  </div>
   <!-- Channel conditions notification -->
   <div class="banner" id="banner" role="status" aria-live="polite" data-level="loading" hidden>
     <div class="wx-art" id="wxArt" aria-hidden="true"></div>
@@ -1359,6 +1376,36 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("records").innerHTML = '<li class="empty">Records need an internet connection.</li>';
     }
   })();
+  // "Data sync is pending": from the daily update time (10:30 UTC) for up to an hour, or until
+  // the new figures arrive. While it shows, the page checks for the new figures every 2 minutes.
+  function runTime(){ const r = new Date(); r.setUTCHours(10, 30, 0, 0); return r; }
+  function syncPending(){
+    const now = new Date(), run = runTime();
+    const done = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;
+    return now >= run && now - run < 60*60*1000 && !done;
+  }
+  let lastPoll = 0;
+  async function checkSync(){
+    const on = !!sorted.length && syncPending();
+    $("syncNote").hidden = !on;
+    if(!on) return;
+    $("syncTime").textContent = "Since " + runTime().toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
+    if(Date.now() - lastPoll < 2*60*1000 || document.hidden) return;
+    lastPoll = Date.now();
+    try{
+      const r = await fetch("data.json", {cache:"no-cache"});
+      if(!r.ok) return;
+      const d = await r.json();
+      if(d.checkedAt && (!meta.checkedAt || new Date(d.checkedAt) > new Date(meta.checkedAt))){
+        load(d, true);
+        $("syncNote").hidden = true;
+        toast("New figures are in");
+      }
+    }catch(e){ /* try again on the next check */ }
+  }
+  setInterval(checkSync, 30*1000);
+  setTimeout(checkSync, 1500);
+
   loadWeather();
   setInterval(loadWeather, 30*60*1000);   // refresh conditions every 30 minutes
 
