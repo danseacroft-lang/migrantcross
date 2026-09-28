@@ -150,7 +150,11 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .theme-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.theme-btn:hover{background:var(--label3)}}
 .fresh{display:flex;align-items:center;gap:6px;font-size:.765rem;color:var(--label2);min-width:0}
-#freshText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#freshText,#nextText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nextText{color:var(--blue);font-weight:590;animation:nextFlash 1.4s ease-in-out 2}
+#nextText.out{opacity:0;transition:opacity .4s ease}
+@keyframes nextFlash{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){#nextText{animation:none}}
 .fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .fresh.stale i{background:var(--orange)}
 .link-btn{appearance:none;border:0;background:none;padding:0;min-height:44px;color:var(--blue);font:inherit;cursor:pointer}
@@ -357,7 +361,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <svg viewBox="0 0 400 400" role="img" aria-label="Channel Crossings logo"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg>
       <div class="brand-text">
         <h1>Channel Crossings</h1>
-        <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span></span>
+        <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span id="nextText" role="status" hidden></span></span>
       </div>
     </div>
     <div class="bar-actions">
@@ -1208,6 +1212,29 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
+  // When the next figures are expected: the update job runs daily at 10:30 UK winter time (10:30 UTC)
+  // and takes a few minutes, so it's shown as an approximate London time
+  function nextUpdateText(){
+    const now = new Date(), run = new Date(now);
+    run.setUTCHours(10, 30, 0, 0);
+    const doneToday = meta && meta.checkedAt && new Date(meta.checkedAt) >= run;
+    if(now >= run && !doneToday && now - run < 3*60*60*1000) return "Next update due any minute";
+    if(now >= run) run.setUTCDate(run.getUTCDate() + 1);
+    const time = run.toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
+    const day = run.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) === now.toLocaleDateString("en-GB", {timeZone:"Europe/London"}) ? "today" : "tomorrow";
+    return "Next update: " + day + " ~" + time;
+  }
+  let nextShown = false;
+  function flashNextUpdate(){
+    const next = $("nextText"), cur = $("freshText");
+    next.textContent = nextUpdateText();
+    cur.hidden = true; next.hidden = false; next.classList.remove("out");
+    setTimeout(()=>{
+      next.classList.add("out");
+      setTimeout(()=>{ next.hidden = true; cur.hidden = false; }, 400);
+    }, 5000);
+  }
+
   let seenChecked = false;
   function load(data, full){
     meta = data;
@@ -1239,6 +1266,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); }
     $("shareBtn").disabled = false;
+    if(!nextShown){ nextShown = true; setTimeout(flashNextUpdate, 1200); }
     $("rangeSeg").hidden = sorted.length < 15;
   }
 
