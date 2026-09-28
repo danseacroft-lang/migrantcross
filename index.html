@@ -276,7 +276,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .tile .cost{margin-top:6px;padding-top:6px;border-top:.5px solid var(--sep)}
 .tile .cost b{color:var(--label);font-weight:600;font-variant-numeric:tabular-nums}
-.esttag{display:inline-block;margin-left:4px;padding:2px 7px;border-radius:999px;background:var(--indigo-bg);color:var(--indigo);font-size:11px;font-weight:600;letter-spacing:.02em;vertical-align:1px}
 /* Dashboard: notices side by side, then a board of cards */
 .news{--glow:0 0 18px 2px rgba(255,59,48,.35),0 0 42px 6px rgba(255,59,48,.14);position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 48px 14px 14px;border-radius:22px;box-shadow:var(--glow),var(--shadow);animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both, newsFlash 1.1s ease-out .5s 1}
 .news.leaving{animation:lift .25s ease-in both}
@@ -549,6 +548,19 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 @media (prefers-contrast:more) and (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
 }
+/* Advert tile: Restore Britain colours (navy and white) */
+.tile.ad{position:relative;overflow:hidden;isolation:isolate;background:#051E40;color:#fff;outline-color:rgba(255,255,255,.12);-webkit-backdrop-filter:none;backdrop-filter:none;align-content:start;gap:4px}
+.tile.ad > :not(.ad-flag){position:relative;z-index:1}
+.ad-flag{position:absolute;right:0;top:0;bottom:0;width:62%;z-index:0;opacity:.35;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to left,#000 20%,transparent 95%);mask-image:linear-gradient(to left,#000 20%,transparent 95%)}
+.ad-flag svg{display:block;width:100%;height:100%}
+.adtag{display:inline-block;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.16);color:rgba(255,255,255,.85);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.ad-name{font:800 1.75rem/1.1 var(--font);letter-spacing:.01em;text-transform:uppercase;margin-top:4px}
+.ad-sub{font-size:.765rem;color:rgba(255,255,255,.7)}
+.ad-btn{justify-self:start;margin-top:10px;display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;background:#fff;color:#051E40;font:700 .941rem/1 var(--font);text-decoration:none;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.ad-btn:hover{background:#E8EEF7}
+.ad-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media (prefers-reduced-transparency:reduce){.tile.ad{background:#051E40}}
 </style>
 </head>
 <body>
@@ -646,7 +658,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div><div class="prog" id="ytdProg" hidden><i id="ytdFill"></i><b id="ytdMark"></b></div><div class="s" id="ytdAvg"></div></div>
     <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="tlSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="tlStone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"/><stop offset="1" stop-color="var(--ta-stone2)"/></linearGradient><radialGradient id="tlGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"/><stop offset="1" stop-color="#E4003B" stop-opacity="0"/></radialGradient></defs><circle cx="190" cy="60" r="70" fill="url(#tlGlow)"/><g transform="translate(190 0)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"/><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"/><rect x="-12" y="36" width="24" height="12" fill="url(#tlStone)"/><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"/><rect x="-14" y="48" width="28" height="30" fill="url(#tlStone)"/><circle cx="0" cy="63" r="10" fill="var(--ta-clock)" stroke="var(--ta-stone3)" stroke-width="1.5"/><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-width="1.4" stroke-linecap="round"/><rect x="-12" y="78" width="24" height="52" fill="url(#tlStone)"/><path d="M-7 84 v42 M0 84 v42 M7 84 v42" stroke="var(--ta-stone3)" stroke-width="1.2" opacity=".7"/><path d="M-60 122 H-12 V104 H-48z M12 104 H70 V122 H12z" fill="url(#tlStone)" opacity=".75"/></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div><div class="s cost" id="labC" title="Rough estimate: people arrived since 5 July 2024 × average asylum support cost per person a year (£4.0bn ÷ 106,771 people, 2024–25). See How it works."></div></div>
     <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div><div class="k">Since Burnham became PM</div><div class="v" id="burV">–</div><div class="s" id="burS">&nbsp;</div><div class="s" id="burA"></div></div>
-    <div class="tile tile-fc" id="fcTile"><div class="k"><span id="fcK">Tomorrow</span> <span class="esttag">Estimate</span></div><div class="v" id="fcV">–</div><div class="s" id="fcS">&nbsp;</div><div class="s" id="fcC"></div></div>
+    <aside class="tile tile-fc ad" aria-label="Advert: Restore Britain"><div class="ad-flag" aria-hidden="true"><svg viewBox="0 0 60 30" preserveAspectRatio="xMaxYMid slice"><clipPath id="adS"><path d="M0,0v30h60V0z"/></clipPath><clipPath id="adT"><path d="M30,15h30v15zv15H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#adS)"><path d="M0,0v30h60V0z" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#adT)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></g></svg></div><div class="k"><span class="adtag">Advert</span></div><div class="ad-name">Restore Britain</div><div class="ad-sub">restorebritain.org.uk</div><a class="ad-btn" href="https://www.restorebritain.org.uk/join_us" target="_blank" rel="noopener">Join Restore Britain</a></aside>
   </div>
 
   <div class="board">
@@ -1768,19 +1780,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
-  function renderForecast(){
-    const fc = extras.forecast && extras.forecast.days || [];
-    const todayISO = new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
-    const tomorrowISO = new Date(Date.parse(todayISO+"T12:00:00Z") + 864e5).toISOString().slice(0,10);
-    let f = fc.find(d=>d.date===tomorrowISO), label = "Tomorrow";
-    if(!f){ f = fc.find(d=>d.date===todayISO); label = "Today"; }
-    if(!f){ $("fcK").textContent = "Arrivals estimate"; $("fcV").textContent = "–"; $("fcS").textContent = "No estimate available right now"; $("fcC").textContent = ""; return; }
-    $("fcK").textContent = label + " · " + dShort.format(parse(f.date));
-    $("fcV").textContent = f.high === 0 ? "0" : fmt(f.low) + "–" + fmt(f.high);
-    $("fcS").textContent = (f.typical ? "Most likely around " + fmt(f.typical) : "Most likely none") + " · " + f.band + " conditions";
-    $("fcC").textContent = Math.round(f.chance*100) + "% of " + f.basis + " similar days had crossings";
-    $("fcTile").title = "Rough estimate from the weather forecast and arrivals on days with similar weather in the last " + f.window + " days. Not an official forecast.";
-  }
 
   let gPeriod = "lastYear";
   function renderGender(){
@@ -1903,7 +1902,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     } else busyMin = Infinity;
 
     renderSummary(); setRange(range); drawCalendar(); drawDots();
-    if(data.extras){ extras = data.extras; renderForecast(); renderGender(); renderPetitions(); }
+    if(data.extras){ extras = data.extras; renderGender(); renderPetitions(); }
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); drawHistory(); }
     initCalc();
