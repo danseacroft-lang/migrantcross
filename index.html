@@ -68,6 +68,7 @@
   --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18); --boat:#DB7100;
   --material:rgba(255,255,255,.78);
   --flag-o:.5;
+  --wx-o:.9; --cloud-a:#F4F6FA; --cloud-b:#BFC9D9; --cloud-edge:rgba(60,60,67,.14);
   --bar-glass:rgba(242,242,247,.72); --bar-solid:#F2F2F7;
   --shadow:0 8px 30px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.06);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -86,7 +87,7 @@
     --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
     --material:rgba(44,44,46,.78);
     --flag-o:.42;
-  --flag-o:.42;
+  --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
     --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
   --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
     --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
@@ -104,6 +105,7 @@
   --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
   --material:rgba(44,44,46,.78);
   --flag-o:.42;
+  --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
   --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
   --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
 }
@@ -187,11 +189,25 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 @keyframes closeIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 .chip b.num{font-variant-numeric:tabular-nums}
 .b-icon svg{width:24px;height:24px}
-.b-body{display:grid;gap:2px;min-width:0}
+.b-body{display:grid;gap:2px;min-width:0;position:relative;z-index:1}
+.b-icon{position:relative;z-index:1}
+/* Current weather picture, faded into the corner of the conditions card */
+.banner{overflow:hidden;isolation:isolate}
+.wx-art{position:absolute;bottom:-16px;right:-6px;width:230px;height:170px;z-index:0;pointer-events:none;opacity:var(--wx-o);
+  -webkit-mask-image:linear-gradient(to left,#000 40%,transparent 96%),linear-gradient(to top,#000 62%,transparent 100%);-webkit-mask-composite:source-in;
+          mask-image:linear-gradient(to left,#000 40%,transparent 96%),linear-gradient(to top,#000 62%,transparent 100%);mask-composite:intersect}
+.wx-art svg{display:block;width:100%;height:100%}
+.wx-art .drop{animation:wxFall 1.1s linear infinite}
+.wx-art .flake{animation:wxFall 3.2s linear infinite}
+.wx-art .drift{animation:wxDrift 9s ease-in-out infinite alternate}
+@keyframes wxFall{from{transform:translateY(-10px);opacity:0}25%{opacity:1}to{transform:translateY(26px);opacity:0}}
+@keyframes wxDrift{from{transform:translateX(-5px)}to{transform:translateX(5px)}}
+@media (prefers-reduced-motion:reduce){.wx-art .drop,.wx-art .flake,.wx-art .drift{animation:none}}
+@media (max-width:600px){.wx-art{width:140px;height:104px;bottom:-8px;right:-16px}}
 .b-top{display:flex;justify-content:space-between;gap:8px;font-size:.765rem;color:var(--label2)}
 .b-title{font-weight:600;font-size:1rem;letter-spacing:-.024em}
 .b-text{font-size:.882rem;color:var(--label2);letter-spacing:-.016em}
-.b-close{position:absolute;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
+.b-close{position:absolute;z-index:2;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
 .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
 .b-close svg{width:10px;height:10px}
 .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
@@ -397,6 +413,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   <div class="notices">
   <!-- Channel conditions notification -->
   <div class="banner" id="banner" role="status" aria-live="polite" data-level="loading" hidden>
+    <div class="wx-art" id="wxArt" aria-hidden="true"></div>
     <div class="b-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 13c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 17.5c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/></svg>
     </div>
@@ -565,7 +582,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     const common = "latitude="+LAT+"&longitude="+LON+"&timezone=Europe%2FLondon&forecast_days=4";
     try{
       const [w, m] = await Promise.all([
-        fetch("https://api.open-meteo.com/v1/forecast?"+common+"&current=wind_speed_10m,wind_gusts_10m&hourly=wind_speed_10m&wind_speed_unit=mph").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+        fetch("https://api.open-meteo.com/v1/forecast?"+common+"&current=wind_speed_10m,wind_gusts_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&wind_speed_unit=mph").then(r=>{ if(!r.ok) throw 0; return r.json(); }),
         fetch("https://marine-api.open-meteo.com/v1/marine?"+common+"&current=wave_height&hourly=wave_height").then(r=>{ if(!r.ok) throw 0; return r.json(); })
       ]);
       const wind = w.current.wind_speed_10m, gust = w.current.wind_gusts_10m, wave = m.current.wave_height;
@@ -585,12 +602,48 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
         const mw = median(byDay[d].w), mv = median(byDay[d].v);
         days.push({date:d, wind:mw, wave:mv, level:rate(mw,mv)});
       });
-      wx = {wind, gust, wave, level:rate(wind,wave), time:w.current.time, days};
+      wx = {wind, gust, wave, level:rate(wind,wave), time:w.current.time, days, code:w.current.weather_code, day:w.current.is_day !== 0, temp:w.current.temperature_2m};
       renderWeather();
     }catch(e){
       wx = {error:true};
       renderWeather();
     }
+  }
+
+  // Weather type from the WMO code Open-Meteo gives
+  function wxKind(c){
+    if(c==null) return null;
+    if(c<=1) return "clear"; if(c===2) return "partly"; if(c===3) return "cloudy";
+    if(c===45||c===48) return "fog";
+    if(c>=51&&c<=57) return "drizzle"; if((c>=61&&c<=67)||(c>=80&&c<=82)) return "rain";
+    if((c>=71&&c<=77)||c===85||c===86) return "snow"; if(c>=95) return "storm";
+    return "cloudy";
+  }
+  const WX_WORDS = {clear:"Clear", partly:"Partly cloudy", cloudy:"Cloudy", fog:"Foggy", drizzle:"Drizzle", rain:"Rain", snow:"Snow", storm:"Thunderstorms"};
+  function wxArt(kind, day){
+    const sun = '<circle cx="150" cy="62" r="62" fill="url(#wxGlow)"/><circle cx="150" cy="62" r="30" fill="url(#wxSun)"/>';
+    const moon = '<circle cx="150" cy="60" r="55" fill="url(#wxMoonGlow)"/><circle cx="150" cy="60" r="24" fill="#F4F1D8" mask="url(#wxCres)"/>'
+      + '<circle cx="60" cy="30" r="1.6" fill="#F4F1D8"/><circle cx="92" cy="18" r="1.2" fill="#F4F1D8"/><circle cx="200" cy="112" r="1.4" fill="#F4F1D8"/>';
+    const cloud = (x,y,sc,op) => '<g class="drift" opacity="'+(op||1)+'"><g transform="translate('+x+' '+y+') scale('+sc+')"><path d="M20 70h96a26 26 0 0 0 2-52 38 38 0 0 0-72-6A28 28 0 0 0 20 70z" fill="url(#wxCloud)" stroke="var(--cloud-edge)"/></g></g>';
+    const drops = (cls, n) => { let d = ""; for(let i=0;i<n;i++){ const x = 92 + i*18, dl = (i*0.27 % 1).toFixed(2);
+        d += cls==="flake" ? '<circle class="flake" style="animation-delay:-'+(dl*3)+'s" cx="'+x+'" cy="'+(118+(i%2)*10)+'" r="3" fill="#FFFFFF" stroke="#C7D2E3"/>'
+                           : '<line class="drop" style="animation-delay:-'+dl+'s" x1="'+x+'" y1="'+(116+(i%2)*8)+'" x2="'+(x-5)+'" y2="'+(130+(i%2)*8)+'" stroke="#3E9BFF" stroke-width="3" stroke-linecap="round"/>'; } return d; };
+    let g = "";
+    if(kind==="clear") g = day ? sun : moon;
+    else if(kind==="partly") g = (day ? sun : moon) + cloud(62, 50, .95);
+    else if(kind==="cloudy") g = cloud(96, 22, .8, .8) + cloud(52, 48, 1);
+    else if(kind==="fog") g = cloud(70, 24, .9, .8) + '<g stroke="var(--cloud-b)" stroke-width="7" stroke-linecap="round" opacity=".9"><path d="M70 112h120M92 130h110M78 148h90"/></g>';
+    else if(kind==="drizzle") g = cloud(60, 26, 1) + drops("drop", 4);
+    else if(kind==="rain") g = cloud(60, 26, 1) + drops("drop", 6);
+    else if(kind==="snow") g = cloud(60, 26, 1) + drops("flake", 6);
+    else if(kind==="storm") g = cloud(60, 26, 1) + drops("drop", 5) + '<path d="M150 104l-18 30h14l-8 26 26-36h-15l9-20z" fill="#FFCC00" stroke="#FF9F0A" stroke-width="1.5" stroke-linejoin="round"/>';
+    return '<svg viewBox="0 0 230 170"><defs>'
+      + '<radialGradient id="wxSun" cx="40%" cy="35%"><stop offset="0" stop-color="#FFE483"/><stop offset=".6" stop-color="#FFC21A"/><stop offset="1" stop-color="#FF9F0A"/></radialGradient>'
+      + '<radialGradient id="wxGlow"><stop offset=".35" stop-color="#FFC21A" stop-opacity=".45"/><stop offset="1" stop-color="#FFC21A" stop-opacity="0"/></radialGradient>'
+      + '<radialGradient id="wxMoonGlow"><stop offset=".3" stop-color="#F4F1D8" stop-opacity=".25"/><stop offset="1" stop-color="#F4F1D8" stop-opacity="0"/></radialGradient>'
+      + '<mask id="wxCres"><rect width="230" height="170" fill="#fff"/><circle cx="162" cy="50" r="22" fill="#000"/></mask>'
+      + '<linearGradient id="wxCloud" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--cloud-a)"/><stop offset="1" stop-color="var(--cloud-b)"/></linearGradient>'
+      + '</defs>' + g + '</svg>';
   }
 
   function renderWeather(){
@@ -601,13 +654,17 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("bText").textContent = "The weather service didn't respond. Try reloading the page later.";
       $("outlook").textContent = "";
       $("bTime").textContent = "";
+      $("wxArt").innerHTML = "";
       showBanner(!dismissedFor("error"));
       return;
     }
     const L = wx.level ? LEVELS[wx.level] : null;
     banner.dataset.level = wx.level || "error";
     $("bTitle").textContent = L ? L.title : "Conditions unavailable";
-    $("bText").textContent = "Wind " + Math.round(wx.wind) + " mph, gusting " + Math.round(wx.gust) + " mph. Waves " + (wx.wave==null ? "–" : wx.wave.toFixed(1) + " m") + ".";
+    const kind = wxKind(wx.code);
+    $("wxArt").innerHTML = kind ? wxArt(kind, wx.day) : "";
+    const sky = kind ? (kind==="clear" && !wx.day ? "Clear night" : WX_WORDS[kind]) + (wx.temp!=null ? ", " + Math.round(wx.temp) + "°C. " : ". ") : "";
+    $("bText").textContent = sky + "Wind " + Math.round(wx.wind) + " mph, gusting " + Math.round(wx.gust) + " mph. Waves " + (wx.wave==null ? "–" : wx.wave.toFixed(1) + " m") + ".";
     $("bTime").textContent = "Now · " + wx.time.slice(11,16);
     const ol = $("outlook"); ol.textContent = "";
     wx.days.forEach(d=>{
