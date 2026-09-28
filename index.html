@@ -302,11 +302,11 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .notices:not(:has(.banner:not([hidden]))){display:none}
 .board{display:grid;gap:28px 20px;align-items:start;grid-template-columns:minmax(0,1fr)}
 @media (min-width:760px){
-  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "cal cal" "rep rep" "gender records" "petitions days"}
-  .area-chart{grid-area:chart}.area-cal{grid-area:cal}.area-rep{grid-area:rep}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}.area-days{grid-area:days}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "cal cal" "rep rep" "gender records" "petitions petitions"}
+  .area-chart{grid-area:chart}.area-cal{grid-area:cal}.area-rep{grid-area:rep}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}
 }
 @media (min-width:1080px){
-  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "cal cal records" "rep rep rep" "petitions petitions days"}
+  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "cal cal records" "rep rep rep" "petitions petitions petitions"}
 }
 .card.pad{padding:16px}
 .seg.seg-sm{min-width:0}
@@ -351,12 +351,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .prog i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--blue)}
 .prog b{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label2)}
 /* Tappable day rows, busy-day dot and new-day dot */
-.list li.tap{cursor:pointer}
-.list li.tap:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;border-radius:8px}
-.busy{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bar-peak);margin-right:7px;vertical-align:1px}
-.newdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue);margin-left:7px;vertical-align:1px}
 .rev{color:var(--orange);font-weight:500}
-@media (hover:hover){.list li.tap:hover{background:var(--fill)}}
 
 /* Segmented control */
 .seg{position:relative;display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--fill);border-radius:9px;padding:2px;min-width:180px}
@@ -401,6 +396,16 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .cal-day.l4{color:#fff}.cal-day.l4 .dn{color:rgba(255,255,255,.8)}
 .cal-day.future,.cal-day.nodata{background:none;cursor:default}
 .cal-day.future .dn,.cal-day.nodata .dn{color:var(--label3)}
+.cal-day{position:relative}
+.cal-day .mk{position:absolute;top:5px;width:6px;height:6px;border-radius:50%}
+.cal-day .mk.busy{right:5px;background:var(--bar-peak);box-shadow:0 0 0 1.5px var(--card)}
+.cal-day .mk.new{left:5px;background:var(--blue);box-shadow:0 0 0 1.5px var(--card)}
+.cal-day.l4 .mk.new{background:#fff}
+.cal-day.rev .dv{text-decoration:underline dotted var(--orange);text-decoration-thickness:2px;text-underline-offset:3px}
+.cal-marks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-size:.765rem;color:var(--label2)}
+.cal-marks span{display:inline-flex;align-items:center;gap:5px}
+.cal-marks i{width:7px;height:7px;border-radius:50%}
+.cal-marks u{text-decoration:underline dotted var(--orange);text-decoration-thickness:2px;text-underline-offset:3px;color:var(--label)}
 .cal-day.latest{box-shadow:inset 0 0 0 2px var(--blue)}
 .cal-day.on{box-shadow:inset 0 0 0 2px var(--label)}
 .cal-day:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
@@ -432,13 +437,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .list{list-style:none;margin:0;padding:0}
 .list li{display:grid;grid-template-columns:1fr auto;gap:1px 12px;align-items:center;min-height:60px;padding:10px 16px;position:relative}
 .list li + li::before{content:"";position:absolute;top:0;left:16px;right:0;height:.5px;background:var(--sep)}
-.list .d{font-size:1rem}
-.list .n{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
-.list .m{grid-column:1 / -1;font-size:.882rem;color:var(--label2)}
-.list li.zero .n,.list li.zero .d{color:var(--label2);font-weight:400}
-.list li.peak .n{color:var(--orange)}
-.more{appearance:none;border:0;color:var(--blue);font:400 1rem/1 var(--font);letter-spacing:-.022em;min-height:44px;width:100%;border-radius:12px;cursor:pointer}
-.more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
 .empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:.882rem}
 
@@ -475,13 +473,13 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   .banner,.banner.leaving,.b-close.fade-in{animation:none}
 }
 /* Frosted glass boxes: the page (and the flag) shows through, softly blurred, with a fine glass edge */
-.banner,.card,.tile,.more,.tip{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
-.banner,.news,.card,.tile,.more,.tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.banner,.card,.tile,.tip{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
+.banner,.news,.card,.tile,.tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .seg{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.more,.tip{background:var(--card)}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.tip{background:var(--card)}}
 /* Reduce Transparency: solid boxes and bar, fainter pictures */
 @media (prefers-reduced-transparency:reduce){
-  .banner,.news,.card,.tile,.more,.tip{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .banner,.news,.card,.tile,.tip{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
   .seg{-webkit-backdrop-filter:none;backdrop-filter:none}
   .topbar.scrolled{background:var(--bar-solid);-webkit-backdrop-filter:none;backdrop-filter:none}
   .flag{opacity:calc(var(--flag-o)*.5)}
@@ -496,7 +494,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 @media (prefers-contrast:more) and (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
 }
-@media (hover:hover){.more:hover{background:var(--fill)}}
 </style>
 </head>
 <body>
@@ -625,6 +622,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       </div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="cal-detail" id="calDetail" aria-live="polite"></div>
+      <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
       <div class="cal-foot">
         <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i style="--h:88%"></i>600+</span>
       </div>
@@ -679,12 +677,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     <p class="footnote">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
   </section>
 
-  <section class="area-days">
-    <div class="sec-title"><h2>Day by Day</h2></div>
-    <div class="card"><ul class="list" id="list"><li class="empty">Loading figures…</li></ul></div>
-    <button type="button" class="more" id="more" hidden>Show More Days</button>
-    <p class="footnote" id="busyNote" hidden><span class="busy" aria-hidden="true"></span>One of the busiest 5% of days since 2018. Tap a day to see it on the chart.</p>
-  </section>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -884,7 +876,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   let sorted = [], meta = null;
   let range = window.matchMedia("(max-width:600px)").matches ? 7 : 30;
   let repDays = 7;
-  let selected = null, listCount = 14, geom = null;
+  let selected = null, geom = null;
 
   let newSince = null;   // the latest date this person saw on their previous visit
   let busyMin = Infinity; // the busiest 5% of days since 2018 are at or above this
@@ -1091,7 +1083,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   function setRange(n){
     range = n;
     document.querySelectorAll("#rangeSeg button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.range===n)));
-    if(sorted.length){ drawChart(); drawList(); }
+    if(sorted.length) drawChart();
   }
   document.querySelectorAll("#rangeSeg button").forEach(b=>b.addEventListener("click", ()=>setRange(+b.dataset.range)));
 
@@ -1195,8 +1187,12 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
         if(lv) b.classList.add("l" + lv); else b.classList.add("zero");
         dv.textContent = fmt(d.migrants);
         if(iso === last) b.classList.add("latest");
+        const notes = [];
+        if(d.migrants > 0 && d.migrants >= busyMin){ const m = document.createElement("i"); m.className = "mk busy"; b.append(m); notes.push("one of the busiest 5% of days since 2018"); }
+        if(newSince && iso > newSince){ const m = document.createElement("i"); m.className = "mk new"; b.append(m); notes.push("new since your last visit"); }
+        if(d.revised){ b.classList.add("rev"); notes.push("revised from " + fmt(d.revised.from)); }
         if(iso === calPick) b.classList.add("on");
-        b.setAttribute("aria-label", dList.format(parse(iso)) + ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + ", " + fmt(d.boats) + (d.boats===1?" boat":" boats"));
+        b.setAttribute("aria-label", dList.format(parse(iso)) + ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + ", " + fmt(d.boats) + (d.boats===1?" boat":" boats") + (notes.length ? ", " + notes.join(", ") : ""));
       }
       grid.append(b);
     }
@@ -1205,6 +1201,9 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     const sub = document.createElement("span"); sub.className = "sub";
     sub.textContent = counted ? fmt(people) + (people===1?" person":" people") + " · " + fmt(boats) + (boats===1?" boat":" boats") + (calMonth === last.slice(0,7) ? " so far" : "") : "No figures";
     $("calTitle").append(sub);
+    $("calBusyKey").hidden = !grid.querySelector(".mk.busy");
+    $("calNewKey").hidden = !grid.querySelector(".mk.new");
+    $("calRevKey").hidden = !grid.querySelector(".rev");
     $("calPrev").disabled = calMonth <= first.slice(0,7);
     $("calNext").disabled = calMonth >= last.slice(0,7);
     showCalDetail();
@@ -1244,50 +1243,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     new ResizeObserver(en=>{ const w=Math.round(en[0].contentRect.width); if(w && w!==lastD && sorted.length){ lastD=w; clearTimeout(rd); rd=setTimeout(drawDots,60); } }).observe($("dots"));
   } else addEventListener("resize", ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ drawChart(); drawDots(); },100); });
 
-  function drawList(){
-    const recent = sorted.slice().reverse();
-    const shown = sorted.slice(-range), peak = shown.reduce((a,b)=>b.migrants>a.migrants?b:a, shown[0]);
-    const ul = $("list"); ul.textContent = "";
-    recent.slice(0, listCount).forEach(d=>{
-      const li = document.createElement("li");
-      if(d.migrants===0) li.className = "zero"; else if(d===peak) li.className = "peak";
-      li.classList.add("tap");
-      li.tabIndex = 0;
-      li.setAttribute("role", "button");
-      li.dataset.date = d.date;
-      const a = document.createElement("span"); a.className = "d"; a.textContent = dList.format(parse(d.date));
-      if(newSince && d.date > newSince){
-        const nd = document.createElement("span"); nd.className = "newdot"; nd.title = "New since your last visit";
-        a.append(nd);
-      }
-      const b = document.createElement("span"); b.className = "n"; b.textContent = fmt(d.migrants);
-      if(d.migrants > 0 && d.migrants >= busyMin){
-        const bd = document.createElement("span"); bd.className = "busy"; bd.title = "One of the busiest 5% of days since 2018";
-        b.prepend(bd);
-      }
-      li.setAttribute("aria-label", dList.format(parse(d.date)) + ", " + fmt(d.migrants) + " people. Show on chart");
-      const c = document.createElement("span"); c.className = "m";
-      if(d.migrants===0) c.textContent = "No crossings detected";
-      else {
-        const p = [fmt(d.boats) + (d.boats===1?" boat":" boats")];
-        if(d.boats) p.push(Math.round(d.migrants/d.boats) + " per boat");
-        if(d.uncontrolled) p.push(d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings"));
-        c.textContent = p.join(" · ");
-      }
-      if(d.revised){
-        const rv = document.createElement("span"); rv.className = "rev";
-        rv.textContent = "Revised from " + fmt(d.revised.from);
-        rv.title = "The Home Office updated this figure on " + dMid.format(parse(d.revised.on));
-        c.append(" · ", rv);
-      }
-      li.append(a,b,c); ul.append(li);
-    });
-    $("more").hidden = listCount >= recent.length;
-    $("busyNote").hidden = !isFinite(busyMin);
-  }
-  $("more").addEventListener("click", ()=>{ listCount += 30; drawList(); });
 
-  // Tapping a day in the list shows it on the chart
+  // Show a day on the chart (from the calendar)
   function showOnChart(date){
     const back = sorted.length - sorted.findIndex(d=>d.date===date);
     if(back > 90){ toast("The chart covers the last 90 days"); return; }
@@ -1297,14 +1254,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     card.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"center"});
   }
-  $("list").addEventListener("click", e=>{
-    const li = e.target.closest("li.tap"); if(li) showOnChart(li.dataset.date);
-  });
-  $("list").addEventListener("keydown", e=>{
-    if(e.key !== "Enter" && e.key !== " ") return;
-    const li = e.target.closest("li.tap"); if(!li) return;
-    e.preventDefault(); showOnChart(li.dataset.date);
-  });
 
   /* =========== Records =========== */
   const DAY = 864e5;
@@ -1620,7 +1569,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(!sorted.length){
       $("freshText").textContent = "No figures yet";
       $("chart").innerHTML = '<div class="empty">No figures yet.</div>';
-      $("list").innerHTML = '<li class="empty">No figures yet.</li>';
       $("records").innerHTML = '<li class="empty">No figures yet.</li>';
       return;
     }
@@ -1639,7 +1587,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       busyMin = Math.max(1, vals[Math.floor(vals.length*0.95)]);
     } else busyMin = Infinity;
 
-    renderSummary(); setRange(range); drawCalendar(); drawDots(); drawList();
+    renderSummary(); setRange(range); drawCalendar(); drawDots();
     if(data.extras){ extras = data.extras; renderForecast(); renderGender(); renderPetitions(); }
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); }
