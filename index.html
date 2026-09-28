@@ -548,19 +548,18 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 @media (prefers-contrast:more) and (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
 }
-/* Advert tile: Restore Britain colours (navy and white) */
-.tile.ad{position:relative;overflow:hidden;isolation:isolate;background:#051E40;color:#fff;outline-color:rgba(255,255,255,.12);-webkit-backdrop-filter:none;backdrop-filter:none;align-content:start;gap:4px}
-.tile.ad > :not(.ad-flag){position:relative;z-index:1}
-.ad-flag{position:absolute;right:0;top:0;bottom:0;width:62%;z-index:0;opacity:.35;pointer-events:none;
-  -webkit-mask-image:linear-gradient(to left,#000 20%,transparent 95%);mask-image:linear-gradient(to left,#000 20%,transparent 95%)}
-.ad-flag svg{display:block;width:100%;height:100%}
-.adtag{display:inline-block;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.16);color:rgba(255,255,255,.85);font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-.ad-name{font:800 1.75rem/1.1 var(--font);letter-spacing:.01em;text-transform:uppercase;margin-top:4px}
-.ad-sub{font-size:.765rem;color:rgba(255,255,255,.7)}
-.ad-btn{justify-self:start;margin-top:10px;display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;background:#fff;color:#051E40;font:700 .941rem/1 var(--font);text-decoration:none;box-shadow:0 2px 10px rgba(0,0,0,.25)}
-.ad-btn:hover{background:#E8EEF7}
-.ad-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
-@media (prefers-reduced-transparency:reduce){.tile.ad{background:#051E40}}
+/* Share tile */
+.share-tile{gap:8px}
+.share-text{font-size:.882rem;color:var(--label);line-height:1.35}
+.share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff}
+.sh-x{background:#000}
+:root[data-theme="dark"] .sh-x{background:#fff;color:#000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sh-x{background:#fff;color:#000}}
+.sh-fb{background:#1877F2}.sh-wa{background:#1FA855}.sh-tg{background:#229ED9}
+.sh-copy,.sh-more{background:var(--fill);color:var(--blue)}
+.sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.sh:hover{filter:brightness(1.1)}}
 </style>
 </head>
 <body>
@@ -658,7 +657,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div><div class="prog" id="ytdProg" hidden><i id="ytdFill"></i><b id="ytdMark"></b></div><div class="s" id="ytdAvg"></div></div>
     <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="tlSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="tlStone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"/><stop offset="1" stop-color="var(--ta-stone2)"/></linearGradient><radialGradient id="tlGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"/><stop offset="1" stop-color="#E4003B" stop-opacity="0"/></radialGradient></defs><circle cx="190" cy="60" r="70" fill="url(#tlGlow)"/><g transform="translate(190 0)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"/><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"/><rect x="-12" y="36" width="24" height="12" fill="url(#tlStone)"/><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"/><rect x="-14" y="48" width="28" height="30" fill="url(#tlStone)"/><circle cx="0" cy="63" r="10" fill="var(--ta-clock)" stroke="var(--ta-stone3)" stroke-width="1.5"/><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-width="1.4" stroke-linecap="round"/><rect x="-12" y="78" width="24" height="52" fill="url(#tlStone)"/><path d="M-7 84 v42 M0 84 v42 M7 84 v42" stroke="var(--ta-stone3)" stroke-width="1.2" opacity=".7"/><path d="M-60 122 H-12 V104 H-48z M12 104 H70 V122 H12z" fill="url(#tlStone)" opacity=".75"/></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div><div class="s cost" id="labC" title="Rough estimate: people arrived since 5 July 2024 × average asylum support cost per person a year (£4.0bn ÷ 106,771 people, 2024–25). See How it works."></div></div>
     <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div><div class="k">Since Burnham became PM</div><div class="v" id="burV">–</div><div class="s" id="burS">&nbsp;</div><div class="s" id="burA"></div></div>
-    <aside class="tile tile-fc ad" aria-label="Advert: Restore Britain"><div class="ad-flag" aria-hidden="true"><svg viewBox="0 0 60 30" preserveAspectRatio="xMaxYMid slice"><clipPath id="adS"><path d="M0,0v30h60V0z"/></clipPath><clipPath id="adT"><path d="M30,15h30v15zv15H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#adS)"><path d="M0,0v30h60V0z" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#adT)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#fff" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></g></svg></div><div class="k"><span class="adtag">Advert</span></div><div class="ad-name">Restore Britain</div><div class="ad-sub">restorebritain.org.uk</div><a class="ad-btn" href="https://www.restorebritain.org.uk/join_us" target="_blank" rel="noopener">Join Restore Britain</a></aside>
+    <div class="tile tile-fc share-tile" aria-labelledby="shareK"><div class="k" id="shareK">Share today's figures</div><div class="share-text" id="shareText">Loading the latest figures…</div><div class="share-row"><a class="sh sh-x" id="shX" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" target="_blank" rel="noopener">Facebook</a><a class="sh sh-wa" id="shWa" target="_blank" rel="noopener">WhatsApp</a><a class="sh sh-tg" id="shTg" target="_blank" rel="noopener">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div></div>
   </div>
 
   <div class="board">
@@ -1680,6 +1679,22 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(ytd && ytd !== "–") s += " " + last.date.slice(0,4) + " so far: " + ytd + ".";
     return s + " Source: Home Office.";
   }
+  // Share tile: ready-made posts for each network (links only; nothing loads from them until clicked)
+  function renderShare(){
+    if(!sorted.length) return;
+    const url = "https://channelcrossings.world/", text = shareText(), e = encodeURIComponent;
+    $("shareText").textContent = text;
+    $("shX").href = "https://x.com/intent/post?text=" + e(text) + "&url=" + e(url);
+    $("shFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + e(url);
+    $("shWa").href = "https://wa.me/?text=" + e(text + " " + url);
+    $("shTg").href = "https://t.me/share/url?url=" + e(url) + "&text=" + e(text);
+    $("shMore").hidden = !navigator.share;
+  }
+  $("shCopy").addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText(shareText() + " https://channelcrossings.world/"); toast("Copied to clipboard"); }
+    catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
+  });
+  $("shMore").addEventListener("click", ()=>{ $("shareBtn").click(); });
   $("shareBtn").addEventListener("click", async ()=>{
     if(!sorted.length) return;
     const url = location.href.split("#")[0];
@@ -1907,6 +1922,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(full){ renderRecords(); renderOnThisDay(); drawHistory(); }
     initCalc();
     $("shareBtn").disabled = false;
+    renderShare();
     if(!nextShown){ nextShown = true; setTimeout(flashNextUpdate, 1200); }
     $("rangeSeg").hidden = sorted.length < 15;
   }
