@@ -68,6 +68,7 @@
   --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18); --boat:#DB7100;
   --material:rgba(255,255,255,.78);
   --glass:rgba(255,255,255,.74);
+  --glass-edge:rgba(255,255,255,.75); --orb-a:rgba(0,122,255,.13); --orb-b:rgba(255,59,48,.09); --orb-c:rgba(88,86,214,.10);
   --flag-o:.5;
   --wx-o:.9; --cloud-a:#F4F6FA; --cloud-b:#BFC9D9; --cloud-edge:rgba(60,60,67,.14);
   --bar-glass:rgba(242,242,247,.72); --bar-solid:#F2F2F7;
@@ -88,6 +89,7 @@
     --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
     --material:rgba(44,44,46,.78);
     --glass:rgba(38,38,40,.7);
+  --glass-edge:rgba(255,255,255,.09); --orb-a:rgba(10,132,255,.22); --orb-b:rgba(255,69,58,.14); --orb-c:rgba(125,122,255,.16);
     --flag-o:.42;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
     --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
@@ -107,6 +109,7 @@
   --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
   --material:rgba(44,44,46,.78);
   --glass:rgba(38,38,40,.7);
+  --glass-edge:rgba(255,255,255,.09); --orb-a:rgba(10,132,255,.22); --orb-b:rgba(255,69,58,.14); --orb-c:rgba(125,122,255,.16);
   --flag-o:.42;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
   --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
@@ -131,7 +134,14 @@ body{position:relative}
 @media (max-width:600px){.flag{width:72vw;opacity:calc(var(--flag-o)*.8)}}
 .flag svg{display:block;width:100%;height:100%}
 .wrap{position:relative;z-index:1}
-/* Frosted glass boxes: the page (and the flag) shows through, softly blurred */
+/* Soft colour glows fixed behind the page, so every frosted box has something to frost */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(40vmax 40vmax at 8% 38%,var(--orb-a),transparent 70%),
+             radial-gradient(34vmax 34vmax at 92% 78%,var(--orb-b),transparent 70%),
+             radial-gradient(38vmax 38vmax at 35% 100%,var(--orb-c),transparent 70%),
+             radial-gradient(30vmax 30vmax at 60% 45%,var(--orb-a),transparent 70%)}
+/* Frosted glass boxes: the page (and the flag) shows through, softly blurred, with a fine glass edge */
+.banner,.news,.card,.tile,.more,.tip{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
 .banner,.news,.card,.tile,.more,.tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .seg{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.more,.tip{background:var(--card)}}
