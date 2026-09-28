@@ -173,6 +173,11 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 @media (prefers-reduced-motion:reduce){#nextText{animation:none}}
 .fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .fresh.stale i{background:var(--orange)}
+.sync-dot{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;color:var(--blue);cursor:help;animation:syncPulse 1.2s ease-in-out infinite}
+.sync-dot svg{width:13px;height:13px;animation:spin 2.4s linear infinite}
+.fresh.syncing i{display:none}
+@keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.sync-dot,.sync-dot svg{animation:none}}
 .link-btn{appearance:none;border:0;background:none;padding:0;min-height:44px;color:var(--blue);font:inherit;cursor:pointer}
 
 /* Notification banner (iOS style) */
@@ -402,7 +407,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <svg viewBox="0 0 400 400" role="img" aria-label="Channel Crossings logo"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg>
       <div class="brand-text">
         <h1>Channel Crossings</h1>
-        <span class="fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span id="nextText" role="status" hidden></span></span>
+        <span class="fresh" id="fresh"><i></i><span class="sync-dot" id="syncDot" role="img" aria-label="Data sync pending latest figures" title="Data sync pending latest figures" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg></span><span id="freshText">Loading figures…</span><span id="nextText" role="status" hidden></span></span>
       </div>
     </div>
     <div class="bar-actions">
@@ -1414,6 +1419,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   async function checkSync(){
     const on = !!sorted.length && syncPending();
     $("syncNote").hidden = !on;
+    $("syncDot").hidden = !on; $("fresh").classList.toggle("syncing", on);
     if(!on) return;
     $("syncTime").textContent = "Since " + runTime().toLocaleTimeString("en-GB", {hour:"numeric", minute:"2-digit", hour12:true, timeZone:"Europe/London"}).replace(" ", "");
     if(Date.now() - lastPoll < 2*60*1000 || document.hidden) return;
@@ -1425,6 +1431,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       if(d.checkedAt && (!meta.checkedAt || new Date(d.checkedAt) > new Date(meta.checkedAt))){
         load(d, true);
         $("syncNote").hidden = true;
+        $("syncDot").hidden = true; $("fresh").classList.remove("syncing");
         toast("New figures are in");
       }
     }catch(e){ /* try again on the next check */ }
