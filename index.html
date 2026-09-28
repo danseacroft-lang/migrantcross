@@ -725,9 +725,9 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   </section>
 
   <section class="area-quiet">
-    <div class="sec-title"><h2>Longest Spells Without Crossings</h2></div>
+    <div class="sec-title"><h2>Longest Spells Without Crossings, All Years</h2></div>
     <div class="card tbl-wrap"><table class="tbl" id="quietTbl"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
-    <p class="footnote">Since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
+    <p class="footnote">The five longest spells since 2020, when crossings became a year-round pattern. This year's longest is under Records. Long spells are usually down to bad weather in the Channel.</p>
   </section>
 
   <section class="area-pat">
@@ -1631,7 +1631,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
     const calm = longestCalm(yearDays.length ? yearDays : sorted);
     if(calm.len){
-      rows.push({icon:"waves", bg:"#34C759", label: fullYear ? "Longest run without crossings in " + yr : "Longest recent run without crossings", sub: calm.len===1 ? dMid.format(parse(calm.start)) : dShort.format(parse(calm.start)) + " – " + dShort.format(parse(calm.end)), value: calm.len + (calm.len===1?" day":" days")});
+      rows.push({icon:"waves", bg:"#34C759", label: fullYear ? "Longest run without crossings this year (" + yr + ")" : "Longest recent run without crossings", sub: calm.len===1 ? dMid.format(parse(calm.start)) : dShort.format(parse(calm.start)) + " – " + dShort.format(parse(calm.end)), value: calm.len + (calm.len===1?" day":" days")});
     }
 
     // Uncontrolled landings: the Home Office only started publishing these
