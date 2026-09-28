@@ -71,6 +71,7 @@
   --glass:rgba(255,255,255,.74);
   --glass-edge:rgba(255,255,255,.75); --orb-a:rgba(0,122,255,.13); --orb-b:rgba(255,59,48,.09); --orb-c:rgba(88,86,214,.10);
   --flag-o:.5;
+  --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-foam:#FFFFFF; --ta-tube1:#9AA3AF; --ta-tube2:#5B6472; --ta-tube3:#3A414C; --ta-rope:#E5E7EB; --ta-skin:#8D5A3B;
   --wx-o:.9; --cloud-a:#F4F6FA; --cloud-b:#BFC9D9; --cloud-edge:rgba(60,60,67,.14);
   --bar-glass:rgba(242,242,247,.72); --bar-solid:#F2F2F7;
   --shadow:0 8px 30px rgba(0,0,0,.12), 0 1px 3px rgba(0,0,0,.06);
@@ -92,6 +93,7 @@
     --glass:rgba(38,38,40,.7);
     --glass-edge:rgba(255,255,255,.09); --orb-a:rgba(10,132,255,.22); --orb-b:rgba(255,69,58,.14); --orb-c:rgba(125,122,255,.16);
     --flag-o:.42;
+    --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630;
     --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
     --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
     --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
@@ -111,6 +113,7 @@
   --glass:rgba(38,38,40,.7);
   --glass-edge:rgba(255,255,255,.09); --orb-a:rgba(10,132,255,.22); --orb-b:rgba(255,69,58,.14); --orb-c:rgba(125,122,255,.16);
   --flag-o:.42;
+  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
   --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
   --shadow:0 8px 30px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.3);
@@ -456,6 +459,19 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .pat-card{padding:14px 12px 10px}
 .pat svg{display:block;width:100%;height:auto}
 .pat svg text{font-family:var(--font);fill:var(--label2)}
+/* Picture in the first tile: a crowded dinghy on the Channel, faded into the tile */
+.tile-hero{position:relative;overflow:hidden;isolation:isolate}
+.tile-hero > :not(.tile-art){position:relative;z-index:1}
+.tile-art{position:absolute;right:0;bottom:0;width:min(62%,340px);height:100%;z-index:0;pointer-events:none;opacity:var(--ta-o);
+  -webkit-mask-image:linear-gradient(to left,#000 35%,transparent 95%),linear-gradient(to top,#000 55%,transparent 100%);-webkit-mask-composite:source-in;
+          mask-image:linear-gradient(to left,#000 35%,transparent 95%),linear-gradient(to top,#000 55%,transparent 100%);mask-composite:intersect}
+.tile-art svg{display:block;width:100%;height:100%}
+.tile-art .ta-boat{animation:taBob 5s ease-in-out infinite}
+.tile-art .ta-wave{animation:taSwell 7s ease-in-out infinite alternate}
+.tile-art .ta-wave2{animation:taSwell 5.5s ease-in-out infinite alternate-reverse}
+@keyframes taBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(3px) rotate(-1.2deg)}}
+@keyframes taSwell{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
+@media (prefers-reduced-motion:reduce){.tile-art *{animation:none!important}}
 /* Every person, one dot each */
 .rep-card{padding:16px;display:grid;gap:12px}
 .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
@@ -625,7 +641,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   </div>
 
   <div class="tiles">
-    <div class="tile"><div class="k"><span id="latestK">Yesterday's migrant arrivals</span> <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
+    <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax slice"><defs><linearGradient id="taSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="taTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset=".55" stop-color="var(--ta-tube2)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 86 Q10 80 40 86 T100 86 T160 86 T220 86 T280 86 V150 H-20z" fill="url(#taSea)" opacity=".55"/><g class="ta-boat"><g transform="translate(160 104)"><g transform="translate(0 -9)"><g transform="translate(-44 0) scale(0.8)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#E86A10"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-28 0) scale(0.85)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#F08000"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-12 0) scale(0.8)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#E86A10"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(4 0) scale(0.85)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#F08000"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(20 0) scale(0.8)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#E86A10"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(36 0) scale(0.82)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#F08000"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g></g><g transform="translate(-2 -3)"><g transform="translate(-52 0) scale(0.95)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-36 0) scale(1)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF9500"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-20 0) scale(0.92)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-4 0) scale(1.05)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF9500"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(12 0) scale(0.95)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(28 0) scale(1)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF9500"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(44 0) scale(0.9)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g></g><path d="M-78 -2 H66 q16 0 16 11 q0 11 -16 11 H-70 q-14 0 -18 -11 q0 -11 10 -11z" fill="url(#taTube)"/><path d="M-72 4 H62" stroke="var(--ta-rope)" stroke-width="1.4" stroke-dasharray="4 5" stroke-linecap="round" opacity=".8"/></g></g><path class="ta-wave" d="M-40 116 Q-20 108 0 116 T40 116 T80 116 T120 116 T160 116 T200 116 T240 116 T280 116 T320 116 V150 H-40z" fill="url(#taSea)"/><path class="ta-wave2" d="M-40 128 Q-15 121 10 128 T60 128 T110 128 T160 128 T210 128 T260 128 T310 128 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/><path d="M40 116 q6 -4 12 0 M120 116 q6 -4 12 0 M200 116 q6 -4 12 0" stroke="var(--ta-foam)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></div><div class="k"><span id="latestK">Yesterday's migrant arrivals</span> <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
     <div class="tile"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div><div class="s" id="weekD"></div></div>
     <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div><div class="prog" id="ytdProg" hidden><i id="ytdFill"></i><b id="ytdMark"></b></div><div class="s" id="ytdAvg"></div></div>
     <div class="tile"><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div><div class="s cost" id="labC" title="Rough estimate: people arrived since 5 July 2024 × average asylum support cost per person a year (£4.0bn ÷ 106,771 people, 2024–25). See How it works."></div></div>
