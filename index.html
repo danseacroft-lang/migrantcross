@@ -467,7 +467,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   </div>
 
   <div class="tiles">
-    <div class="tile"><div class="k">Latest day <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
+    <div class="tile"><div class="k"><span id="latestK">Yesterday's migrant arrivals</span> <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
     <div class="tile"><div class="k">Last 7 days</div><div class="v" id="weekV">–</div><div class="s" id="weekS">&nbsp;</div><div class="s" id="weekD"></div></div>
     <div class="tile"><div class="k" id="ytdK">Year to date</div><div class="v" id="ytdV">–</div><div class="s" id="ytdS">&nbsp;</div><div class="prog" id="ytdProg" hidden><i id="ytdFill"></i><b id="ytdMark"></b></div><div class="s" id="ytdAvg"></div></div>
     <div class="tile"><div class="k">Since Labour took office</div><div class="v" id="labV">–</div><div class="s" id="labS">&nbsp;</div><div class="s" id="labA"></div><div class="s cost" id="labC" title="Rough estimate: people arrived since 5 July 2024 × average asylum support cost per person a year (£4.0bn ÷ 106,771 people, 2024–25). See How it works."></div></div>
@@ -743,6 +743,9 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     $("freshText").textContent = fresh;
     $("fresh").classList.toggle("stale", ageDays > 3);
 
+    // "Yesterday's" only when the latest figures really are for yesterday (the Home Office sometimes skips a day)
+    const ydayISO = new Date(Date.parse(new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"})+"T12:00:00Z") - 864e5).toISOString().slice(0,10);
+    $("latestK").textContent = last.date === ydayISO ? "Yesterday's migrant arrivals" : "Latest migrant arrivals";
     $("latestV").textContent = fmt(last.migrants);
     $("latestS").textContent = dMid.format(parse(last.date)) + " · " + fmt(last.boats) + (last.boats===1?" boat":" boats");
     $("newTag").hidden = !(newSince && last.date > newSince);
