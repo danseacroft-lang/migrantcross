@@ -14,21 +14,20 @@
 <style>
 :root{
   --bg:#F2F2F7; --card:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.74);
-  --sep:rgba(60,60,67,.22); --fill:rgba(118,118,128,.12); --blue:#007AFF; --orange:#C93400; --code:#F2F2F7;
+  --sep:rgba(60,60,67,.22); --fill:rgba(118,118,128,.12); --blue:#007AFF; --orange:#C93400;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
     --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
-    --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --blue:#0A84FF; --orange:#FF9F0A; --code:#2C2C2E;
+    --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --blue:#0A84FF; --orange:#FF9F0A;
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
-  --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --blue:#0A84FF; --orange:#FF9F0A; --code:#2C2C2E;
+  --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --blue:#0A84FF; --orange:#FF9F0A;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px}
@@ -57,8 +56,6 @@ a{color:var(--blue); text-decoration:none}
 strong{font-weight:600}
 .rev{color:var(--orange); font-weight:500}
 .dot{display:inline-block; width:8px; height:8px; border-radius:50%; vertical-align:1px}
-code{font:.8rem/1.5 var(--mono)}
-pre{background:var(--code); border-radius:10px; padding:12px; margin:0 0 10px; overflow-x:auto; white-space:pre-wrap; word-break:break-all}
 footer{font-size:.765rem; color:var(--label2); text-align:center; margin-top:12px}
 </style>
 </head>
@@ -137,6 +134,11 @@ footer{font-size:.765rem; color:var(--label2); text-align:center; margin-top:12p
     <h2>Channel conditions</h2>
     <p>The weather notice uses <a href="https://open-meteo.com/">Open-Meteo</a> wind and wave forecasts for the middle of the Dover Strait. Crossings cluster on calm days, so the site rates conditions as <strong>calm</strong> (wind under 12 mph and waves under 0.5 m), <strong>moderate</strong> (wind under 18 mph and waves under 1 m) or <strong>rough</strong>.</p>
     <p><strong>This is a rough guide for context, not a marine forecast.</strong> Never use it to decide whether it is safe to go to sea.</p>
+  </section>
+
+  <section>
+    <h2>Breaking news</h2>
+    <p>Once an hour the site reads the public news feeds of BBC News, Sky News, The Guardian, The Telegraph, GB News and GOV.UK, and keeps headlines from the last three hours that are clearly about small boats or Channel crossings. The newest appears in a box at the top of the page with a link to the full story on the outlet's own site. Channel Crossings doesn't write or check these stories; each one is the responsibility of the outlet that published it.</p>
   </section>
 
   <section>

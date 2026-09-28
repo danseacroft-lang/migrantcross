@@ -11,6 +11,8 @@ on:
 permissions:
   contents: write
 
+concurrency: publish      # one publishing job at a time (shared with the hourly news job)
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -41,5 +43,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data.json recent.json data.csv og-image.png week-card.png index.html gender.json petitions.json forecast.json
-          git diff --cached --quiet || git commit -m "Update crossing figures"
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "Update crossing figures"
+          git pull --rebase && git push
