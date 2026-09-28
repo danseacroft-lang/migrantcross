@@ -21,6 +21,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `week-card.png` – the "Week in numbers" picture, redrawn daily for the last full week
 - `manifest.webmanifest`, `icon-192.png`, `icon-512.png` – let visitors add the site to their home screen as an app
 - `scripts/update.py` – fetches the latest figures from GOV.UK and updates `data.json`
+- `scripts/news.py`, `news.json`, `.github/workflows/news.yml` – hourly breaking news about small boats from UK news feeds (edit `news-override.json` to hide or pin a story)
 - `.github/workflows/update.yml` – runs the update script every day at 10:30 UK time
 
 ## Put it online with GitHub Pages

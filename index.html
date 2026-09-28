@@ -246,6 +246,31 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .tile .cost b{color:var(--label);font-weight:600;font-variant-numeric:tabular-nums}
 .esttag{display:inline-block;margin-left:4px;padding:2px 7px;border-radius:999px;background:var(--indigo-bg);color:var(--indigo);font-size:11px;font-weight:600;letter-spacing:.02em;vertical-align:1px}
 /* Dashboard: notices side by side, then a board of cards */
+.news{--glow:0 0 0 1px rgba(255,59,48,.55),0 0 18px 2px rgba(255,59,48,.35),0 0 42px 6px rgba(255,59,48,.14);position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 48px 14px 14px;border-radius:22px;background:var(--card);box-shadow:var(--glow),var(--shadow);animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both, newsFlash 1.1s ease-out .5s 1}
+.news.leaving{animation:lift .25s ease-in both}
+.news.calm{--glow:0 0 0 1px rgba(255,59,48,.3),0 0 16px 1px rgba(255,59,48,.18)}
+@keyframes newsFlash{0%{box-shadow:var(--glow),var(--shadow),0 0 0 0 rgba(255,59,48,.55)}35%{box-shadow:var(--glow),var(--shadow),0 0 0 6px rgba(255,59,48,.35)}100%{box-shadow:var(--glow),var(--shadow),0 0 0 14px rgba(255,59,48,0)}}
+.news .b-icon{background:var(--red-bg);color:var(--red)}
+/* Speaker broadcasting: the sound waves pulse out in turn, the speaker gives a small beat */
+.news .w1,.news .w2{animation:wave 1.6s ease-in-out infinite}
+.news .w2{animation-delay:.25s}
+.news .spk{transform-box:fill-box;transform-origin:center;animation:beat 1.6s ease-in-out infinite}
+@keyframes wave{0%,100%{opacity:.15}35%{opacity:1}70%{opacity:.15}}
+@keyframes beat{0%,100%{transform:scale(1)}18%{transform:scale(1.1)}36%{transform:scale(1)}}
+.news.calm .w1,.news.calm .w2,.news.calm .spk{animation-duration:3.2s}
+@media (prefers-reduced-motion:reduce){.news .w1,.news .w2,.news .spk{animation:none}}
+.news .n-tag{display:inline-flex;align-items:center;gap:5px;color:var(--red);font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+.news .n-tag.latest{color:var(--label2)}
+.news .n-tag i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.news .n-head{font-weight:600;font-size:1rem;letter-spacing:-.024em;color:var(--label);text-decoration:none}
+.news .n-head:hover{text-decoration:underline}
+.news .n-src{font-size:.824rem;color:var(--label2)}
+.news .n-more{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:.5px solid var(--sep);display:grid;gap:6px}
+.news .n-more a{color:var(--label);text-decoration:none;font-size:.882rem}
+.news .n-more a:hover{text-decoration:underline}
+.news .n-more span{color:var(--label2);font-size:.765rem}
+@media (prefers-reduced-motion:reduce){.news{animation:none}}
+@media (max-width:600px){.news .n-more li:nth-child(n+2){display:none}.news .n-head{font-size:.94rem}}
 .notices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
 .notices:not(:has(.banner:not([hidden]))){display:none}
 .board{display:grid;gap:28px 20px;align-items:start;grid-template-columns:minmax(0,1fr)}
@@ -425,6 +450,21 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 <div class="wrap">
   <div class="meta-row"><button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button></div>
 
+  <!-- Breaking news about small boats, from UK news outlets (news.json, updated hourly) -->
+  <aside class="news" id="news" aria-label="Breaking news" hidden>
+    <div class="b-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="spk" d="M4 11v2a1 1 0 0 0 1 1h2l5 4V6L7 10H5a1 1 0 0 0-1 1z"/><path class="w1" d="M16 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M18.8 6a8.5 8.5 0 0 1 0 12"/></svg>
+    </div>
+    <div class="b-body">
+      <div class="b-top"><span class="n-tag" id="newsTag"><i></i>Breaking</span><span id="newsAge"></span></div>
+      <a class="n-head" id="newsHead" href="#" target="_blank" rel="noopener"></a>
+      <div class="n-src" id="newsSrc"></div>
+      <ul class="n-more" id="newsMore" hidden></ul>
+    </div>
+    <button type="button" class="b-close" id="newsClose" aria-label="Dismiss breaking news">
+      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    </button>
+  </aside>
   <div class="notices">
   <!-- Shown while the daily update is running -->
   <div class="banner sync" id="syncNote" role="status" aria-live="polite" hidden>
@@ -1447,6 +1487,50 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
   }
   setInterval(checkSync, 30*1000);
   setTimeout(checkSync, 1500);
+
+  // Breaking news only: small boats stories from UK outlets published in the last 3 hours. Closing
+  // it hides it until a newer story comes in. Checked on load and every 10 minutes.
+  const NEWS_MAX_H = 3;
+  function agoShort(iso){
+    const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 60000));
+    return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m/60) + (Math.round(m/60)===1 ? " hour ago" : " hours ago");
+  }
+  let newsShown = null;
+  async function loadNews(){
+    try{
+      const r = await fetch("news.json", {cache:"no-cache"}); if(!r.ok) return;
+      const n = await r.json();
+      const items = (n.items || []).filter(s => s.breaking && s.url && /^https?:/.test(s.url) && Date.now() - new Date(s.published) < NEWS_MAX_H*36e5);
+      const box = $("news");
+      if(!items.length || store.get("newsSeen") === items[0].url){ box.hidden = true; return; }
+      const top = items[0];
+      $("newsTag").className = "n-tag" + (top.breaking ? "" : " latest");
+      box.classList.toggle("calm", !top.breaking);   // softer glow for "Latest news"
+      $("newsTag").lastChild.textContent = top.breaking ? "Breaking" : "Latest news";
+      $("newsAge").textContent = agoShort(top.published);
+      $("newsHead").textContent = top.title; $("newsHead").href = top.url;
+      $("newsSrc").textContent = top.source;
+      const more = $("newsMore"); more.textContent = "";
+      items.slice(1, 3).forEach(s=>{
+        const li = document.createElement("li"), a = document.createElement("a"), sp = document.createElement("span");
+        a.href = s.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = s.title;
+        sp.textContent = " · " + s.source + ", " + agoShort(s.published).toLowerCase();
+        li.append(a, sp); more.append(li);
+      });
+      more.hidden = !more.children.length;
+      if(newsShown !== top.url){ box.hidden = false; box.style.animation = "none"; box.offsetWidth; box.style.animation = ""; }
+      newsShown = top.url;
+    }catch(e){ /* no news box if the file can't be read */ }
+  }
+  $("newsClose").addEventListener("click", ()=>{
+    if(newsShown) store.set("newsSeen", newsShown);
+    const box = $("news");
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){ box.hidden = true; return; }
+    box.classList.add("leaving");
+    box.addEventListener("animationend", ()=>{ box.hidden = true; box.classList.remove("leaving"); }, {once:true});
+  });
+  loadNews();
+  setInterval(loadNews, 10*60*1000);
 
   loadWeather();
   setInterval(loadWeather, 30*60*1000);   // refresh conditions every 30 minutes
