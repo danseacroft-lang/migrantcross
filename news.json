@@ -1,7 +1,7 @@
 {
- "checkedAt": "2026-09-28T15:25:21Z",
+ "checkedAt": "2026-09-28T16:26:11Z",
  "feeds": {
-  "https://feeds.bbci.co.uk/news/uk/rss.xml": 27,
+  "https://feeds.bbci.co.uk/news/uk/rss.xml": 28,
   "https://feeds.bbci.co.uk/news/politics/rss.xml": 61,
   "https://feeds.skynews.com/feeds/rss/uk.xml": 8,
   "https://feeds.skynews.com/feeds/rss/politics.xml": 7,
@@ -11,6 +11,13 @@
   "https://www.gov.uk/search/news-and-communications.atom?keywords=small+boats": 20
  },
  "items": [
+  {
+   "title": "Labour MP compares Epping migrant hotel protesters to proscribed terror group Palestine Action",
+   "url": "https://www.gbnews.com/politics/stella-creasy-labour-conference-epping-migrant-hotel-palestine-action",
+   "source": "GB News",
+   "published": "2026-09-28T15:40:17Z",
+   "breaking": true
+  },
   {
    "title": "Nigel Farage rejects \u2018fast track\u2019 refugee routes from Palestine and Afghanistan: \u2018We have to put national security first\u2019",
    "url": "https://www.gbnews.com/politics/migrant-crisis-nigel-farage-safe-legal-routes-national-security",
