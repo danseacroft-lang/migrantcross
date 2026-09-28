@@ -1,10 +1,10 @@
 {
- "checkedAt": "2026-09-28T14:26:23Z",
+ "checkedAt": "2026-09-28T15:25:21Z",
  "feeds": {
-  "https://feeds.bbci.co.uk/news/uk/rss.xml": 26,
+  "https://feeds.bbci.co.uk/news/uk/rss.xml": 27,
   "https://feeds.bbci.co.uk/news/politics/rss.xml": 61,
   "https://feeds.skynews.com/feeds/rss/uk.xml": 8,
-  "https://feeds.skynews.com/feeds/rss/politics.xml": 8,
+  "https://feeds.skynews.com/feeds/rss/politics.xml": 7,
   "https://www.theguardian.com/uk/immigration/rss": 20,
   "https://www.telegraph.co.uk/news/rss.xml": 119,
   "https://www.gbnews.com/feeds/news.rss": 30,
@@ -12,24 +12,17 @@
  },
  "items": [
   {
+   "title": "Nigel Farage rejects \u2018fast track\u2019 refugee routes from Palestine and Afghanistan: \u2018We have to put national security first\u2019",
+   "url": "https://www.gbnews.com/politics/migrant-crisis-nigel-farage-safe-legal-routes-national-security",
+   "source": "GB News",
+   "published": "2026-09-28T15:06:10Z",
+   "breaking": true
+  },
+  {
    "title": "Rejoining the EU would be folly. Sadiq Khan needs to be told to get back in his box over Brexit",
    "url": "https://www.gbnews.com/opinion/rejoining-eu-sadiq-khan-brexit",
    "source": "GB News",
    "published": "2026-09-28T13:51:24Z",
-   "breaking": true
-  },
-  {
-   "title": "Three people dead, including a child, in attempt to cross Channel to UK",
-   "url": "https://www.theguardian.com/uk-news/2026/sep/28/people-dead-english-channel-crossing",
-   "source": "The Guardian",
-   "published": "2026-09-28T11:45:11Z",
-   "breaking": true
-  },
-  {
-   "title": "Ten arrested after powerboat smuggling Albanian migrants docks in Cornwall harbour",
-   "url": "https://www.gbnews.com/news/migrant-crisis-ten-arrested-powerboat-smuggling-albanian-migrants-docks-cornwall-harbour",
-   "source": "GB News",
-   "published": "2026-09-28T11:28:10Z",
    "breaking": true
   }
  ]
