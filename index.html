@@ -274,6 +274,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 @media (prefers-reduced-motion:reduce){.tip{transition:none}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* Every person, one dot each */
+.area-rep{display:none}
+@media (min-width:760px) and (hover:hover) and (pointer:fine){.area-rep{display:block}}   /* computers only */
 .rep-card{padding:16px;display:grid;gap:12px}
 .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
@@ -805,7 +807,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 
   // One dot per person, one boat icon per boat
   function drawDots(){
-    const box = $("dots"); if(!sorted.length) return;
+    const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // hidden on phones and tablets: skip the work
     const days = sorted.slice(-repDays);
     const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0);
     const from = dShort.format(parse(days[0].date)), to = dShort.format(parse(days[days.length-1].date));
