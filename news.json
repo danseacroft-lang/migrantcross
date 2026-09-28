@@ -1,10 +1,10 @@
 {
- "checkedAt": "2026-09-28T17:22:44Z",
+ "checkedAt": "2026-09-28T18:25:41Z",
  "feeds": {
   "https://feeds.bbci.co.uk/news/uk/rss.xml": 29,
   "https://feeds.bbci.co.uk/news/politics/rss.xml": 61,
-  "https://feeds.skynews.com/feeds/rss/uk.xml": 9,
-  "https://feeds.skynews.com/feeds/rss/politics.xml": 7,
+  "https://feeds.skynews.com/feeds/rss/uk.xml": 10,
+  "https://feeds.skynews.com/feeds/rss/politics.xml": 6,
   "https://www.theguardian.com/uk/immigration/rss": 20,
   "https://www.telegraph.co.uk/news/rss.xml": 119,
   "https://www.gbnews.com/feeds/news.rss": 30,
@@ -12,17 +12,17 @@
  },
  "items": [
   {
-   "title": "Labour MP compares Epping migrant hotel protesters to proscribed terror group Palestine Action",
-   "url": "https://www.gbnews.com/politics/stella-creasy-labour-conference-epping-migrant-hotel-palestine-action",
+   "title": "Shabana Mahmood\u2019s new Afghanistan and Palestine refugee scheme slammed: \u2018Terrible timing!\u2019",
+   "url": "https://www.gbnews.com/politics/video-migrant-crisis-shabana-mahmoods-refugee-scheme-timing",
    "source": "GB News",
-   "published": "2026-09-28T15:40:17Z",
+   "published": "2026-09-28T18:09:45Z",
    "breaking": true
   },
   {
-   "title": "Nigel Farage rejects \u2018fast track\u2019 refugee routes from Palestine and Afghanistan: \u2018We have to put national security first\u2019",
-   "url": "https://www.gbnews.com/politics/migrant-crisis-nigel-farage-safe-legal-routes-national-security",
+   "title": "Labour MP branded 'out of touch' after comparing Epping migrant hotel protesters to terror group Palestine Action",
+   "url": "https://www.gbnews.com/politics/stella-creasy-labour-conference-epping-migrant-hotel-palestine-action",
    "source": "GB News",
-   "published": "2026-09-28T15:06:10Z",
+   "published": "2026-09-28T15:40:17Z",
    "breaking": true
   }
  ]
