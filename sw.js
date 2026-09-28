@@ -3,7 +3,7 @@
    used only when there is no connection. Icons and other fixed files: served
    from the saved copy straight away and refreshed in the background.
    Weather requests go straight to Open-Meteo and are never saved. */
-const CACHE = "cc-v3";
+const CACHE = "cc-v4";
 const CORE = [
   "./", "index.html", "how-it-works.html", "privacy.html",
   "recent.json", "favicon.svg", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png"
@@ -22,7 +22,7 @@ self.addEventListener("activate", event => {
 });
 
 function networkFirst(request) {
-  return fetch(request).then(response => {
+  return fetch(request, {cache: "no-cache"}).then(response => {
     if (response.ok) {
       const copy = response.clone();
       caches.open(CACHE).then(c => c.put(request, copy));

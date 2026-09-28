@@ -818,23 +818,25 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     while(pitch > 5 && Math.ceil(people/Math.floor(W/pitch))*pitch > 420) pitch -= .5;
     const d = pitch*.62, cols = Math.max(1, Math.floor((W - d)/pitch)), rows = Math.ceil(people/cols);
     const off = (W - (cols-1)*pitch)/2;
-    // Dots run day by day; alternate days are shaded lighter so each day's group shows
+    // Dots run day by day; each day's group is shaded in turn. Drawn as rows filled with a
+    // repeating dot pattern (a few shapes instead of thousands, and works in every browser)
     const last = rows ? people - (rows-1)*cols : 0;
-    const pos = k => { const r2 = Math.floor(k/cols), c = k - r2*cols;
-      return [(r2===rows-1 ? (W - (last-1)*pitch)/2 : off) + c*pitch, d/2 + r2*pitch]; };
+    const lastX = (W - (last-1)*pitch)/2;
     let s = "", k = 0, shade = 0;
     days.forEach(day=>{
       if(!day.migrants) return;
       const di = shade++;
       let g = "";
       for(let end = k + day.migrants; k < end; ){
-        const r2 = Math.floor(k/cols), stop = Math.min(end, (r2+1)*cols), [x0,y0] = pos(k);
-        g += 'M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + 'h' + ((stop-k-1)*pitch + .01).toFixed(2);
+        const r2 = Math.floor(k/cols), stop = Math.min(end, (r2+1)*cols), c = k - r2*cols;
+        const isLast = r2===rows-1, x0 = (isLast ? lastX : off) + c*pitch - pitch/2;
+        g += '<rect x="' + x0.toFixed(2) + '" y="' + (r2*pitch).toFixed(2) + '" width="' + ((stop-k)*pitch).toFixed(2) + '" height="' + pitch + '" fill="url(#' + (isLast ? 'dpL' : 'dp') + ')"/>';
         k = stop;
       }
-      s += '<path d="' + g + '"' + (di % 2 ? ' opacity=".55"' : '') + '><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
+      s += '<g' + (di % 2 ? ' opacity=".55"' : '') + '><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title>' + g + '</g>';
     });
-    const dotsH = rows ? d + (rows-1)*pitch : 0;
+    const pat = (id, x) => '<pattern id="' + id + '" patternUnits="userSpaceOnUse" x="' + (x - pitch/2).toFixed(2) + '" y="0" width="' + pitch + '" height="' + pitch + '"><circle cx="' + pitch/2 + '" cy="' + pitch/2 + '" r="' + (d/2).toFixed(2) + '" fill="var(--bar)"/></pattern>';
+    const dotsH = rows*pitch;
     // Boats: small hull icons, wrapped and centred
     const bp = 16, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
     let b2 = "";
@@ -845,8 +847,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
     const H = Math.ceil(dotsH + (boats ? 18 + brows*18 : 0)) || 20;
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + fmt(people) + ' dots for ' + fmt(people) + ' people and ' + fmt(boats) + ' boat icons, ' + from + ' to ' + to + '">'
-      + '<defs><symbol id="hull" viewBox="0 0 12 14" width="12" height="14"><path d="M6 0 L7 5 L11 8 L9.5 13 L2.5 13 L1 8 L5 5 Z" fill="var(--boat)"/></symbol></defs>'
-      + (people ? '<g fill="none" stroke="var(--bar)" stroke-width="' + d.toFixed(2) + '" stroke-linecap="round" stroke-dasharray="0 ' + pitch + '">' + s + '</g>' : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
+      + '<defs>' + pat("dp", off) + pat("dpL", lastX) + '<symbol id="hull" viewBox="0 0 12 14" width="12" height="14"><path d="M6 0 L7 5 L11 8 L9.5 13 L2.5 13 L1 8 L5 5 Z" fill="var(--boat)"/></symbol></defs>'
+      + (people ? s : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
       + b2 + '</svg>';
     box.style.animation = "none"; box.offsetWidth; box.style.animation = "";
   }
