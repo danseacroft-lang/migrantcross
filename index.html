@@ -67,7 +67,7 @@
   --indigo:#5856D6; --indigo-bg:rgba(88,86,214,.14);
   --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18); --boat:#DB7100;
   --material:rgba(255,255,255,.78);
-  --glass:rgba(255,255,255,.74);
+  --glass:rgba(255,255,255,.58);
   --flag-o:.5;
   --wx-o:.9; --cloud-a:#F4F6FA; --cloud-b:#BFC9D9; --cloud-edge:rgba(60,60,67,.14);
   --bar-glass:rgba(242,242,247,.72); --bar-solid:#F2F2F7;
@@ -87,7 +87,7 @@
     --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
     --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
     --material:rgba(44,44,46,.78);
-    --glass:rgba(38,38,40,.7);
+    --glass:rgba(28,28,30,.55);
     --flag-o:.42;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
     --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
@@ -106,7 +106,7 @@
   --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
   --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
   --material:rgba(44,44,46,.78);
-  --glass:rgba(38,38,40,.7);
+  --glass:rgba(28,28,30,.55);
   --flag-o:.42;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
   --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
@@ -132,7 +132,7 @@ body{position:relative}
 .flag svg{display:block;width:100%;height:100%}
 .wrap{position:relative;z-index:1}
 /* Frosted glass boxes: the page (and the flag) shows through, softly blurred */
-.banner,.news,.card,.tile,.more{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.banner,.news,.card,.tile,.more{background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.more{background:var(--card)}}
 /* Reduce Transparency: solid boxes and bar, fainter pictures */
 @media (prefers-reduced-transparency:reduce){
