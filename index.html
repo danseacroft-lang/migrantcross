@@ -67,6 +67,7 @@
   --indigo:#5856D6; --indigo-bg:rgba(88,86,214,.14);
   --bar:#007AFF; --bar-peak:#FF9500; --bar-zero:rgba(60,60,67,.18); --boat:#DB7100;
   --material:rgba(255,255,255,.78);
+  --glass:rgba(255,255,255,.74);
   --flag-o:.5;
   --wx-o:.9; --cloud-a:#F4F6FA; --cloud-b:#BFC9D9; --cloud-edge:rgba(60,60,67,.14);
   --bar-glass:rgba(242,242,247,.72); --bar-solid:#F2F2F7;
@@ -86,6 +87,7 @@
     --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
     --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
     --material:rgba(44,44,46,.78);
+    --glass:rgba(38,38,40,.7);
     --flag-o:.42;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
     --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
@@ -104,6 +106,7 @@
   --indigo:#7D7AFF; --indigo-bg:rgba(94,92,230,.22);
   --bar:#0A84FF; --bar-peak:#FF9F0A; --bar-zero:rgba(235,235,245,.18); --boat:#D97200;
   --material:rgba(44,44,46,.78);
+  --glass:rgba(38,38,40,.7);
   --flag-o:.42;
   --wx-o:.7; --cloud-a:#8E8E93; --cloud-b:#48484A; --cloud-edge:rgba(255,255,255,.06);
   --bar-glass:rgba(0,0,0,.6); --bar-solid:#000000;
@@ -128,6 +131,25 @@ body{position:relative}
 @media (max-width:600px){.flag{width:72vw;opacity:calc(var(--flag-o)*.8)}}
 .flag svg{display:block;width:100%;height:100%}
 .wrap{position:relative;z-index:1}
+/* Frosted glass boxes: the page (and the flag) shows through, softly blurred */
+.banner,.news,.card,.tile,.more{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.more{background:var(--card)}}
+/* Reduce Transparency: solid boxes and bar, fainter pictures */
+@media (prefers-reduced-transparency:reduce){
+  .banner,.news,.card,.tile,.more{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .topbar.scrolled{background:var(--bar-solid);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .flag{opacity:calc(var(--flag-o)*.5)}
+  .wx-art{opacity:.45}
+}
+/* Increase Contrast: stronger grey text and dividing lines */
+@media (prefers-contrast:more){
+  :root{--label2:rgba(60,60,67,.85);--sep:rgba(60,60,67,.6)}
+  :root[data-theme="dark"]{--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
+  .flag{opacity:calc(var(--flag-o)*.6)}
+}
+@media (prefers-contrast:more) and (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
+}
 /* Frosted top bar: clear at the top of the page, frosted glass once the page scrolls under it */
 html{scroll-padding-top:84px}
 .topbar{position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top, 0px);background:transparent;border-bottom:.5px solid transparent;transition:background-color .25s ease,border-color .25s ease,-webkit-backdrop-filter .25s ease,backdrop-filter .25s ease}
@@ -137,6 +159,7 @@ html{scroll-padding-top:84px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1;color:inherit;text-decoration:none}
 .brand > svg{width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 8px rgba(0,122,255,.25)}
 .brand-text{display:grid;gap:1px;min-width:0}
+.topbar:not(.scrolled) .brand-text{text-shadow:0 0 10px var(--bg),0 0 3px var(--bg),0 0 1px var(--bg)}
 .bar-actions{display:flex;align-items:center;gap:8px;flex:none}
 .top-sentinel{position:absolute;top:0;height:1px;width:1px}
 .share-btn{flex:none;align-self:center;width:44px;height:44px;border-radius:50%;border:0;background:var(--fill);color:var(--blue);display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
@@ -163,6 +186,7 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .theme-btn svg{width:16px;height:16px;flex:none}
 .theme-btn .sun{color:#FF9500}
 .theme-btn .moon{color:var(--indigo)}
+.theme-btn .auto{color:var(--blue)}
 .theme-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.theme-btn:hover{background:var(--label3)}}
 .fresh{display:flex;align-items:center;gap:6px;font-size:.765rem;color:var(--label2);min-width:0}
@@ -258,6 +282,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 @keyframes wave{0%,100%{opacity:.15}35%{opacity:1}70%{opacity:.15}}
 @keyframes beat{0%,100%{transform:scale(1)}18%{transform:scale(1.1)}36%{transform:scale(1)}}
 .news.calm .w1,.news.calm .w2,.news.calm .spk{animation-duration:3.2s}
+.news .w1,.news .w2,.news .spk{animation-iteration-count:5}
 @media (prefers-reduced-motion:reduce){.news .w1,.news .w2,.news .spk{animation:none}}
 .news .n-tag{display:inline-flex;align-items:center;gap:5px;color:var(--red);font-weight:700;letter-spacing:.02em;text-transform:uppercase}
 .news .n-tag.latest{color:var(--label2)}
@@ -358,8 +383,6 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 @media (prefers-reduced-motion:reduce){.tip{transition:none}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* Every person, one dot each */
-.area-rep{display:none}
-@media (min-width:760px) and (hover:hover) and (pointer:fine){.area-rep{display:grid}}   /* computers only */
 .rep-card{padding:16px;display:grid;gap:12px}
 .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
@@ -439,6 +462,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <button type="button" class="theme-btn" id="themeToggle" aria-pressed="false" aria-label="Switch between day and night theme">
         <svg class="sun" id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
         <svg class="moon" id="iconMoon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>
+        <svg class="auto" id="iconAuto" viewBox="0 0 24 24" aria-hidden="true" hidden><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>
         <span id="themeLabel">Day</span>
       </button>
       <button type="button" class="share-btn" id="shareBtn" aria-label="Share today's figures" disabled>
@@ -550,7 +574,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
       <div class="dots" id="dots"></div>
     </div>
-    <p class="footnote">Each dot is one person and each boat is one boat. Hover over the dots to see each day.</p>
+    <p class="footnote">Each dot is one person and each boat is one boat. Tap or hover over the dots to see each day.</p>
   </section>
 
   <section class="area-gender">
@@ -978,7 +1002,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 
   // One dot per person, one boat icon per boat
   function drawDots(){
-    const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // hidden on phones and tablets: skip the work
+    const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
     const days = sorted.slice(-repDays);
     const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0);
     const from = dShort.format(parse(days[0].date)), to = dShort.format(parse(days[days.length-1].date));
@@ -1031,6 +1055,8 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(!repHead) repHead = $("repS").textContent;
     $("repS").textContent = dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people · " + fmt(day.boats) + (day.boats===1?" boat":" boats");
   });
+  // On touch screens, tapping anywhere else clears the highlight
+  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && !e.target.closest("#dots")) $("dots").dispatchEvent(new Event("mouseleave")); });
   $("dots").addEventListener("mouseleave", ()=>{
     $("dots").classList.remove("hovering");
     if(repHead){ $("repS").textContent = repHead; repHead = ""; }
@@ -1542,24 +1568,27 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(!document.hidden && Date.now() - openedAt > 3*60*60*1000) location.reload();
   });
 })();
-// Day / Night switch (like HypaSpeed). Follows the phone's own setting until tapped, then remembers the choice.
+// Appearance: Auto (follows the device, the default), Day or Night. Tapping cycles Auto → Day → Night → Auto.
 (function(){
   const root = document.documentElement, btn = document.getElementById("themeToggle");
-  const sun = document.getElementById("iconSun"), moon = document.getElementById("iconMoon"), label = document.getElementById("themeLabel");
+  const icons = {auto:document.getElementById("iconAuto"), light:document.getElementById("iconSun"), dark:document.getElementById("iconMoon")};
+  const label = document.getElementById("themeLabel");
   const sys = window.matchMedia("(prefers-color-scheme: dark)");
-  const current = () => root.getAttribute("data-theme") || (sys.matches ? "dark" : "light");
+  const NAMES = {auto:"Auto", light:"Day", dark:"Night"}, NEXT = {auto:"light", light:"dark", dark:"auto"};
+  const mode = () => root.getAttribute("data-theme") || "auto";
   function show(){
-    const t = current();
-    sun.toggleAttribute("hidden", t !== "light"); moon.toggleAttribute("hidden", t !== "dark");
-    label.textContent = t === "light" ? "Day" : "Night";
-    btn.setAttribute("aria-pressed", String(t === "dark"));
-    btn.setAttribute("aria-label", t === "light" ? "Day theme. Switch to night theme" : "Night theme. Switch to day theme");
-    document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", t === "dark" ? "#000000" : "#F2F2F7"));
+    const m = mode(), shown = m === "auto" ? (sys.matches ? "dark" : "light") : m;
+    Object.keys(icons).forEach(k => icons[k].toggleAttribute("hidden", k !== m));
+    label.textContent = NAMES[m];
+    btn.setAttribute("aria-label", "Appearance: " + NAMES[m] + (m === "auto" ? ", following your device" : "") + ". Switch to " + NAMES[NEXT[m]]);
+    btn.title = m === "auto" ? "Following your device (" + (shown === "dark" ? "Night" : "Day") + ")" : NAMES[m] + " theme";
+    document.querySelectorAll('meta[name="theme-color"]').forEach(x => x.setAttribute("content", shown === "dark" ? "#000000" : "#F2F2F7"));
   }
+  btn.removeAttribute("aria-pressed");
   btn.addEventListener("click", ()=>{
-    const next = current() === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    try{ localStorage.setItem("cc-theme", next); }catch(e){ /* the choice just won't be remembered */ }
+    const next = NEXT[mode()];
+    if(next === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", next);
+    try{ next === "auto" ? localStorage.removeItem("cc-theme") : localStorage.setItem("cc-theme", next); }catch(e){ /* not remembered */ }
     show();
   });
   sys.addEventListener("change", show);
