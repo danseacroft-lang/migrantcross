@@ -1,8 +1,8 @@
 {
- "checkedAt": "2026-09-28T13:24:11Z",
+ "checkedAt": "2026-09-28T14:26:23Z",
  "feeds": {
-  "https://feeds.bbci.co.uk/news/uk/rss.xml": 25,
-  "https://feeds.bbci.co.uk/news/politics/rss.xml": 60,
+  "https://feeds.bbci.co.uk/news/uk/rss.xml": 26,
+  "https://feeds.bbci.co.uk/news/politics/rss.xml": 61,
   "https://feeds.skynews.com/feeds/rss/uk.xml": 8,
   "https://feeds.skynews.com/feeds/rss/politics.xml": 8,
   "https://www.theguardian.com/uk/immigration/rss": 20,
@@ -11,6 +11,13 @@
   "https://www.gov.uk/search/news-and-communications.atom?keywords=small+boats": 20
  },
  "items": [
+  {
+   "title": "Rejoining the EU would be folly. Sadiq Khan needs to be told to get back in his box over Brexit",
+   "url": "https://www.gbnews.com/opinion/rejoining-eu-sadiq-khan-brexit",
+   "source": "GB News",
+   "published": "2026-09-28T13:51:24Z",
+   "breaking": true
+  },
   {
    "title": "Three people dead, including a child, in attempt to cross Channel to UK",
    "url": "https://www.theguardian.com/uk-news/2026/sep/28/people-dead-english-channel-crossing",
