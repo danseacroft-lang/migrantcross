@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="How Channel Crossings works: where the daily small boat figures come from, when they update, what they count, and how to download or embed them.">
+<meta name="description" content="How Channel Crossings works: where the daily small boat figures come from, when they update, what they count, and how to download them.">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
@@ -59,9 +59,6 @@ strong{font-weight:600}
 .dot{display:inline-block; width:8px; height:8px; border-radius:50%; vertical-align:1px}
 code{font:.8rem/1.5 var(--mono)}
 pre{background:var(--code); border-radius:10px; padding:12px; margin:0 0 10px; overflow-x:auto; white-space:pre-wrap; word-break:break-all}
-.copy{appearance:none; border:0; border-radius:10px; background:var(--fill); color:var(--blue); font:600 .882rem/1 var(--font); min-height:44px; padding:0 16px; margin-bottom:14px; cursor:pointer}
-.copy:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
-.embed-preview{border:0; border-radius:12px; width:100%; max-width:340px; height:190px; display:block; margin:0 0 14px}
 footer{font-size:.765rem; color:var(--label2); text-align:center; margin-top:12px}
 </style>
 </head>
@@ -147,19 +144,6 @@ footer{font-size:.765rem; color:var(--label2); text-align:center; margin-top:12p
     <p>You're welcome to use the figures. Please credit the Home Office as the source: "Contains public sector information licensed under the Open Government Licence v3.0."</p>
   </section>
 
-  <section id="embed">
-    <h2>Put the latest figure on your site</h2>
-    <p>Paste this into your web page to show a small box with the latest figure, which updates by itself:</p>
-    <iframe class="embed-preview" src="embed.html" title="Channel Crossings latest figures" loading="lazy"></iframe>
-    <pre><code id="snippet">&lt;iframe src="https://channelcrossings.world/embed.html" width="340" height="190" style="border:0;border-radius:12px" title="Channel Crossings latest figures" loading="lazy"&gt;&lt;/iframe&gt;</code></pre>
-    <button type="button" class="copy" id="copyBtn">Copy Code</button>
-  </section>
-
-  <section>
-    <h2>Use it like an app</h2>
-    <p>On iPhone, tap the Share button in Safari, then <strong>Add to Home Screen</strong>. On Android, use <strong>Install app</strong> or <strong>Add to Home screen</strong> in the browser menu. The site then opens full-screen, and pages you've visited open even without a signal, showing the last figures you saw.</p>
-  </section>
-
   <section>
     <h2>Contact</h2>
     <p>Spotted a problem, or have a question? Email <a href="mailto:x.chancrossings@gmail.com">x.chancrossings@gmail.com</a>.</p>
@@ -167,17 +151,5 @@ footer{font-size:.765rem; color:var(--label2); text-align:center; margin-top:12p
 
   <footer><a href="privacy.html">Privacy Policy &amp; Terms of Use</a></footer>
 </main>
-<script>
-document.getElementById("copyBtn").addEventListener("click", async function(){
-  const btn = this, text = document.getElementById("snippet").textContent;
-  try{ await navigator.clipboard.writeText(text); btn.textContent = "Copied"; }
-  catch(e){
-    const r = document.createRange(); r.selectNodeContents(document.getElementById("snippet"));
-    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
-    btn.textContent = "Selected. Copy it from the menu";
-  }
-  setTimeout(()=>{ btn.textContent = "Copy Code"; }, 2500);
-});
-</script>
 </body>
 </html>
