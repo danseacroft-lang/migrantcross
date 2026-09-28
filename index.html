@@ -302,11 +302,11 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .notices:not(:has(.banner:not([hidden]))){display:none}
 .board{display:grid;gap:28px 20px;align-items:start;grid-template-columns:minmax(0,1fr)}
 @media (min-width:760px){
-  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "rep rep" "gender records" "petitions days"}
-  .area-chart{grid-area:chart}.area-rep{grid-area:rep}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}.area-days{grid-area:days}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "cal cal" "rep rep" "gender records" "petitions days"}
+  .area-chart{grid-area:chart}.area-cal{grid-area:cal}.area-rep{grid-area:rep}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}.area-days{grid-area:days}
 }
 @media (min-width:1080px){
-  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "rep rep rep" "records petitions days"}
+  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "cal cal records" "rep rep rep" "petitions petitions days"}
 }
 .card.pad{padding:16px}
 .seg.seg-sm{min-width:0}
@@ -380,6 +380,38 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
 .tip .x{margin-top:4px;color:var(--label2)}
 @media (prefers-reduced-motion:reduce){.tip{transition:none}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* Calendar: one square per day, shaded by how many people arrived */
+.cal-card{padding:12px 12px 14px;display:grid;gap:10px}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cal-nav h3{margin:0;font:600 1rem/1.2 var(--font);letter-spacing:-.02em;text-align:center;flex:1}
+.cal-nav .sub{display:block;font-size:.765rem;font-weight:400;color:var(--label2);margin-top:2px}
+.cal-btn{appearance:none;border:0;background:none;color:var(--blue);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none}
+.cal-btn svg{width:18px;height:18px}
+.cal-btn:disabled{color:var(--label3);cursor:default}
+.cal-btn:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+@media (hover:hover){.cal-btn:not(:disabled):hover{background:var(--fill)}}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-dow{text-align:center;font-size:.706rem;font-weight:600;color:var(--label2);padding-bottom:2px}
+.cal-day{--h:0%;appearance:none;border:0;font:inherit;color:var(--label);border-radius:10px;min-height:48px;padding:5px 2px;display:grid;align-content:center;justify-items:center;gap:1px;cursor:pointer;
+  background:color-mix(in srgb, var(--bar) var(--h), var(--fill))}
+.cal-day .dn{font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
+.cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
+.cal-day.zero .dv{color:var(--label2);font-weight:400}
+.cal-day.l1{--h:18%}.cal-day.l2{--h:38%}.cal-day.l3{--h:62%}.cal-day.l4{--h:88%}
+.cal-day.l4{color:#fff}.cal-day.l4 .dn{color:rgba(255,255,255,.8)}
+.cal-day.future,.cal-day.nodata{background:none;cursor:default}
+.cal-day.future .dn,.cal-day.nodata .dn{color:var(--label3)}
+.cal-day.latest{box-shadow:inset 0 0 0 2px var(--blue)}
+.cal-day.on{box-shadow:inset 0 0 0 2px var(--label)}
+.cal-day:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+@media (hover:hover){.cal-day:not(.future):not(.nodata):hover{filter:brightness(1.08)}}
+.cal-foot{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;font-size:.765rem;color:var(--label2)}
+.cal-key{display:flex;align-items:center;gap:4px}
+.cal-key i{width:14px;height:14px;border-radius:4px;background:color-mix(in srgb, var(--bar) var(--h), var(--fill))}
+.cal-detail{min-height:1.4em;font-size:.882rem}
+.cal-detail b{font-weight:600}
+.cal-detail button{appearance:none;border:0;background:none;padding:0 0 0 6px;font:inherit;color:var(--blue);cursor:pointer}
+@media (max-width:420px){.cal-grid{gap:3px}.cal-day{min-height:42px;border-radius:8px}.cal-day .dv{font-size:.765rem}}
 /* Every person, one dot each */
 .rep-card{padding:16px;display:grid;gap:12px}
 .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
@@ -581,6 +613,23 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       <div class="sr" aria-live="polite" id="chartSay"></div>
     </div>
     <p class="footnote">Tap, drag or hover across the chart to see each day. Boats have their own scale below.</p>
+  </section>
+
+  <section class="area-cal">
+    <div class="sec-title"><h2>Calendar</h2></div>
+    <div class="card cal-card">
+      <div class="cal-nav">
+        <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <h3 id="calTitle" aria-live="polite">–</h3>
+        <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-detail" id="calDetail" aria-live="polite"></div>
+      <div class="cal-foot">
+        <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i style="--h:88%"></i>600+</span>
+      </div>
+    </div>
+    <p class="footnote">Tap a day to see its figures. Days before the Home Office published figures, and days still to come, are left blank.</p>
   </section>
 
   <section class="area-rep">
@@ -1113,6 +1162,80 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     drawDots();
   }));
 
+  /* =========== Calendar =========== */
+  let calMonth = null, calPick = null;   // "YYYY-MM" shown, and the chosen day
+  const calLevel = n => n <= 0 ? 0 : n < 100 ? 1 : n < 300 ? 2 : n < 600 ? 3 : 4;
+  const monthName = ym => new Date(ym + "-01T00:00:00Z").toLocaleDateString("en-GB", {month:"long", year:"numeric", timeZone:"UTC"});
+  const shiftMonth = (ym, k) => { const d = new Date(ym + "-01T00:00:00Z"); d.setUTCMonth(d.getUTCMonth() + k); return d.toISOString().slice(0,7); };
+  function drawCalendar(){
+    if(!sorted.length) return;
+    const first = sorted[0].date, last = sorted[sorted.length-1].date;
+    if(!calMonth || calMonth > last.slice(0,7)) calMonth = last.slice(0,7);
+    if(calMonth < first.slice(0,7)) calMonth = first.slice(0,7);
+    const byDate = new Map(sorted.map(d=>[d.date, d]));
+    const start = new Date(calMonth + "-01T00:00:00Z");
+    const dim = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth()+1, 0)).getUTCDate();
+    const lead = (start.getUTCDay() + 6) % 7;   // Monday first
+    const grid = $("calGrid"); grid.textContent = "";
+    ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(w=>{ const h = document.createElement("div"); h.className = "cal-dow"; h.textContent = w; grid.append(h); });
+    for(let i=0; i<lead; i++) grid.append(document.createElement("div"));
+    let people = 0, boats = 0, counted = 0;
+    for(let day=1; day<=dim; day++){
+      const iso = calMonth + "-" + String(day).padStart(2,"0");
+      const b = document.createElement("button"); b.type = "button"; b.className = "cal-day"; b.dataset.date = iso;
+      const dn = document.createElement("span"); dn.className = "dn"; dn.textContent = day;
+      const dv = document.createElement("span"); dv.className = "dv";
+      b.append(dn, dv);
+      if(iso > last){ b.classList.add("future"); b.disabled = true; b.setAttribute("aria-label", dList.format(parse(iso)) + ": no figures yet"); }
+      else if(iso < first){ b.classList.add("nodata"); b.disabled = true; }
+      else {
+        const d = byDate.get(iso) || {date:iso, migrants:0, boats:0};   // days missing between reported days had no crossings
+        people += d.migrants; boats += d.boats; counted++;
+        const lv = calLevel(d.migrants);
+        if(lv) b.classList.add("l" + lv); else b.classList.add("zero");
+        dv.textContent = fmt(d.migrants);
+        if(iso === last) b.classList.add("latest");
+        if(iso === calPick) b.classList.add("on");
+        b.setAttribute("aria-label", dList.format(parse(iso)) + ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + ", " + fmt(d.boats) + (d.boats===1?" boat":" boats"));
+      }
+      grid.append(b);
+    }
+    $("calTitle").innerHTML = "";
+    $("calTitle").append(monthName(calMonth));
+    const sub = document.createElement("span"); sub.className = "sub";
+    sub.textContent = counted ? fmt(people) + (people===1?" person":" people") + " · " + fmt(boats) + (boats===1?" boat":" boats") + (calMonth === last.slice(0,7) ? " so far" : "") : "No figures";
+    $("calTitle").append(sub);
+    $("calPrev").disabled = calMonth <= first.slice(0,7);
+    $("calNext").disabled = calMonth >= last.slice(0,7);
+    showCalDetail();
+  }
+  function showCalDetail(){
+    const box = $("calDetail"); box.textContent = "";
+    if(!calPick || calPick.slice(0,7) !== calMonth) return;
+    const d = sorted.find(x=>x.date===calPick) || {date:calPick, migrants:0, boats:0};
+    const b = document.createElement("b"); b.textContent = dFullCal.format(parse(d.date));
+    let t = d.migrants ? ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + " in " + fmt(d.boats) + (d.boats===1?" boat":" boats") : ": no crossings detected";
+    if(d.boats) t += " · " + Math.round(d.migrants/d.boats) + " per boat";
+    if(d.uncontrolled) t += " · " + d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings");
+    if(d.revised) t += " · revised from " + fmt(d.revised.from);
+    box.append(b, t);
+    const back = sorted.length - sorted.findIndex(x=>x.date===d.date);
+    if(sorted.some(x=>x.date===d.date) && back <= 90){
+      const go = document.createElement("button"); go.type = "button"; go.textContent = "Show on chart";
+      go.addEventListener("click", ()=>showOnChart(d.date));
+      box.append(go);
+    }
+  }
+  const dFullCal = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",...UTC});
+  $("calGrid").addEventListener("click", e=>{
+    const b = e.target.closest(".cal-day"); if(!b || b.disabled) return;
+    calPick = calPick === b.dataset.date ? null : b.dataset.date;
+    drawCalendar();
+    const again = $("calGrid").querySelector('[data-date="' + b.dataset.date + '"]'); if(again) again.focus();
+  });
+  $("calPrev").addEventListener("click", ()=>{ calMonth = shiftMonth(calMonth, -1); drawCalendar(); });
+  $("calNext").addEventListener("click", ()=>{ calMonth = shiftMonth(calMonth, 1); drawCalendar(); });
+
   let rt;
   if("ResizeObserver" in window){
     let lastW = 0;
@@ -1516,7 +1639,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
       busyMin = Math.max(1, vals[Math.floor(vals.length*0.95)]);
     } else busyMin = Infinity;
 
-    renderSummary(); setRange(range); drawDots(); drawList();
+    renderSummary(); setRange(range); drawCalendar(); drawDots(); drawList();
     if(data.extras){ extras = data.extras; renderForecast(); renderGender(); renderPetitions(); }
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); }
