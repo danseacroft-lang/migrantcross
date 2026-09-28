@@ -9,7 +9,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `favicon.svg` – the CC logo shown in the browser tab
 - `apple-touch-icon.png` – the icon used when someone adds the site to their iPhone home screen
 - `logo-badge.png` – the full Channel Crossings badge, for your X profile and elsewhere
-- `og-image.png` – the preview picture X shows when someone shares the link; redrawn each morning with the latest figure
+- `og-image.png` – the preview picture X shows when someone shares the link; redrawn whenever new figures are published
 - `scripts/og_image.py` – draws `og-image.png`
 - `data.json` – the full daily history, loaded in the background
 - `recent.json` – the last 90 days and totals, used by the embed widget
