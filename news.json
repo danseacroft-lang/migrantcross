@@ -1,1 +1,36 @@
-{"checkedAt": null, "items": []}
+{
+ "checkedAt": "2026-09-28T13:24:11Z",
+ "feeds": {
+  "https://feeds.bbci.co.uk/news/uk/rss.xml": 25,
+  "https://feeds.bbci.co.uk/news/politics/rss.xml": 60,
+  "https://feeds.skynews.com/feeds/rss/uk.xml": 8,
+  "https://feeds.skynews.com/feeds/rss/politics.xml": 8,
+  "https://www.theguardian.com/uk/immigration/rss": 20,
+  "https://www.telegraph.co.uk/news/rss.xml": 119,
+  "https://www.gbnews.com/feeds/news.rss": 30,
+  "https://www.gov.uk/search/news-and-communications.atom?keywords=small+boats": 20
+ },
+ "items": [
+  {
+   "title": "Track UK's latest migration numbers - net migration, visas, asylum and small boats",
+   "url": "https://www.bbc.co.uk/news/articles/c70989jrdweo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-09-28T12:38:07Z",
+   "breaking": true
+  },
+  {
+   "title": "Three people dead, including a child, in attempt to cross Channel to UK",
+   "url": "https://www.theguardian.com/uk-news/2026/sep/28/people-dead-english-channel-crossing",
+   "source": "The Guardian",
+   "published": "2026-09-28T11:45:11Z",
+   "breaking": true
+  },
+  {
+   "title": "Ten arrested after powerboat smuggling Albanian migrants docks in Cornwall harbour",
+   "url": "https://www.gbnews.com/news/migrant-crisis-ten-arrested-powerboat-smuggling-albanian-migrants-docks-cornwall-harbour",
+   "source": "GB News",
+   "published": "2026-09-28T11:28:10Z",
+   "breaking": true
+  }
+ ]
+}
