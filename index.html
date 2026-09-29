@@ -976,7 +976,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 <div class="frost" id="frost" role="status" aria-live="polite" hidden>
     <div class="frost-in">
       <svg class="frost-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
-      <b id="frostTitle">Checking for new figures…</b>
+      <b id="frostTitle">Refreshing figures database…</b>
       <span id="frostSub"></span>
     </div>
 </div>
@@ -1929,7 +1929,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const btn = $("refreshBtn"), frost = $("frost");
     if(btn.disabled) return;
     btn.disabled = true;
-    $("frostTitle").textContent = "Checking for new figures…"; $("frostSub").textContent = "";
+    $("frostTitle").textContent = "Refreshing figures database…"; $("frostSub").textContent = "";
     frost.classList.remove("out"); frost.classList.add("busy"); frost.hidden = false;
     const shown = Date.now(), before = sorted.length ? sorted[sorted.length-1].date : "", builtBefore = meta && meta.checkedAt;
     let title = "No new updates available", failed = false;
@@ -1942,12 +1942,14 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       else if(d.checkedAt && d.checkedAt !== builtBefore){ load(d, true); }   // same days, possibly revised figures
     }catch(e){ title = "Couldn't check for updates"; failed = true; }
     loadNews(); if(Date.now() - wxAt > 5*60*1000) loadWeather();   // freshen the rest too
+    // "Refreshing figures database…" stays up for a moment, then the result shows before the frost clears
+    await new Promise(r => setTimeout(r, Math.max(0, 800 - (Date.now() - shown))));
     $("frostTitle").textContent = title;
     $("frostSub").textContent = failed ? "Check your connection and try again." : lastUpdatedText();
     frost.classList.remove("busy");
     setTimeout(()=>{
       leaveFrost(()=>{ frost.hidden = true; btn.disabled = false; });
-    }, Math.max(0, 2000 - (Date.now() - shown)));
+    }, 1400);
   });
   function leaveFrost(done){
     const frost = $("frost");
