@@ -2166,6 +2166,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     initCalc();
     renderShare();
     $("rangeSeg").hidden = sorted.length < 15;
+    if($("frost").hidden) $("refreshBtn").hidden = syncPending();   // no flicker: set as soon as the figures load
   }
 
   // 1. Show the figures built into the page straight away (rebuilt whenever new figures are published)
@@ -2217,6 +2218,8 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   function syncUi(){
     const on = !!sorted.length && syncPending();
     $("syncNote").hidden = !on || syncClosed() || $("syncNote").classList.contains("leaving");
+    // While a download is in motion there's nothing to refresh: hide Refresh Figures until the figures are in
+    if(!$("frost").hidden || !$("refreshBtn").disabled) $("refreshBtn").hidden = on;
     const btnOn = on && syncClosed();
     if(btnOn && $("syncBtn").hidden){ $("syncBtn").hidden = false; $("syncBtn").classList.add("pop"); }
     if(!btnOn) $("syncBtn").hidden = true;
