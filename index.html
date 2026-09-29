@@ -210,13 +210,8 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 @keyframes closeIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 .b-icon svg{width:24px;height:24px}
 .b-body{display:grid;gap:2px;align-content:start;min-width:0;position:relative;z-index:1}
-/* Daily update in progress, with a silly face in the corner (the device draws its own emoji: Apple's on iPhone and Mac) */
-.banner.sync{padding-right:104px}
-.sync-face{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:grid;justify-items:center;gap:1px;z-index:1}
-.sync-face .sf-emoji{margin-bottom:6px;font:52px/1.1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;display:block;animation:sfWobble 2.6s ease-in-out infinite;transform-origin:50% 85%}
-.sync-face span:not(.sf-emoji){font-size:.647rem;font-weight:600;color:var(--label2);white-space:nowrap;letter-spacing:0}
-@keyframes sfWobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) scale(1.04)}}
-@media (max-width:600px){.banner.sync{padding-right:88px}.sync-face{right:10px}.sync-face .sf-emoji{font-size:44px}}
+/* Daily update in progress */
+.banner.sync{padding-right:14px}
 .banner.sync .b-icon{background:rgba(0,122,255,.12);color:var(--blue)}
 .spin{animation:spin 1s linear infinite;transform-origin:50% 50%}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -658,10 +653,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       <div class="b-text" id="syncText">Yesterday's figures from the Home Office usually arrive around 1pm. They'll appear here by themselves, so there's no need to refresh.</div>
     </div>
 
-    <div class="sync-face" aria-hidden="true">
-      <span class="sf-emoji">🤪</span>
-      <span>Working on it…</span>
-    </div>
   </div>
   <!-- Channel conditions notification -->
   <div class="banner" id="banner" role="status" aria-live="polite" data-level="loading" hidden>
