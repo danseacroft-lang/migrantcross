@@ -192,27 +192,16 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 }
 @media (max-width:360px){.br-btn{width:40px;height:40px}}
 @media (max-width:400px){.bar-actions{gap:6px}.topbar-in{gap:8px}}
-/* Refresh Figures: a pill on wider screens, the refresh symbol on phones */
-.refresh-btn{display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 16px 0 12px;border:0;border-radius:22px;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;white-space:nowrap;cursor:pointer;touch-action:manipulation}
-.refresh-btn svg{width:20px;height:20px;flex:none;color:var(--blue)}
-.refresh-btn:disabled{cursor:default}
-.refresh-btn:disabled svg{animation:spin .9s linear infinite}
-.refresh-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.refresh-btn:not(:disabled):hover{background:var(--label3)}}
-@media (max-width:600px){.refresh-btn{width:44px;padding:0;justify-content:center;border-radius:50%}.refresh-btn .rf-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
-@media (max-width:360px){.refresh-btn{width:40px;height:40px}}
-/* The whole screen frosts over while the figures are refreshed */
-.frost{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px;background:color-mix(in srgb,var(--bg) 42%,transparent);
-  -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);animation:frostIn .3s ease-out both}
-.frost.out{animation:frostOut .35s ease-in both}
-@keyframes frostIn{from{opacity:0}to{opacity:1}}
-@keyframes frostOut{to{opacity:0}}
-.frost-in{display:grid;justify-items:center;gap:6px;text-align:center}
-.frost-icon{width:44px;height:44px;color:var(--blue);margin-bottom:6px}
-.frost.busy .frost-icon{animation:spin .9s linear infinite}
-.frost b{font:700 1.294rem/1.2 var(--font);letter-spacing:.01em}
-.frost span{font-size:1rem;color:var(--label2)}
-@media (prefers-reduced-transparency:reduce){.frost{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
+/* Refresh Figures: a text button under today's line in the Figure updates pop-up */
+.refresh-btn{position:relative;margin-top:6px;display:inline-flex;align-items:center;gap:6px;padding:4px 0;border:0;background:none;color:var(--blue);font:600 .882rem/1.2 var(--font);letter-spacing:-.016em;cursor:pointer;touch-action:manipulation}
+.refresh-btn::after{content:"";position:absolute;inset:-8px -8px}   /* 44pt tap target */
+.refresh-btn svg{width:17px;height:17px;flex:none}
+.refresh-btn.busy svg{animation:spin .9s linear infinite}
+.refresh-btn.busy,.refresh-btn.done{cursor:default}
+.refresh-btn.done{color:var(--label2)}
+.refresh-btn.done svg{color:var(--green)}
+.refresh-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+@media (hover:hover){.refresh-btn:not(.busy):not(.done):hover{text-decoration:underline}}
 .theme-btn .sun{color:#FF9500}
 .theme-btn .moon{color:var(--indigo)}
 .theme-btn .auto{color:var(--blue)}
@@ -662,10 +651,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       </div>
     </div>
     <div class="bar-actions">
-      <button type="button" class="refresh-btn" id="refreshBtn" aria-label="Refresh figures">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
-        <span class="rf-text">Refresh Figures</span>
-      </button>
       <button type="button" class="share-btn dl-btn" id="syncBtn" aria-label="New figures incoming. Show the notice" title="New figures incoming" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><g class="dl-arrow"><path d="M12 7.2v8.2"/><path d="M8.6 12.3l3.4 3.4 3.4-3.4"/></g></svg>
       </button>
@@ -938,6 +923,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <b>Figure updates</b>
     <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
     <p class="fu-today" id="fuToday"></p>
+    <button type="button" class="refresh-btn" id="refreshBtn" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg><span id="refreshText">Refresh Figures</span></button>
   </div>
   <div class="info-pop" id="popWeek" hidden>
     <b>Last 7 days</b>
@@ -973,13 +959,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   </footer>
 </div>
 
-<div class="frost" id="frost" role="status" aria-live="polite" hidden>
-    <div class="frost-in">
-      <svg class="frost-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
-      <b id="frostTitle">Refreshing figures database…</b>
-      <span id="frostSub"></span>
-    </div>
-</div>
 
 <!-- Latest figures, rebuilt by scripts/update.py whenever new ones are published, so the page shows them instantly -->
 <script id="seed" type="application/json">{"ytdBase":11884,"ytdBaseDate":"2026-06-30","fullYear":true,"checkedAt":"2026-09-29T13:43:15Z","days":[{"date":"2026-07-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-08","migrants":249,"boats":4,"uncontrolled":null},{"date":"2026-07-09","migrants":81,"boats":1,"uncontrolled":null},{"date":"2026-07-10","migrants":255,"boats":3,"uncontrolled":null},{"date":"2026-07-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-14","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-15","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-22","migrants":172,"boats":3,"uncontrolled":null},{"date":"2026-07-23","migrants":366,"boats":3,"uncontrolled":null},{"date":"2026-07-24","migrants":103,"boats":2,"uncontrolled":null},{"date":"2026-07-25","migrants":240,"boats":5,"uncontrolled":null},{"date":"2026-07-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-27","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-28","migrants":26,"boats":1,"uncontrolled":null},{"date":"2026-07-29","migrants":752,"boats":9,"uncontrolled":null},{"date":"2026-07-30","migrants":72,"boats":1,"uncontrolled":null},{"date":"2026-07-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-01","migrants":326,"boats":4,"uncontrolled":null},{"date":"2026-08-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-03","migrants":35,"boats":1,"uncontrolled":null},{"date":"2026-08-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-08","migrants":258,"boats":4,"uncontrolled":null},{"date":"2026-08-09","migrants":423,"boats":5,"uncontrolled":null},{"date":"2026-08-10","migrants":230,"boats":1,"uncontrolled":null},{"date":"2026-08-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-14","migrants":93,"boats":1,"uncontrolled":null},{"date":"2026-08-15","migrants":82,"boats":1,"uncontrolled":null},{"date":"2026-08-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-17","migrants":250,"boats":3,"uncontrolled":null},{"date":"2026-08-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-22","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-23","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-24","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-25","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-27","migrants":494,"boats":7,"uncontrolled":null},{"date":"2026-08-28","migrants":122,"boats":3,"uncontrolled":null},{"date":"2026-08-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-30","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-06","migrants":625,"boats":8,"uncontrolled":null},{"date":"2026-09-07","migrants":143,"boats":2,"uncontrolled":null},{"date":"2026-09-08","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-09","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-10","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-14","migrants":144,"boats":2,"uncontrolled":null},{"date":"2026-09-15","migrants":55,"boats":1,"uncontrolled":null},{"date":"2026-09-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-26","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-27","migrants":526,"boats":7,"uncontrolled":0},{"date":"2026-09-28","migrants":0,"boats":0,"uncontrolled":0}],"prevYearSamePoint":33486,"periods":{"labour":{"from":"2024-07-05","people":83849,"boats":1376,"days":816},"burnham":{"from":"2026-07-20","people":6666,"boats":91,"days":71}},"extras":{"gender":{"source":"https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx","latestQuarter":"2026 Q2","period":"year ending June 2026","lastYear":{"sex":{"Male":26973,"Female":5260,"Unknown":1141},"age":{"17 and under":4993,"18 to 24":10637,"25 to 39":14341,"40 and over":2263,"Unknown":1140},"adultMen":23110,"total":33374},"since2018":{"sex":{"Male":174171,"Female":26077,"Unknown":4269},"age":{"17 and under":32306,"18 to 24":66808,"25 to 39":86529,"40 and over":14924,"Unknown":3950},"adultMen":148786,"total":204517},"updatedAt":"2026-09-27T18:15:08Z"},"petitions":{"petitions":[{"id":778181,"title":"Deploy the Royal Navy to turn illegal small boats back to France","signatures":255,"state":"open","closes":"2027-03-04","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/778181"},{"id":777795,"title":"Ban all alternative remittance systems to disrupt small boat smuggling networks","signatures":118,"state":"open","closes":"2027-02-18","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/777795"},{"id":731131,"title":"End all EU fishing rights in UK waters until France stops small boats","signatures":2273,"state":"closed","closes":"2026-02-11","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/731131"},{"id":760177,"title":"End the 2023 \u00a3476m deal with France to stop the migrants crossing the channel","signatures":996,"state":"closed","closes":"2026-09-16","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/760177"},{"id":732995,"title":"Ban UK Border Force from picking up migrants in the Channel","signatures":850,"state":"closed","closes":"2026-02-13","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/732995"},{"id":736491,"title":"Detain all illegal immigrants and put in camping sites on airfields","signatures":498,"state":"closed","closes":"2026-02-20","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/736491"}],"updatedAt":"2026-09-29T13:43:26Z"}}}</script>
@@ -1917,46 +1896,29 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
   });
 
-  /* =========== Refresh Figures =========== */
-  // Looks for new figures without reloading the page. The screen frosts over for 2 seconds with the result.
-  function lastUpdatedText(){
-    if(!meta || !meta.checkedAt || isNaN(new Date(meta.checkedAt))) return "";
-    const t = new Date(meta.checkedAt), day = t.toLocaleDateString("en-CA",{timeZone:"Europe/London"});
-    const when = day === todayKey() ? "" : day === yesterdayISO() ? " yesterday" : " on " + dMid.format(parse(day));
-    return "Last updated at " + ukTime(t) + when;
-  }
-  $("refreshBtn").addEventListener("click", async ()=>{
-    const btn = $("refreshBtn"), frost = $("frost");
-    if(btn.disabled) return;
-    btn.disabled = true;
-    $("frostTitle").textContent = "Refreshing figures database…"; $("frostSub").textContent = "";
-    frost.classList.remove("out"); frost.classList.add("busy"); frost.hidden = false;
-    const shown = Date.now(), before = sorted.length ? sorted[sorted.length-1].date : "", builtBefore = meta && meta.checkedAt;
-    let title = "No new updates available", failed = false;
+  /* =========== Refresh Figures (in the Figure updates pop-up) =========== */
+  // Looks for new figures without reloading the page: "Refreshing…", then the result, then back to normal
+  $("refreshBtn").addEventListener("click", async e=>{
+    e.stopPropagation();
+    const btn = $("refreshBtn"), txt = $("refreshText");
+    if(btn.getAttribute("aria-disabled") === "true") return;
+    // Marked busy rather than disabled, so focus stays in the pop-up and it doesn't close
+    btn.setAttribute("aria-disabled", "true"); btn.classList.remove("done"); btn.classList.add("busy"); txt.textContent = "Refreshing…";
+    const started = Date.now(), before = sorted.length ? sorted[sorted.length-1].date : "", builtBefore = meta && meta.checkedAt;
+    let result = "No updates available";
     try{
       const r = await fetch("data.json", {cache:"no-cache", ...limit()});
       if(!r.ok) throw 0;
       const d = await r.json();
       const latest = d.days && d.days.length ? d.days[d.days.length-1].date : "";
-      if(latest > before){ load(d, true); title = "New figures are in"; }
-      else if(d.checkedAt && d.checkedAt !== builtBefore){ load(d, true); }   // same days, possibly revised figures
-    }catch(e){ title = "Couldn't check for updates"; failed = true; }
+      if(latest > before){ load(d, true); result = "New figures are in"; }
+      else if(d.checkedAt && d.checkedAt !== builtBefore) load(d, true);   // same days, possibly revised figures
+    }catch(err){ result = "Couldn't refresh. Try again"; }
     loadNews(); if(Date.now() - wxAt > 5*60*1000) loadWeather();   // freshen the rest too
-    // "Refreshing figures database…" stays up for a moment, then the result shows before the frost clears
-    await new Promise(r => setTimeout(r, Math.max(0, 800 - (Date.now() - shown))));
-    $("frostTitle").textContent = title;
-    $("frostSub").textContent = failed ? "Check your connection and try again." : lastUpdatedText();
-    frost.classList.remove("busy");
-    setTimeout(()=>{
-      leaveFrost(()=>{ frost.hidden = true; btn.disabled = false; });
-    }, 1400);
+    await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - started))));   // let "Refreshing…" register
+    btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
+    setTimeout(()=>{ btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); }, 2500);
   });
-  function leaveFrost(done){
-    const frost = $("frost");
-    if(reduced()){ done(); return; }
-    frost.classList.add("out");
-    frost.addEventListener("animationend", done, {once:true});
-  }
 
   /* =========== Email updates =========== */
   $("subForm").addEventListener("submit", async e=>{
@@ -2166,7 +2128,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     initCalc();
     renderShare();
     $("rangeSeg").hidden = sorted.length < 15;
-    if($("frost").hidden) $("refreshBtn").hidden = syncPending();   // no flicker: set as soon as the figures load
+    $("refreshBtn").hidden = syncPending();   // nothing to refresh while a download is in motion
   }
 
   // 1. Show the figures built into the page straight away (rebuilt whenever new figures are published)
@@ -2219,7 +2181,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const on = !!sorted.length && syncPending();
     $("syncNote").hidden = !on || syncClosed() || $("syncNote").classList.contains("leaving");
     // While a download is in motion there's nothing to refresh: hide Refresh Figures until the figures are in
-    if(!$("frost").hidden || !$("refreshBtn").disabled) $("refreshBtn").hidden = on;
+    $("refreshBtn").hidden = on;
     const btnOn = on && syncClosed();
     if(btnOn && $("syncBtn").hidden){ $("syncBtn").hidden = false; $("syncBtn").classList.add("pop"); }
     if(!btnOn) $("syncBtn").hidden = true;
