@@ -2041,6 +2041,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   }
   let nextShown = false;
   function flashNextUpdate(){
+    if(syncPending()) return;   // the day's figures are already being awaited: "Updating now" says it all
     const next = $("nextText"), cur = $("freshText");
     next.textContent = nextUpdateText();
     cur.hidden = true; next.hidden = false; next.classList.remove("out");
