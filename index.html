@@ -649,8 +649,8 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     </div>
     <div class="b-body">
       <div class="b-top"><span>Daily update</span><span id="syncTime"></span></div>
-      <div class="b-title">Data dump in progress</div>
-      <div class="b-text" id="syncText">Yesterday's figures from the Home Office usually arrive around 1pm. Standby.</div>
+      <div class="b-title">New figures incoming</div>
+      <div class="b-text" id="syncText">A data download is in progress. New figures are being retrieved from the Home Office. This can take up to 1 hour. Please wait.</div>
     </div>
 
   </div>
@@ -2118,7 +2118,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }catch(e){ /* try again on the next check */ }
   }
 
-  // "Data dump in progress": from the usual release time until yesterday's figures are live on the page, however
+  // "New figures incoming": from the usual release time until yesterday's figures are live on the page, however
   // late the Home Office publishes. While it shows, the page looks for the new figures every 2 minutes.
   function syncPending(){
     return new Date() >= runTime() && !haveYesterday();
@@ -2130,7 +2130,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(on){
       const r = runTime();
       $("syncTime").textContent = "Since " + ukTime(r);
-      $("syncText").textContent = "Yesterday's figures from the Home Office usually arrive around " + ukTime(r).replace(":00","") + ". Standby.";
     }
     if(sorted.length) renderSummary();   // adds or removes "Updating now" on the top line
     return on;
