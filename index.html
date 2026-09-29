@@ -1131,7 +1131,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const last = sorted[sorted.length-1];
     const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
     let fresh = "Figures to " + dShort.format(parse(last.date));
-    if(syncPending()) fresh += " · In progress";   // while the day's figures are awaited
+    if(syncPending()) fresh += " · Updating now";   // while the day's figures are awaited
     $("freshText").textContent = fresh;
     $("fresh").classList.toggle("stale", ageDays > 3);
 
@@ -2140,7 +2140,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("syncTime").textContent = "Since " + ukTime(r);
       $("syncText").textContent = "Yesterday's figures from the Home Office usually arrive around " + ukTime(r).replace(":00","") + ". They'll appear here by themselves, so there's no need to refresh.";
     }
-    if(sorted.length) renderSummary();   // adds or removes "In progress" on the top line
+    if(sorted.length) renderSummary();   // adds or removes "Updating now" on the top line
     return on;
   }
   function checkSync(){
