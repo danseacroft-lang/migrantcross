@@ -264,6 +264,31 @@ def update_page(data, recent):
     page.write_text(html)
 
 
+SITE = "https://channelcrossings.world/"
+INDEXNOW_KEY = "3c699a48e42e6f3a4c6573138dd6fc80"   # proves we own the site: the same key is in /3c699a48e42e6f3a4c6573138dd6fc80.txt
+
+
+def write_sitemap(latest):
+    """Tell search engines when the figures last changed."""
+    pages = [("", latest, "daily", "1.0"), ("how-it-works.html", None, "monthly", "0.6"), ("privacy.html", None, "yearly", "0.3")]
+    rows = "".join(f"  <url><loc>{SITE}{p}</loc>" + (f"<lastmod>{m}</lastmod>" if m else "") + f"<changefreq>{c}</changefreq><priority>{pr}</priority></url>\n"
+                   for p, m, c, pr in pages)
+    (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + rows + "</urlset>\n")
+
+
+def ping_indexnow():
+    """New figures: ask Bing (which also feeds DuckDuckGo, Yahoo and Ecosia) and others to look again.
+    Google doesn't take part in IndexNow; it reads the sitemap instead."""
+    try:
+        import requests
+        r = requests.post("https://api.indexnow.org/indexnow", timeout=20, json={
+            "host": "channelcrossings.world", "key": INDEXNOW_KEY,
+            "keyLocation": f"{SITE}{INDEXNOW_KEY}.txt", "urlList": [SITE]})
+        print("IndexNow:", r.status_code)
+    except Exception as e:  # noqa: BLE001 - never let this stop the update
+        print("IndexNow skipped:", e)
+
+
 def publish(data):
     """Write every output file from data (with data['days'] already merged)."""
     ordered = data["days"]
@@ -275,6 +300,7 @@ def publish(data):
     (ROOT / "recent.json").write_text(json.dumps(recent, separators=(",", ":")) + "\n")
     write_csv(ordered)
     update_page(data, recent)
+    write_sitemap(ordered[-1]["date"])
     print(f"Saved {len(ordered)} days, latest {ordered[-1]['date']}")
 
     try:
@@ -334,6 +360,7 @@ def main():
     data["source"] = PUB
     publish(data)
     write_status(data, now)
+    ping_indexnow()
 
 
 if __name__ == "__main__":
