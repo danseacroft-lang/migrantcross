@@ -209,7 +209,7 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .b-close.fade-in{animation:closeIn .35s ease-out both}
 @keyframes closeIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 .b-icon svg{width:24px;height:24px}
-.b-body{display:grid;gap:2px;min-width:0;position:relative;z-index:1}
+.b-body{display:grid;gap:2px;align-content:start;min-width:0;position:relative;z-index:1}
 /* Daily update in progress */
 .banner.sync{padding-right:14px}
 .banner.sync .b-icon{background:rgba(0,122,255,.12);color:var(--blue)}
@@ -648,8 +648,8 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     </div>
     <div class="b-body">
       <div class="b-top"><span>Daily update</span><span id="syncTime"></span></div>
-      <div class="b-title">Data sync is pending</div>
-      <div class="b-text">Update in process…</div>
+      <div class="b-title">Data dump in progress</div>
+      <div class="b-text">Please wait a moment whilst we retrieve the latest figures. Update pending.</div>
     </div>
   </div>
   <!-- Channel conditions notification -->
