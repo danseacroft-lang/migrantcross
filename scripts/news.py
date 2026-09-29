@@ -118,15 +118,13 @@ def pick(stories, now):
 
 def main():
     now = datetime.now(timezone.utc)
-    stories, status = [], {}
+    stories = []
     for source, url in FEEDS:
         try:
             got = read_feed(source, url)
             stories += got
-            status[url] = len(got)
             print(f"{source}: {len(got)} items")
         except Exception as e:  # noqa: BLE001 - one broken feed shouldn't stop the others
-            status[url] = "error: " + str(e)[:80]
             print(f"{source}: skipped ({e})")
     items = pick(stories, now)
 
@@ -144,7 +142,7 @@ def main():
         except Exception as e:  # noqa: BLE001
             print("Override skipped:", e)
 
-    out = {"checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "feeds": status, "items": [
+    out = {"checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "items": [
         {"title": s["title"], "url": s["url"], "source": s["source"],
          "published": s["published"].astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
          "breaking": s.get("pinned", False) or (now - s["published"]) <= timedelta(hours=BREAKING_HOURS)}
@@ -152,7 +150,7 @@ def main():
     # Only rewrite the file when the stories change, so the site isn't republished every hour for nothing
     try:
         old = json.loads(OUT.read_text())
-        if old.get("items") == out["items"] and "feeds" in old:
+        if old.get("items") == out["items"]:
             print("No change")
             return
     except (OSError, ValueError):

@@ -1,0 +1,6 @@
+pandas
+lxml
+odfpy
+requests
+pillow
+openpyxl

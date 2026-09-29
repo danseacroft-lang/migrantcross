@@ -3,14 +3,15 @@
    used only when there is no connection. Icons and other fixed files: served
    from the saved copy straight away and refreshed in the background.
    Weather requests go straight to Open-Meteo and are never saved. */
-const CACHE = "cc-v4";
+const CACHE = "cc-v5";
 const CORE = [
   "./", "index.html", "how-it-works.html", "privacy.html",
-  "recent.json", "favicon.svg", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png"
+  "favicon.svg", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png"
 ];
 
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+  // One missing file must not stop the rest being saved
+  event.waitUntil(caches.open(CACHE).then(c => Promise.allSettled(CORE.map(url => c.add(url)))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", event => {

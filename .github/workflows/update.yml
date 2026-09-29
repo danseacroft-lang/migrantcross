@@ -3,7 +3,7 @@ name: Update crossing figures
 on:
   schedule:
     # Every 30 minutes, 07:00-18:30 UTC (8am-7:30pm UK in summer, 7am-6:30pm in winter).
-    # Most runs just look at the Home Office page and stop if nothing is new.
+    # Most runs just look at the Home Office page and record the check in status.json.
     - cron: "*/30 7-18 * * *"
   workflow_dispatch:         # lets you run it by hand from the Actions tab
 
@@ -20,13 +20,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pandas lxml odfpy requests pillow openpyxl
+          cache: pip                      # keeps the frequent checks quick
+      - run: pip install -r requirements.txt
       - run: python scripts/update.py
       - name: Publish new figures
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data.json recent.json data.csv og-image.png week-card.png index.html gender.json petitions.json forecast.json
+          git add data.json recent.json data.csv og-image.png week-card.png index.html gender.json petitions.json status.json
           git diff --cached --quiet && exit 0
-          git commit -m "Update crossing figures"
+          # status.json changes on every check; the message says whether anything else did
+          if git diff --cached --name-only | grep -qv '^status.json$'; then msg="Update crossing figures"; else msg="Checked for new figures"; fi
+          git commit -m "$msg"
           git pull --rebase && git push

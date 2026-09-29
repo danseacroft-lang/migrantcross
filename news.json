@@ -1,14 +1,4 @@
 {
  "checkedAt": "2026-09-29T04:23:08Z",
- "feeds": {
-  "https://feeds.bbci.co.uk/news/uk/rss.xml": 34,
-  "https://feeds.bbci.co.uk/news/politics/rss.xml": 61,
-  "https://feeds.skynews.com/feeds/rss/uk.xml": 7,
-  "https://feeds.skynews.com/feeds/rss/politics.xml": 5,
-  "https://www.theguardian.com/uk/immigration/rss": 20,
-  "https://www.telegraph.co.uk/news/rss.xml": 119,
-  "https://www.gbnews.com/feeds/news.rss": 30,
-  "https://www.gov.uk/search/news-and-communications.atom?keywords=small+boats": 20
- },
  "items": []
 }

@@ -15,7 +15,8 @@ Outputs (see publish()):
   index.html   latest figures built into the page so they show instantly,
                plus an up-to-date description and dataset date for Google
   og-image.png link preview picture; week-card.png weekly summary picture
-  gender.json, petitions.json, forecast.json: see scripts/extras.py
+  gender.json, petitions.json: see scripts/extras.py
+  status.json  tiny heartbeat the page polls: when we last checked, and which build of the figures is current
 """
 import io
 import json
@@ -212,10 +213,12 @@ PERIODS = {"labour": "2024-07-05", "burnham": "2026-07-20"}
 
 def period_totals(days):
     out = {}
+    last = date.fromisoformat(days[-1]["date"])
     for key, start in PERIODS.items():
         span = [d for d in days if d["date"] >= start]
         out[key] = {"from": start, "people": sum(d["migrants"] for d in span),
-                    "boats": sum(d["boats"] for d in span), "days": len(span)}
+                    "boats": sum(d["boats"] for d in span),
+                    "days": (last - date.fromisoformat(start)).days + 1}   # calendar days, so quiet days count
     return out
 
 
@@ -240,7 +243,7 @@ def update_page(data, recent):
     latest = last["date"]
 
     extras = {}
-    for key, name in (("gender", "gender.json"), ("petitions", "petitions.json"), ("forecast", "forecast.json")):
+    for key, name in (("gender", "gender.json"), ("petitions", "petitions.json")):
         f = ROOT / name
         if f.exists():
             extras[key] = json.loads(f.read_text())
@@ -283,6 +286,17 @@ def publish(data):
         print("Pictures skipped:", e)
 
 
+def write_status(data, now):
+    """The heartbeat: written on every check (even when nothing changed) so the page can say when we last
+    looked, and can fetch the full figures only when dataAt moves past the copy it already holds."""
+    days = data.get("days") or []
+    (ROOT / "status.json").write_text(json.dumps({
+        "checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "dataAt": data.get("checkedAt"),
+        "latest": days[-1]["date"] if days else None,
+    }, separators=(",", ":")) + "\n")
+
+
 def unchanged(data, last7, now):
     """True when the 7-day page matches what we hold and today's full update has already run."""
     held = {d["date"]: d for d in data.get("days", [])}
@@ -301,6 +315,7 @@ def main():
     # Frequent checks: stop here if nothing new has been published (no files change, nothing republished)
     if unchanged(data, last7, now):
         print("No new figures")
+        write_status(data, now)
         return
     try:
         ts = fetch_timeseries()
@@ -318,10 +333,13 @@ def main():
     data["checkedAt"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
     data["source"] = PUB
     publish(data)
+    write_status(data, now)
 
 
 if __name__ == "__main__":
     if "--publish-only" in sys.argv:   # rebuild outputs from data.json without fetching
-        publish(load())
+        data = load()
+        publish(data)
+        write_status(data, datetime.now(timezone.utc))
     else:
         main()
