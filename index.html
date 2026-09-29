@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="526 people crossed the Channel in small boats on Sun 27 September. 2026 so far: 19,135. Daily Home Office figures, records and Channel conditions.">
-<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("subClosed"))document.documentElement.classList.add("sub-off")}catch(e){}</script>
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="format-detection" content="telephone=no">
@@ -556,7 +556,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   :root:not([data-theme="light"]){--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
 }
 /* Email updates: sign-ups go straight to EmailOctopus */
-.subscribe{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px;border-radius:12px}
+.subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:12px}
+.sub-off .subscribe{display:none}
+.subscribe.leaving{animation:lift .25s ease-in both}
 .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
 .sub-icon svg{width:24px;height:24px}
 .sub-copy{display:grid;gap:2px;min-width:0}
@@ -575,7 +577,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 .sub-msg a{color:var(--blue);text-decoration:none}
 .sub-msg.ok{color:var(--green);font-weight:600}.sub-msg.err{color:var(--red)}
 .subscribe.done .sub-form{display:none}
-@media (max-width:760px){.subscribe{grid-template-columns:auto minmax(0,1fr)}.sub-form,.sub-msg{grid-column:1 / -1}}
+@media (max-width:760px){.subscribe{grid-template-columns:auto minmax(0,1fr);padding-right:16px}.sub-copy{padding-right:32px}.sub-form,.sub-msg{grid-column:1 / -1}}
 /* Share tile */
 .share-tile{gap:8px}
 .share-text{font-size:.882rem;color:var(--label);line-height:1.35}
@@ -702,6 +704,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button type="submit" id="subBtn">Subscribe</button>
     </form>
+    <button type="button" class="b-close" id="subClose" aria-label="Close the weekly roundup sign-up">
+      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    </button>
     <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
   </section>
 
@@ -1844,6 +1849,12 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       $("subBtn").disabled = false;
       f.submit();   // couldn't send from here: open EmailOctopus's own page instead
     }
+  });
+
+  // Closing the box keeps it closed on this device
+  $("subClose").addEventListener("click", ()=>{
+    store.set("subClosed", "1");
+    leave($("subscribe"), ()=>document.documentElement.classList.add("sub-off"));
   });
 
   /* =========== On this day =========== */
