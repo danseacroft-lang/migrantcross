@@ -210,8 +210,11 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 @keyframes closeIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 .b-icon svg{width:24px;height:24px}
 .b-body{display:grid;gap:2px;align-content:start;min-width:0;position:relative;z-index:1}
-/* Daily update in progress */
-.banner.sync{padding-right:14px}
+/* Daily update in progress. Closing it leaves a download button in the top bar that brings it back */
+.dl-btn .dl-arrow{animation:dlDrop 1.6s ease-in-out infinite}
+@keyframes dlDrop{0%{transform:translateY(-2.5px);opacity:0}25%{opacity:1}70%{transform:translateY(1.5px);opacity:1}100%{transform:translateY(2.5px);opacity:0}}
+.dl-btn.pop{animation:dlPop .45s cubic-bezier(.2,.9,.3,1.4) both}
+@keyframes dlPop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
 .banner.sync .b-icon{background:rgba(0,122,255,.12);color:var(--blue)}
 .spin{animation:spin 1s linear infinite;transform-origin:50% 50%}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -611,6 +614,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       </div>
     </div>
     <div class="bar-actions">
+      <button type="button" class="share-btn dl-btn" id="syncBtn" aria-label="New figures incoming. Show the notice" title="New figures incoming" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><g class="dl-arrow"><path d="M12 7.2v8.2"/><path d="M8.6 12.3l3.4 3.4 3.4-3.4"/></g></svg>
+      </button>
       <button type="button" class="theme-btn" id="themeToggle" aria-label="Appearance">
         <svg class="sun" id="iconSun" hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
         <svg class="moon" id="iconMoon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>
@@ -652,6 +658,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       <div class="b-title">New figures incoming</div>
       <div class="b-text" id="syncText">A data download is in progress. New figures are being retrieved from the Home Office. This can take up to 1 hour. Please wait.</div>
     </div>
+    <button type="button" class="b-close" id="syncClose" aria-label="Close the new figures notice">
+      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    </button>
 
   </div>
   <!-- Channel conditions notification -->
@@ -2123,9 +2132,13 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   function syncPending(){
     return new Date() >= runTime() && !haveYesterday();
   }
+  const syncClosed = () => store.get("syncClosed") === todayKey();   // closed for today only
   function syncUi(){
     const on = !!sorted.length && syncPending();
-    $("syncNote").hidden = !on;
+    $("syncNote").hidden = !on || syncClosed() || $("syncNote").classList.contains("leaving");
+    const btnOn = on && syncClosed();
+    if(btnOn && $("syncBtn").hidden){ $("syncBtn").hidden = false; $("syncBtn").classList.add("pop"); }
+    if(!btnOn) $("syncBtn").hidden = true;
     $("syncDot").hidden = !on; $("fresh").classList.toggle("syncing", on);
     if(on){
       const r = runTime();
@@ -2134,6 +2147,16 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     if(sorted.length) renderSummary();   // adds or removes "Updating now" on the top line
     return on;
   }
+  $("syncClose").addEventListener("click", ()=>{
+    store.set("syncClosed", todayKey());
+    leave($("syncNote"), ()=>{ syncUi(); $("syncBtn").focus(); });
+  });
+  $("syncBtn").addEventListener("click", ()=>{
+    store.set("syncClosed", "");
+    $("syncBtn").hidden = true;
+    syncUi();
+    $("syncNote").scrollIntoView({behavior: reduced() ? "auto" : "smooth", block:"center"});
+  });
   function checkSync(){
     if(syncUi() && !document.hidden && Date.now() - statusAt > 2*60*1000) pollStatus();
   }
