@@ -867,7 +867,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="info-pop" id="infoPop" hidden>
     <b>How the figures are released</b>
-    <p>The Home Office publishes each day's figures the following morning, usually by about 10–11am. Weekend figures sometimes arrive on Monday.</p>
+    <p>The Home Office publishes each day's figures the following day, usually around 1pm on weekdays and 9am at weekends. Some weekend figures arrive on Monday.</p>
     <p>This site checks for new figures every 30 minutes from about 8am to 7:30pm, so new figures normally appear here within half an hour of being published.</p>
     <p>The figures are provisional. The Home Office sometimes corrects a day later; corrected days are marked in the calendar. Final checked figures come in its quarterly statistics.</p>
     <a href="how-it-works.html#updates">More on how it works</a>
@@ -1129,8 +1129,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const last = sorted[sorted.length-1];
     const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
     let fresh = "Figures to " + dShort.format(parse(last.date));
-    const checked = [status && status.checkedAt, meta && meta.checkedAt].filter(Boolean).sort().pop();   // the newest we know of
-    if(checked && !isNaN(new Date(checked))) fresh += " · Last checked " + ago(checked);
+    if(syncPending()) fresh += " · In progress";   // while the day's figures are awaited
     $("freshText").textContent = fresh;
     $("fresh").classList.toggle("stale", ageDays > 3);
 
@@ -2016,12 +2015,16 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
     return t;
   }
-  // 10:30 UK time today (09:30 UTC in summer, 10:30 UTC in winter): when the Home Office usually publishes
+  // When the Home Office usually publishes, UK time. From GOV.UK's own update log for 2026: weekdays
+  // around 1:25pm (9 days in 10 between 1pm and 2:30pm), weekends around 9am. The notice starts then.
   function runTime(){
-    const r = new Date();
-    for(const h of [9, 10]){
-      r.setUTCHours(h, 30, 0, 0);
-      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === "10:30") return r;
+    const now = new Date();
+    const wd = now.toLocaleDateString("en-GB", {weekday:"short", timeZone:"Europe/London"});
+    const target = (wd === "Sat" || wd === "Sun") ? "09:00" : "13:00";
+    const r = new Date(now), h = +target.slice(0,2);
+    for(const off of [1, 0]){   // UK is UTC+1 in summer, UTC in winter
+      r.setUTCHours(h - off, 0, 0, 0);
+      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === target) return r;
     }
     return r;
   }
@@ -2100,7 +2103,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 
   // The heartbeat: status.json is a tiny file written at every check (about every 30 minutes, 8am-7:30pm UK).
   // It says when we last looked and which build of the figures is current, so we only fetch the full figures
-  // (about 35 KB compressed) when they have really changed. This keeps "Last checked" honest and brings new
+  // (about 35 KB compressed) when they have really changed. This brings new
   // figures to a tab that has been open for hours.
   let statusAt = 0;
   async function pollStatus(){
@@ -2121,7 +2124,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }catch(e){ /* try again on the next check */ }
   }
 
-  // "Data dump in progress": from 10:30 UK time until yesterday's figures are live on the page, however
+  // "Data dump in progress": from the usual release time until yesterday's figures are live on the page, however
   // late the Home Office publishes. While it shows, the page looks for the new figures every 2 minutes.
   function syncPending(){
     return new Date() >= runTime() && !haveYesterday();
@@ -2131,13 +2134,14 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     $("syncNote").hidden = !on;
     $("syncDot").hidden = !on; $("fresh").classList.toggle("syncing", on);
     if(on) $("syncTime").textContent = "Since " + ukTime(runTime());
+    if(sorted.length) renderSummary();   // adds or removes "In progress" on the top line
     return on;
   }
   function checkSync(){
     if(syncUi() && !document.hidden && Date.now() - statusAt > 2*60*1000) pollStatus();
   }
   setInterval(checkSync, 30*1000);
-  setTimeout(()=>{ checkSync(); if(!statusAt) pollStatus(); }, 1500);   // also once at load, for an exact "Last checked"
+  setTimeout(()=>{ checkSync(); if(!statusAt) pollStatus(); }, 1500);   // also once at load
 
   // Breaking news only: small boats stories from UK outlets published in the last 3 hours. Closing
   // it hides it until a newer story comes in. Checked on load and every 10 minutes.
@@ -2180,7 +2184,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   loadWeather();
 
   // Refresh while the tab is on screen: news every 10 minutes, conditions and the heartbeat every 30 minutes,
-  // "Last checked" every minute. Coming back to a tab that has been away catches up straight away,
+  // the top line every minute. Coming back to a tab that has been away catches up straight away,
   // and a tab left open for hours reloads to pick up any newer version of the page.
   const openedAt = Date.now(), MIN = 60*1000;
   setInterval(()=>{
