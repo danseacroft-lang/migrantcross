@@ -213,6 +213,8 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
 .fu-clock .fu-hour{transform-origin:60px 60px;animation:spin 144s linear infinite}
 .fu-pop p{padding-right:18px}
+.fu-pop .fu-today{margin:4px 0 0;padding-top:8px;border-top:.5px solid var(--sep);color:var(--label);font-weight:600}
+.fu-pop .fu-today:empty{display:none}
 .fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .fresh.stale i{background:var(--orange)}
 .sync-dot{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;color:var(--blue);cursor:help;animation:syncPulse 1.2s ease-in-out infinite}
@@ -913,6 +915,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       <circle cx="60" cy="60" r="5" fill="var(--blue)"/></svg>
     <b>Figure updates</b>
     <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
+    <p class="fu-today" id="fuToday"></p>
   </div>
   <div class="info-pop" id="popWeek" hidden>
     <b>Last 7 days</b>
@@ -1161,7 +1164,14 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const last = sorted[sorted.length-1];
     const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
     const freshDate = dShort.format(parse(last.date));
-    $("fuBtn").textContent = inUpdateWindow() ? "Updating Now" : "Figure Updates";
+    // Follows what's actually happening: "Updating Now" from noon until yesterday's figures are in
+    const waiting = syncPending();
+    $("fuBtn").textContent = waiting ? "Updating Now" : "Figure Updates";
+    $("fuToday").textContent = haveYesterday()
+      ? (meta && meta.checkedAt && new Date(meta.checkedAt).toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === todayKey()
+          ? "Today's figures arrived at " + ukTime(new Date(meta.checkedAt)) + "." : "Today's figures are in.")
+      : waiting ? "Today's figures aren't in yet. The site is checking for them every 15 minutes."
+                : "Today's figures aren't in yet. Checks start at 12:00.";
     $("freshText").textContent = "Figures to " + freshDate;
     $("fresh").classList.toggle("stale", ageDays > 3);
 
@@ -2034,9 +2044,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
-  // The notice can appear from 12 noon UK time (when the update job starts checking; see scripts/gate.py).
-  // Between 12:00 and 15:30 the status line reads "Updating Now" instead of "Figure Updates".
-  const START = "12:00", WINDOW_END = "15:30";
+  // The notice, and "Updating Now" on the status line, can appear from 12 noon UK time (when the update
+  // job starts checking; see scripts/gate.py) and stay until yesterday's figures are in.
+  const START = "12:00";
   const ukHM = d => d.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
   // The moment it's hh:mm UK time on the same UK day as d
   function ukAt(d, hm){
@@ -2048,7 +2058,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     return r;
   }
   const runTime = () => ukAt(new Date(), START);
-  const inUpdateWindow = () => { const t = ukHM(new Date()); return t >= START && t < WINDOW_END; };
   // Yesterday's figure is in (UK date)
   function haveYesterday(){
     if(!sorted.length) return false;
