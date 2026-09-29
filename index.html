@@ -1046,7 +1046,7 @@ h2{font:700 22px/1.2 var(--font);letter-spacing:.013em;margin:0}
     const last = sorted[sorted.length-1];
     const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
     let fresh = "Figures to " + dShort.format(parse(last.date));
-    if(meta && meta.checkedAt && !isNaN(new Date(meta.checkedAt))) fresh += " · Updated " + ago(meta.checkedAt);
+    if(meta && meta.checkedAt && !isNaN(new Date(meta.checkedAt))) fresh += " · Last checked " + ago(meta.checkedAt);
     $("freshText").textContent = fresh;
     $("fresh").classList.toggle("stale", ageDays > 3);
 
