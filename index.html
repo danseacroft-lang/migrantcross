@@ -2121,11 +2121,10 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }catch(e){ /* try again on the next check */ }
   }
 
-  // "Data sync is pending": from the daily update time (10:30 UK time) for up to an hour, or until
-  // yesterday's figure arrives. While it shows, the page looks for the new figures every 2 minutes.
+  // "Data dump in progress": from 10:30 UK time until yesterday's figures are live on the page, however
+  // late the Home Office publishes. While it shows, the page looks for the new figures every 2 minutes.
   function syncPending(){
-    const now = new Date(), run = runTime();
-    return now >= run && now - run < 60*60*1000 && !haveYesterday();
+    return new Date() >= runTime() && !haveYesterday();
   }
   function syncUi(){
     const on = !!sorted.length && syncPending();
