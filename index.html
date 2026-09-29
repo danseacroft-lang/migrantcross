@@ -192,6 +192,27 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 }
 @media (max-width:360px){.br-btn{width:40px;height:40px}}
 @media (max-width:400px){.bar-actions{gap:6px}.topbar-in{gap:8px}}
+/* Refresh Figures: a pill on wider screens, the refresh symbol on phones */
+.refresh-btn{display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 16px 0 12px;border:0;border-radius:22px;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+.refresh-btn svg{width:20px;height:20px;flex:none;color:var(--blue)}
+.refresh-btn:disabled{cursor:default}
+.refresh-btn:disabled svg{animation:spin .9s linear infinite}
+.refresh-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.refresh-btn:not(:disabled):hover{background:var(--label3)}}
+@media (max-width:600px){.refresh-btn{width:44px;padding:0;justify-content:center;border-radius:50%}.refresh-btn .rf-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+@media (max-width:360px){.refresh-btn{width:40px;height:40px}}
+/* The whole screen frosts over while the figures are refreshed */
+.frost{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px;background:color-mix(in srgb,var(--bg) 42%,transparent);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);animation:frostIn .3s ease-out both}
+.frost.out{animation:frostOut .35s ease-in both}
+@keyframes frostIn{from{opacity:0}to{opacity:1}}
+@keyframes frostOut{to{opacity:0}}
+.frost-in{display:grid;justify-items:center;gap:6px;text-align:center}
+.frost-icon{width:44px;height:44px;color:var(--blue);margin-bottom:6px}
+.frost.busy .frost-icon{animation:spin .9s linear infinite}
+.frost b{font:700 1.294rem/1.2 var(--font);letter-spacing:.01em}
+.frost span{font-size:1rem;color:var(--label2)}
+@media (prefers-reduced-transparency:reduce){.frost{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
 .theme-btn .sun{color:#FF9500}
 .theme-btn .moon{color:var(--indigo)}
 .theme-btn .auto{color:var(--blue)}
@@ -655,8 +676,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
         <svg class="auto" id="iconAuto" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>
         <span id="themeLabel">Auto</span>
       </button>
-      <button type="button" class="share-btn" id="shareBtn" aria-label="Share today's figures" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg>
+      <button type="button" class="refresh-btn" id="refreshBtn" aria-label="Refresh figures">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
+        <span class="rf-text">Refresh Figures</span>
       </button>
     </div>
   </div>
@@ -949,6 +971,14 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
     <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
   </footer>
+</div>
+
+<div class="frost" id="frost" role="status" aria-live="polite" hidden>
+    <div class="frost-in">
+      <svg class="frost-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
+      <b id="frostTitle">Checking for new figures…</b>
+      <span id="frostSub"></span>
+    </div>
 </div>
 
 <!-- Latest figures, rebuilt by scripts/update.py whenever new ones are published, so the page shows them instantly -->
@@ -1870,8 +1900,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     try{ await navigator.clipboard.writeText(shareText() + " https://channelcrossings.world/"); toast("Copied to clipboard"); }
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
   });
-  $("shMore").addEventListener("click", ()=>{ $("shareBtn").click(); });
-  $("shareBtn").addEventListener("click", async ()=>{
+  $("shMore").addEventListener("click", async ()=>{
     if(!sorted.length) return;
     const url = location.href.split("#")[0];
     const text = shareText();
@@ -1887,6 +1916,45 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       toast("Couldn't copy. Try your browser's share menu.");
     }
   });
+
+  /* =========== Refresh Figures =========== */
+  // Looks for new figures without reloading the page. The screen frosts over for 2 seconds with the result.
+  function lastUpdatedText(){
+    if(!meta || !meta.checkedAt || isNaN(new Date(meta.checkedAt))) return "";
+    const t = new Date(meta.checkedAt), day = t.toLocaleDateString("en-CA",{timeZone:"Europe/London"});
+    const when = day === todayKey() ? "" : day === yesterdayISO() ? " yesterday" : " on " + dMid.format(parse(day));
+    return "Last updated at " + ukTime(t) + when;
+  }
+  $("refreshBtn").addEventListener("click", async ()=>{
+    const btn = $("refreshBtn"), frost = $("frost");
+    if(btn.disabled) return;
+    btn.disabled = true;
+    $("frostTitle").textContent = "Checking for new figures…"; $("frostSub").textContent = "";
+    frost.classList.remove("out"); frost.classList.add("busy"); frost.hidden = false;
+    const shown = Date.now(), before = sorted.length ? sorted[sorted.length-1].date : "", builtBefore = meta && meta.checkedAt;
+    let title = "No new updates available", failed = false;
+    try{
+      const r = await fetch("data.json", {cache:"no-cache", ...limit()});
+      if(!r.ok) throw 0;
+      const d = await r.json();
+      const latest = d.days && d.days.length ? d.days[d.days.length-1].date : "";
+      if(latest > before){ load(d, true); title = "New figures are in"; }
+      else if(d.checkedAt && d.checkedAt !== builtBefore){ load(d, true); }   // same days, possibly revised figures
+    }catch(e){ title = "Couldn't check for updates"; failed = true; }
+    loadNews(); if(Date.now() - wxAt > 5*60*1000) loadWeather();   // freshen the rest too
+    $("frostTitle").textContent = title;
+    $("frostSub").textContent = failed ? "Check your connection and try again." : lastUpdatedText();
+    frost.classList.remove("busy");
+    setTimeout(()=>{
+      leaveFrost(()=>{ frost.hidden = true; btn.disabled = false; });
+    }, Math.max(0, 2000 - (Date.now() - shown)));
+  });
+  function leaveFrost(done){
+    const frost = $("frost");
+    if(reduced()){ done(); return; }
+    frost.classList.add("out");
+    frost.addEventListener("animationend", done, {once:true});
+  }
 
   /* =========== Email updates =========== */
   $("subForm").addEventListener("submit", async e=>{
@@ -2094,7 +2162,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); drawHistory(); }
     initCalc();
-    $("shareBtn").disabled = false;
     renderShare();
     $("rangeSeg").hidden = sorted.length < 15;
   }
