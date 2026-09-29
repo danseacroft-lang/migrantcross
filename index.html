@@ -662,23 +662,23 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       </div>
     </div>
     <div class="bar-actions">
+      <button type="button" class="refresh-btn" id="refreshBtn" aria-label="Refresh figures">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
+        <span class="rf-text">Refresh Figures</span>
+      </button>
+      <button type="button" class="share-btn dl-btn" id="syncBtn" aria-label="New figures incoming. Show the notice" title="New figures incoming" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><g class="dl-arrow"><path d="M12 7.2v8.2"/><path d="M8.6 12.3l3.4 3.4 3.4-3.4"/></g></svg>
+      </button>
       <a class="br-btn" href="beach-radar.html" aria-label="New: try Beach Radar">
         <span class="br-new" aria-hidden="true">NEW</span>
         <span class="br-text">Try Beach Radar</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="12" r="4.6" opacity=".55"/><g class="br-sweep"><path d="M12 12V2.8"/></g><circle cx="16.6" cy="7.6" r="1.5" fill="currentColor" stroke="none"/></svg>
       </a>
-      <button type="button" class="share-btn dl-btn" id="syncBtn" aria-label="New figures incoming. Show the notice" title="New figures incoming" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><g class="dl-arrow"><path d="M12 7.2v8.2"/><path d="M8.6 12.3l3.4 3.4 3.4-3.4"/></g></svg>
-      </button>
       <button type="button" class="theme-btn" id="themeToggle" aria-label="Appearance">
         <svg class="sun" id="iconSun" hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
         <svg class="moon" id="iconMoon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>
         <svg class="auto" id="iconAuto" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>
         <span id="themeLabel">Auto</span>
-      </button>
-      <button type="button" class="refresh-btn" id="refreshBtn" aria-label="Refresh figures">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg>
-        <span class="rf-text">Refresh Figures</span>
       </button>
     </div>
   </div>
