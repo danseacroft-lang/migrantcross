@@ -19,6 +19,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
 - `how-it-works.html` – sources, definitions, downloads and the embed code
 - `embed.html` – the small "latest figure" box other sites can embed
+- `beach-radar.html` – Beach Radar, a coming-soon page (not listed in search engines)
 - `sw.js` – offline mode: keeps a copy of the site on visitors' devices
 - `robots.txt`, `sitemap.xml` – help search engines find and index the site
 - `week-card.png` – the "Week in numbers" picture, redrawn daily for the last full week
