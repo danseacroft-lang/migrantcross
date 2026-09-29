@@ -534,13 +534,13 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   .b-close:hover span{background:var(--label3);color:var(--label)}
 }
 /* Frosted glass boxes: the page (and the flag) shows through, softly blurred, with a fine glass edge */
-.banner,.card,.tile,.tip{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
-.banner,.news,.card,.tile,.tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.banner,.card,.tile,.tip,.subscribe{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
+.banner,.news,.card,.tile,.tip,.subscribe{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .seg{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.tip{background:var(--card)}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.tip,.subscribe{background:var(--card)}}
 /* Reduce Transparency: solid boxes and bar, fainter pictures */
 @media (prefers-reduced-transparency:reduce){
-  .banner,.news,.card,.tile,.tip{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .banner,.news,.card,.tile,.tip,.subscribe{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
   .seg{-webkit-backdrop-filter:none;backdrop-filter:none}
   .topbar.scrolled{background:var(--bar-solid);-webkit-backdrop-filter:none;backdrop-filter:none}
   .flag{opacity:calc(var(--flag-o)*.5)}
@@ -555,6 +555,27 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 @media (prefers-contrast:more) and (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){--label2:rgba(235,235,245,.85);--sep:rgba(235,235,245,.45)}
 }
+/* Email updates: sign-ups go straight to EmailOctopus */
+.subscribe{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px;border-radius:12px}
+.sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
+.sub-icon svg{width:24px;height:24px}
+.sub-copy{display:grid;gap:2px;min-width:0}
+.sub-copy h2{font:600 1rem/1.25 var(--font);letter-spacing:-.024em}
+.sub-copy p{margin:0;font-size:.824rem;color:var(--label2)}
+.sub-form{display:flex;gap:8px;min-width:0}
+.sub-form input[type=email]{flex:1;min-width:0;appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 14px}
+.sub-form input[type=email]::placeholder{color:var(--label2)}
+.sub-form input[type=email]:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.sub-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.sub-form button{flex:none;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer}
+.sub-form button:disabled{opacity:.5;cursor:default}
+.sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
+.sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
+.sub-msg a{color:var(--blue);text-decoration:none}
+.sub-msg.ok{color:var(--green);font-weight:600}.sub-msg.err{color:var(--red)}
+.subscribe.done .sub-form{display:none}
+@media (max-width:760px){.subscribe{grid-template-columns:auto minmax(0,1fr)}.sub-form,.sub-msg{grid-column:1 / -1}}
 /* Share tile */
 .share-tile{gap:8px}
 .share-text{font-size:.882rem;color:var(--label);line-height:1.35}
@@ -668,6 +689,21 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div><div class="k">Since Burnham became PM<button type="button" class="info-btn" aria-label="How the Burnham total works" aria-expanded="false" aria-controls="popBur"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="7.6" r="1.25" fill="currentColor"/><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div class="v" id="burV">–</div><div class="s" id="burS">&nbsp;</div><div class="s" id="burA"></div></div>
     <div class="tile tile-fc share-tile" aria-labelledby="shareK"><div class="k" id="shareK">Share today's figures</div><div class="share-text" id="shareText">Loading the latest figures…</div><div class="share-row"><a class="sh sh-x" id="shX" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" target="_blank" rel="noopener">Facebook</a><a class="sh sh-wa" id="shWa" target="_blank" rel="noopener">WhatsApp</a><a class="sh sh-tg" id="shTg" target="_blank" rel="noopener">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div></div>
   </div>
+
+  <section class="subscribe" id="subscribe" aria-labelledby="subTitle">
+    <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
+    <div class="sub-copy">
+      <h2 id="subTitle">Get the figures by email</h2>
+      <p>The latest Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
+    </div>
+    <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
+      <label class="sr" for="subEmail">Email address</label>
+      <input type="email" id="subEmail" name="field_0" placeholder="Email address" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+      <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" id="subBtn">Subscribe</button>
+    </form>
+    <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the figures. <a href="privacy.html#email">Privacy</a></p>
+  </section>
 
   <div class="board">
   <section class="area-chart">
@@ -849,7 +885,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 30 minutes through the day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
     <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
     <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
-    <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. No personal data is stored or collected through browser cookies.</p>
+    <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
   </footer>
 </div>
 
@@ -1790,6 +1826,23 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       toast("Copied to clipboard");
     }catch(e){
       toast("Couldn't copy. Try your browser's share menu.");
+    }
+  });
+
+  /* =========== Email updates =========== */
+  $("subForm").addEventListener("submit", async e=>{
+    const f = e.currentTarget, email = $("subEmail"), msg = $("subMsg");
+    e.preventDefault();
+    if(!email.checkValidity()){ msg.className = "sub-msg err"; msg.textContent = "Enter a valid email address."; email.focus(); return; }
+    $("subBtn").disabled = true;
+    try{
+      await fetch(f.action, {method:"POST", mode:"no-cors", body:new URLSearchParams(new FormData(f)), ...limit()});
+      $("subscribe").classList.add("done");
+      msg.className = "sub-msg ok";
+      msg.textContent = "Nearly done. Check your inbox and tap the link to confirm.";
+    }catch(err){
+      $("subBtn").disabled = false;
+      f.submit();   // couldn't send from here: open EmailOctopus's own page instead
     }
   });
 
