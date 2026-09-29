@@ -888,7 +888,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   <div class="info-pop" id="infoPop" hidden>
     <b>How the figures are released</b>
     <p>The Home Office publishes each day's figures the following day, usually around 1pm on weekdays and 9am at weekends. Some weekend figures arrive on Monday.</p>
-    <p>This site checks for new figures every 30 minutes from about 8am to 7:30pm, so new figures normally appear here within half an hour of being published.</p>
+    <p>From 12 noon each day this site checks every 15 minutes until the new figures are in, so they normally appear here within 15 minutes of being published. Figures published before noon, as they often are at weekends, appear from noon.</p>
     <p>The figures are provisional. The Home Office sometimes corrects a day later; corrected days are marked in the calendar. Final checked figures come in its quarterly statistics.</p>
     <a href="how-it-works.html#updates">More on how it works</a>
   </div>
@@ -920,7 +920,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 
   <footer class="site-footer">
     <nav aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
-    <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 30 minutes through the day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+    <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
     <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
     <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
     <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
@@ -2013,31 +2013,28 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
-  // When the site next checks. The update job looks at the Home Office page every 30 minutes
-  // from 07:00 to 18:30 UTC (8am-7:30pm UK in summer). "~" because GitHub can start it a little late.
+  // The check schedule (scripts/gate.py and update.yml): from 12 noon UK time, every 15 minutes until
+  // yesterday's figures are in, then nothing until noon the next day. "~" because GitHub can start a little late.
+  const START = "12:00", LAST = "22:45";
   const ukDay = d => d.toLocaleDateString("en-GB", {timeZone:"Europe/London"});
-  function nextCheck(now){
-    const t = new Date(now);
-    t.setUTCSeconds(0, 0);
-    t.setUTCMinutes(t.getUTCMinutes() < 30 ? 30 : 60);
-    if(t.getUTCHours() < 7 || t.getUTCHours() > 18 || (t.getUTCHours() === 18 && t.getUTCMinutes() > 30)){
-      if(t.getUTCHours() > 7) t.setUTCDate(t.getUTCDate() + 1);
-      t.setUTCHours(7, 0, 0, 0);
-    }
-    return t;
-  }
-  // When the Home Office usually publishes, UK time. From GOV.UK's own update log for 2026: weekdays
-  // around 1:25pm (9 days in 10 between 1pm and 2:30pm), weekends around 9am. The notice starts then.
-  function runTime(){
-    const now = new Date();
-    const wd = now.toLocaleDateString("en-GB", {weekday:"short", timeZone:"Europe/London"});
-    const target = (wd === "Sat" || wd === "Sun") ? "09:00" : "13:00";
-    const r = new Date(now), h = +target.slice(0,2);
+  const ukHM = d => d.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
+  // The moment it's hh:mm UK time on the same UK day as d
+  function ukAt(d, hm){
+    const r = new Date(d), h = +hm.slice(0,2), m = +hm.slice(3);
     for(const off of [1, 0]){   // UK is UTC+1 in summer, UTC in winter
-      r.setUTCHours(h - off, 0, 0, 0);
-      if(r.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"}) === target) return r;
+      r.setUTCHours(h - off, m, 0, 0);
+      if(ukHM(r) === hm) return r;
     }
     return r;
+  }
+  const runTime = () => ukAt(new Date(), START);   // the notice can appear from noon
+  function nextCheck(now){
+    const tomorrow = () => ukAt(new Date(now.getTime() + DAY), START);
+    if(haveYesterday()) return tomorrow();
+    if(ukHM(now) < START) return ukAt(now, START);
+    const t = new Date(now); t.setUTCSeconds(0, 0);
+    t.setUTCMinutes(t.getUTCMinutes() - t.getUTCMinutes() % 15 + 15);
+    return ukDay(t) === ukDay(now) && ukHM(t) <= LAST ? t : tomorrow();
   }
   // Yesterday's figure is in (UK date)
   function haveYesterday(){
@@ -2113,7 +2110,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
   })();
 
-  // The heartbeat: status.json is a tiny file written at every check (about every 30 minutes, 8am-7:30pm UK).
+  // The heartbeat: status.json is a tiny file written at every check (every 15 minutes from noon UK time until the figures are in).
   // It says when we last looked and which build of the figures is current, so we only fetch the full figures
   // (about 35 KB compressed) when they have really changed. This brings new
   // figures to a tab that has been open for hours.

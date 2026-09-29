@@ -1,8 +1,8 @@
 """Fetch the Home Office small boat figures and rebuild the site's data files.
 
-Runs every 30 minutes through the day from .github/workflows/update.yml. Each run
-reads the 7-day page and stops unless there are new or changed figures, or today's
-full update hasn't run yet.
+Runs from .github/workflows/update.yml every 15 minutes from 12 noon UK time until
+yesterday's figures are in (scripts/gate.py decides). Each run reads the 7-day page and
+stops unless there are new or changed figures, or today's full update hasn't run yet.
 Two sources, both provisional Home Office data:
   1. The weekly time-series spreadsheet (.ods), daily figures since 2018.
   2. The "last 7 days" page, updated every day.

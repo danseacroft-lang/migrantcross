@@ -2,10 +2,11 @@ name: Update crossing figures
 
 on:
   schedule:
-    # Every 30 minutes, 07:00-18:30 UTC (8am-7:30pm UK in summer, 7am-6:30pm in winter).
-    # Most runs just look at the Home Office page and record the check in status.json.
-    - cron: "*/30 7-18 * * *"
-  workflow_dispatch:         # lets you run it by hand from the Actions tab
+    # Every 15 minutes, 11:00-21:45 UTC (noon to 10:45pm UK in summer, 11am to 9:45pm in winter).
+    # scripts/gate.py stops each run straight away unless it's after noon UK time and yesterday's
+    # figures aren't in yet, so once they're published there are no more checks until noon tomorrow.
+    - cron: "*/15 11-21 * * *"
+  workflow_dispatch:         # lets you run it by hand from the Actions tab (always checks)
 
 permissions:
   contents: write
@@ -17,13 +18,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Is a check due?
+        id: gate
+        run: python3 scripts/gate.py
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: pip                      # keeps the frequent checks quick
-      - run: pip install -r requirements.txt
-      - run: python scripts/update.py
+          cache: pip                      # keeps the checks quick
+      - if: steps.gate.outputs.run == 'true'
+        run: pip install -r requirements.txt
+      - if: steps.gate.outputs.run == 'true'
+        run: python scripts/update.py
       - name: Publish new figures
+        if: steps.gate.outputs.run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
