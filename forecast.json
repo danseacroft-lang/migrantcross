@@ -1,22 +1,9 @@
 {
  "days": [
   {
-   "date": "2026-09-28",
-   "band": "moderate",
-   "wind": 8,
-   "wave": 0.6,
-   "low": 0,
-   "typical": 0,
-   "high": 13,
-   "chance": 0.26,
-   "basis": 57,
-   "window": 120,
-   "afterRough": false
-  },
-  {
    "date": "2026-09-29",
    "band": "moderate",
-   "wind": 17,
+   "wind": 12,
    "wave": 0.5,
    "low": 0,
    "typical": 0,
@@ -25,7 +12,20 @@
    "basis": 56,
    "window": 120,
    "afterRough": false
+  },
+  {
+   "date": "2026-09-30",
+   "band": "rough",
+   "wind": 19,
+   "wave": 0.9,
+   "low": 0,
+   "typical": 0,
+   "high": 0,
+   "chance": 0.0,
+   "basis": 28,
+   "window": 120,
+   "afterRough": false
   }
  ],
- "updatedAt": "2026-09-28T11:03:00Z"
+ "updatedAt": "2026-09-29T07:10:42Z"
 }
