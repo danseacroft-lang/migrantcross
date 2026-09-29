@@ -178,6 +178,20 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .theme-btn{position:relative;display:inline-flex;align-items:center;gap:6px;appearance:none;border:0;cursor:pointer;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;height:44px;padding:0 16px 0 12px;border-radius:22px;touch-action:manipulation}
 .theme-btn::after{content:"";position:absolute;inset:-5px 0}
 .theme-btn svg{width:20px;height:20px;flex:none}
+/* "NEW Try Beach Radar": a pill on wider screens, the radar symbol with a NEW tag on phones */
+.br-btn{position:relative;display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 14px 0 8px;border-radius:22px;background:var(--fill);color:var(--label);text-decoration:none;font:600 .882rem/1 var(--font);letter-spacing:-.016em;white-space:nowrap}
+.br-btn svg{width:20px;height:20px;flex:none;color:var(--green)}
+.br-btn .br-sweep{transform-origin:12px 12px;animation:spin 3s linear infinite}
+.br-new{background:var(--green);color:#fff;font:700 .647rem/1 var(--font);letter-spacing:.04em;padding:4px 6px;border-radius:999px}
+.br-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.br-btn:hover{background:var(--label3)}}
+@media (max-width:600px){
+  .br-btn{width:44px;padding:0;justify-content:center}
+  .br-btn .br-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .br-new{position:absolute;top:-3px;right:-6px;padding:2px 4px;font-size:.53rem;box-shadow:0 0 0 2px var(--bg)}
+}
+@media (max-width:360px){.br-btn{width:40px;height:40px}}
+@media (max-width:400px){.bar-actions{gap:6px}.topbar-in{gap:8px}}
 .theme-btn .sun{color:#FF9500}
 .theme-btn .moon{color:var(--indigo)}
 .theme-btn .auto{color:var(--blue)}
@@ -516,7 +530,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 .site-footer a{color:var(--blue);text-decoration:none}
 .site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
 .site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
-.site-footer .br-link{display:inline-grid;place-items:center;min-width:44px;min-height:44px;color:var(--label3);font-size:.706rem;font-weight:600}   /* quiet link to the unlisted Beach Radar page */
 
 @media (max-width:600px){
   .topbar-in{min-height:56px;gap:8px}
@@ -615,6 +628,11 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       </div>
     </div>
     <div class="bar-actions">
+      <a class="br-btn" href="beach-radar.html" aria-label="New: try Beach Radar">
+        <span class="br-new" aria-hidden="true">NEW</span>
+        <span class="br-text">Try Beach Radar</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="12" r="4.6" opacity=".55"/><g class="br-sweep"><path d="M12 12V2.8"/></g><circle cx="16.6" cy="7.6" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </a>
       <button type="button" class="share-btn dl-btn" id="syncBtn" aria-label="New figures incoming. Show the notice" title="New figures incoming" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><g class="dl-arrow"><path d="M12 7.2v8.2"/><path d="M8.6 12.3l3.4 3.4 3.4-3.4"/></g></svg>
       </button>
@@ -906,7 +924,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
     <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0).</p>
     <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
-    <a class="br-link" href="beach-radar.html" aria-label="Beach Radar preview">BR</a>
   </footer>
 </div>
 
