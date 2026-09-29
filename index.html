@@ -198,10 +198,21 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .theme-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.theme-btn:hover{background:var(--label3)}}
 .fresh{display:flex;align-items:center;gap:6px;font-size:.765rem;color:var(--label2);min-width:0}
-#freshText,#nextText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#nextText{color:var(--blue);font-weight:590;animation:nextFlash 1.4s ease-in-out 2}
-#nextText.out{opacity:0;transition:opacity .4s ease}
-@keyframes nextFlash{0%,100%{opacity:1}50%{opacity:.25}}
+#freshText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.fu-sep{flex:none}
+@media (max-width:600px){#freshText,.fu-sep{display:none}}   /* phones: the date is in the first box just below */
+.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;color:var(--blue);font-weight:590;white-space:nowrap;cursor:pointer}
+.fu-btn::after{content:"";position:absolute;inset:-3px -6px -14px}   /* a comfortable tap target, reaching down but not over the site name */
+.fu-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+@media (hover:hover){.fu-btn:hover{text-decoration:underline}}
+/* Figure updates pop-up: a clock faded into its corner */
+.fu-pop{overflow:hidden;isolation:isolate}
+.fu-pop > :not(.fu-clock){position:relative;z-index:1}
+.fu-clock{position:absolute;right:-22px;bottom:-26px;width:124px;height:124px;z-index:0;color:var(--label2);opacity:.28;
+  -webkit-mask-image:radial-gradient(circle at 70% 70%,#000 40%,transparent 75%);mask-image:radial-gradient(circle at 70% 70%,#000 40%,transparent 75%)}
+.fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
+.fu-clock .fu-hour{transform-origin:60px 60px;animation:spin 144s linear infinite}
+.fu-pop p{padding-right:18px}
 .fresh i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none}
 .fresh.stale i{background:var(--orange)}
 .sync-dot{flex:none;display:inline-grid;place-items:center;width:15px;height:15px;color:var(--blue);cursor:help;animation:syncPulse 1.2s ease-in-out infinite}
@@ -624,7 +635,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       <svg viewBox="0 0 400 400" role="img" aria-label="Channel Crossings logo"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg>
       <div class="brand-text">
         <h1>Channel Crossings</h1>
-        <span class="fresh" id="fresh"><i></i><span class="sync-dot" id="syncDot" role="img" aria-label="Updating now: new figures incoming" title="Updating now: new figures incoming" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg></span><span id="freshText">Loading figures…</span><span id="nextText" role="status" hidden></span></span>
+        <span class="fresh" id="fresh"><i></i><span class="sync-dot" id="syncDot" role="img" aria-label="New figures incoming" title="New figures incoming" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg></span><span id="freshText">Loading figures…</span><span class="fu-sep" aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span>
       </div>
     </div>
     <div class="bar-actions">
@@ -893,6 +904,16 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <a href="how-it-works.html#updates">More on how it works</a>
   </div>
 
+  <div class="info-pop fu-pop" id="popFU" hidden>
+    <svg class="fu-clock" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="fuFace" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--fill)"/></radialGradient></defs>
+      <circle cx="60" cy="60" r="54" fill="url(#fuFace)" stroke="currentColor" stroke-width="5"/>
+      <g stroke="currentColor" stroke-linecap="round"><path d="M60 13v10M60 97v10M13 60h10M97 60h10" stroke-width="5"/><path d="M83.5 19.3l-3 5.2M100.7 36.5l-5.2 3M100.7 83.5l-5.2-3M83.5 100.7l-3-5.2M36.5 100.7l3-5.2M19.3 83.5l5.2-3M19.3 36.5l5.2 3M36.5 19.3l3 5.2" stroke-width="3"/></g>
+      <path class="fu-hour" d="M60 60V34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+      <path class="fu-min" d="M60 60h30" stroke="var(--blue)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="60" cy="60" r="5" fill="var(--blue)"/></svg>
+    <b>Figure updates</b>
+    <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
+  </div>
   <div class="info-pop" id="popWeek" hidden>
     <b>Last 7 days</b>
     <p>The total for the seven most recent days of Home Office figures, including days with no crossings. It ends on the latest day published, so until the morning's figures arrive it runs up to the day before yesterday.</p>
@@ -1139,9 +1160,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   function renderSummary(){
     const last = sorted[sorted.length-1];
     const ageDays = Math.round((Date.now()-parse(last.date).getTime())/864e5);
-    let fresh = "Figures to " + dShort.format(parse(last.date));
-    if(syncPending()) fresh += " · Updating now";   // while the day's figures are awaited
-    $("freshText").textContent = fresh;
+    const freshDate = dShort.format(parse(last.date));
+    $("fuBtn").textContent = inUpdateWindow() ? "Updating Now" : "Figure Updates";
+    $("freshText").textContent = "Figures to " + freshDate;
     $("fresh").classList.toggle("stale", ageDays > 3);
 
     // "Yesterday's" only when the latest figures really are for yesterday (the Home Office sometimes skips a day)
@@ -1806,7 +1827,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     function open(btn, pop){ clearTimeout(hideT); if(cur && cur.btn !== btn) close(); pop.hidden = false; btn.setAttribute("aria-expanded","true"); cur = {btn, pop}; place(btn, pop); }
     const later = () => { clearTimeout(hideT); hideT = setTimeout(close, 180); };
     const mouse = e => e.pointerType === "mouse";
-    document.querySelectorAll(".info-btn").forEach(btn=>{
+    document.querySelectorAll(".info-btn, .fu-btn").forEach(btn=>{
       const pop = $(btn.getAttribute("aria-controls")); if(!pop) return;
       btn.addEventListener("pointerenter", e=>{ if(mouse(e)) open(btn, pop); });
       btn.addEventListener("pointerleave", e=>{ if(mouse(e)) later(); });
@@ -2013,10 +2034,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     });
   }
 
-  // The check schedule (scripts/gate.py and update.yml): from 12 noon UK time, every 15 minutes until
-  // yesterday's figures are in, then nothing until noon the next day. "~" because GitHub can start a little late.
-  const START = "12:00", LAST = "22:45";
-  const ukDay = d => d.toLocaleDateString("en-GB", {timeZone:"Europe/London"});
+  // The notice can appear from 12 noon UK time (when the update job starts checking; see scripts/gate.py).
+  // Between 12:00 and 15:30 the status line reads "Updating Now" instead of "Figure Updates".
+  const START = "12:00", WINDOW_END = "15:30";
   const ukHM = d => d.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
   // The moment it's hh:mm UK time on the same UK day as d
   function ukAt(d, hm){
@@ -2027,34 +2047,12 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
     return r;
   }
-  const runTime = () => ukAt(new Date(), START);   // the notice can appear from noon
-  function nextCheck(now){
-    const tomorrow = () => ukAt(new Date(now.getTime() + DAY), START);
-    if(haveYesterday()) return tomorrow();
-    if(ukHM(now) < START) return ukAt(now, START);
-    const t = new Date(now); t.setUTCSeconds(0, 0);
-    t.setUTCMinutes(t.getUTCMinutes() - t.getUTCMinutes() % 15 + 15);
-    return ukDay(t) === ukDay(now) && ukHM(t) <= LAST ? t : tomorrow();
-  }
+  const runTime = () => ukAt(new Date(), START);
+  const inUpdateWindow = () => { const t = ukHM(new Date()); return t >= START && t < WINDOW_END; };
   // Yesterday's figure is in (UK date)
   function haveYesterday(){
     if(!sorted.length) return false;
     return sorted[sorted.length-1].date >= yesterdayISO();
-  }
-  function nextUpdateText(){
-    const now = new Date(), t = nextCheck(now);
-    return "Next check: " + (ukDay(t) === ukDay(now) ? "~" + ukTime(t) : "tomorrow ~" + ukTime(t));
-  }
-  let nextShown = false;
-  function flashNextUpdate(){
-    if(syncPending()) return;   // the day's figures are already being awaited: "Updating now" says it all
-    const next = $("nextText"), cur = $("freshText");
-    next.textContent = nextUpdateText();
-    cur.hidden = true; next.hidden = false; next.classList.remove("out");
-    setTimeout(()=>{
-      next.classList.add("out");
-      setTimeout(()=>{ next.hidden = true; cur.hidden = false; }, 400);
-    }, 5000);
   }
 
   let seenChecked = false;
@@ -2089,7 +2087,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     initCalc();
     $("shareBtn").disabled = false;
     renderShare();
-    if(!nextShown){ nextShown = true; setTimeout(flashNextUpdate, 1200); }
     $("rangeSeg").hidden = sorted.length < 15;
   }
 
@@ -2150,7 +2147,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       const r = runTime();
       $("syncTime").textContent = "Since " + ukTime(r);
     }
-    if(sorted.length) renderSummary();   // adds or removes "Updating now" on the top line
+    if(sorted.length) renderSummary();
     return on;
   }
   $("syncClose").addEventListener("click", ()=>{
