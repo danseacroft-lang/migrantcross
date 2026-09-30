@@ -41,3 +41,18 @@ jobs:
           if git diff --cached --name-only | grep -qv '^status.json$'; then msg="Update crossing figures"; else msg="Checked for new figures"; fi
           git commit -m "$msg"
           git pull --rebase && git push
+      - name: Post to Facebook
+        # Posts each new day's figures once (fb.json remembers the last one). Does nothing until the
+        # FB_PAGE_ID and FB_PAGE_TOKEN secrets are set. Runs after publishing, so a failed post never
+        # holds up the figures, and a failure emails you (usually an expired Page token).
+        if: steps.gate.outputs.run == 'true'
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+        run: |
+          python scripts/facebook.py
+          [ -f fb.json ] || exit 0
+          git add fb.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Posted the latest figures to Facebook"
+          git pull --rebase && git push
