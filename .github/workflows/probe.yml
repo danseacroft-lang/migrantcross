@@ -22,7 +22,7 @@ jobs:
           days = json.load(open("data.json"))["days"]
           print("dataset:", extras.dataset_url())
           wb = extras.workbook()
-          for ws in wb.worksheets:
+          for ws in []:
               heads = []
               for i, r in enumerate(ws.iter_rows(values_only=True)):
                   if i > 12: break
@@ -34,6 +34,12 @@ jobs:
               except Exception:
                   print(name, "FAILED"); traceback.print_exc()
           print("pages:", extras.returns_pages())
+          import pandas as pd, io, requests
+          u = extras.returns_pages()[0][1]
+          html = requests.get(u, headers=extras.H, timeout=60).text
+          i = html.find("<table"); print("RAWTABLE", html[i:i+1500])
+          for t in pd.read_html(io.StringIO(html)):
+              print("COLS", list(t.columns)); print(t.head(3).to_string())
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
