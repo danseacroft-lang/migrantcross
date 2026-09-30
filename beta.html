@@ -20,7 +20,7 @@
   --blue:#007AFF; --green:#34C759; --green-t:#248A3D; --orange:#FF9500; --red:#FF3B30; --red-t:#D70015; --indigo:#5856D6; --teal:#30B0C7; --pink:#FF2D55;
   --glass:rgba(255,255,255,.72); --bar:rgba(246,246,248,.78);
   --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07);
-  --sea1:#6CB8F0; --sea2:#2E86D1; --sea3:#1B64A8; --land:#E4EBDD; --land2:#CBD8C1; --coast:rgba(255,255,255,.9); --maptext:rgba(40,52,40,.55); --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
+  --sea1:#6CB8F0; --sea2:#2E86D1; --sea3:#1B64A8; --land:#E4EBDD; --land2:#CBD8C1; --coast:rgba(255,255,255,.9); --maptext:rgba(40,52,40,.55); --cloud:#E3E8EF; --cloud-edge:#AEB7C4; --shelf:#9FD6FA; --town:#33413A; --halo:rgba(255,255,255,.8); --dot:#5E6B62;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-foam:#FFFFFF; --ta-tube1:#9AA3AF; --ta-tube2:#5B6472; --ta-tube3:#3A414C; --ta-rope:#E5E7EB; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;
@@ -32,7 +32,7 @@
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45);
-  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0); --shelf:#1B4E78; --town:#D5DED6; --halo:rgba(0,0,0,.6); --dot:#AEB9B0;
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
 }}
 :root[data-theme="dark"]{
@@ -42,7 +42,7 @@
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45);
-  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0); --shelf:#1B4E78; --town:#D5DED6; --halo:rgba(0,0,0,.6); --dot:#AEB9B0;
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
 }
 *{box-sizing:border-box}
@@ -85,7 +85,12 @@ button{font:inherit}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 42%,rgba(0,0,0,.55) 80%,rgba(0,0,0,.62) 100%)}
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff}
-.large-title{position:absolute;z-index:2;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;align-items:center;gap:10px}
+.large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;align-items:center;gap:10px;pointer-events:none}
+.large-title > *{pointer-events:auto}
+.live-chip{margin-left:auto;min-height:34px;padding:0 12px 0 11px}
+.live-chip i.live{background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.3);animation:pulse 1.6s ease-in-out infinite}
+.lc-short{display:none}
+@media (max-width:600px){.large-title .pill-beta,.lc-long{display:none}.lc-short{display:inline}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 .big{font:700 clamp(4.6rem,17vw,9.5rem)/.95 var(--round);letter-spacing:-.02em;margin:6px 0 2px;text-shadow:0 4px 30px rgba(0,0,0,.35)}
@@ -148,6 +153,19 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
 .lx-axis{display:flex;justify-content:space-between;font-size:.647rem;color:var(--label2);font-weight:600;margin-bottom:12px}
 .lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
+.mp-pop .wp-stats{grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0 10px}
+.mp-live{display:flex;align-items:center;gap:7px;font-weight:600;font-size:.824rem;color:var(--label)}
+.mp-live i{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.25);animation:pulse 1.6s ease-in-out infinite}
+.mp-boats{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:10px 0 2px;border-top:.5px solid var(--sep)}
+.mp-boats svg{width:30px;height:30px}
+.info-pop .mp-boats p{margin:0}
+.info-pop .mp-boats b{display:inline;color:var(--label);margin:0}
+.wp-stats .arrow{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-left:3px;color:var(--blue)}
+/* boat details, shown on hover or tap */
+.boat-tip{width:min(272px,calc(100vw - 32px));padding:14px 15px;border-radius:16px;z-index:40}
+.boat-tip .bt-day{display:block;color:var(--label2);font-size:.765rem;margin:-2px 0 0}
+.boat-tip .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin:10px 0 8px}
+.boat-tip p{font-size:.765rem;margin:0}
 .fu-pop > :not(.fu-clock){position:relative;z-index:1}
 .fu-clock{position:absolute;right:-22px;bottom:-26px;width:124px;height:124px;z-index:0;color:var(--label2);opacity:.28}
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
@@ -158,8 +176,22 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .fu-pop .fu-today:empty{display:none}
 .scroll-cue{position:absolute;z-index:2;left:50%;bottom:14px;translate:-50% 0;width:26px;height:26px;color:#fff;opacity:.7;animation:cue 2.2s ease-in-out infinite}
 @keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(6px);opacity:.35}}
-.boat{transition:opacity .6s ease}
 .country rect{fill:rgba(0,0,0,.34)}
+#veil{opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.hero.night #veil{opacity:.4}
+.town circle{fill:var(--dot);stroke:#fff;stroke-width:1.6}
+.town text{font:600 12px var(--font);letter-spacing:-.01em;fill:var(--town);paint-order:stroke;stroke:var(--halo);stroke-width:3.2px;stroke-linejoin:round}
+.hero.night .town circle{fill:#FFD66B;stroke:#FFF3C4;filter:drop-shadow(0 0 5px #FFB300)}
+.hero.night .town text{fill:#E9EEF5;stroke:rgba(0,0,0,.6)}
+.strait path{stroke:#fff;stroke-width:1.6;stroke-dasharray:5 6;opacity:.75;fill:none}
+.strait rect{fill:rgba(0,0,0,.34)}
+.strait text{fill:#fff;font:700 11px var(--font)}
+#map.tall .w{display:none}
+.boat{cursor:pointer;transition:opacity .6s ease}
+.boat .hit{fill:transparent}
+.boat.sel .hull{stroke:#fff;stroke-width:2.2}
+.boat.sel .ring{opacity:1}
+.boat .ring{opacity:0;fill:none;stroke:#fff;stroke-width:2;transition:opacity .2s}
 .country text{fill:#fff;font:700 12px/1 var(--font);letter-spacing:2px}
 
 /* ------------------------------------------------------------ layout */
@@ -384,36 +416,31 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
-  <div class="hero-map" id="heroMap" aria-hidden="true">
-    <svg viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid slice" id="map">
+  <div class="hero-map" id="heroMap">
+    <svg viewBox="0 0 1000 686" preserveAspectRatio="xMidYMid slice" id="map">
       <defs>
         <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sea2)"/><stop offset=".5" stop-color="var(--sea1)"/><stop offset="1" stop-color="var(--sea2)"/></linearGradient>
-        <radialGradient id="glint" cx="72%" cy="45%" r="45%"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-        <pattern id="ripple" width="80" height="26" patternUnits="userSpaceOnUse"><path d="M0 13q10-6 20 0t20 0 20 0 20 0" fill="none" stroke="#fff" stroke-opacity=".09" stroke-width="1.4"/></pattern>
+        <radialGradient id="glint" cx="45%" cy="45%" r="45%"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--land)"/><stop offset="1" stop-color="var(--land2)"/></linearGradient>
+        <pattern id="ripple" width="80" height="26" patternUnits="userSpaceOnUse"><path id="ripplePath" d="M0 13q10-6 20 0t20 0 20 0 20 0" fill="none" stroke="#fff" stroke-opacity=".1" stroke-width="1.4"/></pattern>
         <filter id="soft"><feGaussianBlur stdDeviation="1.2"/></filter>
       </defs>
-      <rect width="1000" height="620" fill="url(#seaG)"/>
-      <rect id="ripples" x="-80" width="1160" height="620" fill="url(#ripple)"/>
-      <rect width="1000" height="620" fill="url(#glint)"/>
-      <!-- England (top) -->
-      <path d="M0 0H1000V118C960 124 930 146 896 150 866 154 846 138 818 142 776 148 748 170 700 168 640 166 600 186 540 184 470 182 420 204 350 196 280 188 230 206 160 200 100 195 50 210 0 206Z" fill="var(--land)"/>
-      <path d="M1000 118C960 124 930 146 896 150 866 154 846 138 818 142 776 148 748 170 700 168 640 166 600 186 540 184 470 182 420 204 350 196 280 188 230 206 160 200 100 195 50 210 0 206" fill="none" stroke="var(--coast)" stroke-width="3" stroke-linecap="round"/>
-      <!-- France (bottom) -->
-      <path d="M0 620H1000V430C972 436 950 426 924 430 900 434 884 424 866 436 840 452 800 470 760 478 700 490 650 488 590 500 520 514 460 510 400 522 320 538 250 534 180 546 110 556 60 552 0 560Z" fill="var(--land)"/>
-      <path d="M1000 430C972 436 950 426 924 430 900 434 884 424 866 436 840 452 800 470 760 478 700 490 650 488 590 500 520 514 460 510 400 522 320 538 250 534 180 546 110 556 60 552 0 560" fill="none" stroke="var(--coast)" stroke-width="3" stroke-linecap="round"/>
-      <g font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="var(--maptext)">
-        <circle cx="872" cy="146" r="4" fill="var(--maptext)"/><text x="846" y="128">Dover</text>
-        <circle cx="905" cy="430" r="4" fill="var(--maptext)"/><text x="884" y="458">Calais</text>
-        <g id="boulogne"><circle cx="704" cy="484" r="4" fill="var(--maptext)"/><text x="672" y="512">Boulogne</text></g>
-      </g>
-      <!-- country labels: placed by fitMap() so both are always in view -->
+      <rect width="1000" height="686" fill="url(#seaG)"/>
+      <rect width="1000" height="686" fill="url(#ripple)"/>
+      <rect width="1000" height="686" fill="url(#glint)"/>
+      <!-- real coastlines (Natural Earth, 1:10m), with a band of shallower water along the shore -->
+      <path d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z" fill="none" stroke="var(--shelf)" stroke-width="18" stroke-linejoin="round" opacity=".55"/>
+      <path d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z" fill="url(#landG)" stroke="var(--coast)" stroke-width="2" stroke-linejoin="round"/>
+      <rect id="veil" width="1000" height="686" fill="#030A1C"/>
+      <g class="w strait"><path d="M322.8 227.6L465.3 443.5"/><g transform="translate(394.1 335.6)"><rect x="-31" y="-11" width="62" height="22" rx="11"/><text y="4" text-anchor="middle">21 miles</text></g></g>
+      <g class="town"><circle cx="322.8" cy="227.6" r="4"/><text x="330.8" y="231.6" text-anchor="start">Dover</text></g><g class="town"><circle cx="369.2" cy="148.4" r="4"/><text x="377.2" y="152.4" text-anchor="start">Deal</text></g><g class="town w"><circle cx="247.1" cy="266.5" r="4"/><text x="239.1" y="258.5" text-anchor="end">Folkestone</text></g><g class="town"><circle cx="609.8" cy="375.3" r="4"/><text x="601.8" y="367.3" text-anchor="end">Calais</text></g><g class="town w"><circle cx="465.3" cy="443.5" r="4"/><text x="473.3" y="447.5" text-anchor="start">Cap Gris-Nez</text></g><g class="town w"><circle cx="481.4" cy="563.3" r="4"/><text x="489.4" y="567.3" text-anchor="start">Boulogne-sur-Mer</text></g><g class="town w"><circle cx="751.6" cy="345.7" r="4"/><text x="751.6" y="365.7" text-anchor="start">Gravelines</text></g><g class="town w"><circle cx="882.5" cy="305.8" r="4"/><text x="882.5" y="325.8" text-anchor="start">Dunkirk</text></g>
+      <g id="boats"></g>
       <g class="country" id="cEN"><rect/><text>ENGLAND</text></g>
       <g class="country" id="cFR"><rect/><text>FRANCE</text></g>
-      <g id="boats"></g>
     </svg>
   </div>
 
-  <div class="large-title"><h1>Channel Crossings</h1><span class="pill-beta">Beta</span></div>
+  <div class="large-title"><h1>Channel Crossings</h1><span class="pill-beta">Beta</span><button type="button" class="chip live-chip" id="chipMap" aria-expanded="false" aria-controls="popMap"><i class="live"></i><span><span class="lc-long">Live conditions</span><span class="lc-short">Live</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker">Loading the latest figures…</div>
@@ -442,6 +469,10 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 </div>
 
 <div class="info-pop wx-pop" id="popWx" role="dialog" aria-label="Channel conditions" hidden></div>
+
+<div class="info-pop lx-pop mp-pop" id="popMap" role="dialog" aria-label="About this map" hidden></div>
+
+<div class="info-pop boat-tip" id="boatTip" role="tooltip" hidden></div>
 
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 
@@ -659,20 +690,16 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
 
-  /* ---------------------------------------------------- the live Channel: one dinghy for every boat yesterday */
-  const boatsG = $("boats"), ripples = $("ripples"), NS = "http://www.w3.org/2000/svg";
-  // Tall screens: frame the narrows between Dover and Calais, where the boats cross
-  // Wide screens keep Dover and Calais in view (anchored right). England and France are labelled wherever they show.
+  /* ---------------------------------------------------- the Channel: a real map, live conditions, one dinghy per boat */
+  const boatsG = $("boats"), map = $("map"), NS = "http://www.w3.org/2000/svg";
+  // Tall screens frame the narrows between Folkestone and Calais. England and France are labelled wherever they show.
   function fitMap(){
     const W = hero.clientWidth, H = hero.clientHeight; if(!W || !H) return;
-    const tall = W < H * .9, vb = tall ? [560, 30, 440, 590] : [0, 0, 1000, 620], map = $("map");
-    map.setAttribute("viewBox", vb.join(" "));
-    map.setAttribute("preserveAspectRatio", (tall ? "xMid" : "xMax") + "YMid slice");
-    const k = Math.max(W / vb[2], H / vb[3]), vw = W / k, vh = H / k;
-    const x0 = tall ? vb[0] + (vb[2] - vw) / 2 : vb[0] + vb[2] - vw, y0 = vb[1] + (vb[3] - vh) / 2, pad = 20 / k;
-    $("boulogne").style.display = tall ? "none" : "";
-    label("cEN", tall ? x0 + pad : 610, tall ? y0 + 80 / k : Math.max(92, y0 + 70 / k), "start");
-    label("cFR", x0 + vw - pad, 505, "end");
+    const tall = W < H * .9, vb = tall ? [210, 0, 480, 686] : [0, 0, 1000, 686];
+    map.setAttribute("viewBox", vb.join(" ")); map.classList.toggle("tall", tall);
+    const k = Math.max(W / vb[2], H / vb[3]), vw = W / k, vh = H / k, x0 = vb[0] + (vb[2] - vw) / 2, y0 = vb[1] + (vb[3] - vh) / 2, pad = 20 / k;
+    label("cEN", x0 + pad, y0 + 100 / k, "start");
+    label("cFR", x0 + vw - pad, tall ? 505 : 540, "end");
   }
   function label(id, x, y, anchor){
     const g = $(id), t = g.querySelector("text"), r = g.querySelector("rect");
@@ -682,46 +709,98 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     r.setAttribute("width", (b.width + 18).toFixed(1)); r.setAttribute("height", (b.height + 10).toFixed(1)); r.setAttribute("rx", ((b.height + 10) / 2).toFixed(1));
   }
   fitMap(); addEventListener("resize", fitMap);
-  let boats = [], lastT = 0;
-  // The two coastlines, so each boat sets off just off France and lands on England
-  const FR = [[560,500],[600,500],[650,488],[700,490],[760,478],[800,470],[840,452],[866,436],[900,432],[950,428],[1000,430]];
-  const EN = [[440,190],[470,182],[540,184],[600,186],[640,166],[700,168],[748,170],[776,148],[818,142],[866,154],[896,150],[930,146],[1000,118]];
-  const coastY = (pts, x) => { for(let i = 1; i < pts.length; i++){ if(x <= pts[i][0]){ const [x0,y0] = pts[i-1], [x1,y1] = pts[i]; return y0 + (y1 - y0) * (x - x0) / (x1 - x0); } } return pts[pts.length-1][1]; };
+
+  // Just off the beaches boats leave from, and off the Kent coast (map units; every point checked to be at sea)
+  const LAUNCH = [[851.0, 269.7], [738.4, 304.5], [545.6, 362.3], [489.3, 416.9], [458.7, 526.9], [442.8, 568.7], [445.2, 635.6]], LANDING = [[389.7, 150.5], [340.0, 248.2], [252.6, 285.8], [202.8, 298.4], [161.4, 408.4]];
+  let boats = [], boatDay = null, lastT = 0;
   function makeBoats(n){
-    boatsG.textContent = ""; boats = [];
+    hideTip(true); boatsG.textContent = ""; boats = [];
     for(let i = 0; i < n; i++){
-      const g = document.createElementNS(NS, "g"); g.setAttribute("class", "boat");
-      g.innerHTML = '<path class="wake" d="M0 0 L-5 26 L5 26 Z" fill="#fff" opacity=".35" filter="url(#soft)"/>'
-        + '<rect x="-7" y="-13" width="14" height="24" rx="7" fill="#FF9500" stroke="#fff" stroke-width="1.6"/>'
-        + '<circle cx="0" cy="-4" r="2.2" fill="#6B3B00" opacity=".55"/><circle cx="0" cy="3" r="2.2" fill="#6B3B00" opacity=".55"/>';
+      const g = document.createElementNS(NS, "g"); g.setAttribute("class", "boat"); g.dataset.i = i;
+      // a grey inflatable with people in orange life jackets
+      g.innerHTML = '<circle class="hit" r="24"/><circle class="ring" r="20"/><path d="M0 0 L-6 30 L6 30 Z" fill="#fff" opacity=".35" filter="url(#soft)"/>'
+        + '<rect class="hull" x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472" stroke="#E5E7EB" stroke-width="1.2"/>'
+        + '<rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/>'
+        + [-7, -2.5, 2, 6.5].map(y => '<circle cx="' + (y % 2 ? -1.8 : 1.8) + '" cy="' + y + '" r="2.1" fill="#FF9500"/>').join("");
       boatsG.append(g);
-      const x0 = 640 + Math.random() * 330, x1 = Math.max(470, x0 - 60 - Math.random() * 170);
-      boats.push({g, x0, y0: coastY(FR, x0) - 16, x1, y1: coastY(EN, x1) + 18, dur: 16 + Math.random() * 10, off: i / Math.max(1, n), wob: Math.random() * 6.28});
+      const a = LAUNCH[Math.floor(Math.random() * LAUNCH.length)];
+      const near = LANDING.slice().sort((p, q) => Math.hypot(p[0] - a[0], p[1] - a[1]) - Math.hypot(q[0] - a[0], q[1] - a[1]));
+      const e = near[Math.floor(Math.random() * 2)], mx = (a[0] + e[0]) / 2, my = (a[1] + e[1]) / 2, len = Math.hypot(e[0] - a[0], e[1] - a[1]), bend = (Math.random() - .5) * .35 * len;
+      boats.push({g, a, e, c:[mx + (a[1] - e[1]) / len * bend, my + (e[0] - a[0]) / len * bend], dur: 22 + Math.random() * 14, off: i / Math.max(1, n), k: 0, hold: false});
     }
-    if(reduced) placeBoats(0, true);
+    placeBoats(performance.now(), reduced);
   }
   function placeBoats(t, still){
     boats.forEach(b => {
-      let k = still ? .25 + b.off * .5 : ((t / 1000 / b.dur) + b.off) % 1;
-      const x = b.x0 + (b.x1 - b.x0) * k + Math.sin(k * 9 + b.wob) * 10, y = b.y0 + (b.y1 - b.y0) * k;
-      const ang = Math.atan2(b.y1 - b.y0, b.x1 - b.x0) * 180 / Math.PI + 90;
-      const fade = still ? 1 : Math.min(1, k * 8, (1 - k) * 8);
-      b.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + ang.toFixed(1) + ")");
-      b.g.style.opacity = fade.toFixed(2);
+      if(!b.hold) b.k = still ? .18 + b.off * .64 : ((t / 1000 / b.dur) + b.off) % 1;
+      const k = b.k, u = 1 - k;
+      const x = u * u * b.a[0] + 2 * u * k * b.c[0] + k * k * b.e[0], y = u * u * b.a[1] + 2 * u * k * b.c[1] + k * k * b.e[1];
+      const dx = 2 * u * (b.c[0] - b.a[0]) + 2 * k * (b.e[0] - b.c[0]), dy = 2 * u * (b.c[1] - b.a[1]) + 2 * k * (b.e[1] - b.c[1]);
+      b.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI + 90).toFixed(1) + ")" + (b.hold ? " scale(1.3)" : ""));
+      b.g.style.opacity = still || b.hold ? 1 : Math.min(1, k * 10, u * 10).toFixed(2);
     });
+  }
+  // Live sea: ripples travel with the real wind, stronger with bigger waves (set by loadWeather)
+  let sea = {wind:10, dir:225, wave:.5};
+  function drawSea(t){
+    const ang = sea.dir + 90, off = (t / 1000 * (3 + sea.wind * .5)) % 26;
+    $("ripple").setAttribute("patternTransform", "rotate(" + ang.toFixed(0) + ") translate(0 " + off.toFixed(1) + ")");
   }
   // Runs only while the Channel is on screen and the tab is visible
   let raf = 0, heroOn = true;
   function frame(t){
     if(!heroOn || document.hidden){ raf = 0; return; }
     placeBoats(t);
-    if(t - lastT > 40){ ripples.setAttribute("x", (-80 + (t / 60) % 80).toFixed(1)); lastT = t; }
+    if(t - lastT > 40){ drawSea(t); lastT = t; if(tipBoat) placeTip(); }
     raf = requestAnimationFrame(frame);
   }
   const play = () => { if(!reduced && !raf && heroOn && !document.hidden) raf = requestAnimationFrame(frame); };
   if("IntersectionObserver" in window) new IntersectionObserver(e => { heroOn = e[0].isIntersecting; play(); }).observe(hero);
   document.addEventListener("visibilitychange", play);
-  play();
+  play(); drawSea(0);
+
+  // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
+  const tip = $("boatTip"); let tipBoat = null, tipT;
+  function showTip(g){
+    clearTimeout(tipT);
+    const b = boats[+g.dataset.i]; if(!b || !boatDay) return;
+    if(tipBoat && tipBoat !== b) release(tipBoat);
+    tipBoat = b; b.hold = true; b.g.classList.add("sel");
+    const d = boatDay, avg = d.boats ? Math.round(d.migrants / d.boats) : 0;
+    tip.innerHTML = "<b>Boat " + (b.g.dataset.i * 1 + 1) + " of " + fmt(d.boats) + "</b>"
+      + '<span class="bt-day">' + dLong.format(parse(d.date)) + "</span>"
+      + '<div class="wp-stats"><div><span>On board</span><b class="num">' + fmt(avg) + '</b><small> average</small></div><div><span>That day</span><b class="num">' + fmt(d.migrants) + "</b><small> people</small></div></div>"
+      + "<p>One of " + plural(d.boats, "small boat", "small boats") + " the Home Office recorded that day" + (d.boats > boats.length ? " (" + boats.length + " shown)" : "") + ". It doesn't publish where each boat crossed, so its place on the map is illustrative.</p>";
+    tip.hidden = false; placeTip(); placeBoats(performance.now(), reduced);
+  }
+  function placeTip(){
+    if(!tipBoat || tip.hidden) return;
+    const r = tipBoat.g.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, cx = r.left + r.width / 2;
+    let top = r.top - h - 8; const below = top < 70; if(below) top = r.bottom + 8;
+    tip.style.left = Math.min(Math.max(12, cx - w / 2), innerWidth - w - 12) + "px"; tip.style.top = top + "px";
+    tip.style.setProperty("--from", (below ? "top " : "bottom ") + "center");
+  }
+  function release(b){
+    b.hold = false; b.g.classList.remove("sel");
+    b.off = (((b.k - performance.now() / 1000 / b.dur) % 1) + 1) % 1;   // carry on from where it stopped
+  }
+  function hideTip(now){
+    clearTimeout(tipT);
+    const go = () => { if(tipBoat) release(tipBoat); tipBoat = null; tip.hidden = true; };
+    now === true ? go() : tipT = setTimeout(go, 220);
+  }
+  boatsG.addEventListener("pointerover", e => { const g = e.target.closest(".boat"); if(g && e.pointerType === "mouse") showTip(g); });
+  boatsG.addEventListener("pointerout", e => { if(e.pointerType === "mouse" && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".boat"))) hideTip(); });
+  tip.addEventListener("pointerenter", () => clearTimeout(tipT));
+  tip.addEventListener("pointerleave", () => hideTip());
+  let tapType = "";
+  boatsG.addEventListener("pointerdown", e => { tapType = e.pointerType; });
+  boatsG.addEventListener("click", e => {   // a tap opens it, a second tap closes it
+    const g = e.target.closest(".boat"); if(!g) return; e.stopPropagation();
+    if(tapType !== "mouse" && tipBoat && tipBoat.g === g) hideTip(true); else showTip(g);
+  });
+  document.addEventListener("click", e => { if(tipBoat && !tip.contains(e.target) && !e.target.closest(".boat")) hideTip(true); });
+  addEventListener("scroll", placeTip, {passive:true});
 
   /* ---------------------------------------------------- data */
   let days = [], meta = null;
@@ -743,7 +822,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     cl.hidden = !lx;
     if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
     else closePop(cl);
-    makeBoats(Math.min(last.boats, 16));
+    boatDay = last; makeBoats(Math.min(last.boats, 16)); renderMapPop();
     // Year so far chip
     const yr = last.date.slice(0,4), ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
@@ -1091,14 +1170,31 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     return '<svg viewBox="0 0 24 24" aria-hidden="true">' + g + "</svg>";
   }
   const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
+  const COMPASS = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"];
+  // What the map shows, and what's live on it
+  function renderMapPop(){
+    const live = !!sea.at, d = boatDay;
+    const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(sea.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    $("popMap").innerHTML = "<b>About this map</b>"
+      + '<div class="mp-live"><i></i>' + (live ? "Live conditions · updated " + ukClock(sea.at) : "Loading live conditions…") + "</div>"
+      + (live ? '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(sea.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Waves</span><b class="num">' + sea.wave.toFixed(1) + '</b><small> m</small></div><div><span>Light</span><b>' + (sea.day ? "Day" : "Night") + "</b></div></div>"
+        + '<p class="wp-p">The sea, wind and light on the map follow the real weather in the Dover Strait right now: the wind is from the ' + COMPASS[Math.round(sea.dir / 45) % 8] + ". It refreshes every 30 minutes.</p>" : "")
+      + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
+      + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
+      + "Boat positions and routes are an illustration: small boats can't be tracked live, and the Home Office doesn't publish where or when each one crossed. Hover over or tap a boat for its day's figures.</p></div>"
+      + '<p class="wp-foot">Coastline: Natural Earth · Weather: Open-Meteo · About 21 miles across at the narrowest point</p>';
+  }
   async function loadWeather(){
     wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
+      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
                                         getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
       const wind = w.current.wind_speed_10m, wave = m.current.wave_height, lvl = rate(wind, wave), kind = kindOf(w.current.weather_code);
       $("wxArt").innerHTML = wxIcon(kind, w.current.is_day !== 0);
+      sea = {wind, dir: w.current.wind_direction_10m == null ? 225 : w.current.wind_direction_10m, wave: wave == null ? .5 : wave, gust: w.current.wind_gusts_10m, day: w.current.is_day !== 0, kind, temp: w.current.temperature_2m, at: new Date()};
+      $("ripplePath").setAttribute("stroke-opacity", (.07 + Math.min(sea.wave, 2) * .06).toFixed(2));
+      hero.classList.toggle("night", !sea.day); drawSea(performance.now()); renderMapPop();
       $("wxV").textContent = lvl ? WORD[lvl] + ": " + LINE[lvl] : "Unavailable"; $("wxV").className = "wx-lv " + (lvl || "");
       $("wxSky").textContent = (kind ? SKY[kind] + " · " : "") + Math.round(w.current.temperature_2m) + "°C";
       $("wxS").textContent = "Wind " + Math.round(wind) + " mph, gusting " + Math.round(w.current.wind_gusts_10m) + " mph · Waves " + (wave == null ? "–" : wave.toFixed(1) + " m");
