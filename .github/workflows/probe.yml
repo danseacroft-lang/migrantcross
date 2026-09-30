@@ -37,5 +37,5 @@ jobs:
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f probe.txt nationalities.json returns.json || true
+          for f in probe.txt nationalities.json returns.json; do [ -f "$f" ] && git add -f "$f"; done
           git commit -m "Probe results" && git push
