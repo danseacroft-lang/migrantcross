@@ -1,7 +1,10 @@
 """Extra data for the dashboard, gathered by the daily update.
 
-  gender.json    small boat arrivals by sex and age (Home Office quarterly dataset)
-  petitions.json open UK Parliament petitions about small boat crossings
+  gender.json        small boat arrivals by sex and age (Home Office quarterly dataset)
+  nationalities.json small boat arrivals by nationality (the same quarterly dataset)
+  perboat.json       average people per boat, worked out from the daily figures
+  returns.json       UK-France "one in, one out" transfers and returns (Home Office monthly table)
+  petitions.json     open UK Parliament petitions about small boat crossings
 
 Each part is independent: if one source fails, the others still update and the
 page keeps showing the last good file.
@@ -31,17 +34,43 @@ def now_iso():
 TABLES = "https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables"
 
 
+_CACHE = {}
+
+
+def dataset_url():
+    """Link to the latest quarterly illegal entry routes spreadsheet on GOV.UK."""
+    if "url" not in _CACHE:
+        page = requests.get(TABLES, headers=H, timeout=60).text
+        links = re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.xlsx', page)
+        _CACHE["url"] = next(l for l in links if re.search(r"(illegal-entry-routes|irregular-migration).*dataset", l, re.I))
+    return _CACHE["url"]
+
+
+def workbook():
+    """The spreadsheet, downloaded once per run however many boxes need it."""
+    if "wb" not in _CACHE:
+        import openpyxl
+        raw = requests.get(dataset_url(), headers=H, timeout=180).content
+        _CACHE["wb"] = openpyxl.load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
+    return _CACHE["wb"]
+
+
+def unchanged(name, url):
+    f = ROOT / name
+    return f.exists() and json.loads(f.read_text()).get("source") == url
+
+
+def year_ending(quarter):
+    y, qn = int(quarter[:4]), int(quarter[-1])
+    return f"year ending {({1: 'March', 2: 'June', 3: 'September', 4: 'December'})[qn]} {y}"
+
+
 def update_gender():
-    page = requests.get(TABLES, headers=H, timeout=60).text
-    links = re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.xlsx', page)
-    url = next(l for l in links if re.search(r"(illegal-entry-routes|irregular-migration).*dataset", l, re.I))
-    old = json.loads((ROOT / "gender.json").read_text()) if (ROOT / "gender.json").exists() else {}
-    if old.get("source") == url:
+    url = dataset_url()
+    if unchanged("gender.json", url):
         print("Sex and age: dataset unchanged")
         return
-    import openpyxl
-    raw = requests.get(url, headers=H, timeout=180).content
-    wb = openpyxl.load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
+    wb = workbook()
     ws = next(s for s in wb.worksheets if s.title.lower().startswith("data_") and ("d01" in s.title.lower()))
     rows = ws.iter_rows(values_only=True)
     head = None
@@ -94,6 +123,176 @@ def update_gender():
     print(f"Sex and age: saved, latest quarter {last_q}")
 
 
+# ------------------------------------------------------------ by nationality
+
+def find_table(need, prefer="d01"):
+    """First data sheet with a header row holding every column in `need`: (header, row iterator)."""
+    sheets = [ws for ws in workbook().worksheets if ws.title.lower().startswith("data_")]
+    sheets.sort(key=lambda ws: prefer not in ws.title.lower())
+    for ws in sheets:
+        rows = ws.iter_rows(values_only=True)
+        for i, r in enumerate(rows):
+            if i > 40:
+                break
+            cells = [str(c).strip().lower() if c is not None else "" for c in r]
+            if all(k in cells for k in need):
+                return cells, rows
+    raise LookupError("no sheet with " + ", ".join(need))
+
+
+def update_nationalities():
+    url = dataset_url()
+    if unchanged("nationalities.json", url):
+        print("Nationalities: dataset unchanged")
+        return
+    head, rows = find_table(("quarter", "method of entry", "nationality"))
+    qc, mc, nc = head.index("quarter"), head.index("method of entry"), head.index("nationality")
+    num = next(i for i, c in enumerate(head) if "number" in c)
+    counts = {}                                        # (quarter, nationality) -> people
+    for r in rows:
+        if r is None or len(r) <= num or r[qc] is None or "small boat" not in str(r[mc]).lower():
+            continue
+        try:
+            n = int(r[num] or 0)
+        except (TypeError, ValueError):
+            continue
+        k = (str(r[qc]).strip(), str(r[nc]).strip())
+        counts[k] = counts.get(k, 0) + n
+    quarters = sorted({q for q, _ in counts if re.fullmatch(r"\d{4} Q[1-4]", q)})
+    if len(quarters) < 8:
+        raise ValueError(f"only {len(quarters)} quarters found")
+    this, before = set(quarters[-4:]), set(quarters[-8:-4])
+
+    def year(keep):
+        out = {}
+        for (q, nat), n in counts.items():
+            if q in keep:
+                out[nat] = out.get(nat, 0) + n
+        return out
+    now, prev = year(this), year(before)
+    total = sum(now.values())
+    unknown = re.compile(r"unknown|not (currently )?recorded|not known|other", re.I)
+    ranked = sorted((k for k in now if not unknown.search(k)), key=lambda k: -now[k])[:5]
+    top = [{"name": k, "n": now[k], "pc": round(now[k] / total * 100, 1),
+            "change": round((now[k] / prev[k] - 1) * 100) if prev.get(k) else None} for k in ranked]
+    if total < 1000 or not top:
+        raise ValueError("figures look wrong")
+    save("nationalities.json", {
+        "source": url,
+        "latestQuarter": quarters[-1],
+        "period": year_ending(quarters[-1]),
+        "total": total,
+        "top": top,
+        "other": total - sum(t["n"] for t in top),
+        "updatedAt": now_iso(),
+    })
+    print(f"Nationalities: saved, top {ranked[0]} for {year_ending(quarters[-1])}")
+
+
+# ------------------------------------------------------------ people per boat (from the daily figures)
+
+def update_perboat(days):
+    days = [d for d in days if d.get("date")]
+    if not days:
+        return
+    years, months = {}, {}
+    for d in days:
+        b = d.get("boats") or 0
+        if not b:
+            continue
+        for key, bucket in ((d["date"][:4], years), (d["date"][:7], months)):
+            p = bucket.setdefault(key, [0, 0])
+            p[0] += d["migrants"]
+            p[1] += b
+    last = days[-1]["date"]
+    since = (date.fromisoformat(last) - timedelta(days=89)).isoformat()
+    recent = [d for d in days if d["date"] >= since and d.get("boats")]
+    rp, rb = sum(d["migrants"] for d in recent), sum(d["boats"] for d in recent)
+    busy = {m: v for m, v in months.items() if v[1] >= 5}          # ignore months with a handful of boats
+    best = max(busy, key=lambda m: busy[m][0] / busy[m][1]) if busy else None
+    save("perboat.json", {
+        "years": [{"y": y, "people": p, "boats": b, "avg": round(p / b)} for y, (p, b) in sorted(years.items())],
+        "partialYear": last[:4] if last[5:] != "12-31" else None,
+        "last90": {"people": rp, "boats": rb, "avg": round(rp / rb) if rb else None, "to": last},
+        "recordMonth": {"month": best, "avg": round(busy[best][0] / busy[best][1])} if best else None,
+        "updatedAt": now_iso(),
+    })
+    print("People per boat: saved")
+
+
+# ------------------------------------------------------------ UK-France returns
+
+RETURNS_COLLECTION = "https://www.gov.uk/api/content/government/publications/the-border-security-commanders-annual-report-data"
+RETURNS_TITLE = re.compile(r"transfers into and returns from the United Kingdom under the UK.France Agreement", re.I)
+
+
+def _period(title):
+    """'... between 6 August 2025 and 30 June 2026' -> ('2025-08-06', '2026-06-30')"""
+    m = re.search(r"between (\d{1,2} \w+ \d{4}) and (\d{1,2} \w+ \d{4})", title)
+    if not m:
+        return None, None
+    f = lambda s: datetime.strptime(s, "%d %B %Y").date().isoformat()
+    return f(m.group(1)), f(m.group(2))
+
+
+def returns_pages():
+    """Every GOV.UK page of UK-France transfer and return figures we can find: (title, url)."""
+    found = {}
+    try:
+        for a in requests.get(RETURNS_COLLECTION, headers=H, timeout=60).json().get("details", {}).get("attachments", []):
+            if RETURNS_TITLE.search(a.get("title", "")):
+                found[a["url"]] = a["title"]
+    except Exception as e:  # noqa: BLE001
+        print("Returns: collection not read:", e)
+    try:
+        res = requests.get("https://www.gov.uk/api/search.json", headers=H, timeout=60, params={
+            "q": "Transfers into and returns from the United Kingdom under the UK-France Agreement",
+            "count": 20, "order": "-public_timestamp", "fields": "title,link"}).json().get("results", [])
+        for x in res:
+            if RETURNS_TITLE.search(x.get("title", "")):
+                found[x["link"]] = x["title"]
+    except Exception as e:  # noqa: BLE001
+        print("Returns: search not read:", e)
+    return [(t, u if u.startswith("http") else "https://www.gov.uk" + u) for u, t in found.items()]
+
+
+def update_returns(days):
+    import pandas as pd
+    pages = [p for p in returns_pages() if _period(p[0])[1]]
+    if not pages:
+        raise LookupError("no UK-France returns page found")
+    title, url = max(pages, key=lambda p: _period(p[0])[1])           # the most recent period
+    start, end = _period(title)
+    html = requests.get(url, headers=H, timeout=60).text
+    months = []
+    for t in pd.read_html(io.StringIO(html)):
+        cols = [" ".join(map(str, c)) if isinstance(c, tuple) else str(c) for c in t.columns]
+        ci = next((i for i, c in enumerate(cols) if re.search(r"\bin\b|transfer", c, re.I)), None)
+        co = next((i for i, c in enumerate(cols) if re.search(r"\bout\b|return", c, re.I)), None)
+        if ci is None or co is None:
+            continue
+        for row in t.itertuples(index=False):
+            try:
+                m = datetime.strptime(str(row[0]).strip(), "%B %Y").strftime("%Y-%m")
+            except ValueError:
+                continue                                                  # the total row, notes
+            num = lambda v: int(re.sub(r"[^\d]", "", str(v)) or 0)
+            months.append({"month": m, "in": num(row[ci]), "out": num(row[co])})
+        if months:
+            break
+    if not months:
+        raise ValueError("no monthly table on " + url)
+    tin, tout = sum(m["in"] for m in months), sum(m["out"] for m in months)
+    arrivals = sum(d["migrants"] for d in days if start <= d["date"] <= end) if days else None
+    save("returns.json", {
+        "source": url, "title": title, "from": start, "to": end,
+        "months": months, "in": tin, "out": tout,
+        "arrivals": arrivals,
+        "updatedAt": now_iso(),
+    })
+    print(f"UK-France returns: saved to {end}, {tout} out, {tin} in")
+
+
 # ------------------------------------------------------------ petitions
 
 PETITION_SEARCHES = ["small boats", "small boat", "channel crossings", "channel migrants", "illegal crossings"]
@@ -130,8 +329,17 @@ def update_petitions():
 
 
 def update_all(days=None):
-    for name, job in (("sex and age", update_gender), ("petitions", update_petitions)):
+    days = days or []
+    for name, job in (("sex and age", update_gender),
+                      ("nationalities", update_nationalities),
+                      ("people per boat", lambda: update_perboat(days)),
+                      ("UK-France returns", lambda: update_returns(days)),
+                      ("petitions", update_petitions)):
         try:
             job()
         except Exception as e:  # noqa: BLE001 - keep the last good file
             print(f"{name} skipped: {e}")
+
+
+if __name__ == "__main__":        # run the extras on their own: python scripts/extras.py
+    update_all(json.loads((ROOT / "data.json").read_text())["days"])

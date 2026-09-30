@@ -1,0 +1,41 @@
+name: Test new extras (temporary)
+on:
+  push:
+    branches: [probe-extras]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Run the new extras and record what the files look like
+        run: |
+          python - > probe.txt 2>&1 <<'PY' || true
+          import json, sys, traceback
+          sys.path.insert(0, "scripts")
+          import extras
+          days = json.load(open("data.json"))["days"]
+          print("dataset:", extras.dataset_url())
+          wb = extras.workbook()
+          for ws in wb.worksheets:
+              heads = []
+              for i, r in enumerate(ws.iter_rows(values_only=True)):
+                  if i > 12: break
+                  heads.append([c for c in r if c is not None][:12])
+              print("SHEET", ws.title, heads[-4:])
+          for name, job in (("nat", extras.update_nationalities), ("ret", lambda: extras.update_returns(days))):
+              try:
+                  job()
+              except Exception:
+                  print(name, "FAILED"); traceback.print_exc()
+          print("pages:", extras.returns_pages())
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f probe.txt nationalities.json returns.json || true
+          git commit -m "Probe results" && git push
