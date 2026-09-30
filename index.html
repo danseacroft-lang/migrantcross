@@ -248,6 +248,18 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .wrap.searching .board > section{grid-area:auto}
 .s-dim{opacity:.32;filter:saturate(.4);transition:opacity .25s ease,filter .25s ease}
 .s-hit{transition:opacity .25s ease}
+/* Searching "beta" reveals the redesign preview */
+.wrap.searching > .beta-card,.wrap.searching > .search-empty{order:-3}   /* above the results */
+.beta-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;color:#fff;text-decoration:none;
+  background:linear-gradient(120deg,#5E5CE6,#0A84FF 55%,#30B0C7);box-shadow:0 10px 30px rgba(10,132,255,.3);animation:betaIn .5s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes betaIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.beta-ic{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);display:grid;place-items:center}
+.beta-ic svg{width:24px;height:24px}
+.beta-tx b{display:block;font-size:1.06rem}
+.beta-tx span{font-size:.824rem;opacity:.9}
+.beta-go{width:20px;height:20px;opacity:.85}
+.beta-card:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media (hover:hover){.beta-card:hover{filter:brightness(1.06)}}
 .search-empty{margin:0;padding:18px 16px;border-radius:12px;background:var(--fill);color:var(--label2);text-align:center;font-size:.941rem}
 /* "NEW Try Beach Radar": a pill on wider screens, the radar symbol with a NEW tag on phones */
 .br-btn{position:relative;display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 14px 0 8px;border-radius:22px;background:var(--fill);color:var(--label);text-decoration:none;font:600 .882rem/1 var(--font);letter-spacing:-.016em;white-space:nowrap}
@@ -757,6 +769,11 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 </aside>
 <div class="wrap">
   <p class="search-empty" id="searchEmpty" hidden></p>
+  <a class="beta-card" id="searchBeta" href="beta.html" hidden>
+    <span class="beta-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.5L12 15l-1.8-4.5L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></span>
+    <span class="beta-tx"><b>Channel Crossings Beta</b><span>A complete redesign, with a live map of the Channel. Take a look.</span></span>
+    <svg class="beta-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
   <div class="meta-row"><button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button></div>
 
   <div class="notices">
@@ -2100,7 +2117,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const before = new Map(searchItems.map(it => [it.el, it.el.getBoundingClientRect()]));
     $("searchClear").hidden = !q;
     if(!tokens.length){
-      wrap.classList.remove("searching"); $("searchEmpty").hidden = true;
+      wrap.classList.remove("searching"); $("searchEmpty").hidden = true; $("searchBeta").hidden = true;
       [tiles, board].forEach(g => g.style.order = "");
       searchItems.forEach(it => { it.el.style.order = ""; it.el.classList.remove("s-dim", "s-hit"); });
       $("searchCount").textContent = "";
@@ -2114,7 +2131,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     // Whichever group holds the best match goes first
     const topIsBoard = hits.length && board.contains(hits[0].it.el);
     tiles.style.order = topIsBoard ? -1 : -2; board.style.order = topIsBoard ? -2 : -1;
-    $("searchEmpty").hidden = !!hits.length;
+    const beta = tokens.includes("beta");
+    $("searchBeta").hidden = !beta;
+    $("searchEmpty").hidden = !!hits.length || beta;
     $("searchEmpty").textContent = hits.length ? "" : "Nothing matches “" + q.trim() + "”. Try “week”, “cost”, “records” or “petitions”.";
     $("searchCount").textContent = hits.length ? hits.length + (hits.length === 1 ? " match" : " matches") : "No matches";
     // Glide boxes to their new places
