@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-09-30T16:26:49Z",
+ "checkedAt": "2026-09-30T17:23:47Z",
  "items": [
+  {
+   "title": "UK-France 'one in, one out' migrant scheme scrapped",
+   "url": "https://www.bbc.co.uk/news/articles/c64gvnv4eqylo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-09-30T17:11:08Z",
+   "breaking": true
+  },
   {
    "title": "French court jails six men for manslaughter over mass drowning in Channel",
    "url": "https://www.theguardian.com/world/2026/sep/30/french-court-jails-six-manslaughter-mass-drowning-channel",
@@ -13,13 +20,6 @@
    "url": "https://www.gbnews.com/politics/migrant-crisis-andy-burnham-shabana-mahmood-one-in-one-out-deal",
    "source": "GB News",
    "published": "2026-09-30T15:33:37Z",
-   "breaking": true
-  },
-  {
-   "title": "Six men found guilty of manslaughter after 27 migrants died trying to cross Channel",
-   "url": "https://www.gbnews.com/news/migrant-crisis-paris-court-found-guilty-manslaughter-worst-migrant-disaster",
-   "source": "GB News",
-   "published": "2026-09-30T14:03:56Z",
    "breaking": true
   }
  ]
