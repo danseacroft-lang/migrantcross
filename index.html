@@ -178,6 +178,46 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .theme-btn{position:relative;display:inline-flex;align-items:center;gap:6px;appearance:none;border:0;cursor:pointer;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;height:44px;padding:0 16px 0 12px;border-radius:22px;touch-action:manipulation}
 .theme-btn::after{content:"";position:absolute;inset:-5px 0}
 .theme-btn svg{width:20px;height:20px;flex:none}
+/* Breaking news: a frosted strip under the top bar. It scrolls away beneath the top bar as you go down.
+   Several stories slide through in turn (pausing on hover); a thin red line shows when the next one is due. */
+.newsbar{position:relative;z-index:19;overflow:hidden;isolation:isolate;background:var(--bar-glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:.5px solid var(--sep);animation:nbDrop .55s cubic-bezier(.2,.9,.3,1.12) both}
+@keyframes nbDrop{from{transform:translateY(-100%);opacity:0}to{transform:none;opacity:1}}
+.newsbar.leaving{animation:nbUp .3s ease-in both}
+@keyframes nbUp{to{transform:translateY(-100%);opacity:0}}
+.newsbar::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--red);opacity:0;pointer-events:none}
+.newsbar.flash::after{animation:nbBlink .9s ease-in-out .5s 3}
+@keyframes nbBlink{0%,100%{opacity:0}45%{opacity:.16}}
+.nb-in{max-width:1240px;margin:0 auto;min-height:50px;display:flex;align-items:center;gap:12px;padding:6px max(16px,env(safe-area-inset-right,0px)) 6px max(16px,env(safe-area-inset-left,0px))}
+.nb-tag{flex:none;display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:var(--red);color:#fff;font:700 .647rem/1 var(--font);letter-spacing:.06em;text-transform:uppercase}
+.nb-tag i{position:relative;width:7px;height:7px;border-radius:50%;background:#fff}
+.nb-tag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:nbPing 1.6s ease-out infinite}
+@keyframes nbPing{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
+.nb-stage{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px}
+.nb-stage.in{animation:nbIn .45s cubic-bezier(.2,.9,.3,1) both}
+@keyframes nbIn{from{transform:translateY(70%);opacity:0}to{transform:none;opacity:1}}
+.nb-head{min-width:0;flex:0 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--label);text-decoration:none;font:600 .941rem/1.3 var(--font);letter-spacing:-.02em}
+.nb-head:hover{text-decoration:underline}
+.nb-head:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.nb-meta{flex:none;font-size:.765rem;color:var(--label2);white-space:nowrap}
+.nb-count{flex:none;font-size:.706rem;font-weight:600;color:var(--label2);font-variant-numeric:tabular-nums}
+.nb-close{flex:none;width:44px;height:44px;margin:-6px -12px -6px 0;border:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:50%}
+.nb-close span{width:24px;height:24px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
+.nb-close svg{width:9px;height:9px}
+.nb-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.nb-close:hover span{background:var(--label3);color:var(--label)}}
+.nb-progress{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--red);transform-origin:left;transform:scaleX(0);opacity:.85}
+.newsbar.rotating .nb-progress{animation:nbProg var(--nb-t,7s) linear both}
+.newsbar.paused .nb-progress{animation-play-state:paused}
+@keyframes nbProg{to{transform:scaleX(1)}}
+@media (max-width:600px){
+  .nb-in{align-items:flex-start;padding-top:9px;padding-bottom:9px}
+  .nb-tag{margin-top:1px}
+  .nb-stage{flex-direction:column;gap:2px}
+  .nb-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem}
+  .nb-count{margin-top:2px}
+}
+@media (prefers-reduced-transparency:reduce){.newsbar{background:var(--bar-solid);-webkit-backdrop-filter:none;backdrop-filter:none}}
 /* Search: a field in the top right on wider screens; on phones a button that opens a bar across the top */
 .search{display:flex;align-items:center;gap:10px}
 .search-open{display:none;width:44px;height:44px;border:0;border-radius:50%;background:var(--fill);color:var(--blue);place-items:center;cursor:pointer;touch-action:manipulation}
@@ -203,7 +243,7 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 }
 @media (max-width:360px){.search-open{width:40px;height:40px}}
 /* While searching: best matches first, everything else pushed below and faded; notices step aside */
-.wrap.searching > .news,.wrap.searching > .notices,.wrap.searching > .subscribe,.wrap.searching > .meta-row{display:none!important}
+.wrap.searching > .notices,.wrap.searching > .subscribe,.wrap.searching > .meta-row{display:none!important}
 .wrap.searching .board{grid-template-columns:minmax(0,1fr);grid-template-areas:none}
 .wrap.searching .board > section{grid-area:auto}
 .s-dim{opacity:.32;filter:saturate(.4);transition:opacity .25s ease,filter .25s ease}
@@ -347,32 +387,6 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 .tile .cost{margin-top:6px;padding-top:6px;border-top:.5px solid var(--sep)}
 .tile .cost b{color:var(--label);font-weight:600;font-variant-numeric:tabular-nums}
 /* Dashboard: notices side by side, then a board of cards */
-.news{position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px 48px 14px 14px;border-radius:22px;box-shadow:var(--shadow);animation:drop .45s cubic-bezier(.2,.9,.3,1.2) both}
-.news.leaving{animation:lift .25s ease-in both}
-.news .b-icon{background:var(--red-bg);color:var(--red)}
-/* Speaker broadcasting: the sound waves pulse out in turn, the speaker gives a small beat */
-.news .w1,.news .w2{animation:wave 1.6s ease-in-out infinite}
-.news .w2{animation-delay:.25s}
-.news .spk{transform-box:fill-box;transform-origin:center;animation:beat 1.6s ease-in-out infinite}
-@keyframes wave{0%,100%{opacity:.15}35%{opacity:1}70%{opacity:.15}}
-@keyframes beat{0%,100%{transform:scale(1)}18%{transform:scale(1.1)}36%{transform:scale(1)}}
-.news .w1,.news .w2,.news .spk{animation-iteration-count:5}
-.news .n-tag{display:inline-flex;align-items:center;gap:5px;color:var(--red);font-weight:700;letter-spacing:.02em;text-transform:uppercase}
-.news .n-tag i{width:7px;height:7px;border-radius:50%;background:currentColor}
-.news .n-head{font-weight:600;font-size:1rem;letter-spacing:-.024em;color:var(--label);text-decoration:none}
-.news .n-head:hover{text-decoration:underline}
-.news .n-src{font-size:.824rem;color:var(--label2)}
-.news .n-more{list-style:none;margin:8px 0 0;padding:8px 0 0;border-top:.5px solid var(--sep);display:grid;gap:6px}
-.news .n-more a{color:var(--label);text-decoration:none;font-size:.882rem}
-.news .n-more a:hover{text-decoration:underline}
-.news .n-more span{color:var(--label2);font-size:.765rem}
-.news{overflow:hidden;isolation:isolate}
-.news > :not(.b-close){position:relative;z-index:1}
-/* Breaking: the whole box flashes three times when a new story arrives */
-.news::after{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;background:var(--red);opacity:0;pointer-events:none}
-.news.flash::after{animation:newsBlink .9s ease-in-out .5s 3}
-@keyframes newsBlink{0%,100%{opacity:0}45%{opacity:.28}}
-@media (max-width:600px){.news .n-more li:nth-child(n+2){display:none}.news .n-head{font-size:.94rem}}
 .notices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
 .notices:not(:has(.banner:not([hidden]))){display:none}
 .board{display:grid;gap:28px 20px;align-items:start;grid-template-columns:minmax(0,1fr)}
@@ -633,12 +647,12 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 }
 /* Frosted glass boxes: the page (and the flag) shows through, softly blurred, with a fine glass edge */
 .banner,.card,.tile,.tip,.subscribe{outline:.5px solid var(--glass-edge);outline-offset:-.5px}
-.banner,.news,.card,.tile,.tip,.subscribe{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.banner,.card,.tile,.tip,.subscribe{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .seg{-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.news,.card,.tile,.tip,.subscribe{background:var(--card)}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.banner,.card,.tile,.tip,.subscribe{background:var(--card)}}
 /* Reduce Transparency: solid boxes and bar, fainter pictures */
 @media (prefers-reduced-transparency:reduce){
-  .banner,.news,.card,.tile,.tip,.subscribe{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .banner,.card,.tile,.tip,.subscribe{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}
   .seg{-webkit-backdrop-filter:none;backdrop-filter:none}
   .topbar.scrolled{background:var(--bar-solid);-webkit-backdrop-filter:none;backdrop-filter:none}
   .flag{opacity:calc(var(--flag-o)*.5)}
@@ -728,25 +742,23 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     </div>
   </div>
 </header>
+<!-- Breaking news about small boats, from UK news outlets (news.json, updated hourly) -->
+<aside class="newsbar" id="news" aria-label="Breaking news" hidden>
+  <div class="nb-in">
+    <span class="nb-tag" id="newsTag"><i aria-hidden="true"></i>Breaking</span>
+    <div class="nb-stage" id="newsStage">
+      <a class="nb-head" id="newsHead" href="#" target="_blank" rel="noopener"></a>
+      <span class="nb-meta"><span id="newsSrc"></span> · <span id="newsAge"></span></span>
+    </div>
+    <span class="nb-count" id="newsCount" aria-hidden="true" hidden></span>
+    <button type="button" class="nb-close" id="newsClose" aria-label="Dismiss breaking news"><span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></button>
+  </div>
+  <i class="nb-progress" id="newsProgress" aria-hidden="true"></i>
+</aside>
 <div class="wrap">
   <p class="search-empty" id="searchEmpty" hidden></p>
   <div class="meta-row"><button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button></div>
 
-  <!-- Breaking news about small boats, from UK news outlets (news.json, updated hourly) -->
-  <aside class="news" id="news" aria-label="Breaking news" hidden>
-    <div class="b-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="spk" d="M4 11v2a1 1 0 0 0 1 1h2l5 4V6L7 10H5a1 1 0 0 0-1 1z"/><path class="w1" d="M16 8.5a5 5 0 0 1 0 7"/><path class="w2" d="M18.8 6a8.5 8.5 0 0 1 0 12"/></svg>
-    </div>
-    <div class="b-body">
-      <div class="b-top"><span class="n-tag" id="newsTag"><i></i>Breaking</span><span id="newsAge"></span></div>
-      <a class="n-head" id="newsHead" href="#" target="_blank" rel="noopener"></a>
-      <div class="n-src" id="newsSrc"></div>
-      <ul class="n-more" id="newsMore" hidden></ul>
-    </div>
-    <button type="button" class="b-close" id="newsClose" aria-label="Dismiss breaking news">
-      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-    </button>
-  </aside>
   <div class="notices">
   <!-- Shown while the daily update is running -->
   <div class="banner sync" id="syncNote" role="status" aria-live="polite" hidden>
@@ -1268,7 +1280,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     $("fuToday").textContent = haveYesterday()
       ? (meta && meta.checkedAt && new Date(meta.checkedAt).toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === todayKey()
           ? "Today's figures arrived at " + ukTime(new Date(meta.checkedAt)) + "." : "Today's figures are in.")
-      : waiting ? "Today's figures aren't in yet. The site is checking for them every 15 minutes."
+      : waiting ? "New figures incoming. Please wait."
                 : "Today's figures aren't in yet. Checks start at 12:00.";
     $("freshText").textContent = "Figures to " + freshDate;
     $("fresh").classList.toggle("stale", ageDays > 3);
@@ -2505,7 +2517,25 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 60000));
     return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m/60) + (Math.round(m/60)===1 ? " hour ago" : " hours ago");
   }
-  let newsShown = null, newsAt = 0;
+  let newsShown = null, newsAt = 0, newsItems = [], newsIdx = 0, newsTimer = null;
+  const NEWS_EACH = 7000;   // each story shows for 7 seconds when there are several
+  function showStory(i, animate){
+    const it = newsItems[i]; if(!it) return;
+    newsIdx = i;
+    const stage = $("newsStage"), box = $("news");
+    $("newsHead").textContent = it.title; $("newsHead").href = it.url;
+    $("newsSrc").textContent = it.source; $("newsAge").textContent = agoShort(it.published);
+    $("newsCount").textContent = (i + 1) + "/" + newsItems.length;
+    if(animate && !reduced()){ stage.classList.remove("in"); stage.offsetWidth; stage.classList.add("in"); }
+    if(box.classList.contains("rotating")){ const p = $("newsProgress"); p.style.animation = "none"; p.offsetWidth; p.style.animation = ""; }
+  }
+  function rotateNews(){
+    clearInterval(newsTimer);
+    const box = $("news"), many = newsItems.length > 1 && !reduced();
+    box.classList.toggle("rotating", many); $("newsCount").hidden = newsItems.length < 2;
+    box.style.setProperty("--nb-t", NEWS_EACH + "ms");
+    if(many) newsTimer = setInterval(()=>{ if(!box.classList.contains("paused") && !document.hidden) showStory((newsIdx + 1) % newsItems.length, true); }, NEWS_EACH);
+  }
   async function loadNews(){
     newsAt = Date.now();
     try{
@@ -2513,25 +2543,21 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       const n = await r.json();
       const items = (n.items || []).filter(s => s.breaking && s.url && /^https?:/.test(s.url) && Date.now() - new Date(s.published) < NEWS_MAX_H*36e5);
       const box = $("news");
-      if(!items.length || store.get("newsSeen") === items[0].url){ box.hidden = true; return; }
-      const top = items[0];
-      $("newsAge").textContent = agoShort(top.published);
-      $("newsHead").textContent = top.title; $("newsHead").href = top.url;
-      $("newsSrc").textContent = top.source;
-      const more = $("newsMore"); more.textContent = "";
-      items.slice(1, 3).forEach(s=>{
-        const li = document.createElement("li"), a = document.createElement("a"), sp = document.createElement("span");
-        a.href = s.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = s.title;
-        sp.textContent = " · " + s.source + ", " + agoShort(s.published).toLowerCase();
-        li.append(a, sp); more.append(li);
-      });
-      more.hidden = !more.children.length;
-      if(newsShown !== top.url){ box.hidden = false; box.classList.remove("flash"); box.style.animation = "none"; box.offsetWidth; box.style.animation = ""; box.classList.add("flash"); }
-      newsShown = top.url;
-    }catch(e){ /* no news box if the file can't be read */ }
+      if(!items.length || store.get("newsSeen") === items[0].url){ box.hidden = true; clearInterval(newsTimer); return; }
+      const fresh = newsShown !== items[0].url;
+      newsItems = items.slice(0, 3);
+      showStory(fresh ? 0 : Math.min(newsIdx, newsItems.length - 1), false);
+      rotateNews();
+      if(fresh){ box.hidden = false; box.classList.remove("flash"); box.style.animation = "none"; box.offsetWidth; box.style.animation = ""; box.classList.add("flash"); }
+      newsShown = items[0].url;
+    }catch(e){ /* no news strip if the file can't be read */ }
   }
+  // Hovering or focusing the strip pauses the rotation
+  ["pointerenter","focusin"].forEach(t => $("news").addEventListener(t, ()=>$("news").classList.add("paused")));
+  ["pointerleave","focusout"].forEach(t => $("news").addEventListener(t, ()=>$("news").classList.remove("paused")));
   $("newsClose").addEventListener("click", ()=>{
     if(newsShown) store.set("newsSeen", newsShown);
+    clearInterval(newsTimer);
     const box = $("news");
     leave(box, ()=>{ box.hidden = true; });
   });
