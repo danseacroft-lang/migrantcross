@@ -108,7 +108,46 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 62%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
+.info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
+/* Channel conditions pop-up, in the style of the Weather app */
+.wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
+.wx-pop{--lv:var(--blue);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 22%,transparent),transparent 110px)}
+.wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
+.wp-head{display:flex;align-items:center;gap:12px}
+.wp-ic{flex:none;width:52px;height:52px}
+.wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
+.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv)}
+.wp-head span{display:block;color:var(--label);font-weight:600;font-size:.882rem;margin-top:2px}
+.wp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:14px 0 12px}
+.wp-stats div{background:var(--fill);border-radius:12px;padding:8px 10px}
+.wp-stats span{display:block;font-size:.647rem;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em}
+.wp-stats b{display:inline;margin:0;font:700 1.12rem/1.2 var(--round);color:var(--label)}
+.wp-stats small{font-size:.706rem;font-weight:600;color:var(--label2)}
+.wp-scale{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
+.wp-scale i{height:6px;border-radius:3px;background:var(--fill2)}
+.wp-scale i.on.calm{background:var(--green)}.wp-scale i.on.moderate{background:var(--orange)}.wp-scale i.on.rough{background:var(--red)}
+.wp-scale em{font-style:normal;font-size:.647rem;font-weight:600;color:var(--label2);margin-top:4px}
+.wp-scale em.on{color:var(--label)}
+.info-pop .wp-p{color:var(--label);margin:0 0 6px}
+.info-pop .wp-note{font-size:.765rem;margin:0 0 10px}
+.wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep)}
+.wp-days li{display:grid;grid-template-columns:1fr 26px 86px 30px;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
+.wp-days li span{font-weight:600}
+.wp-days li div{width:26px;height:26px}
+.wp-days li b{margin:0;font-size:.824rem}
+.wp-days li em{font-style:normal;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.wp-foot{margin:8px 0 0!important;font-size:.706rem;color:var(--label2)}
+/* last crossings pop-up */
+.lx-big{font:700 2.1rem/1.05 var(--round);letter-spacing:-.01em;margin-top:2px}
+.lx-big small{font:600 .941rem var(--font);color:var(--label2);margin-left:4px;letter-spacing:-.02em}
+.lx-sub{color:var(--label2);font-size:.824rem;margin-top:2px}
+.lx-strip{display:flex;align-items:flex-end;gap:3px;height:54px;margin:14px 0 4px}
+.lx-strip i{flex:1;min-height:3px;border-radius:3px;background:var(--fill2)}
+.lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
+.lx-axis{display:flex;justify-content:space-between;font-size:.647rem;color:var(--label2);font-weight:600;margin-bottom:12px}
+.lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
 .fu-pop > :not(.fu-clock){position:relative;z-index:1}
 .fu-clock{position:absolute;right:-22px;bottom:-26px;width:124px;height:124px;z-index:0;color:var(--label2);opacity:.28}
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
@@ -152,8 +191,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .on .spark span{transform:scaleY(1)}
 .spark-days{display:flex;gap:6px;margin-top:6px}
 .spark-days span{flex:1;text-align:center;font-size:.647rem;color:var(--label2);font-weight:600}
-.ring-wrap{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;margin-top:10px}
-.ring{width:170px;height:170px}
+.ring-wrap{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:14px}
+.ring{width:min(250px,46vw);height:auto;aspect-ratio:1;display:block}
+@media (min-width:901px){.b-ring{display:flex;flex-direction:column}.b-ring .ring-wrap{flex:1;align-content:center}.ring{width:min(280px,22vw)}.b-ring .ring-legend b{font-size:1.75rem}.b-ring .ring-legend{gap:16px;font-size:.941rem}}
 .ring circle{fill:none;stroke-linecap:round}
 .ring .track{stroke:var(--fill)}
 .ring .arc{stroke:url(#ringGrad);stroke-dasharray:0 999;transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)}
@@ -313,8 +353,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   .tile-art{height:120px}
   .wx-day{grid-template-columns:1fr;justify-items:start;row-gap:4px}
   .wx-day .ic{grid-row:auto;width:32px;height:32px}
-  .ring{width:132px;height:132px}
-  .ring-wrap{gap:16px}
+  .ring-wrap{gap:18px}
   .card{padding:16px;border-radius:20px}
   .val{font-size:1.8rem}
   .chart-head{flex-direction:column}
@@ -382,8 +421,8 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     <div class="big-sub" id="heroSub">&nbsp;</div>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
-      <span class="chip" id="chipWx" hidden><i></i><span></span></span>
-      <span class="chip" id="chipLast" hidden></span>
+      <button type="button" class="chip" id="chipWx" aria-expanded="false" aria-controls="popWx" hidden><i></i><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><i class="wait"></i><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
   </div>
@@ -401,6 +440,10 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
   <p class="fu-today" id="fuToday"></p>
 </div>
+
+<div class="info-pop wx-pop" id="popWx" role="dialog" aria-label="Channel conditions" hidden></div>
+
+<div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 
 <main id="main">
 
@@ -698,7 +741,8 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     $("heroSub").textContent = last.migrants ? "people crossed in " + plural(last.boats, "small boat", "small boats") : "No crossings detected";
     const lx = last.migrants ? null : [...days].reverse().find(d => d.migrants > 0), cl = $("chipLast");   // a quiet day: say when the last crossings were
     cl.hidden = !lx;
-    if(lx) cl.innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>";
+    if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
+    else closePop(cl);
     makeBoats(Math.min(last.boats, 16));
     // Year so far chip
     const yr = last.date.slice(0,4), ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
@@ -716,36 +760,54 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   const pending = () => ukHM() >= "12:00" && !haveYesterday();
   function liveUi(){
     const on = pending(), live = $("chipLive");
-    live.hidden = !on; if(!on) closePop();
+    live.hidden = !on; if(!on) closePop(live);
     const at = meta && meta.checkedAt ? new Date(meta.checkedAt) : null;
     $("fuToday").textContent = haveYesterday()
       ? (at && at.toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? "New figures incoming. Please wait." : "Today's figures aren't in yet. Checks start at 12:00.";
   }
-  // Pop-up: opens on hover (mouse), tap or keyboard; closes on leaving, tapping elsewhere or Escape
-  const chip = $("chipLive"), pop = $("popFU");
-  let hideT;
+  // Pop-ups on the chips: open on hover (mouse), tap or keyboard; close on leaving, tapping elsewhere or Escape
+  let cur = null, hideT;
   function placePop(){
-    const r = chip.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
-    pop.style.left = Math.min(Math.max(12, r.left), innerWidth - w - 12) + "px";
-    let top = r.top - h - 10; if(top < 64) top = r.bottom + 10;   // above the chip, unless there's no room
-    pop.style.top = top + "px";
+    if(!cur) return;
+    const {chip, pop} = cur, r = chip.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    const left = Math.min(Math.max(12, r.left), innerWidth - w - 12);
+    let top = r.top - h - 10, below = top < 64;   // above the chip, unless there's no room
+    if(below) top = Math.min(r.bottom + 10, innerHeight - h - 12);
+    pop.style.left = left + "px"; pop.style.top = Math.max(12, top) + "px";
+    pop.style.setProperty("--from", (below ? "top " : "bottom ") + Math.round(Math.min(Math.max(r.left + 24 - left, 0), w)) + "px");
   }
-  function openPop(){ clearTimeout(hideT); pop.hidden = false; chip.setAttribute("aria-expanded","true"); placePop(); }
-  function closePop(){ clearTimeout(hideT); if(pop.hidden) return; pop.hidden = true; chip.setAttribute("aria-expanded","false"); }
-  const later = () => { clearTimeout(hideT); hideT = setTimeout(closePop, 180); };
-  let lastType = "";
-  chip.addEventListener("pointerdown", e => { lastType = e.pointerType; });
-  chip.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") openPop(); });
-  chip.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") later(); });
-  pop.addEventListener("pointerenter", () => clearTimeout(hideT));
-  pop.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") later(); });
-  chip.addEventListener("click", e => { e.stopPropagation(); if(lastType === "mouse") openPop(); else pop.hidden ? openPop() : closePop(); lastType = ""; });
-  chip.addEventListener("blur", () => setTimeout(() => { if(!chip.matches(":hover") && !pop.matches(":hover")) closePop(); }, 0));
-  document.addEventListener("click", e => { if(!pop.hidden && !pop.contains(e.target)) closePop(); });
-  document.addEventListener("keydown", e => { if(e.key === "Escape" && !pop.hidden){ closePop(); chip.focus(); } });
-  addEventListener("scroll", () => { if(!pop.hidden) placePop(); }, {passive:true});
-  addEventListener("resize", () => { if(!pop.hidden) placePop(); });
+  function openPop(chip, pop){ clearTimeout(hideT); if(cur && cur.pop !== pop) closePop(); if(cur) return placePop(); pop.hidden = false; chip.setAttribute("aria-expanded","true"); cur = {chip, pop}; placePop(); }
+  function closePop(chip){ clearTimeout(hideT); if(!cur || (chip && cur.chip !== chip)) return; cur.pop.hidden = true; cur.chip.setAttribute("aria-expanded","false"); cur = null; }
+  const later = () => { clearTimeout(hideT); hideT = setTimeout(() => closePop(), 180); };
+  document.querySelectorAll("button.chip[aria-controls]").forEach(chip => {
+    const pop = $(chip.getAttribute("aria-controls")); let lastType = "";
+    chip.addEventListener("pointerdown", e => { lastType = e.pointerType; });
+    chip.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") openPop(chip, pop); });
+    chip.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") later(); });
+    pop.addEventListener("pointerenter", () => clearTimeout(hideT));
+    pop.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") later(); });
+    chip.addEventListener("click", e => { e.stopPropagation(); if(lastType === "mouse" || !cur || cur.chip !== chip) openPop(chip, pop); else closePop(); lastType = ""; });
+    chip.addEventListener("blur", () => setTimeout(() => { if(cur && cur.chip === chip && !chip.matches(":hover") && !pop.matches(":hover") && !pop.contains(document.activeElement)) closePop(); }, 0));
+  });
+  document.addEventListener("click", e => { if(cur && !cur.pop.contains(e.target)) closePop(); });
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && cur){ const c = cur.chip; closePop(); c.focus(); } });
+  addEventListener("scroll", placePop, {passive:true});
+  addEventListener("resize", placePop);
+
+  // Last crossings: the day, the fortnight around it, and how it's worked out
+  function renderLastPop(lx, last){
+    const all = allDays(), i = all.findIndex(d => d.date === lx.date), strip = all.slice(-14), mx = Math.max(...strip.map(d => d.migrants), 1);
+    const quiet = all.length - 1 - i;
+    $("popLast").innerHTML = '<b>Last crossings</b>'
+      + '<div class="lx-big num">' + fmt(lx.migrants) + '<small>' + (lx.migrants === 1 ? "person" : "people") + '</small></div>'
+      + '<div class="lx-sub">' + dLong.format(parse(lx.date)) + " · " + plural(lx.boats, "boat", "boats") + '</div>'
+      + '<div class="lx-strip" aria-hidden="true">' + strip.map(d => '<i class="' + (d.date === lx.date ? "lx" : d.migrants ? "x" : "") + '" style="height:' + Math.max(6, d.migrants / mx * 100).toFixed(1) + '%"></i>').join("") + "</div>"
+      + '<div class="lx-axis"><span>' + dShort.format(parse(strip[0].date)) + "</span><span>Last 14 days</span><span>" + dShort.format(parse(last.date)) + "</span></div>"
+      + '<div class="wp-stats"><div><span>Quiet days since</span><b class="num">' + quiet + '</b></div><div><span>People a boat</span><b class="num">' + (lx.boats ? Math.round(lx.migrants / lx.boats) : "–") + "</b></div></div>"
+      + '<p>The Home Office publishes how many people were detected crossing in small boats each day, usually the next afternoon. A day it reports as zero, or leaves out, means no crossings were detected. This is the most recent day with at least one person, counted back from the latest figures (' + dMid.format(parse(last.date)) + ").</p>"
+      + '<p class="wp-foot">Source: Home Office. Figures are provisional.</p>';
+  }
 
   /* ---------------------------------------------------- automatic updates (the same timings as the main site) */
   // The site's heartbeat (status.json) says when new or revised figures were published: checked every
@@ -1005,6 +1067,9 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
+  const MEANS = {calm:"Light winds and a flat sea. These are the conditions most small boats set out in, so crossings are likely.",
+    moderate:"A breeze and some chop. Some boats may still try, usually in the calmer early hours.",
+    rough:"Strong winds or big waves make the crossing dangerous, so crossings are unlikely until it settles."};
   const SKY = {clear:"Clear", partly:"Partly cloudy", cloudy:"Cloudy", fog:"Foggy", drizzle:"Drizzle", rain:"Rain", snow:"Snow", storm:"Thunderstorms"};
   const kindOf = c => c == null ? null : c <= 1 ? "clear" : c === 2 ? "partly" : c === 3 ? "cloudy" : c === 45 || c === 48 ? "fog"
     : c >= 51 && c <= 57 ? "drizzle" : (c >= 61 && c <= 67) || (c >= 80 && c <= 82) ? "rain" : (c >= 71 && c <= 77) || c === 85 || c === 86 ? "snow" : c >= 95 ? "storm" : "cloudy";
@@ -1047,9 +1112,21 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
         return '<div class="wx-day"><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + (hi != null ? "<em>" + Math.round(hi) + "°</em>" : "") + '</span><div class="ic" title="' + (k ? SKY[k] : "") + '">' + wxIcon(k, true) + '</div><div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><small>" + (k ? SKY[k] : "") + "</small></div></div>";
       }).join("");
       const c = $("chipWx"); c.hidden = !lvl; c.querySelector("i").className = lvl || ""; c.querySelector("span").textContent = (lvl ? WORD[lvl] : "") + " in the Channel now";
+      // the chip's pop-up: now, what it means, and the next three mornings
+      const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
+        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "°" : "") + "</em></li>"; }).join("");
+      const LV = ["calm", "moderate", "rough"];
+      const pw = $("popWx"); pw.dataset.lv = lvl || "";
+      pw.innerHTML = '<div class="wp-head"><div class="wp-ic">' + wxIcon(kind, w.current.is_day !== 0) + "</div><div><b>" + (lvl ? WORD[lvl] + " in the Channel" : "Channel conditions") + "</b><span>" + (kind ? SKY[kind] + " · " : "") + Math.round(w.current.temperature_2m) + "°C · Dover Strait</span></div></div>"
+        + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wind) + '</b><small> mph</small></div><div><span>Gusts</span><b class="num">' + Math.round(w.current.wind_gusts_10m) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wave == null ? "–" : wave.toFixed(1)) + "</b><small> m</small></div></div>"
+        + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
+        + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
+        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
+        + '<ul class="wp-days" aria-label="The next three mornings">' + outlook + "</ul>"
+        + '<p class="wp-foot">Mornings, when most boats set out · Updated ' + ukClock(new Date()) + " · Open-Meteo</p>";
     }catch(e){
       $("wxArt").innerHTML = wxIcon(null); $("wxV").textContent = "Unavailable"; $("wxV").className = "wx-lv"; $("wxSky").textContent = "";
-      $("wxS").textContent = "The weather service didn't respond. It will try again shortly."; $("wxDays").innerHTML = ""; $("chipWx").hidden = true;
+      $("wxS").textContent = "The weather service didn't respond. It will try again shortly."; $("wxDays").innerHTML = ""; $("chipWx").hidden = true; closePop($("chipWx"));
       wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
     }
   }
