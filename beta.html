@@ -20,7 +20,8 @@
   --blue:#007AFF; --green:#34C759; --green-t:#248A3D; --orange:#FF9500; --red:#FF3B30; --red-t:#D70015; --indigo:#5856D6; --teal:#30B0C7; --pink:#FF2D55;
   --glass:rgba(255,255,255,.72); --bar:rgba(246,246,248,.78);
   --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07);
-  --sea1:#6CB8F0; --sea2:#2E86D1; --sea3:#1B64A8; --land:#E4EBDD; --land2:#CBD8C1; --coast:rgba(255,255,255,.9); --maptext:rgba(40,52,40,.55);
+  --sea1:#6CB8F0; --sea2:#2E86D1; --sea3:#1B64A8; --land:#E4EBDD; --land2:#CBD8C1; --coast:rgba(255,255,255,.9); --maptext:rgba(40,52,40,.55); --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
+  --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-foam:#FFFFFF; --ta-tube1:#9AA3AF; --ta-tube2:#5B6472; --ta-tube3:#3A414C; --ta-rope:#E5E7EB; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;
 }
@@ -31,7 +32,8 @@
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45);
-  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45);
+  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -40,7 +42,8 @@
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45);
-  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45);
+  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -57,10 +60,14 @@ button{font:inherit}
 .nav{position:fixed;inset:0 0 auto;z-index:50;height:calc(52px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;transition:background-color .3s ease,border-color .3s ease;border-bottom:.5px solid transparent}
 .nav.solid{background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom-color:var(--sep)}
-.nav-back{justify-self:start;display:inline-flex;align-items:center;gap:4px;min-height:44px;font-weight:400;color:var(--blue)}
-.nav-back svg{width:13px;height:22px}
-.bk-short{display:none}
-@media (max-width:600px){.bk-long,.nav-right .pill-beta{display:none}.bk-short{display:inline}}
+/* Beta switch: turn it off to go back to the current site */
+.bswitch{justify-self:start;position:relative;display:inline-flex;align-items:center;gap:9px;min-height:44px;cursor:pointer;font-weight:600;font-size:.941rem}
+.bswitch input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.bswitch i{position:relative;width:51px;height:31px;border-radius:16px;background:var(--fill2);transition:background .25s ease}
+.bswitch i::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06);transition:transform .28s cubic-bezier(.3,.7,.3,1.1)}
+.bswitch input:checked + i{background:linear-gradient(135deg,#5E5CE6,#0A84FF)}
+.bswitch input:checked + i::after{transform:translateX(20px)}
+.bswitch input:focus-visible + i{outline:2px solid var(--blue);outline-offset:2px}
 .nav-title{font-weight:600;font-size:1rem;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;white-space:nowrap}
 .nav.solid .nav-title{opacity:1;transform:none}
 .nav-right{justify-self:end;display:flex;align-items:center;gap:8px}
@@ -113,6 +120,8 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .scroll-cue{position:absolute;z-index:2;left:50%;bottom:14px;translate:-50% 0;width:26px;height:26px;color:#fff;opacity:.7;animation:cue 2.2s ease-in-out infinite}
 @keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(6px);opacity:.35}}
 .boat{transition:opacity .6s ease}
+.country rect{fill:rgba(0,0,0,.34)}
+.country text{fill:#fff;font:700 12px/1 var(--font);letter-spacing:2px}
 
 /* ------------------------------------------------------------ layout */
 main > section,.card,.bento > *{min-width:0}
@@ -135,9 +144,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 
 /* ------------------------------------------------------------ bento */
 .bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.b-week{grid-column:span 2}.b-ring{grid-column:span 2;grid-row:span 2}.b-lab,.b-bur{grid-column:span 1}.b-wx{grid-column:1 / -1}
-.b-wx .wx-days{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media (min-width:901px){.b-wx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);column-gap:24px;align-items:center}.b-wx h3,.b-wx .val,.b-wx .sub{grid-column:1}.b-wx .wx-days{grid-column:2;grid-row:1 / span 3;margin:0}}
+.b-week{grid-column:span 2}.b-ring{grid-column:span 2;grid-row:span 2}.b-lab,.b-bur{grid-column:span 1}
 .spark{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:12px}
 .spark span{flex:1;border-radius:6px;background:var(--blue);min-height:4px;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
 .spark span.zero{background:var(--fill2)}
@@ -155,13 +162,51 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .ring-legend{display:grid;gap:10px;font-size:.882rem}
 .ring-legend b{display:block;font:700 1.35rem/1.15 var(--round)}
 .ring-legend span{color:var(--label2);font-size:.765rem}
+/* corner pictures, as on the main site */
+.card.art > :not(.tile-art){position:relative;z-index:1}
+.tile-art{position:absolute;right:0;bottom:0;width:min(62%,300px);height:150px;z-index:0;pointer-events:none;opacity:var(--ta-o);
+  -webkit-mask-image:linear-gradient(to left,#000 35%,transparent 95%),linear-gradient(to top,#000 55%,transparent 100%);-webkit-mask-composite:source-in;
+          mask-image:linear-gradient(to left,#000 35%,transparent 95%),linear-gradient(to top,#000 55%,transparent 100%);mask-composite:intersect}
+.tile-art svg{display:block;width:100%;height:100%}
+.tile-art .ta-boat{animation:taBob 5s ease-in-out infinite}
+.tile-art .ta-wave{animation:taSwell 7s ease-in-out infinite alternate}
+.tile-art .ta-wave2{animation:taSwell 5.5s ease-in-out infinite alternate-reverse}
+@keyframes taBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(3px) rotate(-1.2deg)}}
+@keyframes taSwell{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
+.card.b-ring{padding-bottom:132px}
+.card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
-.wx-days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.wx-day{background:var(--fill);border-radius:14px;padding:10px 12px}
-.wx-day span{display:block;font-size:.706rem;color:var(--label2);font-weight:600}
-.wx-day b{font-size:.941rem}
-.wx-day b.calm{color:var(--green-t)}.wx-day b.moderate{color:var(--orange)}.wx-day b.rough{color:var(--red-t)}
+.wx-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:14px 24px;align-items:center}
+.wx-now{display:flex;align-items:center;gap:16px;min-width:0}
+.wx-art{flex:none;width:76px;height:76px}
+.wx-art svg,.wx-day svg{display:block;width:100%;height:100%;overflow:visible}
+.wx-lv{font:700 1.5rem/1.15 var(--round);letter-spacing:-.01em}
+.wx-sky{font-weight:600;font-size:.941rem;margin-top:3px}
+.calm{color:var(--green-t)}.moderate{color:var(--orange)}.rough{color:var(--red-t)}
+.wx-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wx-day{background:var(--fill);border-radius:16px;padding:10px 12px 12px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center}
+.wx-day span{grid-column:1 / -1;justify-self:stretch;display:flex;justify-content:space-between;gap:6px;font-size:.706rem;color:var(--label2);font-weight:600;margin-bottom:6px}
+.wx-day span em{font-style:normal;color:var(--label)}
+.wx-day .ic{width:36px;height:36px;grid-row:2}
+.wx-day b{display:block;font-size:.941rem;line-height:1.15}
+.wx-day small{display:block;font-size:.706rem;color:var(--label2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wx-day > div:last-child{min-width:0;max-width:100%}
+
+/* ------------------------------------------------------------ on this day */
+.otd-top{display:flex;align-items:center;gap:16px}
+.cal{flex:none;width:64px;height:68px;border-radius:15px;overflow:hidden;background:var(--card2);box-shadow:0 0 0 .5px var(--sep),0 3px 10px rgba(0,0,0,.08);display:grid;grid-template-rows:21px 1fr;text-align:center}
+.cal span{background:var(--red);color:#fff;font:700 .647rem/21px var(--font);letter-spacing:.08em;text-transform:uppercase}
+.cal b{display:grid;place-items:center;font:500 2rem/1 var(--font);letter-spacing:-.03em}
+.otd-v{font-size:1.7rem}
+.otd-years{display:flex;align-items:flex-end;gap:8px;height:136px;margin-top:18px}
+.otd-years div{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
+.otd-years i{width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--indigo);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.otd-years i.zero{background:var(--fill2)}
+.otd-years i.last{background:var(--orange)}
+.on .otd-years i{transform:scaleY(1)}
+.otd-years b{font:600 .706rem/1 var(--round);white-space:nowrap}
+.otd-years em{font-style:normal;font-size:.647rem;color:var(--label2);font-weight:600}
 
 /* ------------------------------------------------------------ Stocks-style chart */
 .chart-card{padding:18px 18px 12px}
@@ -254,25 +299,34 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
   .b-ring{grid-row:auto}
   .duo{grid-template-columns:1fr}
+  .wx-card{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
   .hero-in,.large-title{padding-left:20px;padding-right:20px}
   .large-title h1{font-size:clamp(1.3rem,6.6vw,1.75rem);white-space:nowrap}
   .bento{gap:12px}
-  .b-week,.b-ring,.b-wx{grid-column:1 / -1}
+  .b-week,.b-ring{grid-column:1 / -1}
+  .wx-art{width:62px;height:62px}
+  .wx-lv{font-size:1.3rem}
+  .card.b-ring{padding-bottom:100px}
+  .tile-art{height:120px}
+  .wx-day{grid-template-columns:1fr;justify-items:start;row-gap:4px}
+  .wx-day .ic{grid-row:auto;width:32px;height:32px}
   .ring{width:132px;height:132px}
   .ring-wrap{gap:16px}
   .card{padding:16px;border-radius:20px}
   .val{font-size:1.8rem}
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:40px 1fr 64px;gap:10px}
+  .otd-years{gap:5px}
+  .otd-years b{font-size:.588rem}
 }
 /* ------------------------------------------------------------ accessibility settings */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rv{opacity:1;transform:none}
-  .spark span,.minibars span,.heat i{transform:none;opacity:1}
+  .spark span,.minibars span,.heat i,.otd-years i{transform:none;opacity:1}
   .draw{stroke-dasharray:none;stroke-dashoffset:0}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
@@ -282,10 +336,9 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 <body>
 
 <nav class="nav" id="nav" aria-label="Channel Crossings Beta">
-  <a class="nav-back" href="./"><svg viewBox="0 0 13 22" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2L2 11l9 9"/></svg><span class="bk-long">Current site</span><span class="bk-short">Back</span></a>
+  <label class="bswitch" title="Turn off to go back to the current site">Beta<input type="checkbox" role="switch" id="betaSwitch" checked aria-label="Beta design. Turn off to go back to the current site"><i aria-hidden="true"></i></label>
   <div class="nav-title">Channel Crossings</div>
   <div class="nav-right">
-    <span class="pill-beta">Beta</span>
     <button type="button" class="theme" id="theme" aria-label="Appearance"></button>
   </div>
 </nav>
@@ -309,14 +362,14 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       <!-- France (bottom) -->
       <path d="M0 620H1000V430C972 436 950 426 924 430 900 434 884 424 866 436 840 452 800 470 760 478 700 490 650 488 590 500 520 514 460 510 400 522 320 538 250 534 180 546 110 556 60 552 0 560Z" fill="var(--land)"/>
       <path d="M1000 430C972 436 950 426 924 430 900 434 884 424 866 436 840 452 800 470 760 478 700 490 650 488 590 500 520 514 460 510 400 522 320 538 250 534 180 546 110 556 60 552 0 560" fill="none" stroke="var(--coast)" stroke-width="3" stroke-linecap="round"/>
-      <g fill="var(--maptext)" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-weight="700" letter-spacing="6" font-size="17">
-        <text x="610" y="92" class="cn">ENGLAND</text><text x="600" y="585" class="cn">FRANCE</text>
-      </g>
       <g font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" fill="var(--maptext)">
         <circle cx="872" cy="146" r="4" fill="var(--maptext)"/><text x="846" y="128">Dover</text>
         <circle cx="905" cy="430" r="4" fill="var(--maptext)"/><text x="884" y="458">Calais</text>
-        <g class="cn"><circle cx="704" cy="484" r="4" fill="var(--maptext)"/><text x="672" y="512">Boulogne</text></g>
+        <g id="boulogne"><circle cx="704" cy="484" r="4" fill="var(--maptext)"/><text x="672" y="512">Boulogne</text></g>
       </g>
+      <!-- country labels: placed by fitMap() so both are always in view -->
+      <g class="country" id="cEN"><rect/><text>ENGLAND</text></g>
+      <g class="country" id="cFR"><rect/><text>FRANCE</text></g>
       <g id="boats"></g>
     </svg>
   </div>
@@ -351,6 +404,22 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
 <main id="main">
 
+  <!-- ============================================================ CHANNEL CONDITIONS -->
+  <section aria-labelledby="hWx">
+    <div class="section-h rv"><h2 id="hWx">Channel Conditions</h2><p id="wxTime"></p></div>
+    <article class="card wx-card rv">
+      <div class="wx-now">
+        <div class="wx-art" id="wxArt" aria-hidden="true"></div>
+        <div>
+          <div class="wx-lv" id="wxV">Checking…</div>
+          <div class="wx-sky" id="wxSky"></div>
+          <div class="sub" id="wxS">&nbsp;</div>
+        </div>
+      </div>
+      <div class="wx-days" id="wxDays"></div>
+    </article>
+  </section>
+
   <!-- ============================================================ AT A GLANCE -->
   <section aria-labelledby="hGlance">
     <div class="section-h rv"><h2 id="hGlance">At a Glance</h2><p id="glanceNote"></p></div>
@@ -362,8 +431,9 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
         <div class="spark" id="spark"></div>
         <div class="spark-days" id="sparkDays"></div>
       </article>
-      <article class="card b-ring rv">
-        <h3><span id="ringYear">This year</span> so far</h3>
+      <article class="card b-ring art rv">
+        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="twSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="twTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"/><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"/><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
+        <h3 id="ringYear">This year so far</h3>
         <div class="ring-wrap">
           <svg class="ring" viewBox="0 0 170 170" aria-hidden="true">
             <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF375F"/></linearGradient></defs>
@@ -379,24 +449,32 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
           </div>
         </div>
       </article>
-      <article class="card b-lab rv">
+      <article class="card b-lab art rv">
+        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="tlSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="tlStone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"/><stop offset="1" stop-color="var(--ta-stone2)"/></linearGradient><radialGradient id="tlGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"/><stop offset="1" stop-color="#E4003B" stop-opacity="0"/></radialGradient></defs><circle cx="190" cy="60" r="70" fill="url(#tlGlow)"/><g transform="translate(190 0)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"/><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"/><rect x="-12" y="36" width="24" height="12" fill="url(#tlStone)"/><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"/><rect x="-14" y="48" width="28" height="30" fill="url(#tlStone)"/><circle cx="0" cy="63" r="10" fill="var(--ta-clock)" stroke="var(--ta-stone3)" stroke-width="1.5"/><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-width="1.4" stroke-linecap="round"/><rect x="-12" y="78" width="24" height="52" fill="url(#tlStone)"/><path d="M-7 84 v42 M0 84 v42 M7 84 v42" stroke="var(--ta-stone3)" stroke-width="1.2" opacity=".7"/><path d="M-60 122 H-12 V104 H-48z M12 104 H70 V122 H12z" fill="url(#tlStone)" opacity=".75"/></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
         <h3>Since Labour took office</h3>
         <div class="val num" id="labV">–</div>
         <div class="sub" id="labS">&nbsp;</div>
         <div class="cost" id="labC"></div>
       </article>
-      <article class="card b-bur rv">
+      <article class="card b-bur art rv">
+        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div>
         <h3>Since Burnham became PM</h3>
         <div class="val num" id="burV">–</div>
         <div class="sub" id="burS">&nbsp;</div>
       </article>
-      <article class="card b-wx rv">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M2 9c2 0 2-1.5 4-1.5S8 9 10 9s2-1.5 4-1.5S16 9 18 9s2-1.5 4-1.5M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/></svg>Channel conditions</h3>
-        <div class="val" id="wxV" style="font-size:1.5rem">Checking…</div>
-        <div class="sub" id="wxS">&nbsp;</div>
-        <div class="wx-days" id="wxDays"></div>
-      </article>
     </div>
+  </section>
+
+  <!-- ============================================================ ON THIS DAY -->
+  <section aria-labelledby="hOtd" id="otd" hidden>
+    <div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
+    <article class="card rv">
+      <div class="otd-top">
+        <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
+        <div><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS"></div></div>
+      </div>
+      <div class="otd-years" id="otdYears" aria-label="The same date in earlier years"></div>
+    </article>
   </section>
 
   <!-- ============================================================ EVERY DAY -->
@@ -476,7 +554,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
 <footer>
   <a class="to-classic" href="./">Back to the current site</a>
-  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0). Weather by Open-Meteo.</p>
+  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo.</p>
 </footer>
 
 <script>
@@ -495,7 +573,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
   /* ---------------------------------------------------- appearance: Auto → Day → Night (shared with the main site) */
-  const root = document.documentElement, sys = matchMedia("(prefers-color-scheme: dark)");
+  const root = document.documentElement;
   const ICON = {auto:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>',
     light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>',
     dark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>'};
@@ -509,6 +587,11 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     showTheme();
   });
   showTheme();
+
+  /* ---------------------------------------------------- Beta switch: off takes you back to the current site */
+  const bsw = $("betaSwitch");
+  bsw.addEventListener("change", () => { if(!bsw.checked) setTimeout(() => location.href = "./", reduced ? 0 : 300); });
+  addEventListener("pageshow", () => { bsw.checked = true; });   // coming back with the Back button
 
   /* ---------------------------------------------------- large title → navigation bar, hero parallax */
   const nav = $("nav"), hero = $("hero"), heroMap = $("heroMap");
@@ -536,10 +619,24 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   /* ---------------------------------------------------- the live Channel: one dinghy for every boat yesterday */
   const boatsG = $("boats"), ripples = $("ripples"), NS = "http://www.w3.org/2000/svg";
   // Tall screens: frame the narrows between Dover and Calais, where the boats cross
+  // Wide screens keep Dover and Calais in view (anchored right). England and France are labelled wherever they show.
   function fitMap(){
-    const tall = hero.clientWidth < hero.clientHeight * .9;
-    $("map").setAttribute("viewBox", tall ? "560 30 440 590" : "0 0 1000 620");
-    document.querySelectorAll("#map .cn").forEach(t => t.style.display = tall ? "none" : "");   // no room for the country names
+    const W = hero.clientWidth, H = hero.clientHeight; if(!W || !H) return;
+    const tall = W < H * .9, vb = tall ? [560, 30, 440, 590] : [0, 0, 1000, 620], map = $("map");
+    map.setAttribute("viewBox", vb.join(" "));
+    map.setAttribute("preserveAspectRatio", (tall ? "xMid" : "xMax") + "YMid slice");
+    const k = Math.max(W / vb[2], H / vb[3]), vw = W / k, vh = H / k;
+    const x0 = tall ? vb[0] + (vb[2] - vw) / 2 : vb[0] + vb[2] - vw, y0 = vb[1] + (vb[3] - vh) / 2, pad = 20 / k;
+    $("boulogne").style.display = tall ? "none" : "";
+    label("cEN", tall ? x0 + pad : 610, tall ? y0 + 80 / k : Math.max(92, y0 + 70 / k), "start");
+    label("cFR", x0 + vw - pad, 505, "end");
+  }
+  function label(id, x, y, anchor){
+    const g = $(id), t = g.querySelector("text"), r = g.querySelector("rect");
+    t.setAttribute("x", x.toFixed(1)); t.setAttribute("y", y.toFixed(1)); t.setAttribute("text-anchor", anchor);
+    const b = t.getBBox();
+    r.setAttribute("x", (b.x - 10).toFixed(1)); r.setAttribute("y", (b.y - 5).toFixed(1));
+    r.setAttribute("width", (b.width + 18).toFixed(1)); r.setAttribute("height", (b.height + 10).toFixed(1)); r.setAttribute("rx", ((b.height + 10) / 2).toFixed(1));
   }
   fitMap(); addEventListener("resize", fitMap);
   let boats = [], lastT = 0;
@@ -570,14 +667,18 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       b.g.style.opacity = fade.toFixed(2);
     });
   }
+  // Runs only while the Channel is on screen and the tab is visible
+  let raf = 0, heroOn = true;
   function frame(t){
-    if(!document.hidden && scrollY < hero.offsetTop + hero.offsetHeight){
-      placeBoats(t);
-      if(t - lastT > 40){ ripples.setAttribute("x", (-80 + (t / 60) % 80).toFixed(1)); lastT = t; }
-    }
-    requestAnimationFrame(frame);
+    if(!heroOn || document.hidden){ raf = 0; return; }
+    placeBoats(t);
+    if(t - lastT > 40){ ripples.setAttribute("x", (-80 + (t / 60) % 80).toFixed(1)); lastT = t; }
+    raf = requestAnimationFrame(frame);
   }
-  if(!reduced) requestAnimationFrame(frame);
+  const play = () => { if(!reduced && !raf && heroOn && !document.hidden) raf = requestAnimationFrame(frame); };
+  if("IntersectionObserver" in window) new IntersectionObserver(e => { heroOn = e[0].isIntersecting; play(); }).observe(hero);
+  document.addEventListener("visibilitychange", play);
+  play();
 
   /* ---------------------------------------------------- data */
   let days = [], meta = null;
@@ -595,10 +696,9 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     $("heroKicker").textContent = (last.date === yday ? "Yesterday · " : "Latest · ") + dMid.format(parse(last.date));
     countUp($("heroNum"), last.migrants);
     $("heroSub").textContent = last.migrants ? "people crossed in " + plural(last.boats, "small boat", "small boats") : "No crossings detected";
-    if(!last.migrants){   // a quiet day: say when the last crossings were
-      const lx = [...days].reverse().find(d => d.migrants > 0);
-      if(lx){ const c = $("chipLast"); c.hidden = false; c.innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; }
-    }
+    const lx = last.migrants ? null : [...days].reverse().find(d => d.migrants > 0), cl = $("chipLast");   // a quiet day: say when the last crossings were
+    cl.hidden = !lx;
+    if(lx) cl.innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>";
     makeBoats(Math.min(last.boats, 16));
     // Year so far chip
     const yr = last.date.slice(0,4), ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
@@ -646,17 +746,33 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   document.addEventListener("keydown", e => { if(e.key === "Escape" && !pop.hidden){ closePop(); chip.focus(); } });
   addEventListener("scroll", () => { if(!pop.hidden) placePop(); }, {passive:true});
   addEventListener("resize", () => { if(!pop.hidden) placePop(); });
-  // While waiting, look for the new figures every 2 minutes (like the main site), and redraw when they land
-  async function poll(){
-    if(document.hidden || !pending()) return liveUi();
+
+  /* ---------------------------------------------------- automatic updates (the same timings as the main site) */
+  // The site's heartbeat (status.json) says when new or revised figures were published: checked every
+  // 2 minutes while new figures are awaited, otherwise every 30. Conditions refresh every 30 minutes.
+  const MIN = 6e4, openedAt = Date.now();
+  let statusAt = 0, wxAt = 0, today = ukToday();
+  async function checkStatus(){
+    statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
-      if(meta && meta.checkedAt && st.dataAt > meta.checkedAt){ const d = await getJSON("data.json"); if(d.days && d.days.length){ meta = d; days = d.days.filter(x => x && x.date).sort((a,b) => a.date < b.date ? -1 : 1); renderAll(); } }
+      if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){ useData(await getJSON("data.json")); renderAll(); loadExtras(); }
     }catch(e){ /* try again next time */ }
     liveUi();
   }
-  setInterval(poll, 120000);
-  document.addEventListener("visibilitychange", () => { if(!document.hidden) poll(); });
+  function tick(){
+    if(document.hidden || !days.length) return;
+    if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
+    liveUi();
+    if(Date.now() - statusAt >= (pending() ? 2 : 30) * MIN) checkStatus();
+    if(Date.now() - wxAt >= 30 * MIN) loadWeather();
+  }
+  setInterval(tick, MIN);
+  document.addEventListener("visibilitychange", () => {
+    if(document.hidden) return;
+    if(Date.now() - openedAt > 180 * MIN) return location.reload();   // picks up any newer version of the page
+    tick();
+  });
 
   function renderGlance(){
     const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4);
@@ -672,7 +788,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     const ytdDays = all.filter(d => d.date.slice(0,4) === yr), ytd = sum(ytdDays, "migrants");
     const lastYearAll = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1)), "migrants");
     const lastYearSame = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
-    $("ringYear").textContent = yr;
+    $("ringYear").textContent = yr + " so far";
     countUp($("ytdV"), ytd); countUp($("ytdPrev"), lastYearSame); countUp($("ytdAvg"), Math.round(ytd / ytdDays.length));
     $("ytdPrevS").textContent = (yr - 1) + " by this date";
     const ratio = lastYearAll ? ytd / lastYearAll : 0, C = 2 * Math.PI * 72;
@@ -688,6 +804,25 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       if(id === "lab") $("labC").innerHTML = "Estimated annual support cost <b>£" + (n * 4.0e9 / 106771 / 1e9).toFixed(1) + "bn</b>";
     });
     $("glanceNote").textContent = "Figures to " + dMid.format(parse(last.date));
+  }
+
+  /* ---------------------------------------------------- on this day: today's date in every earlier year (as on the main site) */
+  function renderOtd(){
+    const all = allDays(), by = new Map(all.map(d => [d.date, d])), t = ukToday(), mmdd = t.slice(5), first = all[0].date, lastD = all[all.length-1].date, yrs = [];
+    for(let y = +t.slice(0,4) - 1; y >= +first.slice(0,4); y--){
+      const iso = y + "-" + mmdd;
+      if(iso < first || iso > lastD || parse(iso).toISOString().slice(0,10) !== iso) continue;   // 29 February in other years
+      yrs.push(by.get(iso) || {date:iso, migrants:0, boats:0});
+    }
+    const sec = $("otd"); sec.hidden = !yrs.length; if(!yrs.length) return;
+    const main = yrs[0], mx = Math.max(...yrs.map(d => d.migrants), 1), top = yrs.reduce((m, d) => d.migrants > m.migrants ? d : m, yrs[0]);
+    const td = parse(t);
+    $("otdMon").textContent = td.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3);
+    $("otdDay").textContent = td.getUTCDate();
+    $("otdV").textContent = main.migrants ? plural(main.migrants, "person", "people") + " crossed" : "No crossings detected";
+    $("otdS").textContent = "A year ago, " + dLong.format(parse(main.date)) + (main.migrants ? " · " + plural(main.boats, "boat", "boats") : "");
+    $("otdNote").textContent = top.migrants ? "Busiest: " + top.date.slice(0,4) + ", " + fmt(top.migrants) : "";
+    $("otdYears").innerHTML = yrs.slice().reverse().map((d, i, a) => '<div title="' + dLong.format(parse(d.date)) + ": " + fmt(d.migrants) + ' people"><b class="num">' + fmt(d.migrants) + '</b><i class="' + (d.migrants ? "" : "zero") + (i === a.length - 1 ? " last" : "") + '" style="height:' + Math.max(3, d.migrants / mx * 100).toFixed(1) + "%;transition-delay:" + i * 60 + 'ms"></i><em>' + d.date.slice(0,4) + "</em></div>").join("");
   }
 
   /* ---------------------------------------------------- Stocks-style chart */
@@ -781,12 +916,13 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       h += '<i data-d="' + iso + '" class="' + (fut ? "fut" : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" style="transition-delay:' + Math.min(900, col * 16) + 'ms" role="button" tabindex="-1" aria-label="' + dMid.format(parse(iso)) + (fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
     }
     $("heat").innerHTML = months + h;
-    // squares grow to fill wide screens (53 weeks), and stay finger-sized on phones (the grid scrolls)
-    const cols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7), avail = $("heatScroll").clientWidth - 8;
-    $("heat").style.setProperty("--c", Math.max(14, Math.min(22, Math.floor(avail / cols) - 4)) + "px");
+    heatCols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7); sizeHeat();
     $("heatNote").textContent = yr + " · " + fmt(inYear.filter(d => d.migrants > 0).length) + " days with crossings";
     const sc = $("heatScroll"); sc.scrollLeft = sc.scrollWidth;
   }
+  // squares grow to fill wide screens (53 weeks), and stay finger-sized on phones (the grid scrolls)
+  let heatCols = 53;
+  const sizeHeat = () => $("heat").style.setProperty("--c", Math.max(14, Math.min(22, Math.floor(($("heatScroll").clientWidth - 8) / heatCols) - 4)) + "px");
   $("heat").addEventListener("click", e => {
     const c = e.target.closest("i[data-d]"); if(!c) return;
     document.querySelectorAll("#heat i.sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel");
@@ -808,8 +944,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   }
 
   /* ---------------------------------------------------- who is crossing, per boat, returns */
-  const FLAGS = {Eritrea:"🇪🇷", Sudan:"🇸🇩", Afghanistan:"🇦🇫", Iran:"🇮🇷", Iraq:"🇮🇶", Syria:"🇸🇾", Vietnam:"🇻🇳", Somalia:"🇸🇩", Ethiopia:"🇪🇹", Egypt:"🇪🇬", Albania:"🇦🇱", Turkey:"🇹🇷", Kuwait:"🇰🇼", Yemen:"🇾🇪", Chad:"🇹🇩", "South Sudan":"🇸🇸", Libya:"🇱🇾", India:"🇮🇳", Pakistan:"🇵🇰"};
-  FLAGS.Somalia = "🇸🇴";
+  const FLAGS = {Eritrea:"🇪🇷", Sudan:"🇸🇩", Afghanistan:"🇦🇫", Iran:"🇮🇷", Iraq:"🇮🇶", Syria:"🇸🇾", Vietnam:"🇻🇳", Somalia:"🇸🇴", Ethiopia:"🇪🇹", Egypt:"🇪🇬", Albania:"🇦🇱", Turkey:"🇹🇷", Kuwait:"🇰🇼", Yemen:"🇾🇪", Chad:"🇹🇩", "South Sudan":"🇸🇸", Libya:"🇱🇾", India:"🇮🇳", Pakistan:"🇵🇰"};
   function onReveal(el, fn){ const c = el.closest(".rv"); if(c.classList.contains("on") || reduced) fn(); else c.addEventListener("reveal", fn, {once:true}); }
   function renderWho(g, nat){
     if(g && g.lastYear){
@@ -866,41 +1001,81 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     $("records").innerHTML = rows.map(r => '<li><span class="ic" style="background:' + r[1] + '">' + RIC[r[0]] + '</span><span class="t">' + r[2] + "<small>" + r[3] + '</small></span><span class="v">' + r[4] + "</span></li>").join("");
   }
 
-  /* ---------------------------------------------------- Channel conditions (Open-Meteo) */
+  /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated as on the main site */
   const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
+  const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
+  const SKY = {clear:"Clear", partly:"Partly cloudy", cloudy:"Cloudy", fog:"Foggy", drizzle:"Drizzle", rain:"Rain", snow:"Snow", storm:"Thunderstorms"};
+  const kindOf = c => c == null ? null : c <= 1 ? "clear" : c === 2 ? "partly" : c === 3 ? "cloudy" : c === 45 || c === 48 ? "fog"
+    : c >= 51 && c <= 57 ? "drizzle" : (c >= 61 && c <= 67) || (c >= 80 && c <= 82) ? "rain" : (c >= 71 && c <= 77) || c === 85 || c === 86 ? "snow" : c >= 95 ? "storm" : "cloudy";
+  // Full-colour weather symbols, in the style of Apple's multicolour SF Symbols
+  function wxIcon(kind, day){
+    const sun = '<circle cx="12" cy="12" r="4.6" fill="#FFCC00"/><path d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6" stroke="#FFCC00" stroke-width="1.9" stroke-linecap="round"/>';
+    const moon = '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z" fill="#FFD60A"/>';
+    const cloud = (t, o) => '<path' + (t ? ' transform="' + t + '"' : "") + (o ? ' opacity="' + o + '"' : "") + ' d="M7 18.5h10.2a3.8 3.8 0 0 0 .3-7.6 5.4 5.4 0 0 0-10.3-1.4A4.5 4.5 0 0 0 7 18.5z" fill="var(--cloud)" stroke="var(--cloud-edge)" stroke-width=".9"/>';
+    const up = "translate(0 -3.5)", drops = n => [0,1,2].slice(0, n).map(i => '<path d="M' + (9 + i * 3.5) + ' 18.4l-1 2.8" stroke="#0A84FF" stroke-width="1.9" stroke-linecap="round"/>').join("");
+    const g = kind === "clear" ? (day ? sun : moon)
+      : kind === "partly" ? '<g transform="translate(6.5 -4.5) scale(.62)">' + (day ? sun : moon) + "</g>" + cloud("translate(-1 1)")
+      : kind === "cloudy" ? cloud("translate(5.5 -4.5) scale(.72)", ".65") + cloud("translate(-1 1)")
+      : kind === "fog" ? cloud(up) + '<path d="M4.5 18h15M7 21.2h10" stroke="var(--cloud-edge)" stroke-width="1.9" stroke-linecap="round"/>'
+      : kind === "drizzle" ? cloud(up) + drops(2)
+      : kind === "rain" ? cloud(up) + drops(3)
+      : kind === "snow" ? cloud(up) + [0,1,2].map(i => '<circle cx="' + (8.5 + i * 3.5) + '" cy="' + (19.5 + (i % 2) * 1.6) + '" r="1.1" fill="#5AC8FA"/>').join("")
+      : kind === "storm" ? cloud(up) + '<path d="M12.6 14.6l-2.6 4h2.6l-1.4 4 4-5.2h-2.6l1.2-2.8z" fill="#FFCC00"/>'
+      : '<path d="M2 9c2 0 2-1.5 4-1.5S8 9 10 9s2-1.5 4-1.5S16 9 18 9s2-1.5 4-1.5M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5" fill="none" stroke="#0A84FF" stroke-width="2" stroke-linecap="round"/>';
+    return '<svg viewBox="0 0 24 24" aria-hidden="true">' + g + "</svg>";
+  }
+  const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
   async function loadWeather(){
+    wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m&hourly=wind_speed_10m&wind_speed_unit=mph"),
+      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
                                         getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
-      const wind = w.current.wind_speed_10m, wave = m.current.wave_height, lvl = rate(wind, wave);
-      $("wxV").textContent = lvl ? WORD[lvl] + (lvl === "calm" ? ": crossings likely" : lvl === "moderate" ? ": some crossings possible" : ": crossings unlikely") : "Unavailable";
-      $("wxV").style.color = lvl === "calm" ? "var(--green-t)" : lvl === "moderate" ? "var(--orange)" : "var(--red-t)";
+      const wind = w.current.wind_speed_10m, wave = m.current.wave_height, lvl = rate(wind, wave), kind = kindOf(w.current.weather_code);
+      $("wxArt").innerHTML = wxIcon(kind, w.current.is_day !== 0);
+      $("wxV").textContent = lvl ? WORD[lvl] + ": " + LINE[lvl] : "Unavailable"; $("wxV").className = "wx-lv " + (lvl || "");
+      $("wxSky").textContent = (kind ? SKY[kind] + " · " : "") + Math.round(w.current.temperature_2m) + "°C";
       $("wxS").textContent = "Wind " + Math.round(wind) + " mph, gusting " + Math.round(w.current.wind_gusts_10m) + " mph · Waves " + (wave == null ? "–" : wave.toFixed(1) + " m");
+      $("wxTime").textContent = "Updated " + ukClock(new Date());
+      // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
-      $("wxDays").innerHTML = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)); return '<div class="wx-day"><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + '</span><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b></div>"; }).join("");
+      $("wxDays").innerHTML = Object.keys(by).sort().slice(1,4).map(d => {
+        const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d), k = di >= 0 ? kindOf(w.daily.weather_code[di]) : null, hi = di >= 0 ? w.daily.temperature_2m_max[di] : null;
+        return '<div class="wx-day"><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + (hi != null ? "<em>" + Math.round(hi) + "°</em>" : "") + '</span><div class="ic" title="' + (k ? SKY[k] : "") + '">' + wxIcon(k, true) + '</div><div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><small>" + (k ? SKY[k] : "") + "</small></div></div>";
+      }).join("");
       const c = $("chipWx"); c.hidden = !lvl; c.querySelector("i").className = lvl || ""; c.querySelector("span").textContent = (lvl ? WORD[lvl] : "") + " in the Channel now";
-    }catch(e){ $("wxV").textContent = "Unavailable"; $("wxS").textContent = "The weather service didn't respond."; }
+    }catch(e){
+      $("wxArt").innerHTML = wxIcon(null); $("wxV").textContent = "Unavailable"; $("wxV").className = "wx-lv"; $("wxSky").textContent = "";
+      $("wxS").textContent = "The weather service didn't respond. It will try again shortly."; $("wxDays").innerHTML = ""; $("chipWx").hidden = true;
+      wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
+    }
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); drawHeat(); drawYears(); renderRecords(); if(!first) drawChart(); }
+  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); if(!first) drawChart(); }
 
   /* ---------------------------------------------------- go */
+  function useData(d){
+    const list = (d.days || []).filter(x => x && x.date).sort((a,b) => a.date < b.date ? -1 : 1);
+    if(list.length){ meta = d; days = list; }
+  }
+  async function loadExtras(){
+    const [g, n, pb, r] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json")]);
+    renderWho(g.value, n.value); renderPerBoat(pb.value); renderReturns(r.value);
+  }
   async function start(){
+    statusAt = Date.now();
     try{
-      const d = await getJSON("data.json");
-      meta = d; days = (d.days || []).filter(x => x && x.date).sort((a,b) => a.date < b.date ? -1 : 1);
+      useData(await getJSON("data.json"));
       if(!days.length) throw 0;
       renderAll(true);
       const line = drawChart();
       const cc = $("chart").closest(".rv"); if(cc.classList.contains("on") || reduced) animateLine(line); else cc.addEventListener("reveal", () => animateLine($("chart").querySelector("#chartLine,#chartBars")), {once:true});
-      let lw = 0; if("ResizeObserver" in window) new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; drawChart(); } }).observe($("chart"));
-    }catch(e){ $("heroKicker").textContent = "Couldn't load the figures. Try reloading the page."; }
-    const [g, n, pb, r] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json")]);
-    renderWho(g.value, n.value); renderPerBoat(pb.value); renderReturns(r.value);
+      let lw = 0; if("ResizeObserver" in window) new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; drawChart(); sizeHeat(); } }).observe($("chart"));
+      loadExtras();
+    }catch(e){ $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
   }
   start(); loadWeather();
 })();
