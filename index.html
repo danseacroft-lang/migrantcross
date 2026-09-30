@@ -1897,7 +1897,27 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   });
 
   /* =========== Refresh Figures (in the Figure updates pop-up) =========== */
-  // Looks for new figures without reloading the page: "Refreshing…", then the result, then back to normal
+  // Looks for new figures without reloading the page: "Refreshing…", then the result, then back to normal.
+  // Two sources, fetched together: the site's own figures, and the Home Office's "last 7 days" page read
+  // straight from GOV.UK (useful when it publishes before the site's next check, e.g. weekend mornings).
+  // If the browser can't read GOV.UK, the site's own figures are used.
+  const GOV7 = "https://www.gov.uk/api/content/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats/migrants-detected-crossing-the-english-channel-in-small-boats-last-7-days";
+  const MONTHS = {january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
+  const toInt = t => { const n = parseInt(String(t).replace(/[^0-9]/g, ""), 10); return isNaN(n) ? 0 : n; };
+  async function fetchGov7(){
+    const r = await fetch(GOV7, {cache:"no-cache", ...limit()});
+    if(!r.ok) throw 0;
+    const body = ((await r.json()).details || {}).body || "";
+    const doc = new DOMParser().parseFromString(body, "text/html"), out = [];
+    doc.querySelectorAll("table tbody tr").forEach(tr=>{
+      const cells = [...tr.children].map(c=>c.textContent.trim());
+      const m = /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/.exec(cells[0] || "");
+      if(!m || !MONTHS[m[2].toLowerCase()]) return;
+      const date = m[3] + "-" + String(MONTHS[m[2].toLowerCase()]).padStart(2,"0") + "-" + m[1].padStart(2,"0");
+      out.push({date, migrants:toInt(cells[1]), boats:toInt(cells[2]), uncontrolled: cells[3] != null ? toInt(cells[3]) : null});
+    });
+    return out;
+  }
   $("refreshBtn").addEventListener("click", async e=>{
     e.stopPropagation();
     const btn = $("refreshBtn"), txt = $("refreshText");
@@ -1906,14 +1926,20 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     btn.setAttribute("aria-disabled", "true"); btn.classList.remove("done"); btn.classList.add("busy"); txt.textContent = "Refreshing…";
     const started = Date.now(), before = sorted.length ? sorted[sorted.length-1].date : "", builtBefore = meta && meta.checkedAt;
     let result = "No updates available";
-    try{
-      const r = await fetch("data.json", {cache:"no-cache", ...limit()});
-      if(!r.ok) throw 0;
-      const d = await r.json();
-      const latest = d.days && d.days.length ? d.days[d.days.length-1].date : "";
+    const [own, gov] = await Promise.allSettled([
+      fetch("data.json", {cache:"no-cache", ...limit()}).then(r=>{ if(!r.ok) throw 0; return r.json(); }),
+      fetchGov7()
+    ]);
+    if(own.status === "fulfilled"){
+      const d = own.value, govDays = gov.status === "fulfilled" ? gov.value : [];
+      const ownLatest = d.days && d.days.length ? d.days[d.days.length-1].date : "";
+      // Days the Home Office has published that the site hasn't picked up yet
+      const extra = govDays.filter(g => g.date > ownLatest).sort((a,b)=>a.date<b.date?-1:1);
+      if(extra.length) d.days = d.days.concat(extra);
+      const latest = d.days.length ? d.days[d.days.length-1].date : "";
       if(latest > before){ load(d, true); result = "New figures are in"; }
       else if(d.checkedAt && d.checkedAt !== builtBefore) load(d, true);   // same days, possibly revised figures
-    }catch(err){ result = "Couldn't refresh. Try again"; }
+    } else result = "Couldn't refresh. Try again";
     loadNews(); if(Date.now() - wxAt > 5*60*1000) loadWeather();   // freshen the rest too
     await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - started))));   // let "Refreshing…" register
     btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
