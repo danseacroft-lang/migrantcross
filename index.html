@@ -178,6 +178,38 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .theme-btn{position:relative;display:inline-flex;align-items:center;gap:6px;appearance:none;border:0;cursor:pointer;background:var(--fill);color:var(--label);font:600 .882rem/1 var(--font);letter-spacing:-.016em;height:44px;padding:0 16px 0 12px;border-radius:22px;touch-action:manipulation}
 .theme-btn::after{content:"";position:absolute;inset:-5px 0}
 .theme-btn svg{width:20px;height:20px;flex:none}
+/* Search: a field in the top right on wider screens; on phones a button that opens a bar across the top */
+.search{display:flex;align-items:center;gap:10px}
+.search-open{display:none;width:44px;height:44px;border:0;border-radius:50%;background:var(--fill);color:var(--blue);place-items:center;cursor:pointer;touch-action:manipulation}
+.search-open svg{width:20px;height:20px}
+.search-field{position:relative;display:flex;align-items:center;gap:6px;width:210px;height:44px;padding:0 10px 0 12px;border-radius:22px;background:var(--fill);color:var(--label2);cursor:text;transition:width .25s ease}
+.search-field:focus-within{width:270px}
+.search-field > svg{width:17px;height:17px;flex:none}
+.search-field input{flex:1;min-width:0;appearance:none;border:0;background:none;color:var(--label);font:inherit;font-size:1rem;letter-spacing:-.02em;outline:none;padding:0}
+.search-field input::placeholder{color:var(--label2)}
+.search-field input::-webkit-search-cancel-button{display:none}
+.search-field:has(input:focus-visible){outline:2px solid var(--blue);outline-offset:1px}
+.search-clear{flex:none;display:grid;place-items:center;width:28px;height:28px;margin-right:-4px;border:0;background:none;color:var(--label3);cursor:pointer;padding:4px}
+.search-clear svg{width:17px;height:17px}
+.search-cancel{display:none;border:0;background:none;color:var(--blue);font:400 1rem/1 var(--font);min-height:44px;padding:0 2px;cursor:pointer;white-space:nowrap}
+.search-open:focus-visible,.search-cancel:focus-visible,.search-clear:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (max-width:600px){
+  .search-open{display:grid}
+  .search-field{display:none}
+  .search.open{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));
+    background:var(--bg)}
+  .search.open .search-open{display:none}
+  .search.open .search-field{display:flex;flex:1;width:auto;height:40px}
+  .search.open .search-cancel{display:block}
+}
+@media (max-width:360px){.search-open{width:40px;height:40px}}
+/* While searching: best matches first, everything else pushed below and faded; notices step aside */
+.wrap.searching > .news,.wrap.searching > .notices,.wrap.searching > .subscribe,.wrap.searching > .meta-row{display:none!important}
+.wrap.searching .board{grid-template-columns:minmax(0,1fr);grid-template-areas:none}
+.wrap.searching .board > section{grid-area:auto}
+.s-dim{opacity:.32;filter:saturate(.4);transition:opacity .25s ease,filter .25s ease}
+.s-hit{transition:opacity .25s ease}
+.search-empty{margin:0;padding:18px 16px;border-radius:12px;background:var(--fill);color:var(--label2);text-align:center;font-size:.941rem}
 /* "NEW Try Beach Radar": a pill on wider screens, the radar symbol with a NEW tag on phones */
 .br-btn{position:relative;display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 14px 0 8px;border-radius:22px;background:var(--fill);color:var(--label);text-decoration:none;font:600 .882rem/1 var(--font);letter-spacing:-.016em;white-space:nowrap}
 .br-btn svg{width:20px;height:20px;flex:none;color:var(--green)}
@@ -651,6 +683,12 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
       </div>
     </div>
     <div class="bar-actions">
+      <div class="search" id="search" role="search">
+        <button type="button" class="search-open" id="searchOpen" aria-label="Search the figures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4l5 5"/></svg></button>
+        <label class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4l5 5"/></svg><span class="sr">Search the figures</span><input type="search" id="searchInput" placeholder="Search figures" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-describedby="searchCount"><button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor"/><path d="M7 7l6 6M13 7l-6 6" stroke="var(--bg)" stroke-width="1.8" stroke-linecap="round"/></svg></button></label>
+        <button type="button" class="search-cancel" id="searchCancel">Cancel</button>
+        <span class="sr" id="searchCount" aria-live="polite"></span>
+      </div>
       <button type="button" class="share-btn dl-btn" id="syncBtn" aria-label="New figures incoming. Show the notice" title="New figures incoming" hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><g class="dl-arrow"><path d="M12 7.2v8.2"/><path d="M8.6 12.3l3.4 3.4 3.4-3.4"/></g></svg>
       </button>
@@ -669,6 +707,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   </div>
 </header>
 <div class="wrap">
+  <p class="search-empty" id="searchEmpty" hidden></p>
   <div class="meta-row"><button type="button" class="link-btn" id="showWeather" hidden>Show Channel conditions</button></div>
 
   <!-- Breaking news about small boats, from UK news outlets (news.json, updated hourly) -->
@@ -1944,6 +1983,98 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - started))));   // let "Refreshing…" register
     btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
     setTimeout(()=>{ btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); }, 2500);
+  });
+
+  /* =========== Search =========== */
+  // Live results: boxes that match move to the top in order of relevance, the rest move below and fade.
+  // Each box is found by its own title plus everyday words people might search for.
+  const SEARCH_KEYS = [
+    ["latestV", "latest yesterday today arrivals migrants people crossed day daily boats month"],
+    ["weekV", "week weekly last 7 days seven past fortnight compare"],
+    ["ytdV", "year so far ytd annual total this year 2026 compare last year progress average"],
+    ["labV", "labour starmer government since 2024 election cost taxpayer money asylum support billion average"],
+    ["burV", "burnham pm prime minister since 2026 government average"],
+    ["shareText", "share post x twitter facebook whatsapp telegram copy link send"],
+    [".area-chart", "chart graph daily per day arrivals bars boats 7 30 90 days trend"],
+    [".area-cal", "calendar month date day history pick busiest revised new"],
+    [".area-race", "year by year race compare years running total cumulative 2025 2024 2023 2022 2021 2020 2019 2018 line"],
+    [".area-years", "yearly totals annual year table per boat change people boats"],
+    [".area-calc", "between two dates calculator range from to period custom since"],
+    [".area-quiet", "longest spells without crossings quiet calm weather gap zero no crossings streak"],
+    [".area-pat", "patterns day of week month busiest average seasonal weekday weekend"],
+    [".area-rep", "every person dots people boats emoji visual"],
+    [".area-gender", "sex age gender male female men women children kids under 18 adult quarterly"],
+    [".area-records", "records record busiest day most since last crossing longest run uncontrolled landings"],
+    [".area-petitions", "petitions parliament debate signatures sign government response"]
+  ];
+  let searchItems = null;
+  function buildSearch(){
+    searchItems = SEARCH_KEYS.map(([sel, keys], i)=>{
+      const el = sel[0] === "." ? document.querySelector(sel) : $(sel) && $(sel).closest(".tile");
+      if(!el) return null;
+      const title = (el.querySelector(".k, h2") || el).textContent.replace(/\s+/g, " ").trim().toLowerCase();
+      return {el, i, title, titleWords: title.split(/[^a-z0-9]+/).filter(Boolean), keyWords: keys.split(" ")};
+    }).filter(Boolean);
+  }
+  function scoreItem(it, tokens){
+    let total = 0;
+    for(const t of tokens){
+      let best = 0;
+      if(it.titleWords.some(w => w.startsWith(t))) best = 3;
+      else if(it.keyWords.some(w => w.startsWith(t))) best = 2;
+      else if(t.length >= 3 && (it.title.includes(t) || it.keyWords.some(w => w.includes(t)))) best = 1;
+      if(!best) return 0;   // every word typed has to match something
+      total += best;
+    }
+    return total;
+  }
+  function runSearch(q){
+    if(!searchItems) buildSearch();
+    const wrap = document.querySelector(".wrap"), tiles = document.querySelector(".tiles"), board = document.querySelector(".board");
+    const tokens = q.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+    const before = new Map(searchItems.map(it => [it.el, it.el.getBoundingClientRect()]));
+    $("searchClear").hidden = !q;
+    if(!tokens.length){
+      wrap.classList.remove("searching"); $("searchEmpty").hidden = true;
+      [tiles, board].forEach(g => g.style.order = "");
+      searchItems.forEach(it => { it.el.style.order = ""; it.el.classList.remove("s-dim", "s-hit"); });
+      $("searchCount").textContent = "";
+      return;
+    }
+    wrap.classList.add("searching");
+    const visible = searchItems.filter(it => getComputedStyle(it.el).display !== "none" || it.el.style.display);
+    const ranked = visible.map(it => ({it, s: scoreItem(it, tokens)})).sort((a,b) => b.s - a.s || a.it.i - b.it.i);
+    const hits = ranked.filter(r => r.s > 0);
+    ranked.forEach((r, n) => { r.it.el.style.order = r.s > 0 ? n : 100 + r.it.i; r.it.el.classList.toggle("s-dim", !r.s); r.it.el.classList.toggle("s-hit", !!r.s); });
+    // Whichever group holds the best match goes first
+    const topIsBoard = hits.length && board.contains(hits[0].it.el);
+    tiles.style.order = topIsBoard ? -1 : -2; board.style.order = topIsBoard ? -2 : -1;
+    $("searchEmpty").hidden = !!hits.length;
+    $("searchEmpty").textContent = hits.length ? "" : "Nothing matches “" + q.trim() + "”. Try “week”, “cost”, “records” or “petitions”.";
+    $("searchCount").textContent = hits.length ? hits.length + (hits.length === 1 ? " match" : " matches") : "No matches";
+    // Glide boxes to their new places
+    if(!reduced()) searchItems.forEach(it=>{
+      const a = before.get(it.el), b = it.el.getBoundingClientRect();
+      const dx = a.left - b.left, dy = a.top - b.top;
+      if((dx || dy) && a.width && b.width) it.el.animate([{transform:"translate(" + dx + "px," + dy + "px)"}, {transform:"none"}], {duration:320, easing:"cubic-bezier(.2,.8,.2,1)"});
+    });
+  }
+  const sInput = $("searchInput");
+  sInput.addEventListener("input", ()=>{
+    if(sInput.value && scrollY > 80) scrollTo({top:0, behavior: reduced() ? "auto" : "smooth"});
+    runSearch(sInput.value);
+  });
+  sInput.addEventListener("keydown", e=>{
+    if(e.key === "Escape"){ sInput.value = ""; runSearch(""); sInput.blur(); closeSearch(); }
+    if(e.key === "Enter"){ e.preventDefault(); sInput.blur(); }   // hides the phone keyboard; results are already showing
+  });
+  $("searchClear").addEventListener("click", ()=>{ sInput.value = ""; runSearch(""); sInput.focus(); });
+  function closeSearch(){ $("search").classList.remove("open"); }
+  $("searchOpen").addEventListener("click", ()=>{ $("search").classList.add("open"); sInput.focus(); });
+  $("searchCancel").addEventListener("click", ()=>{ sInput.value = ""; runSearch(""); closeSearch(); $("searchOpen").focus(); });
+  // "/" jumps to search on a keyboard
+  document.addEventListener("keydown", e=>{
+    if(e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){ e.preventDefault(); $("search").classList.add("open"); sInput.focus(); }
   });
 
   /* =========== Email updates =========== */
