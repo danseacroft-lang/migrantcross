@@ -265,18 +265,25 @@ def update_returns(days):
     start, end = _period(title)
     html = requests.get(url, headers=H, timeout=60).text
     months = []
+    num = lambda v: int(re.sub(r"[^\d]", "", str(v)) or 0)
     for t in pd.read_html(io.StringIO(html)):
         cols = [" ".join(map(str, c)) if isinstance(c, tuple) else str(c) for c in t.columns]
-        ci = next((i for i, c in enumerate(cols) if re.search(r"\bin\b|transfer", c, re.I)), None)
-        co = next((i for i, c in enumerate(cols) if re.search(r"\bout\b|return", c, re.I)), None)
-        if ci is None or co is None:
+        find = lambda pat: next((i for i, c in enumerate(cols) if re.search(pat, c, re.I)), None)
+        ci, co = find(r"^\s*in\b|transfer"), find(r"^\s*out\b|return")
+        cy, cm = find(r"year"), find(r"month")
+        if ci is None or co is None or cm is None:
             continue
+        year = None
         for row in t.itertuples(index=False):
+            if cy is not None and re.fullmatch(r"\d{4}", str(row[cy]).strip()):
+                year = str(row[cy]).strip()                                # years may only be given once
+            text = str(row[cm]).strip()
+            if not re.search(r"\d{4}", text) and year:
+                text += " " + year
             try:
-                m = datetime.strptime(str(row[0]).strip(), "%B %Y").strftime("%Y-%m")
+                m = datetime.strptime(text, "%B %Y").strftime("%Y-%m")
             except ValueError:
                 continue                                                  # the total row, notes
-            num = lambda v: int(re.sub(r"[^\d]", "", str(v)) or 0)
             months.append({"month": m, "in": num(row[ci]), "out": num(row[co])})
         if months:
             break
