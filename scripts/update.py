@@ -15,7 +15,7 @@ Outputs (see publish()):
   index.html   latest figures built into the page so they show instantly,
                plus an up-to-date description and dataset date for Google
   og-image.png link preview picture; week-card.png weekly summary picture
-  gender.json, petitions.json: see scripts/extras.py
+  gender.json, nationalities.json, perboat.json, returns.json, petitions.json: see scripts/extras.py
   status.json  tiny heartbeat the page polls: when we last checked, and which build of the figures is current
 """
 import io
@@ -243,7 +243,8 @@ def update_page(data, recent):
     latest = last["date"]
 
     extras = {}
-    for key, name in (("gender", "gender.json"), ("petitions", "petitions.json")):
+    for key, name in (("gender", "gender.json"), ("petitions", "petitions.json"), ("nationalities", "nationalities.json"),
+                      ("perboat", "perboat.json"), ("returns", "returns.json")):
         f = ROOT / name
         if f.exists():
             extras[key] = json.loads(f.read_text())

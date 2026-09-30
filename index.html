@@ -377,15 +377,38 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 .notices:not(:has(.banner:not([hidden]))){display:none}
 .board{display:grid;gap:28px 20px;align-items:start;grid-template-columns:minmax(0,1fr)}
 @media (min-width:760px){
-  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "cal cal" "race race" "years years" "calc quiet" "pat pat" "rep rep" "gender records" "petitions petitions"}
-  .area-chart{grid-area:chart}.area-cal{grid-area:cal}.area-race{grid-area:race}.area-years{grid-area:years}.area-calc{grid-area:calc}.area-quiet{grid-area:quiet}.area-pat{grid-area:pat}.area-rep{grid-area:rep}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"chart chart" "cal cal" "race race" "years years" "calc quiet" "pat pat" "rep rep" "gender records" "nat boat" "ret ret" "petitions petitions"}
+  .area-chart{grid-area:chart}.area-cal{grid-area:cal}.area-race{grid-area:race}.area-years{grid-area:years}.area-calc{grid-area:calc}.area-quiet{grid-area:quiet}.area-pat{grid-area:pat}.area-rep{grid-area:rep}.area-gender{grid-area:gender}.area-records{grid-area:records}.area-petitions{grid-area:petitions}.area-nat{grid-area:nat}.area-boat{grid-area:boat}.area-ret{grid-area:ret}
 }
 @media (min-width:1080px){
-  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "cal cal records" "race race race" "years years calc" "pat pat quiet" "rep rep rep" "petitions petitions petitions"}
+  .board{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:"chart chart gender" "cal cal records" "race race race" "years years calc" "pat pat quiet" "nat boat ret" "rep rep rep" "petitions petitions petitions"}
 }
 /* Every Person: computers only */
 .area-rep{display:none}
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.area-rep{display:grid}}
+/* Nationalities */
+.nat li{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
+.nat .nn{font-size:1rem}
+.nat .np{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.nat .nbar{grid-column:1 / -1;height:6px;border-radius:3px;background:var(--fill);overflow:hidden}
+.nat .nbar i{display:block;height:100%;background:var(--blue);border-radius:3px}
+.nat li.other .nbar i{background:var(--label3)}
+.nat .nm{grid-column:1 / -1;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
+/* People per boat, UK-France returns */
+.mini{margin-top:12px}
+.mini svg{display:block;width:100%;height:auto}
+.mini text{font-family:var(--font);font-variant-numeric:tabular-nums}
+.mini .lab{fill:var(--label2);font-size:11px}
+.mini .val{fill:var(--label);font-size:11px;font-weight:600}
+.rt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rt-grid div{display:grid;gap:2px}
+.rt-grid b{font:700 28px/1.1 var(--round);font-variant-numeric:tabular-nums}
+.rt-grid span{font-size:.765rem;color:var(--label2)}
+.rt-grid i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.rt-o{background:var(--blue)}.rt-a{background:var(--indigo)}
+.rt-notes{list-style:none;margin:14px 0 0;padding:12px 0 0;border-top:.5px solid var(--sep);display:grid;gap:8px;font-size:.882rem}
+.rt-notes li{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}
+.rt-notes li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--label3);margin-top:.5em}
 .card.pad{padding:16px}
 .seg.seg-sm{min-width:0}
 .seg button{white-space:nowrap}
@@ -935,6 +958,34 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     <p class="footnote" id="recordsNote"></p>
   </section>
 
+  <section class="area-nat">
+    <div class="sec-title"><h2>Nationalities</h2></div>
+    <div class="card"><ul class="list nat" id="nat"><li class="empty">Loading figures…</li></ul></div>
+    <p class="footnote" id="natNote"></p>
+  </section>
+
+  <section class="area-boat">
+    <div class="sec-title"><h2>People per Boat</h2></div>
+    <div class="card pad">
+      <div class="g-head"><span class="g-total" id="pbV">–</span><span class="g-period" id="pbS"></span></div>
+      <div class="mini" id="pbChart" role="img"></div>
+    </div>
+    <p class="footnote" id="pbNote"></p>
+  </section>
+
+  <section class="area-ret">
+    <div class="sec-title"><h2>Returns to France</h2></div>
+    <div class="card pad">
+      <div class="rt-grid">
+        <div><b id="rtOut">–</b><span><i class="rt-o"></i>sent back to France</span></div>
+        <div><b id="rtIn">–</b><span><i class="rt-a"></i>taken in from France</span></div>
+      </div>
+      <div class="mini" id="rtChart" role="img"></div>
+      <ul class="rt-notes" id="rtNotes"></ul>
+    </div>
+    <p class="footnote" id="rtNote"></p>
+  </section>
+
   <section class="area-petitions">
     <div class="sec-title"><h2>Petitions</h2></div>
     <div class="card"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
@@ -999,7 +1050,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 
 
 <!-- Latest figures, rebuilt by scripts/update.py whenever new ones are published, so the page shows them instantly -->
-<script id="seed" type="application/json">{"ytdBase":11884,"ytdBaseDate":"2026-06-30","fullYear":true,"checkedAt":"2026-09-29T13:43:15Z","days":[{"date":"2026-07-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-08","migrants":249,"boats":4,"uncontrolled":null},{"date":"2026-07-09","migrants":81,"boats":1,"uncontrolled":null},{"date":"2026-07-10","migrants":255,"boats":3,"uncontrolled":null},{"date":"2026-07-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-14","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-15","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-22","migrants":172,"boats":3,"uncontrolled":null},{"date":"2026-07-23","migrants":366,"boats":3,"uncontrolled":null},{"date":"2026-07-24","migrants":103,"boats":2,"uncontrolled":null},{"date":"2026-07-25","migrants":240,"boats":5,"uncontrolled":null},{"date":"2026-07-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-27","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-28","migrants":26,"boats":1,"uncontrolled":null},{"date":"2026-07-29","migrants":752,"boats":9,"uncontrolled":null},{"date":"2026-07-30","migrants":72,"boats":1,"uncontrolled":null},{"date":"2026-07-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-01","migrants":326,"boats":4,"uncontrolled":null},{"date":"2026-08-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-03","migrants":35,"boats":1,"uncontrolled":null},{"date":"2026-08-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-08","migrants":258,"boats":4,"uncontrolled":null},{"date":"2026-08-09","migrants":423,"boats":5,"uncontrolled":null},{"date":"2026-08-10","migrants":230,"boats":1,"uncontrolled":null},{"date":"2026-08-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-14","migrants":93,"boats":1,"uncontrolled":null},{"date":"2026-08-15","migrants":82,"boats":1,"uncontrolled":null},{"date":"2026-08-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-17","migrants":250,"boats":3,"uncontrolled":null},{"date":"2026-08-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-22","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-23","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-24","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-25","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-27","migrants":494,"boats":7,"uncontrolled":null},{"date":"2026-08-28","migrants":122,"boats":3,"uncontrolled":null},{"date":"2026-08-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-30","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-06","migrants":625,"boats":8,"uncontrolled":null},{"date":"2026-09-07","migrants":143,"boats":2,"uncontrolled":null},{"date":"2026-09-08","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-09","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-10","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-14","migrants":144,"boats":2,"uncontrolled":null},{"date":"2026-09-15","migrants":55,"boats":1,"uncontrolled":null},{"date":"2026-09-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-26","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-27","migrants":526,"boats":7,"uncontrolled":0},{"date":"2026-09-28","migrants":0,"boats":0,"uncontrolled":0}],"prevYearSamePoint":33486,"periods":{"labour":{"from":"2024-07-05","people":83849,"boats":1376,"days":816},"burnham":{"from":"2026-07-20","people":6666,"boats":91,"days":71}},"extras":{"gender":{"source":"https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx","latestQuarter":"2026 Q2","period":"year ending June 2026","lastYear":{"sex":{"Male":26973,"Female":5260,"Unknown":1141},"age":{"17 and under":4993,"18 to 24":10637,"25 to 39":14341,"40 and over":2263,"Unknown":1140},"adultMen":23110,"total":33374},"since2018":{"sex":{"Male":174171,"Female":26077,"Unknown":4269},"age":{"17 and under":32306,"18 to 24":66808,"25 to 39":86529,"40 and over":14924,"Unknown":3950},"adultMen":148786,"total":204517},"updatedAt":"2026-09-27T18:15:08Z"},"petitions":{"petitions":[{"id":778181,"title":"Deploy the Royal Navy to turn illegal small boats back to France","signatures":255,"state":"open","closes":"2027-03-04","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/778181"},{"id":777795,"title":"Ban all alternative remittance systems to disrupt small boat smuggling networks","signatures":118,"state":"open","closes":"2027-02-18","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/777795"},{"id":731131,"title":"End all EU fishing rights in UK waters until France stops small boats","signatures":2273,"state":"closed","closes":"2026-02-11","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/731131"},{"id":760177,"title":"End the 2023 \u00a3476m deal with France to stop the migrants crossing the channel","signatures":996,"state":"closed","closes":"2026-09-16","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/760177"},{"id":732995,"title":"Ban UK Border Force from picking up migrants in the Channel","signatures":850,"state":"closed","closes":"2026-02-13","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/732995"},{"id":736491,"title":"Detain all illegal immigrants and put in camping sites on airfields","signatures":498,"state":"closed","closes":"2026-02-20","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/736491"}],"updatedAt":"2026-09-29T13:43:26Z"}}}</script>
+<script id="seed" type="application/json">{"ytdBase":11884,"ytdBaseDate":"2026-06-30","fullYear":true,"checkedAt":"2026-09-29T13:43:15Z","days":[{"date":"2026-07-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-08","migrants":249,"boats":4,"uncontrolled":null},{"date":"2026-07-09","migrants":81,"boats":1,"uncontrolled":null},{"date":"2026-07-10","migrants":255,"boats":3,"uncontrolled":null},{"date":"2026-07-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-14","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-15","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-22","migrants":172,"boats":3,"uncontrolled":null},{"date":"2026-07-23","migrants":366,"boats":3,"uncontrolled":null},{"date":"2026-07-24","migrants":103,"boats":2,"uncontrolled":null},{"date":"2026-07-25","migrants":240,"boats":5,"uncontrolled":null},{"date":"2026-07-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-27","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-07-28","migrants":26,"boats":1,"uncontrolled":null},{"date":"2026-07-29","migrants":752,"boats":9,"uncontrolled":null},{"date":"2026-07-30","migrants":72,"boats":1,"uncontrolled":null},{"date":"2026-07-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-01","migrants":326,"boats":4,"uncontrolled":null},{"date":"2026-08-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-03","migrants":35,"boats":1,"uncontrolled":null},{"date":"2026-08-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-06","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-07","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-08","migrants":258,"boats":4,"uncontrolled":null},{"date":"2026-08-09","migrants":423,"boats":5,"uncontrolled":null},{"date":"2026-08-10","migrants":230,"boats":1,"uncontrolled":null},{"date":"2026-08-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-14","migrants":93,"boats":1,"uncontrolled":null},{"date":"2026-08-15","migrants":82,"boats":1,"uncontrolled":null},{"date":"2026-08-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-17","migrants":250,"boats":3,"uncontrolled":null},{"date":"2026-08-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-19","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-20","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-21","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-22","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-23","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-24","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-25","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-26","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-27","migrants":494,"boats":7,"uncontrolled":null},{"date":"2026-08-28","migrants":122,"boats":3,"uncontrolled":null},{"date":"2026-08-29","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-30","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-08-31","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-01","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-02","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-03","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-04","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-05","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-06","migrants":625,"boats":8,"uncontrolled":null},{"date":"2026-09-07","migrants":143,"boats":2,"uncontrolled":null},{"date":"2026-09-08","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-09","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-10","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-11","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-12","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-13","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-14","migrants":144,"boats":2,"uncontrolled":null},{"date":"2026-09-15","migrants":55,"boats":1,"uncontrolled":null},{"date":"2026-09-16","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-17","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-18","migrants":0,"boats":0,"uncontrolled":null},{"date":"2026-09-19","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-20","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-21","migrants":150,"boats":3,"uncontrolled":1},{"date":"2026-09-22","migrants":154,"boats":3,"uncontrolled":1},{"date":"2026-09-23","migrants":781,"boats":10,"uncontrolled":0},{"date":"2026-09-24","migrants":44,"boats":1,"uncontrolled":0},{"date":"2026-09-25","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-26","migrants":0,"boats":0,"uncontrolled":0},{"date":"2026-09-27","migrants":526,"boats":7,"uncontrolled":0},{"date":"2026-09-28","migrants":0,"boats":0,"uncontrolled":0}],"prevYearSamePoint":33486,"periods":{"labour":{"from":"2024-07-05","people":83849,"boats":1376,"days":816},"burnham":{"from":"2026-07-20","people":6666,"boats":91,"days":71}},"extras":{"gender":{"source":"https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx","latestQuarter":"2026 Q2","period":"year ending June 2026","lastYear":{"sex":{"Male":26973,"Female":5260,"Unknown":1141},"age":{"17 and under":4993,"18 to 24":10637,"25 to 39":14341,"40 and over":2263,"Unknown":1140},"adultMen":23110,"total":33374},"since2018":{"sex":{"Male":174171,"Female":26077,"Unknown":4269},"age":{"17 and under":32306,"18 to 24":66808,"25 to 39":86529,"40 and over":14924,"Unknown":3950},"adultMen":148786,"total":204517},"updatedAt":"2026-09-27T18:15:08Z"},"petitions":{"petitions":[{"id":778181,"title":"Deploy the Royal Navy to turn illegal small boats back to France","signatures":255,"state":"open","closes":"2027-03-04","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/778181"},{"id":777795,"title":"Ban all alternative remittance systems to disrupt small boat smuggling networks","signatures":118,"state":"open","closes":"2027-02-18","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/777795"},{"id":731131,"title":"End all EU fishing rights in UK waters until France stops small boats","signatures":2273,"state":"closed","closes":"2026-02-11","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/731131"},{"id":760177,"title":"End the 2023 \u00a3476m deal with France to stop the migrants crossing the channel","signatures":996,"state":"closed","closes":"2026-09-16","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/760177"},{"id":732995,"title":"Ban UK Border Force from picking up migrants in the Channel","signatures":850,"state":"closed","closes":"2026-02-13","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/732995"},{"id":736491,"title":"Detain all illegal immigrants and put in camping sites on airfields","signatures":498,"state":"closed","closes":"2026-02-20","response":false,"debated":false,"url":"https://petition.parliament.uk/petitions/736491"}],"updatedAt":"2026-09-29T13:43:26Z"},"nationalities":{"source":"https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx","latestQuarter":"2026 Q2","period":"year ending June 2026","total":33374,"top":[{"name":"Eritrea","n":5875,"pc":17.6,"change":-2},{"name":"Sudan","n":4191,"pc":12.6,"change":11},{"name":"Afghanistan","n":4042,"pc":12.1,"change":-37},{"name":"Somalia","n":3901,"pc":11.7,"change":76},{"name":"Iran","n":3657,"pc":11.0,"change":-15}],"other":11708,"updatedAt":"2026-09-30T09:55:56Z"},"perboat":{"years":[{"y":"2018","people":299,"boats":43,"avg":7},{"y":"2019","people":1843,"boats":164,"avg":11},{"y":"2020","people":8462,"boats":641,"avg":13},{"y":"2021","people":28526,"boats":1034,"avg":28},{"y":"2022","people":45755,"boats":1110,"avg":41},{"y":"2023","people":29437,"boats":602,"avg":49},{"y":"2024","people":36816,"boats":695,"avg":53},{"y":"2025","people":41472,"boats":672,"avg":62},{"y":"2026","people":19135,"boats":281,"avg":68}],"partialYear":"2026","last90":{"people":7251,"boats":99,"avg":73,"to":"2026-09-28"},"recordMonth":{"month":"2026-08","avg":77},"updatedAt":"2026-09-30T09:59:26Z"},"returns":{"source":"https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/transfers-into-and-returns-from-the-united-kingdom-under-the-uk-france-agreement-on-the-prevention-of-dangerous-journeys-between-6-august-2025-and-30","title":"Transfers into and returns from the United Kingdom under the UK-France Agreement on the Prevention of Dangerous Journeys, between 6 August 2025 and 30 June 2026 ","from":"2025-08-06","to":"2026-06-30","months":[{"month":"2025-08","in":0,"out":0},{"month":"2025-09","in":3,"out":17},{"month":"2025-10","in":51,"out":58},{"month":"2025-11","in":87,"out":78},{"month":"2025-12","in":104,"out":64},{"month":"2026-01","in":122,"out":88},{"month":"2026-02","in":3,"out":49},{"month":"2026-03","in":73,"out":109},{"month":"2026-04","in":138,"out":142},{"month":"2026-05","in":222,"out":218},{"month":"2026-06","in":314,"out":264}],"in":1117,"out":1087,"arrivals":27920,"updatedAt":"2026-09-30T09:58:58Z"}}}</script>
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -2004,6 +2055,9 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     [".area-rep", "every person dots people boats emoji visual"],
     [".area-gender", "sex age gender male female men women children kids under 18 adult quarterly"],
     [".area-records", "records record busiest day most since last crossing longest run uncontrolled landings"],
+    [".area-nat", "nationality nationalities country countries where from eritrea sudan afghanistan somalia iran syria"],
+    [".area-boat", "people per boat average boat size overcrowded bigger boats dinghy"],
+    [".area-ret", "returns returned france one in one out deal agreement deported sent back removals"],
     [".area-petitions", "petitions parliament debate signatures sign government response"]
   ];
   let searchItems = null;
@@ -2252,6 +2306,85 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     return sorted[sorted.length-1].date >= yesterdayISO();
   }
 
+
+  // ---- Nationalities, People per Boat, Returns to France: all built by scripts/extras.py ----
+  const link = (href, text) => Object.assign(document.createElement("a"),{href, target:"_blank", rel:"noopener", textContent:text});
+  function bars(el, list, opts){
+    // list: [{l:label, v:[values...]}]; opts.colors per value
+    const W = 340, H = 140, top = 18, bottom = 20, gap = opts.gap || 6, n = list.length, k = list[0].v.length;
+    const mx = Math.max(1, ...list.flatMap(b=>b.v));
+    const bw = (W - gap*(n-1))/n, sub = bw/k;
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" aria-hidden="true">';
+    list.forEach((b,i)=>{
+      const x0 = i*(bw+gap);
+      b.v.forEach((v,j)=>{
+        const h = Math.max(v?2:0,(H-top-bottom)*v/mx), x = x0 + j*sub, y = H-bottom-h;
+        s += '<rect x="'+(x+(k>1?.5:0)).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(sub-(k>1?1:0)).toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+Math.min(3,sub/3).toFixed(1)+'" fill="var('+(b.hi && k===1 ? '--bar-peak' : opts.colors[j])+')"/>';
+        if(opts.values) s += '<text class="val" x="'+(x+sub/2).toFixed(1)+'" y="'+(y-5).toFixed(1)+'" text-anchor="middle">'+v+'</text>';
+      });
+      if(b.l){ const edge = n > 6 && i===0 ? ["start", x0] : n > 6 && i===n-1 ? ["end", x0+bw] : ["middle", x0+bw/2];
+        s += '<text class="lab" x="'+edge[1].toFixed(1)+'" y="'+(H-5)+'" text-anchor="'+edge[0]+'">'+b.l+'</text>'; }
+    });
+    el.innerHTML = s + '</svg>';
+  }
+
+  function renderNat(){
+    const n = extras.nationalities, ul = $("nat");
+    if(!n || !n.top || !n.top.length){ ul.innerHTML = '<li class="empty">Nationality figures aren\'t available right now.</li>'; $("natNote").textContent = ""; return; }
+    ul.textContent = "";
+    const rows = n.top.concat([{name:"All other nationalities", n:n.other, pc:Math.round(n.other/n.total*1000)/10, other:true}]);
+    const max = Math.max(...rows.map(r=>r.pc));
+    rows.forEach(t=>{
+      const li = document.createElement("li"); if(t.other) li.className = "other";
+      const a = document.createElement("span"); a.className = "nn"; a.textContent = t.name;
+      const b = document.createElement("span"); b.className = "np"; b.textContent = Math.round(t.pc) + "%";
+      const bar = document.createElement("span"); bar.className = "nbar";
+      const f = document.createElement("i"); f.style.width = (t.pc/max*100).toFixed(1)+"%"; bar.append(f);
+      const m = document.createElement("span"); m.className = "nm"; m.append(fmt(t.n) + " people");
+      if(typeof t.change === "number"){
+        const c = document.createElement("span"); c.className = "delta " + (t.change > 0 ? "up" : "down");
+        c.textContent = (t.change > 0 ? "↑ " : "↓ ") + Math.abs(t.change) + "%";
+        m.append(" · ", c, " on the year before");
+      }
+      li.append(a,b,bar,m); ul.append(li);
+    });
+    const note = $("natNote"); note.textContent = "";
+    note.append("Share of " + fmt(n.total) + " small boat arrivals in the " + n.period + ", from the Home Office ",
+      link(n.source, "quarterly statistics"), ". Updates automatically every three months.");
+  }
+
+  function renderPerBoat(){
+    const p = extras.perboat;
+    if(!p || !p.years || !p.years.length){ $("pbNote").textContent = "Figures aren't available right now."; return; }
+    const r = p.last90 || {};
+    $("pbV").textContent = r.avg ? fmt(r.avg) : "–";
+    $("pbS").textContent = r.avg ? "people per boat on average, last 90 days (" + fmt(r.boats) + " boats)" : "";
+    const list = p.years.map(y=>({l:"’"+y.y.slice(2) + (y.y===p.partialYear ? "*" : ""), v:[y.avg], hi:y.y===p.partialYear}));
+    bars($("pbChart"), list, {colors:["--bar"], values:true});
+    $("pbChart").setAttribute("aria-label","Average people per boat by year: " + p.years.map(y=>y.y+" "+y.avg).join(", "));
+    let t = "Average people per boat each year, from the Home Office daily figures" + (p.partialYear ? " (* " + p.partialYear + " so far)" : "") + ".";
+    if(p.recordMonth) t += " The highest month on record was " + monthName(p.recordMonth.month) + ", at " + p.recordMonth.avg + " a boat.";
+    $("pbNote").textContent = t + " Bigger boats carry more people, and many are overloaded.";
+  }
+
+  function renderReturns(){
+    const r = extras.returns;
+    if(!r || !r.months){ $("rtNote").textContent = "Figures aren't available right now."; return; }
+    $("rtOut").textContent = fmt(r.out); $("rtIn").textContent = fmt(r.in);
+    const ms = r.months.filter(m=>m.in || m.out);
+    bars($("rtChart"), ms.map((m,i)=>({l: (i===0 || m.month.endsWith("-01") || i===ms.length-1) ? new Date(m.month+"-01T00:00:00Z").toLocaleString("en-GB",{month:"short",...UTC}) + (m.month.endsWith("-01")||i===0 ? " ’"+m.month.slice(2,4) : "") : "", v:[m.out, m.in]})), {colors:["--blue","--indigo"], gap:4});
+    $("rtChart").setAttribute("aria-label","Each month, people sent back to France and taken in from France: " + ms.map(m=>monthName(m.month)+" "+m.out+" out, "+m.in+" in").join("; "));
+    const ul = $("rtNotes"); ul.textContent = "";
+    const add = t => { const li = document.createElement("li"); li.append(t); ul.append(li); };
+    if(r.arrivals) add("Returns equal about " + Math.round(r.out/r.arrivals*100) + "% of the " + fmt(r.arrivals) + " people who crossed over the same period.");
+    const last = r.months[r.months.length-1];
+    if(last) add(monthName(last.month) + ": " + fmt(last.out) + " sent back, " + fmt(last.in) + " taken in.");
+    const to = parse(r.to);
+    const note = $("rtNote"); note.textContent = "";
+    note.append("UK–France “one in, one out” agreement, " + dShort.format(parse(r.from)) + " " + r.from.slice(0,4) + " to " + dShort.format(to) + " " + r.to.slice(0,4) + ". ",
+      link(r.source, "Home Office figures"), ". Updates automatically when the Home Office publishes new ones.");
+  }
+
   let seenChecked = false;
   function load(data, full){
     meta = data;
@@ -2278,7 +2411,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     } else busyMin = Infinity;
 
     renderSummary(); setRange(range); drawCalendar(); drawDots();
-    if(data.extras){ extras = data.extras; renderGender(); renderPetitions(); }
+    if(data.extras){ extras = data.extras; renderGender(); renderPetitions(); renderNat(); renderPerBoat(); renderReturns(); }
     renderPeriods();
     if(full){ renderRecords(); renderOnThisDay(); drawHistory(); }
     initCalc();

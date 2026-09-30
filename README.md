@@ -14,7 +14,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `data.json` – the full daily history, loaded in the background
 - `recent.json` – the last 90 days and totals, used by the embed widget
 - `status.json` – a tiny heartbeat written at every check, so open pages know when the site last looked and when to fetch new figures
-- `gender.json`, `petitions.json` – sex and age figures and related petitions, gathered by `scripts/extras.py`
+- `gender.json`, `nationalities.json`, `perboat.json`, `returns.json`, `petitions.json` – sex and age, nationalities, people per boat, UK–France returns and related petitions, all gathered automatically by `scripts/extras.py`
 - `requirements.txt` – the Python packages the update job installs
 - `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
 - `how-it-works.html` – sources, definitions, downloads and the embed code
