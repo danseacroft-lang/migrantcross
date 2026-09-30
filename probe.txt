@@ -1,12 +1,6 @@
-Traceback (most recent call last):
-  File "<stdin>", line 15, in <module>
-  File "<stdin>", line 13, in <lambda>
-  File "/home/runner/work/migrantcross/migrantcross/scripts/extras.py", line 284, in update_returns
-    raise ValueError("no monthly table on " + url)
-ValueError: no monthly table on https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/transfers-into-and-returns-from-the-united-kingdom-under-the-uk-france-agreement-on-the-prevention-of-dangerous-journeys-between-6-august-2025-and-30
 dataset: https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx
 Nationalities: dataset unchanged
-ret FAILED
+UK-France returns: saved to 2026-06-30, 1087 out, 1117 in
 pages: [('Transfers into and returns from the United Kingdom under the UK-France Agreement on the Prevention of Dangerous Journeys, between 6 August 2025 and 30 June 2026 ', 'https://www.gov.uk/government/publications/the-border-security-commanders-annual-report-data/transfers-into-and-returns-from-the-united-kingdom-under-the-uk-france-agreement-on-the-prevention-of-dangerous-journeys-between-6-august-2025-and-30')]
 RAWTABLE <table>
   <thead>
