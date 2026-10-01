@@ -89,6 +89,7 @@ button{font:inherit}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
 #map.zoomed .strait{display:none}
+#map .coastline{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1.4;vector-effect:non-scaling-stroke;stroke-linejoin:round;pointer-events:none}
 #lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
 #lmap .leaflet-control-attribution a{color:inherit}
 #lmap .leaflet-bar{border:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
@@ -128,7 +129,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .wx-key{display:flex;align-items:center;gap:6px;font:600 .647rem/1 var(--font);text-shadow:0 1px 4px rgba(0,0,0,.7)}
 .wx-key i{width:150px;height:6px;border-radius:3px;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 42%,rgba(0,0,0,.55) 80%,rgba(0,0,0,.62) 100%)}
+  background:linear-gradient(to bottom,rgba(0,0,0,.28) 0,rgba(0,0,0,0) 20%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45) 85%,rgba(0,0,0,.55) 100%)}
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
 .hero-chips > *{pointer-events:auto}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;align-items:center;gap:10px;pointer-events:none}
@@ -442,6 +443,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
         <!-- real coastlines (Natural Earth, 1:10m), used to keep the waves layer off the land -->
         <path id="coast" d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z"/>
       </defs>
+      <use href="#coast" class="coastline"/>
       <g class="w strait"><path d="M322.8 227.6L465.3 443.5"/><g transform="translate(394.1 335.6)"><rect x="-31" y="-11" width="62" height="22" rx="11"/><text y="4" text-anchor="middle">21 miles</text></g></g>
       <g id="boats"></g>
     </svg>
@@ -873,20 +875,20 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       const k = r * cols + c, ll = LM.containerPointToLatLng([c * CELL, r * CELL]);
       u[k] = sample(ll.lat, ll.lng, "u"); v[k] = -sample(ll.lat, ll.lng, "v");
       const val = sample(ll.lat, ll.lng, sc.key), col = colour(val, sc.stops);
-      img.data.set([col[0], col[1], col[2], sc.alpha ? sc.alpha(val) : 150], k * 4);
+      img.data.set([col[0], col[1], col[2], sc.alpha ? sc.alpha(val) * .7 : 105], k * 4);
     }
     off.getContext("2d").putImageData(img, 0, 0);
     fld = {cols, rows, u, v};
     const h = heat.getContext("2d");
     h.imageSmoothingEnabled = true;
     h.drawImage(off, -CELL / 2 * dpr, -CELL / 2 * dpr, cols * CELL * dpr, rows * CELL * dpr);
-    if(layer === "waves"){   // waves are only at sea
+    {   // keep the land clear so the map shows through: waves are only at sea, other layers are faint over land
       const p = unitPx();
-      h.globalCompositeOperation = "destination-out";
+      h.globalCompositeOperation = "destination-out"; h.fillStyle = layer === "waves" ? "#000" : "rgba(0,0,0,.65)";
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(new Path2D($("coast").getAttribute("d")));
-      h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over";
+      h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over"; h.fillStyle = "#000";
     }
-    const count = Math.round(Math.min(1800, vw * vh / 900));
+    const count = Math.round(Math.min(1800, vw * vh / 1300));
     parts = Array.from({length:count}, () => spawn({}));
     if(reduced) for(let i = 0; i < 40; i++) stepFlow();   // one still picture of the wind instead of motion
   }
@@ -923,7 +925,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     const c = flow.getContext("2d");
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0,.92)"; c.fillRect(0, 0, vw, vh);   // older trails fade
-    c.globalCompositeOperation = "source-over"; c.strokeStyle = "rgba(255,255,255,.65)"; c.lineWidth = 1.1; c.lineCap = "round";
+    c.globalCompositeOperation = "source-over"; c.strokeStyle = "rgba(255,255,255,.5)"; c.lineWidth = 1.1; c.lineCap = "round";
     c.beginPath();
     for(const p of parts){
       const [u, v] = vel(p.x, p.y), nx = p.x + u * SPEED, ny = p.y + v * SPEED;
