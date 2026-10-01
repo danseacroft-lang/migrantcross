@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="No small boat crossings of the Channel were detected on Wed 30 September. 2026 so far: 19,196. Daily Home Office figures, records and Channel conditions.">
-<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("subClosed"))document.documentElement.classList.add("sub-off")}catch(e){}</script>
+<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);if(localStorage.getItem("subClosed"))document.documentElement.classList.add("sub-off");if(localStorage.getItem("tryBetaClosed"))document.documentElement.classList.add("trybeta-off")}catch(e){}</script>
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="format-detection" content="telephone=no">
@@ -682,6 +682,21 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
 /* Email updates: sign-ups go straight to EmailOctopus */
 .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:12px}
 .sub-off .subscribe{display:none}
+/* Invitation to try the beta: an app-store style card with an icon, a line of copy and a pill button */
+.try-beta{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:12px;background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);outline:.5px solid var(--glass-edge);outline-offset:-.5px}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.try-beta{background:var(--card)}}
+.trybeta-off .try-beta{display:none}
+.try-beta.leaving{animation:lift .25s ease-in both}
+.tb-icon{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#5E5CE6,#0A84FF 55%,#30B0C7);box-shadow:0 4px 14px rgba(10,132,255,.3),inset 0 0 0 .5px rgba(255,255,255,.25)}
+.tb-icon svg{width:28px;height:28px}
+.tb-copy{display:grid;gap:2px;min-width:0}
+.tb-copy .tb-tag{font-size:.706rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--blue)}
+.tb-copy h2{margin:0;font:600 1.06rem/1.25 var(--font);letter-spacing:-.024em}
+.tb-copy p{margin:0;font-size:.824rem;color:var(--label2)}
+.tb-go{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);text-decoration:none;white-space:nowrap}
+.tb-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.tb-go:hover{filter:brightness(1.1)}}
+@media (max-width:760px){.try-beta{grid-template-columns:auto minmax(0,1fr);padding-right:16px}.tb-copy{padding-right:32px}.tb-go{grid-column:1 / -1}}
 .subscribe.leaving{animation:lift .25s ease-in both}
 .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
 .sub-icon svg{width:24px;height:24px}
@@ -825,6 +840,20 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     </button>
   </div>
   </div>
+
+  <!-- Invitation to try the beta site -->
+  <section class="try-beta" id="tryBeta" aria-labelledby="tbTitle">
+    <div class="tb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.5L12 15l-1.8-4.5L5.5 9l4.7-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></div>
+    <div class="tb-copy">
+      <span class="tb-tag">New</span>
+      <h2 id="tbTitle">Try the Channel Crossings beta</h2>
+      <p>A fresh design with a live, interactive map of the Channel, weather and breaking news. Some features are still being worked on.</p>
+    </div>
+    <a class="tb-go" href="beta.html">Try the Beta</a>
+    <button type="button" class="b-close" id="tryBetaClose" aria-label="Close the beta invitation">
+      <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+    </button>
+  </section>
 
   <div class="tiles">
     <div class="tile tile-hero"><div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="taSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="taTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset=".55" stop-color="var(--ta-tube2)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 86 Q10 80 40 86 T100 86 T160 86 T220 86 T280 86 V150 H-20z" fill="url(#taSea)" opacity=".55"/><g class="ta-boat"><g transform="translate(160 104)"><g transform="translate(0 -9)"><g transform="translate(-44 0) scale(0.8)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#E86A10"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-28 0) scale(0.85)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#F08000"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-12 0) scale(0.8)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#E86A10"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(4 0) scale(0.85)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#F08000"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(20 0) scale(0.8)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#E86A10"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(36 0) scale(0.82)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#F08000"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g></g><g transform="translate(-2 -3)"><g transform="translate(-52 0) scale(0.95)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-36 0) scale(1)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF9500"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-20 0) scale(0.92)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(-4 0) scale(1.05)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF9500"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(12 0) scale(0.95)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(28 0) scale(1)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF9500"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g><g transform="translate(44 0) scale(0.9)"><path d="M-7 0 q0-15 7-15 q7 0 7 15z" fill="#FF7A1A"/><path d="M-2.2 -13.5 h4.4 v9 h-4.4z" fill="#B84A00" opacity=".45"/><circle cx="0" cy="-19.5" r="5" fill="var(--ta-skin)"/></g></g><path d="M-78 -2 H66 q16 0 16 11 q0 11 -16 11 H-70 q-14 0 -18 -11 q0 -11 10 -11z" fill="url(#taTube)"/><path d="M-72 4 H62" stroke="var(--ta-rope)" stroke-width="1.4" stroke-dasharray="4 5" stroke-linecap="round" opacity=".8"/></g></g><path class="ta-wave" d="M-40 116 Q-20 108 0 116 T40 116 T80 116 T120 116 T160 116 T200 116 T240 116 T280 116 T320 116 V150 H-40z" fill="url(#taSea)"/><path class="ta-wave2" d="M-40 128 Q-15 121 10 128 T60 128 T110 128 T160 128 T210 128 T260 128 T310 128 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/><path d="M40 116 q6 -4 12 0 M120 116 q6 -4 12 0 M200 116 q6 -4 12 0" stroke="var(--ta-foam)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></div><div class="k"><span id="latestK">Yesterday's migrant arrivals</span><button type="button" class="info-btn" id="infoBtn" aria-label="How the figures are released" aria-expanded="false" aria-controls="infoPop"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="7.6" r="1.25" fill="currentColor"/><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button> <span class="newtag" id="newTag" hidden>New</span></div><div class="v" id="latestV">–</div><div class="s" id="latestS">&nbsp;</div><div class="s" id="monthS"></div></div>
@@ -2179,6 +2208,10 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
   });
 
   // Closing the box keeps it closed on this device
+  $("tryBetaClose").addEventListener("click", ()=>{
+    store.set("tryBetaClosed", "1");
+    leave($("tryBeta"), ()=>document.documentElement.classList.add("trybeta-off"));
+  });
   $("subClose").addEventListener("click", ()=>{
     store.set("subClosed", "1");
     leave($("subscribe"), ()=>document.documentElement.classList.add("sub-off"));
