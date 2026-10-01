@@ -128,8 +128,6 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .wx-seg button[aria-pressed="true"] .am-tn{color:#64B5FF}
 /* the key and the forecast timeline, as small frosted pills */
 .am-pill{border-radius:14px}
-.wx-key{display:flex;align-items:center;gap:7px;padding:7px 10px;font:600 .647rem/1 var(--font);font-variant-numeric:tabular-nums}
-.wx-key i{width:150px;height:6px;border-radius:3px;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
 .wx-time{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
 .wx-time[hidden]{display:none}
 .wx-time span{min-width:74px;text-align:right}
@@ -571,7 +569,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
       <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button><button type="button" data-l="cloud" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 17.8 10a4 4 0 0 1-.3 8z"/></svg></span><span class="am-tn">Cloud</span></button></div>
     </div>
-    <div class="wx-key am-pill" id="wxKey" aria-hidden="true"></div>
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
   </div>
   </div>
@@ -1005,10 +1002,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     for(let k = 1; k < st.length; k++) if(v <= st[k][0]){ const [a, ca] = st[k - 1], [b, cb] = st[k], t = (v - a) / (b - a); return ca.map((x, n) => x + (cb[n] - x) * t); }
     return st[st.length - 1][1];
   }
-  function showKey(){
-    const sc = SCALE[layer], lo = sc.min || 0;
-    $("wxKey").innerHTML = "<span>" + lo + "</span><i style=\"background:linear-gradient(to right," + sc.stops.map(([v, c]) => "rgb(" + c.join(",") + ") " + ((v - lo) / (sc.max - lo) * 100).toFixed(0) + "%").join(",") + ")\"></i><span>" + sc.max + "+ " + sc.unit + "</span>";
-  }
   // The layer picker: a tile for each layer, tinted with its own colour scale
   const grad = (sc, dir) => "linear-gradient(" + dir + "," + sc.stops.map(([v, c]) => "rgb(" + c.join(",") + ") " + ((v - (sc.min || 0)) / (sc.max - (sc.min || 0)) * 100).toFixed(0) + "%").join(",") + ")";
   const segBtns = [...document.querySelectorAll("#wxCtl .wx-seg button")], pickEl = $("wxPick"), pickBtn = $("wxLayerBtn");
@@ -1027,7 +1020,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     const b = segBtns.find(x => x.dataset.l === l), sc = SCALE[l];
     $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML; $("wxLayerIc").style.setProperty("--lg", "rgb(" + colour(sc.max * .45 + (sc.min || 0) * .55, sc.stops).map(Math.round).join(",") + ")");
     $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
-    showKey(); if(!first){ resetWx(); if(hoverAt) showHover(); }
+    if(!first){ resetWx(); if(hoverAt) showHover(); }
   }
   segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
   setLayer(layer, true);
@@ -1696,7 +1689,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>"
-        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the moving lines are the wind, blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", coloured by its speed. Gusts sweep across in pulses, turning amber then red as they get stronger, and the waves roll the way the wind is pushing them. Tap anywhere on the map for the weather there, switch to gusts, waves, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
+        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the moving lines are the wind, blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", coloured by its speed. Gusts sweep across in pulses, turning amber then red as they get stronger, and the waves roll the way the wind is pushing them. Hover over the map with a mouse to read the weather at any spot, or tap anywhere for the full picture there. Switch to gusts, waves, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
