@@ -596,7 +596,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
 <footer>
   <a class="to-classic" href="./">Back to the current site</a>
-  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo. Map © OpenStreetMap contributors, CARTO.</p>
+  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo. Map © Esri, HERE, Garmin, OpenStreetMap contributors.</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -673,9 +673,10 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
     LM.createPane("labels").style.zIndex = 350;
-    const carto = (style, o) => L.tileLayer("https://{s}.basemaps.cartocdn.com/" + style + "/{z}/{x}/{y}{r}.png", Object.assign({subdomains:"abcd", maxZoom:20}, o));
-    carto("dark_nolabels", {attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a> · <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
-    carto("dark_only_labels", {pane:"labels"}).addTo(LM);
+    // Esri's dark grey basemap: detailed, free to use with credit, and needs no key
+    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
+    esri("World_Dark_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin, © OpenStreetMap · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("World_Dark_Gray_Reference", {pane:"labels"}).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     L.control.zoom({position:"bottomright"}).addTo(LM);
