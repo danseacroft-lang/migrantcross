@@ -150,6 +150,15 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .am-place.land{font-size:11px;font-weight:700;letter-spacing:.32em;color:rgba(255,255,255,.82)}
 .am-place.sea{font-style:italic;font-weight:500;font-size:12.5px;color:#A8D8FF;letter-spacing:.02em}
 #lmap.z-lo .am-place.r2{display:none}
+/* with a mouse: the reading under the pointer, for the layer on show */
+.am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 10px 6px 7px;border-radius:12px;color:#fff;white-space:nowrap;
+  font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(30,30,32,.62);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.16),0 6px 18px rgba(0,0,0,.25);transition:opacity .15s}
+.am-hover[hidden]{display:block;opacity:0}
+.am-hover b{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+.am-hover small{font-weight:600;opacity:.7}
+.am-hover em{font-style:normal;font-weight:500;opacity:.7;font-size:.765rem}
+.am-hover .sw{width:12px;height:12px;border-radius:4px;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.4)}
+.am-hover svg{width:14px;height:14px;opacity:.9}
 /* phones: the sheet a tap brings up */
 .am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
   background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
@@ -549,6 +558,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   <div class="large-title"><h1>Channel Crossings</h1><button type="button" class="pill-beta" id="chipBeta" aria-expanded="false" aria-controls="popBeta">Beta</button></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
+  <div class="am-hover" id="amHover" aria-hidden="true" hidden></div>
   <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
 
   <!-- Map controls, laid out like Apple Maps: a layer button and a full-screen button, the key, and a forecast timeline -->
@@ -844,6 +854,8 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     });
     LM.on("moveend", () => { wxPane.style.opacity = ""; resetWx(); });
     LM.on("click", e => showPoint(e.latlng));
+    LM.on("mousemove", e => { hoverAt = e; if(!hoverRaf) hoverRaf = requestAnimationFrame(showHover); });
+    LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").hidden = true; });
   }
   // Full screen: drag, pinch and scroll to zoom anywhere, on phones too (in the page, phones keep the map still so it scrolls)
   const isFull = () => hero.classList.contains("full");
@@ -955,7 +967,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     $("wxWhen").textContent = whenText(); hs.closest(".wx-time").hidden = !hours.length;
     hs.style.setProperty("--p", (hs.max > 0 ? hs.value / hs.max * 100 : 0) + "%");
   }
-  function toHour(i){ const h = hours[i]; if(!h) return; $("wxHour").value = i; grid = h; showWhen(); resetWx(); if(ptAt) showPoint(ptAt); }
+  function toHour(i){ const h = hours[i]; if(!h) return; $("wxHour").value = i; grid = h; showWhen(); resetWx(); if(ptAt) showPoint(ptAt); if(hoverAt) showHover(); }
   $("wxHour").addEventListener("input", e => { stopPlay(); toHour(+e.target.value); });
   // Play: steps through the forecast an hour at a time, like Apple Weather's maps, and loops back to now
   let playT = 0;
@@ -1015,7 +1027,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     const b = segBtns.find(x => x.dataset.l === l), sc = SCALE[l];
     $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML; $("wxLayerIc").style.setProperty("--lg", "rgb(" + colour(sc.max * .45 + (sc.min || 0) * .55, sc.stops).map(Math.round).join(",") + ")");
     $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
-    showKey(); if(!first) resetWx();
+    showKey(); if(!first){ resetWx(); if(hoverAt) showHover(); }
   }
   segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
   setLayer(layer, true);
@@ -1128,6 +1140,32 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
   let pin = null;
+  // With a mouse, the layer's reading follows the pointer: wind with its direction, gusts, wave height, temperature, rain or cloud
+  let hoverAt = null, hoverRaf = 0;
+  function showHover(){
+    hoverRaf = 0;
+    const box = $("amHover"), e = hoverAt;
+    if(!e || touchOnly || !LM){ box.hidden = true; return; }
+    const ll = e.latlng, sc = SCALE[layer], g = k => sample(ll.lat, ll.lng, k);
+    let val, unit = sc.unit, extra = "";
+    if(layer === "wind"){
+      const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360; val = Math.round(Math.hypot(u, v));
+      extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + "</em>";
+    }
+    else if(layer === "waves"){ if(!atSea(ll)){ box.innerHTML = "<em>On land</em>"; place(); return; } val = g("wave").toFixed(1); }
+    else if(layer === "rain"){ val = g("rain").toFixed(1); }
+    else val = Math.round(g(sc.key));
+    const col = colour(+val, sc.stops).map(Math.round).join(",");
+    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
+    place();
+    function place(){
+      box.hidden = false;
+      const m = $("lmap").getBoundingClientRect(), h = hero.getBoundingClientRect(), w = box.offsetWidth;
+      let x = e.containerPoint.x + m.left - h.left + 16, y = e.containerPoint.y + m.top - h.top + 18;
+      if(x + w > h.width - 8) x -= w + 32;
+      box.style.transform = "translate(" + Math.round(x) + "px," + Math.round(y) + "px)";
+    }
+  }
   if(LM) LM.on("popupclose", () => { if(!$("amSheet").hidden) return; ptAt = null; if(pin) pin.remove(); });
   function closeSheet(){ $("amSheet").hidden = true; ptAt = null; if(pin) pin.remove(); }
   $("amSheetX").addEventListener("click", e => { e.stopPropagation(); closeSheet(); });
