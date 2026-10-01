@@ -85,7 +85,8 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .hero-map{position:absolute;inset:0;will-change:transform}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* the live weather map (Leaflet), in the style of Ventusky: wind or waves coloured across the Channel, with the wind flowing over it */
-#lmap{position:absolute;inset:0;background:#0B1420;font:inherit}
+#lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
+.wx-heat{mix-blend-mode:multiply}   /* the sea colour tints the map, so its texture still shows */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -211,7 +212,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .wx-pt .wp-stats div{padding:6px 8px}
 .wx-pt .wp-stats b{font-size:1rem}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(0,0,0,.28) 0,rgba(0,0,0,0) 20%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45) 85%,rgba(0,0,0,.55) 100%)}
+  background:linear-gradient(to bottom,rgba(0,0,0,.34) 0,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45) 85%,rgba(0,0,0,.55) 100%)}
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
 .hero-chips > *{pointer-events:auto}
 /* breaking news: a strip across the top of the map that flashes when a story comes in */
@@ -248,7 +249,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
 .hero-fresh.live > i{background:#fff;animation:pulse 1.4s ease-in-out infinite}
-.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#64B5FF;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
+.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
 .fu-btn::after{content:"";position:absolute;inset:-12px -8px}   /* a comfortable tap target */
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
@@ -1192,12 +1193,11 @@ footer strong{color:var(--label);font-weight:600}
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
     LM.createPane("labels").style.zIndex = 350;
-    // Esri's satellite map with place names on top: detailed, free to use with credit, and needs no key
-    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:18}, o));
-    esri("World_Imagery", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
-    // place names drawn here in Apple Maps' style, rather than Esri's label layer
-    PLACES.forEach(([name, lat, lon, kind]) => L.marker([lat, lon], {pane:"labels", interactive:false, keyboard:false,
-      icon:L.divIcon({className:"am-place " + kind, html:(/land|sea/.test(kind) ? "" : "<i></i>") + "<span>" + name + "</span>", iconSize:[0, 0]})}).addTo(LM));
+    // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with its place names above the weather.
+    // Free to use with credit, and needs no key.
+    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
+    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("Canvas/World_Light_Gray_Reference", {pane:"labels"}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
@@ -1288,7 +1288,7 @@ footer strong{color:var(--label);font-weight:600}
   const GLAT = [], GLON = [];
   for(let i = 0; i < 8; i++) GLAT.push(+(50.45 + i * .15).toFixed(2));
   for(let i = 0; i < 10; i++) GLON.push(+(.55 + i * .25).toFixed(2));
-  let grid = null, layer = "wind";
+  let grid = null, layer = "waves";
   const fillGaps = a => {   // the marine model has no waves over land: borrow from the nearest sea
     if(!a.some(x => x != null)) return null;
     for(let pass = 0; pass < 20 && a.some(x => x == null); pass++){
@@ -1437,7 +1437,14 @@ footer strong{color:var(--label);font-weight:600}
     }
     const sm = Math.hypot(su, sv) || 1;
     fld = {cols, rows, u, v, m, sea, mode, du:su / sm, dv:sv / sm};
-    const h = heat.getContext("2d");   // no colour shading: the map stays clear, with the weather drawn on top
+    const h = heat.getContext("2d");
+    {   // the sea in one calm blue, as on Ventusky; the land stays clear grey
+      const p = unitPx();
+      h.fillStyle = "#6973B2"; h.fillRect(0, 0, heat.width, heat.height);
+      h.globalCompositeOperation = "destination-out"; h.filter = "blur(" + (1.5 * dpr) + "px)";
+      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
+      h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over"; h.filter = "none";
+    }
     const LABEL = {temp:v => Math.round(v) + "°", rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm", cloud:v => Math.round(v) + "%"}[layer];
     if(LABEL){   // temperature, rain or cloud, written across the map every so often
       const gap = vw < 600 ? 120 : 170, fs = 13;
@@ -1453,7 +1460,7 @@ footer strong{color:var(--label);font-weight:600}
       }
       h.restore();
     }
-    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(420, area / 3000) : mode === "gusts" ? Math.min(1100, area / 2000) : Math.min(1800, area / 1300));
+    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(650, area / 2000) : mode === "gusts" ? Math.min(1100, area / 2000) : Math.min(1800, area / 1300));
     parts = Array.from({length:count}, () => spawn({}));
     parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
     flow.getContext("2d").clearRect(0, 0, flow.width, flow.height);
@@ -1539,29 +1546,29 @@ footer strong{color:var(--label);font-weight:600}
   // Batches: everything drawn in the same style goes into one path, so a frame is a handful of strokes
   const batches = n => Array.from({length:n}, () => new Path2D());
   // Waves: crests that swell up, roll forward and fade, longer and quicker for bigger seas, with whitecaps on rough water
+  // Waves as on Ventusky: small white comets drifting the way the waves run, longer and brighter where the sea is higher
   function stepWaves(c, dt){
-    c.clearRect(0, 0, vw, vh); c.lineCap = "round"; c.lineJoin = "round";
-    const A = 5, W = 3, crest = batches(A * W), trough = batches(W), foam = new Path2D();
+    c.clearRect(0, 0, vw, vh); c.lineCap = "round";
+    const A = 4, tails = batches(A), heads = batches(A);
     for(const p of parts){
       const k = cellAt(p.x, p.y);
       p.age += dt;
       if(p.age > p.max || !fld.sea[k] || p.x < -20 || p.y < -20 || p.x > vw + 20 || p.y > vh + 20){ spawn(p); continue; }
-      const du = fld.u[k], dv = fld.v[k], hgt = Math.min(fld.m[k], 4), f = p.age / p.max, rise = Math.sin(Math.PI * f), sp = (.16 + .2 * Math.sqrt(hgt)) * dt;
+      const du = fld.u[k], dv = fld.v[k], hgt = Math.min(fld.m[k], 4), rise = Math.sin(Math.PI * p.age / p.max), sp = (.22 + .28 * Math.sqrt(hgt)) * dt;
       p.x += du * sp; p.y += dv * sp;
-      const half = (9 + hgt * 7) * (.6 + .4 * rise), bow = half * (.1 + .12 * rise), wob = Math.sin(clock * .04 + p.cap * 6) * half * .08;
-      const ax = p.x - dv * half, ay = p.y + du * half, bx = p.x + dv * half, by = p.y - du * half, qx = p.x + du * bow + dv * wob, qy = p.y + dv * bow - du * wob;
-      const w = Math.min(W - 1, hgt / 1.2 | 0), a = Math.min(A - 1, rise * A | 0);
-      const P = crest[a * W + w]; P.moveTo(ax, ay); P.quadraticCurveTo(qx, qy, bx, by);
-      if(rise > .45){ const T = trough[w], o = 1.6 + hgt * .7; T.moveTo(ax - du * o, ay - dv * o); T.quadraticCurveTo(qx - du * o, qy - dv * o, bx - du * o, by - dv * o); }
-      if(hgt > 1 && p.cap < hgt / 5 && rise > .75){   // a whitecap breaking at the top of the crest
-        const r = .8 + hgt * .35;
-        foam.moveTo(qx + du * 1.5 + r, qy + dv * 1.5); foam.arc(qx + du * 1.5, qy + dv * 1.5, r, 0, 7);
-        foam.moveTo(qx - dv * half * .4 + r * .7, qy + du * half * .4); foam.arc(qx - dv * half * .4, qy + du * half * .4, r * .7, 0, 7);
+      const len = 5 + hgt * 5, r = .9 + Math.min(hgt, 2.5) * .45, a = Math.min(A - 1, rise * A | 0);
+      // the tail fades back from the head in three steps
+      for(let s2 = 0; s2 < 3; s2++){
+        const T = tails[Math.max(0, a - (2 - s2))], f0 = len * (1 - s2 / 3), f1 = len * (1 - (s2 + 1) / 3);
+        T.moveTo(p.x - du * f0, p.y - dv * f0); T.lineTo(p.x - du * f1, p.y - dv * f1);
       }
+      const H = heads[a]; H.moveTo(p.x + r, p.y); H.arc(p.x, p.y, r, 0, 7);
     }
-    for(let w = 0; w < W; w++){ c.strokeStyle = "rgba(4,22,44,.22)"; c.lineWidth = 1.8 + w * .9; c.stroke(trough[w]); }
-    for(let a = 0; a < A; a++) for(let w = 0; w < W; w++){ c.strokeStyle = "rgba(255,255,255," + (.12 + .68 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.1 + w * .6; c.stroke(crest[a * W + w]); }
-    c.fillStyle = "rgba(255,255,255,.9)"; c.fill(foam);
+    for(let a = 0; a < A; a++){
+      const o = (.15 + .75 * (a + .5) / A).toFixed(2);
+      c.strokeStyle = "rgba(255,255,255," + (o * .55).toFixed(2) + ")"; c.lineWidth = 1.6; c.stroke(tails[a]);
+      c.fillStyle = "rgba(255,255,255," + o + ")"; c.fill(heads[a]);
+    }
   }
   // Gusts: quick streaks sweeping downwind in waves, white for a breeze, amber then red for strong gusts
   const GCOL = ["255,255,255", "255,214,10", "255,95,80"];
