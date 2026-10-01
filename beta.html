@@ -741,6 +741,23 @@ footer strong{color:var(--label);font-weight:600}
   main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:24px;align-items:start}
   main > section.wide{grid-column:1 / -1}
 }
+/* First-visit tour of the map: a spotlight on each control with a small card explaining it */
+.tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
+.tour[hidden]{display:none}
+.tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.tour-card{position:fixed;width:min(320px,calc(100vw - 32px));padding:16px 16px 14px;border-radius:18px;background:var(--card);color:var(--label);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1);animation:popIn .3s ease-out both}
+.tour-card .tc-step{font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--blue)}
+.tour-card h3{margin:6px 0 4px;font:700 1.06rem/1.25 var(--font);letter-spacing:-.02em}
+.tour-card p{margin:0;font-size:.882rem;line-height:1.4;color:var(--label2)}
+.tour-row{display:flex;align-items:center;gap:8px;margin-top:14px}
+.tour-dots{display:flex;gap:5px;margin-right:auto}
+.tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--fill)}
+.tour-dots i.on{background:var(--blue)}
+.tour-row button{border:0;border-radius:999px;min-height:36px;padding:0 14px;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
+.tour-skip{background:none;color:var(--label2)}
+.tour-next{background:var(--blue);color:#fff}
+.tour-row button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.tour-spot,.tour-card{transition:none;animation:none}}
 </style>
 </head>
 <body>
@@ -1099,9 +1116,19 @@ footer strong{color:var(--label);font-weight:600}
 
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="tour" id="tour" role="dialog" aria-modal="true" aria-labelledby="tourH" hidden>
+  <div class="tour-spot" id="tourSpot"></div>
+  <div class="tour-card" id="tourCard">
+    <div class="tc-step" id="tourStep"></div>
+    <h3 id="tourH"></h3>
+    <p id="tourP"></p>
+    <div class="tour-row"><span class="tour-dots" id="tourDots"></span><button type="button" class="tour-skip" id="tourSkip">Skip</button><button type="button" class="tour-next" id="tourNext">Next</button></div>
+  </div>
+</div>
+
 
 <footer>
-  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
   <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, Maxar, Earthstar Geographics.</p>
@@ -2586,6 +2613,73 @@ footer strong{color:var(--label);font-weight:600}
   if("ResizeObserver" in window) [["dots", drawDots], ["race", drawRace], ["pat", drawPat]].forEach(([id, fn]) => {
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
+
+
+  /* ---------------------------------------------------- first-visit tour of the map */
+  const touchy = matchMedia("(hover: none)").matches;
+  const TOUR = [
+    {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
+    {el:() => document.querySelector("#lmap .boat"), h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
+    {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
+    {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature, rain and cloud. You can also turn the launch beaches on or off here."},
+    {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
+    {el:() => $("lmap"), h: touchy ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchy ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
+    {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
+  ];
+  let tourSteps = [], tourI = 0, tourTick = null;
+  const tourSeen = () => { try{ return localStorage.getItem("mapTourDone"); }catch(e){ return "1"; } };
+  function tourPlace(){
+    const st = tourSteps[tourI]; if(!st) return;
+    const el = st.el(); if(!el) return;
+    const r = el.getBoundingClientRect(), big = r.width > innerWidth * .6, pad = big ? -10 : 6;
+    const spot = $("tourSpot"), card = $("tourCard");
+    Object.assign(spot.style, {left:(r.left - pad) + "px", top:(r.top - pad) + "px", width:(r.width + pad * 2) + "px", height:(r.height + pad * 2) + "px", borderRadius:big ? "24px" : "16px"});
+    const cw = card.offsetWidth, ch = card.offsetHeight, m = 14;
+    let left, top;
+    if(big){ left = r.left + (r.width - cw) / 2; top = Math.min(r.bottom - ch - 40, Math.max(r.top + 40, innerHeight / 2 - ch / 2)); }
+    else {
+      left = r.left + r.width / 2 - cw / 2;
+      top = r.bottom + pad + m; if(top + ch > innerHeight - 12) top = r.top - pad - m - ch;
+    }
+    card.style.left = Math.max(16, Math.min(innerWidth - cw - 16, left)) + "px";
+    card.style.top = Math.max(12, Math.min(innerHeight - ch - 12, top)) + "px";
+  }
+  function tourShow(i){
+    tourI = i; const st = tourSteps[i];
+    $("tourStep").textContent = "Map tour · " + (i + 1) + " of " + tourSteps.length;
+    $("tourH").textContent = st.h; $("tourP").textContent = st.p;
+    $("tourDots").innerHTML = tourSteps.map((_, k) => "<i" + (k === i ? ' class="on"' : "") + "></i>").join("");
+    $("tourNext").textContent = i === tourSteps.length - 1 ? "Done" : "Next";
+    $("tourSkip").hidden = i === tourSteps.length - 1;
+    tourPlace(); $("tourNext").focus({preventScroll:true});
+  }
+  function tourEnd(){
+    $("tour").hidden = true; document.documentElement.style.overflow = "";
+    try{ localStorage.setItem("mapTourDone", "1"); }catch(e){}
+    removeEventListener("resize", tourPlace); removeEventListener("scroll", tourPlace); clearInterval(tourTick);
+  }
+  function startTour(){
+    if(!$("tour").hidden) return;
+    const shown = el => { if(!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+    if(isFull()) return;
+    tourSteps = TOUR.filter(t => shown(t.el())); if(tourSteps.length < 2) return;
+    scrollTo({top:0, behavior:"auto"}); document.documentElement.style.overflow = "hidden";
+    $("tour").hidden = false; addEventListener("resize", tourPlace); addEventListener("scroll", tourPlace, {passive:true});
+    tourTick = setInterval(tourPlace, 250);   // the boats move, so the spotlight follows them
+    tourShow(0);
+  }
+  $("tourNext").addEventListener("click", e => { e.stopPropagation(); tourI < tourSteps.length - 1 ? tourShow(tourI + 1) : tourEnd(); });
+  $("tourSkip").addEventListener("click", e => { e.stopPropagation(); tourEnd(); });
+  $("tour").addEventListener("click", e => { if(e.target === $("tour")) $("tourNext").click(); });
+  $("tour").addEventListener("keydown", e => {
+    if(e.key === "Escape"){ e.stopPropagation(); tourEnd(); }
+    if(e.key === "ArrowRight") $("tourNext").click();
+    if(e.key === "ArrowLeft" && tourI > 0) tourShow(tourI - 1);
+    if(e.key === "Tab"){ e.preventDefault(); (document.activeElement === $("tourNext") && !$("tourSkip").hidden ? $("tourSkip") : $("tourNext")).focus(); }
+  });
+  $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
+  // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
+  if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
 
   /* ---------------------------------------------------- go */
   function useData(d){
