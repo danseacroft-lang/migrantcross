@@ -11,6 +11,7 @@
 <title>Channel Crossings Beta</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ------------------------------------------------------------ tokens (Apple system colours) */
 :root{
@@ -81,16 +82,34 @@ button{font:inherit}
   height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
 .hero-map{position:absolute;inset:0;will-change:transform}
-.hero-map svg{width:100%;height:100%;display:block}
+.hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* the live weather map (Leaflet), in the style of Ventusky: wind or waves coloured across the Channel, with the wind flowing over it */
+#lmap{position:absolute;inset:0;background:#0B1420;font:inherit}
+.wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
+.leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
+#map .boat{pointer-events:auto}
+#map.zoomed .strait{display:none}
+#lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
+#lmap .leaflet-control-attribution a{color:inherit}
+#lmap .leaflet-bar{border:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+#lmap .leaflet-bar a{width:34px;height:34px;line-height:34px;background:rgba(0,0,0,.4);color:#fff;border-color:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+#lmap .leaflet-bar a:hover{background:rgba(0,0,0,.6)}
+#lmap .leaflet-bar a.leaflet-disabled{color:rgba(255,255,255,.35)}
+#lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
+.wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
+.wx-seg{display:flex;padding:3px;border-radius:999px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+.wx-seg button{border:0;background:none;color:#fff;font:600 .824rem/1 var(--font);padding:8px 14px;border-radius:999px;cursor:pointer;opacity:.75;touch-action:manipulation;transition:background-color .2s,opacity .2s}
+.wx-seg button[aria-pressed="true"]{background:rgba(255,255,255,.26);opacity:1}
+.wx-key{display:flex;align-items:center;gap:6px;font:600 .647rem/1 var(--font);text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.wx-key i{width:110px;height:6px;border-radius:3px;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.32) 0,rgba(0,0,0,0) 24%,rgba(0,0,0,0) 42%,rgba(0,0,0,.55) 80%,rgba(0,0,0,.62) 100%)}
-.hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff}
+.hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
+.hero-chips > *{pointer-events:auto}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;align-items:center;gap:10px;pointer-events:none}
 .large-title > *{pointer-events:auto}
-.live-chip{margin-left:auto;min-height:34px;padding:0 12px 0 11px}
 .live-chip i.live{background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.3);animation:pulse 1.6s ease-in-out infinite}
-.lc-short{display:none}
-@media (max-width:600px){.large-title .pill-beta,.lc-long{display:none}.lc-short{display:inline}}
+@media (max-width:600px){.large-title .pill-beta{display:none}.wx-ctl{top:62px;right:20px}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 .big{font:700 clamp(4.6rem,17vw,9.5rem)/.95 var(--round);letter-spacing:-.02em;margin:6px 0 2px;text-shadow:0 4px 30px rgba(0,0,0,.35)}
@@ -153,8 +172,9 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
 .lx-axis{display:flex;justify-content:space-between;font-size:.647rem;color:var(--label2);font-weight:600;margin-bottom:12px}
 .lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
-.mp-pop .wp-stats{grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0 10px}
-.mp-live{display:flex;align-items:center;gap:7px;font-weight:600;font-size:.824rem;color:var(--label)}
+.mp-pop{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
+.mp-pop .wp-days{margin-bottom:10px}
+.mp-live{display:flex;align-items:center;gap:7px;font-weight:600;font-size:.824rem;color:var(--label);margin-top:10px}
 .mp-live i{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.25);animation:pulse 1.6s ease-in-out infinite}
 .mp-boats{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:10px 0 2px;border-top:.5px solid var(--sep)}
 .mp-boats svg{width:30px;height:30px}
@@ -174,15 +194,8 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .fu-pop p{padding-right:18px}
 .fu-pop .fu-today{margin:4px 0 0;padding-top:8px;border-top:.5px solid var(--sep);color:var(--label);font-weight:600}
 .fu-pop .fu-today:empty{display:none}
-.scroll-cue{position:absolute;z-index:2;left:50%;bottom:14px;translate:-50% 0;width:26px;height:26px;color:#fff;opacity:.7;animation:cue 2.2s ease-in-out infinite}
+.scroll-cue{position:absolute;z-index:2;pointer-events:none;left:50%;bottom:14px;translate:-50% 0;width:26px;height:26px;color:#fff;opacity:.7;animation:cue 2.2s ease-in-out infinite}
 @keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(6px);opacity:.35}}
-.country rect{fill:rgba(0,0,0,.34)}
-#veil{opacity:0;transition:opacity 1.2s ease;pointer-events:none}
-.hero.night #veil{opacity:.4}
-.town circle{fill:var(--dot);stroke:#fff;stroke-width:1.6}
-.town text{font:600 12px var(--font);letter-spacing:-.01em;fill:var(--town);paint-order:stroke;stroke:var(--halo);stroke-width:3.2px;stroke-linejoin:round}
-.hero.night .town circle{fill:#FFD66B;stroke:#FFF3C4;filter:drop-shadow(0 0 5px #FFB300)}
-.hero.night .town text{fill:#E9EEF5;stroke:rgba(0,0,0,.6)}
 .strait path{stroke:#fff;stroke-width:1.6;stroke-dasharray:5 6;opacity:.75;fill:none}
 .strait rect{fill:rgba(0,0,0,.34)}
 .strait text{fill:#fff;font:700 11px var(--font)}
@@ -192,7 +205,6 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .boat.sel .hull{stroke:#fff;stroke-width:2.2}
 .boat.sel .ring{opacity:1}
 .boat .ring{opacity:0;fill:none;stroke:#fff;stroke-width:2;transition:opacity .2s}
-.country text{fill:#fff;font:700 12px/1 var(--font);letter-spacing:2px}
 
 /* ------------------------------------------------------------ layout */
 main > section,.card,.bento > *{min-width:0}
@@ -249,21 +261,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
-.wx-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:14px 24px;align-items:center}
-.wx-now{display:flex;align-items:center;gap:16px;min-width:0}
-.wx-art{flex:none;width:76px;height:76px}
-.wx-art svg,.wx-day svg{display:block;width:100%;height:100%;overflow:visible}
-.wx-lv{font:700 1.5rem/1.15 var(--round);letter-spacing:-.01em}
-.wx-sky{font-weight:600;font-size:.941rem;margin-top:3px}
 .calm{color:var(--green-t)}.moderate{color:var(--orange)}.rough{color:var(--red-t)}
-.wx-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.wx-day{background:var(--fill);border-radius:16px;padding:10px 12px 12px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center}
-.wx-day span{grid-column:1 / -1;justify-self:stretch;display:flex;justify-content:space-between;gap:6px;font-size:.706rem;color:var(--label2);font-weight:600;margin-bottom:6px}
-.wx-day span em{font-style:normal;color:var(--label)}
-.wx-day .ic{width:36px;height:36px;grid-row:2}
-.wx-day b{display:block;font-size:.941rem;line-height:1.15}
-.wx-day small{display:block;font-size:.706rem;color:var(--label2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wx-day > div:last-child{min-width:0;max-width:100%}
 
 /* ------------------------------------------------------------ on this day */
 .otd-top{display:flex;align-items:center;gap:16px}
@@ -371,7 +369,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
   .b-ring{grid-row:auto}
   .duo{grid-template-columns:1fr}
-  .wx-card{grid-template-columns:1fr}
 }
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
@@ -379,12 +376,8 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   .large-title h1{font-size:clamp(1.3rem,6.6vw,1.75rem);white-space:nowrap}
   .bento{gap:12px}
   .b-week,.b-ring{grid-column:1 / -1}
-  .wx-art{width:62px;height:62px}
-  .wx-lv{font-size:1.3rem}
   .card.b-ring{padding-bottom:100px}
   .tile-art{height:120px}
-  .wx-day{grid-template-columns:1fr;justify-items:start;row-gap:4px}
-  .wx-day .ic{grid-row:auto;width:32px;height:32px}
   .ring-wrap{gap:18px}
   .card{padding:16px;border-radius:20px}
   .val{font-size:1.8rem}
@@ -417,30 +410,24 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
   <div class="hero-map" id="heroMap">
-    <svg viewBox="0 0 1000 686" preserveAspectRatio="xMidYMid slice" id="map">
+    <div id="lmap"></div>
+    <svg viewBox="0 0 1000 686" preserveAspectRatio="none" id="map">
       <defs>
-        <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--sea2)"/><stop offset=".5" stop-color="var(--sea1)"/><stop offset="1" stop-color="var(--sea2)"/></linearGradient>
-        <radialGradient id="glint" cx="45%" cy="45%" r="45%"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-        <linearGradient id="landG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--land)"/><stop offset="1" stop-color="var(--land2)"/></linearGradient>
-        <pattern id="ripple" width="80" height="26" patternUnits="userSpaceOnUse"><path id="ripplePath" d="M0 13q10-6 20 0t20 0 20 0 20 0" fill="none" stroke="#fff" stroke-opacity=".1" stroke-width="1.4"/></pattern>
         <filter id="soft"><feGaussianBlur stdDeviation="1.2"/></filter>
+        <!-- real coastlines (Natural Earth, 1:10m), used to keep the waves layer off the land -->
+        <path id="coast" d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z"/>
       </defs>
-      <rect width="1000" height="686" fill="url(#seaG)"/>
-      <rect width="1000" height="686" fill="url(#ripple)"/>
-      <rect width="1000" height="686" fill="url(#glint)"/>
-      <!-- real coastlines (Natural Earth, 1:10m), with a band of shallower water along the shore -->
-      <path d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z" fill="none" stroke="var(--shelf)" stroke-width="18" stroke-linejoin="round" opacity=".55"/>
-      <path d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z" fill="url(#landG)" stroke="var(--coast)" stroke-width="2" stroke-linejoin="round"/>
-      <rect id="veil" width="1000" height="686" fill="#030A1C"/>
       <g class="w strait"><path d="M322.8 227.6L465.3 443.5"/><g transform="translate(394.1 335.6)"><rect x="-31" y="-11" width="62" height="22" rx="11"/><text y="4" text-anchor="middle">21 miles</text></g></g>
-      <g class="town"><circle cx="322.8" cy="227.6" r="4"/><text x="330.8" y="231.6" text-anchor="start">Dover</text></g><g class="town"><circle cx="369.2" cy="148.4" r="4"/><text x="377.2" y="152.4" text-anchor="start">Deal</text></g><g class="town w"><circle cx="247.1" cy="266.5" r="4"/><text x="239.1" y="258.5" text-anchor="end">Folkestone</text></g><g class="town"><circle cx="609.8" cy="375.3" r="4"/><text x="601.8" y="367.3" text-anchor="end">Calais</text></g><g class="town w"><circle cx="465.3" cy="443.5" r="4"/><text x="473.3" y="447.5" text-anchor="start">Cap Gris-Nez</text></g><g class="town w"><circle cx="481.4" cy="563.3" r="4"/><text x="489.4" y="567.3" text-anchor="start">Boulogne-sur-Mer</text></g><g class="town w"><circle cx="751.6" cy="345.7" r="4"/><text x="751.6" y="365.7" text-anchor="start">Gravelines</text></g><g class="town w"><circle cx="882.5" cy="305.8" r="4"/><text x="882.5" y="325.8" text-anchor="start">Dunkirk</text></g>
       <g id="boats"></g>
-      <g class="country" id="cEN"><rect/><text>ENGLAND</text></g>
-      <g class="country" id="cFR"><rect/><text>FRANCE</text></g>
     </svg>
   </div>
 
-  <div class="large-title"><h1>Channel Crossings</h1><span class="pill-beta">Beta</span><button type="button" class="chip live-chip" id="chipMap" aria-expanded="false" aria-controls="popMap"><i class="live"></i><span><span class="lc-long">Live conditions</span><span class="lc-short">Live</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+  <div class="large-title"><h1>Channel Crossings</h1><span class="pill-beta">Beta</span></div>
+
+  <div class="wx-ctl" id="wxCtl">
+    <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="true">Wind</button><button type="button" data-l="waves" aria-pressed="false">Waves</button></div>
+    <div class="wx-key" id="wxKey" aria-hidden="true"></div>
+  </div>
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker">Loading the latest figures…</div>
@@ -448,7 +435,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     <div class="big-sub" id="heroSub">&nbsp;</div>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
-      <button type="button" class="chip" id="chipWx" aria-expanded="false" aria-controls="popWx" hidden><i></i><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button type="button" class="chip live-chip" id="chipMap" aria-expanded="false" aria-controls="popMap"><i class="live"></i><span>Live conditions</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><i class="wait"></i><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
@@ -468,31 +455,13 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   <p class="fu-today" id="fuToday"></p>
 </div>
 
-<div class="info-pop wx-pop" id="popWx" role="dialog" aria-label="Channel conditions" hidden></div>
-
-<div class="info-pop lx-pop mp-pop" id="popMap" role="dialog" aria-label="About this map" hidden></div>
+<div class="info-pop wx-pop mp-pop" id="popMap" role="dialog" aria-label="Live conditions" hidden></div>
 
 <div class="info-pop boat-tip" id="boatTip" role="tooltip" hidden></div>
 
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 
 <main id="main">
-
-  <!-- ============================================================ CHANNEL CONDITIONS -->
-  <section aria-labelledby="hWx">
-    <div class="section-h rv"><h2 id="hWx">Channel Conditions</h2><p id="wxTime"></p></div>
-    <article class="card wx-card rv">
-      <div class="wx-now">
-        <div class="wx-art" id="wxArt" aria-hidden="true"></div>
-        <div>
-          <div class="wx-lv" id="wxV">Checking…</div>
-          <div class="wx-sky" id="wxSky"></div>
-          <div class="sub" id="wxS">&nbsp;</div>
-        </div>
-      </div>
-      <div class="wx-days" id="wxDays"></div>
-    </article>
-  </section>
 
   <!-- ============================================================ AT A GLANCE -->
   <section aria-labelledby="hGlance">
@@ -628,9 +597,10 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
 <footer>
   <a class="to-classic" href="./">Back to the current site</a>
-  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo.</p>
+  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo. Map © OpenStreetMap contributors, CARTO.</p>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -672,7 +642,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   function onScroll(){
     const y = scrollY, h = hero.offsetHeight;
     nav.classList.toggle("solid", y > 4);
-    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px) scale(" + (1 + y / h * .08).toFixed(3) + ")"; }
+    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px)"; }
   }
   addEventListener("scroll", onScroll, {passive:true}); onScroll();
 
@@ -690,25 +660,46 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
 
-  /* ---------------------------------------------------- the Channel: a real map, live conditions, one dinghy per boat */
+  /* ---------------------------------------------------- the Channel: a live weather map in the style of Ventusky, one dinghy per boat */
   const boatsG = $("boats"), map = $("map"), NS = "http://www.w3.org/2000/svg";
-  // Tall screens frame the narrows between Folkestone and Calais. England and France are labelled wherever they show.
+  // The boats are drawn in map units (1000 across, 686 down), which cover this part of the Channel
+  const AREA = [[50.5796, 0.7000], [51.4002, 2.6004]], NARROWS = [[50.5796, 1.0990], [51.4002, 2.0112]];
+  // On phones the map stays put so the page still scrolls; with a mouse it can be dragged and zoomed
+  const touchOnly = matchMedia("(hover: none)").matches;
+  const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, scrollWheelZoom:false, keyboard:false, boxZoom:false,
+    dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:AREA, maxBoundsViscosity:1, maxZoom:12}) : null;
+  let heat, flow, wxPane, boatK = 1;
+  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
+  if(LM){
+    LM.attributionControl.setPrefix(false);
+    wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
+    LM.createPane("labels").style.zIndex = 350;
+    const carto = (style, o) => L.tileLayer("https://{s}.basemaps.cartocdn.com/" + style + "/{z}/{x}/{y}{r}.png", Object.assign({subdomains:"abcd", maxZoom:20}, o));
+    carto("dark_nolabels", {attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a> · <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    carto("dark_only_labels", {pane:"labels"}).addTo(LM);
+    L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
+    [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
+    if(!touchOnly) L.control.zoom({position:"bottomright"}).addTo(LM);
+    LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
+    LM.on("zoomend", () => { boatK = Math.min(1, 1.05 / unitPx().sx); map.classList.toggle("zoomed", LM.getZoom() > LM.getMinZoom() + .8); placeBoats(performance.now(), reduced); });
+    LM.on("moveend", () => { wxPane.style.opacity = ""; resetWx(); });
+  }
+  // Where map units land on screen right now
+  function unitPx(){
+    const a = LM.latLngToContainerPoint([AREA[1][0], AREA[0][1]]), b = LM.latLngToContainerPoint([AREA[0][0], AREA[1][1]]);
+    return {x0:a.x, y0:a.y, sx:(b.x - a.x) / 1000, sy:(b.y - a.y) / 686};
+  }
+  // Tall screens frame the narrows between Folkestone and Calais; wide ones show Deal to Boulogne and Dunkirk
+  let fitW = 0;
   function fitMap(){
-    const W = hero.clientWidth, H = hero.clientHeight; if(!W || !H) return;
-    const tall = W < H * .9, vb = tall ? [210, 0, 480, 686] : [0, 0, 1000, 686];
-    map.setAttribute("viewBox", vb.join(" ")); map.classList.toggle("tall", tall);
-    const k = Math.max(W / vb[2], H / vb[3]), vw = W / k, vh = H / k, x0 = vb[0] + (vb[2] - vw) / 2, y0 = vb[1] + (vb[3] - vh) / 2, pad = 20 / k;
-    label("cEN", x0 + pad, y0 + 100 / k, "start");
-    label("cFR", x0 + vw - pad, tall ? 505 : 540, "end");
+    const W = hero.clientWidth, H = hero.clientHeight; if(!W || !H || !LM) return;
+    LM.invalidateSize({pan:false});
+    const tall = W < H * .9; map.classList.toggle("tall", tall);
+    LM.setMinZoom(LM.getBoundsZoom(AREA, true));
+    if(W !== fitW){ fitW = W; const f = L.latLngBounds(tall ? NARROWS : AREA); LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false}); }
+    else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
+    else resetWx();
   }
-  function label(id, x, y, anchor){
-    const g = $(id), t = g.querySelector("text"), r = g.querySelector("rect");
-    t.setAttribute("x", x.toFixed(1)); t.setAttribute("y", y.toFixed(1)); t.setAttribute("text-anchor", anchor);
-    const b = t.getBBox();
-    r.setAttribute("x", (b.x - 10).toFixed(1)); r.setAttribute("y", (b.y - 5).toFixed(1));
-    r.setAttribute("width", (b.width + 18).toFixed(1)); r.setAttribute("height", (b.height + 10).toFixed(1)); r.setAttribute("rx", ((b.height + 10) / 2).toFixed(1));
-  }
-  fitMap(); addEventListener("resize", fitMap);
 
   // Just off the beaches boats leave from, and off the Kent coast (map units; every point checked to be at sea)
   const LAUNCH = [[851.0, 269.7], [738.4, 304.5], [545.6, 362.3], [489.3, 416.9], [458.7, 526.9], [442.8, 568.7], [445.2, 635.6]], LANDING = [[389.7, 150.5], [340.0, 248.2], [252.6, 285.8], [202.8, 298.4], [161.4, 408.4]];
@@ -736,28 +727,138 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       const k = b.k, u = 1 - k;
       const x = u * u * b.a[0] + 2 * u * k * b.c[0] + k * k * b.e[0], y = u * u * b.a[1] + 2 * u * k * b.c[1] + k * k * b.e[1];
       const dx = 2 * u * (b.c[0] - b.a[0]) + 2 * k * (b.e[0] - b.c[0]), dy = 2 * u * (b.c[1] - b.a[1]) + 2 * k * (b.e[1] - b.c[1]);
-      b.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI + 90).toFixed(1) + ")" + (b.hold ? " scale(1.3)" : ""));
+      b.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI + 90).toFixed(1) + ") scale(" + (boatK * (b.hold ? 1.3 : 1)).toFixed(3) + ")");
       b.g.style.opacity = still || b.hold ? 1 : Math.min(1, k * 10, u * 10).toFixed(2);
     });
   }
-  // Live sea: ripples travel with the real wind, stronger with bigger waves (set by loadWeather)
-  let sea = {wind:10, dir:225, wave:.5};
-  function drawSea(t){
-    const ang = sea.dir + 90, off = (t / 1000 * (3 + sea.wind * .5)) % 26;
-    $("ripple").setAttribute("patternTransform", "rotate(" + ang.toFixed(0) + ") translate(0 " + off.toFixed(1) + ")");
+  /* Live weather layer: wind (or wave height) read at a grid of points across the Channel, coloured in,
+     with the wind drawn as flowing lines. Refreshed with the conditions every 30 minutes. */
+  const GLAT = [], GLON = [];
+  for(let i = 0; i < 8; i++) GLAT.push(+(50.45 + i * .15).toFixed(2));
+  for(let i = 0; i < 10; i++) GLON.push(+(.55 + i * .25).toFixed(2));
+  let grid = null, layer = "wind";
+  const fillGaps = a => {   // the marine model has no waves over land: borrow from the nearest sea
+    if(!a.some(x => x != null)) return null;
+    for(let pass = 0; pass < 20 && a.some(x => x == null); pass++){
+      a = a.map((x, k) => { if(x != null) return x; const r = Math.floor(k / GLON.length), c = k % GLON.length, n = [];
+        [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]].forEach(([i, j]) => { const y = i >= 0 && i < GLAT.length && j >= 0 && j < GLON.length ? a[i * GLON.length + j] : null; if(y != null) n.push(y); });
+        return n.length ? n.reduce((p, q) => p + q) / n.length : null; });
+    }
+    return a;
+  };
+  async function loadGrid(){
+    const la = [], lo = [];
+    GLAT.forEach(a => GLON.forEach(o => { la.push(a); lo.push(o); }));
+    const q = "latitude=" + la.join(",") + "&longitude=" + lo.join(",");
+    try{
+      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=mph"),
+                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height").catch(() => null)]);
+      const sp = [].concat(w).map(r => r.current.wind_speed_10m || 0), dir = [].concat(w).map(r => (r.current.wind_direction_10m || 0) * Math.PI / 180);
+      grid = {s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
+        wave: m ? fillGaps([].concat(m).map(r => r && r.current ? r.current.wave_height : null)) : null};
+    }catch(e){ grid = null; }
+    resetWx();
+  }
+  // A reading anywhere: blended from the four grid points around it, or the Dover Strait reading if the grid isn't in
+  function sample(lat, lon, key){
+    if(!grid || !grid[key]){
+      const w = wx ? wx.wind : 10, d = (wx ? wx.dir : 225) * Math.PI / 180;
+      return key === "u" ? -w * Math.sin(d) : key === "v" ? -w * Math.cos(d) : key === "s" ? w : (wx && wx.wave != null ? wx.wave : .5);
+    }
+    const nO = GLON.length, cl = (x, n) => Math.min(Math.max(x, 0), n - 1.001);
+    const fy = cl((lat - GLAT[0]) / .15, GLAT.length), fx = cl((lon - GLON[0]) / .25, nO), i = fy | 0, j = fx | 0, ty = fy - i, tx = fx - j, a = grid[key];
+    const at = (r, c) => a[r * nO + c] || 0;
+    return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
+  }
+  // Colour scales, close to Ventusky's
+  const SCALE = {
+    wind:{max:40, unit:"mph", stops:[[0,[98,113,183]],[6,[57,97,159]],[10,[74,148,169]],[14,[77,141,123]],[18,[83,165,83]],[23,[201,186,63]],[28,[221,135,50]],[34,[208,70,60]],[40,[173,40,110]]]},
+    waves:{max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]}
+  };
+  function colour(v, st){
+    if(v <= st[0][0]) return st[0][1];
+    for(let k = 1; k < st.length; k++) if(v <= st[k][0]){ const [a, ca] = st[k - 1], [b, cb] = st[k], t = (v - a) / (b - a); return ca.map((x, n) => x + (cb[n] - x) * t); }
+    return st[st.length - 1][1];
+  }
+  function showKey(){
+    const sc = SCALE[layer];
+    $("wxKey").innerHTML = "<span>0</span><i style=\"background:linear-gradient(to right," + sc.stops.map(([v, c]) => "rgb(" + c.join(",") + ") " + (v / sc.max * 100).toFixed(0) + "%").join(",") + ")\"></i><span>" + sc.max + "+ " + sc.unit + "</span>";
+  }
+  document.querySelectorAll("#wxCtl button").forEach(b => b.addEventListener("click", () => {
+    layer = b.dataset.l;
+    document.querySelectorAll("#wxCtl button").forEach(x => x.setAttribute("aria-pressed", x === b));
+    showKey(); resetWx();
+  }));
+  showKey();
+  // Rebuilt whenever the map moves or new readings arrive: the coloured layer, and the wind as on-screen motion every few pixels
+  const CELL = 8, SPEED = .055;   // pixels a frame for each mph
+  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0;
+  function resetWx(){
+    if(!LM) return;
+    const sz = LM.getSize(); vw = sz.x; vh = sz.y; if(!vw || !vh) return;
+    dpr = Math.min(2, devicePixelRatio || 1);
+    const tl = LM.containerPointToLayerPoint([0, 0]);
+    [heat, flow].forEach(c => { c.width = vw * dpr; c.height = vh * dpr; c.style.width = vw + "px"; c.style.height = vh + "px"; L.DomUtil.setPosition(c, tl); });
+    const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
+    const u = new Float32Array(n), v = new Float32Array(n), off = document.createElement("canvas");
+    off.width = cols; off.height = rows;
+    const img = off.getContext("2d").createImageData(cols, rows), sc = SCALE[layer];
+    for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
+      const k = r * cols + c, ll = LM.containerPointToLatLng([c * CELL, r * CELL]);
+      u[k] = sample(ll.lat, ll.lng, "u"); v[k] = -sample(ll.lat, ll.lng, "v");
+      const col = colour(sample(ll.lat, ll.lng, layer === "wind" ? "s" : "wave"), sc.stops);
+      img.data.set([col[0], col[1], col[2], 150], k * 4);
+    }
+    off.getContext("2d").putImageData(img, 0, 0);
+    fld = {cols, rows, u, v};
+    const h = heat.getContext("2d");
+    h.imageSmoothingEnabled = true;
+    h.drawImage(off, -CELL / 2 * dpr, -CELL / 2 * dpr, cols * CELL * dpr, rows * CELL * dpr);
+    if(layer === "waves"){   // waves are only at sea
+      const p = unitPx();
+      h.globalCompositeOperation = "destination-out";
+      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(new Path2D($("coast").getAttribute("d")));
+      h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over";
+    }
+    const count = Math.round(Math.min(1800, vw * vh / 900));
+    parts = Array.from({length:count}, () => spawn({}));
+    if(reduced) for(let i = 0; i < 40; i++) stepFlow();   // one still picture of the wind instead of motion
+  }
+  function spawn(p){ p.x = Math.random() * vw; p.y = Math.random() * vh; p.age = 0; p.max = 50 + Math.random() * 70; return p; }
+  function vel(x, y){
+    const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
+    const i = fy | 0, j = fx | 0, tx = fx - j, ty = fy - i, k = i * fld.cols + j, C = fld.cols;
+    const bl = a => (a[k] * (1 - tx) + a[k + 1] * tx) * (1 - ty) + (a[k + C] * (1 - tx) + a[k + C + 1] * tx) * ty;
+    return [bl(fld.u), bl(fld.v)];
+  }
+  function stepFlow(){
+    if(!fld || !flow) return;
+    const c = flow.getContext("2d");
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0,.92)"; c.fillRect(0, 0, vw, vh);   // older trails fade
+    c.globalCompositeOperation = "source-over"; c.strokeStyle = "rgba(255,255,255,.65)"; c.lineWidth = 1.1; c.lineCap = "round";
+    c.beginPath();
+    for(const p of parts){
+      const [u, v] = vel(p.x, p.y), nx = p.x + u * SPEED, ny = p.y + v * SPEED;
+      if(++p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
+      c.moveTo(p.x, p.y); c.lineTo(nx, ny); p.x = nx; p.y = ny;
+    }
+    c.stroke();
   }
   // Runs only while the Channel is on screen and the tab is visible
   let raf = 0, heroOn = true;
   function frame(t){
     if(!heroOn || document.hidden){ raf = 0; return; }
-    placeBoats(t);
-    if(t - lastT > 40){ drawSea(t); lastT = t; if(tipBoat) placeTip(); }
+    placeBoats(t); stepFlow();
+    if(t - lastT > 40){ lastT = t; if(tipBoat) placeTip(); }
     raf = requestAnimationFrame(frame);
   }
   const play = () => { if(!reduced && !raf && heroOn && !document.hidden) raf = requestAnimationFrame(frame); };
   if("IntersectionObserver" in window) new IntersectionObserver(e => { heroOn = e[0].isIntersecting; play(); }).observe(hero);
   document.addEventListener("visibilitychange", play);
-  play(); drawSea(0);
+  if(!LM) map.setAttribute("preserveAspectRatio", "xMidYMid slice");   // the map library didn't load: just the boats
+  fitMap(); addEventListener("resize", fitMap);
+  play();
 
   // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
   const tip = $("boatTip"); let tipBoat = null, tipT;
@@ -849,10 +950,14 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   let cur = null, hideT;
   function placePop(){
     if(!cur) return;
-    const {chip, pop} = cur, r = chip.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    const {chip, pop} = cur, r = chip.getBoundingClientRect(), w = pop.offsetWidth;
     const left = Math.min(Math.max(12, r.left), innerWidth - w - 12);
-    let top = r.top - h - 10, below = top < 64;   // above the chip, unless there's no room
-    if(below) top = Math.min(r.bottom + 10, innerHeight - h - 12);
+    pop.style.maxHeight = ""; let h = pop.offsetHeight;
+    // above the chip, unless there's no room; a long pop-up goes on the roomier side and scrolls, never over its chip
+    const above = r.top - 74, under = innerHeight - r.bottom - 22;
+    const below = h > above && (h <= under || under > above), room = below ? under : above;
+    if(h > room){ h = Math.max(120, room); pop.style.maxHeight = h + "px"; }
+    let top = below ? Math.min(r.bottom + 10, innerHeight - h - 12) : r.top - h - 10;
     pop.style.left = left + "px"; pop.style.top = Math.max(12, top) + "px";
     pop.style.setProperty("--from", (below ? "top " : "bottom ") + Math.round(Math.min(Math.max(r.left + 24 - left, 0), w)) + "px");
   }
@@ -906,7 +1011,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
     liveUi();
     if(Date.now() - statusAt >= (pending() ? 2 : 30) * MIN) checkStatus();
-    if(Date.now() - wxAt >= 30 * MIN) loadWeather();
+    if(Date.now() - wxAt >= 30 * MIN){ loadWeather(); loadGrid(); }
   }
   setInterval(tick, MIN);
   document.addEventListener("visibilitychange", () => {
@@ -1171,18 +1276,28 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   }
   const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
   const COMPASS = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"];
-  // What the map shows, and what's live on it
+  // Live conditions: the weather in the Channel now, the next three mornings, and what the map shows
   function renderMapPop(){
-    const live = !!sea.at, d = boatDay;
-    const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(sea.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    $("popMap").innerHTML = "<b>About this map</b>"
-      + '<div class="mp-live"><i></i>' + (live ? "Live conditions · updated " + ukClock(sea.at) : "Loading live conditions…") + "</div>"
-      + (live ? '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(sea.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Waves</span><b class="num">' + sea.wave.toFixed(1) + '</b><small> m</small></div><div><span>Light</span><b>' + (sea.day ? "Day" : "Night") + "</b></div></div>"
-        + '<p class="wp-p">The sea, wind and light on the map follow the real weather in the Dover Strait right now: the wind is from the ' + COMPASS[Math.round(sea.dir / 45) % 8] + ". It refreshes every 30 minutes.</p>" : "")
+    const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
+    pm.dataset.lv = lvl || "";
+    let h;
+    if(wx){
+      const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? WORD[lvl] + " in the Channel" : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
+        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
+        + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
+        + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
+        + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
+        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
+        + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>"
+        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the moving lines are the wind, blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", coloured by its speed. Choose Waves to colour it by wave height.</p>";
+    }
+    else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
+    pm.innerHTML = h
       + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
       + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
-      + "Boat positions and routes are an illustration: small boats can't be tracked live, and the Home Office doesn't publish where or when each one crossed. Hover over or tap a boat for its day's figures.</p></div>"
-      + '<p class="wp-foot">Coastline: Natural Earth · Weather: Open-Meteo · About 21 miles across at the narrowest point</p>';
+      + "Hover over or tap a boat for its day's figures.</p></div>"
+      + '<p class="wp-foot">Weather: Open-Meteo · Map: OpenStreetMap, CARTO · Refreshes every 30 minutes</p>';
   }
   async function loadWeather(){
     wxAt = Date.now();
@@ -1190,41 +1305,22 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     try{
       const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
                                         getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
-      const wind = w.current.wind_speed_10m, wave = m.current.wave_height, lvl = rate(wind, wave), kind = kindOf(w.current.weather_code);
-      $("wxArt").innerHTML = wxIcon(kind, w.current.is_day !== 0);
-      sea = {wind, dir: w.current.wind_direction_10m == null ? 225 : w.current.wind_direction_10m, wave: wave == null ? .5 : wave, gust: w.current.wind_gusts_10m, day: w.current.is_day !== 0, kind, temp: w.current.temperature_2m, at: new Date()};
-      $("ripplePath").setAttribute("stroke-opacity", (.07 + Math.min(sea.wave, 2) * .06).toFixed(2));
-      hero.classList.toggle("night", !sea.day); drawSea(performance.now()); renderMapPop();
-      $("wxV").textContent = lvl ? WORD[lvl] + ": " + LINE[lvl] : "Unavailable"; $("wxV").className = "wx-lv " + (lvl || "");
-      $("wxSky").textContent = (kind ? SKY[kind] + " · " : "") + Math.round(w.current.temperature_2m) + "°C";
-      $("wxS").textContent = "Wind " + Math.round(wind) + " mph, gusting " + Math.round(w.current.wind_gusts_10m) + " mph · Waves " + (wave == null ? "–" : wave.toFixed(1) + " m");
-      $("wxTime").textContent = "Updated " + ukClock(new Date());
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
-      $("wxDays").innerHTML = Object.keys(by).sort().slice(1,4).map(d => {
-        const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d), k = di >= 0 ? kindOf(w.daily.weather_code[di]) : null, hi = di >= 0 ? w.daily.temperature_2m_max[di] : null;
-        return '<div class="wx-day"><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + (hi != null ? "<em>" + Math.round(hi) + "°</em>" : "") + '</span><div class="ic" title="' + (k ? SKY[k] : "") + '">' + wxIcon(k, true) + '</div><div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><small>" + (k ? SKY[k] : "") + "</small></div></div>";
-      }).join("");
-      const c = $("chipWx"); c.hidden = !lvl; c.querySelector("i").className = lvl || ""; c.querySelector("span").textContent = (lvl ? WORD[lvl] : "") + " in the Channel now";
-      // the chip's pop-up: now, what it means, and the next three mornings
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
         return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "°" : "") + "</em></li>"; }).join("");
-      const LV = ["calm", "moderate", "rough"];
-      const pw = $("popWx"); pw.dataset.lv = lvl || "";
-      pw.innerHTML = '<div class="wp-head"><div class="wp-ic">' + wxIcon(kind, w.current.is_day !== 0) + "</div><div><b>" + (lvl ? WORD[lvl] + " in the Channel" : "Channel conditions") + "</b><span>" + (kind ? SKY[kind] + " · " : "") + Math.round(w.current.temperature_2m) + "°C · Dover Strait</span></div></div>"
-        + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wind) + '</b><small> mph</small></div><div><span>Gusts</span><b class="num">' + Math.round(w.current.wind_gusts_10m) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wave == null ? "–" : wave.toFixed(1)) + "</b><small> m</small></div></div>"
-        + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
-        + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
-        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
-        + '<ul class="wp-days" aria-label="The next three mornings">' + outlook + "</ul>"
-        + '<p class="wp-foot">Mornings, when most boats set out · Updated ' + ukClock(new Date()) + " · Open-Meteo</p>";
+      const c = w.current;
+      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
+        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
+      wxFailed = false;
     }catch(e){
-      $("wxArt").innerHTML = wxIcon(null); $("wxV").textContent = "Unavailable"; $("wxV").className = "wx-lv"; $("wxSky").textContent = "";
-      $("wxS").textContent = "The weather service didn't respond. It will try again shortly."; $("wxDays").innerHTML = ""; $("chipWx").hidden = true; closePop($("chipWx"));
+      wxFailed = true;
       wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
     }
+    renderMapPop();
+    if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
   function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); if(!first) drawChart(); }
@@ -1250,7 +1346,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       loadExtras();
     }catch(e){ $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
   }
-  start(); loadWeather();
+  start(); loadWeather(); loadGrid();
 })();
 </script>
 </body>
