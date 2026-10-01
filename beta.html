@@ -504,6 +504,13 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-area-inset-bottom,0px));color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
+footer{border-top:.5px solid var(--sep);padding-top:20px}
+footer p{margin:0;max-width:52ch;line-height:1.45}
+footer p a,.ft-nav a{color:var(--blue);text-decoration:none}
+footer strong{color:var(--label);font-weight:600}
+.ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
+.ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
+@media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
 .to-classic{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 18px;border-radius:22px;background:var(--fill);color:var(--blue);font-weight:600;font-size:.882rem}
 
 /* ------------------------------------------------------------ smaller screens */
@@ -766,8 +773,12 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 </main>
 
 <footer>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+  <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
+  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, Maxar, Earthstar Geographics.</p>
+  <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
   <a class="to-classic" href="./">Back to the current site</a>
-  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo. Map © Esri, Maxar, Earthstar Geographics.</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
