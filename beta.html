@@ -91,19 +91,86 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 #map .boat{pointer-events:auto}
 #lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
 #lmap .leaflet-control-attribution a{color:inherit}
-#lmap .leaflet-bar{border:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
-#lmap .leaflet-bar a{width:34px;height:34px;line-height:34px;background:rgba(0,0,0,.4);color:#fff;border-color:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
-#lmap .leaflet-bar a:hover{background:rgba(0,0,0,.6)}
+#lmap .leaflet-bar{border:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.16),0 6px 20px rgba(0,0,0,.22)}
+#lmap .leaflet-bar a{width:44px;height:44px;line-height:44px;font:400 22px/44px var(--font);background:rgba(30,30,32,.58);color:#fff;border-color:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
+#lmap .leaflet-bar a:hover{background:rgba(44,44,46,.72)}
 #lmap .leaflet-bar a.leaflet-disabled{color:rgba(255,255,255,.35)}
 #lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
-.wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
-.wx-row{display:flex;gap:6px;align-items:center}
-.wx-full{flex:none;width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;color:#fff;cursor:pointer;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);touch-action:manipulation}
-.wx-full svg{width:17px;height:17px}
+/* Map controls in the style of Apple Maps: frosted dark glass, rounded rectangles, SF type */
+.wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff;--glass:rgba(30,30,32,.58);--edge:rgba(255,255,255,.16)}
+.am-top{display:flex;gap:8px;align-items:center}
+.am-btn,.am-pill,.am-pick{background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px var(--edge),0 6px 20px rgba(0,0,0,.22)}
+.am-btn{flex:none;height:44px;min-width:44px;border:0;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
+.am-btn:active{transform:scale(.96)}
+.am-btn svg{width:19px;height:19px}
+@media (hover:hover){.am-btn:hover{background:rgba(44,44,46,.72)}}
+.am-layer{padding:0 12px 0 11px}
+.am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
+.am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
+#wxLayerIc{display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--lg,#0A84FF)}
+#wxLayerIc svg{width:16px;height:16px}
 .wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
-.wx-time{display:flex;align-items:center;gap:8px;font:600 .706rem/1 var(--font);text-shadow:0 1px 4px rgba(0,0,0,.7)}
-.wx-time input{width:150px;accent-color:#fff;margin:0;touch-action:manipulation}
-.wx-time span{min-width:72px;text-align:right}
+.wx-full svg{width:17px;height:17px}
+/* the layer picker: a card of tiles, like Apple Maps' map chooser */
+.am-pick{position:absolute;top:52px;right:0;z-index:5;width:288px;background:rgba(28,28,30,.88);padding:14px 14px 16px;border-radius:16px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
+.am-pick[hidden]{display:none}
+@keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
+.am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
+.am-pick-h b{font:700 1.06rem/1 var(--font);letter-spacing:-.02em}
+.am-x{width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer}
+.am-x svg{width:9px;height:9px}
+.wx-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 10px}
+.wx-seg button{border:0;background:none;padding:0;color:#fff;cursor:pointer;display:grid;gap:6px;justify-items:center;font:600 .706rem/1.1 var(--font);touch-action:manipulation}
+.am-tile{width:100%;height:58px;border-radius:12px;display:grid;place-items:center;background:var(--tg);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.2);transition:box-shadow .2s,transform .15s}
+.am-tile svg{width:24px;height:24px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.45))}
+.wx-seg button:active .am-tile{transform:scale(.95)}
+.wx-seg button[aria-pressed="true"] .am-tile{box-shadow:0 0 0 2.5px #0A84FF,inset 0 0 0 .5px rgba(255,255,255,.2)}
+.wx-seg button[aria-pressed="true"] .am-tn{color:#64B5FF}
+/* the key and the forecast timeline, as small frosted pills */
+.am-pill{border-radius:14px}
+.wx-key{display:flex;align-items:center;gap:7px;padding:7px 10px;font:600 .647rem/1 var(--font);font-variant-numeric:tabular-nums}
+.wx-key i{width:150px;height:6px;border-radius:3px;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
+.wx-time{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
+.wx-time[hidden]{display:none}
+.wx-time span{min-width:74px;text-align:right}
+.am-play{width:34px;height:34px;border:0;border-radius:10px;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
+.am-play svg{width:15px;height:15px}.am-play .pa,.am-play[aria-pressed="true"] .pl{display:none}.am-play[aria-pressed="true"] .pa{display:block}
+.wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:4px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.28) var(--p,0%));touch-action:manipulation;cursor:pointer}
+.wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
+.wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+/* place names in Apple Maps' satellite style: SF type with a soft halo, a dot for towns, italic blue for water */
+.am-place{white-space:nowrap;pointer-events:none;color:#fff;font:600 12px/1 var(--font);letter-spacing:-.01em;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.55)}
+.am-place span{position:absolute;top:50%;transform:translateY(-50%)}
+.am-place.r span{left:8px}.am-place.l span{right:8px}
+.am-place i{position:absolute;left:-3.5px;top:-3.5px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 1.5px rgba(0,0,0,.45),0 1px 3px rgba(0,0,0,.5)}
+.am-place.big{font-size:13.5px;font-weight:700}
+.am-place.mark i{background:#FF9F0A}
+.am-place.land,.am-place.sea{transform:none}
+.am-place.land span,.am-place.sea span{left:50%;transform:translate(-50%,-50%)}
+.am-place.land{font-size:11px;font-weight:700;letter-spacing:.32em;color:rgba(255,255,255,.82)}
+.am-place.sea{font-style:italic;font-weight:500;font-size:12.5px;color:#A8D8FF;letter-spacing:.02em}
+#lmap.z-lo .am-place.r2{display:none}
+/* phones: the sheet a tap brings up */
+.am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
+  background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
+.am-sheet[hidden]{display:none}
+.am-sheet.in{animation:sheetUp .38s cubic-bezier(.2,.9,.25,1) both}
+@keyframes sheetUp{from{transform:translateY(110%)}}
+.am-grab{position:absolute;top:6px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--label3)}
+.am-sheet .am-x{position:absolute;top:12px;right:12px;background:var(--fill);color:var(--label2)}
+.am-sheet-in{font:.824rem/1.35 var(--font);padding-right:30px}
+.am-sheet .am-sheet-in .wp-stats{margin-right:-30px}
+/* the dropped pin where you tap */
+.am-pin{pointer-events:none}
+.am-pin i{position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50%;background:#FF3B30;box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4);animation:pinDrop .35s cubic-bezier(.3,1.5,.5,1) both}
+.am-pin i::after{content:"";position:absolute;left:5px;top:5px;width:6px;height:6px;border-radius:50%;background:#fff}
+.am-pin b{position:absolute;left:10px;top:15px;width:2px;height:13px;border-radius:1px;background:linear-gradient(#8E8E93,#C7C7CC)}
+.am-pin s{position:absolute;left:7px;top:26px;width:8px;height:4px;border-radius:50%;background:rgba(0,0,0,.4);filter:blur(1px)}
+@keyframes pinDrop{from{transform:translateY(-22px);opacity:0}}
+/* scale bar, shown in full screen */
+#lmap .leaflet-control-scale{display:none;margin:0 0 14px 16px}
+.hero.full #lmap .leaflet-control-scale{display:block}
+#lmap .leaflet-control-scale-line{border:2px solid #fff;border-top:0;background:none;color:#fff;font:600 10px/1.4 var(--font);text-shadow:0 0 3px rgba(0,0,0,.9);box-shadow:0 1px 2px rgba(0,0,0,.35);padding:0 4px}
 /* full screen: the whole Channel to explore */
 .hero.full{position:fixed;inset:0;z-index:55;width:auto;height:auto;min-height:0;max-height:none;margin:0;border-radius:0}
 .hero.full .hero-in,.hero.full .scroll-cue,.hero.full .large-title,.hero.full::after{display:none}
@@ -113,20 +180,15 @@ html.map-full,html.map-full body{overflow:hidden}
 @media (hover:none){#lmap .leaflet-control-zoom{display:none}}
 .hero.full #lmap .leaflet-control-zoom{display:block}
 /* tap the map: the weather at that spot */
-#lmap .wx-pt .leaflet-popup-content-wrapper{border-radius:14px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);color:var(--label);box-shadow:var(--shadow),0 0 0 .5px var(--sep)}
+#lmap .wx-pt .leaflet-popup-content-wrapper{border-radius:16px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);color:var(--label);box-shadow:var(--shadow),0 0 0 .5px var(--sep)}
 #lmap .wx-pt .leaflet-popup-tip{background:color-mix(in srgb,var(--card) 80%,transparent)}
 #lmap .wx-pt .leaflet-popup-content{margin:12px 14px;width:236px!important;font:.765rem/1.35 var(--font)}
-.wx-pt b.pt-h{display:block;font-size:.882rem;margin:0}
+.wx-pt b.pt-h{display:block;font-size:1.06rem;letter-spacing:-.02em;margin:0}
 .wx-pt .pt-lv{display:block;font-weight:700;font-size:.824rem;margin-top:6px}
 .wx-pt .pt-sub{display:block;color:var(--label2);font-size:.706rem;margin-top:1px}
 .wx-pt .wp-stats{margin:8px 0 0;gap:5px}
 .wx-pt .wp-stats div{padding:6px 8px}
 .wx-pt .wp-stats b{font-size:1rem}
-.wx-seg{display:flex;padding:3px;border-radius:999px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
-.wx-seg button{border:0;background:none;color:#fff;font:600 .765rem/1 var(--font);padding:9px 10px;border-radius:999px;cursor:pointer;opacity:.75;touch-action:manipulation;transition:background-color .2s,opacity .2s}
-.wx-seg button[aria-pressed="true"]{background:rgba(255,255,255,.26);opacity:1}
-.wx-key{display:flex;align-items:center;gap:6px;font:600 .647rem/1 var(--font);text-shadow:0 1px 4px rgba(0,0,0,.7)}
-.wx-key i{width:150px;height:6px;border-radius:3px;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.28) 0,rgba(0,0,0,0) 20%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45) 85%,rgba(0,0,0,.55) 100%)}
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
@@ -161,7 +223,6 @@ html.map-full,html.map-full body{overflow:hidden}
 @media (max-width:600px){.hero.has-news .wx-ctl{top:calc(62px + var(--mn-h,0px))}}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;align-items:center;gap:10px;pointer-events:none}
 .large-title > *{pointer-events:auto}
-.wx-btn{min-height:38px;background:rgba(0,0,0,.32);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 @media (max-width:600px){.wx-ctl{top:62px;right:20px}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
@@ -487,15 +548,22 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
   <div class="large-title"><h1>Channel Crossings</h1><button type="button" class="pill-beta" id="chipBeta" aria-expanded="false" aria-controls="popBeta">Beta</button></div>
 
+  <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
+  <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
+
+  <!-- Map controls, laid out like Apple Maps: a layer button and a full-screen button, the key, and a forecast timeline -->
   <div class="wx-ctl" id="wxCtl">
-    <div class="wx-row">
-      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="true">Wind</button><button type="button" data-l="gusts" aria-pressed="false">Gusts</button><button type="button" data-l="waves" aria-pressed="false">Waves</button><button type="button" data-l="temp" aria-pressed="false">Temp</button><button type="button" data-l="rain" aria-pressed="false">Rain</button><button type="button" data-l="cloud" aria-pressed="false">Cloud</button></div>
+    <div class="am-top">
+      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span id="wxLayerName">Wind</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button type="button" class="am-btn wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <div class="wx-key" id="wxKey" aria-hidden="true"></div>
-    <label class="wx-time"><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></label>
-    <div class="wx-row">
-      <button type="button" class="wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
+      <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button><button type="button" data-l="cloud" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 17.8 10a4 4 0 0 1-.3 8z"/></svg></span><span class="am-tn">Cloud</span></button></div>
     </div>
+    <div class="wx-key am-pill" id="wxKey" aria-hidden="true"></div>
+    <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
+  </div>
   </div>
 
   <div class="hero-in">
@@ -739,6 +807,12 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   const boatsG = $("boats"), map = $("map"), NS = "http://www.w3.org/2000/svg";
   // The boats are drawn in map units (1000 across, 686 down), which cover this part of the Channel
   const AREA = [[50.5796, 0.7000], [51.4002, 2.6004]], NARROWS = [[50.5796, 1.0990], [51.4002, 2.0112]];
+  // Towns (l or r: which side the name sits, kept off the sea; r2: smaller places, shown once zoomed in), the cape, the countries and the seas
+  const PLACES = [["Dover", 51.1279, 1.3134, "big l"], ["Folkestone", 51.0814, 1.1695, "big l"], ["Calais", 50.9513, 1.8587, "big r"], ["Boulogne-sur-Mer", 50.7264, 1.6147, "big r"], ["Dunkirk", 51.0344, 2.3768, "big r"],
+    ["Deal", 51.2226, 1.4021, "l r2"], ["Ramsgate", 51.3359, 1.4160, "l r2"], ["Hythe", 51.0716, 1.0840, "l r2"], ["Dungeness", 50.9135, 0.9760, "l r2"], ["Rye", 50.9502, 0.7330, "r r2"],
+    ["Gravelines", 50.9865, 2.1281, "r r2"], ["Sangatte", 50.9455, 1.7525, "r r2"], ["Wissant", 50.8858, 1.6634, "r r2"], ["Wimereux", 50.7697, 1.6110, "r r2"], ["Le Portel", 50.7072, 1.5733, "r r2"],
+    ["Cap Gris-Nez", 50.8693, 1.5838, "mark l r2"],
+    ["ENGLAND", 51.17, 0.86, "land"], ["FRANCE", 50.74, 2.18, "land"], ["Strait of Dover", 51.10, 1.63, "sea"], ["North Sea", 51.30, 2.22, "sea"], ["English Channel", 50.70, 1.10, "sea"]];
   // On phones the map stays put so the page still scrolls; with a mouse it can be dragged and zoomed
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
@@ -752,12 +826,16 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     // Esri's satellite map with place names on top: detailed, free to use with credit, and needs no key
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:18}, o));
     esri("World_Imagery", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
-    esri("Reference/World_Boundaries_and_Places", {pane:"labels"}).addTo(LM);
+    // place names drawn here in Apple Maps' style, rather than Esri's label layer
+    PLACES.forEach(([name, lat, lon, kind]) => L.marker([lat, lon], {pane:"labels", interactive:false, keyboard:false,
+      icon:L.divIcon({className:"am-place " + kind, html:(/land|sea/.test(kind) ? "" : "<i></i>") + "<span>" + name + "</span>", iconSize:[0, 0]})}).addTo(LM));
+    L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     L.control.zoom({position:"bottomright"}).addTo(LM);
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
     LM.on("zoomend", () => {
+      $("lmap").classList.toggle("z-lo", LM.getZoom() < 10);
       boatK = Math.min(1, 1.05 / unitPx().sx); map.classList.toggle("zoomed", LM.getZoom() > LM.getMinZoom() + .8);
       // the Dover to Cap Gris-Nez line: its label and end dots stay the same size on screen at any zoom
       const k = (1 / unitPx().sx).toFixed(3);
@@ -872,8 +950,23 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     showWhen(); resetWx();
   }
   const whenText = () => !hours.length || +$("wxHour").value === hourNow ? "Now" : new Date(grid.t + ":00Z").toLocaleString("en-GB", {weekday:"short", hour:"2-digit", minute:"2-digit", timeZone:"UTC"});
-  function showWhen(){ $("wxWhen").textContent = whenText(); $("wxHour").closest("label").hidden = !hours.length; }
-  $("wxHour").addEventListener("input", e => { const h = hours[+e.target.value]; if(!h) return; grid = h; showWhen(); resetWx(); if(ptAt) showPoint(ptAt); });
+  function showWhen(){
+    const hs = $("wxHour");
+    $("wxWhen").textContent = whenText(); hs.closest(".wx-time").hidden = !hours.length;
+    hs.style.setProperty("--p", (hs.max > 0 ? hs.value / hs.max * 100 : 0) + "%");
+  }
+  function toHour(i){ const h = hours[i]; if(!h) return; $("wxHour").value = i; grid = h; showWhen(); resetWx(); if(ptAt) showPoint(ptAt); }
+  $("wxHour").addEventListener("input", e => { stopPlay(); toHour(+e.target.value); });
+  // Play: steps through the forecast an hour at a time, like Apple Weather's maps, and loops back to now
+  let playT = 0;
+  function stopPlay(){ clearInterval(playT); playT = 0; $("wxPlay").setAttribute("aria-pressed", false); $("wxPlay").setAttribute("aria-label", "Play the forecast"); }
+  $("wxPlay").addEventListener("click", e => {
+    e.stopPropagation();
+    if(playT) return stopPlay();
+    $("wxPlay").setAttribute("aria-pressed", true); $("wxPlay").setAttribute("aria-label", "Pause the forecast");
+    const step = () => { if(!heroOn || document.hidden) return; const i = +$("wxHour").value; toHour(i >= hours.length - 1 ? hourNow : i + 1); };
+    step(); playT = setInterval(step, 650);
+  });
   // A reading anywhere: blended from the four grid points around it, or the Dover Strait reading if the grid isn't in
   function sample(lat, lon, key){
     if(!grid || !grid[key]){
@@ -904,12 +997,28 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     const sc = SCALE[layer], lo = sc.min || 0;
     $("wxKey").innerHTML = "<span>" + lo + "</span><i style=\"background:linear-gradient(to right," + sc.stops.map(([v, c]) => "rgb(" + c.join(",") + ") " + ((v - lo) / (sc.max - lo) * 100).toFixed(0) + "%").join(",") + ")\"></i><span>" + sc.max + "+ " + sc.unit + "</span>";
   }
-  document.querySelectorAll("#wxCtl .wx-seg button").forEach(b => b.addEventListener("click", e => {
-    e.stopPropagation(); layer = b.dataset.l;
-    document.querySelectorAll("#wxCtl .wx-seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
-    showKey(); resetWx();
-  }));
-  showKey();
+  // The layer picker: a tile for each layer, tinted with its own colour scale
+  const grad = (sc, dir) => "linear-gradient(" + dir + "," + sc.stops.map(([v, c]) => "rgb(" + c.join(",") + ") " + ((v - (sc.min || 0)) / (sc.max - (sc.min || 0)) * 100).toFixed(0) + "%").join(",") + ")";
+  const segBtns = [...document.querySelectorAll("#wxCtl .wx-seg button")], pickEl = $("wxPick"), pickBtn = $("wxLayerBtn");
+  segBtns.forEach(b => b.querySelector(".am-tile").style.setProperty("--tg", grad(SCALE[b.dataset.l], "135deg")));
+  function showPick(on){
+    pickEl.hidden = !on; pickBtn.setAttribute("aria-expanded", on);
+    if(on){ const b = segBtns.find(x => x.dataset.l === layer); if(b) b.focus({preventScroll:true}); }
+  }
+  pickBtn.addEventListener("click", e => { e.stopPropagation(); showPick(pickEl.hidden); });
+  $("wxPickX").addEventListener("click", e => { e.stopPropagation(); showPick(false); pickBtn.focus({preventScroll:true}); });
+  document.addEventListener("pointerdown", e => { if(!pickEl.hidden && !pickEl.contains(e.target) && !pickBtn.contains(e.target)) showPick(false); });
+  addEventListener("keydown", e => { if(e.key === "Escape" && !pickEl.hidden){ e.stopImmediatePropagation(); showPick(false); pickBtn.focus({preventScroll:true}); } }, true);
+  function setLayer(l, first){
+    layer = l;
+    segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
+    const b = segBtns.find(x => x.dataset.l === l), sc = SCALE[l];
+    $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML; $("wxLayerIc").style.setProperty("--lg", "rgb(" + colour(sc.max * .45 + (sc.min || 0) * .55, sc.stops).map(Math.round).join(",") + ")");
+    $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
+    showKey(); if(!first) resetWx();
+  }
+  segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
+  setLayer(layer, true);
   // Rebuilt whenever the map moves or new readings arrive: the coloured layer, and the motion drawn over it.
   // Wind: streams of particles. Gusts: fast streaks that sweep downwind in pulses, warmer for stronger gusts.
   // Waves: crests rolling the way the wind blows them (the swell's own direction when it's nearly calm).
@@ -996,14 +1105,33 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     ptAt = ll;
     const g = k => sample(ll.lat, ll.lng, k), u = g("u"), v = g("v"), sp = Math.hypot(u, v), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, sea = atSea(ll), lv = sea ? rate(sp, g("wave")) : null;
     const cell = (name, val, unit) => "<div><span>" + name + '</span><b class="num">' + val + "</b><small> " + unit + "</small></div>";
-    const html = '<b class="pt-h">' + (sea ? "At sea" : "On land") + " · " + ll.lat.toFixed(2) + "°N " + Math.abs(ll.lng).toFixed(2) + "°" + (ll.lng < 0 ? "W" : "E") + "</b>"
-      + '<span class="pt-sub">' + whenText() + " · wind from the " + COMPASS[Math.round(from / 45) % 8] + "</span>"
+    // named like Apple Maps would: how far you are from the nearest town
+    const towns = PLACES.filter(p => !/land|sea|mark/.test(p[3])), mi = p => Math.hypot((p[1] - ll.lat) * 69.05, (p[2] - ll.lng) * 69.05 * Math.cos(ll.lat * Math.PI / 180));
+    const near = towns.reduce((a, b) => mi(a) <= mi(b) ? a : b), d = Math.round(mi(near));
+    const title = d < 1 ? near[0] : sea ? plural(d, "mile", "miles") + " off " + near[0] : "Near " + near[0];
+    const html = '<b class="pt-h">' + title + "</b>"
+      + '<span class="pt-sub">' + (sea ? "At sea" : "On land") + " · " + whenText() + " · wind from the " + COMPASS[Math.round(from / 45) % 8] + "</span>"
       + (sea && lv ? '<span class="pt-lv ' + lv + '">' + WORD[lv] + ": " + LINE[lv] + "</span>" : "")
       + '<div class="wp-stats">' + cell("Wind", Math.round(sp), "mph") + cell("Gusts", Math.round(g("gust")), "mph") + cell("Waves", sea ? g("wave").toFixed(1) : "–", "m") + "</div>"
       + '<div class="wp-stats">' + cell("Temp", Math.round(g("temp")), "°C") + cell("Rain", g("rain").toFixed(1), "mm") + cell("Cloud", Math.round(g("cloud")), "%") + "</div>";
-    L.popup({className:"wx-pt", closeButton:false, autoPanPaddingTopLeft:[16, 110], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
+    const moved = !pin || !pin.getLatLng().equals(ll);
+    pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
+    if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
+    if(vw < 600){   // phones: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
+      LM.closePopup(); ptAt = ll;
+      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
+      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      return;
+    }
+    // keep the card clear of the controls at the top
+    const top = Math.max(110, $("wxCtl").getBoundingClientRect().bottom - $("lmap").getBoundingClientRect().top + 12);
+    L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
-  if(LM) LM.on("popupclose", () => { ptAt = null; });
+  let pin = null;
+  if(LM) LM.on("popupclose", () => { if(!$("amSheet").hidden) return; ptAt = null; if(pin) pin.remove(); });
+  function closeSheet(){ $("amSheet").hidden = true; ptAt = null; if(pin) pin.remove(); }
+  $("amSheetX").addEventListener("click", e => { e.stopPropagation(); closeSheet(); });
+  addEventListener("keydown", e => { if(e.key === "Escape" && !$("amSheet").hidden){ e.stopImmediatePropagation(); closeSheet(); } }, true);
   $("chipMap").addEventListener("pointerdown", () => { if(LM) LM.closePopup(); });   // one pop-up at a time
   function cellAt(x, y){ return Math.min(fld.rows - 1, Math.max(0, Math.round(y / CELL))) * fld.cols + Math.min(fld.cols - 1, Math.max(0, Math.round(x / CELL))); }
   function spawn(p){
