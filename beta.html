@@ -137,6 +137,20 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
 .wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
 /* place names in Apple Maps' satellite style: SF type with a soft halo, a dot for towns, italic blue for water */
+/* main launch beaches: soft pulsing rings on the French coast */
+.am-launch{pointer-events:auto;cursor:pointer}
+.am-launch i,.am-launch b{position:absolute;inset:0;border-radius:50%}
+.am-launch i{inset:8px;background:#FF9F0A;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 1px 4px rgba(0,0,0,.5)}
+.am-launch b{border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
+@keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
+@media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
+.am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
+.am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.1);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
+.am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
+.am-launch-tg[aria-pressed="false"]{color:rgba(255,255,255,.6)}
+.am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+.am-launch-tg::after{content:"On";margin-left:auto;font-weight:500;color:rgba(255,255,255,.7)}
+.am-launch-tg[aria-pressed="false"]::after{content:"Off"}
 .am-place{white-space:nowrap;pointer-events:none;color:#fff;font:600 12px/1 var(--font);letter-spacing:-.01em;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.55)}
 .am-place span{position:absolute;top:50%;transform:translateY(-50%)}
 .am-place.r span{left:8px}.am-place.l span{right:8px}
@@ -768,6 +782,7 @@ footer strong{color:var(--label);font-weight:600}
     <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
       <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
       <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button><button type="button" data-l="cloud" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 17.8 10a4 4 0 0 1-.3 8z"/></svg></span><span class="am-tn">Cloud</span></button></div>
+      <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
     </div>
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
   </div>
@@ -1150,6 +1165,10 @@ footer strong{color:var(--label);font-weight:600}
   // The boats are drawn in map units (1000 across, 686 down), which cover this part of the Channel
   const AREA = [[50.5796, 0.7000], [51.4002, 2.6004]], NARROWS = [[50.5796, 1.0990], [51.4002, 2.0112]];
   // Towns (l or r: which side the name sits, kept off the sea; r2: smaller places, shown once zoomed in), the cape, the countries and the seas
+  const BEACHES = [["Dunkirk beaches", 51.045, 2.30, "Loon-Plage and the beaches east of Dunkirk"], ["Gravelines", 51.003, 2.11, "The beaches and the Aa canal by Gravelines"],
+    ["Calais to Sangatte", 50.955, 1.78, "Beaches west of Calais and Blériot-Plage"], ["Wimereux", 50.77, 1.605, "Wimereux and the dunes of the Slack"],
+    ["Boulogne to Hardelot", 50.66, 1.575, "Le Portel, Équihen-Plage and Hardelot"], ["Le Touquet area", 50.52, 1.585, "The Canche estuary and Stella-Plage"]];
+  let launchLayer = null;
   const PLACES = [["Dover", 51.1279, 1.3134, "big l"], ["Folkestone", 51.0814, 1.1695, "big l"], ["Calais", 50.9513, 1.8587, "big r"], ["Boulogne-sur-Mer", 50.7264, 1.6147, "big r"], ["Dunkirk", 51.0344, 2.3768, "big r"],
     ["Deal", 51.2226, 1.4021, "l r2"], ["Ramsgate", 51.3359, 1.4160, "l r2"], ["Hythe", 51.0716, 1.0840, "l r2"], ["Dungeness", 50.9135, 0.9760, "l r2"], ["Rye", 50.9502, 0.7330, "r r2"],
     ["Gravelines", 50.9865, 2.1281, "r r2"], ["Sangatte", 50.9455, 1.7525, "r r2"], ["Wissant", 50.8858, 1.6634, "r r2"], ["Wimereux", 50.7697, 1.6110, "r r2"], ["Le Portel", 50.7072, 1.5733, "r r2"],
@@ -1172,6 +1191,11 @@ footer strong{color:var(--label);font-weight:600}
     PLACES.forEach(([name, lat, lon, kind]) => L.marker([lat, lon], {pane:"labels", interactive:false, keyboard:false,
       icon:L.divIcon({className:"am-place " + kind, html:(/land|sea/.test(kind) ? "" : "<i></i>") + "<span>" + name + "</span>", iconSize:[0, 0]})}).addTo(LM));
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
+    // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
+    launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
+      icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
+      .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
+      .on("click", e => { L.DomEvent.stopPropagation(e); e.target.toggleTooltip(); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     L.control.zoom({position:"bottomright"}).addTo(LM);
@@ -1349,6 +1373,12 @@ footer strong{color:var(--label);font-weight:600}
   $("wxPickX").addEventListener("click", e => { e.stopPropagation(); showPick(false); pickBtn.focus({preventScroll:true}); });
   document.addEventListener("pointerdown", e => { if(!pickEl.hidden && !pickEl.contains(e.target) && !pickBtn.contains(e.target)) showPick(false); });
   addEventListener("keydown", e => { if(e.key === "Escape" && !pickEl.hidden){ e.stopImmediatePropagation(); showPick(false); pickBtn.focus({preventScroll:true}); } }, true);
+  $("launchTg").addEventListener("click", e => {
+    e.stopPropagation();
+    const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+    e.currentTarget.setAttribute("aria-pressed", String(on));
+    if(launchLayer) on ? launchLayer.addTo(LM) : launchLayer.remove();
+  });
   function setLayer(l, first){
     layer = l;
     segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
@@ -1380,10 +1410,8 @@ footer strong{color:var(--label);font-weight:600}
     const tl = LM.containerPointToLayerPoint([0, 0]);
     [heat, flow].forEach(c => { c.width = vw * dpr; c.height = vh * dpr; c.style.width = vw + "px"; c.style.height = vh + "px"; L.DomUtil.setPosition(c, tl); });
     const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
-    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n), off = document.createElement("canvas");
+    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n);
     const mode = layer === "waves" ? "waves" : layer === "gusts" ? "gusts" : "wind", sea = seaMask(cols, rows);
-    off.width = cols; off.height = rows;
-    const img = off.getContext("2d").createImageData(cols, rows), sc = SCALE[layer];
     // the grid is regular in latitude and longitude, so each column and row is looked up once
     const lat = Float64Array.from({length:rows}, (_, r) => LM.containerPointToLatLng([0, r * CELL]).lat), lon = Float64Array.from({length:cols}, (_, c) => LM.containerPointToLatLng([c * CELL, 0]).lng);
     let su = 0, sv = 0;
@@ -1398,31 +1426,21 @@ footer strong{color:var(--label);font-weight:600}
         const g = sample(la, lo, "gust"); u[k] = wu / (ws || 1) * g; v[k] = wv / (ws || 1) * g; m[k] = g;
       } else { u[k] = wu; v[k] = wv; m[k] = ws; }
       su += u[k]; sv += v[k];
-      const val = sample(la, lo, sc.key), col = colour(val, sc.stops);
-      img.data.set([col[0], col[1], col[2], sc.alpha ? sc.alpha(val) * .7 : 105], k * 4);
     }
-    off.getContext("2d").putImageData(img, 0, 0);
     const sm = Math.hypot(su, sv) || 1;
     fld = {cols, rows, u, v, m, sea, mode, du:su / sm, dv:sv / sm};
-    const h = heat.getContext("2d");
-    h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
-    h.drawImage(off, -CELL / 2 * dpr, -CELL / 2 * dpr, cols * CELL * dpr, rows * CELL * dpr);
-    {   // keep the land clear so the map shows through: waves are only at sea, other layers are faint over land
-      const p = unitPx();
-      h.globalCompositeOperation = "destination-out"; h.fillStyle = mode === "waves" ? "#000" : "rgba(0,0,0,.65)";
-      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
-      h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over"; h.fillStyle = "#000";
-    }
-    if(layer === "temp"){   // the temperature itself, written across the map every so often
-      const gap = vw < 600 ? 95 : 120, fs = 13;
+    const h = heat.getContext("2d");   // no colour shading: the map stays clear, with the weather drawn on top
+    const LABEL = {temp:v => Math.round(v) + "°", rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm", cloud:v => Math.round(v) + "%"}[layer];
+    if(LABEL){   // temperature, rain or cloud, written across the map every so often
+      const gap = vw < 600 ? 120 : 170, fs = 13;
       h.save(); h.scale(dpr, dpr);
       h.font = "700 " + fs + "px " + getComputedStyle(document.body).fontFamily; h.textAlign = "center"; h.textBaseline = "middle";
       h.lineJoin = "round"; h.lineWidth = 3.5; h.strokeStyle = "rgba(0,0,0,.6)"; h.fillStyle = "#fff";
-      const mr = $("lmap").getBoundingClientRect(), keep = ["wxCtl", "news"].map(id => $(id)).filter(e => !e.hidden).map(e => e.getBoundingClientRect());   // not under the controls
+      const mr = $("lmap").getBoundingClientRect(), keep = [$("wxCtl"), $("news"), document.querySelector(".large-title"), ...document.querySelectorAll(".hero-in > *")].filter(e => e && !e.hidden && e.offsetParent).map(e => e.getBoundingClientRect());   // not under the controls
       const under = (x, y) => keep.some(cr => x > cr.left - mr.left - 24 && x < cr.right - mr.left + 24 && y > cr.top - mr.top - 14 && y < cr.bottom - mr.top + 14);
       for(let y = gap * .6; y < vh; y += gap) for(let x = gap * (Math.round(y / gap) % 2 ? .5 : 1); x < vw; x += gap){
         if(under(x, y)) continue;
-        const ll = LM.containerPointToLatLng([x, y]), t = Math.round(sample(ll.lat, ll.lng, "temp")) + "°";
+        const ll = LM.containerPointToLatLng([x, y]), t = LABEL(sample(ll.lat, ll.lng, SCALE[layer].key)); if(!t) continue;
         h.strokeText(t, x, y); h.fillText(t, x, y);
       }
       h.restore();
