@@ -546,6 +546,173 @@ footer strong{color:var(--label);font-weight:600}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
+/* ---------- Boxes from the main page (calendar, running totals, tables, calculator, patterns, dots, petitions, share, roundup) */
+.mb{--mbar:var(--blue);--bar-peak:var(--orange);--boat:#DB7100;--green-bg:rgba(52,199,89,.14)}
+:root[data-theme="dark"] .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
+.mb .card.flush{padding:0}
+.mb .card.cal-card,.mb .card.race-card,.mb .card.pat-card{padding:14px}
+.mb .section-h .seg{flex:none}
+.mb .tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+.mb .empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:.882rem}
+.mb .petitions{margin:0}
+.mb .petitions li{gap:2px 12px;padding:12px 0}
+.mb .petitions li:first-child{padding-top:0}
+.mb .petitions li:last-child{padding-bottom:0}
+.mb .share-card{display:grid;gap:8px}
+.mb .subscribe{margin-top:14px;background:var(--card);border-radius:22px;box-shadow:var(--shadow)}
+.mb .subscribe[hidden]{display:none}
+.mb.area-rep{display:none}
+@media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
+.toast{background:var(--glass)}
+.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--material);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.mb .b-close{position:absolute;z-index:2;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
+.mb .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
+.mb .b-close svg{width:10px;height:10px}
+.mb .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
+.mb .petitions li{grid-template-columns:1fr auto}
+.mb .petitions a.pt{color:var(--label);text-decoration:none;font-size:.882rem;font-weight:600;line-height:1.3}
+.mb .petitions a.pt:hover{color:var(--blue)}
+.mb .petitions .pn{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;font-size:.882rem}
+.mb .petitions .pm{grid-column:1 / -1;font-size:.765rem;color:var(--label2);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.mb .petitions .pbar{grid-column:1 / -1;height:4px;border-radius:2px;background:var(--fill);overflow:hidden;margin-top:4px}
+.mb .petitions .pbar i{display:block;height:100%;background:var(--blue);border-radius:2px}
+.mb .chipst{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.647rem;font-weight:600}
+.mb .chipst.open{background:var(--green-bg);color:var(--green-t)}
+.mb .chipst.closed{background:var(--fill);color:var(--label2)}
+.mb .tip{position:absolute;top:8px;left:0;z-index:2;min-width:150px;max-width:220px;padding:10px 12px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);pointer-events:none;font-size:.824rem;line-height:1.35;transition:transform .12s ease-out;opacity:1}
+.mb .tip b{display:block;font-size:.882rem;font-weight:600;margin-bottom:4px}
+.mb .tip .row{display:flex;align-items:center;gap:7px;font-variant-numeric:tabular-nums}
+.mb .tip .row i{flex:none;width:9px;height:9px;border-radius:3px;background:var(--mbar)}
+.mb .tip .row i.bt{background:var(--boat)}
+.mb .tip .row em{font-style:normal;margin-left:auto;font-weight:600;padding-left:12px}
+.mb .tip .x{margin-top:4px;color:var(--label2)}
+.mb .cal-card{padding:12px 12px 14px;display:grid;gap:10px}
+.mb .cal-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mb .cal-nav h3{margin:0;font:600 1rem/1.2 var(--font);letter-spacing:-.02em;text-align:center;flex:1}
+.mb .cal-nav .sub{display:block;font-size:.765rem;font-weight:400;color:var(--label2);margin-top:2px}
+.mb .cal-btn{appearance:none;border:0;background:none;color:var(--blue);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none}
+.mb .cal-btn svg{width:18px;height:18px}
+.mb .cal-btn:disabled{color:var(--label3);cursor:default}
+.mb .cal-btn:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+@media (hover:hover){.mb .cal-btn:not(:disabled):hover{background:var(--fill)}}
+.mb .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.mb .cal-dow{text-align:center;font-size:.706rem;font-weight:600;color:var(--label2);padding-bottom:2px}
+.mb .cal-day{--h:0%;appearance:none;border:0;font:inherit;color:var(--label);border-radius:10px;min-height:48px;padding:5px 2px;display:grid;align-content:center;justify-items:center;gap:1px;cursor:pointer;
+  background:color-mix(in srgb, var(--mbar) var(--h), var(--fill))}
+.mb .cal-day .dn{font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
+.mb .cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
+.mb .cal-day.zero .dv{color:var(--label2);font-weight:400}
+.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{--h:88%}
+.mb .cal-day.l4{color:#fff}.mb .cal-day.l4 .dn{color:rgba(255,255,255,.8)}
+.mb .cal-day.future,.mb .cal-day.nodata{background:none;cursor:default}
+.mb .cal-day.future .dn,.mb .cal-day.nodata .dn{color:var(--label3)}
+.mb .cal-day{position:relative}
+.mb .cal-day .mk{position:absolute;top:5px;width:6px;height:6px;border-radius:50%}
+.mb .cal-day .mk.busy{right:5px;background:var(--bar-peak);box-shadow:0 0 0 1.5px var(--card)}
+.mb .cal-day .mk.new{left:5px;background:var(--blue);box-shadow:0 0 0 1.5px var(--card)}
+.mb .cal-day.l4 .mk.new{background:#fff}
+.mb .cal-day.rev .dv{text-decoration:underline dotted var(--orange);text-decoration-thickness:2px;text-underline-offset:3px}
+.mb .cal-marks{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-size:.765rem;color:var(--label2)}
+.mb .cal-marks span{display:inline-flex;align-items:center;gap:5px}
+.mb .cal-marks i{width:7px;height:7px;border-radius:50%}
+.mb .cal-marks u{text-decoration:underline dotted var(--orange);text-decoration-thickness:2px;text-underline-offset:3px;color:var(--label)}
+.mb .cal-day.latest{box-shadow:inset 0 0 0 2px var(--blue)}
+.mb .cal-day.on{box-shadow:inset 0 0 0 2px var(--label)}
+.mb .cal-day:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+@media (hover:hover){.mb .cal-day:not(.future):not(.nodata):hover{filter:brightness(1.08)}}
+.mb .cal-foot{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;font-size:.765rem;color:var(--label2)}
+.mb .cal-key{display:flex;align-items:center;gap:4px}
+.mb .cal-key i{width:14px;height:14px;border-radius:4px;background:color-mix(in srgb, var(--mbar) var(--h), var(--fill))}
+.mb .cal-detail{min-height:1.4em;font-size:.882rem}
+.mb .cal-detail b{font-weight:600}
+.mb .cal-detail button{appearance:none;border:0;background:none;padding:12px 0 12px 8px;margin:-12px 0;font:inherit;color:var(--blue);cursor:pointer}
+@media (max-width:420px){.mb .cal-grid{gap:3px}.mb .cal-day{min-height:42px;border-radius:8px}.mb .cal-day .dv{font-size:.765rem}}
+.mb .race-card{padding:14px 12px 10px;display:grid;gap:8px}
+.mb .race{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.mb .race svg{display:block;width:100%;height:auto}
+.mb .race svg text{font-family:var(--font);fill:var(--label2)}
+.mb .race .tip{min-width:170px}
+.mb .race .tip .row.cur{font-weight:600;color:var(--label)}
+.mb .key-row{display:flex;flex-wrap:wrap;gap:4px 16px;padding-inline:4px;font-size:.824rem;color:var(--label2)}
+.mb .key-row span{display:inline-flex;align-items:center;gap:6px}
+.mb .key-row i{width:14px;height:3px;border-radius:2px}
+.mb .tbl{width:100%;border-collapse:collapse;font-size:.882rem;font-variant-numeric:tabular-nums}
+.mb .tbl th{font-size:.706rem;font-weight:600;color:var(--label2);text-align:right;padding:10px 16px 6px;letter-spacing:.01em}
+.mb .tbl th:first-child,.mb .tbl td:first-child{text-align:left}
+.mb .tbl td{padding:9px 16px;text-align:right;border-top:.5px solid var(--sep);white-space:nowrap}
+@media (max-width:420px){.mb .tbl th,.mb .tbl td{padding-inline:10px}}
+@media (max-width:360px){.mb .tbl .pb{display:none}}
+.mb #quietTbl th:nth-child(2),.mb #quietTbl td:nth-child(2){text-align:left}
+.mb .tbl tr.cur td{font-weight:600}
+.mb .tbl .up{color:var(--red-t)}.mb .tbl .down{color:var(--green-t)}
+.mb .tbl-wrap{overflow-x:auto}
+.mb .calc-card{padding:14px 16px;display:grid;gap:12px}
+.mb .calc-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
+.mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:10px;min-height:44px;padding:0 10px;width:100%}
+.mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.mb .presets{display:flex;flex-wrap:wrap;gap:6px}
+.mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--blue);font:500 .824rem/1 var(--font);border-radius:999px;padding:8px 12px;min-height:34px;cursor:pointer}
+.mb .presets button::after{content:"";position:absolute;inset:-5px 0}
+.mb .presets button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.mb .calc-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:12px;border-top:.5px solid var(--sep)}
+.mb .calc-out div{display:grid;gap:1px}
+.mb .calc-out b{font:700 1.4rem/1.15 var(--round);font-variant-numeric:tabular-nums}
+.mb .calc-out span{font-size:.765rem;color:var(--label2)}
+.mb .calc-note{font-size:.824rem;color:var(--label2)}
+/* Patterns */
+.mb .pat-card{padding:14px 12px 10px}
+.mb .pat svg{display:block;width:100%;height:auto}
+.mb .pat svg text{font-family:var(--font);fill:var(--label2)}
+.mb .rep-card{padding:16px;display:grid;gap:12px}
+.mb .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.mb .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums;margin:0;text-shadow:none}
+.mb .rep-head .sub{font-size:.882rem;color:var(--label2)}
+.mb .dots svg{display:block;width:100%;height:auto}
+.mb .dots .boats{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
+.mb .dots .dd{transition:opacity .15s ease}
+.mb .dots.hovering .dd:not(.on){opacity:.3}
+.mb .dots{animation:fadeIn .35s ease-out}
+.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:12px}
+.sub-off .mb .subscribe{display:none}
+.mb .subscribe.leaving{animation:lift .25s ease-in both}
+.mb .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
+.mb .sub-icon svg{width:24px;height:24px}
+.mb .sub-copy{display:grid;gap:2px;min-width:0}
+.mb .sub-copy h2{font:600 1rem/1.25 var(--font);letter-spacing:-.024em}
+.mb .sub-copy p{margin:0;font-size:.824rem;color:var(--label2)}
+.mb .sub-form{display:flex;gap:8px;min-width:0}
+.mb .sub-form input[type=email]{flex:1;min-width:0;appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 14px}
+.mb .sub-form input[type=email]::placeholder{color:var(--label2)}
+.mb .sub-form input[type=email]:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.mb .sub-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.mb .sub-form button{flex:none;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer}
+.mb .sub-form button:disabled{opacity:.5;cursor:default}
+.mb .sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.mb .sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
+.mb .sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
+.mb .sub-msg a{color:var(--blue);text-decoration:none}
+.mb .sub-msg.ok{color:var(--green);font-weight:600}.mb .sub-msg.err{color:var(--red)}
+.mb .subscribe.done .sub-form{display:none}
+@media (max-width:760px){.mb .subscribe{grid-template-columns:auto minmax(0,1fr);padding-right:16px}.mb .sub-copy{padding-right:32px}.mb .sub-form,.mb .sub-msg{grid-column:1 / -1}}
+/* Share tile */
+.mb .share-tile{gap:8px}
+.mb .share-text{font-size:.882rem;color:var(--label);line-height:1.35}
+.mb .share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.mb .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff}
+.mb .sh-x{background:#000}
+.mb .sh-fb{background:#1877F2}.mb .sh-wa{background:#1FA855}.mb .sh-tg{background:#229ED9}
+.mb .sh-copy,.mb .sh-more{background:var(--fill);color:var(--blue)}
+.mb .sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.mb .sh:hover{filter:brightness(1.1)}}
+@media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
+:root[data-theme="dark"] .mb .sh-x{background:#fff;color:#000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb .sh-x{background:#fff;color:#000}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
+
 </style>
 </head>
 <body>
@@ -713,6 +880,25 @@ footer strong{color:var(--label);font-weight:600}
     </div>
   </section>
 
+  <!-- ============================================================ CALENDAR (from the main page) -->
+  <section class="mb" aria-labelledby="hCal">
+    <div class="section-h rv"><h2 id="hCal">Calendar</h2><p>Tap a day to see its figures</p></div>
+    <div class="card cal-card rv">
+      <div class="cal-nav">
+        <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <h3 id="calTitle" aria-live="polite">–</h3>
+        <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-detail" id="calDetail" aria-live="polite"></div>
+      <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
+      <div class="cal-foot">
+        <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i style="--h:88%"></i>600+</span>
+      </div>
+    </div>
+    <p class="foot rv">Days before the Home Office published figures, and days still to come, are left blank.</p>
+  </section>
+
   <!-- ============================================================ THE YEAR IN SQUARES -->
   <section aria-labelledby="hHeat">
     <div class="section-h rv"><h2 id="hHeat">The Year in Squares</h2><p id="heatNote"></p></div>
@@ -731,6 +917,83 @@ footer strong{color:var(--label);font-weight:600}
     <div class="section-h rv"><h2 id="hYears">Year by Year</h2><p id="yearsNote"></p></div>
     <div class="card rv"><div class="years" id="years"></div></div>
     <p class="foot rv">The line on this year's bar shows where last year had reached by the same date.</p>
+  </section>
+
+  <!-- ============================================================ RUNNING TOTALS, YEARLY TOTALS (from the main page) -->
+  <section class="mb" aria-labelledby="hRace">
+    <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
+    <div class="card race-card rv">
+      <div class="key-row" id="raceKey" aria-hidden="true"></div>
+      <div class="race" id="race"><div class="empty">Loading the history since 2018…</div></div>
+      <div class="sr" aria-live="polite" id="raceSay"></div>
+    </div>
+    <p class="foot rv">Running total of arrivals from 1 January in each year.</p>
+  </section>
+
+  <section class="mb" aria-labelledby="hYT">
+    <div class="section-h rv"><h2 id="hYT">Yearly Totals</h2></div>
+    <div class="card flush tbl-wrap rv"><table class="tbl" id="yearsTbl" aria-label="Arrivals by year"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
+    <p class="foot rv" id="ytNote"></p>
+  </section>
+
+  <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
+  <section class="mb" aria-labelledby="hCalc">
+    <div class="duo">
+      <div class="mb-col">
+        <div class="section-h rv"><h2 id="hCalc">Between Two Dates</h2></div>
+        <div class="card calc-card rv">
+          <div class="calc-dates">
+            <label>From<input type="date" id="calcFrom"></label>
+            <label>To<input type="date" id="calcTo"></label>
+          </div>
+          <div class="presets" id="calcPresets">
+            <button type="button" data-p="labour">Since Labour</button>
+            <button type="button" data-p="burnham">Since Burnham</button>
+            <button type="button" data-p="year">This year</button>
+            <button type="button" data-p="12m">Last 12 months</button>
+            <button type="button" data-p="30d">Last 30 days</button>
+          </div>
+          <div class="calc-out" aria-live="polite">
+            <div><b id="calcP">–</b><span>people</span></div>
+            <div><b id="calcB">–</b><span>boats</span></div>
+            <div><b id="calcA">–</b><span>a day on average</span></div>
+          </div>
+          <div class="calc-note" id="calcNote"></div>
+        </div>
+      </div>
+      <div class="mb-col">
+        <div class="section-h rv"><h2>Longest Quiet Spells</h2></div>
+        <div class="card flush tbl-wrap rv"><table class="tbl" id="quietTbl" aria-label="Longest spells without crossings"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
+        <p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ PATTERNS -->
+  <section class="mb" aria-labelledby="hPat">
+    <div class="section-h rv"><h2 id="hPat">Patterns</h2>
+      <div class="seg" id="patSeg" role="group" aria-label="Pattern">
+        <button type="button" data-pat="dow" aria-pressed="true">Day of Week</button>
+        <button type="button" data-pat="month" aria-pressed="false">Month</button>
+      </div>
+    </div>
+    <div class="card pat-card rv"><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
+    <p class="foot rv" id="patNote"></p>
+  </section>
+
+  <!-- ============================================================ EVERY PERSON (desktop) -->
+  <section class="mb area-rep" aria-labelledby="repTitle">
+    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 7 Days</h2>
+      <div class="seg" id="repSeg" role="group" aria-label="Period">
+        <button type="button" data-rep="7" aria-pressed="true">Week</button>
+        <button type="button" data-rep="30" aria-pressed="false">Month</button>
+      </div>
+    </div>
+    <div class="card rep-card rv">
+      <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <p class="foot rv">Each dot is one person and each boat is one boat. Hover over the dots to see each day.</p>
   </section>
 
   <!-- ============================================================ WHO, PER BOAT, RETURNS -->
@@ -772,7 +1035,41 @@ footer strong{color:var(--label);font-weight:600}
     <div class="card rv"><ul class="records" id="records"></ul></div>
   </section>
 
+  <!-- ============================================================ PETITIONS -->
+  <section class="mb" aria-labelledby="hPet">
+    <div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
+    <div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
+    <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
+  </section>
+
+  <!-- ============================================================ SHARE, WEEKLY ROUNDUP -->
+  <section class="mb" aria-labelledby="shareK">
+    <div class="section-h rv"><h2 id="shareK">Share Today's Figures</h2></div>
+    <div class="card share-card rv">
+      <div class="share-text" id="shareText">Loading the latest figures…</div>
+      <div class="share-row"><a class="sh sh-x" id="shX" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" target="_blank" rel="noopener">Facebook</a><a class="sh sh-wa" id="shWa" target="_blank" rel="noopener">WhatsApp</a><a class="sh sh-tg" id="shTg" target="_blank" rel="noopener">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
+    </div>
+    <div class="subscribe rv" id="subscribe" aria-labelledby="subTitle">
+      <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
+      <div class="sub-copy">
+        <h2 id="subTitle">Weekly roundup of the figures</h2>
+        <p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
+      </div>
+      <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
+        <label class="sr" for="subEmail">Email address</label>
+        <input type="email" id="subEmail" name="field_0" placeholder="Email address" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+        <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" id="subBtn">Subscribe</button>
+      </form>
+      <button type="button" class="b-close" id="subClose" aria-label="Close the weekly roundup sign-up">
+        <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      </button>
+      <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
+    </div>
+  </section>
+
 </main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <footer>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
@@ -1769,7 +2066,488 @@ footer strong{color:var(--label);font-weight:600}
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); if(!first) drawChart(); }
+  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
+
+
+  /* ---------------------------------------------------- boxes from the main page: calendar, running totals, yearly totals,
+     between two dates, quiet spells, patterns, every person, petitions, share and the weekly roundup */
+  let sorted = [];   // the same figures as days, under the name these boxes were written with
+  const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
+  const dFull = dLong;
+  const niceStep = raw => { const p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; };
+  const store = {
+    get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+    set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  };
+  const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
+  const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
+  let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 7, extras = {};
+  let daysFor = null, daysAll = null;
+  function allD(){
+    if(daysFor === sorted) return daysAll;
+    daysAll = allDays(); daysFor = sorted;
+    return daysAll;
+  }
+  const hasHistory = () => sorted.length && sorted[0].date <= "2018-01-31";
+
+  function drawDots(){
+    const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
+    const days = sorted.slice(-repDays);
+    const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0);
+    const from = dShort.format(parse(days[0].date)), to = dShort.format(parse(days[days.length-1].date));
+    $("repTitle").textContent = "Every Person, Last " + repDays + " Days";
+    $("repN").textContent = fmt(people) + (people===1 ? " person" : " people");
+    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to;
+    const W = Math.max(260, Math.round(box.clientWidth || 320));
+    // Dot spacing shrinks for bigger totals so the block stays a sensible height
+    let pitch = 9;
+    while(pitch > 5 && Math.ceil(people/Math.floor(W/pitch))*pitch > 420) pitch -= .5;
+    const d = pitch*.62, cols = Math.max(1, Math.floor((W - d)/pitch)), rows = Math.ceil(people/cols);
+    const off = (W - (cols-1)*pitch)/2;
+    // Dots run day by day, drawn as exact circles (one shape per day). Hovering a day highlights it.
+    const last = rows ? people - (rows-1)*cols : 0;
+    const lastX = (W - (last-1)*pitch)/2, rr = (d/2).toFixed(2), dd = d.toFixed(2);
+    let s = "", k = 0;
+    days.forEach(day=>{
+      if(!day.migrants) return;
+      let g = "";
+      for(const end = k + day.migrants; k < end; k++){
+        const r2 = Math.floor(k/cols), c = k - r2*cols;
+        const x = (r2===rows-1 ? lastX : off) + c*pitch - d/2, y = r2*pitch + pitch/2;
+        g += "M" + x.toFixed(1) + " " + y.toFixed(1) + "a" + rr + " " + rr + " 0 1 0 " + dd + " 0a" + rr + " " + rr + " 0 1 0 -" + dd + " 0";
+      }
+      s += '<path class="dd" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
+    });
+    const dotsH = rows*pitch;
+    // Boats: one boat emoji each (the device draws its own, e.g. Apple's on iPhone and Mac), wrapped and centred
+    const bp = 22, bh = 24, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
+    let b2 = "";
+    for(let i=0; i<boats; i++){
+      const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
+      const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
+      b2 += '<text x="' + x.toFixed(1) + '" y="' + yy + '">\u{1F6A4}</text>';
+    }
+    if(b2) b2 = '<g class="boats" font-size="17" text-anchor="middle">' + b2 + '</g>';
+    const H = Math.ceil(dotsH + (boats ? 14 + brows*bh : 0)) || 20;
+    box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + fmt(people) + ' dots for ' + fmt(people) + ' people and ' + fmt(boats) + ' boat icons, ' + from + ' to ' + to + '">'
+      + (people ? '<g fill="var(--mbar)">' + s + '</g>' : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
+      + b2 + '</svg>';
+    box.style.animation = "none"; box.offsetWidth; box.style.animation = "";
+  }
+  // Hover a day's dots: that day stays bright and its figures show in the header
+  let repHead = "";
+  $("dots").addEventListener("mouseover", e=>{
+    const p = e.target.closest(".dd"); if(!p) return;
+    const day = sorted.find(x=>x.date===p.dataset.day); if(!day) return;
+    $("dots").classList.add("hovering");
+    $("dots").querySelectorAll(".dd").forEach(x=>x.classList.toggle("on", x===p));
+    if(!repHead) repHead = $("repS").textContent;
+    $("repS").textContent = dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people · " + fmt(day.boats) + (day.boats===1?" boat":" boats");
+  });
+  // On touch screens, tapping anywhere else clears the highlight
+  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && !e.target.closest("#dots")) $("dots").dispatchEvent(new Event("mouseleave")); });
+  $("dots").addEventListener("mouseleave", ()=>{
+    $("dots").classList.remove("hovering");
+    if(repHead){ $("repS").textContent = repHead; repHead = ""; }
+  });
+  document.querySelectorAll("#repSeg button").forEach(b=>b.addEventListener("click", ()=>{
+    repDays = +b.dataset.rep;
+    document.querySelectorAll("#repSeg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    drawDots();
+  }));
+
+
+  /* =========== Calendar =========== */
+  let calMonth = null, calPick = null;   // "YYYY-MM" shown, and the chosen day
+  const calLevel = n => n <= 0 ? 0 : n < 100 ? 1 : n < 300 ? 2 : n < 600 ? 3 : 4;
+  const monthName = ym => new Date(ym + "-01T00:00:00Z").toLocaleDateString("en-GB", {month:"long", year:"numeric", timeZone:"UTC"});
+  const shiftMonth = (ym, k) => { const d = new Date(ym + "-01T00:00:00Z"); d.setUTCMonth(d.getUTCMonth() + k); return d.toISOString().slice(0,7); };
+  function drawCalendar(){
+    if(!sorted.length) return;
+    const first = sorted[0].date, last = sorted[sorted.length-1].date;
+    if(!calMonth || calMonth > last.slice(0,7)) calMonth = last.slice(0,7);
+    if(calMonth < first.slice(0,7)) calMonth = first.slice(0,7);
+    const byDate = new Map(sorted.map(d=>[d.date, d]));
+    const start = new Date(calMonth + "-01T00:00:00Z");
+    const dim = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth()+1, 0)).getUTCDate();
+    const lead = (start.getUTCDay() + 6) % 7;   // Monday first
+    const grid = $("calGrid"); grid.textContent = "";
+    ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].forEach(w=>{ const h = document.createElement("div"); h.className = "cal-dow"; h.textContent = w; grid.append(h); });
+    for(let i=0; i<lead; i++) grid.append(document.createElement("div"));
+    let people = 0, boats = 0, counted = 0;
+    for(let day=1; day<=dim; day++){
+      const iso = calMonth + "-" + String(day).padStart(2,"0");
+      const b = document.createElement("button"); b.type = "button"; b.className = "cal-day"; b.dataset.date = iso;
+      const dn = document.createElement("span"); dn.className = "dn"; dn.textContent = day;
+      const dv = document.createElement("span"); dv.className = "dv";
+      b.append(dn, dv);
+      if(iso > last){ b.classList.add("future"); b.disabled = true; b.setAttribute("aria-label", dList.format(parse(iso)) + ": no figures yet"); }
+      else if(iso < first){ b.classList.add("nodata"); b.disabled = true; }
+      else {
+        const d = byDate.get(iso) || {date:iso, migrants:0, boats:0};   // days missing between reported days had no crossings
+        people += d.migrants; boats += d.boats; counted++;
+        const lv = calLevel(d.migrants);
+        if(lv) b.classList.add("l" + lv); else b.classList.add("zero");
+        dv.textContent = fmt(d.migrants);
+        if(iso === last) b.classList.add("latest");
+        const notes = [];
+        if(d.migrants > 0 && d.migrants >= busyMin){ const m = document.createElement("i"); m.className = "mk busy"; b.append(m); notes.push("one of the busiest 5% of days since 2018"); }
+        if(newSince && iso > newSince){ const m = document.createElement("i"); m.className = "mk new"; b.append(m); notes.push("new since your last visit"); }
+        if(d.revised){ b.classList.add("rev"); notes.push("revised from " + fmt(d.revised.from)); }
+        if(iso === calPick) b.classList.add("on");
+        b.setAttribute("aria-label", dList.format(parse(iso)) + ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + ", " + fmt(d.boats) + (d.boats===1?" boat":" boats") + (notes.length ? ", " + notes.join(", ") : ""));
+      }
+      grid.append(b);
+    }
+    $("calTitle").innerHTML = "";
+    $("calTitle").append(monthName(calMonth));
+    const sub = document.createElement("span"); sub.className = "sub";
+    sub.textContent = counted ? fmt(people) + (people===1?" person":" people") + " · " + fmt(boats) + (boats===1?" boat":" boats") + (calMonth === last.slice(0,7) ? " so far" : "") : "No figures";
+    $("calTitle").append(sub);
+    $("calBusyKey").hidden = !grid.querySelector(".mk.busy");
+    $("calNewKey").hidden = !grid.querySelector(".mk.new");
+    $("calRevKey").hidden = !grid.querySelector(".rev");
+    $("calPrev").disabled = calMonth <= first.slice(0,7);
+    $("calNext").disabled = calMonth >= last.slice(0,7);
+    showCalDetail();
+  }
+  function showCalDetail(){
+    const box = $("calDetail"); box.textContent = "";
+    if(!calPick || calPick.slice(0,7) !== calMonth) return;
+    const d = sorted.find(x=>x.date===calPick) || {date:calPick, migrants:0, boats:0};
+    const b = document.createElement("b"); b.textContent = dFull.format(parse(d.date));
+    let t = d.migrants ? ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + " in " + fmt(d.boats) + (d.boats===1?" boat":" boats") : ": no crossings detected";
+    if(d.boats) t += " · " + Math.round(d.migrants/d.boats) + " per boat";
+    if(d.uncontrolled) t += " · " + d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings");
+    if(d.revised) t += " · revised from " + fmt(d.revised.from);
+    box.append(b, t);
+    const back = sorted.length - sorted.findIndex(x=>x.date===d.date);
+    if(sorted.some(x=>x.date===d.date)){
+      const go = document.createElement("button"); go.type = "button"; go.textContent = "Show on chart";
+      go.addEventListener("click", ()=>showOnChart(d.date));
+      box.append(go);
+    }
+  }
+  $("calGrid").addEventListener("click", e=>{
+    const b = e.target.closest(".cal-day"); if(!b || b.disabled) return;
+    calPick = calPick === b.dataset.date ? null : b.dataset.date;
+    drawCalendar();
+    const again = $("calGrid").querySelector('[data-date="' + b.dataset.date + '"]'); if(again) again.focus();
+  });
+  $("calPrev").addEventListener("click", ()=>{ calMonth = shiftMonth(calMonth, -1); drawCalendar(); });
+  $("calNext").addEventListener("click", ()=>{ calMonth = shiftMonth(calMonth, 1); drawCalendar(); });
+
+
+  // ---- Year by year race
+  let race = null, raceDay = null;
+  function drawRace(){
+    const box = $("race");
+    if(!hasHistory()){ return; }
+    const days = allD(), lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4);
+    const years = {};
+    days.forEach(d=>{
+      const y = +d.date.slice(0,4), doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY);
+      (years[y] = years[y] || {y, cum:[], tot:0});
+      years[y].tot += d.migrants; years[y].cum[doy] = years[y].tot;
+    });
+    const list = Object.values(years).sort((a,b)=>a.y-b.y);
+    const W = Math.max(280, Math.round(box.clientWidth || 320));
+    const H = Math.round(Math.min(340, Math.max(220, W*0.45)));
+    const m = {t:14, r:40, b:26, l:40}, iw = W-m.l-m.r, ih = H-m.t-m.b;
+    const maxV = Math.max(...list.map(v=>v.tot), 10), step = niceStep(maxV/4), top = Math.ceil(maxV/step)*step;
+    const x = doy => m.l + doy/365*iw, y = v => m.t + ih - v/top*ih;
+    const colour = yr => yr===curYr ? "var(--mbar)" : yr===curYr-1 ? "var(--boat)" : "var(--label3)";
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Running total of arrivals each year from 1 January, '+list[0].y+' to '+curYr+'. '
+      + list.map(v=>v.y+(v.y===curYr?" so far":"")+": "+fmt(v.tot)).join(", ")+'.">';
+    for(let v=0; v<=top; v+=step){
+      s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--sep)" stroke-width=".5"'+(v?' stroke-dasharray="2 3"':'')+'/>';
+      s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+(v>=1000?(v/1000)+'k':v)+'</text>';
+    }
+    ["J","F","M","A","M","J","J","A","S","O","N","D"].forEach((mn,i)=>{
+      const doy = Math.round((Date.UTC(2023,i,1)-Date.UTC(2023,0,1))/DAY);
+      s += '<text x="'+(x(doy)+iw/24).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11">'+(W < 520 ? mn : new Date(Date.UTC(2023,i,1)).toLocaleString("en-GB",{month:"short",...UTC}))+'</text>';
+    });
+    // earlier years first (grey, thin), then last year, then this year on top
+    const order = list.filter(v=>v.y<curYr-1).concat(list.filter(v=>v.y===curYr-1), list.filter(v=>v.y===curYr));
+    order.forEach(v=>{
+      let d = "";
+      v.cum.forEach((c,i)=>{ if(c!=null) d += (d?"L":"M") + x(i).toFixed(1) + " " + y(c).toFixed(1); });
+      const main = v.y>=curYr-1;
+      s += '<path d="'+d+'" fill="none" stroke="'+colour(v.y)+'" stroke-width="'+(v.y===curYr?2.6:main?2:1.3)+'" stroke-linejoin="round" stroke-linecap="round"'+(main?'':' opacity=".9"')+'/>';
+    });
+    // year labels at the line ends, skipping any that would overlap
+    const placed = [];
+    [list.find(v=>v.y===curYr), list.find(v=>v.y===curYr-1)].concat(list.filter(v=>v.y<curYr-1).sort((a,b)=>b.tot-a.tot)).forEach(v=>{
+      if(!v) return;
+      const endDoy = v.cum.length-1, ly = y(v.tot) + 4;
+      if(placed.some(p=>Math.abs(p-ly)<12 && endDoy>300)) return;
+      placed.push(ly);
+      s += '<text x="'+(x(endDoy)+4).toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="11" font-weight="'+(v.y>=curYr-1?600:400)+'" style="fill:'+(v.y>=curYr-1?colour(v.y):"var(--label2)")+'">'+v.y+'</text>';
+    });
+    if(raceDay!=null){
+      s += '<line x1="'+x(raceDay)+'" x2="'+x(raceDay)+'" y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--label2)" stroke-width="1"/>';
+      list.forEach(v=>{ const c = v.cum[Math.min(raceDay, v.cum.length-1)]; if(c!=null && raceDay < v.cum.length) s += '<circle cx="'+x(raceDay)+'" cy="'+y(c)+'" r="'+(v.y>=curYr-1?4:3)+'" fill="'+colour(v.y)+'" stroke="var(--card)" stroke-width="1.5"/>'; });
+    }
+    s += '</svg>';
+    race = {m, iw, W, list, curYr};
+    let tip = "";
+    if(raceDay!=null){
+      const label = new Date(Date.UTC(2023,0,1)+raceDay*DAY).toLocaleDateString("en-GB",{day:"numeric",month:"long",...UTC});
+      const rows = list.filter(v=>raceDay < v.cum.length).map(v=>({y:v.y, n:v.cum[raceDay]})).sort((a,b)=>b.n-a.n);
+      tip = '<div class="tip" id="raceTip"><b>By ' + label + '</b>' + rows.map(r=>'<div class="row'+(r.y===curYr?' cur':'')+'"><i style="background:'+colour(r.y)+'"></i>'+r.y+'<em>'+fmt(r.n)+'</em></div>').join("") + '</div>';
+      $("raceSay").textContent = "By " + label + ": " + rows.map(r=>r.y+" "+fmt(r.n)).join(", ");
+    }
+    box.innerHTML = s + tip;
+    if(raceDay!=null){
+      const t = $("raceTip"), sc = box.clientWidth / W, cx = x(raceDay)*sc, tw = t.offsetWidth;
+      let left = cx + 14; if(left + tw > box.clientWidth) left = cx - 14 - tw;
+      t.style.transform = "translateX(" + Math.max(0, Math.round(left)) + "px)";
+    }
+    $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+(curYr-2)+'</span>';
+  }
+  function racePick(clientX){
+    const svg = $("race").querySelector("svg"); if(!svg || !race) return;
+    const r = svg.getBoundingClientRect(), px = (clientX - r.left) * (race.W / r.width);
+    const d = Math.max(0, Math.min(364, Math.round((px - race.m.l)/race.iw*365)));
+    if(d !== raceDay){ raceDay = d; drawRace(); }
+  }
+  let raceDrag = false;
+  $("race").addEventListener("pointerdown", e=>{ raceDrag = true; racePick(e.clientX); });
+  $("race").addEventListener("pointermove", e=>{ if(raceDrag || e.pointerType==="mouse") racePick(e.clientX); });
+  $("race").addEventListener("pointerleave", e=>{ if(e.pointerType==="mouse" && raceDay!=null){ raceDay = null; drawRace(); } });
+  addEventListener("pointerup", ()=>raceDrag=false);
+  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")){ raceDay = null; drawRace(); } }, true);
+
+  // ---- Yearly totals
+  function drawYT(){
+    if(!hasHistory()) return;
+    const lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4), rows = {};
+    sorted.forEach(d=>{ const y = +d.date.slice(0,4); (rows[y] = rows[y] || {y, p:0, b:0}); rows[y].p += d.migrants; rows[y].b += d.boats; });
+    const ys = Object.values(rows).sort((a,b)=>b.y-a.y);
+    let h = '<thead><tr><th scope="col">Year</th><th scope="col">People</th><th scope="col">Boats</th><th scope="col" class="pb">Per boat</th><th scope="col">Change</th></tr></thead><tbody>';
+    ys.forEach(r=>{
+      const prev = rows[r.y-1];
+      let ch = "–";
+      if(prev && prev.p){
+        const base = r.y===curYr ? sorted.filter(d=>d.date.slice(0,4)===String(r.y-1) && d.date.slice(5) <= lastISO.slice(5)).reduce((a,d)=>a+d.migrants,0) : prev.p;
+        if(base){
+          const pct = Math.round((r.p/base-1)*100);
+          ch = '<span class="'+(pct<0?"down":"up")+'">'+(pct<0?"↓ ":"↑ ")+Math.abs(pct)+'%</span>';
+        }
+      }
+      h += '<tr'+(r.y===curYr?' class="cur"':'')+'><td>'+r.y+(r.y===curYr?' so far':'')+'</td><td>'+fmt(r.p)+'</td><td>'+fmt(r.b)+'</td><td class="pb">'+(r.b?Math.round(r.p/r.b):"–")+'</td><td>'+ch+'</td></tr>';
+    });
+    $("yearsTbl").innerHTML = h + '</tbody>';
+    // average a week over the past 52 weeks
+    const last364 = sorted.filter(d=>parse(d.date) > parse(lastISO) - 364*DAY).reduce((a,d)=>a+d.migrants,0);
+    $("ytNote").textContent = "Change compares each full year with the year before; " + curYr + " is compared with the same dates in " + (curYr-1) + ". Past 52 weeks: " + fmt(last364) + " people, an average of " + fmt(Math.round(last364/52)) + " a week.";
+  }
+
+  // ---- Arrivals between two dates
+  function calc(){
+    if(!sorted.length) return;
+    const a = $("calcFrom").value, b = $("calcTo").value;
+    if(!a || !b){ return; }
+    const [from, to] = a <= b ? [a, b] : [b, a];
+    const first = sorted[0].date, last = sorted[sorted.length-1].date;
+    const span = sorted.filter(d=>d.date>=from && d.date<=to);
+    const days = Math.round((parse(to<last?to:last) - parse(from>first?from:first))/DAY) + 1;
+    const p = span.reduce((s2,d)=>s2+d.migrants,0), bt = span.reduce((s2,d)=>s2+d.boats,0);
+    $("calcP").textContent = fmt(p); $("calcB").textContent = fmt(bt);
+    $("calcA").textContent = days > 0 ? fmt(Math.round(p/days)) : "–";
+    const busy = span.reduce((m,d)=>d.migrants>(m?m.migrants:0)?d:m, null);
+    let note = dShort.format(parse(from)) + " " + from.slice(0,4) + " to " + dShort.format(parse(to)) + " " + to.slice(0,4) + " · " + fmt(Math.max(days,0)) + (days===1?" day":" days");
+    if(busy) note += ". Busiest: " + dList.format(parse(busy.date)) + " " + busy.date.slice(0,4) + ", " + fmt(busy.migrants) + " people";
+    if(from < first) note += ". Figures start on " + dShort.format(parse(first)) + " " + first.slice(0,4);
+    if(to > last) note += ". Latest figures are for " + dShort.format(parse(last));
+    if(!hasHistory() && from < first) note += " (loading the full history…)";
+    $("calcNote").textContent = note + ".";
+  }
+  function setCalc(from, to){ $("calcFrom").value = from; $("calcTo").value = to; calc(); }
+  function calcPreset(p){
+    const last = sorted[sorted.length-1].date, back = n => new Date(parse(last) - (n-1)*DAY).toISOString().slice(0,10);
+    if(p==="labour") setCalc(PERIODS.labour, last);
+    else if(p==="burnham") setCalc(PERIODS.burnham, last);
+    else if(p==="year") setCalc(last.slice(0,4)+"-01-01", last);
+    else if(p==="12m") setCalc(back(365), last);
+    else if(p==="30d") setCalc(back(30), last);
+  }
+  $("calcFrom").addEventListener("change", calc); $("calcTo").addEventListener("change", calc);
+  $("calcPresets").addEventListener("click", e=>{ const b = e.target.closest("button"); if(b && sorted.length) calcPreset(b.dataset.p); });
+  let calcReady = false;
+  function initCalc(){
+    const first = hasHistory() ? "2018-01-01" : sorted[0].date, last = sorted[sorted.length-1].date;
+    ["calcFrom","calcTo"].forEach(id=>{ $(id).min = first; $(id).max = last; });
+    if(!calcReady){ calcReady = true; calcPreset("year"); } else calc();
+  }
+
+  // ---- Longest spells without crossings
+  function drawQuiet(){
+    if(!hasHistory()) return;
+    const runs = []; let start = null, len = 0;
+    const days = allD().filter(d=>d.date >= "2020-01-01");   // crossings were rare before 2020
+    days.forEach((d,i)=>{
+      if(d.migrants===0){ if(!len) start = d.date; len++; }
+      if(d.migrants!==0 || i===days.length-1){ if(len) runs.push({start, end: d.migrants===0 ? d.date : days[i-1].date, len}); len = 0; }
+    });
+    const top = runs.sort((a,b)=>b.len-a.len).slice(0,5);
+    const yearOf = iso => " " + iso.slice(0,4);
+    let h = '<thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Days</th></tr></thead><tbody>';
+    top.forEach(r=>{ h += '<tr><td>'+dShort.format(parse(r.start))+yearOf(r.start)+'</td><td>'+dShort.format(parse(r.end))+yearOf(r.end)+'</td><td>'+r.len+'</td></tr>'; });
+    $("quietTbl").innerHTML = h + '</tbody>';
+  }
+
+  // ---- Patterns: average people a day by weekday or month
+  let patMode = "dow";
+  function drawPat(){
+    if(!hasHistory()) return;
+    const box = $("pat"), days = allD();
+    const labels = patMode==="dow" ? ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const sum = labels.map(()=>0), cnt = labels.map(()=>0);
+    days.forEach(d=>{ const t = parse(d.date); const k = patMode==="dow" ? (t.getUTCDay()+6)%7 : t.getUTCMonth(); sum[k] += d.migrants; cnt[k]++; });
+    const avg = sum.map((v,i)=>cnt[i] ? v/cnt[i] : 0), mx = Math.max(...avg, 1);
+    const W = Math.max(280, Math.round(box.clientWidth || 320)), H = Math.round(Math.min(220, Math.max(170, W*0.3)));
+    const m = {t:22, r:4, b:24, l:4}, iw = W-m.l-m.r, ih = H-m.t-m.b, slot = iw/labels.length, bw = Math.min(slot*.62, 56);
+    const peak = avg.indexOf(Math.max(...avg));
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since 2018: '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'.">';
+    s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+(m.t+ih)+'" y2="'+(m.t+ih)+'" stroke="var(--sep)" stroke-width=".5"/>';
+    labels.forEach((l,i)=>{
+      const h = Math.max(avg[i]/mx*ih, 2), x0 = m.l + i*slot + (slot-bw)/2;
+      s += '<rect x="'+x0.toFixed(1)+'" y="'+(m.t+ih-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+Math.min(4,bw/2)+'" fill="var(--mbar)"'+(i===peak?'':' opacity=".55"')+'><title>'+l+': '+Math.round(avg[i])+' a day on average</title></rect>';
+      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(m.t+ih-h-5).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="'+(i===peak?600:400)+'"'+(i===peak?' style="fill:var(--label)"':'')+'>'+Math.round(avg[i])+'</text>';
+      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="11">'+(W<420 && patMode==="month" ? l[0] : l)+'</text>';
+    });
+    box.innerHTML = s + '</svg>';
+    $("patNote").textContent = "Average number of people arriving a day, " + (patMode==="dow" ? "by day of the week" : "by month") + ", " + sorted[0].date.slice(0,4) + " to " + sorted[sorted.length-1].date.slice(0,4) + ". Busiest: " + (patMode==="dow" ? ["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"][peak] : ["January","February","March","April","May","June","July","August","September","October","November","December"][peak]) + ".";
+  }
+  document.querySelectorAll("#patSeg button").forEach(b=>b.addEventListener("click", ()=>{
+    patMode = b.dataset.pat;
+    document.querySelectorAll("#patSeg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    drawPat();
+  }));
+
+  function drawHistory(){ drawRace(); drawYT(); drawQuiet(); drawPat(); }
+
+  // Show a day on the Every Day chart (from the calendar)
+  function showOnChart(date){
+    const all = allDays(), i = all.findIndex(d => d.date === date); if(i < 0) return;
+    const back = all.length - i;
+    range = [30,90,365].find(n => n >= back) || 0;
+    document.querySelectorAll("#rangeSeg button").forEach(x => x.setAttribute("aria-pressed", String(+x.dataset.r === range)));
+    sel = range ? i - (all.length - range) : i;
+    drawChart();
+    $("chart").scrollIntoView({behavior: reduced ? "auto" : "smooth", block:"center"});
+  }
+
+  let toastTimer;
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+  }
+  function shareText(){
+    const last = sorted[sorted.length-1];
+    const n = last.migrants;
+    let s = n===0
+      ? "No small boat crossings of the Channel were detected on " + dMid.format(parse(last.date)) + "."
+      : fmt(n) + (n===1?" person":" people") + " crossed the Channel in small boats on " + dMid.format(parse(last.date)) + ".";
+    const ytd = sorted.filter(d => d.date.slice(0,4) === last.date.slice(0,4)).reduce((a,d) => a + d.migrants, 0);
+    s += " " + last.date.slice(0,4) + " so far: " + fmt(ytd) + ".";
+    return s + " Source: Home Office.";
+  }
+  // Share tile: ready-made posts for each network (links only; nothing loads from them until clicked)
+  function renderShare(){
+    if(!sorted.length) return;
+    const url = "https://channelcrossings.world/", text = shareText(), e = encodeURIComponent;
+    $("shareText").textContent = text;
+    $("shX").href = "https://x.com/intent/post?text=" + e(text) + "&url=" + e(url);
+    $("shFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + e(url);
+    $("shWa").href = "https://wa.me/?text=" + e(text + " " + url);
+    $("shTg").href = "https://t.me/share/url?url=" + e(url) + "&text=" + e(text);
+    $("shMore").hidden = !navigator.share;
+  }
+  $("shCopy").addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText(shareText() + " https://channelcrossings.world/"); toast("Copied to clipboard"); }
+    catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
+  });
+  $("shMore").addEventListener("click", async ()=>{
+    if(!sorted.length) return;
+    const url = location.href.split("#")[0];
+    const text = shareText();
+    if(navigator.share){
+      try{ await navigator.share({title:"Channel Crossings", text, url}); }
+      catch(e){ /* the viewer closed the share sheet */ }
+      return;
+    }
+    try{
+      await navigator.clipboard.writeText(text + " " + url);
+      toast("Copied to clipboard");
+    }catch(e){
+      toast("Couldn't copy. Try your browser's share menu.");
+    }
+  });
+
+  /* =========== Email updates =========== */
+  $("subForm").addEventListener("submit", async e=>{
+    const f = e.currentTarget, email = $("subEmail"), msg = $("subMsg");
+    e.preventDefault();
+    if(!email.checkValidity()){ msg.className = "sub-msg err"; msg.textContent = "Enter a valid email address."; email.focus(); return; }
+    $("subBtn").disabled = true;
+    try{
+      await fetch(f.action, {method:"POST", mode:"no-cors", body:new URLSearchParams(new FormData(f)), ...limit()});
+      $("subscribe").classList.add("done");
+      msg.className = "sub-msg ok";
+      msg.textContent = "Nearly done. Check your inbox and tap the link to confirm.";
+    }catch(err){
+      $("subBtn").disabled = false;
+      f.submit();   // couldn't send from here: open EmailOctopus's own page instead
+    }
+  });
+
+  $("subClose").addEventListener("click", () => {
+    store.set("subClosed", "1");
+    const box = $("subscribe"); if(reduced){ box.hidden = true; return; }
+    box.classList.add("leaving"); box.addEventListener("animationend", () => box.hidden = true, {once:true});
+  });
+  if(store.get("subClosed")) $("subscribe").hidden = true;
+
+  function renderPetitions(){
+    const list = extras.petitions && extras.petitions.petitions || [];
+    const ul = $("petitions"); ul.textContent = "";
+    if(!list.length){ ul.innerHTML = '<li class="empty">No current petitions found.</li>'; return; }
+    list.slice(0,6).forEach(p=>{
+      const li = document.createElement("li");
+      const a = document.createElement("a"); a.className = "pt"; a.href = p.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = p.title;
+      const n = document.createElement("span"); n.className = "pn"; n.textContent = fmt(p.signatures);
+      const m = document.createElement("span"); m.className = "pm";
+      const chip = document.createElement("span"); chip.className = "chipst " + (p.state==="open"?"open":"closed"); chip.textContent = p.state==="open" ? "Open" : "Closed";
+      const target = p.signatures >= 10000 ? 100000 : 10000;
+      const closes = p.closes ? dShort.format(parse(p.closes)) + " " + p.closes.slice(0,4) : "";
+      const need = target - p.signatures;
+      if(p.state==="open") m.append(chip, (need > 0 ? fmt(need) + " more for " + (target===10000?"a government response":"a debate") : "Enough for a debate") + (closes ? " · until " + closes : ""));
+      else m.append(chip, closes);
+      if(p.response) m.append(" · Government responded");
+      const bar = document.createElement("span"); bar.className = "pbar";
+      const fill = document.createElement("i"); fill.style.width = Math.min(100, p.signatures/target*100).toFixed(1) + "%"; bar.append(fill);
+      li.append(a, n, m, bar); ul.append(li);
+    });
+  }
+  async function loadPetitions(){ try{ extras.petitions = await getJSON("petitions.json"); }catch(e){ extras.petitions = null; } renderPetitions(); }
+
+  function renderMain(){
+    sorted = days; if(!sorted.length) return;
+    const latest = sorted[sorted.length-1].date;
+    if(!seenChecked){   // "New since your last visit", as on the main page
+      const seen = store.get("lastSeenLatest");
+      newSince = (seen && /^\d{4}-\d{2}-\d{2}$/.test(seen) && seen < latest) ? seen : null;
+      store.set("lastSeenLatest", latest);
+      seenChecked = true;
+    }
+    if(sorted.length >= 365){ const vals = sorted.map(d => d.migrants).sort((a,b) => a-b); busyMin = Math.max(1, vals[Math.floor(vals.length*0.95)]); }
+    drawCalendar(); drawDots(); drawHistory(); initCalc(); renderShare();
+  }
+  if("ResizeObserver" in window) [["dots", drawDots], ["race", drawRace], ["pat", drawPat]].forEach(([id, fn]) => {
+    let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
+  });
 
   /* ---------------------------------------------------- go */
   function useData(d){
@@ -1789,7 +2567,7 @@ footer strong{color:var(--label);font-weight:600}
       const line = drawChart();
       const cc = $("chart").closest(".rv"); if(cc.classList.contains("on") || reduced) animateLine(line); else cc.addEventListener("reveal", () => animateLine($("chart").querySelector("#chartLine,#chartBars")), {once:true});
       let lw = 0; if("ResizeObserver" in window) new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; drawChart(); sizeHeat(); } }).observe($("chart"));
-      loadExtras();
+      loadExtras(); loadPetitions();
     }catch(e){ $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
   }
   /* ---------------------------------------------------- Refresh Figures (in the Figure updates pop-up), as on the main site */
