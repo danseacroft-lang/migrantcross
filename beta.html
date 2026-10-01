@@ -252,6 +252,11 @@ html.map-full,html.map-full body{overflow:hidden}
 @media (hover:hover){.refresh-btn:not(.busy):not(.done):not(.latest):hover{text-decoration:underline}}
 .large-title > *{pointer-events:auto}
 @media (max-width:600px){.wx-ctl{top:88px;right:20px}}
+.large-title .lt-logo{display:block;width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,.35);transition:transform .2s ease}
+.large-title .lt-logo svg{display:block;width:100%;height:100%}
+.large-title .lt-logo:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media (hover:hover){.large-title .lt-logo:hover{transform:scale(1.06)}}
+@media (max-width:600px){.large-title .lt-logo{width:28px;height:28px}.large-title{column-gap:8px}.large-title h1{font-size:clamp(1.15rem,5.6vw,1.6rem)!important}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 .big{font:700 clamp(4.6rem,17vw,9.5rem)/.95 var(--round);letter-spacing:-.02em;margin:6px 0 2px;text-shadow:0 4px 30px rgba(0,0,0,.35)}
@@ -748,7 +753,7 @@ footer strong{color:var(--label);font-weight:600}
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><h1>Channel Crossings</h1><button type="button" class="pill-beta" id="chipBeta" aria-expanded="false" aria-controls="popBeta">Beta</button><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="beta.html" aria-label="Channel Crossings beta, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><button type="button" class="pill-beta" id="chipBeta" aria-expanded="false" aria-controls="popBeta">Beta</button><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover" id="amHover" aria-hidden="true" hidden></div>
