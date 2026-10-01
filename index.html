@@ -284,7 +284,9 @@ h1{font:700 1.18rem/1.15 var(--font);letter-spacing:-.02em;margin:0;white-space:
 .refresh-btn.done{color:var(--label2)}
 .refresh-btn.done svg{color:var(--green)}
 .refresh-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
-@media (hover:hover){.refresh-btn:not(.busy):not(.done):hover{text-decoration:underline}}
+.refresh-btn.latest{cursor:default;color:var(--label2);font-weight:500}
+.refresh-btn.latest svg{display:none}
+@media (hover:hover){.refresh-btn:not(.busy):not(.done):not(.latest):hover{text-decoration:underline}}
 .theme-btn .sun{color:#FF9500}
 .theme-btn .moon{color:var(--indigo)}
 .theme-btn .auto{color:var(--blue)}
@@ -2090,7 +2092,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     loadNews(); if(Date.now() - wxAt > 5*60*1000) loadWeather();   // freshen the rest too
     await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - started))));   // let "Refreshing…" register
     btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
-    setTimeout(()=>{ btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); }, 2500);
+    setTimeout(()=>{ btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); refreshLatest(); }, 2500);
   });
 
   /* =========== Search =========== */
@@ -2363,6 +2365,15 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     }
     return r;
   }
+  // Already up to date: Refresh Figures stops being a link and says so instead
+  function refreshLatest(){
+    const btn = $("refreshBtn");
+    if(btn.classList.contains("busy") || btn.classList.contains("done")) return;
+    const on = haveYesterday();
+    btn.classList.toggle("latest", on);
+    if(on) btn.setAttribute("aria-disabled", "true"); else btn.removeAttribute("aria-disabled");
+    $("refreshText").textContent = on ? "You already have the latest figures database" : "Refresh Figures";
+  }
   const runTime = () => ukAt(new Date(), START);
   // Yesterday's figure is in (UK date)
   function haveYesterday(){
@@ -2482,6 +2493,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     renderShare();
     $("rangeSeg").hidden = sorted.length < 15;
     $("refreshBtn").hidden = syncPending();   // nothing to refresh while a download is in motion
+    refreshLatest();
   }
 
   // 1. Show the figures built into the page straight away (rebuilt whenever new figures are published)
@@ -2535,6 +2547,7 @@ h2{font:700 1.294rem/1.2 var(--font);letter-spacing:.013em;margin:0}
     $("syncNote").hidden = !on || syncClosed() || $("syncNote").classList.contains("leaving");
     // While a download is in motion there's nothing to refresh: hide Refresh Figures until the figures are in
     $("refreshBtn").hidden = on;
+    refreshLatest();
     const btnOn = on && syncClosed();
     if(btnOn && $("syncBtn").hidden){ $("syncBtn").hidden = false; $("syncBtn").classList.add("pop"); }
     if(!btnOn) $("syncBtn").hidden = true;

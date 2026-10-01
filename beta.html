@@ -247,7 +247,9 @@ html.map-full,html.map-full body{overflow:hidden}
 .refresh-btn.done{color:var(--label2)}
 .refresh-btn.done svg{color:var(--green)}
 .refresh-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
-@media (hover:hover){.refresh-btn:not(.busy):not(.done):hover{text-decoration:underline}}
+.refresh-btn.latest{cursor:default;color:var(--label2);font-weight:500}
+.refresh-btn.latest svg{display:none}
+@media (hover:hover){.refresh-btn:not(.busy):not(.done):not(.latest):hover{text-decoration:underline}}
 .large-title > *{pointer-events:auto}
 @media (max-width:600px){.wx-ctl{top:88px;right:20px}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
@@ -1366,6 +1368,15 @@ footer strong{color:var(--label);font-weight:600}
   const yesterday = () => new Date(Date.parse(ukToday() + "T12:00:00Z") - DAY).toISOString().slice(0,10);
   const haveYesterday = () => days.length && days[days.length-1].date >= yesterday();
   const pending = () => ukHM() >= "12:00" && !haveYesterday();
+  // Already up to date: Refresh Figures stops being a link and says so instead
+  function refreshLatest(){
+    const btn = $("refreshBtn");
+    if(btn.classList.contains("busy") || btn.classList.contains("done")) return;
+    const on = haveYesterday();
+    btn.classList.toggle("latest", on);
+    if(on) btn.setAttribute("aria-disabled", "true"); else btn.removeAttribute("aria-disabled");
+    $("refreshText").textContent = on ? "You already have the latest figures database" : "Refresh Figures";
+  }
   function liveUi(){
     const on = pending(), live = $("chipLive");
     live.hidden = !on; if(!on) closePop(live);
@@ -1377,6 +1388,7 @@ footer strong{color:var(--label);font-weight:600}
     $("fuBtn").textContent = on ? "Updating Now" : "Figure Updates";
     if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3); }
     $("fresh").classList.toggle("live", on);
+    refreshLatest();
   }
   // Pop-ups on the chips: open on hover (mouse), tap or keyboard; close on leaving, tapping elsewhere or Escape
   let cur = null, hideT;
@@ -1813,7 +1825,7 @@ footer strong{color:var(--label);font-weight:600}
     loadNews(); if(Date.now() - wxAt > 5 * MIN){ loadWeather(); loadGrid(); }   // freshen the rest too
     await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - started))));
     btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
-    setTimeout(() => { btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); }, 2500);
+    setTimeout(() => { btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); refreshLatest(); }, 2500);
   });
   /* ---------------------------------------------------- breaking news, as on the main site, across the top of the map */
   // Small boats stories from UK outlets published in the last 3 hours. It flashes when a new story comes in;
