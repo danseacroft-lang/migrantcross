@@ -117,6 +117,7 @@ html.map-full,html.map-full body{overflow:hidden}
 #lmap .wx-pt .leaflet-popup-tip{background:color-mix(in srgb,var(--card) 80%,transparent)}
 #lmap .wx-pt .leaflet-popup-content{margin:12px 14px;width:236px!important;font:.765rem/1.35 var(--font)}
 .wx-pt b.pt-h{display:block;font-size:.882rem;margin:0}
+.wx-pt .pt-lv{display:block;font-weight:700;font-size:.824rem;margin-top:6px}
 .wx-pt .pt-sub{display:block;color:var(--label2);font-size:.706rem;margin-top:1px}
 .wx-pt .wp-stats{margin:8px 0 0;gap:5px}
 .wx-pt .wp-stats div{padding:6px 8px}
@@ -132,7 +133,6 @@ html.map-full,html.map-full body{overflow:hidden}
 .hero-chips > *{pointer-events:auto}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;align-items:center;gap:10px;pointer-events:none}
 .large-title > *{pointer-events:auto}
-.live-chip i.live{background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.3);animation:pulse 1.6s ease-in-out infinite}
 @media (max-width:600px){.large-title .pill-beta{display:none}.wx-ctl{top:62px;right:20px}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
@@ -160,32 +160,14 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
 /* Channel conditions pop-up, in the style of the Weather app */
-.wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
-.wx-pop{--lv:var(--blue);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 22%,transparent),transparent 110px)}
-.wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
-.wp-head{display:flex;align-items:center;gap:12px}
-.wp-ic{flex:none;width:52px;height:52px}
-.wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
-.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv)}
-.wp-head span{display:block;color:var(--label);font-weight:600;font-size:.882rem;margin-top:2px}
+.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
 .wp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:14px 0 12px}
 .wp-stats div{background:var(--fill);border-radius:12px;padding:8px 10px}
 .wp-stats span{display:block;font-size:.647rem;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em}
 .wp-stats b{display:inline;margin:0;font:700 1.12rem/1.2 var(--round);color:var(--label)}
 .wp-stats small{font-size:.706rem;font-weight:600;color:var(--label2)}
-.wp-scale{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
-.wp-scale i{height:6px;border-radius:3px;background:var(--fill2)}
-.wp-scale i.on.calm{background:var(--green)}.wp-scale i.on.moderate{background:var(--orange)}.wp-scale i.on.rough{background:var(--red)}
-.wp-scale em{font-style:normal;font-size:.647rem;font-weight:600;color:var(--label2);margin-top:4px}
-.wp-scale em.on{color:var(--label)}
 .info-pop .wp-p{color:var(--label);margin:0 0 6px}
 .info-pop .wp-note{font-size:.765rem;margin:0 0 10px}
-.wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep)}
-.wp-days li{display:grid;grid-template-columns:1fr 26px 86px 30px;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
-.wp-days li span{font-weight:600}
-.wp-days li div{width:26px;height:26px}
-.wp-days li b{margin:0;font-size:.824rem}
-.wp-days li em{font-style:normal;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .wp-foot{margin:8px 0 0!important;font-size:.706rem;color:var(--label2)}
 /* last crossings pop-up */
 .lx-big{font:700 2.1rem/1.05 var(--round);letter-spacing:-.01em;margin-top:2px}
@@ -196,14 +178,6 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
 .lx-axis{display:flex;justify-content:space-between;font-size:.647rem;color:var(--label2);font-weight:600;margin-bottom:12px}
 .lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
-.mp-pop{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
-.mp-pop .wp-days{margin-bottom:10px}
-.mp-live{display:flex;align-items:center;gap:7px;font-weight:600;font-size:.824rem;color:var(--label);margin-top:10px}
-.mp-live i{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.25);animation:pulse 1.6s ease-in-out infinite}
-.mp-boats{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:10px 0 2px;border-top:.5px solid var(--sep)}
-.mp-boats svg{width:30px;height:30px}
-.info-pop .mp-boats p{margin:0}
-.info-pop .mp-boats b{display:inline;color:var(--label);margin:0}
 .wp-stats .arrow{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-left:3px;color:var(--blue)}
 /* boat details, shown on hover or tap */
 .boat-tip{width:min(272px,calc(100vw - 32px));padding:14px 15px;border-radius:16px;z-index:40}
@@ -463,7 +437,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     <div class="big-sub" id="heroSub">&nbsp;</div>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
-      <button type="button" class="chip live-chip" id="chipMap" aria-expanded="false" aria-controls="popMap"><i class="live"></i><span>Live conditions</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><i class="wait"></i><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
@@ -482,8 +455,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
   <p class="fu-today" id="fuToday"></p>
 </div>
-
-<div class="info-pop wx-pop mp-pop" id="popMap" role="dialog" aria-label="Live conditions" hidden></div>
 
 <div class="info-pop boat-tip" id="boatTip" role="tooltip" hidden></div>
 
@@ -697,7 +668,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:AREA, maxBoundsViscosity:1, maxZoom:12}) : null;
   let heat, flow, wxPane, boatK = 1;
-  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
+  let wx = null;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
@@ -896,10 +867,11 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   function showPoint(ll){
     if(!LM) return;
     ptAt = ll;
-    const g = k => sample(ll.lat, ll.lng, k), u = g("u"), v = g("v"), sp = Math.hypot(u, v), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, sea = atSea(ll);
+    const g = k => sample(ll.lat, ll.lng, k), u = g("u"), v = g("v"), sp = Math.hypot(u, v), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, sea = atSea(ll), lv = sea ? rate(sp, g("wave")) : null;
     const cell = (name, val, unit) => "<div><span>" + name + '</span><b class="num">' + val + "</b><small> " + unit + "</small></div>";
     const html = '<b class="pt-h">' + (sea ? "At sea" : "On land") + " · " + ll.lat.toFixed(2) + "°N " + Math.abs(ll.lng).toFixed(2) + "°" + (ll.lng < 0 ? "W" : "E") + "</b>"
       + '<span class="pt-sub">' + whenText() + " · wind from the " + COMPASS[Math.round(from / 45) % 8] + "</span>"
+      + (sea && lv ? '<span class="pt-lv ' + lv + '">' + WORD[lv] + ": " + LINE[lv] + "</span>" : "")
       + '<div class="wp-stats">' + cell("Wind", Math.round(sp), "mph") + cell("Gusts", Math.round(g("gust")), "mph") + cell("Waves", sea ? g("wave").toFixed(1) : "–", "m") + "</div>"
       + '<div class="wp-stats">' + cell("Temp", Math.round(g("temp")), "°C") + cell("Rain", g("rain").toFixed(1), "mm") + cell("Cloud", Math.round(g("cloud")), "%") + "</div>";
     L.popup({className:"wx-pt", closeButton:false, autoPanPaddingTopLeft:[16, 110], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
@@ -952,7 +924,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     tip.innerHTML = "<b>Boat " + (b.g.dataset.i * 1 + 1) + " of " + fmt(d.boats) + "</b>"
       + '<span class="bt-day">' + dLong.format(parse(d.date)) + "</span>"
       + '<div class="wp-stats"><div><span>On board</span><b class="num">' + fmt(avg) + '</b><small> average</small></div><div><span>That day</span><b class="num">' + fmt(d.migrants) + "</b><small> people</small></div></div>"
-      + "<p>One of " + plural(d.boats, "small boat", "small boats") + " the Home Office recorded that day" + (d.boats > boats.length ? " (" + boats.length + " shown)" : "") + ". It doesn't publish where each boat crossed, so its place on the map is illustrative.</p>";
+      + "<p>One of " + plural(d.boats, "small boat", "small boats") + " the Home Office recorded that day" + (d.boats > boats.length ? " (" + boats.length + " shown)" : "") + ". There's one dinghy on the map for each boat.</p>";
     tip.hidden = false; placeTip(); placeBoats(performance.now(), reduced);
   }
   function placeTip(){
@@ -1004,7 +976,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     cl.hidden = !lx;
     if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
     else closePop(cl);
-    boatDay = last; makeBoats(Math.min(last.boats, 16)); renderMapPop();
+    boatDay = last; makeBoats(Math.min(last.boats, 16));
     // Year so far chip
     const yr = last.date.slice(0,4), ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
@@ -1332,76 +1304,20 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
   const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
-  const MEANS = {calm:"Light winds and a flat sea. These are the conditions most small boats set out in, so crossings are likely.",
-    moderate:"A breeze and some chop. Some boats may still try, usually in the calmer early hours.",
-    rough:"Strong winds or big waves make the crossing dangerous, so crossings are unlikely until it settles."};
-  const SKY = {clear:"Clear", partly:"Partly cloudy", cloudy:"Cloudy", fog:"Foggy", drizzle:"Drizzle", rain:"Rain", snow:"Snow", storm:"Thunderstorms"};
-  const kindOf = c => c == null ? null : c <= 1 ? "clear" : c === 2 ? "partly" : c === 3 ? "cloudy" : c === 45 || c === 48 ? "fog"
-    : c >= 51 && c <= 57 ? "drizzle" : (c >= 61 && c <= 67) || (c >= 80 && c <= 82) ? "rain" : (c >= 71 && c <= 77) || c === 85 || c === 86 ? "snow" : c >= 95 ? "storm" : "cloudy";
-  // Full-colour weather symbols, in the style of Apple's multicolour SF Symbols
-  function wxIcon(kind, day){
-    const sun = '<circle cx="12" cy="12" r="4.6" fill="#FFCC00"/><path d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6" stroke="#FFCC00" stroke-width="1.9" stroke-linecap="round"/>';
-    const moon = '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z" fill="#FFD60A"/>';
-    const cloud = (t, o) => '<path' + (t ? ' transform="' + t + '"' : "") + (o ? ' opacity="' + o + '"' : "") + ' d="M7 18.5h10.2a3.8 3.8 0 0 0 .3-7.6 5.4 5.4 0 0 0-10.3-1.4A4.5 4.5 0 0 0 7 18.5z" fill="var(--cloud)" stroke="var(--cloud-edge)" stroke-width=".9"/>';
-    const up = "translate(0 -3.5)", drops = n => [0,1,2].slice(0, n).map(i => '<path d="M' + (9 + i * 3.5) + ' 18.4l-1 2.8" stroke="#0A84FF" stroke-width="1.9" stroke-linecap="round"/>').join("");
-    const g = kind === "clear" ? (day ? sun : moon)
-      : kind === "partly" ? '<g transform="translate(6.5 -4.5) scale(.62)">' + (day ? sun : moon) + "</g>" + cloud("translate(-1 1)")
-      : kind === "cloudy" ? cloud("translate(5.5 -4.5) scale(.72)", ".65") + cloud("translate(-1 1)")
-      : kind === "fog" ? cloud(up) + '<path d="M4.5 18h15M7 21.2h10" stroke="var(--cloud-edge)" stroke-width="1.9" stroke-linecap="round"/>'
-      : kind === "drizzle" ? cloud(up) + drops(2)
-      : kind === "rain" ? cloud(up) + drops(3)
-      : kind === "snow" ? cloud(up) + [0,1,2].map(i => '<circle cx="' + (8.5 + i * 3.5) + '" cy="' + (19.5 + (i % 2) * 1.6) + '" r="1.1" fill="#5AC8FA"/>').join("")
-      : kind === "storm" ? cloud(up) + '<path d="M12.6 14.6l-2.6 4h2.6l-1.4 4 4-5.2h-2.6l1.2-2.8z" fill="#FFCC00"/>'
-      : '<path d="M2 9c2 0 2-1.5 4-1.5S8 9 10 9s2-1.5 4-1.5S16 9 18 9s2-1.5 4-1.5M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5" fill="none" stroke="#0A84FF" stroke-width="2" stroke-linecap="round"/>';
-    return '<svg viewBox="0 0 24 24" aria-hidden="true">' + g + "</svg>";
-  }
-  const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
   const COMPASS = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"];
-  // Live conditions: the weather in the Channel now, the next three mornings, and what the map shows
-  function renderMapPop(){
-    const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
-    pm.dataset.lv = lvl || "";
-    let h;
-    if(wx){
-      const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? WORD[lvl] + " in the Channel" : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
-        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
-        + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
-        + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
-        + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
-        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
-        + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>"
-        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the moving lines are the wind, blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", coloured by its speed. Tap anywhere on the map for the weather there, switch to gusts, waves, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
-    }
-    else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
-    pm.innerHTML = h
-      + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
-      + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
-      + "Hover over or tap a boat for its day's figures.</p></div>"
-      + '<p class="wp-foot">Weather: Open-Meteo · Map: OpenStreetMap, CARTO · Refreshes every 30 minutes</p>';
-  }
+  // The Dover Strait reading: what the map shows until the grid is in, or if it can't be fetched
   async function loadWeather(){
     wxAt = Date.now();
-    const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
+    const q = "latitude=51.0&longitude=1.55";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
-                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
-      // Outlook: typical overnight-to-midday conditions, when most departures happen
-      const by = {};
-      w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
-      const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
-      const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "°" : "") + "</em></li>"; }).join("");
+      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,temperature_2m&wind_speed_unit=mph"),
+                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height")]);
       const c = w.current;
-      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
-        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
-      wxFailed = false;
+      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height, temp:c.temperature_2m};
     }catch(e){
-      wxFailed = true;
       wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
     }
-    renderMapPop();
-    if(!grid) resetWx();   // the map falls back to this reading until the grid is in
+    if(!grid) resetWx();
   }
 
   function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); if(!first) drawChart(); }
