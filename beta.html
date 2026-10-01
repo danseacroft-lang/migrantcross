@@ -89,7 +89,6 @@ button{font:inherit}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
 #map.zoomed .strait{display:none}
-#map .coastline{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1.4;vector-effect:non-scaling-stroke;stroke-linejoin:round;pointer-events:none}
 #lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
 #lmap .leaflet-control-attribution a{color:inherit}
 #lmap .leaflet-bar{border:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
@@ -443,7 +442,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
         <!-- real coastlines (Natural Earth, 1:10m), used to keep the waves layer off the land -->
         <path id="coast" d="M1078.9 811.2 L455.4 811.2 L459.7 798.4 L460.1 759.1 L462.8 725.0 L479.1 712.4 L464.9 690.2 L462.0 678.6 L459.8 639.3 L454.3 603.6 L454.0 586.3 L456.7 571.4 L467.7 538.3 L473.7 526.1 L476.7 510.1 L473.3 491.0 L464.8 460.1 L463.5 444.3 L476.2 434.0 L480.8 432.1 L491.7 431.1 L501.8 427.3 L510.6 418.1 L525.8 396.7 L542.0 381.4 L642.8 337.2 L652.3 339.2 L670.3 328.6 L754.8 317.8 L845.0 288.2 L850.6 285.2 L855.0 284.4 L886.6 288.3 L929.5 277.0 L950.9 267.0 L969.5 253.5 L989.4 246.9 L1060.9 192.8 L1078.9 182.1ZM-78.9 -125.4 L78.5 -125.4 L61.2 -114.7 L37.5 -107.3 L-4.2 -114.0 L-18.7 -113.0 L-26.0 -113.6 L-29.4 -113.0 L-30.1 -111.7 L-40.3 -102.1 L-48.1 -99.5 L-55.1 -99.2 L-62.0 -97.5 L-69.0 -90.6 L-77.5 -98.7 L-78.9 -98.6 L-78.9 -75.5 L-2.7 -64.4 L5.0 -59.0 L11.5 -47.1 L12.2 -39.1 L6.9 -34.5 L-4.0 -33.1 L-22.9 -37.2 L-31.1 -36.9 L-47.7 -21.0 L-67.0 -16.4 L-76.6 -10.2 L-72.5 -5.5 L-65.0 5.3 L-60.0 7.5 L-14.8 7.5 L6.8 13.2 L2.6 3.4 L0.2 -8.2 L2.8 -16.3 L13.9 -15.9 L14.9 -5.2 L20.7 10.1 L28.1 23.8 L33.9 29.8 L145.9 42.5 L211.0 22.4 L381.0 6.6 L393.8 14.3 L389.0 41.7 L387.1 47.1 L384.7 52.0 L381.7 56.1 L378.2 58.8 L359.5 58.7 L356.6 61.7 L358.2 79.7 L362.0 93.7 L370.7 115.9 L375.3 149.1 L370.9 181.0 L360.2 207.7 L345.9 225.0 L310.7 237.1 L296.3 248.2 L290.3 248.8 L278.9 247.8 L272.7 250.1 L259.0 265.5 L248.5 269.8 L214.1 270.7 L203.8 273.5 L193.1 280.7 L172.4 299.7 L145.5 339.2 L140.3 349.0 L141.6 370.6 L147.3 403.0 L129.0 410.3 L53.8 385.4 L32.9 392.3 L-18.7 443.0 L-39.9 452.7 L-78.9 461.1ZM111.3 -10.2 L122.4 1.9 L127.4 14.2 L124.4 24.2 L111.3 29.8 L49.9 24.6 L39.5 20.6 L30.3 11.4 L22.9 -0.1 L17.8 -10.2 L24.7 -33.2 L28.4 -38.2 L35.2 -40.1 L100.4 -17.6 L105.6 -14.7Z"/>
       </defs>
-      <use href="#coast" class="coastline"/>
       <g class="w strait"><path d="M322.8 227.6L465.3 443.5"/><g transform="translate(394.1 335.6)"><rect x="-31" y="-11" width="62" height="22" rx="11"/><text y="4" text-anchor="middle">21 miles</text></g></g>
       <g id="boats"></g>
     </svg>
@@ -458,7 +456,6 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     <div class="wx-key" id="wxKey" aria-hidden="true"></div>
     <label class="wx-time"><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></label>
     <div class="wx-row">
-      <button type="button" class="chip wx-btn" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
   </div>
@@ -469,6 +466,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     <div class="big-sub" id="heroSub">&nbsp;</div>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
+      <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><i class="wait"></i><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
@@ -630,7 +628,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
 
 <footer>
   <a class="to-classic" href="./">Back to the current site</a>
-  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo. Map © Esri, HERE, Garmin, OpenStreetMap contributors.</p>
+  <p>Channel Crossings Beta: a preview of a redesign. Figures from the Home Office (provisional, Open Government Licence v3.0), updated automatically. Weather by Open-Meteo. Map © Esri, Maxar, Earthstar Geographics.</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -707,10 +705,10 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
     LM.createPane("labels").style.zIndex = 350;
-    // Esri's dark grey basemap: detailed, free to use with credit, and needs no key
-    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("World_Dark_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin, © OpenStreetMap · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
-    esri("World_Dark_Gray_Reference", {pane:"labels"}).addTo(LM);
+    // Esri's satellite map with place names on top: detailed, free to use with credit, and needs no key
+    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:18}, o));
+    esri("World_Imagery", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("Reference/World_Boundaries_and_Places", {pane:"labels"}).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     L.control.zoom({position:"bottomright"}).addTo(LM);
@@ -1387,7 +1385,7 @@ footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-are
       + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
       + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
       + "Hover over or tap a boat for its day's figures.</p></div>"
-      + '<p class="wp-foot">Weather: Open-Meteo · Map: Esri, OpenStreetMap · Refreshes every 30 minutes</p>';
+      + '<p class="wp-foot">Weather: Open-Meteo · Map: Esri · Refreshes every 30 minutes</p>';
   }
   async function loadWeather(){
     wxAt = Date.now();
