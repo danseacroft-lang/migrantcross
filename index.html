@@ -452,7 +452,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .spark-days span{flex:1;text-align:center;font-size:.647rem;color:var(--label2);font-weight:600}
 .ring-wrap{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:14px}
 .ring{width:min(250px,46vw);height:auto;aspect-ratio:1;display:block}
-@media (min-width:901px){.b-ring{display:flex;flex-direction:column}.b-ring .ring-wrap{flex:1;align-content:center}.ring{width:min(280px,22vw)}.b-ring .ring-legend b{font-size:1.75rem}.b-ring .ring-legend{gap:16px;font-size:.941rem}}
+@media (min-width:901px){.b-ring .fy{display:flex;flex-direction:column}.b-ring .ring-wrap{flex:1;align-content:center}.ring{width:min(280px,22vw)}.b-ring .ring-legend b{font-size:1.75rem}.b-ring .ring-legend{gap:16px;font-size:.941rem}}
 .ring circle{fill:none;stroke-linecap:round}
 .ring .track{stroke:var(--fill)}
 .ring .arc{stroke:url(#ringGrad);stroke-dasharray:0 999;transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)}
@@ -474,7 +474,30 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .tile-art .ta-wave2{animation:taSwell 5.5s ease-in-out infinite alternate-reverse}
 @keyframes taBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(3px) rotate(-1.2deg)}}
 @keyframes taSwell{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
-.card.b-ring{padding-bottom:132px}
+/* This year so far, with the calendar beside it in the same box: the arrow (or a swipe) slides one page across to the other */
+.card.b-ring{padding:0;display:flex}
+.flip{flex:1;display:flex;min-width:0;touch-action:pan-y;transition:transform .55s cubic-bezier(.2,.8,.2,1),height .45s cubic-bezier(.2,.8,.2,1)}
+.flip > div{flex:0 0 100%;min-width:0;padding:18px;position:relative}
+.b-ring.cal-on .flip{transform:translateX(-100%)}
+.flip > .fy{padding-bottom:132px}
+.fy > :not(.tile-art){position:relative;z-index:1}
+.flip-h{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:18px}
+.flip-h h3{margin:0}
+.flip-go{appearance:none;border:0;position:relative;flex:none;margin:-7px -6px -7px 0;min-height:32px;padding:0 9px 0 13px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;
+  font:600 .765rem/1 var(--font);color:var(--blue);background:var(--fill);cursor:pointer;touch-action:manipulation;transition:background .2s ease}
+.flip-go.back{margin:-7px 0 -7px -6px;padding:0 13px 0 9px}
+.flip-go svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.flip-go::after{content:"";position:absolute;inset:-6px -4px}   /* a bigger target for fingers */
+.flip-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.flip-go:hover{background:var(--fill2)}}
+.fc{display:grid;gap:10px;align-content:start}
+.fc .cal-detail.hint{color:var(--label2);text-align:center}
+@media (min-width:901px){   /* the calendar fits the box as it is: its days share out the height left */
+  .b-ring .fc{contain:size;grid-template-rows:auto auto minmax(0,1fr) auto;align-content:stretch}
+  .b-ring .fc .cal-grid{grid-template-rows:auto;grid-auto-rows:minmax(0,1fr);gap:4px}
+  .b-ring .fc .cal-day{min-height:0;padding:2px}
+}
+@media (max-width:900px){.flip{align-items:flex-start}}   /* the box takes the height of the page showing (set in the script) */
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
@@ -624,7 +647,10 @@ footer strong{color:var(--label);font-weight:600}
   .large-title h1{white-space:nowrap}
   .bento{gap:12px}
   .b-week,.b-ring{grid-column:1 / -1}
-  .card.b-ring{padding-bottom:100px}
+  .flip > div{padding:16px}
+  .flip > .fy{padding-bottom:100px}
+  .flip > .fc{padding:14px 12px}
+  .fc .cal-nav h3{flex-direction:column;gap:0}   /* the month, with its totals underneath */
   .tile-art{height:120px}
   .ring-wrap{gap:18px}
   .card{padding:16px;border-radius:20px}
@@ -938,21 +964,40 @@ footer strong{color:var(--label);font-weight:600}
         <div class="spark" id="spark"></div>
         <div class="spark-days" id="sparkDays"></div>
       </article>
-      <article class="card b-ring art rv">
-        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="twSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="twTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"/><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"/><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
-        <h3 id="ringYear">This year so far</h3>
-        <div class="ring-wrap">
-          <svg class="ring" viewBox="0 0 170 170" aria-hidden="true">
-            <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF375F"/></linearGradient></defs>
-            <circle class="track" cx="85" cy="85" r="72" stroke-width="18"/>
-            <circle class="arc" id="ringArc" cx="85" cy="85" r="72" stroke-width="18" transform="rotate(-90 85 85)"/>
-            <text x="85" y="84" text-anchor="middle" class="ring-num" fill="var(--label)" id="ringPct">–</text>
-            <text x="85" y="108" text-anchor="middle" font-size="13" font-weight="600" fill="var(--label2)" id="ringOf">of last year</text>
-          </svg>
-          <div class="ring-legend">
-            <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
-            <div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
-            <div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
+      <article class="card b-ring art rv" id="ytdBox">
+        <!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
+        <div class="flip" id="flip">
+          <div class="fy" id="yearFace">
+            <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="twSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="twTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"/><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"/><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
+            <div class="flip-h"><h3 id="ringYear">This year so far</h3><button type="button" class="flip-go" id="flipCal" aria-controls="calFace">Calendar<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            <div class="ring-wrap">
+              <svg class="ring" viewBox="0 0 170 170" aria-hidden="true">
+                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF375F"/></linearGradient></defs>
+                <circle class="track" cx="85" cy="85" r="72" stroke-width="18"/>
+                <circle class="arc" id="ringArc" cx="85" cy="85" r="72" stroke-width="18" transform="rotate(-90 85 85)"/>
+                <text x="85" y="84" text-anchor="middle" class="ring-num" fill="var(--label)" id="ringPct">–</text>
+                <text x="85" y="108" text-anchor="middle" font-size="13" font-weight="600" fill="var(--label2)" id="ringOf">of last year</text>
+              </svg>
+              <div class="ring-legend">
+                <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
+                <div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
+                <div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="fc mb" id="calFace" role="group" aria-label="Calendar" inert>
+            <div class="flip-h"><button type="button" class="flip-go back" id="flipYear" aria-controls="yearFace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span id="flipYearT">This year so far</span></button></div>
+            <div class="cal-nav">
+              <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <h3 id="calTitle" aria-live="polite">–</h3>
+              <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-detail" id="calDetail" aria-live="polite"></div>
+            <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
+            <div class="cal-foot">
+              <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i style="--h:88%"></i>600+</span>
+            </div>
           </div>
         </div>
       </article>
@@ -996,25 +1041,6 @@ footer strong{color:var(--label);font-weight:600}
       </div>
       <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
     </div>
-  </section>
-
-  <!-- ============================================================ CALENDAR -->
-  <section class="mb" aria-labelledby="hCal">
-    <div class="section-h rv"><h2 id="hCal">Calendar</h2><p>Tap a day to see its figures</p></div>
-    <div class="card cal-card rv">
-      <div class="cal-nav">
-        <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <h3 id="calTitle" aria-live="polite">–</h3>
-        <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
-      </div>
-      <div class="cal-grid" id="calGrid"></div>
-      <div class="cal-detail" id="calDetail" aria-live="polite"></div>
-      <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
-      <div class="cal-foot">
-        <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i style="--h:88%"></i>600+</span>
-      </div>
-    </div>
-    <p class="foot rv">Days before the Home Office published figures, and days still to come, are left blank.</p>
   </section>
 
   <!-- ============================================================ THE YEAR IN SQUARES -->
@@ -2004,7 +2030,7 @@ footer strong{color:var(--label);font-weight:600}
     const ytdDays = all.filter(d => d.date.slice(0,4) === yr), ytd = sum(ytdDays, "migrants");
     const lastYearAll = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1)), "migrants");
     const lastYearSame = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
-    $("ringYear").textContent = yr + " so far";
+    $("ringYear").textContent = $("flipYearT").textContent = yr + " so far";
     countUp($("ytdV"), ytd); countUp($("ytdPrev"), lastYearSame); countUp($("ytdAvg"), Math.round(ytd / ytdDays.length));
     $("ytdPrevS").textContent = (yr - 1) + " by this date";
     const ratio = lastYearAll ? ytd / lastYearAll : 0, C = 2 * Math.PI * 72;
@@ -2435,13 +2461,20 @@ footer strong{color:var(--label);font-weight:600}
     $("calBusyKey").hidden = !grid.querySelector(".mk.busy");
     $("calNewKey").hidden = !grid.querySelector(".mk.new");
     $("calRevKey").hidden = !grid.querySelector(".rev");
+    $("calMarks").hidden = $("calBusyKey").hidden && $("calNewKey").hidden && $("calRevKey").hidden;
     $("calPrev").disabled = calMonth <= first.slice(0,7);
     $("calNext").disabled = calMonth >= last.slice(0,7);
     showCalDetail();
   }
   function showCalDetail(){
-    const box = $("calDetail"); box.textContent = "";
-    if(!calPick || calPick.slice(0,7) !== calMonth) return;
+    const box = $("calDetail"), hint = !calPick || calPick.slice(0,7) !== calMonth;
+    box.classList.toggle("hint", hint);
+    if(hint){   // until a day is picked, how to use it
+      const t = (matchMedia("(hover: none)").matches ? "Tap" : "Click") + " a day to see its figures";
+      if(box.textContent !== t) box.textContent = t;
+      return;
+    }
+    box.textContent = "";
     const d = sorted.find(x=>x.date===calPick) || {date:calPick, migrants:0, boats:0};
     const b = document.createElement("b"); b.textContent = dFull.format(parse(d.date));
     let t = d.migrants ? ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + " in " + fmt(d.boats) + (d.boats===1?" boat":" boats") : ": no crossings detected";
@@ -2463,6 +2496,30 @@ footer strong{color:var(--label);font-weight:600}
   });
   $("calPrev").addEventListener("click", ()=>{ calMonth = shiftMonth(calMonth, -1); drawCalendar(); });
   $("calNext").addEventListener("click", ()=>{ calMonth = shiftMonth(calMonth, 1); drawCalendar(); });
+  // The calendar sits beside "this year so far" in the same box: the arrows, or a sideways swipe, slide from one to the other
+  const ytdBox = $("ytdBox"), flip = $("flip"), faces = [$("yearFace"), $("calFace")], narrow = matchMedia("(max-width:900px)");
+  let calShown = false;
+  function fitFlip(){ flip.style.height = narrow.matches ? faces[+calShown].offsetHeight + "px" : ""; }   // phones: the box is as tall as the page showing
+  function showCal(on){
+    if(on === calShown) return;
+    const had = faces.some(f => f.contains(document.activeElement));
+    calShown = on; ytdBox.classList.toggle("cal-on", on);
+    faces[0].inert = on; faces[1].inert = !on;   // only the page showing can be reached
+    fitFlip();
+    if(had) $(on ? "flipYear" : "flipCal").focus({preventScroll:true});
+  }
+  $("flipCal").addEventListener("click", () => showCal(true));
+  $("flipYear").addEventListener("click", () => showCal(false));
+  let swX = null, swY = 0;
+  flip.addEventListener("pointerdown", e => { if(e.pointerType === "touch"){ swX = e.clientX; swY = e.clientY; } });
+  flip.addEventListener("pointerup", e => {
+    if(swX == null) return;
+    const dx = e.clientX - swX, dy = e.clientY - swY; swX = null;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) showCal(dx < 0);
+  });
+  flip.addEventListener("pointercancel", () => { swX = null; });
+  if(window.ResizeObserver){ const ro = new ResizeObserver(fitFlip); faces.forEach(f => ro.observe(f)); }
+  narrow.addEventListener("change", fitFlip); fitFlip();
 
 
   // ---- Year by year race
