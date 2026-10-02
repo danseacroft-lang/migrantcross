@@ -121,7 +121,7 @@ button,input,select,textarea{font:inherit}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, the sea in one calm blue, and the weather moving over it */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
 .wx-heat{mix-blend-mode:multiply}   /* the sea colour tints the map, so its texture still shows */
-.wx-heat.solid{mix-blend-mode:normal}   /* temperature: the colours themselves, as on Ventusky */
+.wx-heat.solid{opacity:.96}   /* temperature: rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -1515,8 +1515,9 @@ footer strong{color:var(--label);font-weight:600}
     wind:{key:"s", max:40, unit:"mph", stops:WIND},
     gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
     waves:{key:"wave", max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
-    // temperature in Ventusky's earthy colours: blue in the cold, green at 10°, khaki in the mid teens, brown and mauve in the heat
-    temp:{key:"temp", unit:"°C", stops:[[-10,[128,110,190]],[-5,[108,138,206]],[0,[98,168,212]],[5,[108,190,184]],[10,[164,203,140]],[13,[192,202,116]],[16,[200,182,112]],[19,[198,156,100]],[22,[190,128,94]],[25,[180,108,104]],[28,[170,98,130]],[32,[160,88,160]],[36,[192,122,192]]]},
+    // temperature in Ventusky's warm earthy colours: blue in the cold, green at 10°, golden tan in the mid teens, terracotta and mauve
+    // in the heat. Matched to Ventusky (Dan's screenshot, 2 Oct 2026) once multiplied over the light grey map
+    temp:{key:"temp", unit:"°C", stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]},
     rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
     cloud:{key:"cloud", max:100, unit:"%", stops:[[0,[40,50,65]],[100,[225,230,238]]]}
   };
@@ -1606,7 +1607,7 @@ footer strong{color:var(--label);font-weight:600}
       h.drawImage(g, -CELL / 2 * dpr, -CELL / 2 * dpr, cols * CELL * dpr, rows * CELL * dpr);   // each reading sits on its grid point
       // the sea a shade darker than the land, so the coast still shows through the colour
       seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
-      h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(40,30,20,.13)";
+      h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
     } else {   // the sea in one calm blue, as on Ventusky; the land stays clear grey
