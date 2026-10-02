@@ -1,11 +1,12 @@
 """Breaking news about Channel small boat crossings, for the box at the top of the site.
 
 Runs hourly from .github/workflows/news.yml. Reads the public news feeds of a few
-UK outlets, keeps only breaking stories (last 3 hours) that are clearly about small
-boats or Channel crossings, and writes news.json. Every feed is optional: if one
+UK outlets, keeps breaking stories (last 3 hours) about small boats, the Channel,
+migration or UK politics (Dan, 2 Oct 2026: "anything to do with political news ...
+migration, the boats ... can show"), and writes news.json. Every feed is optional: if one
 is down or changes, the others still work.
 
-To change what's shown, edit FEEDS, STRONG, BLOCK or MAX_AGE_HOURS below.
+To change what's shown, edit FEEDS, POLITICS_FEEDS, STRONG, BLOCK or MAX_AGE_HOURS below.
 To pin or hide a story by hand, edit news-override.json (see the bottom of this file).
 """
 import json
@@ -34,11 +35,23 @@ FEEDS = [
     ("GOV.UK", "https://www.gov.uk/search/news-and-communications.atom?keywords=small+boats"),
 ]
 
-# A story must match one of these in its headline or summary...
+# Every story from these feeds is political news, so it can show as it is
+POLITICS_FEEDS = {"https://feeds.bbci.co.uk/news/politics/rss.xml", "https://feeds.skynews.com/feeds/rss/politics.xml"}
+
+# Otherwise a story must match one of these in its headline or summary: the boats and the Channel...
 STRONG = re.compile(
     r"small[- ]boats?|channel (?:migrants?|crossings?)|crossed the channel|crossing the channel|"
     r"migrant (?:boat|dinghy|dinghies)|dinghy|dinghies|one in,? one out|border security command|"
-    r"boat (?:arrivals|crossings)|people[- ]smuggl|smuggling gangs?",
+    r"boat (?:arrivals|crossings)|people[- ]smuggl|smuggling gangs?|"
+    # ...migration...
+    r"\bmigra(?:nts?|tion)\b|\bimmigra(?:nts?|tion)\b|\basylum\b|\brefugees?\b|\bdeport\w*|\bborders?\b|\bthe channel\b|"
+    # ...and UK politics: parties, politicians, Parliament and government
+    r"\bpolitic\w*|\bgovernment\b|\bparliament\b|\bwestminster\b|\bcommons\b|house of lords|\bmps?\b|"
+    r"prime minister|downing street|home secretary|home office|\bchancellor\b|\bcabinet\b|\bminister\b|"
+    r"general election|by-election|\bpolls?\b|\bbrexit\b|\bpmqs?\b|"
+    r"\blabour\b|\bconservatives?\b|\btor(?:y|ies)\b|reform uk|\breform party\b|restore britain|lib(?:eral)? dems?|"
+    r"green party|\bsnp\b|plaid cymru|"
+    r"starmer|burnham|farage|rupert lowe|badenoch|mahmood|jenrick|braverman|rayner|reeves|streeting|polanski",
     re.I)
 # ...and must not be about something else that happens to share the words
 BLOCK = re.compile(r"channel 4|channel 5|tv channel|youtube channel|channel swim|swim the channel|"
@@ -100,7 +113,7 @@ def pick(stories, now):
         if age < timedelta(minutes=-10) or age > timedelta(hours=MAX_AGE_HOURS):
             continue
         blob = s["title"] + " " + s["summary"]
-        if not STRONG.search(blob) or BLOCK.search(blob):
+        if not (s.get("politics") or STRONG.search(blob)) or BLOCK.search(blob):
             continue
         fresh.append(s)
     fresh.sort(key=lambda s: s["published"], reverse=True)
@@ -122,6 +135,8 @@ def main():
     for source, url in FEEDS:
         try:
             got = read_feed(source, url)
+            for g in got:
+                g["politics"] = url in POLITICS_FEEDS
             stories += got
             print(f"{source}: {len(got)} items")
         except Exception as e:  # noqa: BLE001 - one broken feed shouldn't stop the others
