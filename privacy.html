@@ -79,9 +79,11 @@ h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0 0 6px; text-a
 @media (hover:hover){.cc-brand:hover svg{transform:scale(1.06)}}
 footer.cc-foot{width:100%; max-width:1180px; margin:32px auto 0; padding:20px 20px 0; border-top:.5px solid var(--sep); color:var(--label2); font-size:13px; line-height:1.45; text-align:center; display:grid; gap:8px; justify-items:center}
 footer.cc-foot p{margin:0; max-width:52ch; font-size:13px; line-height:1.45}
-footer.cc-foot p a{color:var(--blue); text-decoration:none}
+footer.cc-foot p a,.ft-nav a{color:var(--blue); text-decoration:none}
 footer.cc-foot strong{color:var(--label); font-weight:600}
-@media (hover:hover){footer.cc-foot p a:hover{text-decoration:underline}}
+.ft-nav{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:0 18px; font-size:15px}
+.ft-nav a{display:inline-flex; align-items:center; min-height:44px; padding-inline:4px}
+@media (hover:hover){footer.cc-foot p a:hover,.ft-nav a:hover{text-decoration:underline}}
 /* share buttons (the same as the homepage's), sharing the homepage */
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
 .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 15px/1 var(--font);text-decoration:none;cursor:pointer;color:#fff;touch-action:manipulation}
@@ -249,6 +251,7 @@ button,input,select,textarea{font:inherit}
   <div class="ft-share" role="group" aria-label="Share Channel Crossings"><a class="sh sh-x" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="./#tour">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 <script>
 /* appearance switch: Auto, Day or Night, shared with the homepage */

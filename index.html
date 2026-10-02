@@ -604,9 +604,11 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-area-inset-bottom,0px));color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer{border-top:.5px solid var(--sep);padding-top:20px}
 footer p{margin:0;max-width:52ch;line-height:1.45}
-footer p a{color:var(--blue);text-decoration:none}
+footer p a,.ft-nav a{color:var(--blue);text-decoration:none}
 footer strong{color:var(--label);font-weight:600}
-@media (hover:hover){footer p a:hover{text-decoration:underline}}
+.ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
+.ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
+@media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
 /* share buttons: ready-made posts of the latest figures for each network (links only; nothing loads from them until clicked) */
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
 .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff;touch-action:manipulation}
@@ -1220,6 +1222,7 @@ footer strong{color:var(--label);font-weight:600}
   <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -2983,8 +2986,9 @@ footer strong{color:var(--label);font-weight:600}
     if(e.key === "ArrowLeft" && tourI > 0) tourShow(tourI - 1);
     if(e.key === "Tab"){ e.preventDefault(); (document.activeElement === $("tourNext") && !$("tourSkip").hidden ? $("tourSkip") : $("tourNext")).focus(); }
   });
+  $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
   // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
-  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // old Map tour links (…/#tour)
+  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // the Map tour link on the other pages
   else if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
 
   /* ---------------------------------------------------- go */
