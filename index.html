@@ -301,9 +301,6 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 8px rgba(0,0,0,.55)}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
-.hero-fresh .fig-ring{display:none;width:12px;height:12px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))}
-.hero-fresh.live > i{display:none}
-.hero-fresh.live .fig-ring{display:block}
 .fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
 .fu-btn::after{content:"";position:absolute;inset:-12px -8px}   /* a comfortable tap target */
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
@@ -861,7 +858,7 @@ footer strong{color:var(--label);font-weight:600}
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
@@ -1883,7 +1880,6 @@ footer strong{color:var(--label);font-weight:600}
       : on ? "New figures incoming. Please wait." : "Today's figures aren't in yet. Checks start at 12:00.";
     // the line under the title: "Figures to 30 Sept · Figure Updates" (while new figures are awaited, the strip on the map says so)
     if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3); }
-    $("fresh").classList.toggle("live", on);
     refreshLatest();
     placeTowns();   // the figures and chips may have changed size: the place names keep clear of them
   }
