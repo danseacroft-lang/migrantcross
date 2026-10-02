@@ -60,6 +60,14 @@ footer.cc-foot strong{color:var(--label); font-weight:600}
 .ft-nav{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:0 18px; font-size:15px}
 .ft-nav a{display:inline-flex; align-items:center; min-height:44px; padding-inline:4px}
 @media (hover:hover){footer.cc-foot p a:hover,.ft-nav a:hover{text-decoration:underline}}
+/* appearance switch: Auto, Day or Night (the same on every page) */
+.ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
+.ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
+.ft-theme svg{width:15px;height:15px;flex:none}
+.ft-theme button[aria-pressed="true"]{background:#fff;color:#000;box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
+:root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
+@media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
 button,input,select,textarea{font:inherit}
 </style>
 </head>
@@ -81,10 +89,25 @@ button,input,select,textarea{font:inherit}
 </main>
 <footer class="cc-foot">
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="./#tour">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
   <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin.</p>
   <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
 </footer>
+<script>
+/* appearance switch: Auto, Day or Night, shared with the homepage */
+(function(){
+  var root = document.documentElement, btns = document.querySelectorAll(".ft-theme button");
+  function show(){ var m = root.getAttribute("data-theme") || "auto"; btns.forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m); }); }
+  btns.forEach(function(b){ b.addEventListener("click", function(){
+    var n = b.getAttribute("data-mode");
+    if(n === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", n);
+    try{ n === "auto" ? localStorage.removeItem("cc-theme") : localStorage.setItem("cc-theme", n); }catch(e){}
+    show();
+  }); });
+  show();
+})();
+</script>
 </body>
 </html>
