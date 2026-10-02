@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-02T14:25:59Z",
+ "checkedAt": "2026-10-02T15:25:28Z",
  "items": [
   {
    "title": "First minister demands 'new deal' from Andy Burnham to make Wales equal with Scotland",
    "url": "https://www.bbc.co.uk/news/articles/cr0j3jdj64x7o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-02T14:23:49Z",
+   "published": "2026-10-02T15:13:11Z",
+   "breaking": true
+  },
+  {
+   "title": "First minister told Burnham 'do not undermine Wales'",
+   "url": "https://www.bbc.co.uk/news/videos/c6gqw28kvd5ko?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T15:08:00Z",
+   "breaking": true
+  },
+  {
+   "title": "Greens can move Labour in the right direction, says Polanski",
+   "url": "https://www.bbc.co.uk/news/articles/cmx239469krpo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T14:34:55Z",
    "breaking": true
   },
   {
@@ -20,20 +34,6 @@
    "url": "https://www.bbc.co.uk/news/videos/cqlyeg7rx4rjo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-02T13:33:57Z",
-   "breaking": true
-  },
-  {
-   "title": "Calls for Argentine tourists to be banned from Falkland Islands after 'waving flags and rejecting British sovereignty'",
-   "url": "https://www.gbnews.com/news/falkland-islands-argentine-tourists-waving-flags-rejecting-british-sovereignty",
-   "source": "GB News",
-   "published": "2026-10-02T13:29:14Z",
-   "breaking": true
-  },
-  {
-   "title": "European Union rejects diesel export ban after Donald Trump threats as prices hit record high",
-   "url": "https://www.gbnews.com/lifestyle/cars/european-union-diesel-export-ban-trump-fuel-prices",
-   "source": "GB News",
-   "published": "2026-10-02T12:28:36Z",
    "breaking": true
   }
  ]
