@@ -242,6 +242,38 @@ def short_date(iso):
     return f"{d.day} {SHORT_MONTHS[d.month - 1]}"
 
 
+def faq_answers(days):
+    """The figures in the homepage's Questions, word for word as its script writes them (renderFaq in index.html)."""
+    days = sorted(days, key=lambda d: d["date"])
+    last, yr = days[-1], days[-1]["date"][:4]
+    ppl = lambda n: f"{n:,} {'person' if n == 1 else 'people'}"
+    count = lambda n, one, many: f"{n:,} {one if n == 1 else many}"
+    total = lambda span, k: sum(d[k] for d in span)
+    since = lambda start: total([d for d in days if d["date"] >= start], "migrants")
+
+    def long_date(iso):
+        d = date.fromisoformat(iso)
+        return f"{d.day} {d.strftime('%B')} {d.year}"
+
+    if last["migrants"]:
+        latest = f"The latest, for {nice_date(last['date'])}, show {ppl(last['migrants'])} crossed in {count(last['boats'], 'small boat', 'small boats')}."
+    else:
+        lx = next((d for d in reversed(days) if d["migrants"] > 0), None)
+        latest = f"The latest, for {nice_date(last['date'])}, show no small boat crossings." + (
+            f" The last were on {nice_date(lx['date'])}, when {ppl(lx['migrants'])} crossed in {count(lx['boats'], 'boat', 'boats')}." if lx else "")
+    ytd = total([d for d in days if d["date"][:4] == yr], "migrants")
+    prev = total([d for d in days if d["date"][:4] == str(int(yr) - 1) and d["date"][5:] <= last["date"][5:]], "migrants")
+    rec = max(days, key=lambda d: d["migrants"])   # the earliest of equal days, as on the page
+    upto = date.fromisoformat(last["date"])
+    return {
+        "qLatest": latest,
+        "qYtd": f"{ppl(ytd)} so far in {yr}, up to {upto.day} {upto.strftime('%B')}. By the same date in {int(yr) - 1} the total was {prev:,}.",
+        "qRecord": f"{ppl(rec['migrants'])} on {long_date(rec['date'])}, in {count(rec['boats'], 'small boat', 'small boats')}.",
+        "qTotal": f"{ppl(total(days, 'migrants'))} in {count(total(days, 'boats'), 'small boat', 'small boats')}, from {long_date(days[0]['date'])} to {long_date(last['date'])}.",
+        "qGov": f"{ppl(since(PERIODS['labour']))} since Labour took office on 5 July 2024, and {since(PERIODS['burnham']):,} since Andy Burnham became Prime Minister on 20 July 2026.",
+    }
+
+
 def update_page(data, recent):
     """Keep index.html's description, latest figures, dataset dates and link-preview picture up to date."""
     page = ROOT / "index.html"
@@ -264,6 +296,8 @@ def update_page(data, recent):
     html = re.sub(r'(<span id="freshText">)[^<]*', lambda m: m.group(1) + "Figures to " + short_date(latest), html, count=1)
     html = re.sub(r'(id="heroSub">)[^<]*', lambda m: m.group(1) + sub, html, count=1)
     html = re.sub(r'(id="heroSr" aria-live="polite">)[^<]*', lambda m: m.group(1) + (f"{n:,} {sub}" if n else ""), html, count=1)
+    for key, text in faq_answers(data["days"]).items():   # the answers in the Questions section
+        html = re.sub(rf'(<span id="{key}">)[^<]*', lambda m: m.group(1) + text, html, count=1)
 
     html = re.sub(r'"dateModified":\s*"[^"]*"', f'"dateModified": "{latest}"', html, count=1)
     html = re.sub(r'"temporalCoverage":\s*"[^"]*"', f'"temporalCoverage": "{data["days"][0]["date"]}/{latest}"', html, count=1)

@@ -843,6 +843,22 @@ footer strong{color:var(--label);font-weight:600}
   main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:24px;align-items:start}
   main > section.wide{grid-column:1 / -1}
 }
+/* ---------- Questions: one card of folded rows, two columns on wide screens */
+.faq{padding-top:2px;padding-bottom:2px}
+.faq details{border-top:.5px solid var(--sep)}
+.faq-col > details:first-child{border-top:0}
+.faq-col + .faq-col{border-top:.5px solid var(--sep)}   /* one column on phones: a line between the two halves */
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:50px;padding:12px 0;font:600 .941rem/1.3 var(--font);cursor:pointer;list-style:none;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
+.faq-chev{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--fill);color:var(--label2);transition:transform .25s ease,background .2s ease}
+.faq-chev svg{width:14px;height:14px}
+.faq details[open] .faq-chev{transform:rotate(180deg)}
+@media (hover:hover){.faq summary:hover .faq-chev{background:var(--fill2)}}
+.faq p{margin:-2px 0 14px;max-width:68ch;color:var(--label2);font-size:.882rem;line-height:1.45;animation:fadeIn .25s ease}
+.faq a{color:var(--blue);text-decoration:none}
+@media (hover:hover){.faq a:hover{text-decoration:underline}}
+@media (min-width:900px){.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;align-items:start}.faq-col + .faq-col{border-top:0}}
 /* First-visit tour of the map: a spotlight on each control with a small card explaining it */
 .tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
 .tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
@@ -1209,6 +1225,27 @@ footer strong{color:var(--label);font-weight:600}
         <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
       </button>
       <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
+    </div>
+  </section>
+
+  <!-- ============================================================ QUESTIONS: what people ask about the crossings, folded until tapped.
+       Search engines read the answers too. The figures in them come from renderFaq() below, and scripts/update.py
+       writes the same words into the page each day. -->
+  <section class="wide" aria-labelledby="hFaq">
+    <div class="section-h rv"><h2 id="hFaq">Questions</h2></div>
+    <div class="card faq rv">
+      <div class="faq-col">
+        <details><summary>How many migrants crossed the Channel today?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p>The Home Office publishes each day's figures, usually the following afternoon. <span id="qLatest">The latest, for Thu 1 October, show no small boat crossings. The last were on Tue 29 September, when 61 people crossed in 1 boat.</span></p></details>
+        <details><summary>How many people have crossed in small boats this year?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p><span id="qYtd">19,196 people so far in 2026, up to 1 October. By the same date in 2025 the total was 34,225.</span></p></details>
+        <details><summary>What is the record for Channel crossings in one day?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p><span id="qRecord">1,305 people on 3 September 2022, in 27 small boats.</span></p></details>
+        <details><summary>How many migrants have crossed the Channel since 2018?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p><span id="qTotal">211,806 people in 5,243 small boats, from 1 January 2018 to 1 October 2026.</span></p></details>
+      </div>
+      <div class="faq-col">
+        <details><summary>How many have crossed since Labour took office?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p><span id="qGov">83,910 people since Labour took office on 5 July 2024, and 6,727 since Andy Burnham became Prime Minister on 20 July 2026.</span></p></details>
+        <details><summary>Where do the small boats leave from?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p>Mostly from beaches in northern France between Dunkirk and Le Touquet, including near Calais and Boulogne. They are marked on the map with orange rings. At its narrowest, between Dover and Cap Gris-Nez, the Channel is about 21 miles wide.</p></details>
+        <details><summary>Why are there no crossings on some days?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p>Mostly the weather. Strong wind and high waves make the crossing too rough, so quiet spells usually mean bad weather in the Channel. The map shows live wind, gusts and waves, and the weather outlook shows the days ahead.</p></details>
+        <details><summary>Where do the figures come from?<span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span></summary><p>From the Home Office's daily figures for people detected crossing the Channel in small boats, published on <a href="https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats" target="_blank" rel="noopener">GOV.UK</a>. Channel Crossings checks for new figures every 15 minutes from 12:00 UK time and updates by itself. The figures are provisional, and the site is independent of the UK Government. You can <a href="data.csv" download="channel-crossings-daily.csv">download every day since 2018</a> as a spreadsheet.</p></details>
+      </div>
     </div>
   </section>
 
@@ -2419,7 +2456,26 @@ footer strong{color:var(--label);font-weight:600}
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
+  /* ---------------------------------------------------- Questions: the figures in the answers (scripts/update.py writes the same words into the page each day) */
+  const dDay = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",...UTC});
+  const dYear = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",...UTC});
+  function renderFaq(){
+    const last = days[days.length-1], yr = last.date.slice(0,4), on = d => dMid.format(parse(d.date));
+    const ppl = n => fmt(n) + (n === 1 ? " person" : " people"), since = from => sum(days.filter(d => d.date >= from), "migrants");
+    const lx = [...days].reverse().find(d => d.migrants > 0);
+    $("qLatest").textContent = last.migrants
+      ? "The latest, for " + on(last) + ", show " + ppl(last.migrants) + " crossed in " + plural(last.boats, "small boat", "small boats") + "."
+      : "The latest, for " + on(last) + ", show no small boat crossings." + (lx ? " The last were on " + on(lx) + ", when " + ppl(lx.migrants) + " crossed in " + plural(lx.boats, "boat", "boats") + "." : "");
+    const ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
+    const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
+    $("qYtd").textContent = ppl(ytd) + " so far in " + yr + ", up to " + dDay.format(parse(last.date)) + ". By the same date in " + (yr - 1) + " the total was " + fmt(prev) + ".";
+    const rec = days.reduce((m, d) => d.migrants > m.migrants ? d : m, days[0]);
+    $("qRecord").textContent = ppl(rec.migrants) + " on " + dYear.format(parse(rec.date)) + ", in " + plural(rec.boats, "small boat", "small boats") + ".";
+    $("qTotal").textContent = ppl(sum(days, "migrants")) + " in " + plural(sum(days, "boats"), "small boat", "small boats") + ", from " + dYear.format(parse(days[0].date)) + " to " + dYear.format(parse(last.date)) + ".";
+    $("qGov").textContent = ppl(since("2024-07-05")) + " since Labour took office on 5 July 2024, and " + fmt(since("2026-07-20")) + " since Andy Burnham became Prime Minister on 20 July 2026.";
+  }
+
+  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderFaq(); renderMain(); if(!first) drawChart(); }
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals, yearly totals,
