@@ -234,8 +234,16 @@ def nice_date(iso):
     return f"{d.strftime('%a')} {d.day} {d.strftime('%B')}"
 
 
+SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]   # as the page's en-GB dates write them
+
+
+def short_date(iso):
+    d = date.fromisoformat(iso)
+    return f"{d.day} {SHORT_MONTHS[d.month - 1]}"
+
+
 def update_page(data, recent):
-    """Keep index.html's description, dataset dates and link-preview picture up to date."""
+    """Keep index.html's description, latest figures, dataset dates and link-preview picture up to date."""
     page = ROOT / "index.html"
     html = page.read_text()
     last = data["days"][-1]
@@ -245,8 +253,17 @@ def update_page(data, recent):
     ytd = recent["ytdBase"] + sum(d["migrants"] for d in recent["days"] if d["date"] > recent["ytdBaseDate"] and d["date"][:4] == latest[:4])
     lead = (f"{n:,} {'person' if n == 1 else 'people'} crossed the Channel in small boats on {nice_date(latest)}."
             if n else f"No small boat crossings of the Channel were detected on {nice_date(latest)}.")
-    desc = f"{lead} {latest[:4]} so far: {ytd:,}. Daily Home Office figures, records and Channel conditions."
+    desc = f"{lead} {latest[:4]} so far: {ytd:,}. Daily Home Office figures, a migrant tracker and live Channel weather."
     html = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', html, count=1)
+
+    # The lines under the title and the big number, written as the page's script writes them, so Google and other
+    # readers find the latest figures in the page itself, not only after the script has run
+    on = nice_date(latest).replace(" ", "&nbsp;")
+    sub = (f"people crossed in {last['boats']:,} small boat{'' if last['boats'] == 1 else 's'} on {on}"
+           if n else f"No crossings detected for {on}")
+    html = re.sub(r'(<span id="freshText">)[^<]*', lambda m: m.group(1) + "Figures to " + short_date(latest), html, count=1)
+    html = re.sub(r'(id="heroSub">)[^<]*', lambda m: m.group(1) + sub, html, count=1)
+    html = re.sub(r'(id="heroSr" aria-live="polite">)[^<]*', lambda m: m.group(1) + (f"{n:,} {sub}" if n else ""), html, count=1)
 
     html = re.sub(r'"dateModified":\s*"[^"]*"', f'"dateModified": "{latest}"', html, count=1)
     html = re.sub(r'"temporalCoverage":\s*"[^"]*"', f'"temporalCoverage": "{data["days"][0]["date"]}/{latest}"', html, count=1)
