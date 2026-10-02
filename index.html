@@ -489,9 +489,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .fy > :not(.tile-art){position:relative;z-index:1}
 .flip-h{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:18px}
 .flip-h h3{margin:0}
-.flip-go{appearance:none;border:0;position:relative;flex:none;margin:-7px -6px -7px 0;min-height:32px;padding:0 9px 0 13px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;
-  font:600 .765rem/1 var(--font);color:var(--blue);background:var(--fill);cursor:pointer;touch-action:manipulation;transition:background .2s ease}
-.flip-go.back{margin:-7px 0 -7px -6px;padding:0 13px 0 9px}
+.flip-go{appearance:none;border:0;position:relative;flex:none;margin:-7px -2px -7px 0;height:34px;padding:0 9px 0 12px;border-radius:9px;display:inline-flex;align-items:center;gap:3px;
+  font:600 .765rem/1 var(--font);color:var(--label);background:var(--fill);cursor:pointer;touch-action:manipulation;transition:background .2s ease}   /* the same as the 1M / 3M / 1Y buttons */
+.flip-go.back{margin:-7px 0 -7px -2px;padding:0 12px 0 9px}
 .flip-go svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .flip-go::after{content:"";position:absolute;inset:-6px -4px}   /* a bigger target for fingers */
 .flip-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -503,12 +503,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .flip > .dd-face:first-child{padding-bottom:12px}
 .dd-foot{margin:12px 0 0;color:var(--label2);font-size:.765rem;line-height:1.4}
 .fc .cal-detail.hint{color:var(--label2);text-align:center}
-@media (min-width:901px){   /* the calendar fits the box as it is: its days share out the height left */
-  .b-ring .fc{contain:size;grid-template-rows:auto auto minmax(0,1fr) auto;align-content:stretch}
-  .b-ring .fc .cal-grid{grid-template-rows:auto;grid-auto-rows:minmax(0,1fr);gap:4px}
-  .b-ring .fc .cal-day{min-height:0;padding:2px}
-}
-@media (max-width:900px){.flip{align-items:flex-start}}   /* the box takes the height of the page showing (set in the script) */
+.flip{align-items:flex-start}   /* every sliding box takes the height of the page showing (set in the script) */
+.card.b-ring{align-self:start}
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
@@ -736,11 +732,12 @@ footer strong{color:var(--label);font-weight:600}
 .mb .cal-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .mb .cal-nav h3{margin:0;font:600 1rem/1.2 var(--font);letter-spacing:-.02em;text-align:center;flex:1}
 .mb .cal-nav .sub{display:block;font-size:.765rem;font-weight:400;color:var(--label2);margin-top:2px}
-.mb .cal-btn{appearance:none;border:0;background:none;color:var(--blue);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none}
-.mb .cal-btn svg{width:18px;height:18px}
+.mb .cal-btn{appearance:none;border:0;background:var(--fill);color:var(--label);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;cursor:pointer;flex:none;position:relative}
+.mb .cal-btn::after{content:"";position:absolute;inset:-5px}   /* still a finger-sized target */
+.mb .cal-btn svg{width:16px;height:16px}
 .mb .cal-btn:disabled{color:var(--label3);cursor:default}
 .mb .cal-btn:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
-@media (hover:hover){.mb .cal-btn:not(:disabled):hover{background:var(--fill)}}
+@media (hover:hover){.mb .cal-btn:not(:disabled):hover{background:var(--fill2)}}
 .mb .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
 .mb .cal-dow{text-align:center;font-size:.706rem;font-weight:600;color:var(--label2);padding-bottom:2px}
 .mb .cal-day{--h:0%;appearance:none;border:0;font:inherit;color:var(--label);border-radius:10px;min-height:48px;padding:5px 2px;display:grid;align-content:center;justify-items:center;gap:1px;cursor:pointer;
@@ -798,7 +795,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:10px;min-height:44px;padding:0 10px;width:100%}
 .mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .mb .presets{display:flex;flex-wrap:wrap;gap:6px}
-.mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--blue);font:500 .824rem/1 var(--font);border-radius:999px;padding:8px 12px;min-height:34px;cursor:pointer}
+.mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--label);font:600 .765rem/1 var(--font);border-radius:9px;padding:0 12px;height:34px;cursor:pointer}
 .mb .presets button::after{content:"";position:absolute;inset:-5px 0}
 .mb .presets button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .mb .calc-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:12px;border-top:.5px solid var(--sep)}
@@ -2601,7 +2598,7 @@ footer strong{color:var(--label);font-weight:600}
   // The calendar sits beside "this year so far" in the same box: the arrows, or a sideways swipe, slide from one to the other
   const ytdBox = $("ytdBox"), flip = $("flip"), faces = [$("yearFace"), $("calFace")], narrow = matchMedia("(max-width:900px)");
   let calShown = false;
-  function fitFlip(){ flip.style.height = narrow.matches ? faces[+calShown].offsetHeight + "px" : ""; }   // phones: the box is as tall as the page showing
+  function fitFlip(){ flip.style.height = faces[+calShown].offsetHeight + "px"; }   // the box is as tall as the page showing, growing or shrinking as it slides
   function showCal(on){
     if(on === calShown) return;
     const had = faces.some(f => f.contains(document.activeElement));
@@ -2627,7 +2624,7 @@ footer strong{color:var(--label);font-weight:600}
   const ddBox = $("ddBox"), ddFlip = $("ddFlip"), ddFaces = [...ddFlip.children], ddNotes = [$("ddNote").textContent, "", ""];
   const ddSeen = [true, false, false], ddWait = [[], [], []];
   let ddCur = 0;
-  function fitDd(){ ddFlip.style.height = narrow.matches ? ddFaces[ddCur].offsetHeight + "px" : ""; }   // phones: as tall as the page showing
+  function fitDd(){ ddFlip.style.height = ddFaces[ddCur].offsetHeight + "px"; }   // as tall as the page showing
   function showDd(i){
     i = Math.max(0, Math.min(ddFaces.length - 1, i));
     if(i === ddCur) return;
