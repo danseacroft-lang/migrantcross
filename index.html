@@ -414,6 +414,21 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
 .fu-clock .fu-hour{transform-origin:60px 60px;animation:spin 144s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* the daily update notice: from 12:00 UK time until the new figures are in, as on the old main page */
+.card.sync-box{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:16px 52px 16px 16px;animation:syncIn .45s cubic-bezier(.2,.9,.3,1.2) both}
+.sync-box[hidden]{display:none}
+@keyframes syncIn{from{opacity:0;transform:translateY(-8px) scale(.98)}}
+.sync-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
+.sync-ic svg{width:24px;height:24px;animation:spin 1s linear infinite}
+.sync-top{display:flex;justify-content:space-between;gap:8px;font-size:.765rem;color:var(--label2)}
+.sync-title{font-weight:600;font-size:1.06rem;letter-spacing:-.024em;margin:2px 0}
+.sync-text{font-size:.882rem;color:var(--label2);margin:0}
+.sync-x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%;color:var(--label2)}
+.sync-x span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center}
+.sync-x svg{width:10px;height:10px}
+.sync-x:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.card.sync-box,.sync-ic svg{animation:none}}
+
 .fu-pop p{padding-right:18px}
 .fu-pop .fu-today{margin:4px 0 0;padding-top:8px;border-top:.5px solid var(--sep);color:var(--label);font-weight:600}
 .fu-pop .fu-today:empty{display:none}
@@ -908,6 +923,19 @@ footer strong{color:var(--label);font-weight:600}
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 
 <main id="main">
+
+  <!-- Shown from 12:00 UK time while the daily update is running, until the new figures are in -->
+  <section class="wide sync-wrap" id="syncWrap" hidden>
+    <div class="card sync-box" id="syncNote" role="status" aria-live="polite">
+      <div class="sync-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-9 9"/></svg></div>
+      <div>
+        <div class="sync-top"><span>Daily update</span><span id="syncTime">Since 12:00</span></div>
+        <p class="sync-title">New figures incoming</p>
+        <p class="sync-text">A data download is in progress. New figures are being retrieved from the Home Office. This can take up to 1 hour. Please wait.</p>
+      </div>
+      <button type="button" class="sync-x" id="syncClose" aria-label="Close the new figures notice"><span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></button>
+    </div>
+  </section>
 
   <!-- ============================================================ AT A GLANCE -->
   <section class="wide" aria-labelledby="hGlance">
@@ -1798,6 +1826,9 @@ footer strong{color:var(--label);font-weight:600}
   }
   function liveUi(){
     const on = pending(), live = $("chipLive");
+    // the notice box: shows while new figures are awaited, unless it was closed today
+    let closed = ""; try{ closed = localStorage.getItem("syncClosed"); }catch(e){}
+    $("syncWrap").hidden = !on || closed === ukToday();
     live.hidden = !on; if(!on) closePop(live);
     const at = meta && meta.checkedAt ? new Date(meta.checkedAt) : null;
     $("fuToday").textContent = haveYesterday()
@@ -1869,6 +1900,7 @@ footer strong{color:var(--label);font-weight:600}
     }catch(e){ /* try again next time */ }
     liveUi();
   }
+  $("syncClose").addEventListener("click", () => { try{ localStorage.setItem("syncClosed", ukToday()); }catch(e){} $("syncWrap").hidden = true; });
   function tick(){
     if(document.hidden || !days.length) return;
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
@@ -2839,6 +2871,8 @@ footer strong{color:var(--label);font-weight:600}
 
   start(); loadWeather(); loadGrid(); loadNews();
 })();
+// Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
+if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
 </script>
 </body>
 </html>
