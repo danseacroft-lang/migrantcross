@@ -2725,7 +2725,8 @@ footer strong{color:var(--label);font-weight:600}
   });
   $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
   // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
-  if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
+  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // the Map tour link on the other pages
+  else if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
 
   /* ---------------------------------------------------- go */
   function useData(d){
