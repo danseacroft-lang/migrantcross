@@ -109,9 +109,6 @@ button,input,select,textarea{font:inherit}
 .nav.solid{background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom-color:var(--sep)}
 .nav-title{font-weight:600;font-size:1rem;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;white-space:nowrap}
 .nav.solid .nav-title{opacity:1;transform:none}
-.nav-right{justify-self:end;display:flex;align-items:center;gap:8px}
-.theme{width:44px;height:44px;border:0;border-radius:50%;background:var(--fill);color:var(--blue);display:grid;place-items:center;cursor:pointer}
-.theme svg{width:20px;height:20px}
 
 /* ------------------------------------------------------------ hero: the live Channel */
 /* the Channel is a card in the same column as the boxes below it */
@@ -578,6 +575,14 @@ footer strong{color:var(--label);font-weight:600}
 .ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
 .ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
 @media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
+/* appearance switch: Auto, Day or Night (the same on every page) */
+.ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
+.ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
+.ft-theme svg{width:15px;height:15px;flex:none}
+.ft-theme button[aria-pressed="true"]{background:#fff;color:#000;box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
+:root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
+@media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
 
 /* ------------------------------------------------------------ smaller screens */
 @media (max-width:900px){
@@ -802,9 +807,7 @@ footer strong{color:var(--label);font-weight:600}
 <nav class="nav" id="nav" aria-label="Channel Crossings">
   <span></span>
   <div class="nav-title">Channel Crossings</div>
-  <div class="nav-right">
-    <button type="button" class="theme" id="theme" aria-label="Appearance"></button>
-  </div>
+  <span></span>
 </nav>
 
 <!-- ============================================================ HERO: the live Channel -->
@@ -1173,6 +1176,7 @@ footer strong{color:var(--label);font-weight:600}
 
 <footer>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
   <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin.</p>
@@ -1195,20 +1199,16 @@ footer strong{color:var(--label);font-weight:600}
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
-  /* ---------------------------------------------------- appearance: Auto → Day → Night (shared with the other pages) */
-  const root = document.documentElement;
-  const ICON = {auto:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>',
-    light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>',
-    dark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>'};
-  const NAMES = {auto:"Auto", light:"Day", dark:"Night"}, NEXT = {auto:"light", light:"dark", dark:"auto"};
+  /* ---------------------------------------------------- appearance: Auto, Day or Night, from the switch in the footer (shared with the other pages) */
+  const root = document.documentElement, modeBtns = document.querySelectorAll(".ft-theme button");
   const mode = () => root.getAttribute("data-theme") || "auto";
-  function showTheme(){ const m = mode(); $("theme").innerHTML = ICON[m]; $("theme").setAttribute("aria-label", "Appearance: " + NAMES[m] + ". Switch to " + NAMES[NEXT[m]]); }
-  $("theme").addEventListener("click", ()=>{
-    const n = NEXT[mode()];
+  function showTheme(){ const m = mode(); modeBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m)); }
+  modeBtns.forEach(b => b.addEventListener("click", () => {
+    const n = b.dataset.mode;
     if(n === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", n);
     try{ n === "auto" ? localStorage.removeItem("cc-theme") : localStorage.setItem("cc-theme", n); }catch(e){}
     showTheme();
-  });
+  }));
   showTheme();
 
   /* ---------------------------------------------------- large title → navigation bar, hero parallax */
