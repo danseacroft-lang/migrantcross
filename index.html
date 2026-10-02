@@ -139,6 +139,9 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 #lmap .leaflet-bar a{width:44px;height:44px;line-height:44px;font:400 22px/44px var(--font);background:rgba(30,30,32,.58);color:#fff;border-color:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
 #lmap .leaflet-bar a:hover{background:rgba(44,44,46,.72)}
 #lmap .leaflet-bar a.leaflet-disabled{color:rgba(255,255,255,.35)}
+#lmap .leaflet-bar{border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+#lmap .leaflet-bar a{width:36px;height:40px;font:500 20px/40px var(--font);background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.18)}
+#lmap .leaflet-bar a:hover{background:rgba(255,255,255,.12)}
 #lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
 /* Map controls in the style of Apple Maps: frosted dark glass, rounded rectangles, SF type */
 .wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff;--glass:rgba(30,30,32,.58);--edge:rgba(255,255,255,.16)}
@@ -156,7 +159,7 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
 .wx-full svg{width:17px;height:17px}
 /* the layer picker: a card of tiles, like Apple Maps' map chooser */
-.am-pick{position:absolute;top:52px;right:0;z-index:5;width:288px;background:rgba(28,28,30,.88);padding:14px 14px 16px;border-radius:16px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
+.am-pick{position:absolute;top:44px;right:0;z-index:5;width:288px;background:rgba(28,28,30,.88);padding:14px 14px 16px;border-radius:16px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
 .am-pick[hidden]{display:none}
 @keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
 .am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
@@ -180,6 +183,19 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:4px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.28) var(--p,0%));touch-action:manipulation;cursor:pointer}
 .wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
 .wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+/* The map's controls match the pill buttons along the bottom of the map */
+.am-btn,.am-pill{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+.am-btn{position:relative;height:36px;min-width:36px;border-radius:999px;font-size:.882rem}
+.am-btn::after{content:"";position:absolute;inset:-4px}   /* still a 44pt tap target */
+.am-btn svg{width:15px;height:15px}
+@media (hover:hover){.am-btn:hover{background:rgba(255,255,255,.26)}}
+.am-layer{padding:0 12px 0 13px}
+#wxLayerIc{width:auto;height:auto;border-radius:0;background:none}
+#wxLayerIc svg{width:16px;height:16px}
+.am-pill{border-radius:999px}
+.wx-time{padding:3px 14px 3px 3px}
+.am-play{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18)}
+.am-play svg{width:13px;height:13px}
 /* place names in Apple Maps' satellite style: SF type with a soft halo, a dot for towns, italic blue for water */
 /* main launch beaches: soft pulsing rings on the French coast */
 .am-launch{pointer-events:auto;cursor:pointer}
