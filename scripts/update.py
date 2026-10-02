@@ -10,7 +10,7 @@ The 7-day page wins where the two overlap, because it is newer.
 
 Outputs (see publish()):
   data.json    full daily history, loaded in the background by the page
-  recent.json  last 90 days plus totals: tiny, for the embed widget and beta page
+  recent.json  last 90 days plus totals: tiny, for the embed widget and the homepage
   data.csv     the full history as a spreadsheet download
   index.html   latest figures built into the page so they show instantly,
                plus an up-to-date description and dataset date for Google
