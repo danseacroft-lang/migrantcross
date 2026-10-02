@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-02T18:27:22Z",
+ "checkedAt": "2026-10-02T19:23:35Z",
  "items": [
   {
-   "title": "Ann Widdecombe murder suspect charged with preparing terror act against Nigel Farage",
-   "url": "https://www.gbnews.com/news/ann-widdecombe-suspect-charged-joshua-kerry-terror-act-nigel-farage",
+   "title": "Brydon Carse charged by cricket regulator after nightclub incident",
+   "url": "https://www.gbnews.com/sport/cricket/brydon-carse-cricket-regulator-nightclub-incident",
    "source": "GB News",
-   "published": "2026-10-02T18:12:58Z",
+   "published": "2026-10-02T18:52:36Z",
+   "breaking": true
+  },
+  {
+   "title": "Widdecombe suspect charged with planning terror act against Farage",
+   "url": "https://www.bbc.co.uk/news/articles/cv1j3lgrl6gko?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T18:46:36Z",
+   "breaking": true
+  },
+  {
+   "title": "Polanski calls for three-year cap on rents",
+   "url": "https://www.bbc.co.uk/news/videos/cqlyeg7rx4rjo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T18:43:30Z",
    "breaking": true
   },
   {
@@ -20,20 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cqd095e5x127o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-02T17:33:28Z",
-   "breaking": true
-  },
-  {
-   "title": "Vicar outraged at 'appalling' attack after alleged 'sex acts' performed on Virgin Mary statue",
-   "url": "https://www.gbnews.com/news/world/france-news-vicar-outraged-appalling-attack-alleged-sex-acts-performed-virgin-mary-statue",
-   "source": "GB News",
-   "published": "2026-10-02T17:30:51Z",
-   "breaking": true
-  },
-  {
-   "title": "Greens can move Labour in the right direction, says Polanski",
-   "url": "https://www.bbc.co.uk/news/articles/cmx239469krpo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-02T17:28:07Z",
    "breaking": true
   }
  ]
