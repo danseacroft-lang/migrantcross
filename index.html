@@ -498,6 +498,11 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .flip-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.flip-go:hover{background:var(--fill2)}}
 .fc{display:grid;gap:10px;align-content:start}
+/* Crossings over time: the same sliding box, with three pages */
+.card.dd-card{padding:0;display:flex}
+.dd-face > .flip-h{margin-bottom:12px}
+.flip > .dd-face:first-child{padding-bottom:12px}
+.dd-foot{margin:12px 0 0;color:var(--label2);font-size:.765rem;line-height:1.4}
 .fc .cal-detail.hint{color:var(--label2);text-align:center}
 @media (min-width:901px){   /* the calendar fits the box as it is: its days share out the height left */
   .b-ring .fc{contain:size;grid-template-rows:auto auto minmax(0,1fr) auto;align-content:stretch}
@@ -551,7 +556,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .heat-scroll::-webkit-scrollbar{display:none}
 .heat{--c:14px;position:relative;display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,var(--c));grid-auto-columns:var(--c);gap:4px;width:max-content}
 .heat i{border-radius:4px;background:var(--fill);transform:scale(.3);opacity:0;transition:transform .5s cubic-bezier(.2,.9,.3,1.3),opacity .4s}
-.on .heat i{transform:none;opacity:1}
+.on .heat.show i{transform:none;opacity:1}   /* the squares pop in when their page first slides into view */
 .heat i.l1{background:color-mix(in srgb,var(--blue) 25%,var(--fill))}
 .heat i.l2{background:color-mix(in srgb,var(--blue) 50%,var(--fill))}
 .heat i.l3{background:color-mix(in srgb,var(--blue) 75%,var(--fill))}
@@ -567,7 +572,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 
 /* ------------------------------------------------------------ year bars */
 .years{display:grid;gap:10px;margin-top:6px}
-.yr{display:grid;grid-template-columns:44px 1fr 72px;align-items:center;gap:12px;font-size:.882rem}
+.yr{display:grid;grid-template-columns:44px 1fr 64px 52px;align-items:center;gap:12px;font-size:.882rem}
+.yr .ch{text-align:right;font-size:.824rem;font-variant-numeric:tabular-nums}
 .yr b{font-weight:600}
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
@@ -673,7 +679,7 @@ footer strong{color:var(--label);font-weight:600}
   .card{padding:16px;border-radius:20px}
   .val{font-size:1.8rem}
   .chart-head{flex-direction:column}
-  .yr{grid-template-columns:40px 1fr 64px;gap:10px}
+  .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
   .otd-years b{font-size:.588rem}
 }
@@ -1034,41 +1040,41 @@ footer strong{color:var(--label);font-weight:600}
     </article>
   </section>
 
-  <!-- ============================================================ EVERY DAY -->
+  <!-- ============================================================ CROSSINGS OVER TIME: every day, the year in squares and year by year,
+       three pages in one box slid across with the arrows, or a swipe that doesn't start on the chart or the squares (they have their own drag) -->
   <section aria-labelledby="hDaily">
-    <div class="section-h rv"><h2 id="hDaily">Every Day</h2><p>Drag across to read any day</p></div>
-    <div class="card chart-card rv">
-      <div class="chart-head">
-        <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
-        <div class="seg" role="group" aria-label="Range" id="rangeSeg">
-          <button type="button" data-r="30">1M</button><button type="button" data-r="90" aria-pressed="true">3M</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
+    <div class="section-h rv"><h2 id="hDaily">Crossings Over Time</h2><p id="ddNote">Drag across to read any day</p></div>
+    <div class="card dd-card rv" id="ddBox">
+      <div class="flip" id="ddFlip">
+        <div class="dd-face" id="ddDay" role="group" aria-label="Every day">
+          <div class="flip-h"><h3>Every day</h3><button type="button" class="flip-go" data-go="1" aria-controls="ddSq">Year in squares<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+          <div class="chart-head">
+            <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
+            <div class="seg" role="group" aria-label="Range" id="rangeSeg">
+              <button type="button" data-r="30">1M</button><button type="button" data-r="90" aria-pressed="true">3M</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
+            </div>
+          </div>
+          <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
+        </div>
+        <div class="dd-face" id="ddSq" role="group" aria-label="The year in squares" inert>
+          <div class="flip-h"><button type="button" class="flip-go back" data-go="0" aria-controls="ddDay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Every day</button><button type="button" class="flip-go" data-go="2" aria-controls="ddYr">Year by year<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+          <div class="heat-read" id="heatRead">Tap a square to see that day.</div>
+          <div class="heat-scroll" id="heatScroll"><div class="heat" id="heat"></div></div>
+          <div class="heat-foot">
+            <span class="heat-key">None <i style="background:var(--fill)"></i><i style="background:color-mix(in srgb,var(--blue) 25%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 50%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 75%,var(--fill))"></i><i style="background:var(--blue)"></i> 600+</span>
+            <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
+          </div>
+        </div>
+        <div class="dd-face" id="ddYr" role="group" aria-label="Year by year" inert>
+          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button></div>
+          <div class="years" id="years"></div>
+          <p class="dd-foot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
         </div>
       </div>
-      <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
     </div>
   </section>
 
-  <!-- ============================================================ THE YEAR IN SQUARES -->
-  <section aria-labelledby="hHeat">
-    <div class="section-h rv"><h2 id="hHeat">The Year in Squares</h2><p id="heatNote"></p></div>
-    <div class="card rv" id="heatCard">
-      <div class="heat-read" id="heatRead">Tap a square to see that day.</div>
-      <div class="heat-scroll" id="heatScroll"><div class="heat" id="heat"></div></div>
-      <div class="heat-foot">
-        <span class="heat-key">None <i style="background:var(--fill)"></i><i style="background:color-mix(in srgb,var(--blue) 25%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 50%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 75%,var(--fill))"></i><i style="background:var(--blue)"></i> 600+</span>
-        <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ YEAR BY YEAR -->
-  <section aria-labelledby="hYears">
-    <div class="section-h rv"><h2 id="hYears">Year by Year</h2><p id="yearsNote"></p></div>
-    <div class="card rv"><div class="years" id="years"></div></div>
-    <p class="foot rv">The line on this year's bar shows where last year had reached by the same date.</p>
-  </section>
-
-  <!-- ============================================================ RUNNING TOTALS, YEARLY TOTALS -->
+  <!-- ============================================================ RUNNING TOTALS -->
   <section class="mb" aria-labelledby="hRace">
     <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
     <div class="card race-card rv">
@@ -1077,12 +1083,6 @@ footer strong{color:var(--label);font-weight:600}
       <div class="sr" aria-live="polite" id="raceSay"></div>
     </div>
     <p class="foot rv">Running total of arrivals from 1 January in each year.</p>
-  </section>
-
-  <section class="mb" aria-labelledby="hYT">
-    <div class="section-h rv"><h2 id="hYT">Yearly Totals</h2></div>
-    <div class="card flush tbl-wrap rv"><table class="tbl" id="yearsTbl" aria-label="Arrivals by year"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
-    <p class="foot rv" id="ytNote"></p>
   </section>
 
   <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
@@ -2260,7 +2260,8 @@ footer strong{color:var(--label);font-weight:600}
     }
     $("heat").innerHTML = months + h;
     heatCols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7); sizeHeat();
-    $("heatNote").textContent = yr + " · " + fmt(inYear.filter(d => d.migrants > 0).length) + " days with crossings";
+    ddNotes[1] = yr + " · " + fmt(inYear.filter(d => d.migrants > 0).length) + " days with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
+    whenDd(1, () => $("heat").classList.add("show"));
     const sc = $("heatScroll"); sc.scrollLeft = sc.scrollWidth;
   }
   // squares grow to fill wide screens (53 weeks), and stay finger-sized on phones (the grid scrolls)
@@ -2279,11 +2280,12 @@ footer strong{color:var(--label);font-weight:600}
     all.forEach(d => { const y = +d.date.slice(0,4); rows[y] = (rows[y] || 0) + d.migrants; });
     const ys = Object.keys(rows).map(Number).sort((a,b) => b - a), mx = Math.max(...Object.values(rows));
     const prevSame = sum(all.filter(d => +d.date.slice(0,4) === cur - 1 && d.date.slice(5) <= last.date.slice(5)), "migrants");
+    const change = y => { const base = y === cur ? prevSame : rows[y - 1]; if(!base) return '<span class="ch"></span>';   // on the year before; this year on the same dates last year
+      const pct = Math.round((rows[y] / base - 1) * 100); return '<span class="ch delta ' + (pct < 0 ? "down" : "up") + '">' + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>"; };
     $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : "") + '"><b>' + y + '</b><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
-      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" title="' + (cur - 1) + ' by this date: ' + fmt(prevSame) + '"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span></div>").join("");
-    $("yearsNote").textContent = cur + " so far";
-    const card = $("years").closest(".rv"), grow = () => $("years").querySelectorAll(".fill").forEach((f, i) => setTimeout(() => f.style.width = f.dataset.w + "%", reduced ? 0 : i * 70));
-    if(card.classList.contains("on") || reduced) grow(); else card.addEventListener("reveal", grow, {once:true});
+      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" title="' + (cur - 1) + ' by this date: ' + fmt(prevSame) + '"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
+    ddNotes[2] = cur + " so far"; if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
+    whenDd(2, () => $("years").querySelectorAll(".fill").forEach((f, i) => setTimeout(() => f.style.width = f.dataset.w + "%", reduced ? 0 : i * 70)));   // the bars grow when their page slides into view
   }
 
   /* ---------------------------------------------------- who is crossing, per boat, returns */
@@ -2620,6 +2622,35 @@ footer strong{color:var(--label);font-weight:600}
   flip.addEventListener("pointercancel", () => { swX = null; });
   if(window.ResizeObserver){ const ro = new ResizeObserver(fitFlip); faces.forEach(f => ro.observe(f)); }
   narrow.addEventListener("change", fitFlip); fitFlip();
+  // Crossings over time: every day, the year in squares and year by year, three pages slid across the same way. A swipe that
+  // starts on the chart or the squares is left to them (dragging reads the days; the squares scroll on phones)
+  const ddBox = $("ddBox"), ddFlip = $("ddFlip"), ddFaces = [...ddFlip.children], ddNotes = [$("ddNote").textContent, "", ""];
+  const ddSeen = [true, false, false], ddWait = [[], [], []];
+  let ddCur = 0;
+  function fitDd(){ ddFlip.style.height = narrow.matches ? ddFaces[ddCur].offsetHeight + "px" : ""; }   // phones: as tall as the page showing
+  function showDd(i){
+    i = Math.max(0, Math.min(ddFaces.length - 1, i));
+    if(i === ddCur) return;
+    const had = ddFaces[ddCur].contains(document.activeElement);
+    ddCur = i; ddFlip.style.transform = i ? "translateX(" + (-100 * i) + "%)" : "";
+    ddFaces.forEach((f, k) => f.inert = k !== i);   // only the page showing can be reached
+    $("ddNote").textContent = ddNotes[i];
+    fitDd();
+    if(!ddSeen[i]){ ddSeen[i] = true; ddWait[i].splice(0).forEach(fn => fn()); }
+    if(had) ddFaces[i].querySelector(".flip-go").focus({preventScroll:true});
+  }
+  function whenDd(i, fn){ onReveal(ddBox, () => { if(ddSeen[i]) fn(); else ddWait[i].push(fn); }); }   // once page i has been seen
+  ddFlip.addEventListener("click", e => { const b = e.target.closest(".flip-go[data-go]"); if(b) showDd(+b.dataset.go); });
+  let ddX = null, ddY = 0;
+  ddFlip.addEventListener("pointerdown", e => { ddX = e.pointerType === "touch" && !e.target.closest("#chart,#heatScroll") ? e.clientX : null; ddY = e.clientY; }, true);   // before the chart redraws under the finger
+  ddFlip.addEventListener("pointerup", e => {
+    if(ddX == null) return;
+    const dx = e.clientX - ddX, dy = e.clientY - ddY; ddX = null;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) showDd(ddCur + (dx < 0 ? 1 : -1));
+  });
+  ddFlip.addEventListener("pointercancel", () => { ddX = null; });
+  if(window.ResizeObserver){ const ro = new ResizeObserver(fitDd); ddFaces.forEach(f => ro.observe(f)); }
+  narrow.addEventListener("change", fitDd); fitDd();
 
 
   // ---- Year by year race
@@ -2702,28 +2733,6 @@ footer strong{color:var(--label);font-weight:600}
   document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")){ raceDay = null; drawRace(); } }, true);
 
   // ---- Yearly totals
-  function drawYT(){
-    const lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4), rows = {};
-    sorted.forEach(d=>{ const y = +d.date.slice(0,4); (rows[y] = rows[y] || {y, p:0, b:0}); rows[y].p += d.migrants; rows[y].b += d.boats; });
-    const ys = Object.values(rows).sort((a,b)=>b.y-a.y);
-    let h = '<thead><tr><th scope="col">Year</th><th scope="col">People</th><th scope="col">Boats</th><th scope="col" class="pb">Per boat</th><th scope="col">Change</th></tr></thead><tbody>';
-    ys.forEach(r=>{
-      const prev = rows[r.y-1];
-      let ch = "–";
-      if(prev && prev.p){
-        const base = r.y===curYr ? sorted.filter(d=>d.date.slice(0,4)===String(r.y-1) && d.date.slice(5) <= lastISO.slice(5)).reduce((a,d)=>a+d.migrants,0) : prev.p;
-        if(base){
-          const pct = Math.round((r.p/base-1)*100);
-          ch = '<span class="'+(pct<0?"down":"up")+'">'+(pct<0?"↓ ":"↑ ")+Math.abs(pct)+'%</span>';
-        }
-      }
-      h += '<tr'+(r.y===curYr?' class="cur"':'')+'><td>'+r.y+(r.y===curYr?' so far':'')+'</td><td>'+fmt(r.p)+'</td><td>'+fmt(r.b)+'</td><td class="pb">'+(r.b?Math.round(r.p/r.b):"–")+'</td><td>'+ch+'</td></tr>';
-    });
-    $("yearsTbl").innerHTML = h + '</tbody>';
-    // average a week over the past 52 weeks
-    const last364 = sorted.filter(d=>parse(d.date) > parse(lastISO) - 364*DAY).reduce((a,d)=>a+d.migrants,0);
-    $("ytNote").textContent = "Change compares each full year with the year before; " + curYr + " is compared with the same dates in " + (curYr-1) + ". Past 52 weeks: " + fmt(last364) + " people, an average of " + fmt(Math.round(last364/52)) + " a week.";
-  }
 
   // ---- Arrivals between two dates
   function calc(){
@@ -2805,10 +2814,11 @@ footer strong{color:var(--label);font-weight:600}
     drawPat();
   }));
 
-  function drawHistory(){ drawRace(); drawYT(); drawQuiet(); drawPat(); }
+  function drawHistory(){ drawRace(); drawQuiet(); drawPat(); }
 
-  // Show a day on the Every Day chart (from the calendar)
+  // Show a day on the Every day chart (from the calendar)
   function showOnChart(date){
+    showDd(0);
     const all = allDays(), i = all.findIndex(d => d.date === date); if(i < 0) return;
     const back = all.length - i;
     range = [30,90,365].find(n => n >= back) || 0;
