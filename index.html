@@ -1230,7 +1230,7 @@ footer strong{color:var(--label);font-weight:600}
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
-  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin. Place names from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0).</p>
+  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin. Place names from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0). Hill heights from Mapzen's <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md" target="_blank" rel="noopener">Terrain Tiles</a> (EU-DEM, SRTM and others).</p>
   <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
 </footer>
 
@@ -1498,6 +1498,7 @@ footer strong{color:var(--label);font-weight:600}
   /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
      drawn as moving lines, waves or numbers over the sea. Refreshed with the conditions every 30 minutes. */
   const GLAT = [], GLON = [], GDLAT = .3, GDLON = .4;   // about 20 miles apart, over the whole map
+  const LAPSE = .0065;   // the air is about 0.65°C cooler for every 100 m up
   for(let i = 0; i < 16; i++) GLAT.push(+(48.2 + i * GDLAT).toFixed(2));
   for(let i = 0; i < 22; i++) GLON.push(+(-2.8 + i * GDLON).toFixed(2));
   let grid = null, layer = "waves";
@@ -1519,12 +1520,13 @@ footer strong{color:var(--label);font-weight:600}
     try{
       const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation,cloud_cover&wind_speed_unit=mph"),
                                         getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
-      const W = [].concat(w), M = m ? [].concat(m) : null;
+      const W = [].concat(w), M = m ? [].concat(m) : null, EL = W.map(r => Math.max(0, +r.elevation || 0));   // each reading is for its own spot's height
       hours = W[0].hourly.time.map((t, h) => {
         const col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
         const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
         return {t, s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
           gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
+          tsl:col("temperature_2m").map((x, k) => x == null ? null : x + LAPSE * EL[k]),   // as it would be at sea level, to blend between readings
           wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
           // which way the waves travel, as east and south components (the data says where they come from)
           wdu: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : -Math.sin(d * Math.PI / 180); })) : null,
@@ -1599,8 +1601,11 @@ footer strong{color:var(--label);font-weight:600}
     e.currentTarget.setAttribute("aria-pressed", String(on));
     if(launchLayer) on ? launchLayer.addTo(LM) : launchLayer.remove();
   });
+  const TERRAIN = 'Terrain <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md">Mapzen</a>';
+  let terrainOn = false;
   function setLayer(l, first){
     layer = l;
+    if(LM && terrainOn !== (l === "temp")){ terrainOn = l === "temp"; LM.attributionControl[terrainOn ? "addAttribution" : "removeAttribution"](TERRAIN); }
     segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
     const b = segBtns.find(x => x.dataset.l === l);
     $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML;
@@ -1627,6 +1632,112 @@ footer strong{color:var(--label);font-weight:600}
     maskKey = key; maskVal = sea;
     return sea;
   }
+  /* Hills on the Temperature layer, as on Ventusky: shaded as if lit from the north-west, and a little cooler the higher they are.
+     Each forecast is for its own spot's height, so it is taken down to sea level, blended across the map and brought back up to
+     the height of every hill and valley. Heights come from the free Terrain Tiles on AWS (Mapzen's Terrarium tiles:
+     metres = red × 256 + green + blue ÷ 256 − 32768), fetched only while Temperature is showing. */
+  const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/";
+  const demTiles = new Map(), demWait = new Set();
+  let demCx = null, demT = 0, relief = null, tLut = null;
+  function demTile(z, x, y, get){   // a tile's heights, or null while it's on its way (each is asked for once)
+    const k = z + "/" + x + "/" + y, t = demTiles.get(k);
+    if(t){ demTiles.delete(k); demTiles.set(k, t); return t; }   // kept in the order they were used, so the oldest go first
+    if(!get || demWait.has(k) || !window.createImageBitmap) return null;
+    demWait.add(k);
+    fetch(DEM + k + ".png").then(r => r.ok ? r.blob() : Promise.reject())
+      .then(b => createImageBitmap(b, {colorSpaceConversion:"none", premultiplyAlpha:"none"}).catch(() => createImageBitmap(b)))   // the heights exactly as stored
+      .then(bm => {
+        demCx = demCx || Object.assign(document.createElement("canvas"), {width:256, height:256}).getContext("2d", {willReadFrequently:true});
+        demCx.clearRect(0, 0, 256, 256); demCx.drawImage(bm, 0, 0); if(bm.close) bm.close();
+        const px = demCx.getImageData(0, 0, 256, 256).data, a = new Float32Array(65536);
+        for(let i = 0, j = 0; i < 65536; i++, j += 4) a[i] = Math.max(0, px[j] * 256 + px[j + 1] + px[j + 2] / 256 - 32768);   // the sea, and land below it, as flat
+        demTiles.set(k, a); demWait.delete(k);
+        if(demTiles.size > 36) demTiles.delete(demTiles.keys().next().value);
+        clearTimeout(demT); demT = setTimeout(() => { if(layer === "temp") resetWx(); }, 150);   // redrawn once a batch is in
+      }).catch(() => {});   // not asked for again: that part of the map just stays flat
+    return null;
+  }
+  function reliefNow(){   // heights and shading across the view, in the tiles' own pixels; kept while the view and the tiles stay the same
+    const Z = LM.getZoom(), o = LM.project(LM.containerPointToLatLng([0, 0]), Z);
+    // tiles about one and a half to three screen pixels to each of theirs, but no more than 12 of them for the view
+    let zd = Math.max(4, Math.min(11, Math.floor(Z - .5))), f, x0, y0, w, ht;
+    for(;; zd--){
+      f = Math.pow(2, zd - Z); x0 = Math.floor(o.x * f) - 1; y0 = Math.floor(o.y * f) - 1; w = Math.ceil(vw * f) + 3; ht = Math.ceil(vh * f) + 3;
+      if(zd <= 4 || (((x0 + w - 1) >> 8) - (x0 >> 8) + 1) * (((y0 + ht - 1) >> 8) - (y0 >> 8) + 1) <= 12) break;
+    }
+    const n = 1 << zd, N = 256 * n, got = [];
+    for(let ty = Math.max(0, y0 >> 8); ty <= Math.min(n - 1, (y0 + ht - 1) >> 8); ty++) for(let tx = x0 >> 8; tx <= (x0 + w - 1) >> 8; tx++){
+      let t = demTile(zd, tx, ty, true), up = 0;
+      while(!t && up < 3){ up++; t = demTile(zd - up, tx >> up, ty >> up, false); }   // still coming: a coarser one meanwhile, if there is one
+      got.push([tx, ty, t, t ? up : 9]);
+    }
+    const key = [zd, x0, y0, w, ht, got.map(g => g[3]).join("")].join();
+    if(relief && relief.key === key){ relief.o = o; relief.f = f; return relief; }
+    const E = new Float32Array(w * ht).fill(NaN);   // heights in metres (NaN: not known yet)
+    for(const [tx, ty, t, up] of got){
+      if(!t) continue;
+      const ax = Math.max(x0, tx * 256), bx = Math.min(x0 + w, tx * 256 + 256), ay = Math.max(y0, ty * 256), by = Math.min(y0 + ht, ty * 256 + 256);
+      if(!up) for(let y = ay; y < by; y++){ const s = (y - ty * 256) * 256 - tx * 256, d = (y - y0) * w - x0; for(let x = ax; x < bx; x++) E[d + x] = t[s + x]; }
+      else {   // the coarser tile, blended up to size
+        const sc = 1 << up, ox = (tx >> up) * 256, oy = (ty >> up) * 256;
+        for(let y = ay; y < by; y++){
+          const fy = Math.min(255, Math.max(0, (y + .5) / sc - .5 - oy)), i = Math.min(254, fy | 0), v = fy - i;
+          for(let x = ax; x < bx; x++){
+            const fx = Math.min(255, Math.max(0, (x + .5) / sc - .5 - ox)), j = Math.min(254, fx | 0), u = fx - j, k = i * 256 + j;
+            E[(y - y0) * w + x - x0] = (t[k] * (1 - u) + t[k + 1] * u) * (1 - v) + (t[k + 256] * (1 - u) + t[k + 257] * u) * v;
+          }
+        }
+      }
+    }
+    // the shading: 1 on the flat, lighter on slopes facing the north-west light, darker on those facing away. Gentle, as these
+    // are low hills; the slopes are steepened a little more when zoomed out, where the tiles smooth them over
+    const S = new Float32Array(w * ht).fill(1), ex = 1.8 * Math.pow(2, (10 - zd) * .25), latAt = y => Math.atan(Math.sinh(Math.PI * (1 - 2 * (y0 + y + .5) / N)));
+    for(let y = 1; y < ht - 1; y++){
+      const q = ex / (2 * 40075016.686 / N * Math.cos(latAt(y)));   // metres across a tile pixel, at this latitude
+      for(let x = 1, i = y * w + 1; x < w - 1; x++, i++){
+        const gx = (E[i + 1] - E[i - 1]) * q, gy = (E[i + w] - E[i - w]) * q, g2 = gx * gx + gy * gy;   // rising to the east, and to the south
+        if(!(g2 > 0)) continue;   // flat, or not known yet
+        S[i] = Math.min(1.15, Math.max(.72, 1 + .7 * ((.5 * gx + .5 * gy + .7071) / Math.sqrt(1 + g2) / .7071 - 1)));
+      }
+    }
+    // where each tile pixel falls among the forecast readings
+    const cl = (v, m) => Math.min(Math.max(v, 0), m - 1.001), gi = new Int32Array(ht), gv = new Float32Array(ht), gj = new Int32Array(w), gu = new Float32Array(w);
+    for(let y = 0; y < ht; y++){ const fy = cl((latAt(y) * 180 / Math.PI - GLAT[0]) / GDLAT, GLAT.length); gi[y] = fy | 0; gv[y] = fy - gi[y]; }
+    for(let x = 0; x < w; x++){ const fx = cl(((x0 + x + .5) / N * 360 - 180 - GLON[0]) / GDLON, GLON.length); gj[x] = fx | 0; gu[x] = fx - gj[x]; }
+    const cv = document.createElement("canvas"); cv.width = w; cv.height = ht;
+    const cx = cv.getContext("2d");
+    return relief = {key, zd, f, o, x0, y0, w, ht, E, S, gi, gv, gj, gu, cv, cx, img:cx.createImageData(w, ht)};
+  }
+  function drawTemp(h){   // the temperature in colour, cooler up the hills and shaded like them
+    const R = reliefNow(), {w, ht, E, S, gi, gv, gj, gu} = R, px = R.img.data, nO = GLON.length;
+    const a = grid && grid.tsl, b = grid && grid.temp, t0 = sample(50.9, 1.5, "temp");
+    if(!tLut){ tLut = new Uint8Array(751 * 3); for(let i = 0; i <= 750; i++) tLut.set(colour(i / 10 - 30, SCALE.temp.stops).map(Math.round), i * 3); }   // -30 to 45°C
+    for(let y = 0, k = 0; y < ht; y++){
+      const i = gi[y], v = gv[y];
+      for(let x = 0; x < w; x++, k++){
+        const e = E[k], A = e === e && a ? a : b;
+        let t = t0;
+        if(A){ const p = i * nO + gj[x], u = gu[x]; t = ((A[p] || 0) * (1 - u) + (A[p + 1] || 0) * u) * (1 - v) + ((A[p + nO] || 0) * (1 - u) + (A[p + nO + 1] || 0) * u) * v; if(A === a) t -= LAPSE * e; }
+        const c = Math.max(0, Math.min(750, Math.round((t + 30) * 10))) * 3, sh = S[k], q = k * 4;
+        px[q] = tLut[c] * sh; px[q + 1] = tLut[c + 1] * sh; px[q + 2] = tLut[c + 2] * sh; px[q + 3] = 255;
+      }
+    }
+    R.cx.putImageData(R.img, 0, 0);
+    h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
+    h.setTransform(dpr / R.f, 0, 0, dpr / R.f, dpr * (R.x0 / R.f - R.o.x), dpr * (R.y0 / R.f - R.o.y));   // the tile pixels, scaled onto the screen
+    h.drawImage(R.cv, 0, 0); h.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  function tempAt(lat, lon){   // the temperature at a spot, at its own height once that's known
+    const R = relief;
+    if(R && grid && grid.tsl){
+      const p = LM.project([lat, lon], R.zd), x = p.x - .5 - R.x0, y = p.y - .5 - R.y0, i = Math.floor(y), j = Math.floor(x);
+      if(i >= 0 && j >= 0 && i < R.ht - 1 && j < R.w - 1){
+        const u = x - j, v = y - i, k = i * R.w + j, E = R.E, e = (E[k] * (1 - u) + E[k + 1] * u) * (1 - v) + (E[k + R.w] * (1 - u) + E[k + R.w + 1] * u) * v;
+        if(e === e) return sample(lat, lon, "tsl") - LAPSE * e;
+      }
+    }
+    return sample(lat, lon, "temp");
+  }
   function resetWx(){
     if(!LM) return;
     const sz = LM.getSize(); vw = sz.x; vh = sz.y; if(!vw || !vh) return;
@@ -1652,16 +1763,8 @@ footer strong{color:var(--label);font-weight:600}
     fld = {cols, rows, u, v, m, sea, mode};
     const h = heat.getContext("2d"), p = unitPx();
     heat.classList.toggle("solid", layer === "temp");
-    if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings
-      const g = document.createElement("canvas"); g.width = cols; g.height = rows;
-      const gx = g.getContext("2d"), img = gx.createImageData(cols, rows), px = img.data;
-      for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
-        const k = (r * cols + c) * 4, col = colour(sample(lat[r], lon[c], "temp"), SCALE.temp.stops);
-        px[k] = col[0]; px[k + 1] = col[1]; px[k + 2] = col[2]; px[k + 3] = 255;
-      }
-      gx.putImageData(img, 0, 0);
-      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
-      h.drawImage(g, -CELL / 2 * dpr, -CELL / 2 * dpr, cols * CELL * dpr, rows * CELL * dpr);   // each reading sits on its grid point
+    if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings, with the hills
+      drawTemp(h);
       // the sea a shade darker than the land, so the coast still shows through the colour
       seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
       h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
@@ -1715,7 +1818,7 @@ footer strong{color:var(--label);font-weight:600}
       + '<span class="pt-sub">' + (sea ? "At sea" : "On land") + " · " + whenText() + " · wind from the " + COMPASS[Math.round(from / 45) % 8] + "</span>"
       + (sea && lv ? '<span class="pt-lv ' + lv + '">' + WORD[lv] + ": " + LINE[lv] + "</span>" : "")
       + '<div class="wp-stats">' + cell("Wind", Math.round(sp), "mph") + cell("Gusts", Math.round(g("gust")), "mph") + cell("Waves", sea ? g("wave").toFixed(1) : "–", "m") + "</div>"
-      + '<div class="wp-stats">' + cell("Temp", Math.round(g("temp")), "°C") + cell("Rain", g("rain").toFixed(1), "mm") + cell("Cloud", Math.round(g("cloud")), "%") + "</div>";
+      + '<div class="wp-stats">' + cell("Temp", Math.round(tempAt(ll.lat, ll.lng)), "°C") + cell("Rain", g("rain").toFixed(1), "mm") + cell("Cloud", Math.round(g("cloud")), "%") + "</div>";
     const moved = !pin || !pin.getLatLng().equals(ll);
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
@@ -1744,7 +1847,7 @@ footer strong{color:var(--label);font-weight:600}
     }
     else if(layer === "waves"){ if(!atSea(ll)){ box.innerHTML = "<em>On land</em>"; place(); return; } val = g("wave").toFixed(1); }
     else if(layer === "rain"){ val = g("rain").toFixed(1); }
-    else val = Math.round(g(sc.key));
+    else val = Math.round(layer === "temp" ? tempAt(ll.lat, ll.lng) : g(sc.key));
     const col = colour(+val, sc.stops).map(Math.round).join(",");
     box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
     place();
