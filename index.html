@@ -67,7 +67,7 @@
   --sea1:#6CB8F0; --sea2:#2E86D1; --sea3:#1B64A8; --land:#E4EBDD; --land2:#CBD8C1; --coast:rgba(255,255,255,.9); --maptext:rgba(40,52,40,.55); --cloud:#E3E8EF; --cloud-edge:#AEB7C4; --shelf:#9FD6FA; --town:#33413A; --halo:rgba(255,255,255,.8); --dot:#5E6B62;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-foam:#FFFFFF; --ta-tube1:#9AA3AF; --ta-tube2:#5B6472; --ta-tube3:#3A414C; --ta-rope:#E5E7EB; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --round:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Helvetica Neue",Arial,sans-serif;
+  --round:var(--font);   /* one font across the site */
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
@@ -97,7 +97,8 @@ body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font)
 a{color:var(--blue);text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-button{font:inherit}
+button,input,select,textarea{font:inherit}
+.leaflet-container,.leaflet-container *{font-family:var(--font)}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 
 /* ------------------------------------------------------------ navigation bar: the large title collapses into it */
