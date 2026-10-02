@@ -159,7 +159,7 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
 .wx-full svg{width:17px;height:17px}
 /* the layer picker: a card of tiles, like Apple Maps' map chooser */
-.am-pick{position:absolute;top:44px;right:0;z-index:5;width:288px;background:rgba(28,28,30,.88);padding:14px 14px 16px;border-radius:16px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
+.am-pick{position:absolute;top:44px;right:0;z-index:5;width:288px;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
 .am-pick[hidden]{display:none}
 @keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
 .am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
@@ -168,11 +168,11 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .am-x svg{width:9px;height:9px}
 .wx-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 10px}
 .wx-seg button{border:0;background:none;padding:0;color:#fff;cursor:pointer;display:grid;gap:6px;justify-items:center;font:600 .706rem/1.1 var(--font);touch-action:manipulation}
-.am-tile{width:100%;height:58px;border-radius:12px;display:grid;place-items:center;background:var(--tg);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.2);transition:box-shadow .2s,transform .15s}
-.am-tile svg{width:24px;height:24px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.45))}
+.am-tile{width:100%;height:58px;border-radius:14px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);transition:background .2s,color .2s,transform .15s}
+.am-tile svg{width:24px;height:24px}
+@media (hover:hover){.wx-seg button:hover .am-tile{background:rgba(255,255,255,.22)}}
 .wx-seg button:active .am-tile{transform:scale(.95)}
-.wx-seg button[aria-pressed="true"] .am-tile{box-shadow:0 0 0 2.5px #0A84FF,inset 0 0 0 .5px rgba(255,255,255,.2)}
-.wx-seg button[aria-pressed="true"] .am-tn{color:#64B5FF}
+.wx-seg button[aria-pressed="true"] .am-tile{background:rgba(255,255,255,.92);color:#1C1C1E}
 /* the key and the forecast timeline, as small frosted pills */
 .am-pill{border-radius:14px}
 .wx-time{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
@@ -205,7 +205,7 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
-.am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.1);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
+.am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
 .am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
 .am-launch-tg[aria-pressed="false"]{color:rgba(255,255,255,.6)}
 .am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
@@ -1443,10 +1443,8 @@ footer strong{color:var(--label);font-weight:600}
     for(let k = 1; k < st.length; k++) if(v <= st[k][0]){ const [a, ca] = st[k - 1], [b, cb] = st[k], t = (v - a) / (b - a); return ca.map((x, n) => x + (cb[n] - x) * t); }
     return st[st.length - 1][1];
   }
-  // The layer picker: a tile for each layer, tinted with its own colour scale
-  const grad = (sc, dir) => "linear-gradient(" + dir + "," + sc.stops.map(([v, c]) => "rgb(" + c.join(",") + ") " + ((v - (sc.min || 0)) / (sc.max - (sc.min || 0)) * 100).toFixed(0) + "%").join(",") + ")";
+  // The layer picker: a frosted card of plain white icon tiles
   const segBtns = [...document.querySelectorAll("#wxCtl .wx-seg button")], pickEl = $("wxPick"), pickBtn = $("wxLayerBtn");
-  segBtns.forEach(b => b.querySelector(".am-tile").style.setProperty("--tg", grad(SCALE[b.dataset.l], "135deg")));
   function showPick(on){
     pickEl.hidden = !on; pickBtn.setAttribute("aria-expanded", on);
     if(on){ const b = segBtns.find(x => x.dataset.l === layer); if(b) b.focus({preventScroll:true}); }
