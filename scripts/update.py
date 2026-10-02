@@ -47,8 +47,10 @@ def to_int(v):
             return 0
     except TypeError:
         pass
-    s = re.sub(r"[^\d]", "", str(v))
-    return int(s) if s else 0
+    if isinstance(v, float):                    # a column with a blank cell comes back as floats: 44.0, not 440
+        return int(v)
+    m = re.match(r"\s*(\d[\d,]*)", str(v))      # the leading number only, so "312 [note 1]" is 312
+    return int(m.group(1).replace(",", "")) if m else 0
 
 
 def fetch_last7():
@@ -59,16 +61,17 @@ def fetch_last7():
     out = {}
     for t in tables:
         cols = [str(c).lower() for c in t.columns]
-        if not any("migrant" in c for c in cols):
+        people = [i for i, c in enumerate(cols) if re.search(r"migrant|people|person", c) and "boat" not in c]
+        if not people:
             continue
-        dcol = t.columns[0]
-        mcol = t.columns[next(i for i, c in enumerate(cols) if "migrant" in c)]
+        dcol = next((t.columns[i] for i, c in enumerate(cols) if "date" in c), t.columns[0])
+        mcol = t.columns[people[0]]
         bcol = next((t.columns[i] for i, c in enumerate(cols) if "boat" in c), None)
         ucol = next((t.columns[i] for i, c in enumerate(cols) if "uncontrolled" in c), None)
         for _, r in t.iterrows():
             d = pd.to_datetime(str(r[dcol]), errors="coerce", dayfirst=True)
-            if pd.isna(d):
-                continue
+            if pd.isna(d) or not pd.Timestamp("2018-01-01") <= d <= pd.Timestamp.now() or not re.search(r"\d", str(r[mcol])):
+                continue                    # not a date, a date outside 2018 to today, or no figure in the cell yet
             key = d.strftime("%Y-%m-%d")
             out[key] = {
                 "date": key,
@@ -128,6 +131,10 @@ def merge(data, ts, last7, today):
     """Combine stored days with fresh figures and flag any revised days."""
     old = {d["date"]: d for d in data.get("days", [])}
     days = {k: dict(v) for k, v in old.items()}
+    changes = sum(1 for k, v in ts.items() if k in old and v["migrants"] != old[k]["migrants"])
+    if changes > 31:                          # a new layout (weekly totals, another table) rather than real revisions
+        print(f"Time series ignored: it would change {changes} days already held")
+        ts = {}
 
     for k, v in ts.items():
         prev = days.get(k, {})
@@ -168,6 +175,8 @@ def year_totals(data, ordered):
         prev_total = sum(d["migrants"] for d in ordered if d["date"].startswith(prev_year) and d["date"] <= same_point)
         if prev_total:
             data["prevYearSamePoint"] = prev_total
+        else:
+            data.pop("prevYearSamePoint", None)   # none by this date last year: don't keep the old year's figure
     elif data.get("ytdBaseDate", "")[:4] != year:
         data["ytdBase"] = 0
         data["ytdBaseDate"] = f"{year}-01-00"
@@ -357,6 +366,9 @@ def main():
         ts = {}
 
     data["days"] = merge(data, ts, last7, now.strftime("%Y-%m-%d"))
+    odd = [d for d in data["days"] if not (0 <= d["migrants"] <= 2500 and 0 <= d["boats"] <= 60)]
+    if odd:                                   # the record is 1,305 people and 36 boats in a day
+        sys.exit(f"Not publishing: implausible figures {odd[:3]}")
     year_totals(data, data["days"])
     try:
         from extras import update_all

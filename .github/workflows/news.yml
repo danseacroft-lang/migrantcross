@@ -12,13 +12,14 @@ concurrency: publish      # never push at the same moment as the daily figures u
 
 jobs:
   news:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04     # a fixed image, so a new Ubuntu can't change things unannounced
+    timeout-minutes: 15       # a stuck download can't hold up the other job for hours
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: pip install requests
+      - run: pip install requests==2.34.2
       - run: python scripts/news.py
       - name: Publish news
         run: |
@@ -27,4 +28,12 @@ jobs:
           git add news.json
           git diff --cached --quiet && exit 0
           git commit -m "Update breaking news"
+          git pull --rebase && git push
+      - name: Keep the schedules on
+        # GitHub switches off scheduled workflows after 60 days without a commit. The site's own updates normally
+        # commit every day; if they ever stop, this makes one small commit every 40 days so the checks keep running.
+        if: always()
+        run: |
+          [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -lt 3456000 ] && exit 0
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit --allow-empty -m "Keep scheduled workflows on"
           git pull --rebase && git push
