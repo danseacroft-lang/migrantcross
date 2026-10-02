@@ -2391,7 +2391,9 @@ footer strong{color:var(--label);font-weight:600}
   function drawCalendar(){
     if(!sorted.length) return;
     const first = sorted[0].date, last = sorted[sorted.length-1].date;
-    if(!calMonth || calMonth > last.slice(0,7)) calMonth = last.slice(0,7);
+    // opens on the latest month, but a new month with less than a week of figures would look almost empty,
+    // so until then it opens on the month before (the arrow still goes to the new one)
+    if(!calMonth || calMonth > last.slice(0,7)) calMonth = +last.slice(8) < 7 && shiftMonth(last.slice(0,7), -1) >= first.slice(0,7) ? shiftMonth(last.slice(0,7), -1) : last.slice(0,7);
     if(calMonth < first.slice(0,7)) calMonth = first.slice(0,7);
     const byDate = new Map(sorted.map(d=>[d.date, d]));
     const start = new Date(calMonth + "-01T00:00:00Z");
