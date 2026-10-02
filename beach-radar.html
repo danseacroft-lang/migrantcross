@@ -47,10 +47,10 @@ body{background:var(--bg);color:var(--label);font:17px/1.35 var(--font);letter-s
 /* ---- Top bar ---- */
 .bar{position:fixed;inset:0 0 auto;z-index:5;display:flex;align-items:center;gap:12px;
   padding:max(10px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left))}
-.home{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 10px;border-radius:22px;text-decoration:none;
-  color:var(--blue);font:600 15px/1 var(--font);background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+.home{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 9px;gap:8px;border-radius:22px;text-decoration:none;
+  color:var(--label);font:600 15px/1 var(--font);background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
   box-shadow:0 0 0 .5px var(--glass-edge)}
-.home svg{width:18px;height:18px}
+.home svg{width:26px;height:26px;border-radius:50%}
 .home:focus-visible,.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
 /* ---- The scene: comes in like a wave, settles, then sinks into the background ---- */
@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit}
 </head>
 <body>
 <header class="bar">
-  <a class="home" href="./"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Channel Crossings</a>
+  <a class="home" href="./" aria-label="Channel Crossings, homepage"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg>Channel Crossings</a>
 </header>
 
 <div class="scene" aria-hidden="true">
