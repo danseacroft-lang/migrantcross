@@ -108,8 +108,12 @@ button,input,select,textarea{font:inherit}
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;transition:background-color .3s ease,border-color .3s ease;border-bottom:.5px solid transparent}
 .nav:not(.solid){pointer-events:none}   /* clear at the top, so the switch below it can be used */
 .nav.solid{background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom-color:var(--sep)}
-.nav-title{font-weight:600;font-size:1rem;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;white-space:nowrap}
-.nav.solid .nav-title{opacity:1;transform:none}
+/* the logo and name in the bar, linking to the homepage */
+.nav-brand{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--label);text-decoration:none;font-weight:600;font-size:1rem;white-space:nowrap;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
+.nav-brand svg{width:26px;height:26px;flex:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.nav.solid .nav-brand{opacity:1;transform:none}
+.nav-brand:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
+@media (hover:hover){.nav-brand:hover span{text-decoration:underline;text-underline-offset:3px}}
 
 /* ------------------------------------------------------------ hero: the live Channel */
 /* the Channel is a card in the same column as the boxes below it */
@@ -584,12 +588,11 @@ footer strong{color:var(--label);font-weight:600}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
-/* the Beta pill beside it: frosted glass, and a note on hover or tap */
+/* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
 .beta{position:relative;flex:none;pointer-events:auto}
 .beta-pill{appearance:none;border:0;min-height:40px;padding:0 14px 0 12px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
-  background:linear-gradient(135deg,rgba(255,255,255,.78),rgba(255,255,255,.32));-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.9),inset 0 1px 0 rgba(255,255,255,.95),0 0 0 .5px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.08);transition:transform .2s ease}
-.beta-pill i{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#007AFF,#FF9F0A);box-shadow:0 0 0 3px rgba(0,122,255,.14)}
+  background:var(--fill,rgba(118,118,128,.12));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);transition:transform .2s ease}
+.beta-pill i{width:8px;height:8px;border-radius:50%;background:#007AFF}
 .beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
 .beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);left:0;width:max-content;max-width:min(280px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 13px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
@@ -597,8 +600,6 @@ footer strong{color:var(--label);font-weight:600}
   opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
 .beta-tip b{display:block;margin-bottom:3px;font-weight:600}
 .beta:hover .beta-tip,.beta.open .beta-tip,.beta-pill:focus-visible + .beta-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
-:root[data-theme="dark"] .beta-pill{background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28),inset 0 1px 0 rgba(255,255,255,.22),0 4px 14px rgba(0,0,0,.3)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .beta-pill{background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28),inset 0 1px 0 rgba(255,255,255,.22),0 4px 14px rgba(0,0,0,.3)}}
 @media (prefers-reduced-transparency:reduce){.beta-tip{background:var(--card)}}
 @media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}.beta-pill{padding:0 11px}.beta-pill i{display:none}}   /* small phones: both still fit */
 .top-theme button{min-height:34px;padding:0 13px}
@@ -825,7 +826,7 @@ footer strong{color:var(--label);font-weight:600}
 
 <nav class="nav" id="nav" aria-label="Channel Crossings">
   <span></span>
-  <div class="nav-title">Channel Crossings</div>
+  <a class="nav-brand" href="./" aria-label="Channel Crossings, homepage"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg><span>Channel Crossings</span></a>
   <span></span>
 </nav>
 <!-- the appearance switch again at the top, in line with the map's right edge; it scrolls away under the bar -->
@@ -2230,15 +2231,13 @@ footer strong{color:var(--label);font-weight:600}
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
-        + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>"
-        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the white wave crests drift the way the sea is running, longer where it is rougher. Switch to wind to see it blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", brighter where it is stronger, or to gusts, which stream across faster, turning amber then red as they get stronger. Hover over the map with a mouse to read the weather at any spot, or tap anywhere for the full picture there. Switch to wind, gusts, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
+        + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
       + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
       + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
-      + "Hover over or tap a boat for its day's figures.</p></div>"
-      + '<p class="wp-foot">Weather: Open-Meteo · Map: Esri · Refreshes every 30 minutes</p>';
+      + "Hover over or tap a boat for its day's figures.</p></div>";
   }
   async function loadWeather(){
     wxAt = Date.now();
