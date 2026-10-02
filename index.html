@@ -593,9 +593,26 @@ footer strong{color:var(--label);font-weight:600}
 :root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
-.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;pointer-events:none}
-.top-row .top-theme{display:flex;width:max-content;margin:0 max(16px,env(safe-area-inset-right,0px)) 0 auto;pointer-events:auto}
-@media (min-width:1180px){.top-row .top-theme{margin-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
+.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
+.top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
+@media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
+/* the Beta pill beside it: frosted glass, and a note on hover or tap */
+.beta{position:relative;flex:none;pointer-events:auto}
+.beta-pill{appearance:none;border:0;min-height:40px;padding:0 14px 0 12px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
+  background:linear-gradient(135deg,rgba(255,255,255,.78),rgba(255,255,255,.32));-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.9),inset 0 1px 0 rgba(255,255,255,.95),0 0 0 .5px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.08);transition:transform .2s ease}
+.beta-pill i{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#007AFF,#FF9F0A);box-shadow:0 0 0 3px rgba(0,122,255,.14)}
+.beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
+.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);left:0;width:max-content;max-width:min(280px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 13px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
+  background:color-mix(in srgb,var(--card) 90%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.45),0 12px 32px rgba(0,0,0,.18);
+  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
+.beta-tip b{display:block;margin-bottom:3px;font-weight:600}
+.beta:hover .beta-tip,.beta.open .beta-tip,.beta-pill:focus-visible + .beta-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
+:root[data-theme="dark"] .beta-pill{background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28),inset 0 1px 0 rgba(255,255,255,.22),0 4px 14px rgba(0,0,0,.3)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .beta-pill{background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.06));box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28),inset 0 1px 0 rgba(255,255,255,.22),0 4px 14px rgba(0,0,0,.3)}}
+@media (prefers-reduced-transparency:reduce){.beta-tip{background:var(--card)}}
+@media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}.beta-pill{padding:0 11px}.beta-pill i{display:none}}   /* small phones: both still fit */
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ smaller screens */
@@ -824,7 +841,7 @@ footer strong{color:var(--label);font-weight:600}
   <span></span>
 </nav>
 <!-- the appearance switch again at the top, in line with the map's right edge; it scrolls away under the bar -->
-  <div class="top-row"><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip"><i aria-hidden="true"></i>Beta</button><div class="beta-tip" id="betaTip" role="tooltip"><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1222,6 +1239,12 @@ footer strong{color:var(--label);font-weight:600}
     showTheme();
   }));
   showTheme();
+  // The Beta pill: its note shows on hover, or on a tap (phones); tapping elsewhere or Escape hides it
+  const beta = $("beta"), betaBtn = $("betaBtn");
+  const betaOpen = on => { beta.classList.toggle("open", on); betaBtn.setAttribute("aria-expanded", on); };
+  betaBtn.addEventListener("click", e => { e.stopPropagation(); betaOpen(!beta.classList.contains("open")); });
+  document.addEventListener("click", () => betaOpen(false));
+  document.addEventListener("keydown", e => { if(e.key === "Escape") betaOpen(false); });
 
   /* ---------------------------------------------------- large title → navigation bar, hero parallax */
   const nav = $("nav"), hero = $("hero"), heroMap = $("heroMap");
