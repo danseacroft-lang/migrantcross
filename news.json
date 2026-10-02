@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-02T22:22:14Z",
+ "checkedAt": "2026-10-02T23:19:33Z",
  "items": [
+  {
+   "title": "'The Bedbug Express!' Insect infestation sparks train cancellations on packed commuter line",
+   "url": "https://www.gbnews.com/news/southeastern-railway-bedbug-infestation-train-cancellations",
+   "source": "GB News",
+   "published": "2026-10-02T23:11:17Z",
+   "breaking": true
+  },
   {
    "title": "Widdecombe suspect charged with planning terror act against Farage",
    "url": "https://www.bbc.co.uk/news/articles/cv1j3lgrl6gko?at_medium=RSS&at_campaign=rss",
@@ -20,13 +27,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cmy83xpg9p5eo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-02T20:21:09Z",
-   "breaking": true
-  },
-  {
-   "title": "Shabana Mahmood sends message to Nigel Farage as Labour set to make major security update",
-   "url": "https://www.gbnews.com/politics/nigel-farage-shabana-mahmood-reform-uk-labour",
-   "source": "GB News",
-   "published": "2026-10-02T19:27:19Z",
    "breaking": true
   }
  ]
