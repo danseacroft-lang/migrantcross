@@ -49,12 +49,6 @@ body{
 .home-btn svg{width:18px; height:18px}
 .home-btn:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
 
-.brand{display:flex; align-items:center; gap:12px; margin-bottom:14px; text-decoration:none; color:inherit}
-.brand svg{transition:transform .2s ease}
-.brand:focus-visible{outline:2px solid #007AFF; outline-offset:3px; border-radius:22px}
-@media (hover:hover){.brand:hover svg{transform:scale(1.06)}}
-.brand svg{width:40px; height:40px; border-radius:50%; box-shadow:0 2px 10px rgba(0,0,0,.18)}
-.brand span{font:700 1.25rem/1.1 var(--font); letter-spacing:.01em}
 
 h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0 0 6px; text-align:center; text-wrap:balance}
 .updated{font-size:15px; color:var(--label2); margin:0 0 24px; text-align:center}
@@ -84,17 +78,26 @@ h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0 0 6px; text-a
 .policy-box::-webkit-scrollbar-thumb{background:var(--thumb); border-radius:8px}
 .policy-box::-webkit-scrollbar-track{background:transparent}
 
-footer{margin-top:28px; font-size:13px; color:var(--label2); text-align:center; line-height:1.45; max-width:560px}
+/* shared header and footer, same as the homepage */
+.cc-brand{display:flex; align-items:center; justify-content:center; gap:10px; align-self:center; justify-self:center; width:max-content; margin:0 auto 14px; min-height:44px; text-decoration:none; color:var(--label)}
+.cc-brand svg{width:40px; height:40px; flex:none; border-radius:50%; box-shadow:0 2px 10px rgba(0,0,0,.18); transition:transform .2s ease}
+.cc-brand span{font:700 21px/1.1 var(--font); letter-spacing:.01em}
+.cc-brand:focus-visible{outline:2px solid var(--blue); outline-offset:3px; border-radius:22px}
+@media (hover:hover){.cc-brand:hover svg{transform:scale(1.06)}}
+footer.cc-foot{width:100%; max-width:1180px; margin:32px auto 0; padding:20px 20px 0; border-top:.5px solid var(--sep); color:var(--label2); font-size:13px; line-height:1.45; text-align:center; display:grid; gap:8px; justify-items:center}
+footer.cc-foot p{margin:0; max-width:52ch; font-size:13px; line-height:1.45}
+footer.cc-foot p a,.ft-nav a{color:var(--blue); text-decoration:none}
+footer.cc-foot strong{color:var(--label); font-weight:600}
+.ft-nav{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:0 18px; font-size:15px}
+.ft-nav a{display:inline-flex; align-items:center; min-height:44px; padding-inline:4px}
+@media (hover:hover){footer.cc-foot p a:hover,.ft-nav a:hover{text-decoration:underline}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 
-  <a class="brand" href="./" aria-label="Channel Crossings home">
-    <svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"/><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"/><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"/><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"/><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"/></svg>
-    <span>Channel Crossings</span>
-  </a>
+  <a class="cc-brand" href="./" aria-label="Channel Crossings home"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg><span>Channel Crossings</span></a>
 
   <h1>Privacy Policy &amp; Terms of Use</h1>
   <p class="updated">Last updated: 30 September 2026</p>
@@ -215,8 +218,13 @@ footer{margin-top:28px; font-size:13px; color:var(--label2); text-align:center; 
 
   </div>
 
-  <footer>Channel Crossings is independent and not affiliated with the UK Government.</footer>
-
 </div>
+<footer class="cc-foot">
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="./#tour">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+  <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
+  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin.</p>
+  <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
+</footer>
 </body>
 </html>
