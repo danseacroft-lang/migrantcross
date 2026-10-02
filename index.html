@@ -1881,8 +1881,7 @@ footer strong{color:var(--label);font-weight:600}
     $("fuToday").textContent = haveYesterday()
       ? (at && at.toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? "New figures incoming. Please wait." : "Today's figures aren't in yet. Checks start at 12:00.";
-    // the line under the title: "Figures to 30 Sept · Figure Updates", or "Updating Now" while new figures are awaited
-    $("fuBtn").textContent = on ? "Updating Now" : "Figure Updates";
+    // the line under the title: "Figures to 30 Sept · Figure Updates" (while new figures are awaited, the strip on the map says so)
     if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3); }
     $("fresh").classList.toggle("live", on);
     refreshLatest();
@@ -2754,7 +2753,7 @@ footer strong{color:var(--label);font-weight:600}
     {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature, rain and cloud. You can also turn the launch beaches on or off here."},
     {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
     {el:() => $("lmap"), h: touchy ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchy ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
-    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived, or check for new ones with Refresh Figures. While new figures are on their way it reads Updating Now."},
+    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived, or check for new ones with Refresh Figures."},
     {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
   ];
   let tourSteps = [], tourI = 0, tourTick = null;
