@@ -120,6 +120,7 @@ button,input,select,textarea{font:inherit}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, the sea in one calm blue, and the weather moving over it */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
 .wx-heat{mix-blend-mode:multiply}   /* the sea colour tints the map, so its texture still shows */
+.wx-heat.solid{mix-blend-mode:normal}   /* temperature: the colours themselves, as on Ventusky */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -1300,7 +1301,7 @@ footer strong{color:var(--label);font-weight:600}
       $("straitLbl").setAttribute("transform", "translate(394.1 335.6) scale(" + k + ")"); ["straitA", "straitB"].forEach(id => $(id).setAttribute("r", (3.5 * k).toFixed(2)));
       placeBoats(performance.now(), reduced);
     });
-    LM.on("moveend", () => { wxPane.style.opacity = ""; resetWx(); placeTowns(); });
+    LM.on("moveend", () => { wxPane.style.opacity = ""; placeTowns(); resetWx(); });   // names first, so the numbers can keep clear of them
     LM.on("click", e => showPoint(e.latlng));
     LM.on("mousemove", e => { hoverAt = e; if(!hoverRaf) hoverRaf = requestAnimationFrame(showHover); });
     LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
@@ -1465,7 +1466,8 @@ footer strong{color:var(--label);font-weight:600}
     wind:{key:"s", max:40, unit:"mph", stops:WIND},
     gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
     waves:{key:"wave", max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
-    temp:{key:"temp", min:-5, max:30, unit:"°C", stops:[[-5,[120,80,180]],[0,[80,120,210]],[5,[70,160,210]],[10,[80,180,140]],[15,[170,200,80]],[20,[235,190,60]],[25,[230,120,50]],[30,[200,50,50]]]},
+    // temperature in Ventusky's earthy colours: blue in the cold, green at 10°, khaki in the mid teens, brown and mauve in the heat
+    temp:{key:"temp", unit:"°C", stops:[[-10,[128,110,190]],[-5,[108,138,206]],[0,[98,168,212]],[5,[108,190,184]],[10,[164,203,140]],[13,[192,202,116]],[16,[200,182,112]],[19,[198,156,100]],[22,[190,128,94]],[25,[180,108,104]],[28,[170,98,130]],[32,[160,88,160]],[36,[192,122,192]]]},
     rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
     cloud:{key:"cloud", max:100, unit:"%", stops:[[0,[40,50,65]],[100,[225,230,238]]]}
   };
@@ -1504,7 +1506,7 @@ footer strong{color:var(--label);font-weight:600}
   // Wind: streams of particles. Gusts: fast streaks that sweep downwind in pulses, warmer for stronger gusts.
   // Waves: crests rolling the way the wind blows them (the swell's own direction when it's nearly calm).
   const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
-  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, clock = 0, coastPath = null;
+  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, clock = 0, coastPath = null, seaPath = null;
   let maskKey = "", maskVal = null;
   function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
     const p = unitPx(), key = [cols, rows, p.x0, p.y0, p.sx, p.sy].map(v => Math.round(v * 100)).join();
@@ -1544,9 +1546,24 @@ footer strong{color:var(--label);font-weight:600}
     }
     const sm = Math.hypot(su, sv) || 1;
     fld = {cols, rows, u, v, m, sea, mode, du:su / sm, dv:sv / sm};
-    const h = heat.getContext("2d");
-    {   // the sea in one calm blue, as on Ventusky; the land stays clear grey
-      const p = unitPx();
+    const h = heat.getContext("2d"), p = unitPx();
+    heat.classList.toggle("solid", layer === "temp");
+    if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings
+      const g = document.createElement("canvas"); g.width = cols; g.height = rows;
+      const gx = g.getContext("2d"), img = gx.createImageData(cols, rows), px = img.data;
+      for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
+        const k = (r * cols + c) * 4, col = colour(sample(lat[r], lon[c], "temp"), SCALE.temp.stops);
+        px[k] = col[0]; px[k + 1] = col[1]; px[k + 2] = col[2]; px[k + 3] = 255;
+      }
+      gx.putImageData(img, 0, 0);
+      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
+      h.drawImage(g, -CELL / 2 * dpr, -CELL / 2 * dpr, cols * CELL * dpr, rows * CELL * dpr);   // each reading sits on its grid point
+      // the sea a shade darker than the land, so the coast still shows through the colour
+      seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
+      h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(40,30,20,.13)";
+      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
+      h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
+    } else {   // the sea in one calm blue, as on Ventusky; the land stays clear grey
       h.fillStyle = "#6973B2"; h.fillRect(0, 0, heat.width, heat.height);
       h.globalCompositeOperation = "destination-out"; h.filter = "blur(" + (1.5 * dpr) + "px)";
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
@@ -1558,7 +1575,8 @@ footer strong{color:var(--label);font-weight:600}
       h.save(); h.scale(dpr, dpr);
       h.font = "700 " + fs + "px " + getComputedStyle(document.body).fontFamily; h.textAlign = "center"; h.textBaseline = "middle";
       h.lineJoin = "round"; h.lineWidth = 3.5; h.strokeStyle = "rgba(0,0,0,.6)"; h.fillStyle = "#fff";
-      const mr = $("lmap").getBoundingClientRect(), keep = [$("wxCtl"), $("news"), document.querySelector(".large-title"), ...document.querySelectorAll(".hero-in > *")].filter(e => e && !e.hidden && e.offsetParent).map(e => e.getBoundingClientRect());   // not under the controls
+      const mr = $("lmap").getBoundingClientRect(), keep = [$("wxCtl"), $("news"), document.querySelector(".large-title"), ...document.querySelectorAll(".hero-in > *")].filter(e => e && !e.hidden && e.offsetParent)
+        .concat([$("straitLbl"), ...document.querySelectorAll(".am-town:not(.off) > *, .am-area:not(.off) > span")].filter(e => e && e.getClientRects().length)).map(e => e.getBoundingClientRect());   // not under the controls or the place names
       const under = (x, y) => keep.some(cr => x > cr.left - mr.left - 24 && x < cr.right - mr.left + 24 && y > cr.top - mr.top - 14 && y < cr.bottom - mr.top + 14);
       for(let y = gap * .6; y < vh; y += gap) for(let x = gap * (Math.round(y / gap) % 2 ? .5 : 1); x < vw; x += gap){
         if(under(x, y)) continue;
