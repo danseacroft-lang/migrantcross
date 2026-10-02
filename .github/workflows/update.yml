@@ -15,14 +15,15 @@ concurrency: publish      # one publishing job at a time (shared with the hourly
 
 jobs:
   update:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04     # a fixed image, so a new Ubuntu can't change things unannounced
+    timeout-minutes: 15       # a stuck download can't hold up the other job for hours
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Is a check due?
         id: gate
         run: python3 scripts/gate.py
       - if: steps.gate.outputs.run == 'true'
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip                      # keeps the checks quick

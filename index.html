@@ -60,11 +60,10 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <!-- start talking to the map, tile and weather servers straight away -->
-<link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://server.arcgisonline.com">
 <link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
 <link rel="preconnect" href="https://marine-api.open-meteo.com" crossorigin>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">   <!-- Leaflet 1.9.4, kept in the site so the map never waits on another server -->
 <style>
 /* ------------------------------------------------------------ tokens (Apple system colours) */
 :root{
@@ -1232,7 +1231,7 @@ footer strong{color:var(--label);font-weight:600}
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="vendor/leaflet/leaflet.js"></script>
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -2038,7 +2037,8 @@ footer strong{color:var(--label);font-weight:600}
       ? (at && at.toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? "New figures incoming. Please wait." : "Today's figures aren't in yet. Checks start at 12:00.";
     // the line under the title: "Figures to 30 Sept · Figure Updates" (while new figures are awaited, the strip on the map says so)
-    if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3); }
+    if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3);
+      $("figHead").textContent = (parse(yesterday()) - parse(last)) / DAY > 2 ? "No new Home Office figures since " + dShort.format(parse(last)) : "New figures incoming from the Home Office"; }
     placeTowns();   // the figures and chips may have changed size: the place names keep clear of them
   }
   // Pop-ups on the chips: open on hover (mouse), tap or keyboard; close on leaving, tapping elsewhere or Escape
