@@ -249,27 +249,47 @@ html.map-full,html.map-full body{overflow:hidden}
   background:linear-gradient(to bottom,rgba(0,0,0,.34) 0,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45) 85%,rgba(0,0,0,.55) 100%)}
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
 .hero-chips > *{pointer-events:auto}
-/* breaking news: a strip across the top of the map that flashes when a story comes in */
+/* across the top of the map: breaking news, which flashes when a story comes in, and from 12:00 UK time
+   until the new figures are in, the daily update. When both are on they take turns in the same strip. */
 .map-news{position:absolute;z-index:4;top:12px;left:12px;right:12px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 10px;border-radius:16px;color:#fff;overflow:hidden;isolation:isolate;
   background:rgba(20,20,24,.55);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 6px 20px rgba(0,0,0,.25);animation:mnDrop .5s cubic-bezier(.2,.9,.3,1.12) both}
 @keyframes mnDrop{from{transform:translateY(-130%);opacity:0}}
 .map-news::after{content:"";position:absolute;inset:0;z-index:-1;background:#FF3B30;opacity:0;pointer-events:none}
 .map-news.flash::after{animation:mnBlink 1s ease-in-out .4s 4}
 @keyframes mnBlink{0%,100%{opacity:0}45%{opacity:.55}}
+/* the two slides sit on top of each other, so the strip stays the same height as they swap */
+.mn-slides{flex:1;min-width:0;display:grid}
+.mn-slide{grid-area:1/1;min-width:0;display:flex;align-items:center;gap:10px}
+.mn-slide[hidden]{display:none}
+.mn-slide.off{visibility:hidden}
+.mn-slide.off.leave{animation:mnOut .35s ease-in both}
+.mn-slide.in{animation:mnIn .5s cubic-bezier(.2,.9,.3,1) .12s both}
+@keyframes mnOut{from{visibility:visible}to{transform:translateY(-80%);opacity:0;visibility:hidden}}
 .mn-tag{flex:none;display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:#FF3B30;font:700 .647rem/1 var(--font);letter-spacing:.06em;text-transform:uppercase}
 .mn-tag i{position:relative;width:7px;height:7px;border-radius:50%;background:#fff}
 .mn-tag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:nbPing 1.6s ease-out infinite}
 @keyframes nbPing{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
+.mn-fig .mn-tag{background:#0A84FF;padding-left:6px}
 .mn-stage{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px}
 .mn-stage.in{animation:mnIn .45s cubic-bezier(.2,.9,.3,1) both}
 @keyframes mnIn{from{transform:translateY(70%);opacity:0}}
 .mn-head{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;text-decoration:none;font:600 .941rem/1.3 var(--font);letter-spacing:-.02em}
+button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer;touch-action:manipulation}
 .mn-head:hover{text-decoration:underline}
+.mn-head:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:4px}
 .mn-meta{flex:none;font-size:.765rem;color:rgba(255,255,255,.7);white-space:nowrap}
 .mn-count{flex:none;font-size:.706rem;font-weight:600;color:rgba(255,255,255,.7);font-variant-numeric:tabular-nums}
 .mn-close{flex:none;width:32px;height:32px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .mn-close svg{width:9px;height:9px}
-@media (max-width:600px){.map-news{flex-wrap:wrap;row-gap:6px;padding:8px 8px 10px 10px}.mn-count{margin-left:auto}.mn-close{margin-left:auto}.mn-count:not([hidden]) + .mn-close{margin-left:0}.mn-close{width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}.mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem}}
+@media (max-width:600px){.map-news{padding:8px 8px 10px 10px}.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
+  .mn-close{position:absolute;top:8px;right:8px;width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}
+  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem}.mn-meta{white-space:normal}}
+/* "new figures incoming": a ring that sweeps round, its arc stretching and shrinking like a download in progress */
+.fig-ring{flex:none;width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;animation:spin 1.8s linear infinite}
+.fig-ring .tr{opacity:.32}
+.fig-ring .arc{stroke-dasharray:4 100;animation:ringArc 1.5s ease-in-out infinite}
+@keyframes ringArc{0%{stroke-dasharray:4 100;stroke-dashoffset:0}50%{stroke-dasharray:62 100;stroke-dashoffset:-14}100%{stroke-dasharray:4 100;stroke-dashoffset:-96}}
+@media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
 .hero.has-news .large-title{top:calc(22px + var(--mn-h,0px))}
 .hero.has-news .wx-ctl{top:calc(22px + var(--mn-h,0px))}
@@ -281,7 +301,9 @@ html.map-full,html.map-full body{overflow:hidden}
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 8px rgba(0,0,0,.55)}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
-.hero-fresh.live > i{background:#fff;animation:pulse 1.4s ease-in-out infinite}
+.hero-fresh .fig-ring{display:none;width:12px;height:12px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))}
+.hero-fresh.live > i{display:none}
+.hero-fresh.live .fig-ring{display:block}
 .fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
 .fu-btn::after{content:"";position:absolute;inset:-12px -8px}   /* a comfortable tap target */
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
@@ -316,7 +338,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .chip i.moderate{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25)}
 .chip i.rough{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.25)}
 .chip i.none{background:rgba(255,255,255,.45);box-shadow:none}
-.chip i.wait{background:#fff;animation:pulse 1.4s ease-in-out infinite}
+.chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
 @keyframes pulse{50%{opacity:.3}}
 .chip .up{color:#FFB4AE}.chip .down{color:#9CF0B4}
 button.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulation;transition:background-color .2s}
@@ -387,19 +409,6 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
 .fu-clock .fu-hour{transform-origin:60px 60px;animation:spin 144s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* the daily update notice: from 12:00 UK time until the new figures are in */
-.card.sync-box{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:16px 52px 16px 16px;animation:syncIn .45s cubic-bezier(.2,.9,.3,1.2) both}
-@keyframes syncIn{from{opacity:0;transform:translateY(-8px) scale(.98)}}
-.sync-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
-.sync-ic svg{width:24px;height:24px;animation:spin 1s linear infinite}
-.sync-top{display:flex;justify-content:space-between;gap:8px;font-size:.765rem;color:var(--label2)}
-.sync-title{font-weight:600;font-size:1.06rem;letter-spacing:-.024em;margin:2px 0}
-.sync-text{font-size:.882rem;color:var(--label2);margin:0}
-.sync-x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%;color:var(--label2)}
-.sync-x span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center}
-.sync-x svg{width:10px;height:10px}
-.sync-x:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){.card.sync-box,.sync-ic svg{animation:none}}
 
 .fu-pop p{padding-right:18px}
 .fu-pop .fu-today{margin:4px 0 0;padding-top:8px;border-top:.5px solid var(--sep);color:var(--label);font-weight:600}
@@ -835,15 +844,24 @@ footer strong{color:var(--label);font-weight:600}
     </svg>
   </div>
 
-  <!-- Breaking news about small boats, from UK news outlets (news.json, updated hourly) -->
+  <!-- Across the top of the map: breaking news about small boats from UK news outlets (news.json, updated hourly),
+       and from 12:00 UK time until the new figures are in, the daily update. When both are on they take turns. -->
   <aside class="map-news" id="news" aria-label="Breaking news" hidden>
-    <span class="mn-tag"><i aria-hidden="true"></i>Breaking</span>
-    <div class="mn-stage" id="newsStage"><a class="mn-head" id="newsHead" href="#" target="_blank" rel="noopener"></a><span class="mn-meta"><span id="newsSrc"></span> · <span id="newsAge"></span></span></div>
-    <span class="mn-count" id="newsCount" aria-hidden="true" hidden></span>
+    <div class="mn-slides">
+      <div class="mn-slide" id="newsSlide" hidden>
+        <span class="mn-tag"><i aria-hidden="true"></i>Breaking</span>
+        <div class="mn-stage" id="newsStage"><a class="mn-head" id="newsHead" href="#" target="_blank" rel="noopener"></a><span class="mn-meta"><span id="newsSrc"></span> · <span id="newsAge"></span></span></div>
+        <span class="mn-count" id="newsCount" aria-hidden="true" hidden></span>
+      </div>
+      <div class="mn-slide mn-fig" id="figSlide" role="status" hidden>
+        <span class="mn-tag"><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span>Updating</span></span>
+        <div class="mn-stage"><button type="button" class="mn-head" id="figHead" aria-expanded="false" aria-controls="popFU">New figures incoming from the Home Office</button><span class="mn-meta">Since 12:00 · Can take up to an hour</span></div>
+      </div>
+    </div>
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
@@ -871,7 +889,7 @@ footer strong{color:var(--label);font-weight:600}
       <span class="chip" id="chipYear" hidden></span>
       <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
-      <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><i class="wait"></i><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
   </div>
   <svg class="scroll-cue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
@@ -898,19 +916,6 @@ footer strong{color:var(--label);font-weight:600}
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 
 <main id="main">
-
-  <!-- Shown from 12:00 UK time while the daily update is running, until the new figures are in -->
-  <section class="wide sync-wrap" id="syncWrap" hidden>
-    <div class="card sync-box" id="syncNote" role="status" aria-live="polite">
-      <div class="sync-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 1 1-9 9"/></svg></div>
-      <div>
-        <div class="sync-top"><span>Daily update</span><span id="syncTime">Since 12:00</span></div>
-        <p class="sync-title">New figures incoming</p>
-        <p class="sync-text">A data download is in progress. New figures are being retrieved from the Home Office. This can take up to 1 hour. Please wait.</p>
-      </div>
-      <button type="button" class="sync-x" id="syncClose" aria-label="Close the new figures notice"><span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></button>
-    </div>
-  </section>
 
   <!-- ============================================================ AT A GLANCE -->
   <section class="wide" aria-labelledby="hGlance">
@@ -1868,9 +1873,9 @@ footer strong{color:var(--label);font-weight:600}
   }
   function liveUi(){
     const on = pending(), live = $("chipLive");
-    // the notice box: shows while new figures are awaited, unless it was closed today
+    // the daily update in the strip across the top of the map: shows while new figures are awaited, unless it was closed today
     let closed = ""; try{ closed = localStorage.getItem("syncClosed"); }catch(e){}
-    $("syncWrap").hidden = !on || closed === ukToday();
+    showFigures(on && closed !== ukToday());
     live.hidden = !on; if(!on) closePop(live);
     const at = meta && meta.checkedAt ? new Date(meta.checkedAt) : null;
     $("fuToday").textContent = haveYesterday()
@@ -1901,7 +1906,7 @@ footer strong{color:var(--label);font-weight:600}
   function openPop(chip, pop){ clearTimeout(hideT); if(cur && cur.pop !== pop) closePop(); if(cur && cur.chip !== chip){ cur.chip.setAttribute("aria-expanded","false"); chip.setAttribute("aria-expanded","true"); cur.chip = chip; } if(cur) return placePop(); pop.hidden = false; chip.setAttribute("aria-expanded","true"); cur = {chip, pop}; placePop(); }
   function closePop(chip){ clearTimeout(hideT); if(!cur || (chip && cur.chip !== chip)) return; cur.pop.hidden = true; cur.chip.setAttribute("aria-expanded","false"); cur = null; }
   const later = () => { clearTimeout(hideT); hideT = setTimeout(() => closePop(), 180); };
-  document.querySelectorAll("button.chip[aria-controls], #fuBtn").forEach(chip => {
+  document.querySelectorAll("button.chip[aria-controls], #fuBtn, #figHead").forEach(chip => {
     const pop = $(chip.getAttribute("aria-controls")); let lastType = "";
     chip.addEventListener("pointerdown", e => { lastType = e.pointerType; });
     chip.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") openPop(chip, pop); });
@@ -1943,7 +1948,6 @@ footer strong{color:var(--label);font-weight:600}
     }catch(e){ /* try again next time */ }
     liveUi();
   }
-  $("syncClose").addEventListener("click", () => { try{ localStorage.setItem("syncClosed", ukToday()); }catch(e){} $("syncWrap").hidden = true; });
   function tick(){
     if(document.hidden || !days.length) return;
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
@@ -2865,14 +2869,42 @@ footer strong{color:var(--label);font-weight:600}
     btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
     setTimeout(() => { btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); refreshLatest(); }, 2500);
   });
-  /* ---------------------------------------------------- breaking news, across the top of the map */
-  // Small boats stories from UK outlets published in the last 3 hours. It flashes when a new story comes in;
+  /* ---------------------------------------------------- the strip across the top of the map: breaking news and the daily update */
+  // Breaking news: small boats stories from UK outlets published in the last 3 hours. It flashes when a new story comes in;
   // closing it hides it until a newer one. Checked on load and every 10 minutes.
-  const NEWS_MAX_H = 3, NEWS_EACH = 7000;
-  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsTimer = null;
+  // The daily update, "New figures incoming": from 12:00 UK time until the new figures are in, unless closed today (liveUi).
+  // When both are on they take turns: the news for 15 seconds, then the daily update, then back. Pointing at the strip holds it.
+  const NEWS_MAX_H = 3, NEWS_EACH = 7500, NEWS_TURN = 15000, FIG_TURN = 15000;
+  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
   const seenGet = () => { try{ return localStorage.getItem("newsSeen"); }catch(e){ return null; } };
   const agoShort = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4)); return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m / 60) + (Math.round(m / 60) === 1 ? " hour ago" : " hours ago"); };
-  function newsRoom(){ const box = $("news"), on = !box.hidden; hero.classList.toggle("has-news", on); hero.style.setProperty("--mn-h", on ? box.offsetHeight + 10 + "px" : "0px"); }
+  function newsRoom(){
+    const box = $("news"), on = !box.hidden, h = on ? box.offsetHeight + 10 : 0;
+    hero.classList.toggle("has-news", on); hero.style.setProperty("--mn-h", h + "px");
+    if(h !== roomH){ roomH = h; setTimeout(placeTowns, 600); }   // once the strip has dropped in, the place names keep clear of it
+  }
+  function setSlide(which, animate){
+    const on = $(which === "news" ? "newsSlide" : "figSlide"), off = $(which === "news" ? "figSlide" : "newsSlide");
+    slide = which; turnMs = storyMs = 0; animate = animate && !reduced;
+    on.classList.remove("off", "leave", "in");
+    off.classList.remove("in"); off.classList.add("off"); off.classList.toggle("leave", animate);
+    if(animate){ on.offsetWidth; on.classList.add("in"); }
+    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : "Daily update");
+    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : "Close the new figures notice for today");
+  }
+  function stripUpdate(){
+    const box = $("news");
+    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
+    if(!newsOn && !figOn){ box.hidden = true; slide = ""; newsRoom(); return; }
+    const want = slide === "news" && newsOn || slide === "fig" && figOn ? slide : newsOn ? "news" : "fig";
+    if(box.hidden || want !== slide) setSlide(want, !box.hidden);
+    box.hidden = false; newsRoom();
+  }
+  function showFigures(on){
+    if(on === figOn) return;
+    figOn = on; if(!on) closePop($("figHead"));
+    stripUpdate();
+  }
   function showStory(i, animate){
     const it = newsItems[i]; if(!it) return;
     newsIdx = i;
@@ -2887,22 +2919,34 @@ footer strong{color:var(--label);font-weight:600}
     try{
       const n = await getJSON("news.json"), box = $("news");
       const items = (n.items || []).filter(x => x.breaking && x.url && /^https?:/.test(x.url) && Date.now() - new Date(x.published) < NEWS_MAX_H * 36e5);
-      clearInterval(newsTimer);
-      if(!items.length || seenGet() === items[0].url){ box.hidden = true; newsRoom(); return; }
+      if(!items.length || seenGet() === items[0].url){ newsOn = false; stripUpdate(); return; }
       const fresh = newsShown !== items[0].url;
-      newsItems = items.slice(0, 3);
-      box.hidden = false;
+      newsItems = items.slice(0, 3); newsOn = true;
       showStory(fresh ? 0 : Math.min(newsIdx, newsItems.length - 1), false);
       $("newsCount").hidden = newsItems.length < 2;
-      if(newsItems.length > 1 && !reduced) newsTimer = setInterval(() => { if(!document.hidden && !box.matches(":hover")) showStory((newsIdx + 1) % newsItems.length, true); }, NEWS_EACH);
+      if(fresh && slide === "fig") setSlide("news", true);   // a new story goes straight up
+      stripUpdate();
       if(fresh){ box.classList.remove("flash"); box.style.animation = "none"; box.offsetWidth; box.style.animation = ""; box.classList.add("flash"); }
       newsShown = items[0].url;
-    }catch(e){ /* no news strip if the file can't be read */ }
+    }catch(e){ /* no news if the file can't be read */ }
   }
+  // Takes turns while both are on, and moves through the stories; holds still while pointed at or in use
+  setInterval(() => {
+    const now = performance.now(), dt = Math.min(1000, now - (lastTick || now)), box = $("news"); lastTick = now;
+    if(box.hidden || document.hidden || box.matches(":hover") || box.querySelector(":focus-visible") || $("figHead").getAttribute("aria-expanded") === "true") return;
+    turnMs += dt;
+    if(newsOn && figOn && turnMs >= (slide === "news" ? NEWS_TURN : FIG_TURN)){
+      setSlide(slide === "news" ? "fig" : "news", true);
+      if(slide === "news" && newsItems.length > 1) showStory((newsIdx + 1) % newsItems.length, false);   // back to the news: the next story
+      return;
+    }
+    if(slide === "news" && newsItems.length > 1 && !reduced && (storyMs += dt) >= NEWS_EACH){ storyMs = 0; showStory((newsIdx + 1) % newsItems.length, true); }
+  }, 250);
   $("newsClose").addEventListener("click", e => {
     e.stopPropagation();
-    try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){}
-    clearInterval(newsTimer); $("news").hidden = true; newsRoom();
+    if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
+    else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
+    stripUpdate();
   });
   addEventListener("resize", newsRoom);
 
