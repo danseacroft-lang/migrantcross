@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-02T20:21:59Z",
+ "checkedAt": "2026-10-02T21:22:52Z",
  "items": [
   {
-   "title": "Two Iranians who arrived on small boats charged with plotting terror attack in UK",
-   "url": "https://www.gbnews.com/news/iran-news-men-arrested-suspected-terror-plot-british-jews",
-   "source": "GB News",
-   "published": "2026-10-02T19:40:06Z",
+   "title": "Tories promise to build 50,000 new prison places",
+   "url": "https://www.bbc.co.uk/news/articles/ck9qrqq53nj3o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T21:11:04Z",
+   "breaking": true
+  },
+  {
+   "title": "Man jailed for piloting small boat carrying 26 others",
+   "url": "https://www.bbc.co.uk/news/articles/cmy83xpg9p5eo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T20:21:09Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/sport/cricket/brydon-carse-cricket-regulator-nightclub-incident",
    "source": "GB News",
    "published": "2026-10-02T18:52:36Z",
-   "breaking": true
-  },
-  {
-   "title": "Polanski calls for three-year cap on rents",
-   "url": "https://www.bbc.co.uk/news/videos/cqlyeg7rx4rjo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-02T18:43:30Z",
    "breaking": true
   }
  ]
