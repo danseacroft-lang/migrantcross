@@ -157,7 +157,7 @@ button,input,select,textarea{font:inherit}
 .wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
 .wx-full svg{width:17px;height:17px}
 /* the layer picker: a frosted card of tiles, like Apple Maps' map chooser */
-.am-pick{position:absolute;top:44px;right:0;z-index:5;width:288px;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
+.am-pick{position:absolute;top:44px;right:0;z-index:5;width:288px;max-height:calc(100svh - 24px);overflow:auto;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
 @keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
 .am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
 .am-pick-h b{font:700 1.06rem/1 var(--font);letter-spacing:-.02em}
@@ -178,7 +178,7 @@ button,input,select,textarea{font:inherit}
 .wx-time span{min-width:74px;text-align:right}
 .am-play{width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .am-play svg{width:13px;height:13px}.am-play .pa,.am-play[aria-pressed="true"] .pl{display:none}.am-play[aria-pressed="true"] .pa{display:block}
-.wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:4px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.28) var(--p,0%));touch-action:manipulation;cursor:pointer}
+.wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:28px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.28) var(--p,0%)) 0 50%/100% 4px no-repeat;touch-action:manipulation;cursor:pointer}
 .wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
 .wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
 /* place names in the style of Ventusky: dark navy Helvetica, a ring for each town, bigger places in bold, names centred above */
@@ -289,7 +289,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .mn-head:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:4px}
 .mn-meta{flex:none;font-size:.765rem;color:rgba(255,255,255,.7);white-space:nowrap}
 .mn-count{flex:none;font-size:.706rem;font-weight:600;color:rgba(255,255,255,.7);font-variant-numeric:tabular-nums}
-.mn-close{flex:none;width:32px;height:32px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
+.mn-close{position:relative;flex:none;width:32px;height:32px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .mn-close svg{width:9px;height:9px}
 @media (max-width:600px){.map-news{padding:8px 8px 10px 10px}.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
   .mn-close{position:absolute;top:8px;right:8px;width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}
@@ -424,7 +424,7 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 /* ------------------------------------------------------------ layout */
 main > section,.card,.bento > *{min-width:0}
 main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:grid;gap:40px}
-.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 12px}
+.section-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 12px}
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
 .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
@@ -595,7 +595,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .minibars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
 .minibars span{flex:none;width:100%;min-height:4px;border-radius:6px;background:var(--teal);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .on .minibars span{transform:scaleY(1)}
-.minibars em{font-style:normal;font-size:.588rem;color:var(--label2);font-weight:600}
+.minibars em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .vs div{background:var(--fill);border-radius:16px;padding:12px 14px}
 .vs b{display:block;font:700 1.6rem/1.1 var(--round)}
@@ -639,12 +639,12 @@ footer strong{color:var(--label);font-weight:600}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
 /* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
-.beta{position:relative;flex:none;pointer-events:auto}
+.beta{position:static;flex:none;pointer-events:auto}
 .beta-pill{appearance:none;border:0;min-height:40px;padding:0 15px;border-radius:999px;display:inline-flex;align-items:center;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
   background:var(--fill,rgba(118,118,128,.12));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);transition:transform .2s ease}
 .beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
-.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);left:0;width:max-content;max-width:min(300px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 14.5px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
+.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:max-content;max-width:min(300px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 14.5px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
   background:color-mix(in srgb,var(--card) 92%,transparent);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:0 10px 30px rgba(0,0,0,.16);
   opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
 .beta-tip b{display:block;margin-bottom:3px;font-weight:600}
@@ -653,11 +653,30 @@ footer strong{color:var(--label);font-weight:600}
 @media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}.beta-pill{padding:0 12px}}   /* small phones: both still fit */
 .top-theme button{min-height:34px;padding:0 13px}
 
+/* ------------------------------------------------------------ phones: room, safe areas and sideways */
+html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
+@media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
+/* small buttons keep their look but get a finger-sized tap area */
+.large-title .lt-logo,#wxPlay{position:relative}
+.mn-close::after,.large-title .lt-logo::after,#wxPlay::after{content:"";position:absolute;inset:-8px}
+@media (max-width:600px){.mn-head{min-height:2.6em}}   /* one line or two, the strip stays the same height */
+/* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
+.hero.full #lmap .leaflet-bottom .leaflet-control{margin-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.hero.full #lmap .leaflet-right .leaflet-control{margin-right:max(12px,env(safe-area-inset-right,0px))}
+.hero.full #lmap .leaflet-left .leaflet-control{margin-left:max(12px,env(safe-area-inset-left,0px))}
+.hero.full .map-news{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px))}
+/* phones on their side: the map fills the screen and the number shrinks to fit */
+@media (max-height:500px) and (orientation:landscape){
+  .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
+  .big{font-size:clamp(3rem,13vh,5rem)}
+  .hero-chips{margin-top:10px}
+}
+
 /* ------------------------------------------------------------ smaller screens */
 @media (max-width:900px){
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
   .b-ring{grid-row:auto}
-  .duo{grid-template-columns:1fr}
+  .duo{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
@@ -676,7 +695,6 @@ footer strong{color:var(--label);font-weight:600}
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
-  .otd-years b{font-size:.588rem}
 }
 /* ------------------------------------------------------------ accessibility settings */
 @media (prefers-reduced-motion:reduce){
@@ -790,9 +808,9 @@ footer strong{color:var(--label);font-weight:600}
 .mb .tbl .up{color:var(--red-t)}.mb .tbl .down{color:var(--green-t)}
 .mb .tbl-wrap{overflow-x:auto}
 .mb .calc-card{padding:14px 16px;display:grid;gap:12px}
-.mb .calc-dates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mb .calc-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
-.mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:10px;min-height:44px;padding:0 10px;width:100%}
+.mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:10px;min-height:44px;padding:0 10px;width:100%;min-width:0}
 .mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .mb .presets{display:flex;flex-wrap:wrap;gap:6px}
 .mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--label);font:600 .765rem/1 var(--font);border-radius:9px;padding:0 12px;height:34px;cursor:pointer}
@@ -1197,7 +1215,7 @@ footer strong{color:var(--label);font-weight:600}
       </div>
       <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
         <label class="sr" for="subEmail">Email address</label>
-        <input type="email" id="subEmail" name="field_0" placeholder="Email address" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+        <input type="email" id="subEmail" name="field_0" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
         <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" id="subBtn">Subscribe</button>
       </form>
@@ -1359,14 +1377,14 @@ footer strong{color:var(--label);font-weight:600}
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
-      .on("click", e => { L.DomEvent.stopPropagation(e); e.target.toggleTooltip(); }))).addTo(LM);
+      .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
-    // the extra town names, added biggest first after the ones in the page
-    getJSON("towns.json").then(a => {
+    // the extra town names, added biggest first after the ones in the page, once the page has settled
+    whenIdle(() => getJSON("towns.json").then(a => {
       const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
       places = places.concat(extra).sort((x, y) => x.rank - y.rank);   // a stable sort: the page's own towns stay ahead within each rank
       placeTowns();
-    }).catch(() => {});
+    }).catch(() => {}), 3000);
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     L.control.zoom({position:"bottomright"}).addTo(LM);
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
@@ -1382,6 +1400,7 @@ footer strong{color:var(--label);font-weight:600}
     LM.on("mousemove", e => { hoverAt = e; if(!hoverRaf) hoverRaf = requestAnimationFrame(showHover); });
     LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
   }
+  function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
   // Full screen: drag, pinch and scroll to zoom anywhere, on phones too (in the page, phones keep the map still so it scrolls)
   const isFull = () => hero.classList.contains("full");
   function setFull(on){
@@ -1393,7 +1412,8 @@ footer strong{color:var(--label);font-weight:600}
       const want = on || (!touchOnly && (h === "dragging" || h === "doubleClickZoom"));
       want ? LM[h].enable() : LM[h].disable();
     });
-    LM.closePopup(); fitW = 0; fitMap();
+    if(on) hero.style.minHeight = "";
+    LM.closePopup(); fitW = 0; fitMap(); if(!on) fitHero();
   }
   $("wxFull").addEventListener("click", e => { e.stopPropagation(); setFull(!isFull()); });
   document.addEventListener("keydown", e => { if(e.key === "Escape" && isFull() && !cur) setFull(false); });
@@ -1420,7 +1440,7 @@ footer strong{color:var(--label);font-weight:600}
   function placeTowns(){
     if(!LM) return;
     const z = LM.getZoom(), sz = LM.getSize(), mr = $("lmap").getBoundingClientRect(), view = LM.getBounds().pad(.05);
-    const taken = coverRects().map(b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6]);
+    const taken = coverRects().concat(!$("straitLbl").getClientRects().length ? [] : [$("straitLbl").getBoundingClientRect()]).map(b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6]);
     const hit = q => taken.some(t => q[0] < t[2] && q[2] > t[0] && q[1] < t[3] && q[3] > t[1]);
     for(const t of places){
       let show = z >= RANK_ZOOM[t.rank] && view.contains([t.lat, t.lon]), box;
@@ -1815,7 +1835,7 @@ footer strong{color:var(--label);font-weight:600}
     const moved = !pin || !pin.getLatLng().equals(ll);
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
-    if(vw < 600){   // phones: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
+    if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup(); ptAt = ll;
       const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
@@ -1941,7 +1961,16 @@ footer strong{color:var(--label);font-weight:600}
   // on resize, wait for it to settle, and skip when the map's size hasn't changed (phones' toolbars come and go as you scroll)
   let fitT = 0, fitSz = "";
   fitMap(); fitSz = hero.clientWidth + "x" + hero.clientHeight;
-  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
+  // Small or busy phones: the map card grows just enough that the big number never runs into the weather buttons
+  function fitHero(){
+    if(hero.classList.contains("full")) return;
+    const was = hero.style.minHeight; hero.style.minHeight = "";
+    const gap = Math.ceil($("wxCtl").getBoundingClientRect().bottom + 12 - hero.querySelector(".hero-in").getBoundingClientRect().top);
+    if(gap > 0) hero.style.minHeight = hero.offsetHeight + gap + "px";
+    const sz = hero.clientWidth + "x" + hero.clientHeight;
+    if(hero.style.minHeight !== was && sz !== fitSz){ fitSz = sz; fitMap(); }
+  }
+  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { fitHero(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
   play();
 
   // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
@@ -1961,7 +1990,7 @@ footer strong{color:var(--label);font-weight:600}
   function placeTip(){
     if(!tipBoat || tip.hidden) return;
     const r = tipBoat.g.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, cx = r.left + r.width / 2;
-    let top = r.top - h - 8; const below = top < 70; if(below) top = r.bottom + 8;
+    let top = r.top - h - 8; const below = top < 70; if(below) top = Math.max(70, Math.min(r.bottom + 8, innerHeight - h - 8));
     tip.style.left = Math.min(Math.max(12, cx - w / 2), innerWidth - w - 12) + "px"; tip.style.top = top + "px";
     tip.style.setProperty("--from", (below ? "top " : "bottom ") + "center");
   }
@@ -1989,12 +2018,14 @@ footer strong{color:var(--label);font-weight:600}
 
   /* ---------------------------------------------------- data */
   let days = [], meta = null;
-  function allDays(){   // every calendar day, gaps as zero
+  let allFor = null, allOut = null;
+  function allDays(){   // every calendar day, gaps as zero (worked out once per set of figures)
+    if(allFor === days) return allOut;
     const out = [], by = new Map(days.map(d => [d.date, d]));
     for(let t = parse(days[0].date).getTime(), end = parse(days[days.length-1].date).getTime(); t <= end; t += DAY){
       const iso = new Date(t).toISOString().slice(0,10); out.push(by.get(iso) || {date:iso, migrants:0, boats:0});
     }
-    return out;
+    allFor = days; return allOut = out;
   }
   const sum = (a, k) => a.reduce((s, d) => s + (d[k] || 0), 0);
 
@@ -2015,7 +2046,7 @@ footer strong{color:var(--label);font-weight:600}
     const pct = prev ? Math.round((ytd / prev - 1) * 100) : null;
     const c = $("chipYear"); c.hidden = false;
     c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>" : "");
-    liveUi();
+    liveUi(); fitHero();
   }
 
   /* ---------------------------------------------------- "New figures incoming": from noon until yesterday's figures are in */
@@ -2259,7 +2290,8 @@ footer strong{color:var(--label);font-weight:600}
     heatCols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7); sizeHeat();
     ddNotes[1] = yr + " · " + fmt(inYear.filter(d => d.migrants > 0).length) + " days with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
     whenDd(1, () => $("heat").classList.add("show"));
-    const sc = $("heatScroll"); sc.scrollLeft = sc.scrollWidth;
+    const sc = $("heatScroll"), now = $("heat").querySelector("i.fut");   // today at the right edge, not the empty weeks to come
+    sc.scrollLeft = now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
   }
   // squares grow to fill wide screens (53 weeks), and stay finger-sized on phones (the grid scrolls)
   let heatCols = 53;
@@ -3036,7 +3068,7 @@ footer strong{color:var(--label);font-weight:600}
   const agoShort = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4)); return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m / 60) + (Math.round(m / 60) === 1 ? " hour ago" : " hours ago"); };
   function newsRoom(){
     const box = $("news"), on = !box.hidden, h = on ? box.offsetHeight + 10 : 0;
-    hero.classList.toggle("has-news", on); hero.style.setProperty("--mn-h", h + "px");
+    hero.classList.toggle("has-news", on); hero.style.setProperty("--mn-h", h + "px"); fitHero();
     if(h !== roomH){ roomH = h; setTimeout(placeTowns, 600); }   // once the strip has dropped in, the place names keep clear of it
   }
   function setSlide(which, animate){
@@ -3106,7 +3138,8 @@ footer strong{color:var(--label);font-weight:600}
   });
   addEventListener("resize", newsRoom);
 
-  start(); loadWeather(); loadGrid(); loadNews();
+  start(); loadWeather(); loadNews();
+  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }

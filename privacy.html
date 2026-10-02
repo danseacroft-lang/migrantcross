@@ -52,6 +52,8 @@ h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0 0 6px; text-a
   letter-spacing:-.005em; margin:0 0 8px; padding-inline:16px;
 }
 .policy-box + .section-label{margin-top:32px}
+/* phones: the text runs on down the page, no box that scrolls inside the page */
+@media (max-width:600px){.policy-box{height:auto !important; overflow:visible !important}}
 
 /* Each document scrolls inside its own box */
 .policy-box{
