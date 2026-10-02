@@ -5,7 +5,7 @@ A one-page site showing how many people cross the English Channel in small boats
 ## Files
 
 - `index.html` – the page
-- `privacy.html` – the Privacy Policy and Terms of Use, linked from the page footer
+- `privacy.html` – the Privacy Policy and Terms of Use, linked from the email sign-up
 - `favicon.svg` – the CC logo shown in the browser tab
 - `apple-touch-icon.png` – the icon used when someone adds the site to their iPhone home screen
 - `logo-badge.png` – the full Channel Crossings badge, for your X profile and elsewhere
@@ -16,7 +16,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `status.json` – a tiny heartbeat written at every check, so open pages know when the site last looked and when to fetch new figures
 - `gender.json`, `nationalities.json`, `perboat.json`, `returns.json`, `petitions.json` – sex and age, nationalities, people per boat, UK–France returns and related petitions, all gathered automatically by `scripts/extras.py`
 - `requirements.txt` – the Python packages the update job installs
-- `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
+- `data.csv` – the same daily figures as a spreadsheet download
 - `how-it-works.html` – where the figures come from
 - `embed.html` – the small "latest figure" box other sites can embed
 - `beach-radar.html` – Beach Radar, a coming-soon page (not listed in search engines)
