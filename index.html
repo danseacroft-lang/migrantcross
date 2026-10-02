@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Crossings">
 <title>Channel Crossings: Daily Small Boat Arrivals to the UK</title>
-<!-- Link previews on X and other sites. If the domain changes, replace the address in the four lines that contain it. -->
+<!-- Link previews on X and other sites. If the domain changes, replace the address everywhere it appears (search for channelcrossings.world, here and in scripts/). -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Channel Crossings">
 <meta property="og:title" content="Channel Crossings: daily small boat arrivals">
@@ -54,6 +54,11 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
+<!-- start talking to the map, tile and weather servers straight away -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://server.arcgisonline.com">
+<link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
+<link rel="preconnect" href="https://marine-api.open-meteo.com" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 /* ------------------------------------------------------------ tokens (Apple system colours) */
@@ -63,9 +68,8 @@
   --label:#000; --label2:rgba(60,60,67,.72); --label3:rgba(60,60,67,.36); --sep:rgba(60,60,67,.18);
   --blue:#007AFF; --green:#34C759; --green-t:#248A3D; --orange:#FF9500; --red:#FF3B30; --red-t:#D70015; --indigo:#5856D6; --teal:#30B0C7; --pink:#FF2D55;
   --glass:rgba(255,255,255,.72); --bar:rgba(246,246,248,.78);
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07);
-  --sea1:#6CB8F0; --sea2:#2E86D1; --sea3:#1B64A8; --land:#E4EBDD; --land2:#CBD8C1; --coast:rgba(255,255,255,.9); --maptext:rgba(40,52,40,.55); --cloud:#E3E8EF; --cloud-edge:#AEB7C4; --shelf:#9FD6FA; --town:#33413A; --halo:rgba(255,255,255,.8); --dot:#5E6B62;
-  --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-foam:#FFFFFF; --ta-tube1:#9AA3AF; --ta-tube2:#5B6472; --ta-tube3:#3A414C; --ta-rope:#E5E7EB; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
+  --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:var(--font);   /* one font across the site */
 }
@@ -75,9 +79,8 @@
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45);
-  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0); --shelf:#1B4E78; --town:#D5DED6; --halo:rgba(0,0,0,.6); --dot:#AEB9B0;
-  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -85,9 +88,8 @@
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45);
-  --sea1:#123E66; --sea2:#0B2C4C; --sea3:#061A30; --land:#1D2620; --land2:#26322A; --coast:rgba(170,200,230,.55); --maptext:rgba(210,225,210,.45); --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0); --shelf:#1B4E78; --town:#D5DED6; --halo:rgba(0,0,0,.6); --dot:#AEB9B0;
-  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-foam:#9CC8F0; --ta-tube1:#7C8591; --ta-tube2:#454C58; --ta-tube3:#252A33; --ta-rope:#C7CBD1; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -105,19 +107,9 @@ button,input,select,textarea{font:inherit}
 .nav{position:fixed;inset:0 0 auto;z-index:50;height:calc(52px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;transition:background-color .3s ease,border-color .3s ease;border-bottom:.5px solid transparent}
 .nav.solid{background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom-color:var(--sep)}
-/* Beta switch: turn it off to go back to the current site */
-.bswitch{justify-self:start;position:relative;display:inline-flex;align-items:center;gap:9px;min-height:44px;cursor:pointer;font-weight:600;font-size:.941rem}
-.bswitch input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
-.bswitch i{position:relative;width:51px;height:31px;border-radius:16px;background:var(--fill2);transition:background .25s ease}
-.bswitch i::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 3px 1px rgba(0,0,0,.06);transition:transform .28s cubic-bezier(.3,.7,.3,1.1)}
-.bswitch input:checked + i{background:linear-gradient(135deg,#5E5CE6,#0A84FF)}
-.bswitch input:checked + i::after{transform:translateX(20px)}
-.bswitch input:focus-visible + i{outline:2px solid var(--blue);outline-offset:2px}
 .nav-title{font-weight:600;font-size:1rem;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;white-space:nowrap}
 .nav.solid .nav-title{opacity:1;transform:none}
 .nav-right{justify-self:end;display:flex;align-items:center;gap:8px}
-button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipulation}
-.pill-beta{font:700 .647rem/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#5E5CE6,#0A84FF);padding:5px 8px;border-radius:999px;box-shadow:0 2px 10px rgba(10,132,255,.35)}
 .theme{width:44px;height:44px;border:0;border-radius:50%;background:var(--fill);color:var(--blue);display:grid;place-items:center;cursor:pointer}
 .theme svg{width:20px;height:20px}
 
@@ -128,7 +120,7 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
 .hero-map{position:absolute;inset:0;will-change:transform}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-/* the live weather map (Leaflet), in the style of Ventusky: wind or waves coloured across the Channel, with the wind flowing over it */
+/* the live weather map (Leaflet), in the style of Ventusky: a light grey map, the sea in one calm blue, and the weather moving over it */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
 .wx-heat{mix-blend-mode:multiply}   /* the sea colour tints the map, so its texture still shows */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
@@ -136,32 +128,29 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 #map .boat{pointer-events:auto}
 #lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
 #lmap .leaflet-control-attribution a{color:inherit}
-#lmap .leaflet-bar{border:0;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.16),0 6px 20px rgba(0,0,0,.22)}
-#lmap .leaflet-bar a{width:44px;height:44px;line-height:44px;font:400 22px/44px var(--font);background:rgba(30,30,32,.58);color:#fff;border-color:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%)}
-#lmap .leaflet-bar a:hover{background:rgba(44,44,46,.72)}
-#lmap .leaflet-bar a.leaflet-disabled{color:rgba(255,255,255,.35)}
-#lmap .leaflet-bar{border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
-#lmap .leaflet-bar a{width:36px;height:40px;font:500 20px/40px var(--font);background:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.18)}
+#lmap .leaflet-bar{border:0;overflow:hidden;border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+#lmap .leaflet-bar a{width:36px;height:40px;font:500 20px/40px var(--font);background:none;color:#fff;border-color:rgba(255,255,255,.18)}
 #lmap .leaflet-bar a:hover{background:rgba(255,255,255,.12)}
+#lmap .leaflet-bar a.leaflet-disabled{color:rgba(255,255,255,.35)}
 #lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
-/* Map controls in the style of Apple Maps: frosted dark glass, rounded rectangles, SF type */
-.wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff;--glass:rgba(30,30,32,.58);--edge:rgba(255,255,255,.16)}
+/* Map controls: frosted pills, matching the buttons along the bottom of the map */
+.wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
 .am-top{display:flex;gap:8px;align-items:center}
-.am-btn,.am-pill,.am-pick{background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px var(--edge),0 6px 20px rgba(0,0,0,.22)}
-.am-btn{flex:none;height:44px;min-width:44px;border:0;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
+.am-btn,.am-pill{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+.am-btn{position:relative;flex:none;height:36px;min-width:36px;border:0;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
+.am-btn::after{content:"";position:absolute;inset:-4px}   /* still a 44pt tap target */
 .am-btn:active{transform:scale(.96)}
-.am-btn svg{width:19px;height:19px}
-@media (hover:hover){.am-btn:hover{background:rgba(44,44,46,.72)}}
-.am-layer{padding:0 12px 0 11px}
+.am-btn svg{width:15px;height:15px}
+@media (hover:hover){.am-btn:hover{background:rgba(255,255,255,.26)}}
+.am-layer{padding:0 12px 0 13px}
 .am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
 .am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
-#wxLayerIc{display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--lg,#0A84FF)}
+#wxLayerIc{display:grid;place-items:center}
 #wxLayerIc svg{width:16px;height:16px}
 .wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
 .wx-full svg{width:17px;height:17px}
-/* the layer picker: a card of tiles, like Apple Maps' map chooser */
+/* the layer picker: a frosted card of tiles, like Apple Maps' map chooser */
 .am-pick{position:absolute;top:44px;right:0;z-index:5;width:288px;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
-.am-pick[hidden]{display:none}
 @keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
 .am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
 .am-pick-h b{font:700 1.06rem/1 var(--font);letter-spacing:-.02em}
@@ -174,30 +163,15 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 @media (hover:hover){.wx-seg button:hover .am-tile{background:rgba(255,255,255,.22)}}
 .wx-seg button:active .am-tile{transform:scale(.95)}
 .wx-seg button[aria-pressed="true"] .am-tile{background:rgba(255,255,255,.92);color:#1C1C1E}
-/* the key and the forecast timeline, as small frosted pills */
-.am-pill{border-radius:14px}
-.wx-time{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
-.wx-time[hidden]{display:none}
+/* the forecast timeline, as a frosted pill */
+.am-pill{border-radius:999px}
+.wx-time{display:flex;align-items:center;gap:8px;padding:3px 14px 3px 3px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
 .wx-time span{min-width:74px;text-align:right}
-.am-play{width:34px;height:34px;border:0;border-radius:10px;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
-.am-play svg{width:15px;height:15px}.am-play .pa,.am-play[aria-pressed="true"] .pl{display:none}.am-play[aria-pressed="true"] .pa{display:block}
+.am-play{width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
+.am-play svg{width:13px;height:13px}.am-play .pa,.am-play[aria-pressed="true"] .pl{display:none}.am-play[aria-pressed="true"] .pa{display:block}
 .wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:4px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.28) var(--p,0%));touch-action:manipulation;cursor:pointer}
 .wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
 .wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
-/* The map's controls match the pill buttons along the bottom of the map */
-.am-btn,.am-pill{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
-.am-btn{position:relative;height:36px;min-width:36px;border-radius:999px;font-size:.882rem}
-.am-btn::after{content:"";position:absolute;inset:-4px}   /* still a 44pt tap target */
-.am-btn svg{width:15px;height:15px}
-@media (hover:hover){.am-btn:hover{background:rgba(255,255,255,.26)}}
-.am-layer{padding:0 12px 0 13px}
-#wxLayerIc{width:auto;height:auto;border-radius:0;background:none}
-#wxLayerIc svg{width:16px;height:16px}
-.am-pill{border-radius:999px}
-.wx-time{padding:3px 14px 3px 3px}
-.am-play{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18)}
-.am-play svg{width:13px;height:13px}
-/* place names in Apple Maps' satellite style: SF type with a soft halo, a dot for towns, italic blue for water */
 /* main launch beaches: soft pulsing rings on the French coast */
 .am-launch{pointer-events:auto;cursor:pointer}
 .am-launch i,.am-launch b{position:absolute;inset:0;border-radius:50%}
@@ -212,21 +186,10 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 .am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
 .am-launch-tg::after{content:"On";margin-left:auto;font-weight:500;color:rgba(255,255,255,.7)}
 .am-launch-tg[aria-pressed="false"]::after{content:"Off"}
-.am-place{white-space:nowrap;pointer-events:none;color:#fff;font:600 12px/1 var(--font);letter-spacing:-.01em;text-shadow:0 0 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.55)}
-.am-place span{position:absolute;top:50%;transform:translateY(-50%)}
-.am-place.r span{left:8px}.am-place.l span{right:8px}
-.am-place i{position:absolute;left:-3.5px;top:-3.5px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 1.5px rgba(0,0,0,.45),0 1px 3px rgba(0,0,0,.5)}
-.am-place.big{font-size:13.5px;font-weight:700}
-.am-place.mark i{background:#FF9F0A}
-.am-place.land,.am-place.sea{transform:none}
-.am-place.land span,.am-place.sea span{left:50%;transform:translate(-50%,-50%)}
-.am-place.land{font-size:11px;font-weight:700;letter-spacing:.32em;color:rgba(255,255,255,.82)}
-.am-place.sea{font-style:italic;font-weight:500;font-size:12.5px;color:#A8D8FF;letter-spacing:.02em}
-#lmap.z-lo .am-place.r2{display:none}
 /* with a mouse: the reading under the pointer, for the layer on show */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 10px 6px 7px;border-radius:12px;color:#fff;white-space:nowrap;
   font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(30,30,32,.62);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.16),0 6px 18px rgba(0,0,0,.25);transition:opacity .15s}
-.am-hover[hidden]{display:block;opacity:0}
+.am-hover.off{opacity:0}
 .am-hover b{font-size:1rem;font-weight:700;letter-spacing:-.01em}
 .am-hover small{font-weight:600;opacity:.7}
 .am-hover em{font-style:normal;font-weight:500;opacity:.7;font-size:.765rem}
@@ -235,7 +198,6 @@ button.pill-beta{border:0;cursor:pointer;font-family:inherit;touch-action:manipu
 /* phones: the sheet a tap brings up */
 .am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
   background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
-.am-sheet[hidden]{display:none}
 .am-sheet.in{animation:sheetUp .38s cubic-bezier(.2,.9,.25,1) both}
 @keyframes sheetUp{from{transform:translateY(110%)}}
 .am-grab{position:absolute;top:6px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--label3)}
@@ -278,7 +240,6 @@ html.map-full,html.map-full body{overflow:hidden}
 /* breaking news: a strip across the top of the map that flashes when a story comes in */
 .map-news{position:absolute;z-index:4;top:12px;left:12px;right:12px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 10px;border-radius:16px;color:#fff;overflow:hidden;isolation:isolate;
   background:rgba(20,20,24,.55);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 6px 20px rgba(0,0,0,.25);animation:mnDrop .5s cubic-bezier(.2,.9,.3,1.12) both}
-.map-news[hidden]{display:none}
 @keyframes mnDrop{from{transform:translateY(-130%);opacity:0}}
 .map-news::after{content:"";position:absolute;inset:0;z-index:-1;background:#FF3B30;opacity:0;pointer-events:none}
 .map-news.flash::after{animation:mnBlink 1s ease-in-out .4s 4}
@@ -304,7 +265,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
 @media (max-width:600px){.hero.has-news .wx-ctl{top:calc(88px + var(--mn-h,0px))}}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
-/* under the title, as on the main site: how up to date the figures are, and the Figure Updates link */
+/* under the title: how up to date the figures are, and the Figure Updates link */
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 8px rgba(0,0,0,.55)}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
@@ -351,7 +312,7 @@ button.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 @media (hover:hover){button.chip:hover{background:rgba(255,255,255,.26)}}
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 
-/* ------------------------------------------------------------ Figure Updates pop-up (the same box as on the main site) */
+/* ------------------------------------------------------------ Figure Updates pop-up */
 .info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 62%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
@@ -414,9 +375,8 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
 .fu-clock .fu-hour{transform-origin:60px 60px;animation:spin 144s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* the daily update notice: from 12:00 UK time until the new figures are in, as on the old main page */
+/* the daily update notice: from 12:00 UK time until the new figures are in */
 .card.sync-box{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:16px 52px 16px 16px;animation:syncIn .45s cubic-bezier(.2,.9,.3,1.2) both}
-.sync-box[hidden]{display:none}
 @keyframes syncIn{from{opacity:0;transform:translateY(-8px) scale(.98)}}
 .sync-ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
 .sync-ic svg{width:24px;height:24px;animation:spin 1s linear infinite}
@@ -480,12 +440,11 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .ring circle{fill:none;stroke-linecap:round}
 .ring .track{stroke:var(--fill)}
 .ring .arc{stroke:url(#ringGrad);stroke-dasharray:0 999;transition:stroke-dasharray 1.6s cubic-bezier(.2,.8,.2,1)}
-.ring .arc2{stroke:var(--label3);opacity:.9}
 .ring-num{font:700 34px/1 var(--round)}
 .ring-legend{display:grid;gap:10px;font-size:.882rem}
 .ring-legend b{display:block;font:700 1.35rem/1.15 var(--round)}
 .ring-legend span{color:var(--label2);font-size:.765rem}
-/* corner pictures, as on the main site */
+/* corner pictures */
 .card.art > :not(.tile-art){position:relative;z-index:1}
 .tile-art{position:absolute;right:0;bottom:0;width:min(62%,300px);height:150px;z-index:0;pointer-events:none;opacity:var(--ta-o);
   -webkit-mask-image:linear-gradient(to left,#000 35%,transparent 95%),linear-gradient(to top,#000 55%,transparent 100%);-webkit-mask-composite:source-in;
@@ -618,7 +577,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
   .hero-in,.large-title{padding-left:20px;padding-right:20px}
-  .large-title h1{font-size:clamp(1.3rem,6.6vw,1.75rem);white-space:nowrap}
+  .large-title h1{white-space:nowrap}
   .bento{gap:12px}
   .b-week,.b-ring{grid-column:1 / -1}
   .card.b-ring{padding-bottom:100px}
@@ -640,7 +599,7 @@ footer strong{color:var(--label);font-weight:600}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
-/* ---------- Boxes from the main page (calendar, running totals, tables, calculator, patterns, dots, petitions, share, roundup) */
+/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, share, roundup) */
 .mb{--mbar:var(--blue);--bar-peak:var(--orange);--boat:#DB7100;--green-bg:rgba(52,199,89,.14)}
 :root[data-theme="dark"] .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
@@ -658,11 +617,9 @@ footer strong{color:var(--label);font-weight:600}
 .mb .sub-copy{padding-right:32px}
 .mb .sub-form,.mb .sub-msg{grid-column:1 / -1}
 .mb .subscribe{margin-top:14px;background:var(--card);border-radius:22px;box-shadow:var(--shadow)}
-.mb .subscribe[hidden]{display:none}
 .mb.area-rep{display:none}
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
-.toast{background:var(--glass)}
-.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--material);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
+.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .mb .b-close{position:absolute;z-index:2;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
 .mb .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
@@ -682,7 +639,6 @@ footer strong{color:var(--label);font-weight:600}
 .mb .tip b{display:block;font-size:.882rem;font-weight:600;margin-bottom:4px}
 .mb .tip .row{display:flex;align-items:center;gap:7px;font-variant-numeric:tabular-nums}
 .mb .tip .row i{flex:none;width:9px;height:9px;border-radius:3px;background:var(--mbar)}
-.mb .tip .row i.bt{background:var(--boat)}
 .mb .tip .row em{font-style:normal;margin-left:auto;font-weight:600;padding-left:12px}
 .mb .tip .x{margin-top:4px;color:var(--label2)}
 .mb .cal-card{padding:12px 12px 14px;display:grid;gap:10px}
@@ -760,7 +716,6 @@ footer strong{color:var(--label);font-weight:600}
 .mb .calc-out span{font-size:.765rem;color:var(--label2)}
 .mb .calc-note{font-size:.824rem;color:var(--label2)}
 /* Patterns */
-.mb .pat-card{padding:14px 12px 10px}
 .mb .pat svg{display:block;width:100%;height:auto}
 .mb .pat svg text{font-family:var(--font);fill:var(--label2)}
 .mb .rep-card{padding:16px;display:grid;gap:12px}
@@ -772,8 +727,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .dots .dd{transition:opacity .15s ease}
 .mb .dots.hovering .dd:not(.on){opacity:.3}
 .mb .dots{animation:fadeIn .35s ease-out}
-.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:12px}
-.sub-off .mb .subscribe{display:none}
+.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:22px}
 .mb .subscribe.leaving{animation:lift .25s ease-in both}
 .mb .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
 .mb .sub-icon svg{width:24px;height:24px}
@@ -795,7 +749,6 @@ footer strong{color:var(--label);font-weight:600}
 .mb .subscribe.done .sub-form{display:none}
 @media (max-width:760px){.mb .subscribe{grid-template-columns:auto minmax(0,1fr);padding-right:16px}.mb .sub-copy{padding-right:32px}.mb .sub-form,.mb .sub-msg{grid-column:1 / -1}}
 /* Share tile */
-.mb .share-tile{gap:8px}
 .mb .share-text{font-size:.882rem;color:var(--label);line-height:1.35}
 .mb .share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .mb .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff}
@@ -817,7 +770,6 @@ footer strong{color:var(--label);font-weight:600}
 }
 /* First-visit tour of the map: a spotlight on each control with a small card explaining it */
 .tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
-.tour[hidden]{display:none}
 .tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
 .tour-card{position:fixed;width:min(320px,calc(100vw - 32px));padding:16px 16px 14px;border-radius:18px;background:var(--card);color:var(--label);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1);animation:popIn .3s ease-out both}
 .tour-card .tc-step{font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--blue)}
@@ -870,27 +822,26 @@ footer strong{color:var(--label);font-weight:600}
   <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
-  <div class="am-hover" id="amHover" aria-hidden="true" hidden></div>
+  <div class="am-hover off" id="amHover" aria-hidden="true"></div>
   <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
 
-  <!-- Map controls, laid out like Apple Maps: a layer button and a full-screen button, the key, and a forecast timeline -->
+  <!-- Map controls, laid out like Apple Maps: a layer button, a full-screen button and a forecast timeline -->
   <div class="wx-ctl" id="wxCtl">
     <div class="am-top">
-      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span id="wxLayerName">Wind</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span id="wxLayerName">Waves</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       <button type="button" class="am-btn wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
     <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
       <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button><button type="button" data-l="cloud" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 17.8 10a4 4 0 0 1-.3 8z"/></svg></span><span class="am-tn">Cloud</span></button></div>
+      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button><button type="button" data-l="cloud" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 17.8 10a4 4 0 0 1-.3 8z"/></svg></span><span class="am-tn">Cloud</span></button></div>
       <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
     </div>
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
   </div>
-  </div>
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker">Loading the latest figures…</div>
-    <div class="big num" id="heroNum" aria-live="polite">–</div>
+    <div class="big num" id="heroNum" aria-hidden="true">–</div><span class="sr" id="heroSr" aria-live="polite"></span>
     <div class="big-sub" id="heroSub">&nbsp;</div>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
@@ -990,7 +941,7 @@ footer strong{color:var(--label);font-weight:600}
         <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
         <div><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS"></div></div>
       </div>
-      <div class="otd-years" id="otdYears" aria-label="The same date in earlier years"></div>
+      <div class="otd-years" id="otdYears" role="img" aria-label="The same date in earlier years"></div>
     </article>
   </section>
 
@@ -1004,11 +955,11 @@ footer strong{color:var(--label);font-weight:600}
           <button type="button" data-r="30">1M</button><button type="button" data-r="90" aria-pressed="true">3M</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
         </div>
       </div>
-      <div class="chart" id="chart" tabindex="0" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
+      <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
     </div>
   </section>
 
-  <!-- ============================================================ CALENDAR (from the main page) -->
+  <!-- ============================================================ CALENDAR -->
   <section class="mb" aria-labelledby="hCal">
     <div class="section-h rv"><h2 id="hCal">Calendar</h2><p>Tap a day to see its figures</p></div>
     <div class="card cal-card rv">
@@ -1047,7 +998,7 @@ footer strong{color:var(--label);font-weight:600}
     <p class="foot rv">The line on this year's bar shows where last year had reached by the same date.</p>
   </section>
 
-  <!-- ============================================================ RUNNING TOTALS, YEARLY TOTALS (from the main page) -->
+  <!-- ============================================================ RUNNING TOTALS, YEARLY TOTALS -->
   <section class="mb" aria-labelledby="hRace">
     <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
     <div class="card race-card rv">
@@ -1233,7 +1184,7 @@ footer strong{color:var(--label);font-weight:600}
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
-  /* ---------------------------------------------------- appearance: Auto → Day → Night (shared with the main site) */
+  /* ---------------------------------------------------- appearance: Auto → Day → Night (shared with the other pages) */
   const root = document.documentElement;
   const ICON = {auto:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>',
     light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>',
@@ -1264,10 +1215,12 @@ footer strong{color:var(--label);font-weight:600}
   document.querySelectorAll(".rv").forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + "ms"; watch(el); });
   function countUp(el, to, suffix){
     suffix = suffix || "";
+    const run = el._count = (el._count || 0) + 1;   // a newer count on the same number replaces this one
     if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? fmt(to) : "–") + suffix; return; }
     const card = el.closest(".rv"), start = () => {
+      if(run !== el._count) return;
       const t0 = performance.now(), dur = Math.min(1600, 500 + Math.log10(to + 10) * 280);
-      (function step(t){ const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = fmt(Math.round(to * e)) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
+      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = fmt(Math.round(to * e)) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
     };
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
@@ -1312,8 +1265,7 @@ footer strong{color:var(--label);font-weight:600}
     L.control.zoom({position:"bottomright"}).addTo(LM);
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
     LM.on("zoomend", () => {
-      $("lmap").classList.toggle("z-lo", LM.getZoom() < 10);
-      boatK = Math.min(1, 1.05 / unitPx().sx); map.classList.toggle("zoomed", LM.getZoom() > LM.getMinZoom() + .8);
+      boatK = Math.min(1, 1.05 / unitPx().sx);
       // the Dover to Cap Gris-Nez line: its label and end dots stay the same size on screen at any zoom
       const k = (1 / unitPx().sx).toFixed(3);
       $("straitLbl").setAttribute("transform", "translate(394.1 335.6) scale(" + k + ")"); ["straitA", "straitB"].forEach(id => $(id).setAttribute("r", (3.5 * k).toFixed(2)));
@@ -1322,7 +1274,7 @@ footer strong{color:var(--label);font-weight:600}
     LM.on("moveend", () => { wxPane.style.opacity = ""; resetWx(); });
     LM.on("click", e => showPoint(e.latlng));
     LM.on("mousemove", e => { hoverAt = e; if(!hoverRaf) hoverRaf = requestAnimationFrame(showHover); });
-    LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").hidden = true; });
+    LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
   }
   // Full screen: drag, pinch and scroll to zoom anywhere, on phones too (in the page, phones keep the map still so it scrolls)
   const isFull = () => hero.classList.contains("full");
@@ -1349,7 +1301,7 @@ footer strong{color:var(--label);font-weight:600}
   function fitMap(){
     const W = hero.clientWidth, H = hero.clientHeight; if(!W || !H || !LM) return;
     LM.invalidateSize({pan:false});
-    const tall = W < H * .9; map.classList.toggle("tall", tall);
+    const tall = W < H * .9;
     LM.setMinZoom(LM.getBoundsZoom(AREA, true));
     if(W !== fitW){ fitW = W; const f = L.latLngBounds(tall && !isFull() ? NARROWS : AREA); LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false}); }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
@@ -1386,8 +1338,8 @@ footer strong{color:var(--label);font-weight:600}
       b.g.style.opacity = still || b.hold ? 1 : Math.min(1, k * 10, u * 10).toFixed(2);
     });
   }
-  /* Live weather layer: wind (or wave height) read at a grid of points across the Channel, coloured in,
-     with the wind drawn as flowing lines. Refreshed with the conditions every 30 minutes. */
+  /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
+     drawn as moving lines, waves or numbers over the sea. Refreshed with the conditions every 30 minutes. */
   const GLAT = [], GLON = [];
   for(let i = 0; i < 8; i++) GLAT.push(+(50.45 + i * .15).toFixed(2));
   for(let i = 0; i < 10; i++) GLON.push(+(.55 + i * .25).toFixed(2));
@@ -1457,15 +1409,15 @@ footer strong{color:var(--label);font-weight:600}
     const at = (r, c) => a[r * nO + c] || 0;
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
-  // Colour scales, close to Ventusky's
+  // Colour scales, close to Ventusky's: used for the colour swatch in the readings
   const WIND = [[0,[98,113,183]],[6,[57,97,159]],[10,[74,148,169]],[14,[77,141,123]],[18,[83,165,83]],[23,[201,186,63]],[28,[221,135,50]],[34,[208,70,60]],[40,[173,40,110]]];
   const SCALE = {
     wind:{key:"s", max:40, unit:"mph", stops:WIND},
     gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
     waves:{key:"wave", max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
     temp:{key:"temp", min:-5, max:30, unit:"°C", stops:[[-5,[120,80,180]],[0,[80,120,210]],[5,[70,160,210]],[10,[80,180,140]],[15,[170,200,80]],[20,[235,190,60]],[25,[230,120,50]],[30,[200,50,50]]]},
-    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]], alpha:v => v < .05 ? 0 : Math.min(200, 120 + v * 40)},
-    cloud:{key:"cloud", max:100, unit:"%", stops:[[0,[40,50,65]],[100,[225,230,238]]], alpha:v => v * 1.8}
+    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
+    cloud:{key:"cloud", max:100, unit:"%", stops:[[0,[40,50,65]],[100,[225,230,238]]]}
   };
   function colour(v, st){
     if(v <= st[0][0]) return st[0][1];
@@ -1491,25 +1443,29 @@ footer strong{color:var(--label);font-weight:600}
   function setLayer(l, first){
     layer = l;
     segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
-    const b = segBtns.find(x => x.dataset.l === l), sc = SCALE[l];
-    $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML; $("wxLayerIc").style.setProperty("--lg", "rgb(" + colour(sc.max * .45 + (sc.min || 0) * .55, sc.stops).map(Math.round).join(",") + ")");
+    const b = segBtns.find(x => x.dataset.l === l);
+    $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML;
     $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
     if(!first){ resetWx(); if(hoverAt) showHover(); }
   }
   segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
   setLayer(layer, true);
-  // Rebuilt whenever the map moves or new readings arrive: the coloured layer, and the motion drawn over it.
+  // Rebuilt whenever the map moves or new readings arrive: the sea and any numbers, and the motion drawn over it.
   // Wind: streams of particles. Gusts: fast streaks that sweep downwind in pulses, warmer for stronger gusts.
   // Waves: crests rolling the way the wind blows them (the swell's own direction when it's nearly calm).
   const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
   let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, clock = 0, coastPath = null;
-  function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size
+  let maskKey = "", maskVal = null;
+  function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
+    const p = unitPx(), key = [cols, rows, p.x0, p.y0, p.sx, p.sy].map(v => Math.round(v * 100)).join();
+    if(key === maskKey) return maskVal;
     const c = document.createElement("canvas"); c.width = cols; c.height = rows;
-    const x = c.getContext("2d", {willReadFrequently:true}), p = unitPx();
+    const x = c.getContext("2d", {willReadFrequently:true});
     coastPath = coastPath || new Path2D($("coast").getAttribute("d"));
     x.setTransform(p.sx / CELL, 0, 0, p.sy / CELL, p.x0 / CELL + .5, p.y0 / CELL + .5); x.fill(coastPath);
     const a = x.getImageData(0, 0, cols, rows).data, sea = new Uint8Array(cols * rows);
     for(let k = 0; k < sea.length; k++) sea[k] = a[k * 4 + 3] < 128 ? 1 : 0;
+    maskKey = key; maskVal = sea;
     return sea;
   }
   function resetWx(){
@@ -1607,7 +1563,7 @@ footer strong{color:var(--label);font-weight:600}
   function showHover(){
     hoverRaf = 0;
     const box = $("amHover"), e = hoverAt;
-    if(!e || touchOnly || !LM){ box.hidden = true; return; }
+    if(!e || touchOnly || !LM){ box.classList.add("off"); return; }
     const ll = e.latlng, sc = SCALE[layer], g = k => sample(ll.lat, ll.lng, k);
     let val, unit = sc.unit, extra = "";
     if(layer === "wind"){
@@ -1621,7 +1577,7 @@ footer strong{color:var(--label);font-weight:600}
     box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
     place();
     function place(){
-      box.hidden = false;
+      box.classList.remove("off");
       const m = $("lmap").getBoundingClientRect(), h = hero.getBoundingClientRect(), w = box.offsetWidth;
       let x = e.containerPoint.x + m.left - h.left + 16, y = e.containerPoint.y + m.top - h.top + 18;
       if(x + w > h.width - 8) x -= w + 32;
@@ -1731,10 +1687,13 @@ footer strong{color:var(--label);font-weight:600}
     raf = requestAnimationFrame(frame);
   }
   const play = () => { if(!reduced && !raf && heroOn && !document.hidden) raf = requestAnimationFrame(frame); };
-  if("IntersectionObserver" in window) new IntersectionObserver(e => { heroOn = e[0].isIntersecting; play(); }).observe(hero);
+  if("IntersectionObserver" in window) new IntersectionObserver(e => { heroOn = e[e.length - 1].isIntersecting; play(); }).observe(hero);
   document.addEventListener("visibilitychange", play);
   if(!LM) map.setAttribute("preserveAspectRatio", "xMidYMid slice");   // the map library didn't load: just the boats
-  fitMap(); addEventListener("resize", fitMap);
+  // on resize, wait for it to settle, and skip when the map's size hasn't changed (phones' toolbars come and go as you scroll)
+  let fitT = 0, fitSz = "";
+  fitMap(); fitSz = hero.clientWidth + "x" + hero.clientHeight;
+  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
   play();
 
   // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
@@ -1796,6 +1755,7 @@ footer strong{color:var(--label);font-weight:600}
     $("heroKicker").textContent = (last.date === yday ? "Yesterday · " : "Latest · ") + dMid.format(parse(last.date));
     countUp($("heroNum"), last.migrants);
     $("heroSub").textContent = last.migrants ? "people crossed in " + plural(last.boats, "small boat", "small boats") : "No crossings detected";
+    $("heroSr").textContent = last.migrants ? fmt(last.migrants) + " " + $("heroSub").textContent : "";   // the number, read once (the count-up is hidden from screen readers)
     const lx = last.migrants ? null : [...days].reverse().find(d => d.migrants > 0), cl = $("chipLast");   // a quiet day: say when the last crossings were
     cl.hidden = !lx;
     if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
@@ -1855,10 +1815,10 @@ footer strong{color:var(--label);font-weight:600}
     pop.style.left = left + "px"; pop.style.top = Math.max(12, top) + "px";
     pop.style.setProperty("--from", (below ? "top " : "bottom ") + Math.round(Math.min(Math.max(r.left + 24 - left, 0), w)) + "px");
   }
-  function openPop(chip, pop){ clearTimeout(hideT); if(cur && cur.pop !== pop) closePop(); if(cur) return placePop(); pop.hidden = false; chip.setAttribute("aria-expanded","true"); cur = {chip, pop}; placePop(); }
+  function openPop(chip, pop){ clearTimeout(hideT); if(cur && cur.pop !== pop) closePop(); if(cur && cur.chip !== chip){ cur.chip.setAttribute("aria-expanded","false"); chip.setAttribute("aria-expanded","true"); cur.chip = chip; } if(cur) return placePop(); pop.hidden = false; chip.setAttribute("aria-expanded","true"); cur = {chip, pop}; placePop(); }
   function closePop(chip){ clearTimeout(hideT); if(!cur || (chip && cur.chip !== chip)) return; cur.pop.hidden = true; cur.chip.setAttribute("aria-expanded","false"); cur = null; }
   const later = () => { clearTimeout(hideT); hideT = setTimeout(() => closePop(), 180); };
-  document.querySelectorAll("button.chip[aria-controls], #chipBeta, #fuBtn").forEach(chip => {
+  document.querySelectorAll("button.chip[aria-controls], #fuBtn").forEach(chip => {
     const pop = $(chip.getAttribute("aria-controls")); let lastType = "";
     chip.addEventListener("pointerdown", e => { lastType = e.pointerType; });
     chip.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") openPop(chip, pop); });
@@ -1887,7 +1847,7 @@ footer strong{color:var(--label);font-weight:600}
       + '<p class="wp-foot">Source: Home Office. Figures are provisional.</p>';
   }
 
-  /* ---------------------------------------------------- automatic updates (the same timings as the main site) */
+  /* ---------------------------------------------------- automatic updates */
   // The site's heartbeat (status.json) says when new or revised figures were published: checked every
   // 2 minutes while new figures are awaited, otherwise every 30. Conditions refresh every 30 minutes.
   const MIN = 6e4, openedAt = Date.now();
@@ -1948,7 +1908,7 @@ footer strong{color:var(--label);font-weight:600}
     $("glanceNote").textContent = "Figures to " + dMid.format(parse(last.date));
   }
 
-  /* ---------------------------------------------------- on this day: today's date in every earlier year (as on the main site) */
+  /* ---------------------------------------------------- on this day: today's date in every earlier year */
   function renderOtd(){
     const all = allDays(), by = new Map(all.map(d => [d.date, d])), t = ukToday(), mmdd = t.slice(5), first = all[0].date, lastD = all[all.length-1].date, yrs = [];
     for(let y = +t.slice(0,4) - 1; y >= +first.slice(0,4); y--){
@@ -1962,7 +1922,8 @@ footer strong{color:var(--label);font-weight:600}
     $("otdMon").textContent = td.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3);
     $("otdDay").textContent = td.getUTCDate();
     $("otdV").textContent = main.migrants ? plural(main.migrants, "person", "people") + " crossed" : "No crossings detected";
-    $("otdS").textContent = "A year ago, " + dLong.format(parse(main.date)) + (main.migrants ? " · " + plural(main.boats, "boat", "boats") : "");
+    const gap = +t.slice(0,4) - +main.date.slice(0,4);   // more than a year on 29 February
+    $("otdS").textContent = (gap === 1 ? "A year ago, " : gap + " years ago, ") + dLong.format(parse(main.date)) + (main.migrants ? " · " + plural(main.boats, "boat", "boats") : "");
     $("otdNote").textContent = top.migrants ? "Busiest: " + top.date.slice(0,4) + ", " + fmt(top.migrants) : "";
     $("otdYears").innerHTML = yrs.slice().reverse().map((d, i, a) => '<div title="' + dLong.format(parse(d.date)) + ": " + fmt(d.migrants) + ' people"><b class="num">' + fmt(d.migrants) + '</b><i class="' + (d.migrants ? "" : "zero") + (i === a.length - 1 ? " last" : "") + '" style="height:' + Math.max(3, d.migrants / mx * 100).toFixed(1) + "%;transition-delay:" + i * 60 + 'ms"></i><em>' + d.date.slice(0,4) + "</em></div>").join("");
   }
@@ -2055,7 +2016,7 @@ footer strong{color:var(--label);font-weight:600}
       const iso = new Date(t).toISOString().slice(0,10), d = by.get(iso), fut = iso > last.date;
       const col = Math.floor(k / 7);
       if(iso.slice(8) === "01") months += '<span class="heat-m" style="left:calc(' + col + ' * (var(--c) + 4px))">' + parse(iso).toLocaleDateString("en-GB",{month:"short",...UTC}) + "</span>";
-      h += '<i data-d="' + iso + '" class="' + (fut ? "fut" : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" style="transition-delay:' + Math.min(900, col * 16) + 'ms" role="button" tabindex="-1" aria-label="' + dMid.format(parse(iso)) + (fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
+      h += '<i data-d="' + iso + '" class="' + (fut ? "fut" : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" style="transition-delay:' + Math.min(900, col * 16) + 'ms" role="img" aria-label="' + dMid.format(parse(iso)) + (fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
     }
     $("heat").innerHTML = months + h;
     heatCols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7); sizeHeat();
@@ -2143,7 +2104,7 @@ footer strong{color:var(--label);font-weight:600}
     $("records").innerHTML = rows.map(r => '<li><span class="ic" style="background:' + r[1] + '">' + RIC[r[0]] + '</span><span class="t">' + r[2] + "<small>" + r[3] + '</small></span><span class="v">' + r[4] + "</span></li>").join("");
   }
 
-  /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated as on the main site */
+  /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated calm, moderate or rough */
   const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
@@ -2187,7 +2148,7 @@ footer strong{color:var(--label);font-weight:600}
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>"
-        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the moving lines are the wind, blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", coloured by its speed. Gusts sweep across in pulses, turning amber then red as they get stronger, and the waves roll the way the wind is pushing them. Hover over the map with a mouse to read the weather at any spot, or tap anywhere for the full picture there. Switch to gusts, waves, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
+        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the little white waves roll the way the sea is running, bigger where it is rougher. Switch to wind to see it blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", brighter where it is stronger, or to gusts, which sweep across in pulses, turning amber then red as they get stronger. Hover over the map with a mouse to read the weather at any spot, or tap anywhere for the full picture there. Switch to wind, gusts, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
@@ -2223,7 +2184,7 @@ footer strong{color:var(--label);font-weight:600}
   function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
 
 
-  /* ---------------------------------------------------- boxes from the main page: calendar, running totals, yearly totals,
+  /* ---------------------------------------------------- the boxes: calendar, running totals, yearly totals,
      between two dates, quiet spells, patterns, every person, petitions, share and the weekly roundup */
   let sorted = [];   // the same figures as days, under the name these boxes were written with
   const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
@@ -2242,7 +2203,6 @@ footer strong{color:var(--label);font-weight:600}
     daysAll = allDays(); daysFor = sorted;
     return daysAll;
   }
-  const hasHistory = () => sorted.length && sorted[0].date <= "2018-01-31";
 
   function drawDots(){
     const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
@@ -2375,7 +2335,6 @@ footer strong{color:var(--label);font-weight:600}
     if(d.uncontrolled) t += " · " + d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings");
     if(d.revised) t += " · revised from " + fmt(d.revised.from);
     box.append(b, t);
-    const back = sorted.length - sorted.findIndex(x=>x.date===d.date);
     if(sorted.some(x=>x.date===d.date)){
       const go = document.createElement("button"); go.type = "button"; go.textContent = "Show on chart";
       go.addEventListener("click", ()=>showOnChart(d.date));
@@ -2396,7 +2355,6 @@ footer strong{color:var(--label);font-weight:600}
   let race = null, raceDay = null;
   function drawRace(){
     const box = $("race");
-    if(!hasHistory()){ return; }
     const days = allD(), lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4);
     const years = {};
     days.forEach(d=>{
@@ -2474,7 +2432,6 @@ footer strong{color:var(--label);font-weight:600}
 
   // ---- Yearly totals
   function drawYT(){
-    if(!hasHistory()) return;
     const lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4), rows = {};
     sorted.forEach(d=>{ const y = +d.date.slice(0,4); (rows[y] = rows[y] || {y, p:0, b:0}); rows[y].p += d.migrants; rows[y].b += d.boats; });
     const ys = Object.values(rows).sort((a,b)=>b.y-a.y);
@@ -2514,7 +2471,6 @@ footer strong{color:var(--label);font-weight:600}
     if(busy) note += ". Busiest: " + dList.format(parse(busy.date)) + " " + busy.date.slice(0,4) + ", " + fmt(busy.migrants) + " people";
     if(from < first) note += ". Figures start on " + dShort.format(parse(first)) + " " + first.slice(0,4);
     if(to > last) note += ". Latest figures are for " + dShort.format(parse(last));
-    if(!hasHistory() && from < first) note += " (loading the full history…)";
     $("calcNote").textContent = note + ".";
   }
   function setCalc(from, to){ $("calcFrom").value = from; $("calcTo").value = to; calc(); }
@@ -2530,14 +2486,13 @@ footer strong{color:var(--label);font-weight:600}
   $("calcPresets").addEventListener("click", e=>{ const b = e.target.closest("button"); if(b && sorted.length) calcPreset(b.dataset.p); });
   let calcReady = false;
   function initCalc(){
-    const first = hasHistory() ? "2018-01-01" : sorted[0].date, last = sorted[sorted.length-1].date;
+    const first = "2018-01-01", last = sorted[sorted.length-1].date;
     ["calcFrom","calcTo"].forEach(id=>{ $(id).min = first; $(id).max = last; });
     if(!calcReady){ calcReady = true; calcPreset("year"); } else calc();
   }
 
   // ---- Longest spells without crossings
   function drawQuiet(){
-    if(!hasHistory()) return;
     const runs = []; let start = null, len = 0;
     const days = allD().filter(d=>d.date >= "2020-01-01");   // crossings were rare before 2020
     days.forEach((d,i)=>{
@@ -2554,7 +2509,6 @@ footer strong{color:var(--label);font-weight:600}
   // ---- Patterns: average people a day by weekday or month
   let patMode = "dow";
   function drawPat(){
-    if(!hasHistory()) return;
     const box = $("pat"), days = allD();
     const labels = patMode==="dow" ? ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const sum = labels.map(()=>0), cnt = labels.map(()=>0);
@@ -2690,7 +2644,7 @@ footer strong{color:var(--label);font-weight:600}
   function renderMain(){
     sorted = days; if(!sorted.length) return;
     const latest = sorted[sorted.length-1].date;
-    if(!seenChecked){   // "New since your last visit", as on the main page
+    if(!seenChecked){   // "New since your last visit"
       const seen = store.get("lastSeenLatest");
       newSince = (seen && /^\d{4}-\d{2}-\d{2}$/.test(seen) && seen < latest) ? seen : null;
       store.set("lastSeenLatest", latest);
@@ -2793,7 +2747,7 @@ footer strong{color:var(--label);font-weight:600}
       loadExtras(); loadPetitions();
     }catch(e){ $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
   }
-  /* ---------------------------------------------------- Refresh Figures (in the Figure updates pop-up), as on the main site */
+  /* ---------------------------------------------------- Refresh Figures (in the Figure updates pop-up) */
   // Looks for new figures without reloading: the site's own figures, plus the Home Office's "last 7 days" page read
   // straight from GOV.UK, which can publish before the site's next check. If GOV.UK can't be read, the site's figures are used.
   const GOV7 = "https://www.gov.uk/api/content/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats/migrants-detected-crossing-the-english-channel-in-small-boats-last-7-days";
@@ -2828,9 +2782,9 @@ footer strong{color:var(--label);font-weight:600}
     btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
     setTimeout(() => { btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); refreshLatest(); }, 2500);
   });
-  /* ---------------------------------------------------- breaking news, as on the main site, across the top of the map */
+  /* ---------------------------------------------------- breaking news, across the top of the map */
   // Small boats stories from UK outlets published in the last 3 hours. It flashes when a new story comes in;
-  // closing it hides it until a newer one (shared with the main site). Checked on load and every 10 minutes.
+  // closing it hides it until a newer one. Checked on load and every 10 minutes.
   const NEWS_MAX_H = 3, NEWS_EACH = 7000;
   let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsTimer = null;
   const seenGet = () => { try{ return localStorage.getItem("newsSeen"); }catch(e){ return null; } };

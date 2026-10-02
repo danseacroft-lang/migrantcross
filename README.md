@@ -11,13 +11,13 @@ A one-page site showing how many people cross the English Channel in small boats
 - `logo-badge.png` – the full Channel Crossings badge, for your X profile and elsewhere
 - `og-image.png` – the preview picture X shows when someone shares the link; redrawn whenever new figures are published
 - `scripts/og_image.py` – draws `og-image.png`
-- `data.json` – the full daily history, loaded in the background
+- `data.json` – the full daily history, loaded by the homepage
 - `recent.json` – the last 90 days and totals, used by the embed widget
 - `status.json` – a tiny heartbeat written at every check, so open pages know when the site last looked and when to fetch new figures
 - `gender.json`, `nationalities.json`, `perboat.json`, `returns.json`, `petitions.json` – sex and age, nationalities, people per boat, UK–France returns and related petitions, all gathered automatically by `scripts/extras.py`
 - `requirements.txt` – the Python packages the update job installs
 - `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
-- `how-it-works.html` – sources, definitions, downloads and the embed code
+- `how-it-works.html` – where the figures come from
 - `embed.html` – the small "latest figure" box other sites can embed
 - `beach-radar.html` – Beach Radar, a coming-soon page (not listed in search engines)
 - `sw.js` – offline mode: keeps a copy of the site on visitors' devices
