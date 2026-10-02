@@ -1,18 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
-<meta name="description" content="No small boat crossings of the Channel were detected on Thu 1 October. 2026 so far: 19,196. Daily Home Office figures, records and Channel conditions.">
+<meta name="description" content="No small boat crossings of the Channel were detected on Thu 1 October. 2026 so far: 19,196. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Crossings">
-<title>Channel Crossings: Daily Small Boat Arrivals to the UK</title>
+<title>Channel Crossings: Small Boat Crossing Figures &amp; Migrant Tracker</title>
 <!-- Link previews on X and other sites. If the domain changes, replace the address everywhere it appears (search for channelcrossings.world, here and in scripts/). -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Channel Crossings">
@@ -30,20 +31,24 @@
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "WebSite", "name": "Channel Crossings", "alternateName": "Channel Crossings Tracker", "url": "https://channelcrossings.world/"}
+{"@context": "https://schema.org", "@type": "WebSite", "name": "Channel Crossings", "alternateName": "Channel Crossings Tracker", "url": "https://channelcrossings.world/", "inLanguage": "en-GB"}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "logo": "https://channelcrossings.world/icon-512.png"}
 </script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Dataset",
   "name": "Channel Crossings: daily small boat arrivals to the UK",
+  "alternateName": ["Small boat crossing figures", "Channel migrant tracker"],
   "description": "Daily number of people detected crossing the English Channel to the UK in small boats, with boats and uncontrolled landings, from provisional Home Office figures since 2018. Updated every day.",
   "url": "https://channelcrossings.world/",
   "sameAs": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "isBasedOn": "https://www.gov.uk/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats",
   "license": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
   "isAccessibleForFree": true,
-  "keywords": ["English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
+  "keywords": ["small boat crossings", "Channel crossings", "small boat arrivals", "migrant crossings", "boat crossing figures", "English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
   "creator": {"@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "email": "x.chancrossings@gmail.com"},
   "temporalCoverage": "2018-01-01/2026-10-01",
   "spatialCoverage": "English Channel, United Kingdom",
@@ -864,7 +869,7 @@ footer strong{color:var(--label);font-weight:600}
   <span></span>
 </nav>
 <!-- the appearance switch again at the top, in line with the map's right edge; it scrolls away under the bar -->
-  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip"><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -885,12 +890,12 @@ footer strong{color:var(--label);font-weight:600}
        and from 12:00 UK time until the new figures are in, the daily update. When both are on they take turns. -->
   <aside class="map-news" id="news" aria-label="Breaking news" hidden>
     <div class="mn-slides">
-      <div class="mn-slide" id="newsSlide" hidden>
+      <div class="mn-slide" id="newsSlide" data-nosnippet hidden>
         <span class="mn-tag"><i aria-hidden="true"></i>Breaking</span>
         <div class="mn-stage" id="newsStage"><a class="mn-head" id="newsHead" href="#" target="_blank" rel="noopener"></a><span class="mn-meta"><span id="newsSrc"></span> · <span id="newsAge"></span></span></div>
         <span class="mn-count" id="newsCount" aria-hidden="true" hidden></span>
       </div>
-      <div class="mn-slide mn-fig" id="figSlide" role="status" hidden>
+      <div class="mn-slide mn-fig" id="figSlide" role="status" data-nosnippet hidden>
         <span class="mn-tag"><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span>Updating</span></span>
         <div class="mn-stage"><button type="button" class="mn-head" id="figHead" aria-expanded="false" aria-controls="popFU">New figures incoming from the Home Office</button><span class="mn-meta">Since 12:00 · Can take up to an hour</span></div>
       </div>
@@ -898,7 +903,7 @@ footer strong{color:var(--label);font-weight:600}
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Loading figures…</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 1 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
@@ -921,7 +926,7 @@ footer strong{color:var(--label);font-weight:600}
   <div class="hero-in">
     <div class="kicker" id="heroKicker">Loading the latest figures…</div>
     <div class="big num" id="heroNum" aria-hidden="true">–</div><span class="sr" id="heroSr" aria-live="polite"></span>
-    <div class="big-sub" id="heroSub">&nbsp;</div>
+    <div class="big-sub" id="heroSub">No crossings detected for Thu&nbsp;1&nbsp;October</div>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
       <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -932,7 +937,7 @@ footer strong{color:var(--label);font-weight:600}
   <svg class="scroll-cue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
 </header>
 
-<div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" hidden>
+<div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" data-nosnippet hidden>
   <svg class="fu-clock" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="fuFace" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--fill)"/></radialGradient></defs>
     <circle cx="60" cy="60" r="54" fill="url(#fuFace)" stroke="currentColor" stroke-width="5"/>
     <g stroke="currentColor" stroke-linecap="round"><path d="M60 13v10M60 97v10M13 60h10M97 60h10" stroke-width="5"/><path d="M83.5 19.3l-3 5.2M100.7 36.5l-5.2 3M100.7 83.5l-5.2-3M83.5 100.7l-3-5.2M36.5 100.7l3-5.2M19.3 83.5l5.2-3M19.3 36.5l5.2 3M36.5 19.3l3 5.2" stroke-width="3"/></g>
