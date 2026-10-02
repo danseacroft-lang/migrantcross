@@ -1838,10 +1838,10 @@ footer strong{color:var(--label);font-weight:600}
   const sum = (a, k) => a.reduce((s, d) => s + (d[k] || 0), 0);
 
   function renderHero(){
-    const last = days[days.length-1], yday = new Date(Date.parse(ukToday() + "T12:00:00Z") - DAY).toISOString().slice(0,10);
-    $("heroKicker").textContent = (last.date === yday ? "Yesterday · " : "Latest · ") + dMid.format(parse(last.date));
+    const last = days[days.length-1], on = dMid.format(parse(last.date)).replace(/ /g, "\u00a0");   // the date stays on one line
+    $("heroKicker").hidden = true;   // the date goes in the line under the number instead
     countUp($("heroNum"), last.migrants);
-    $("heroSub").textContent = last.migrants ? "people crossed in " + plural(last.boats, "small boat", "small boats") : "No crossings detected";
+    $("heroSub").textContent = last.migrants ? "people crossed in " + plural(last.boats, "small boat", "small boats") + " on " + on : "No crossings detected for " + on;
     $("heroSr").textContent = last.migrants ? fmt(last.migrants) + " " + $("heroSub").textContent : "";   // the number, read once (the count-up is hidden from screen readers)
     const lx = last.migrants ? null : [...days].reverse().find(d => d.migrants > 0), cl = $("chipLast");   // a quiet day: say when the last crossings were
     cl.hidden = !lx;
@@ -2831,7 +2831,7 @@ footer strong{color:var(--label);font-weight:600}
       const cc = $("chart").closest(".rv"); if(cc.classList.contains("on") || reduced) animateLine(line); else cc.addEventListener("reveal", () => animateLine($("chart").querySelector("#chartLine,#chartBars")), {once:true});
       let lw = 0; if("ResizeObserver" in window) new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; drawChart(); sizeHeat(); } }).observe($("chart"));
       loadExtras(); loadPetitions();
-    }catch(e){ $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
+    }catch(e){ $("heroKicker").hidden = false; $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
   }
   /* ---------------------------------------------------- Refresh Figures (in the Figure updates pop-up) */
   // Looks for new figures without reloading: the site's own figures, plus the Home Office's "last 7 days" page read
