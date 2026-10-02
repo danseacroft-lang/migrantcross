@@ -172,11 +172,13 @@ button,input,select,textarea{font:inherit}
 .wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
 /* place names in the style of Ventusky: dark navy Helvetica, a ring for each town, bigger places in bold, names centred above */
 .am-town,.am-area{pointer-events:none;white-space:nowrap;font-family:var(--font)}
-.am-town.off,.am-area.off{display:none}
 .am-town i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;border:1.6px solid #1A2B4C;background:rgba(255,255,255,.55)}
 .am-town span{position:absolute;left:0;bottom:7px;transform:translateX(-50%);color:#1A2B4C;font:500 12px/1 var(--font);letter-spacing:0;text-shadow:0 0 2px rgba(255,255,255,.9),0 0 6px rgba(255,255,255,.6)}
 .am-town.r1 span{font-weight:700;font-size:13px}
 .am-town.r1 i{width:10px;height:10px;left:-5px;top:-5px;border-width:2px}
+.am-town.r2 span{font-weight:600}
+.am-town.r4 span,.am-town.r5 span{font-size:11px;bottom:6px}
+.am-town.r4 i,.am-town.r5 i{width:6px;height:6px;left:-3px;top:-3px;border-width:1.4px}
 .am-town.cape i{border-color:#FF9F0A}
 .am-area span{position:absolute;left:0;top:0;transform:translate(-50%,-50%)}
 .am-area.land span{font:600 11px/1 var(--font);letter-spacing:.24em;color:rgba(26,43,76,.42)}
@@ -1180,7 +1182,7 @@ footer strong{color:var(--label);font-weight:600}
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
-  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin.</p>
+  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin. Place names from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0).</p>
   <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
 </footer>
 
@@ -1263,13 +1265,16 @@ footer strong{color:var(--label);font-weight:600}
     ["Gravelines", 50.9865, 2.1281, 3], ["Sangatte", 50.9455, 1.7525, 3], ["Wissant", 50.8858, 1.6634, 3], ["Wimereux", 50.7697, 1.6110, 3], ["Le Portel", 50.7072, 1.5733, 3],
     ["Le Touquet", 50.5211, 1.5861, 3], ["Berck", 50.4084, 1.5925, 3], ["Saint-Omer", 50.7500, 2.2520, 3], ["Kortrijk", 50.8279, 3.2649, 3], ["Compiègne", 49.4179, 2.8261, 3],
     ["Fécamp", 49.7578, 0.3747, 3], ["Middelburg", 51.4988, 3.6136, 3], ["Cap Gris-Nez", 50.8693, 1.5838, 3, "cape"]];
-  const AREAS = [["ENGLAND", 51.0, 0.15, "land"], ["FRANCE", 49.75, 2.65, "land"], ["BELGIUM", 50.55, 4.55, "land"],
+  const AREAS = [["ENGLAND", 51.0, 0.15, "land"], ["FRANCE", 49.75, 2.65, "land"], ["BELGIUM", 50.55, 4.55, "land"], ["NETHERLANDS", 52.1, 5.15, "land"],
     ["English Channel", 50.25, -0.35, "sea"], ["North Sea", 51.75, 2.35, "sea"]];
+  // Every name the map can show, biggest first: countries and seas, the towns above, then some 2,500 more from towns.json
+  // (GeoNames; scripts/build-towns.js), which come in as you zoom: rank 1 always, rank 5 only close in
+  let places = AREAS.map(([name, lat, lon, kind]) => ({name, lat, lon, rank:0, kind:"area " + kind})).concat(TOWNS.map(([name, lat, lon, rank, kind]) => ({name, lat, lon, rank, kind})));
   // On phones the map stays put so the page still scrolls; with a mouse it can be dragged and zoomed
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
-  let heat, flow, wxPane, boatK = 1, townMarks = [];
+  let heat, flow, wxPane, boatK = 1;
   let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
@@ -1278,7 +1283,7 @@ footer strong{color:var(--label);font-weight:600}
     // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
     // Free to use with credit, and needs no key.
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
@@ -1286,11 +1291,12 @@ footer strong{color:var(--label);font-weight:600}
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
       .on("click", e => { L.DomEvent.stopPropagation(e); e.target.toggleTooltip(); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
-    // town, country and sea names
-    townMarks = TOWNS.map(([name, lat, lon, rank, kind]) => ({rank, m:L.marker([lat, lon], {pane:"labels", interactive:false, keyboard:false,
-      icon:L.divIcon({className:"am-town r" + rank + (kind ? " " + kind : ""), html:"<i></i><span>" + name + "</span>", iconSize:[0, 0]})}).addTo(LM)}));
-    townMarks = AREAS.map(([name, lat, lon, kind]) => ({rank:0, m:L.marker([lat, lon], {pane:"labels", interactive:false, keyboard:false,
-      icon:L.divIcon({className:"am-area " + kind, html:"<span>" + name + "</span>", iconSize:[0, 0]})}).addTo(LM)})).concat(townMarks);
+    // the extra town names, added biggest first after the ones in the page
+    getJSON("towns.json").then(a => {
+      const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
+      places = places.concat(extra).sort((x, y) => x.rank - y.rank);   // a stable sort: the page's own towns stay ahead within each rank
+      placeTowns();
+    }).catch(() => {});
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     L.control.zoom({position:"bottomright"}).addTo(LM);
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
@@ -1321,21 +1327,45 @@ footer strong{color:var(--label);font-weight:600}
   }
   $("wxFull").addEventListener("click", e => { e.stopPropagation(); setFull(!isFull()); });
   document.addEventListener("keydown", e => { if(e.key === "Escape" && isFull() && !cur) setFull(false); });
-  // Place names: countries and seas, then the bigger towns, more as you zoom in, never on top of each other or under the title, buttons and figures
-  function placeTowns(){
-    if(!LM || !townMarks.length) return;
-    const z = LM.getZoom(), sz = LM.getSize(), mr = $("lmap").getBoundingClientRect(), taken = [];
-    [$("wxCtl"), $("news"), document.querySelector(".large-title"), ...document.querySelectorAll(".hero-in > *")].forEach(e => {
-      if(!e || e.hidden || !e.offsetParent) return; const b = e.getBoundingClientRect();
-      taken.push([b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6]);
+  // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
+  // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
+  const RANK_ZOOM = [0, 0, 0, 7.6, 8.7, 9.7];   // the zoom each rank of town appears from
+  const measure = document.createElement("canvas").getContext("2d");
+  function labelWidth(t){
+    if(t.w) return t.w;
+    const ff = getComputedStyle(document.body).fontFamily;
+    measure.font = t.rank === 0 ? (t.kind === "area land" ? "600 11px " : "italic 500 13px ") + ff : (t.rank === 1 ? "700 13px " : t.rank === 2 ? "600 12px " : t.rank === 3 ? "500 12px " : "500 11px ") + ff;
+    return t.w = measure.measureText(t.name).width + (t.kind === "area land" ? t.name.length * 2.6 : 0);   // land names are letter-spaced
+  }
+  // What covers the map: the title, buttons and figures, hugging their text and chips, so names and numbers can keep clear
+  function coverRects(){
+    const out = [];
+    [$("wxCtl"), $("news"), ...document.querySelectorAll(".large-title > *, .hero-in > div:not(.hero-chips), .hero-chips > *")].forEach(e => {
+      if(!e || e.hidden || !e.offsetParent) return;
+      if(e.children.length || e.tagName !== "DIV") return out.push(e.getBoundingClientRect());
+      const r = document.createRange(); r.selectNodeContents(e); out.push(r.getBoundingClientRect());   // a line of text: just the words, not the full width
     });
+    return out;
+  }
+  function placeTowns(){
+    if(!LM) return;
+    const z = LM.getZoom(), sz = LM.getSize(), mr = $("lmap").getBoundingClientRect(), view = LM.getBounds().pad(.05);
+    const taken = coverRects().map(b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6]);
     const hit = q => taken.some(t => q[0] < t[2] && q[2] > t[0] && q[1] < t[3] && q[3] > t[1]);
-    for(const t of townMarks){
-      const el = t.m.getElement(); if(!el) continue;
-      const p = LM.latLngToContainerPoint(t.m.getLatLng()), name = el.textContent, w = name.length * (t.rank === 0 ? 9.5 : t.rank === 1 ? 7.6 : 6.6) + 6;
-      const box = t.rank === 0 ? [p.x - w / 2, p.y - 10, p.x + w / 2, p.y + 10] : [p.x - w / 2, p.y - 22, p.x + w / 2, p.y + 6];
-      const show = (t.rank < 2 || (t.rank === 2 && z >= 7.9) || z >= 9.2) && box[0] > 0 && box[2] < sz.x && box[1] > 0 && box[3] < sz.y && !hit(box);
-      el.classList.toggle("off", !show); if(show) taken.push(box);
+    for(const t of places){
+      let show = z >= RANK_ZOOM[t.rank] && view.contains([t.lat, t.lon]), box;
+      if(show){
+        const p = LM.latLngToContainerPoint([t.lat, t.lon]), w = labelWidth(t) / 2 + 5, small = t.rank > 3;
+        box = t.rank === 0 ? [p.x - w, p.y - 10, p.x + w, p.y + 10] : [p.x - w, p.y - (small ? 19 : 22), p.x + w, p.y + 6];
+        show = box[0] > 0 && box[2] < sz.x && box[1] > 0 && box[3] < sz.y && !hit(box);
+      }
+      if(show){
+        t.m = t.m || L.marker([t.lat, t.lon], {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon(t.rank === 0
+          ? {className:"am-" + t.kind, html:"<span>" + t.name + "</span>", iconSize:[0, 0]}
+          : {className:"am-town r" + t.rank + (t.kind ? " " + t.kind : ""), html:"<i></i><span>" + t.name + "</span>", iconSize:[0, 0]})});
+        if(!LM.hasLayer(t.m)) t.m.addTo(LM);
+        taken.push(box);
+      } else if(t.m && LM.hasLayer(t.m)) t.m.remove();
     }
   }
   // A place in map units (Web Mercator, like the map itself)
@@ -1502,11 +1532,11 @@ footer strong{color:var(--label);font-weight:600}
   }
   segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
   setLayer(layer, true);
-  // Rebuilt whenever the map moves or new readings arrive: the sea and any numbers, and the motion drawn over it.
-  // Wind: streams of particles. Gusts: fast streaks that sweep downwind in pulses, warmer for stronger gusts.
-  // Waves: crests rolling the way the wind blows them (the swell's own direction when it's nearly calm).
+  // Rebuilt whenever the map moves or new readings arrive: the sea (or the temperature colours), any numbers, and the motion drawn over it.
+  // Wind: streams of particles. Gusts: faster, longer streaks, warmer for stronger gusts.
+  // Waves: crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
   const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
-  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, clock = 0, coastPath = null, seaPath = null;
+  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null, seaPath = null;
   let maskKey = "", maskVal = null;
   function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
     const p = unitPx(), key = [cols, rows, p.x0, p.y0, p.sx, p.sy].map(v => Math.round(v * 100)).join();
@@ -1531,7 +1561,6 @@ footer strong{color:var(--label);font-weight:600}
     const mode = layer === "waves" ? "waves" : layer === "gusts" ? "gusts" : "wind", sea = seaMask(cols, rows);
     // the grid is regular in latitude and longitude, so each column and row is looked up once
     const lat = Float64Array.from({length:rows}, (_, r) => LM.containerPointToLatLng([0, r * CELL]).lat), lon = Float64Array.from({length:cols}, (_, c) => LM.containerPointToLatLng([c * CELL, 0]).lng);
-    let su = 0, sv = 0;
     for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
       const k = r * cols + c, la = lat[r], lo = lon[c], wu = sample(la, lo, "u"), wv = -sample(la, lo, "v"), ws = Math.hypot(wu, wv);
       if(mode === "waves"){
@@ -1542,10 +1571,8 @@ footer strong{color:var(--label);font-weight:600}
       } else if(mode === "gusts"){
         const g = sample(la, lo, "gust"); u[k] = wu / (ws || 1) * g; v[k] = wv / (ws || 1) * g; m[k] = g;
       } else { u[k] = wu; v[k] = wv; m[k] = ws; }
-      su += u[k]; sv += v[k];
     }
-    const sm = Math.hypot(su, sv) || 1;
-    fld = {cols, rows, u, v, m, sea, mode, du:su / sm, dv:sv / sm};
+    fld = {cols, rows, u, v, m, sea, mode};
     const h = heat.getContext("2d"), p = unitPx();
     heat.classList.toggle("solid", layer === "temp");
     if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings
@@ -1569,14 +1596,14 @@ footer strong{color:var(--label);font-weight:600}
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
       h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over"; h.filter = "none";
     }
-    const LABEL = {temp:v => Math.round(v) + "°", rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm", cloud:v => Math.round(v) + "%"}[layer];
-    if(LABEL){   // temperature, rain or cloud, written across the map every so often
+    const LABEL = {rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm", cloud:v => Math.round(v) + "%"}[layer];
+    if(LABEL){   // rain or cloud, written across the map every so often (temperature is shown in colour)
       const gap = vw < 600 ? 120 : 170, fs = 13;
       h.save(); h.scale(dpr, dpr);
       h.font = "700 " + fs + "px " + getComputedStyle(document.body).fontFamily; h.textAlign = "center"; h.textBaseline = "middle";
       h.lineJoin = "round"; h.lineWidth = 3.5; h.strokeStyle = "rgba(0,0,0,.6)"; h.fillStyle = "#fff";
-      const mr = $("lmap").getBoundingClientRect(), keep = [$("wxCtl"), $("news"), document.querySelector(".large-title"), ...document.querySelectorAll(".hero-in > *")].filter(e => e && !e.hidden && e.offsetParent)
-        .concat([$("straitLbl"), ...document.querySelectorAll(".am-town:not(.off) > *, .am-area:not(.off) > span")].filter(e => e && e.getClientRects().length)).map(e => e.getBoundingClientRect());   // not under the controls or the place names
+      const mr = $("lmap").getBoundingClientRect(), keep = coverRects()
+        .concat([$("straitLbl"), ...document.querySelectorAll(".am-town > *, .am-area > span")].filter(e => e && e.getClientRects().length).map(e => e.getBoundingClientRect()));   // not under the controls or the place names
       const under = (x, y) => keep.some(cr => x > cr.left - mr.left - 24 && x < cr.right - mr.left + 24 && y > cr.top - mr.top - 14 && y < cr.bottom - mr.top + 14);
       for(let y = gap * .6; y < vh; y += gap) for(let x = gap * (Math.round(y / gap) % 2 ? .5 : 1); x < vw; x += gap){
         if(under(x, y)) continue;
@@ -1585,7 +1612,7 @@ footer strong{color:var(--label);font-weight:600}
       }
       h.restore();
     }
-    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(460, area / 2600) : mode === "gusts" ? Math.min(1100, area / 2000) : Math.min(1800, area / 1300));
+    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1100, area / 2000) : Math.min(1800, area / 1300));
     parts = Array.from({length:count}, () => spawn({}));
     parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
     flow.getContext("2d").clearRect(0, 0, flow.width, flow.height);
@@ -1604,9 +1631,9 @@ footer strong{color:var(--label);font-weight:600}
     const g = k => sample(ll.lat, ll.lng, k), u = g("u"), v = g("v"), sp = Math.hypot(u, v), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, sea = atSea(ll), lv = sea ? rate(sp, g("wave")) : null;
     const cell = (name, val, unit) => "<div><span>" + name + '</span><b class="num">' + val + "</b><small> " + unit + "</small></div>";
     // named like Apple Maps would: how far you are from the nearest town
-    const towns = TOWNS.filter(p => !p[4]), mi = p => Math.hypot((p[1] - ll.lat) * 69.05, (p[2] - ll.lng) * 69.05 * Math.cos(ll.lat * Math.PI / 180));
+    const towns = places.filter(p => p.rank && !p.kind), mi = p => Math.hypot((p.lat - ll.lat) * 69.05, (p.lon - ll.lng) * 69.05 * Math.cos(ll.lat * Math.PI / 180));
     const near = towns.reduce((a, b) => mi(a) <= mi(b) ? a : b), d = Math.round(mi(near));
-    const title = d < 1 ? near[0] : sea ? plural(d, "mile", "miles") + " off " + near[0] : "Near " + near[0];
+    const title = d < 1 ? near.name : sea ? plural(d, "mile", "miles") + " off " + near.name : "Near " + near.name;
     const html = '<b class="pt-h">' + title + "</b>"
       + '<span class="pt-sub">' + (sea ? "At sea" : "On land") + " · " + whenText() + " · wind from the " + COMPASS[Math.round(from / 45) % 8] + "</span>"
       + (sea && lv ? '<span class="pt-lv ' + lv + '">' + WORD[lv] + ": " + LINE[lv] + "</span>" : "")
@@ -1670,60 +1697,40 @@ footer strong{color:var(--label);font-weight:600}
   }
   // Batches: everything drawn in the same style goes into one path, so a frame is a handful of strokes
   const batches = n => Array.from({length:n}, () => new Path2D());
-  // Waves: little crests seen from above, like a drawn wave. Each one swells up, rolls forward bowed in the
-  // direction the waves run, curls over at its peak and fades, wider and quicker where the sea is higher,
-  // with white foam breaking on rough water
+  // Waves, as on Ventusky: thin white crests seen from above, each bowed the way the waves run, drifting slowly
+  // along their path as it fades in and out; longer, brighter and quicker where the sea is higher
   function stepWaves(c, dt){
-    c.clearRect(0, 0, vw, vh); c.lineCap = "round"; c.lineJoin = "round";
-    const A = 4, crest = batches(A), back = batches(A), foam = batches(A);
+    c.clearRect(0, 0, vw, vh); c.lineCap = "round";
+    const A = 4, crest = batches(A);
     for(const p of parts){
-      const k = cellAt(p.x, p.y);
       p.age += dt;
-      if(p.age > p.max || !fld.sea[k] || p.x < -30 || p.y < -30 || p.x > vw + 30 || p.y > vh + 30){ spawn(p); continue; }
-      const du = fld.u[k], dv = fld.v[k], hgt = Math.min(fld.m[k], 4), t = p.age / p.max, rise = Math.sin(Math.PI * t), sp = (.18 + .22 * Math.sqrt(hgt)) * dt;
+      if(p.age > p.max || !fld.sea[cellAt(p.x, p.y)] || p.x < -30 || p.y < -30 || p.x > vw + 30 || p.y > vh + 30){ spawn(p); continue; }
+      let du = vel(p.x, p.y, fld.u), dv = vel(p.x, p.y, fld.v); const n = Math.hypot(du, dv) || 1; du /= n; dv /= n;
+      const hgt = Math.min(vel(p.x, p.y, fld.m), 4), fade = Math.sin(Math.PI * p.age / p.max), sp = (.1 + .14 * Math.sqrt(hgt)) * dt;
       p.x += du * sp; p.y += dv * sp;
-      const a = Math.min(A - 1, rise * A | 0); if(a < 1 && rise < .12) continue;
-      // drawn upright and side-on like a little breaking wave: it rises from the water and curls over at the
-      // top, facing left or right with the way the waves run, while the whole wave drifts along their path
-      const fx = du < 0 ? -1 : 1, w = (5 + hgt * 2.6) * (.7 + .3 * rise), h = w * (.35 + .65 * rise);
-      const P = (f, u) => [p.x + fx * f * w, p.y - u * h];
-      const C = crest[a], q = (c1, e) => { const A1 = P(...c1), E = P(...e); C.quadraticCurveTo(A1[0], A1[1], E[0], E[1]); };
-      let m = P(-1.4, 0); C.moveTo(m[0], m[1]);
-      q([-.5, 0], [-.2, .45]); q([.05, 1.05], [.55, .95]);   // the face, up to the crest
-      q([.95, .85], [.75, .5]); q([.6, .3], [.4, .55]);      // the curl tipping over
-      // the water line running on ahead of the wave, fainter
-      const bb = back[Math.max(0, a - 1)]; m = P(.55, .1); bb.moveTo(m[0], m[1]); m = P(1.6, 0); bb.lineTo(m[0], m[1]);
-      // whitecaps: spray off the crest on rough water
-      if(hgt > 1.1 && p.cap < (hgt - 1.1) / 2.2 && t > .4 && t < .8){
-        const F = foam[a], fr = .6 + Math.min(hgt, 3) * .2;
-        for(const [f, u] of [[.9, 1.15], [1.2, .9], [.55, 1.35]]){ const [fx, fy] = P(f, u); F.moveTo(fx + fr, fy); F.arc(fx, fy, fr, 0, 7); }
-      }
+      if(fade < .08) continue;
+      // an arc whose middle sits on the crest, curving back on both sides like a wave front
+      const half = 4 + hgt * 3 + p.cap * 2, R = half * 2.4, ang = Math.atan2(dv, du), sw = Math.asin(half / R), cx = p.x - du * R, cy = p.y - dv * R;
+      const P = crest[Math.min(A - 1, fade * A | 0)];
+      P.moveTo(cx + R * Math.cos(ang - sw), cy + R * Math.sin(ang - sw)); P.arc(cx, cy, R, ang - sw, ang + sw);
     }
-    for(let a = 0; a < A; a++){
-      const o = .2 + .75 * (a + .5) / A;
-      c.strokeStyle = "rgba(255,255,255," + (o * .35).toFixed(2) + ")"; c.lineWidth = 1.1; c.stroke(back[a]);
-      c.strokeStyle = "rgba(255,255,255," + o.toFixed(2) + ")"; c.lineWidth = 1.6; c.stroke(crest[a]);
-      c.fillStyle = "rgba(255,255,255," + Math.min(1, o + .1).toFixed(2) + ")"; c.fill(foam[a]);
-    }
+    for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
-  // Gusts: quick streaks sweeping downwind in waves, white for a breeze, amber then red for strong gusts
+  // Gusts: smooth streaks running downwind, faster and longer than the wind's, white for a breeze, amber then red for strong gusts
   const GCOL = ["255,255,255", "255,214,10", "255,95,80"];
   function stepGusts(c, dt){
-    c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0," + Math.pow(.84, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);
+    c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0," + Math.pow(.94, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // long, soft trails
     c.globalCompositeOperation = "source-over"; c.lineCap = "round";
-    const A = 3, paths = batches(A * 3), band = 260, du = fld.du, dv = fld.dv;
+    const paths = batches(3);
     for(const p of parts){
-      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), g = vel(p.x, p.y, fld.m), s = SPEED * 1.7 * dt;
+      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), g = vel(p.x, p.y, fld.m), s = SPEED * 1.25 * dt;
       const nx = p.x + u * s, ny = p.y + v * s;
       p.age += dt;
       if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
-      // a gust front: a band of strong air moving downwind, with lulls between
-      const ph = (p.x * du + p.y * dv) / band - clock * (.004 + g * .0003), pulse = Math.pow(.5 + .5 * Math.sin(ph * 6.283 + p.cap * .8), 3);
-      const a = Math.min(A - 1, pulse * A | 0);
-      if(pulse > .12) { const P = paths[(g >= 40 ? 2 : g >= 28 ? 1 : 0) * A + a]; P.moveTo(p.x, p.y); P.lineTo(nx, ny); }
+      const P = paths[g >= 40 ? 2 : g >= 28 ? 1 : 0]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
       p.x = nx; p.y = ny;
     }
-    for(let col = 0; col < 3; col++) for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(" + GCOL[col] + "," + (.3 + .6 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.3 + a * .5; c.stroke(paths[col * A + a]); }
+    [[.6, 1.3], [.8, 1.5], [.85, 1.7]].forEach(([a, w], i) => { c.strokeStyle = "rgba(" + GCOL[i] + "," + a + ")"; c.lineWidth = w; c.stroke(paths[i]); });
   }
   // Wind: particles drifting with the wind, brighter where it's stronger
   function stepWind(c, dt){
@@ -1742,7 +1749,7 @@ footer strong{color:var(--label);font-weight:600}
   function stepFlow(dt){
     if(!fld || !flow) return;
     const c = flow.getContext("2d");
-    c.setTransform(dpr, 0, 0, dpr, 0, 0); clock += dt;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
     (fld.mode === "waves" ? stepWaves : fld.mode === "gusts" ? stepGusts : stepWind)(c, dt);
   }
   // Runs only while the Channel is on screen and the tab is visible; movement is per time, not per frame, so 120 Hz screens match 60 Hz ones
@@ -1867,6 +1874,7 @@ footer strong{color:var(--label);font-weight:600}
     if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3); }
     $("fresh").classList.toggle("live", on);
     refreshLatest();
+    placeTowns();   // the figures and chips may have changed size: the place names keep clear of them
   }
   // Pop-ups on the chips: open on hover (mouse), tap or keyboard; close on leaving, tapping elsewhere or Escape
   let cur = null, hideT;
@@ -2216,7 +2224,7 @@ footer strong{color:var(--label);font-weight:600}
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>"
-        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the little white waves roll the way the sea is running, bigger where it is rougher. Switch to wind to see it blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", brighter where it is stronger, or to gusts, which sweep across in pulses, turning amber then red as they get stronger. Hover over the map with a mouse to read the weather at any spot, or tap anywhere for the full picture there. Switch to wind, gusts, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
+        + '<p class="wp-note">The outlook is for mornings, when most boats set out. On the map, the white wave crests drift the way the sea is running, longer where it is rougher. Switch to wind to see it blowing from the ' + COMPASS[Math.round(wx.dir / 45) % 8] + ", brighter where it is stronger, or to gusts, which stream across faster, turning amber then red as they get stronger. Hover over the map with a mouse to read the weather at any spot, or tap anywhere for the full picture there. Switch to wind, gusts, temperature, rain or cloud, slide through the next 48 hours, or open it full screen.</p>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
