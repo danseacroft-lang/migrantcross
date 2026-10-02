@@ -604,11 +604,19 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-area-inset-bottom,0px));color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer{border-top:.5px solid var(--sep);padding-top:20px}
 footer p{margin:0;max-width:52ch;line-height:1.45}
-footer p a,.ft-nav a{color:var(--blue);text-decoration:none}
+footer p a{color:var(--blue);text-decoration:none}
 footer strong{color:var(--label);font-weight:600}
-.ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
-.ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
-@media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
+@media (hover:hover){footer p a:hover{text-decoration:underline}}
+/* share buttons: ready-made posts of the latest figures for each network (links only; nothing loads from them until clicked) */
+.ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
+.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff;touch-action:manipulation}
+.sh-x{background:#000}
+.sh-fb{background:#1877F2}.sh-wa{background:#1FA855}.sh-tg{background:#229ED9}
+.sh-copy,.sh-more{background:var(--fill);color:var(--blue)}
+.sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.sh:hover{filter:brightness(1.1)}}
+:root[data-theme="dark"] .sh-x{background:#fff;color:#000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sh-x{background:#fff;color:#000}}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -669,7 +677,7 @@ footer strong{color:var(--label);font-weight:600}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
-/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, share, roundup) */
+/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, roundup) */
 .mb{--mbar:var(--blue);--bar-peak:var(--orange);--boat:#DB7100;--green-bg:rgba(52,199,89,.14)}
 :root[data-theme="dark"] .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
@@ -682,11 +690,10 @@ footer strong{color:var(--label);font-weight:600}
 .mb .petitions li{gap:2px 12px;padding:12px 0}
 .mb .petitions li:first-child{padding-top:0}
 .mb .petitions li:last-child{padding-bottom:0}
-.mb .share-card{display:grid;gap:8px}
 .mb .subscribe{grid-template-columns:auto minmax(0,1fr)!important;padding-right:16px!important}
 .mb .sub-copy{padding-right:32px}
 .mb .sub-form,.mb .sub-msg{grid-column:1 / -1}
-.mb .subscribe{margin-top:14px;background:var(--card);border-radius:22px;box-shadow:var(--shadow)}
+.mb .subscribe{background:var(--card);border-radius:22px;box-shadow:var(--shadow)}
 .mb.area-rep{display:none}
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
 .toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
@@ -818,18 +825,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .sub-msg.ok{color:var(--green);font-weight:600}.mb .sub-msg.err{color:var(--red)}
 .mb .subscribe.done .sub-form{display:none}
 @media (max-width:760px){.mb .subscribe{grid-template-columns:auto minmax(0,1fr);padding-right:16px}.mb .sub-copy{padding-right:32px}.mb .sub-form,.mb .sub-msg{grid-column:1 / -1}}
-/* Share tile */
-.mb .share-text{font-size:.882rem;color:var(--label);line-height:1.35}
-.mb .share-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.mb .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff}
-.mb .sh-x{background:#000}
-.mb .sh-fb{background:#1877F2}.mb .sh-wa{background:#1FA855}.mb .sh-tg{background:#229ED9}
-.mb .sh-copy,.mb .sh-more{background:var(--fill);color:var(--blue)}
-.mb .sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.mb .sh:hover{filter:brightness(1.1)}}
 @media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
-:root[data-theme="dark"] .mb .sh-x{background:#fff;color:#000}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb .sh-x{background:#fff;color:#000}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
@@ -1186,13 +1182,8 @@ footer strong{color:var(--label);font-weight:600}
     <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
   </section>
 
-  <!-- ============================================================ SHARE, WEEKLY ROUNDUP -->
-  <section class="mb" aria-labelledby="shareK">
-    <div class="section-h rv"><h2 id="shareK">Share Today's Figures</h2></div>
-    <div class="card share-card rv">
-      <div class="share-text" id="shareText">Loading the latest figures…</div>
-      <div class="share-row"><a class="sh sh-x" id="shX" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" target="_blank" rel="noopener">Facebook</a><a class="sh sh-wa" id="shWa" target="_blank" rel="noopener">WhatsApp</a><a class="sh sh-tg" id="shTg" target="_blank" rel="noopener">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
-    </div>
+  <!-- ============================================================ WEEKLY ROUNDUP -->
+  <section class="mb" aria-labelledby="subTitle">
     <div class="subscribe rv" id="subscribe" aria-labelledby="subTitle">
       <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
       <div class="sub-copy">
@@ -1226,12 +1217,9 @@ footer strong{color:var(--label);font-weight:600}
 
 
 <footer>
-  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
-  <p>© 2026 Channel Crossings. Independent and not affiliated with the UK Government.</p>
-  <p><strong>Licence:</strong> All Home Office data on this site is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. Weather data by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (CC BY 4.0). Map © Esri, HERE, Garmin. Place names from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0). Hill heights from Mapzen's <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md" target="_blank" rel="noopener">Terrain Tiles</a> (EU-DEM, SRTM and others).</p>
-  <p><strong>Privacy:</strong> This website does not use cookies or any tracking technologies. We only hold your email address if you sign up for email updates.</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -2426,7 +2414,7 @@ footer strong{color:var(--label);font-weight:600}
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals, yearly totals,
-     between two dates, quiet spells, patterns, every person, petitions, share and the weekly roundup */
+     between two dates, quiet spells, patterns, every person, petitions and the weekly roundup */
   let sorted = [];   // the same figures as days, under the name these boxes were written with
   const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
   const dFull = dLong;
@@ -2836,11 +2824,11 @@ footer strong{color:var(--label);font-weight:600}
     s += " " + last.date.slice(0,4) + " so far: " + fmt(ytd) + ".";
     return s + " Source: Home Office.";
   }
-  // Share tile: ready-made posts for each network (links only; nothing loads from them until clicked)
+  // Share buttons in the footer: ready-made posts for each network (links only; nothing loads from them until clicked).
+  // Until the figures load they share just the link.
   function renderShare(){
     if(!sorted.length) return;
     const url = "https://channelcrossings.world/", text = shareText(), e = encodeURIComponent;
-    $("shareText").textContent = text;
     $("shX").href = "https://x.com/intent/post?text=" + e(text) + "&url=" + e(url);
     $("shFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + e(url);
     $("shWa").href = "https://wa.me/?text=" + e(text + " " + url);
@@ -2848,7 +2836,7 @@ footer strong{color:var(--label);font-weight:600}
     $("shMore").hidden = !navigator.share;
   }
   $("shCopy").addEventListener("click", async ()=>{
-    try{ await navigator.clipboard.writeText(shareText() + " https://channelcrossings.world/"); toast("Copied to clipboard"); }
+    try{ await navigator.clipboard.writeText((sorted.length ? shareText() + " " : "") + "https://channelcrossings.world/"); toast("Copied to clipboard"); }
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
   });
   $("shMore").addEventListener("click", async ()=>{
@@ -2887,10 +2875,10 @@ footer strong{color:var(--label);font-weight:600}
 
   $("subClose").addEventListener("click", () => {
     store.set("subClosed", "1");
-    const box = $("subscribe"); if(reduced){ box.hidden = true; return; }
-    box.classList.add("leaving"); box.addEventListener("animationend", () => box.hidden = true, {once:true});
+    const box = $("subscribe"), sec = box.parentElement; if(reduced){ sec.hidden = true; return; }
+    box.classList.add("leaving"); box.addEventListener("animationend", () => sec.hidden = true, {once:true});
   });
-  if(store.get("subClosed")) $("subscribe").hidden = true;
+  if(store.get("subClosed")) $("subscribe").parentElement.hidden = true;   // its section, so no empty gap is left above the footer
 
   function renderPetitions(){
     const list = extras.petitions && extras.petitions.petitions || [];
@@ -2995,9 +2983,8 @@ footer strong{color:var(--label);font-weight:600}
     if(e.key === "ArrowLeft" && tourI > 0) tourShow(tourI - 1);
     if(e.key === "Tab"){ e.preventDefault(); (document.activeElement === $("tourNext") && !$("tourSkip").hidden ? $("tourSkip") : $("tourNext")).focus(); }
   });
-  $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
   // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
-  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // the Map tour link on the other pages
+  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // old Map tour links (…/#tour)
   else if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
 
   /* ---------------------------------------------------- go */
