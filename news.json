@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-02T15:25:28Z",
+ "checkedAt": "2026-10-02T16:24:01Z",
  "items": [
+  {
+   "title": "Is UK politics 'boomer-centric'?",
+   "url": "https://www.bbc.co.uk/news/videos/c9n73ly655ero?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-02T16:13:08Z",
+   "breaking": true
+  },
   {
    "title": "First minister demands 'new deal' from Andy Burnham to make Wales equal with Scotland",
    "url": "https://www.bbc.co.uk/news/articles/cr0j3jdj64x7o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-02T15:13:11Z",
+   "published": "2026-10-02T15:40:31Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cr0qxq7jwg9go?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-02T14:09:25Z",
-   "breaking": true
-  },
-  {
-   "title": "Polanski calls for 'national fair rent guarantee'",
-   "url": "https://www.bbc.co.uk/news/videos/cqlyeg7rx4rjo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-02T13:33:57Z",
    "breaking": true
   }
  ]
