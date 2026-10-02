@@ -305,18 +305,6 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .fu-btn::after{content:"";position:absolute;inset:-12px -8px}   /* a comfortable tap target */
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
-/* Refresh Figures, under today's line in the Figure updates pop-up */
-.refresh-btn{position:relative;margin-top:6px;display:inline-flex;align-items:center;gap:6px;padding:4px 0;border:0;background:none;color:var(--blue);font:600 .882rem/1.2 var(--font);letter-spacing:-.016em;cursor:pointer;touch-action:manipulation}
-.refresh-btn::after{content:"";position:absolute;inset:-8px -8px}
-.refresh-btn svg{width:17px;height:17px;flex:none}
-.refresh-btn.busy svg{animation:spin .9s linear infinite}
-.refresh-btn.busy,.refresh-btn.done{cursor:default}
-.refresh-btn.done{color:var(--label2)}
-.refresh-btn.done svg{color:var(--green)}
-.refresh-btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
-.refresh-btn.latest{cursor:default;color:var(--label2);font-weight:500}
-.refresh-btn.latest svg{display:none}
-@media (hover:hover){.refresh-btn:not(.busy):not(.done):not(.latest):hover{text-decoration:underline}}
 .large-title > *{pointer-events:auto}
 @media (max-width:600px){.wx-ctl{top:88px;right:20px}}
 .large-title .lt-logo{display:block;width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,.35);transition:transform .2s ease}
@@ -919,7 +907,6 @@ footer strong{color:var(--label);font-weight:600}
   <b>Figure updates</b>
   <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
   <p class="fu-today" id="fuToday"></p>
-  <button type="button" class="refresh-btn" id="refreshBtn" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 1 1-2.6-5.9"/><path d="M20.2 3.8v4.6h-4.6"/></svg><span id="refreshText">Refresh Figures</span></button>
 </div>
 
 <div class="info-pop wx-pop mp-pop" id="popMap" role="dialog" aria-label="Live conditions" hidden></div>
@@ -1882,15 +1869,6 @@ footer strong{color:var(--label);font-weight:600}
   const yesterday = () => new Date(Date.parse(ukToday() + "T12:00:00Z") - DAY).toISOString().slice(0,10);
   const haveYesterday = () => days.length && days[days.length-1].date >= yesterday();
   const pending = () => ukHM() >= "12:00" && !haveYesterday();
-  // Already up to date: Refresh Figures stops being a link and says so instead
-  function refreshLatest(){
-    const btn = $("refreshBtn");
-    if(btn.classList.contains("busy") || btn.classList.contains("done")) return;
-    const on = haveYesterday();
-    btn.classList.toggle("latest", on);
-    if(on) btn.setAttribute("aria-disabled", "true"); else btn.removeAttribute("aria-disabled");
-    $("refreshText").textContent = on ? "You already have the latest figures database" : "Refresh Figures";
-  }
   function liveUi(){
     const on = pending(), live = $("chipLive");
     // the daily update in the strip across the top of the map: shows while new figures are awaited, unless it was closed today
@@ -1903,7 +1881,6 @@ footer strong{color:var(--label);font-weight:600}
       : on ? "New figures incoming. Please wait." : "Today's figures aren't in yet. Checks start at 12:00.";
     // the line under the title: "Figures to 30 Sept · Figure Updates" (while new figures are awaited, the strip on the map says so)
     if(days.length){ const last = days[days.length-1].date; $("freshText").textContent = "Figures to " + dShort.format(parse(last)); $("fresh").classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3); }
-    refreshLatest();
     placeTowns();   // the figures and chips may have changed size: the place names keep clear of them
   }
   // Pop-ups on the chips: open on hover (mouse), tap or keyboard; close on leaving, tapping elsewhere or Escape
@@ -2772,7 +2749,7 @@ footer strong{color:var(--label);font-weight:600}
     {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature, rain and cloud. You can also turn the launch beaches on or off here."},
     {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
     {el:() => $("lmap"), h: touchy ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchy ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
-    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived, or check for new ones with Refresh Figures."},
+    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
     {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
   ];
   let tourSteps = [], tourI = 0, tourTick = null;
@@ -2852,41 +2829,6 @@ footer strong{color:var(--label);font-weight:600}
       loadExtras(); loadPetitions();
     }catch(e){ $("heroKicker").hidden = false; $("heroKicker").textContent = "Couldn't load the figures. Trying again…"; setTimeout(start, MIN); }   // try again in a minute
   }
-  /* ---------------------------------------------------- Refresh Figures (in the Figure updates pop-up) */
-  // Looks for new figures without reloading: the site's own figures, plus the Home Office's "last 7 days" page read
-  // straight from GOV.UK, which can publish before the site's next check. If GOV.UK can't be read, the site's figures are used.
-  const GOV7 = "https://www.gov.uk/api/content/government/publications/migrants-detected-crossing-the-english-channel-in-small-boats/migrants-detected-crossing-the-english-channel-in-small-boats-last-7-days";
-  const MONTHS = {january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,september:9,october:10,november:11,december:12};
-  const toInt = t => { const n = parseInt(String(t).replace(/[^0-9]/g, ""), 10); return isNaN(n) ? 0 : n; };
-  async function fetchGov7(){
-    const body = ((await getJSON(GOV7)).details || {}).body || "", out = [];
-    new DOMParser().parseFromString(body, "text/html").querySelectorAll("table tbody tr").forEach(tr => {
-      const cells = [...tr.children].map(c => c.textContent.trim()), m = /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/.exec(cells[0] || "");
-      if(!m || !MONTHS[m[2].toLowerCase()]) return;
-      out.push({date:m[3] + "-" + String(MONTHS[m[2].toLowerCase()]).padStart(2, "0") + "-" + m[1].padStart(2, "0"), migrants:toInt(cells[1]), boats:toInt(cells[2]), uncontrolled:cells[3] != null ? toInt(cells[3]) : null});
-    });
-    return out;
-  }
-  $("refreshBtn").addEventListener("click", async e => {
-    e.stopPropagation();
-    const btn = $("refreshBtn"), txt = $("refreshText");
-    if(btn.getAttribute("aria-disabled") === "true") return;
-    btn.setAttribute("aria-disabled", "true"); btn.classList.remove("done"); btn.classList.add("busy"); txt.textContent = "Refreshing…";
-    const started = Date.now(), before = days.length ? days[days.length-1].date : "", builtBefore = meta && meta.checkedAt;
-    let result = "No updates available";
-    const [own, gov] = await Promise.allSettled([getJSON("data.json"), fetchGov7()]);
-    if(own.status === "fulfilled"){
-      const d = own.value, ownLatest = d.days && d.days.length ? d.days[d.days.length-1].date : "";
-      const extra = (gov.status === "fulfilled" ? gov.value : []).filter(g => g.date > ownLatest).sort((a, b) => a.date < b.date ? -1 : 1);
-      if(extra.length) d.days = (d.days || []).concat(extra);
-      const latest = d.days && d.days.length ? d.days[d.days.length-1].date : "";
-      if(latest > before || (d.checkedAt && d.checkedAt !== builtBefore)){ useData(d); renderAll(); loadExtras(); if(latest > before) result = "New figures are in"; }
-    } else result = "Couldn't refresh. Try again";
-    loadNews(); if(Date.now() - wxAt > 5 * MIN){ loadWeather(); loadGrid(); }   // freshen the rest too
-    await new Promise(r => setTimeout(r, Math.max(0, 900 - (Date.now() - started))));
-    btn.classList.remove("busy"); btn.classList.add("done"); txt.textContent = result;
-    setTimeout(() => { btn.classList.remove("done"); txt.textContent = "Refresh Figures"; btn.removeAttribute("aria-disabled"); refreshLatest(); }, 2500);
-  });
   /* ---------------------------------------------------- the strip across the top of the map: breaking news and the daily update */
   // Breaking news: small boats stories from UK outlets published in the last 3 hours. It flashes when a new story comes in;
   // closing it hides it until a newer one. Checked on load and every 10 minutes.
