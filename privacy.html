@@ -13,7 +13,7 @@
 <style>
 :root{
   --bg:#FFFFFF; --card:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.6);
-  --sep:rgba(60,60,67,.22); --fill:rgba(118,118,128,.12); --note:#F2F2F7; --blue:#007AFF;
+  --sep:rgba(60,60,67,.22); --blue:#007AFF;
   --thumb:rgba(60,60,67,.3);
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
@@ -21,13 +21,13 @@
   :root:not([data-theme="light"]){
     color-scheme:dark;
     --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
-    --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --note:#1C1C1E; --blue:#0A84FF; --thumb:rgba(235,235,245,.3);
+    --sep:rgba(84,84,88,.6); --blue:#0A84FF; --thumb:rgba(235,235,245,.3);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
-  --sep:rgba(84,84,88,.6); --fill:rgba(118,118,128,.24); --note:#1C1C1E; --blue:#0A84FF; --thumb:rgba(235,235,245,.3);
+  --sep:rgba(84,84,88,.6); --blue:#0A84FF; --thumb:rgba(235,235,245,.3);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -40,14 +40,6 @@ body{
 }
 .wrap{width:100%; max-width:680px; display:flex; flex-direction:column; align-items:center}
 
-.home-btn{
-  display:inline-flex; align-items:center; gap:6px; text-decoration:none;
-  font:600 15px/1 var(--font); letter-spacing:-.016em; color:var(--blue);
-  min-height:44px; padding:0 18px 0 12px; border-radius:22px; background:var(--fill);
-  margin-bottom:24px; align-self:flex-start;
-}
-.home-btn svg{width:18px; height:18px}
-.home-btn:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
 
 
 h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0 0 6px; text-align:center; text-wrap:balance}
@@ -60,7 +52,7 @@ h1{font:700 28px/1.15 var(--font); letter-spacing:.013em; margin:0 0 6px; text-a
 }
 .policy-box + .section-label{margin-top:32px}
 
-/* Each document scrolls inside its own box, like the HypaSpeed page */
+/* Each document scrolls inside its own box */
 .policy-box{
   width:100%; height:min(55vh, 520px); overflow-y:auto; overflow-x:hidden;
   background:var(--card); border:.5px solid var(--sep); border-radius:12px;
@@ -119,13 +111,14 @@ button,input,select,textarea{font:inherit}
       <li>tracking cookies of any kind.</li>
     </ul>
     <p id="email"><strong>Weekly roundup emails.</strong> If you sign up for the weekly roundup of the figures, we hold your email address and use it only to send you the roundup. Nothing else is asked for. You sign up by choice: after you enter your address you are sent a message asking you to confirm, and nothing more is sent until you do. Every email has an unsubscribe link, and unsubscribing stops the emails straight away. We keep your address until you unsubscribe or ask us to delete it. We never sell or share it. The mailing list is run for us by EmailOctopus (Three Hearts Digital Ltd, London), which stores the list and sends the emails on our behalf under <a href="https://emailoctopus.com/legal/privacy" target="_blank" rel="noopener">EmailOctopus's Privacy Policy</a>. Like most email services, it can record whether an email is opened and which links are clicked.</p>
-    <p>We do not ask for your location. The weather shown on the site is always for a fixed point in the middle of the Dover Strait, not for where you are.</p>
+    <p>We do not ask for your location. The weather shown on the site is for the Channel itself: the Dover Strait, and any spot on the map you tap or point at. It is never for where you are.</p>
     <p><strong>If you email us.</strong> If you choose to contact us at <a href="mailto:x.chancrossings@gmail.com">x.chancrossings@gmail.com</a>, we receive your email address and whatever you include in your message. We use this only to read and reply to you. We do not add you to any mailing list or share your details with anyone. Emails are kept only as long as needed to deal with your message, and you can ask us to delete them at any time. Our email is provided by Google (Gmail), which processes messages under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</p>
 
     <h2>3. Information Stored on Your Device</h2>
     <p>To make the site work better, your browser keeps a few things on your own device:</p>
     <ul>
-      <li><strong>Closed notices:</strong> if you close the Channel conditions or On this day notice, your browser remembers that for the rest of the day so it does not keep reappearing.</li>
+      <li><strong>Closed notices:</strong> if you close the "New figures incoming" notice, your browser remembers that for the rest of the day so it does not keep reappearing.</li>
+      <li><strong>The map tour:</strong> that you have seen the quick tour of the map, so it is not shown again.</li>
       <li><strong>Closed weekly roundup box:</strong> if you close the weekly roundup sign-up, so it stays closed.</li>
       <li><strong>Your appearance choice:</strong> if you pick Day or Night instead of Auto.</li>
       <li><strong>Closed breaking news:</strong> the last news story you closed, so it stays closed until a newer one arrives.</li>
@@ -138,7 +131,9 @@ button,input,select,textarea{font:inherit}
     <p>Like every website, Channel Crossings relies on a few outside services to work. When your browser connects to them, they receive the technical details that any web request carries, such as your IP address and browser type. Each handles that information under its own privacy policy:</p>
     <ul>
       <li><strong>GitHub Pages</strong> hosts the website. GitHub may log visitors' IP addresses for security and to keep the service running. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's Privacy Statement</a>.</li>
-      <li><strong>Open-Meteo</strong> provides the wind and wave forecasts. Your browser requests the forecast directly from Open-Meteo each time the page loads and every 30 minutes while it is open. See <a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener">Open-Meteo's terms and privacy information</a>.</li>
+      <li><strong>Open-Meteo</strong> provides the weather forecasts. Your browser requests the forecast directly from Open-Meteo each time the page loads and every 30 minutes while it is open. See <a href="https://open-meteo.com/en/terms" target="_blank" rel="noopener">Open-Meteo's terms and privacy information</a>.</li>
+      <li><strong>Esri</strong> provides the map itself. Your browser downloads the map images from Esri's servers as the map is shown and moved. See <a href="https://www.esri.com/en-us/privacy/overview" target="_blank" rel="noopener">Esri's privacy statement</a>.</li>
+      <li><strong>unpkg</strong> delivers Leaflet, the free software that draws the map, each time the page loads. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a> (unpkg runs on Cloudflare).</li>
       <li><strong>EmailOctopus</strong> runs the email updates list. Your browser only contacts it if you sign up. See <a href="https://emailoctopus.com/legal/privacy" target="_blank" rel="noopener">EmailOctopus's Privacy Policy</a>.</li>
       <li><strong>Our domain name provider</strong> directs visitors from our web address to the site. It does not see what you do on the site.</li>
     </ul>

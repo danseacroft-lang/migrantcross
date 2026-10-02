@@ -9,11 +9,10 @@ Two sources, both provisional Home Office data:
 The 7-day page wins where the two overlap, because it is newer.
 
 Outputs (see publish()):
-  data.json    full daily history, loaded in the background by the page
-  recent.json  last 90 days plus totals: tiny, for the embed widget and the homepage
+  data.json    full daily history, loaded by the homepage
+  recent.json  last 90 days plus totals: tiny, for the embed widget
   data.csv     the full history as a spreadsheet download
-  index.html   latest figures built into the page so they show instantly,
-               plus an up-to-date description and dataset date for Google
+  index.html   an up-to-date description, link-preview picture and dataset dates for Google
   og-image.png link preview picture; week-card.png weekly summary picture
   gender.json, nationalities.json, perboat.json, returns.json, petitions.json: see scripts/extras.py
   status.json  tiny heartbeat the page polls: when we last checked, and which build of the figures is current
@@ -236,21 +235,11 @@ def nice_date(iso):
 
 
 def update_page(data, recent):
-    """Build the latest figures, description and dataset date into index.html."""
+    """Keep index.html's description, dataset dates and link-preview picture up to date."""
     page = ROOT / "index.html"
     html = page.read_text()
     last = data["days"][-1]
     latest = last["date"]
-
-    extras = {}
-    for key, name in (("gender", "gender.json"), ("petitions", "petitions.json"), ("nationalities", "nationalities.json"),
-                      ("perboat", "perboat.json"), ("returns", "returns.json")):
-        f = ROOT / name
-        if f.exists():
-            extras[key] = json.loads(f.read_text())
-    seed = json.dumps({**recent, "extras": extras}, separators=(",", ":")).replace("</", "<\\/")
-    html = re.sub(r'(<script id="seed" type="application/json">).*?(</script>)',
-                  lambda m: m.group(1) + seed + m.group(2), html, count=1, flags=re.S)
 
     n = last["migrants"]
     ytd = recent["ytdBase"] + sum(d["migrants"] for d in recent["days"] if d["date"] > recent["ytdBaseDate"] and d["date"][:4] == latest[:4])
@@ -354,7 +343,7 @@ def main():
     year_totals(data, data["days"])
     try:
         from extras import update_all
-        update_all(data["days"])   # sex and age, petitions, prediction: each optional
+        update_all(data["days"])   # sex and age, nationalities, people per boat, returns, petitions: each optional
     except Exception as e:  # noqa: BLE001 - never let the extras stop the daily figures
         print("Extras skipped:", e)
     data["checkedAt"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
