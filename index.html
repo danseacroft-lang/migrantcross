@@ -2620,7 +2620,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       busy.migrants ? ["bolt", "#007AFF", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)]
         : ["bolt", "#007AFF", "No crossings yet in " + yr, "", "–"],   // early January
       ["clock", "#5856D6", "Since the last crossing", !lastX ? "" : since === 0 ? "Crossings on " + dMid.format(parse(last.date)) : "Last: " + dMid.format(parse(lastX.date)),
-        !lastX ? "–" : since === 0 ? "Today" : since + (since === 1 ? " day" : " days")],
+        !lastX ? "–" : since + (since === 1 ? " day" : " days")],   // counted to the latest figures, not to today
       ["waves", "#34C759", "Longest quiet spell in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "No quiet days yet", best ? best + (best === 1 ? " day" : " days") : "–"]
     ];
     $("records").innerHTML = rows.map(r => '<li><span class="ic" style="background:' + r[1] + '">' + RIC[r[0]] + '</span><span class="t">' + r[2] + "<small>" + r[3] + '</small></span><span class="v">' + r[4] + "</span></li>").join("");
