@@ -126,10 +126,10 @@ button,input,select,textarea{font:inherit}
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
 .hero-map{position:absolute;inset:0;will-change:transform}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-/* the live weather map (Leaflet), in the style of Ventusky: a light grey map, the sea in one calm blue, and the weather moving over it */
+/* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
 .wx-heat{mix-blend-mode:multiply}   /* the sea colour tints the map, so its texture still shows */
-.wx-heat.solid{opacity:.96}   /* temperature: rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
+.wx-heat.solid{opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -1758,7 +1758,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     const tl = LM.containerPointToLayerPoint([0, 0]);
     [heat, flow].forEach(c => { c.width = vw * dpr; c.height = vh * dpr; c.style.width = vw + "px"; c.style.height = vh + "px"; L.DomUtil.setPosition(c, tl); });
     const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
-    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n);
+    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n), val = new Float32Array(n);
     const mode = layer === "waves" ? "waves" : layer === "gusts" ? "gusts" : "wind", sea = seaMask(cols, rows);
     // the grid is regular in latitude and longitude, so each column and row is looked up once
     const lat = Float64Array.from({length:rows}, (_, r) => LM.containerPointToLatLng([0, r * CELL]).lat), lon = Float64Array.from({length:cols}, (_, c) => LM.containerPointToLatLng([c * CELL, 0]).lng);
@@ -1772,10 +1772,11 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
       } else if(mode === "gusts"){
         const g = sample(la, lo, "gust"); u[k] = wu / (ws || 1) * g; v[k] = wv / (ws || 1) * g; m[k] = g;
       } else { u[k] = wu; v[k] = wv; m[k] = ws; }
+      val[k] = layer === "rain" ? sample(la, lo, "rain") : m[k];
     }
     fld = {cols, rows, u, v, m, sea, mode};
     const h = heat.getContext("2d"), p = unitPx();
-    heat.classList.toggle("solid", layer === "temp");
+    heat.classList.add("solid");
     if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings, with the hills
       drawTemp(h);
       // the sea a shade darker than the land, so the coast still shows through the colour
@@ -1783,11 +1784,25 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
       h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
-    } else {   // the sea in one calm blue, as on Ventusky; the land stays clear grey
-      h.fillStyle = "#6973B2"; h.fillRect(0, 0, heat.width, heat.height);
-      h.globalCompositeOperation = "destination-out"; h.filter = "blur(" + (1.5 * dpr) + "px)";
-      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
-      h.setTransform(1, 0, 0, 1, 0, 0); h.globalCompositeOperation = "source-over"; h.filter = "none";
+    } else {   // as on Ventusky: the layer in colour, blended smoothly between the readings. Wind and gusts over land and sea;
+      // waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain
+      const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
+      const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
+      for(let k = 0; k < n; k++){
+        const x = val[k], c = colour(x, st), q = k * 4;
+        px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
+        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(255 * Math.min(1, .35 + x * .65))) : 255;
+      }
+      sx.putImageData(img, 0, 0);
+      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = "blur(" + (2 * dpr) + "px)";
+      h.setTransform(dpr, 0, 0, dpr, 0, 0); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
+      h.filter = "none";
+      if(layer === "waves"){   // no waves on land: the colour stops at the coast
+        h.globalCompositeOperation = "destination-out"; h.filter = "blur(" + (1.5 * dpr) + "px)";
+        h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
+        h.globalCompositeOperation = "source-over"; h.filter = "none";
+      }
+      h.setTransform(1, 0, 0, 1, 0, 0);
     }
     const LABEL = {rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm"}[layer];
     if(LABEL){   // rain, written across the map every so often (temperature is shown in colour)
@@ -1909,8 +1924,8 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     }
     for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
-  // Gusts: smooth streaks running downwind, faster and longer than the wind's, white for a breeze, amber then red for strong gusts
-  const GCOL = ["255,255,255", "255,214,10", "255,95,80"];
+  // Gusts: smooth white streaks running downwind, faster and longer than the wind's, brighter for stronger gusts
+  const GCOL = ["255,255,255", "255,255,255", "255,255,255"];
   function stepGusts(c, dt){
     c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0," + Math.pow(.94, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // long, soft trails
     c.globalCompositeOperation = "source-over"; c.lineCap = "round";
