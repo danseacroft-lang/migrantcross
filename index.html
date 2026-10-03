@@ -461,13 +461,15 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 /* ------------------------------------------------------------ bento */
 .bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .b-week{grid-column:span 2}.b-ring{grid-column:span 2;grid-row:span 2}
-.spark{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:12px}
-.spark span{flex:1;border-radius:6px;background:var(--blue);min-height:4px;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.spark{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:24px;position:relative;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.spark span{flex:1;border-radius:6px;background:var(--blue);min-height:3px;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .2s ease}
 .spark span.zero{background:var(--fill2)}
-.spark span.last{background:var(--orange)}
+.spark span.last:not(.zero){background:var(--orange)}   /* a quiet latest day stays a grey stub */
+.spark b{position:absolute;transform:translateX(-50%);font:600 .765rem/1 var(--font);color:var(--label);pointer-events:none}   /* the peak value */
+.spark.picking span:not(.sel){opacity:.4}   /* the day being read stands out */
 .on .spark span{transform:scaleY(1)}
 .spark-days{display:flex;gap:6px;margin-top:6px}
-.spark-days span{flex:1;text-align:center;font-size:.647rem;color:var(--label2);font-weight:600}
+.spark-days span{flex:1;text-align:center;font-size:.706rem;color:var(--label2);font-weight:600}
 .ring-wrap{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:14px}
 .ring{width:min(250px,46vw);height:auto;aspect-ratio:1;display:block}
 @media (min-width:901px){.b-ring .fy{display:flex;flex-direction:column}.b-ring .ring-wrap{flex:1;align-content:center}.ring{width:min(280px,22vw)}.b-ring .ring-legend b{font-size:1.75rem}.b-ring .ring-legend{gap:16px;font-size:.941rem}}
@@ -514,7 +516,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .dd-face > .flip-h{margin-bottom:12px}
 .flip > .dd-face:first-child{padding-bottom:12px}
 .dd-foot{margin:12px 0 0;color:var(--label2);font-size:.765rem;line-height:1.4}
-.fc .cal-detail.hint{color:var(--label2);text-align:center}
+.fc .cal-detail.hint{color:var(--label2);text-align:center;display:grid;align-content:center}
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
@@ -527,13 +529,17 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .cal b{display:grid;place-items:center;font:500 2rem/1 var(--font);letter-spacing:-.03em}
 .otd-v{font-size:1.7rem}
 .otd-years{display:flex;align-items:flex-end;gap:8px;height:136px;margin-top:18px}
-.otd-years div{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
-.otd-years i{width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--indigo);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.otd-years .oy{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
+.otd-years .oy{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}   /* each year is a button: tap to read it above */
+.otd-years .oy[aria-pressed=true] em{color:var(--label)}
+.otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+.otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--blue);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .otd-years i.zero{background:var(--fill2)}
 .otd-years i.last{background:var(--orange)}
 .on .otd-years i{transform:scaleY(1)}
 .otd-years b{font:600 .706rem/1 var(--round);white-space:nowrap}
-.otd-years em{font-style:normal;font-size:.647rem;color:var(--label2);font-weight:600}
+.otd-years em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
+.otd-years b,.otd-years em{line-height:1;flex:none}   /* bars drawn to true scale in the space the labels leave */
 
 /* ------------------------------------------------------------ Stocks-style chart */
 .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;min-height:58px}
@@ -696,6 +702,7 @@ footer strong{color:var(--label);font-weight:600}
   .ring-wrap{gap:18px}
   .card{padding:16px;border-radius:20px}
   .val{font-size:1.8rem}
+  .val.otd-v{font-size:1.45rem;min-height:2.2em}
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
@@ -710,9 +717,9 @@ footer strong{color:var(--label);font-weight:600}
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
 /* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, roundup) */
-.mb{--mbar:var(--blue);--bar-peak:var(--orange);--boat:#DB7100;--green-bg:rgba(52,199,89,.14)}
-:root[data-theme="dark"] .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
+.mb{--mbar4:#0066D6;--mbar:var(--blue);--bar-peak:var(--orange);--boat:#DB7100;--green-bg:rgba(52,199,89,.14)}
+:root[data-theme="dark"] .mb{--mbar4:#0A6FD8;--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--mbar4:#0A6FD8;--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
 .mb .card.flush{padding:0}
 .mb .card.race-card,.mb .card.pat-card{padding:14px}
 .mb .section-h .seg{flex:none}
@@ -760,6 +767,9 @@ footer strong{color:var(--label);font-weight:600}
 .mb .cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
 .mb .cal-day.zero .dv{color:var(--label2);font-weight:400}
 .mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{--h:88%;color:#fff}.mb .cal-day.l4 .dn{color:rgba(255,255,255,.8)}
+.mb .cal-day.l4{background:var(--mbar4)}   /* a deeper blue so white numbers stay readable */
+.mb .cal-day.l2 .dn,.mb .cal-day.l3 .dn{color:var(--label);opacity:.78}
+.mb .cal-day.l4 .dn{color:#fff;opacity:.85}
 .mb .cal-day.future,.mb .cal-day.nodata{background:none;cursor:default}
 .mb .cal-day.future .dn,.mb .cal-day.nodata .dn{color:var(--label3)}
 .mb .cal-day .mk{position:absolute;top:5px;width:6px;height:6px;border-radius:50%}
@@ -778,10 +788,12 @@ footer strong{color:var(--label);font-weight:600}
 .mb .cal-foot{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 14px;font-size:.765rem;color:var(--label2)}
 .mb .cal-key{display:flex;align-items:center;gap:4px}
 .mb .cal-key i{width:14px;height:14px;border-radius:4px;background:color-mix(in srgb, var(--mbar) var(--h), var(--fill))}
-.mb .cal-detail{min-height:1.4em;font-size:.882rem}
+.mb .cal-key i.k4{background:var(--mbar4)}
+.mb .cal-detail{min-height:2.8em;line-height:1.4;font-size:.882rem}   /* room for two lines, so the box does not jump on a tap */
 .mb .cal-detail b{font-weight:600}
 .mb .cal-detail button{appearance:none;border:0;background:none;padding:12px 0 12px 8px;margin:-12px 0;font:inherit;color:var(--blue);cursor:pointer}
-@media (max-width:420px){.mb .cal-grid{gap:3px}.mb .cal-day{min-height:42px;border-radius:8px}.mb .cal-day .dv{font-size:.765rem}}
+@media (max-width:420px){.mb .cal-grid{gap:3px}.mb .cal-day{min-height:44px;border-radius:8px}.mb .cal-day .dv{font-size:.765rem}.mb .cal-detail{min-height:4.2em}}
+@media (max-width:360px){.mb .cal-day .mk{top:3px;width:5px;height:5px}.mb .cal-day .mk.busy{right:2px}.mb .cal-day .mk.new{left:2px}}   /* the dots clear two-digit days */
 .mb .race-card{display:grid;gap:8px}
 .mb .race{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .mb .race svg{display:block;width:100%;height:auto}
@@ -980,8 +992,8 @@ footer strong{color:var(--label);font-weight:600}
         <h3>Last 7 days</h3>
         <div class="val num" id="weekV">–</div>
         <div class="sub" id="weekS">&nbsp;</div>
-        <div class="spark" id="spark"></div>
-        <div class="spark-days" id="sparkDays"></div>
+        <div class="spark" id="spark" role="img" aria-label="Last 7 days"></div>
+        <div class="spark-days" id="sparkDays" aria-hidden="true"></div>
       </article>
       <article class="card b-ring art rv" id="ytdBox">
         <!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
@@ -990,12 +1002,13 @@ footer strong{color:var(--label);font-weight:600}
             <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="twSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="twTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"/><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"/><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
             <div class="flip-h"><h3 id="ringYear">This year so far</h3><button type="button" class="flip-go" id="flipCal" aria-controls="calFace">Calendar<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
             <div class="ring-wrap">
-              <svg class="ring" viewBox="0 0 170 170" aria-hidden="true">
+              <svg class="ring" viewBox="0 0 170 170" role="img" id="ringSvg" aria-label="This year against last year">
                 <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF375F"/></linearGradient></defs>
                 <circle class="track" cx="85" cy="85" r="72" stroke-width="18"/>
                 <circle class="arc" id="ringArc" cx="85" cy="85" r="72" stroke-width="18" transform="rotate(-90 85 85)"/>
                 <text x="85" y="84" text-anchor="middle" class="ring-num" fill="var(--label)" id="ringPct">–</text>
                 <text x="85" y="108" text-anchor="middle" font-size="13" font-weight="600" fill="var(--label2)" id="ringOf">of last year</text>
+                <text x="85" y="126" text-anchor="middle" font-size="12" fill="var(--label2)" id="ringTot"></text>
               </svg>
               <div class="ring-legend">
                 <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
@@ -1015,7 +1028,7 @@ footer strong{color:var(--label);font-weight:600}
             <div class="cal-detail" id="calDetail" aria-live="polite"></div>
             <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
             <div class="cal-foot">
-              <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i style="--h:88%"></i>600+</span>
+              <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i class="k4" style="--h:88%"></i>600+</span>
             </div>
           </div>
         </div>
@@ -1037,14 +1050,14 @@ footer strong{color:var(--label);font-weight:600}
   </section>
 
   <!-- ============================================================ ON THIS DAY -->
-  <section aria-labelledby="hOtd" id="otd" hidden>
+  <section aria-labelledby="hOtd" id="otd">
     <div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
     <article class="card rv">
       <div class="otd-top">
         <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
-        <div><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS"></div></div>
+        <div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS">&nbsp;</div></div>
       </div>
-      <div class="otd-years" id="otdYears" role="img" aria-label="The same date in earlier years"></div>
+      <div class="otd-years" id="otdYears" role="group" aria-label="The same date in earlier years"></div>
     </article>
   </section>
 
@@ -2174,9 +2187,13 @@ footer strong{color:var(--label);font-weight:600}
     countUp($("weekV"), w);
     const pct = p ? Math.round((w / p - 1) * 100) : null;
     $("weekS").innerHTML = dShort.format(parse(wk[0].date)) + " – " + dShort.format(parse(last.date)) + (pct != null ? " · <span class='delta " + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span> on the week before" : "");
-    const mx = Math.max(...wk.map(d => d.migrants), 1);
-    $("spark").innerHTML = wk.map((d, i) => '<span class="' + (d.migrants ? "" : "zero") + (i === 6 ? " last" : "") + '" style="height:' + Math.max(6, d.migrants / mx * 100) + '%;transition-delay:' + i * 60 + 'ms" title="' + dMid.format(parse(d.date)) + ': ' + fmt(d.migrants) + '"></span>').join("");
-    $("sparkDays").innerHTML = wk.map(d => "<span>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"narrow",...UTC}) + "</span>").join("");
+    const mx = Math.max(...wk.map(d => d.migrants), 1), iMax = wk.findIndex(d => d.migrants === mx);
+    // a zero day is a flat 3px stub; the smallest real day still stands clearly taller
+    $("spark").innerHTML = wk.map((d, i) => '<span class="' + (d.migrants ? "" : "zero") + (i === 6 ? " last" : "") + '" style="height:' + (d.migrants ? Math.max(12, d.migrants / mx * 100) + '%' : '3px') + ';transition-delay:' + i * 60 + 'ms"></span>').join("")
+      + (iMax >= 0 ? '<b style="left:' + ((iMax + .5) / 7 * 100) + '%;bottom:calc(100% + 4px)">' + fmt(mx) + '</b>' : "");   // the peak, labelled
+    $("spark").setAttribute("aria-label", "Last 7 days: " + wk.map(d => dShort.format(parse(d.date)) + " " + fmt(d.migrants)).join(", "));
+    $("sparkDays").innerHTML = wk.map(d => "<span>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short",...UTC}) + "</span>").join("");
+    glWeek = wk; glWeekS = $("weekS").innerHTML; $("spark").classList.remove("picking");
     // ring: this year against the whole of last year
     const ytdDays = all.filter(d => d.date.slice(0,4) === yr), ytd = sum(ytdDays, "migrants");
     const lastYearAll = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1)), "migrants");
@@ -2186,6 +2203,8 @@ footer strong{color:var(--label);font-weight:600}
     $("ytdPrevS").textContent = (yr - 1) + " by this date";
     const ratio = lastYearAll ? ytd / lastYearAll : 0, C = 2 * Math.PI * 72;
     $("ringPct").textContent = Math.round(ratio * 100) + "%"; $("ringOf").textContent = "of " + (yr - 1) + "'s total";
+    $("ringTot").textContent = fmt(lastYearAll);   // what the % is out of
+    $("ringSvg").setAttribute("aria-label", Math.round(ratio * 100) + "% of " + (yr - 1) + "'s total of " + fmt(lastYearAll));
     const ringCard = $("ringArc").closest(".rv");
     const fill = () => $("ringArc").style.strokeDasharray = (Math.min(ratio, 1) * C).toFixed(1) + " " + C.toFixed(1);
     if(ringCard.classList.contains("on") || reduced) fill(); else ringCard.addEventListener("reveal", ()=>setTimeout(fill, 150), {once:true});
@@ -2197,7 +2216,25 @@ footer strong{color:var(--label);font-weight:600}
       if(id === "lab") $("labC").innerHTML = "Estimated annual support cost <b>£" + (n * 4.0e9 / 106771 / 1e9).toFixed(1) + "bn</b>";
     });
     $("glanceNote").textContent = "Figures to " + dMid.format(parse(last.date));
+    fitFlip();   // the year box lines up with its neighbours on desktop
   }
+  // tap (or point at) a day in the 7-day bars to read it in the line above; the week's summary comes back afterwards
+  let glWeek = [], glWeekS = "";
+  function sparkRead(e){
+    const sp = $("spark"), r = sp.getBoundingClientRect(), i = Math.max(0, Math.min(6, Math.floor((e.clientX - r.left) / r.width * 7))), d = glWeek[i];
+    if(!d) return;
+    $("weekS").textContent = dMid.format(parse(d.date)) + ": " + plural(d.migrants, "person", "people") + " · " + plural(d.boats || 0, "boat", "boats");
+    sp.classList.add("picking"); sp.querySelectorAll("span").forEach((s, j) => s.classList.toggle("sel", j === i));
+  }
+  function sparkOff(){
+    const sp = $("spark"); if(!sp.classList.contains("picking")) return;
+    sp.classList.remove("picking"); sp.querySelectorAll(".sel").forEach(s => s.classList.remove("sel"));
+    $("weekS").innerHTML = glWeekS;
+  }
+  $("spark").addEventListener("click", sparkRead);   // a real tap, never the start of a scroll
+  $("spark").addEventListener("pointermove", e => { if(e.pointerType === "mouse") sparkRead(e); });
+  $("spark").addEventListener("pointerleave", e => { if(e.pointerType === "mouse") sparkOff(); });
+  document.addEventListener("pointerdown", e => { if(e.pointerType !== "mouse" && !$("spark").contains(e.target)) sparkOff(); });
 
   /* ---------------------------------------------------- on this day: today's date in every earlier year */
   function renderOtd(){
@@ -2209,15 +2246,37 @@ footer strong{color:var(--label);font-weight:600}
     }
     const sec = $("otd"); sec.hidden = !yrs.length; if(!yrs.length) return;
     const main = yrs[0], mx = Math.max(...yrs.map(d => d.migrants), 1), top = yrs.reduce((m, d) => d.migrants > m.migrants ? d : m, yrs[0]);
-    const td = parse(t);
+    const td = parse(t), ty = +t.slice(0,4);
     $("otdMon").textContent = td.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3);
     $("otdDay").textContent = td.getUTCDate();
-    $("otdV").textContent = main.migrants ? plural(main.migrants, "person", "people") + " crossed" : "No crossings detected";
-    const gap = +t.slice(0,4) - +main.date.slice(0,4);   // more than a year on 29 February
-    $("otdS").textContent = (gap === 1 ? "A year ago, " : gap + " years ago, ") + dLong.format(parse(main.date)) + (main.migrants ? " · " + plural(main.boats, "boat", "boats") : "");
+    otdYrs = yrs; otdThis = ty;
+    showOtd(main, ty - +main.date.slice(0,4));   // more than a year on 29 February
     $("otdNote").textContent = top.migrants ? "Busiest: " + top.date.slice(0,4) + ", " + fmt(top.migrants) : "";
-    $("otdYears").innerHTML = yrs.slice().reverse().map((d, i, a) => '<div title="' + dLong.format(parse(d.date)) + ": " + fmt(d.migrants) + ' people"><b class="num">' + fmt(d.migrants) + '</b><i class="' + (d.migrants ? "" : "zero") + (i === a.length - 1 ? " last" : "") + '" style="height:' + Math.max(3, d.migrants / mx * 100).toFixed(1) + "%;transition-delay:" + i * 60 + 'ms"></i><em>' + d.date.slice(0,4) + "</em></div>").join("");
+    const k = v => v >= 1000 ? (v / 1000).toFixed(1) + "k" : fmt(v);   // the short labels, for when the full ones would collide
+    $("otdYears").setAttribute("aria-label", dShort.format(td) + " in earlier years");
+    $("otdYears").innerHTML = yrs.slice().reverse().map((d, i, a) => '<button type="button" class="oy" data-i="' + (a.length - 1 - i) + '" aria-pressed="false" aria-label="' + d.date.slice(0,4) + ", " + plural(d.migrants, "person", "people") + '"><b class="num" aria-hidden="true" data-f="' + fmt(d.migrants) + '" data-s="' + k(d.migrants) + '">' + fmt(d.migrants) + '</b><i class="' + (d.migrants ? "" : "zero") + (i === a.length - 1 ? " last" : "") + '" style="--k:' + Math.max(.03, d.migrants / mx).toFixed(3) + ";transition-delay:" + i * 60 + 'ms"></i><em aria-hidden="true" data-f="' + d.date.slice(0,4) + '" data-s="’' + d.date.slice(2,4) + '">' + d.date.slice(0,4) + "</em></button>").join("");
+    fitOtd();
   }
+  // the headline reads one year: a year ago to start with, or the year tapped below
+  let otdYrs = [], otdThis = 0;
+  function showOtd(d, gap){
+    $("otdK").textContent = gap === 1 ? "A year ago" : gap + " years ago";
+    $("otdV").textContent = d.migrants ? plural(d.migrants, "person", "people") + " detected" : "No crossings detected";
+    $("otdS").textContent = dLong.format(parse(d.date)) + (d.migrants ? " · " + plural(d.boats, "boat", "boats") : "");
+  }
+  $("otdYears").addEventListener("click", e => {
+    const b = e.target.closest(".oy"); if(!b) return;
+    const on = b.getAttribute("aria-pressed") !== "true", d = otdYrs[on ? +b.dataset.i : 0];
+    $("otdYears").querySelectorAll(".oy").forEach(x => x.setAttribute("aria-pressed", String(on && x === b)));
+    showOtd(d, otdThis - +d.date.slice(0,4));   // tapping it again goes back to a year ago
+  });
+  // the labels shorten (1.1k, ’25) when the full ones would run into each other
+  function fitOtd(){
+    const y = $("otdYears"), ls = [...y.querySelectorAll("b,em")];
+    y.classList.remove("tight"); ls.forEach(e => e.textContent = e.dataset.f);
+    if(ls.some(e => e.scrollWidth > e.parentNode.clientWidth + 4)){ y.classList.add("tight"); ls.forEach(e => e.textContent = e.dataset.s); }
+  }
+  if(window.ResizeObserver){ let lw = 0; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; fitOtd(); } }).observe($("otdYears")); }
 
   /* ---------------------------------------------------- Stocks-style chart */
   let range = 90, sel = null, geo = null;
@@ -2646,7 +2705,18 @@ footer strong{color:var(--label);font-weight:600}
   // The calendar sits beside "this year so far" in the same box: the arrows, or a sideways swipe, slide from one to the other
   const ytdBox = $("ytdBox"), flip = $("flip"), faces = [$("yearFace"), $("calFace")], narrow = matchMedia("(max-width:900px)");
   let calShown = false;
-  function fitFlip(){ flip.style.height = faces[+calShown].offsetHeight + "px"; }   // the box is as tall as the page showing, growing or shrinking as it slides
+  // the box is as tall as the page showing, growing or shrinking as it slides; on desktop the year page also reaches the bottom of the boxes beside it
+  const wkBox = document.querySelector(".b-week"), labBox = document.querySelector(".b-lab");
+  function fitFlip(){
+    const f = faces[+calShown]; let h = f.offsetHeight;
+    if(!calShown && !narrow.matches){
+      const was = flip.style.height;
+      flip.style.transitionProperty = "transform"; flip.style.height = h + "px";   // measure the neighbours with the page at its own height
+      h = Math.max(h, labBox.offsetTop + labBox.offsetHeight - ytdBox.offsetTop - (ytdBox.offsetHeight - flip.offsetHeight));
+      flip.style.height = was; flip.offsetHeight; flip.style.transitionProperty = "";
+    }
+    flip.style.height = h + "px";
+  }
   function showCal(on){
     if(on === calShown) return;
     const had = faces.some(f => f.contains(document.activeElement));
@@ -2665,7 +2735,7 @@ footer strong{color:var(--label);font-weight:600}
     if(Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) showCal(dx < 0);
   });
   flip.addEventListener("pointercancel", () => { swX = null; });
-  if(window.ResizeObserver){ const ro = new ResizeObserver(fitFlip); faces.forEach(f => ro.observe(f)); }
+  if(window.ResizeObserver){ const ro = new ResizeObserver(fitFlip); faces.concat(labBox).forEach(f => ro.observe(f)); }
   narrow.addEventListener("change", fitFlip); fitFlip();
   // Crossings over time: every day, the year in squares and year by year, three pages slid across the same way. A swipe that
   // starts on the chart or the squares is left to them (dragging reads the days; the squares scroll on phones)
