@@ -6,7 +6,10 @@
 <meta name="description" content="Privacy Policy and Terms of Use for Channel Crossings.">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>/* Night is the default; Day or Auto only when chosen */
+function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",t);
+  var c=t==="auto"?null:(t==="light"?"#F2F2F7":"#000000");document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){if(!m.dataset.c)m.dataset.c=m.content;m.content=c||m.dataset.c;});}
+try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
 <title>Privacy Policy &amp; Terms of Use · Channel Crossings</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -116,9 +119,24 @@ button,input,select,textarea{font:inherit}
 .nav-brand:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
 @media (hover:hover){.nav-brand:hover span{text-decoration:underline;text-underline-offset:3px}}
 @media (prefers-reduced-transparency:reduce){.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
+
+/* ------------------------------------------------------------ Night: a frosted dark wallpaper that drifts as you scroll */
+.wall{display:none;position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:#04060B}
+.wall i{position:absolute;width:90vmax;height:90vmax;border-radius:50%;will-change:transform;translate:0 calc(var(--sy,0) * var(--k) * -1px);animation:wallDrift 38s ease-in-out infinite alternate}
+.wall i:nth-child(1){--k:.10;left:-35vmax;top:-30vmax;background:radial-gradient(closest-side,rgba(28,72,160,.55),rgba(28,72,160,0))}
+.wall i:nth-child(2){--k:.22;right:-40vmax;top:20vh;background:radial-gradient(closest-side,rgba(16,104,128,.42),rgba(16,104,128,0));animation-duration:46s;animation-delay:-12s}
+.wall i:nth-child(3){--k:.16;left:-10vmax;top:85vh;background:radial-gradient(closest-side,rgba(52,58,140,.45),rgba(52,58,140,0));animation-duration:52s;animation-delay:-24s}
+.wall::after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}   /* a fine frosted grain */
+@keyframes wallDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6vmax,4vmax,0) scale(1.12)}}
+:root[data-theme="dark"] .wall{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wall{display:block}}
+:root[data-theme="dark"] body{background:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background:transparent}}
+@media (prefers-reduced-motion:reduce){.wall i{animation:none;translate:none}}
 </style>
 </head>
 <body>
+<div class="wall" aria-hidden="true"><i></i><i></i><i></i></div>
 <nav class="nav" id="nav" aria-label="Channel Crossings"><a class="nav-brand" href="./" aria-label="Channel Crossings, homepage"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg><span>Channel Crossings</span></a></nav>
 <div class="wrap">
 
@@ -261,8 +279,8 @@ button,input,select,textarea{font:inherit}
   function show(){ var m = root.getAttribute("data-theme") || "auto"; btns.forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m); }); }
   btns.forEach(function(b){ b.addEventListener("click", function(){
     var n = b.getAttribute("data-mode");
-    if(n === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", n);
-    try{ n === "auto" ? localStorage.removeItem("cc-theme") : localStorage.setItem("cc-theme", n); }catch(e){}
+    ccTheme(n);
+    try{ localStorage.setItem("cc-theme", n); }catch(e){}
     show();
   }); });
   show();
@@ -281,5 +299,8 @@ button,input,select,textarea{font:inherit}
 // the bar turns frosted, with the logo, once the page has scrolled
 (function(){ var nav = document.getElementById("nav"); function f(){ nav.classList.toggle("solid", (window.scrollY || 0) > 40); } addEventListener("scroll", f, {passive:true}); f(); })();
 </script>
+<script>/* the wallpaper follows the scroll, gently */
+(function(){var w=document.querySelector(".wall"),q=0;if(!w||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+addEventListener("scroll",function(){if(!q)q=requestAnimationFrame(function(){q=0;w.style.setProperty("--sy",Math.round(scrollY));});},{passive:true});})();</script>
 </body>
 </html>

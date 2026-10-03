@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<script>try{var t=localStorage.getItem("cc-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>/* Night is the default; Day or Auto only when chosen */
+function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",t);
+  var c=t==="auto"?null:(t==="light"?"#F2F2F7":"#000000");document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){if(!m.dataset.c)m.dataset.c=m.content;m.content=c||m.dataset.c;});}
+try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
 <meta name="description" content="91 people crossed the Channel in small boats on Fri 2 October. 2026 so far: 19,287. Daily Home Office figures, a migrant tracker and live Channel weather.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
@@ -866,9 +869,27 @@ footer strong{color:var(--label);font-weight:600}
 .tour-next{background:var(--blue);color:#fff}
 .tour-row button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.tour-spot,.tour-card{transition:none;animation:none}}
+
+/* ------------------------------------------------------------ Night: a frosted dark wallpaper that drifts as you scroll */
+.wall{display:none;position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:#04060B}
+.wall i{position:absolute;width:90vmax;height:90vmax;border-radius:50%;will-change:transform;translate:0 calc(var(--sy,0) * var(--k) * -1px);animation:wallDrift 38s ease-in-out infinite alternate}
+.wall i:nth-child(1){--k:.10;left:-35vmax;top:-30vmax;background:radial-gradient(closest-side,rgba(28,72,160,.55),rgba(28,72,160,0))}
+.wall i:nth-child(2){--k:.22;right:-40vmax;top:20vh;background:radial-gradient(closest-side,rgba(16,104,128,.42),rgba(16,104,128,0));animation-duration:46s;animation-delay:-12s}
+.wall i:nth-child(3){--k:.16;left:-10vmax;top:85vh;background:radial-gradient(closest-side,rgba(52,58,140,.45),rgba(52,58,140,0));animation-duration:52s;animation-delay:-24s}
+.wall::after{content:"";position:absolute;inset:0;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}   /* a fine frosted grain */
+@keyframes wallDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6vmax,4vmax,0) scale(1.12)}}
+:root[data-theme="dark"] .wall{display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wall{display:block}}
+:root[data-theme="dark"] body{background:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background:transparent}}
+@media (prefers-reduced-motion:reduce){.wall i{animation:none;translate:none}}
+/* the boxes are frosted: a little of the wallpaper glows through them */
+:root[data-theme="dark"] .card{background:rgba(28,28,30,.8)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card{background:rgba(28,28,30,.8)}}
 </style>
 </head>
 <body>
+<div class="wall" aria-hidden="true"><i></i><i></i><i></i></div>
 
 <nav class="nav" id="nav" aria-label="Channel Crossings">
   <span></span>
@@ -1255,8 +1276,8 @@ footer strong{color:var(--label);font-weight:600}
   function showTheme(){ const m = mode(); modeBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m)); }
   modeBtns.forEach(b => b.addEventListener("click", () => {
     const n = b.dataset.mode;
-    if(n === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", n);
-    try{ n === "auto" ? localStorage.removeItem("cc-theme") : localStorage.setItem("cc-theme", n); }catch(e){}
+    ccTheme(n);
+    try{ localStorage.setItem("cc-theme", n); }catch(e){}
     showTheme();
   }));
   showTheme();
@@ -3150,5 +3171,8 @@ footer strong{color:var(--label);font-weight:600}
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
 </script>
+<script>/* the wallpaper follows the scroll, gently */
+(function(){var w=document.querySelector(".wall"),q=0;if(!w||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+addEventListener("scroll",function(){if(!q)q=requestAnimationFrame(function(){q=0;w.style.setProperty("--sy",Math.round(scrollY));});},{passive:true});})();</script>
 </body>
 </html>
