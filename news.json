@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-03T09:23:37Z",
+ "checkedAt": "2026-10-03T10:21:29Z",
  "items": [
+  {
+   "title": "GB News given special access to Nato border amid threat of imminent Russian invasion",
+   "url": "https://www.gbnews.com/news/world/video-gb-news-special-access-nato-border-narva-estonia-threat-russia-invasion",
+   "source": "GB News",
+   "published": "2026-10-03T09:57:18Z",
+   "breaking": true
+  },
   {
    "title": "Suppliers pile pressure on government over energy bills",
    "url": "https://www.bbc.co.uk/news/articles/cq0ld88kzxw8o?at_medium=RSS&at_campaign=rss",
@@ -13,27 +20,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cv1j3lgrl6gko?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-03T08:44:29Z",
-   "breaking": true
-  },
-  {
-   "title": "Greens can move Labour in the right direction, says Polanski",
-   "url": "https://www.bbc.co.uk/news/articles/cmx239469krpo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-03T07:08:35Z",
-   "breaking": true
-  },
-  {
-   "title": "Tories pledge to build 50,000 new prison places",
-   "url": "https://www.bbc.co.uk/news/articles/ck9qrqq53nj3o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-03T06:56:19Z",
-   "breaking": true
-  },
-  {
-   "title": "Flydubai hijacker named for first time as terrorism probe reveals he attacked pilot with AXE",
-   "url": "https://www.gbnews.com/news/flydubai-hijacker-named-hammam-al-hammami-co-pilot-israel-911",
-   "source": "GB News",
-   "published": "2026-10-03T06:36:43Z",
    "breaking": true
   }
  ]
