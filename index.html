@@ -2940,20 +2940,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   // ---- Year by year race
   // drawRace builds the chart once per set of figures or width; moveRace only moves the line, the dots and the box of figures
-  let race = null, raceDay = null, raceSayT = 0, raceKeep = "", raceYrs = null;
+  let race = null, raceDay = null, raceSayT = 0, raceKeep = null, raceYrs = null;
   const raceMon = new Intl.DateTimeFormat("en-GB",{month:"short",...UTC}), raceDM = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",...UTC});
   const ordinal = n => n + (n % 100 > 10 && n % 100 < 14 ? "th" : ["th","st","nd","rd"][n % 10] || "th");
   function raceYears(){   // each year's running total by day of the year, worked out once per set of figures
-    const key = sorted.length + "|" + sorted[sorted.length-1].date;
-    if(key === raceKeep) return raceYrs;
+    const all = allDays();   // a new set of figures is a new list, even when only a figure was revised
+    if(all === raceKeep) return raceYrs;
     const years = {};
-    allDays().forEach(d=>{
+    all.forEach(d=>{
       const y = +d.date.slice(0,4);
       let doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY); if(y%4===0 && doy>=59) doy -= 1;   // 29 February counts with the 28th, so 31 December is day 364 every year
       (years[y] = years[y] || {y, cum:[], tot:0});
       years[y].tot += d.migrants; years[y].cum[doy] = years[y].tot;
     });
-    raceKeep = key; return raceYrs = Object.values(years).sort((a,b)=>a.y-b.y);
+    raceKeep = all; return raceYrs = Object.values(years).sort((a,b)=>a.y-b.y);
   }
   const raceOut = () => $("raceTip");   // where the figures for the chosen day are written
   function drawRace(){
