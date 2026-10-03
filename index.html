@@ -1783,7 +1783,8 @@ footer strong{color:var(--label);font-weight:600}
       for(let k = 0; k < n; k++){
         const x = val[k], c = colour(x, st), q = k * 4;
         px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
-        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(255 * Math.min(1, .35 + x * .65))) : 255;
+        // wind, gusts and rain are see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
+        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : layer === "waves" ? 255 : 120;
       }
       sx.putImageData(img, 0, 0);
       h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = "blur(" + (2 * dpr) + "px)";
