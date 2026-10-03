@@ -97,7 +97,7 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px;scroll-behavior:smooth;scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
 body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 a{color:var(--blue);text-decoration:none}
@@ -128,8 +128,7 @@ button,input,select,textarea{font:inherit}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
-.wx-heat{mix-blend-mode:multiply}   /* the sea colour tints the map, so its texture still shows */
-.wx-heat.solid{opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
+.wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -270,7 +269,6 @@ html.map-full,html.map-full body{overflow:hidden}
 /* the two slides sit on top of each other, so the strip stays the same height as they swap */
 .mn-slides{flex:1;min-width:0;display:grid}
 .mn-slide{grid-area:1/1;min-width:0;display:flex;align-items:center;gap:10px}
-.mn-slide[hidden]{display:none}
 .mn-slide.off{visibility:hidden}
 .mn-slide.off.leave{animation:mnOut .35s ease-in both}
 .mn-slide.in{animation:mnIn .5s cubic-bezier(.2,.9,.3,1) .12s both}
@@ -293,7 +291,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .mn-close svg{width:9px;height:9px}
 @media (max-width:600px){.map-news{padding:8px 8px 10px 10px}.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
   .mn-close{position:absolute;top:8px;right:8px;width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}
-  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem}.mn-meta{white-space:normal}}
+  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem;min-height:2.6em}.mn-meta{white-space:normal}}   /* one line or two, the strip stays the same height */
 /* "new figures incoming": a ring that sweeps round, its arc stretching and shrinking like a download in progress */
 .fig-ring{flex:none;width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;animation:spin 1.8s linear infinite}
 .fig-ring .tr{opacity:.32}
@@ -329,7 +327,6 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @media (max-width:600px){.large-title .lt-logo{width:28px;height:28px}.large-title{column-gap:8px}.large-title h1{font-size:clamp(1.15rem,5.6vw,1.6rem)!important}}
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
-.big{font:700 clamp(4.6rem,17vw,9.5rem)/.95 var(--round);letter-spacing:-.02em;margin:6px 0 2px;text-shadow:0 4px 30px rgba(0,0,0,.35)}
 /* the latest day as a calendar tile, as in On This Day */
 .hero-quiet{display:flex;align-items:center;gap:18px;margin:6px 0 2px}
 .hero-quiet .cal{width:88px;height:92px;border-radius:20px;grid-template-rows:28px 1fr;background:rgba(28,28,30,.4);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 6px 24px rgba(0,0,0,.25)}
@@ -338,7 +335,6 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hq-t{font:700 clamp(1.7rem,5.6vw,3rem)/1.05 var(--font);letter-spacing:-.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .hq-s{margin-top:6px;font-size:1.06rem;font-weight:500;opacity:.88;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 @media (max-width:600px){.hero-quiet{gap:14px}.hero-quiet .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero-quiet .cal span{font-size:.706rem;line-height:22px}.hero-quiet .cal b{font-size:2.2rem}.hq-s{font-size:.941rem}}
-.big-sub{font-size:1.18rem;font-weight:500;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
   font-size:.882rem;font-weight:600;color:#fff;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
@@ -461,7 +457,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 
 /* ------------------------------------------------------------ bento */
 .bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.b-week{grid-column:span 2}.b-ring{grid-column:span 2;grid-row:span 2}.b-lab,.b-bur{grid-column:span 1}
+.b-week{grid-column:span 2}.b-ring{grid-column:span 2;grid-row:span 2}
 .spark{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:12px}
 .spark span{flex:1;border-radius:6px;background:var(--blue);min-height:4px;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
 .spark span.zero{background:var(--fill2)}
@@ -494,8 +490,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @keyframes taBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(3px) rotate(-1.2deg)}}
 @keyframes taSwell{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
 /* This year so far, with the calendar beside it in the same box: the arrow (or a swipe) slides one page across to the other */
-.card.b-ring{padding:0;display:flex}
-.flip{flex:1;display:flex;min-width:0;touch-action:pan-y;transition:transform .55s cubic-bezier(.2,.8,.2,1),height .45s cubic-bezier(.2,.8,.2,1)}
+.card.b-ring{padding:0;display:flex;align-self:start}
+.flip{flex:1;display:flex;align-items:flex-start;min-width:0;touch-action:pan-y;transition:transform .55s cubic-bezier(.2,.8,.2,1),height .45s cubic-bezier(.2,.8,.2,1)}
 .flip > div{flex:0 0 100%;min-width:0;padding:18px;position:relative}
 .b-ring.cal-on .flip{transform:translateX(-100%)}
 .flip > .fy{padding-bottom:132px}
@@ -516,8 +512,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .flip > .dd-face:first-child{padding-bottom:12px}
 .dd-foot{margin:12px 0 0;color:var(--label2);font-size:.765rem;line-height:1.4}
 .fc .cal-detail.hint{color:var(--label2);text-align:center}
-.flip{align-items:flex-start}   /* every sliding box takes the height of the page showing (set in the script) */
-.card.b-ring{align-self:start}
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
@@ -539,7 +533,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .otd-years em{font-style:normal;font-size:.647rem;color:var(--label2);font-weight:600}
 
 /* ------------------------------------------------------------ Stocks-style chart */
-.chart-card{padding:18px 18px 12px}
 .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;min-height:58px}
 .chart-read b{display:block;font:700 1.9rem/1.1 var(--round)}
 .chart-read span{color:var(--label2);font-size:.824rem}
@@ -622,10 +615,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
 
 /* ------------------------------------------------------------ footer */
-footer{max-width:1180px;margin:0 auto;padding:10px 20px calc(40px + env(safe-area-inset-bottom,0px));color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
-footer{border-top:.5px solid var(--sep);padding-top:20px}
+footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer p{margin:0;max-width:52ch;line-height:1.45}
-footer p a,.ft-nav a{color:var(--blue);text-decoration:none}
 footer strong{color:var(--label);font-weight:600}
 .ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
 .ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
@@ -667,12 +658,10 @@ footer strong{color:var(--label);font-weight:600}
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
-html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 @media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
 .large-title .lt-logo,#wxPlay{position:relative}
 .mn-close::after,.large-title .lt-logo::after,#wxPlay::after{content:"";position:absolute;inset:-8px}
-@media (max-width:600px){.mn-head{min-height:2.6em}}   /* one line or two, the strip stays the same height */
 /* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
 .hero.full #lmap .leaflet-bottom .leaflet-control{margin-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 .hero.full #lmap .leaflet-right .leaflet-control{margin-right:max(12px,env(safe-area-inset-right,0px))}
@@ -722,18 +711,12 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 :root[data-theme="dark"] .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
 .mb .card.flush{padding:0}
-.mb .card.cal-card,.mb .card.race-card,.mb .card.pat-card{padding:14px}
+.mb .card.race-card,.mb .card.pat-card{padding:14px}
 .mb .section-h .seg{flex:none}
-.mb .tip{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 .mb .empty{padding:24px 16px;color:var(--label2);text-align:center;font-size:.882rem}
 .mb .petitions{margin:0}
-.mb .petitions li{gap:2px 12px;padding:12px 0}
 .mb .petitions li:first-child{padding-top:0}
 .mb .petitions li:last-child{padding-bottom:0}
-.mb .subscribe{grid-template-columns:auto minmax(0,1fr)!important;padding-right:16px!important}
-.mb .sub-copy{padding-right:32px}
-.mb .sub-form,.mb .sub-msg{grid-column:1 / -1}
-.mb .subscribe{background:var(--card);border-radius:22px;box-shadow:var(--shadow)}
 .mb.area-rep{display:none}
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
 .toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
@@ -742,7 +725,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 .mb .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
 .mb .b-close svg{width:10px;height:10px}
 .mb .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
-.mb .petitions li{grid-template-columns:1fr auto}
+.mb .petitions li{grid-template-columns:1fr auto;gap:2px 12px;padding:12px 0}
 .mb .petitions a.pt{color:var(--label);text-decoration:none;font-size:.882rem;font-weight:600;line-height:1.3}
 .mb .petitions a.pt:hover{color:var(--blue)}
 .mb .petitions .pn{font-weight:600;font-variant-numeric:tabular-nums;text-align:right;font-size:.882rem}
@@ -752,13 +735,11 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 .mb .chipst{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.647rem;font-weight:600}
 .mb .chipst.open{background:var(--green-bg);color:var(--green-t)}
 .mb .chipst.closed{background:var(--fill);color:var(--label2)}
-.mb .tip{position:absolute;top:8px;left:0;z-index:2;min-width:150px;max-width:220px;padding:10px 12px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.18);pointer-events:none;font-size:.824rem;line-height:1.35;transition:transform .12s ease-out;opacity:1}
+.mb .tip{position:absolute;top:8px;left:0;z-index:2;min-width:150px;max-width:220px;padding:10px 12px;border-radius:12px;background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);box-shadow:0 8px 24px rgba(0,0,0,.18);pointer-events:none;font-size:.824rem;line-height:1.35;transition:transform .12s ease-out;opacity:1}
 .mb .tip b{display:block;font-size:.882rem;font-weight:600;margin-bottom:4px}
 .mb .tip .row{display:flex;align-items:center;gap:7px;font-variant-numeric:tabular-nums}
 .mb .tip .row i{flex:none;width:9px;height:9px;border-radius:3px;background:var(--mbar)}
 .mb .tip .row em{font-style:normal;margin-left:auto;font-weight:600;padding-left:12px}
-.mb .tip .x{margin-top:4px;color:var(--label2)}
-.mb .cal-card{padding:12px 12px 14px;display:grid;gap:10px}
 .mb .cal-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .mb .cal-nav h3{margin:0;font:600 1rem/1.2 var(--font);letter-spacing:-.02em;text-align:center;flex:1}
 .mb .cal-nav .sub{display:block;font-size:.765rem;font-weight:400;color:var(--label2);margin-top:2px}
@@ -770,16 +751,14 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 @media (hover:hover){.mb .cal-btn:not(:disabled):hover{background:var(--fill2)}}
 .mb .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
 .mb .cal-dow{text-align:center;font-size:.706rem;font-weight:600;color:var(--label2);padding-bottom:2px}
-.mb .cal-day{--h:0%;appearance:none;border:0;font:inherit;color:var(--label);border-radius:10px;min-height:48px;padding:5px 2px;display:grid;align-content:center;justify-items:center;gap:1px;cursor:pointer;
+.mb .cal-day{--h:0%;position:relative;appearance:none;border:0;font:inherit;color:var(--label);border-radius:10px;min-height:48px;padding:5px 2px;display:grid;align-content:center;justify-items:center;gap:1px;cursor:pointer;
   background:color-mix(in srgb, var(--mbar) var(--h), var(--fill))}
 .mb .cal-day .dn{font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .mb .cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
 .mb .cal-day.zero .dv{color:var(--label2);font-weight:400}
-.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{--h:88%}
-.mb .cal-day.l4{color:#fff}.mb .cal-day.l4 .dn{color:rgba(255,255,255,.8)}
+.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{--h:88%;color:#fff}.mb .cal-day.l4 .dn{color:rgba(255,255,255,.8)}
 .mb .cal-day.future,.mb .cal-day.nodata{background:none;cursor:default}
 .mb .cal-day.future .dn,.mb .cal-day.nodata .dn{color:var(--label3)}
-.mb .cal-day{position:relative}
 .mb .cal-day .mk{position:absolute;top:5px;width:6px;height:6px;border-radius:50%}
 .mb .cal-day .mk.busy{right:5px;background:var(--bar-peak);box-shadow:0 0 0 1.5px var(--card)}
 .mb .cal-day .mk.new{left:5px;background:var(--blue);box-shadow:0 0 0 1.5px var(--card)}
@@ -800,7 +779,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 .mb .cal-detail b{font-weight:600}
 .mb .cal-detail button{appearance:none;border:0;background:none;padding:12px 0 12px 8px;margin:-12px 0;font:inherit;color:var(--blue);cursor:pointer}
 @media (max-width:420px){.mb .cal-grid{gap:3px}.mb .cal-day{min-height:42px;border-radius:8px}.mb .cal-day .dv{font-size:.765rem}}
-.mb .race-card{padding:14px 12px 10px;display:grid;gap:8px}
+.mb .race-card{display:grid;gap:8px}
 .mb .race{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .mb .race svg{display:block;width:100%;height:auto}
 .mb .race svg text{font-family:var(--font);fill:var(--label2)}
@@ -814,10 +793,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 .mb .tbl th:first-child,.mb .tbl td:first-child{text-align:left}
 .mb .tbl td{padding:9px 16px;text-align:right;border-top:.5px solid var(--sep);white-space:nowrap}
 @media (max-width:420px){.mb .tbl th,.mb .tbl td{padding-inline:10px}}
-@media (max-width:360px){.mb .tbl .pb{display:none}}
 .mb #quietTbl th:nth-child(2),.mb #quietTbl td:nth-child(2){text-align:left}
-.mb .tbl tr.cur td{font-weight:600}
-.mb .tbl .up{color:var(--red-t)}.mb .tbl .down{color:var(--green-t)}
 .mb .tbl-wrap{overflow-x:auto}
 .mb .calc-card{padding:14px 16px;display:grid;gap:12px}
 .mb .calc-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -838,21 +814,21 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 .mb .pat svg text{font-family:var(--font);fill:var(--label2)}
 .mb .rep-card{padding:16px;display:grid;gap:12px}
 .mb .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
-.mb .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums;margin:0;text-shadow:none}
+.mb .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .mb .rep-head .sub{font-size:.882rem;color:var(--label2)}
 .mb .dots svg{display:block;width:100%;height:auto}
 .mb .dots .boats{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 .mb .dots .dd{transition:opacity .15s ease}
 .mb .dots.hovering .dd:not(.on){opacity:.3}
 .mb .dots{animation:fadeIn .35s ease-out}
-.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,420px);align-items:center;gap:12px 16px;padding:16px 52px 16px 16px;border-radius:22px}
+.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
 .mb .subscribe.leaving{animation:lift .25s ease-in both}
 .mb .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
 .mb .sub-icon svg{width:24px;height:24px}
-.mb .sub-copy{display:grid;gap:2px;min-width:0}
+.mb .sub-copy{display:grid;gap:2px;min-width:0;padding-right:32px}
 .mb .sub-copy h2{font:600 1rem/1.25 var(--font);letter-spacing:-.024em}
 .mb .sub-copy p{margin:0;font-size:.824rem;color:var(--label2)}
-.mb .sub-form{display:flex;gap:8px;min-width:0}
+.mb .sub-form{grid-column:1 / -1;display:flex;gap:8px;min-width:0}
 .mb .sub-form input[type=email]{flex:1;min-width:0;appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 14px}
 .mb .sub-form input[type=email]::placeholder{color:var(--label2)}
 .mb .sub-form input[type=email]:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
@@ -862,10 +838,9 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 .mb .sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.mb .sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
 .mb .sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
-.mb .sub-msg a{color:var(--blue);text-decoration:none}
 .mb .sub-msg.ok{color:var(--green);font-weight:600}.mb .sub-msg.err{color:var(--red)}
 .mb .subscribe.done .sub-form{display:none}
-@media (max-width:760px){.mb .subscribe{grid-template-columns:auto minmax(0,1fr);padding-right:16px}.mb .sub-copy{padding-right:32px}.mb .sub-form,.mb .sub-msg{grid-column:1 / -1}}
+@media (max-width:760px){.mb .sub-msg{grid-column:1 / -1}}
 @media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
@@ -1293,7 +1268,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   document.addEventListener("keydown", e => { if(e.key === "Escape") betaOpen(false); });
 
   // The boxes react to the mouse: a slight lean towards it and a soft light where it points. Mouse only, never with reduced motion.
-  if(matchMedia("(hover: hover) and (pointer: fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+  if(matchMedia("(hover: hover) and (pointer: fine)").matches && !reduced){
     let tiltCard = null, tiltEv = null, tiltRaf = 0;
     const tilt = () => {
       tiltRaf = 0; if(!tiltCard) return;
@@ -1594,7 +1569,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     const at = (r, c) => a[r * nO + c] || 0;
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
-  // Colour scales, close to Ventusky's: used for the colour swatch in the readings
+  // Colour scales, close to Ventusky's: used for the map's colours and the swatch in the readings
   const WIND = [[0,[98,113,183]],[6,[57,97,159]],[10,[74,148,169]],[14,[77,141,123]],[18,[83,165,83]],[23,[201,186,63]],[28,[221,135,50]],[34,[208,70,60]],[40,[173,40,110]]];
   const SCALE = {
     wind:{key:"s", max:40, unit:"mph", stops:WIND},
@@ -1788,7 +1763,6 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     }
     fld = {cols, rows, u, v, m, sea, mode};
     const h = heat.getContext("2d"), p = unitPx();
-    heat.classList.add("solid");
     if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings, with the hills
       drawTemp(h);
       // the sea a shade darker than the land, so the coast still shows through the colour
@@ -1937,7 +1911,6 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
   // Gusts: smooth white streaks running downwind, faster and longer than the wind's, brighter for stronger gusts
-  const GCOL = ["255,255,255", "255,255,255", "255,255,255"];
   function stepGusts(c, dt){
     c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0," + Math.pow(.94, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // long, soft trails
     c.globalCompositeOperation = "source-over"; c.lineCap = "round";
@@ -1950,7 +1923,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
       const P = paths[g >= 40 ? 2 : g >= 28 ? 1 : 0]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
       p.x = nx; p.y = ny;
     }
-    [[.6, 1.3], [.8, 1.5], [.85, 1.7]].forEach(([a, w], i) => { c.strokeStyle = "rgba(" + GCOL[i] + "," + a + ")"; c.lineWidth = w; c.stroke(paths[i]); });
+    [[.6, 1.3], [.8, 1.5], [.85, 1.7]].forEach(([a, w], i) => { c.strokeStyle = "rgba(255,255,255," + a + ")"; c.lineWidth = w; c.stroke(paths[i]); });
   }
   // Wind: particles drifting with the wind, brighter where it's stronger
   function stepWind(c, dt){
@@ -2488,11 +2461,10 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
 
 
-  /* ---------------------------------------------------- the boxes: calendar, running totals, yearly totals,
+  /* ---------------------------------------------------- the boxes: calendar, running totals,
      between two dates, quiet spells, patterns, every person, petitions and the weekly roundup */
   let sorted = [];   // the same figures as days, under the name these boxes were written with
   const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
-  const dFull = dLong;
   const niceStep = raw => { const p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; };
   const store = {
     get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
@@ -2501,12 +2473,6 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
   const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
   let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 7, extras = {};
-  let daysFor = null, daysAll = null;
-  function allD(){
-    if(daysFor === sorted) return daysAll;
-    daysAll = allDays(); daysFor = sorted;
-    return daysAll;
-  }
 
   function drawDots(){
     const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
@@ -2563,7 +2529,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     $("repS").textContent = dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people · " + fmt(day.boats) + (day.boats===1?" boat":" boats");
   });
   // On touch screens, tapping anywhere else clears the highlight
-  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && !e.target.closest("#dots")) $("dots").dispatchEvent(new Event("mouseleave")); });
+  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && $("dots").classList.contains("hovering") && !e.target.closest("#dots")) $("dots").dispatchEvent(new Event("mouseleave")); });
   $("dots").addEventListener("mouseleave", ()=>{
     $("dots").classList.remove("hovering");
     if(repHead){ $("repS").textContent = repHead; repHead = ""; }
@@ -2636,13 +2602,13 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     const box = $("calDetail"), hint = !calPick || calPick.slice(0,7) !== calMonth;
     box.classList.toggle("hint", hint);
     if(hint){   // until a day is picked, how to use it
-      const t = (matchMedia("(hover: none)").matches ? "Tap" : "Click") + " a day to see its figures";
+      const t = (touchOnly ? "Tap" : "Click") + " a day to see its figures";
       if(box.textContent !== t) box.textContent = t;
       return;
     }
     box.textContent = "";
     const d = sorted.find(x=>x.date===calPick) || {date:calPick, migrants:0, boats:0};
-    const b = document.createElement("b"); b.textContent = dFull.format(parse(d.date));
+    const b = document.createElement("b"); b.textContent = dLong.format(parse(d.date));
     let t = d.migrants ? ": " + fmt(d.migrants) + (d.migrants===1?" person":" people") + " in " + fmt(d.boats) + (d.boats===1?" boat":" boats") : ": no crossings detected";
     if(d.boats) t += " · " + Math.round(d.migrants/d.boats) + " per boat";
     if(d.uncontrolled) t += " · " + d.uncontrolled + " uncontrolled " + (d.uncontrolled===1?"landing":"landings");
@@ -2721,7 +2687,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   let race = null, raceDay = null;
   function drawRace(){
     const box = $("race");
-    const days = allD(), lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4);
+    const days = allDays(), lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4);
     const years = {};
     days.forEach(d=>{
       const y = +d.date.slice(0,4), doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY);
@@ -2796,8 +2762,6 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   addEventListener("pointerup", ()=>raceDrag=false);
   document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")){ raceDay = null; drawRace(); } }, true);
 
-  // ---- Yearly totals
-
   // ---- Arrivals between two dates
   function calc(){
     if(!sorted.length) return;
@@ -2838,7 +2802,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   // ---- Longest spells without crossings
   function drawQuiet(){
     const runs = []; let start = null, len = 0;
-    const days = allD().filter(d=>d.date >= "2020-01-01");   // crossings were rare before 2020
+    const days = allDays().filter(d=>d.date >= "2020-01-01");   // crossings were rare before 2020
     days.forEach((d,i)=>{
       if(d.migrants===0){ if(!len) start = d.date; len++; }
       if(d.migrants!==0 || i===days.length-1){ if(len) runs.push({start, end: d.migrants===0 ? d.date : days[i-1].date, len}); len = 0; }
@@ -2853,7 +2817,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   // ---- Patterns: average people a day by weekday or month
   let patMode = "dow";
   function drawPat(){
-    const box = $("pat"), days = allD();
+    const box = $("pat"), days = allDays();
     const labels = patMode==="dow" ? ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const sum = labels.map(()=>0), cnt = labels.map(()=>0);
     days.forEach(d=>{ const t = parse(d.date); const k = patMode==="dow" ? (t.getUTCDay()+6)%7 : t.getUTCMonth(); sum[k] += d.migrants; cnt[k]++; });
@@ -3004,14 +2968,13 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 
 
   /* ---------------------------------------------------- first-visit tour of the map */
-  const touchy = matchMedia("(hover: none)").matches;
   const TOUR = [
     {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
     {el:() => document.querySelector("#lmap .boat"), h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
     {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
     {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
     {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
-    {el:() => $("lmap"), h: touchy ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchy ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
+    {el:() => $("lmap"), h: touchOnly ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchOnly ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
     {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
     {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
   ];
@@ -3171,7 +3134,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
     stripUpdate();
   });
-  addEventListener("resize", newsRoom);
+  addEventListener("resize", () => { if(!$("news").hidden) newsRoom(); });   // with the strip hidden, the resize handler above already refits the map card
 
   start(); loadWeather(); loadNews();
   whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
