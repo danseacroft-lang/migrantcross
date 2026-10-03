@@ -294,7 +294,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .mn-close svg{width:9px;height:9px}
 @media (max-width:600px){.map-news{padding:8px 8px 10px 10px}.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
   .mn-close{position:absolute;top:8px;right:8px;width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}
-  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem;min-height:2.6em}.mn-meta{white-space:normal}}   /* one line or two, the strip stays the same height */
+  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem;min-height:2.6em}.mn-meta{white-space:nowrap}.mn-more{display:none}}   /* one line or two, the strip stays the same height */
 /* "new figures incoming": a ring that sweeps round, its arc stretching and shrinking like a download in progress */
 .fig-ring{flex:none;width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;animation:spin 1.8s linear infinite}
 .fig-ring .tr{opacity:.32}
@@ -307,11 +307,8 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @keyframes ringArc{0%{stroke-dasharray:4 100;stroke-dashoffset:0}50%{stroke-dasharray:62 100;stroke-dashoffset:-14}100%{stroke-dasharray:4 100;stroke-dashoffset:-96}}
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
-.hero.has-news .large-title{top:calc(22px + var(--mn-h,0px))}
-.hero.has-news .wx-ctl{top:calc(22px + var(--mn-h,0px))}
-.hero.full.has-news .wx-ctl{top:calc(14px + env(safe-area-inset-top,0px) + var(--mn-h,0px))}
+.hero.has-news .large-title,.hero.has-news .wx-ctl{transform:translateY(var(--mn-h,0px));transition:transform .45s cubic-bezier(.2,.9,.3,1)}
 .hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
-@media (max-width:600px){.hero.has-news .wx-ctl{top:calc(88px + var(--mn-h,0px))}}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 8px rgba(0,0,0,.55)}
@@ -322,7 +319,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
 .large-title > *{pointer-events:auto}
-@media (max-width:600px){.wx-ctl{top:88px;right:20px}}
+@media (max-width:600px){.wx-ctl{top:88px;right:20px;left:20px}.wx-time{align-self:stretch}.wx-time input{flex:1;width:auto;min-width:0}}   /* the forecast slider spans the map */
 .large-title .lt-logo{display:block;width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,.35);transition:transform .2s ease}
 .large-title .lt-logo svg{display:block;width:100%;height:100%}
 .large-title .lt-logo:focus-visible{outline:2px solid #fff;outline-offset:3px}
@@ -336,6 +333,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hero-quiet .cal span{font-size:.824rem;line-height:28px}
 .hero-quiet .cal b{font-size:2.9rem;color:#fff}
 .hq-t{font:700 clamp(1.7rem,5.6vw,3rem)/1.05 var(--font);letter-spacing:-.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
+@media (max-width:360px){.hq-t{font-size:1.45rem}}   /* small phones: the headline fits two lines */
 .hq-s{margin-top:6px;font-size:1.06rem;font-weight:500;opacity:.88;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 @media (max-width:600px){.hero-quiet{gap:14px}.hero-quiet .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero-quiet .cal span{font-size:.706rem;line-height:22px}.hero-quiet .cal b{font-size:2.2rem}.hq-s{font-size:.941rem}}
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
@@ -354,7 +352,7 @@ button.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
-.info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 62%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
+.info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
@@ -364,10 +362,11 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
 .wx-pop{--lv:var(--blue);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 22%,transparent),transparent 110px)}
 .wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
+.wx-pop[data-lv="calm"]{--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv-t:var(--orange-t,var(--orange))}.wx-pop[data-lv="rough"]{--lv-t:var(--red-t)}   /* the level in words, in a readable shade */
 .wp-head{display:flex;align-items:center;gap:12px}
 .wp-ic{flex:none;width:52px;height:52px}
 .wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
-.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv)}
+.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv-t,var(--lv))}
 .wp-head span{display:block;color:var(--label);font-weight:600;font-size:.882rem;margin-top:2px}
 .wp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:14px 0 12px}
 .wp-stats div{background:var(--fill);border-radius:12px;padding:8px 10px}
@@ -382,7 +381,7 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .info-pop .wp-p{color:var(--label);margin:0 0 6px}
 .info-pop .wp-note{font-size:.765rem;margin:0 0 10px}
 .wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep)}
-.wp-days li{display:grid;grid-template-columns:1fr 26px 86px 30px;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
+.wp-days li{display:grid;grid-template-columns:1fr 26px 86px auto;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
 .wp-days li span{font-weight:600}
 .wp-days li div{width:26px;height:26px}
 .wp-days li b{margin:0;font-size:.824rem}
@@ -392,10 +391,12 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .lx-big{font:700 2.1rem/1.05 var(--round);letter-spacing:-.01em;margin-top:2px}
 .lx-big small{font:600 .941rem var(--font);color:var(--label2);margin-left:4px;letter-spacing:-.02em}
 .lx-sub{color:var(--label2);font-size:.824rem;margin-top:2px}
-.lx-strip{display:flex;align-items:flex-end;gap:3px;height:54px;margin:14px 0 4px}
-.lx-strip i{flex:1;min-height:3px;border-radius:3px;background:var(--fill2)}
+.lx-strip{display:flex;align-items:flex-end;gap:3px;height:54px;margin:28px 0 4px}
+.lx-strip i{position:relative;flex:1;min-height:3px;border-radius:3px 3px 0 0;background:var(--fill2)}
+.lx-strip i.z{min-height:2px}   /* no crossings: a flat line, lower than any real day */
+.lx-strip i b{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:3px;font:600 .706rem/1 var(--font);color:var(--label2);white-space:nowrap}
 .lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
-.lx-axis{display:flex;justify-content:space-between;font-size:.647rem;color:var(--label2);font-weight:600;margin-bottom:12px}
+.lx-axis{display:flex;justify-content:space-between;font-size:.706rem;color:var(--label2);font-weight:600;margin-bottom:12px}
 .lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
 .mp-pop{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
 .mp-pop .wp-days{margin-bottom:10px}
@@ -520,7 +521,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
-.calm{color:var(--green-t)}.moderate{color:var(--orange)}.rough{color:var(--red-t)}
+.calm{color:var(--green-t)}.moderate{color:var(--orange-t,var(--orange))}.rough{color:var(--red-t)}
 
 /* ------------------------------------------------------------ on this day */
 .otd-top{display:flex;align-items:center;gap:16px}
@@ -670,8 +671,10 @@ footer strong{color:var(--label);font-weight:600}
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
 @media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
-.large-title .lt-logo,#wxPlay{position:relative}
-.mn-close::after,.large-title .lt-logo::after,#wxPlay::after{content:"";position:absolute;inset:-8px}
+.large-title .lt-logo,#wxPlay,.am-x,#tourNext,#tourSkip{position:relative}
+.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,#tourNext::after,#tourSkip::after{content:"";position:absolute;inset:-8px}
+button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
+.ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
 /* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
 .hero.full #lmap .leaflet-bottom .leaflet-control{margin-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 .hero.full #lmap .leaflet-right .leaflet-control{margin-right:max(12px,env(safe-area-inset-right,0px))}
@@ -743,6 +746,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .petitions .pm{grid-column:1 / -1;font-size:.765rem;color:var(--label2);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
 .mb .petitions .pbar{grid-column:1 / -1;height:4px;border-radius:2px;background:var(--fill);overflow:hidden;margin-top:4px}
 .mb .petitions .pbar i{display:block;height:100%;background:var(--blue);border-radius:2px}
+.mb .petitions .pbar.done i{background:var(--label3)}   /* closed: grey, not a live bar */
 .mb .chipst{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.647rem;font-weight:600}
 .mb .chipst.open{background:var(--green-bg);color:var(--green-t)}
 .mb .chipst.closed{background:var(--fill);color:var(--label2)}
@@ -854,7 +858,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.mb .sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
 .mb .sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
-.mb .sub-msg.ok{color:var(--green);font-weight:600}.mb .sub-msg.err{color:var(--red)}
+.mb .sub-msg.ok{color:var(--green-t);font-weight:600}.mb .sub-msg.err{color:var(--red-t)}
 .mb .subscribe.done .sub-form{display:none}
 @media (max-width:760px){.mb .sub-msg{grid-column:1 / -1}}
 @media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
@@ -951,7 +955,7 @@ footer strong{color:var(--label);font-weight:600}
   </div>
 
   <div class="hero-in">
-    <div class="kicker" id="heroKicker">Loading the latest figures…</div>
+    <div class="kicker" id="heroKicker" hidden></div>
     <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">2</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">91</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Friday, 2 October 2026 · 1&nbsp;boat</div></div></div><span class="sr" id="heroSr" aria-live="polite">91 people crossed in 1 small boat on Friday, 2 October 2026</span>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
@@ -1371,7 +1375,7 @@ footer strong{color:var(--label);font-weight:600}
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
-  let heat, flow, wxPane, boatK = 1;
+  let heat, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
   let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
@@ -1398,7 +1402,7 @@ footer strong{color:var(--label);font-weight:600}
     L.control.zoom({position:"bottomright"}).addTo(LM);
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
     LM.on("zoomend", () => {
-      boatK = Math.min(4, .75 / unitPx().sx);   // the boats stay the same size on screen at any zoom
+      boatK = Math.min(4, (LM.getSize().x < 600 ? .55 : .75) / unitPx().sx);   // the boats stay the same size on screen at any zoom (a little smaller on phones)
       // the Dover to Cap Gris-Nez line: its label and end dots stay the same size on screen at any zoom
       const k = (1 / unitPx().sx).toFixed(3);
       $("straitLbl").setAttribute("transform", "translate(394.1 335.6) scale(" + k + ")"); ["straitA", "straitB"].forEach(id => $(id).setAttribute("r", (3.5 * k).toFixed(2)));
@@ -1449,8 +1453,12 @@ footer strong{color:var(--label);font-weight:600}
   function placeTowns(){
     if(!LM) return;
     const z = LM.getZoom(), sz = LM.getSize(), mr = $("lmap").getBoundingClientRect(), view = LM.getBounds().pad(.05);
-    const taken = coverRects().concat(!$("straitLbl").getClientRects().length ? [] : [$("straitLbl").getBoundingClientRect()]).map(b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6]);
+    const box6 = b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6];
+    coverPx = coverRects().map(box6);   // just the title, buttons and figures: boats under them fade (placeBoats)
+    const taken = coverPx.concat(!$("straitLbl").getClientRects().length ? [] : [box6($("straitLbl").getBoundingClientRect())]);
     const hit = q => taken.some(t => q[0] < t[2] && q[2] > t[0] && q[1] < t[3] && q[3] > t[1]);
+    // launch rings under the title, buttons or figures fade, and can't be tapped through them
+    if(launchLayer) launchLayer.eachLayer(m => { const el = m.getElement(); if(!el) return; const r = el.getBoundingClientRect(), h = hit([r.left - mr.left, r.top - mr.top, r.right - mr.left, r.bottom - mr.top]); el.style.opacity = h ? .25 : ""; el.style.pointerEvents = h ? "none" : ""; });
     for(const t of places){
       let show = z >= RANK_ZOOM[t.rank] && view.contains([t.lat, t.lon]), box;
       if(show){
@@ -1482,10 +1490,26 @@ footer strong{color:var(--label);font-weight:600}
     LM.invalidateSize({pan:false});
     const tall = W < H * .9;
     LM.setMinZoom(LM.getBoundsZoom(WIDE, true));
-    if(W !== fitW){ fitW = W; const f = L.latLngBounds(tall && !isFull() ? TALL : VIEW); LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false}); }
+    if(W !== fitW){
+      fitW = W; const f = L.latLngBounds(tall ? TALL : VIEW);
+      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});
+      if(isFull() && tall) LM.panBy([0, -(ctlBottom() + 8 - 40) / 2], {animate:false});   // full screen on a phone: Kent to France, framed below the buttons
+    }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
     else resetWx();
+    frameStrait();
     requestAnimationFrame(placeTowns);   // the names go on once the map has laid out its markers
+  }
+  // Where the map buttons end, from the top of the map card (where they're heading, if they're sliding down under the news strip)
+  function ctlBottom(){
+    const c = $("wxCtl"), mn = hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0;
+    return c.offsetTop + c.offsetHeight + mn;
+  }
+  // Phones: the strait sits in the open map between the buttons and the figures
+  function frameStrait(){
+    if(!LM || isFull() || hero.clientWidth >= 600) return;
+    const bot = hero.querySelector(".hero-in").offsetTop, y = LM.latLngToContainerPoint([51.0, 1.45]).y, d = y - (ctlBottom() + bot) / 2;
+    if(Math.abs(d) > 8) LM.panBy([0, d], {animate:false});
   }
 
   // Just off the beaches boats leave from, and off the Kent coast (map units; every point checked to be at sea)
@@ -1509,13 +1533,16 @@ footer strong{color:var(--label);font-weight:600}
     placeBoats(performance.now(), reduced);
   }
   function placeBoats(t, still){
+    const u0 = LM && coverPx.length ? unitPx() : null;   // to find the boats under the title, buttons and figures
     boats.forEach(b => {
       if(!b.hold) b.k = still ? .18 + b.off * .64 : ((t / 1000 / b.dur) + b.off) % 1;
       const k = b.k, u = 1 - k;
       const x = u * u * b.a[0] + 2 * u * k * b.c[0] + k * k * b.e[0], y = u * u * b.a[1] + 2 * u * k * b.c[1] + k * k * b.e[1];
       const dx = 2 * u * (b.c[0] - b.a[0]) + 2 * k * (b.e[0] - b.c[0]), dy = 2 * u * (b.c[1] - b.a[1]) + 2 * k * (b.e[1] - b.c[1]);
       b.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI + 90).toFixed(1) + ") scale(" + (boatK * (b.hold ? 1.3 : 1)).toFixed(3) + ")");
-      b.g.style.opacity = still || b.hold ? 1 : Math.min(1, k * 10, u * 10).toFixed(2);
+      const px = u0 && u0.x0 + x * u0.sx, py = u0 && u0.y0 + y * u0.sy;
+      b.cov = !!u0 && coverPx.some(c => px > c[0] && px < c[2] && py > c[1] && py < c[3]);   // under the controls: faded, so the map reads clearly
+      b.g.style.opacity = b.hold ? 1 : Math.min(still ? 1 : Math.min(1, k * 10, u * 10), b.cov ? .35 : 1).toFixed(2);
     });
   }
   /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
@@ -1995,12 +2022,16 @@ footer strong{color:var(--label);font-weight:600}
   function fitHero(){
     if(hero.classList.contains("full")) return;
     const was = hero.style.minHeight; hero.style.minHeight = "";
-    const gap = Math.ceil($("wxCtl").getBoundingClientRect().bottom + 12 - hero.querySelector(".hero-in").getBoundingClientRect().top);
+    // phones keep about 120px of open map between them, for the strait, the launch beaches and the boats
+    const gap = Math.ceil(ctlBottom() + (hero.clientWidth < 600 ? 120 : 12) - hero.querySelector(".hero-in").offsetTop);
     if(gap > 0) hero.style.minHeight = hero.offsetHeight + gap + "px";
     const sz = hero.clientWidth + "x" + hero.clientHeight;
     if(hero.style.minHeight !== was && sz !== fitSz){ fitSz = sz; fitMap(); }
+    else frameStrait();
   }
-  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { fitHero(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
+  // the figures change size as the number counts up or the chips change: fit again, once a frame at most
+  if("ResizeObserver" in window){ let q = 0; new ResizeObserver(() => { if(!q) q = requestAnimationFrame(() => { q = 0; fitHero(); }); }).observe(hero.querySelector(".hero-in")); }
+  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { $("news").hidden ? fitHero() : newsRoom(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
   play();
 
   // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
@@ -2065,6 +2096,7 @@ footer strong{color:var(--label);font-weight:600}
     const q = parse(last.date), n = last.migrants;   // the day as a calendar tile, as in On This Day
     const long = q.toLocaleDateString("en-GB",{weekday:"long",...UTC}) + ", " + q.getUTCDate() + " " + q.toLocaleDateString("en-GB",{month:"long",...UTC}) + " " + q.getUTCFullYear();
     $("hqMon").textContent = q.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3); $("hqDay").textContent = q.getUTCDate();
+    $("heroNum").style.cssText = n ? "display:inline-block;min-width:" + (String(n).length + (fmt(n).length - String(n).length) * .3) + "ch" : "";   // room for the final number, so the line doesn't rewrap as it counts up
     if(n) countUp($("heroNum"), n); else { $("heroNum")._count = ($("heroNum")._count || 0) + 1; $("heroNum").textContent = ""; }
     $("hqT").textContent = n ? (n === 1 ? " person detected" : " people detected") : "No crossings detected";
     $("heroSub").textContent = long + (n ? " · " + plural(last.boats, "boat", "boats").replace(" ", "\u00a0") : "");
@@ -2079,7 +2111,7 @@ footer strong{color:var(--label);font-weight:600}
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const pct = prev ? Math.round((ytd / prev - 1) * 100) : null;
     const c = $("chipYear"); c.hidden = false;
-    c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>" : "");
+    c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "% on " + (yr - 1) + "</span>" : "");
     liveUi(); fitHero();
   }
 
@@ -2093,12 +2125,12 @@ footer strong{color:var(--label);font-weight:600}
     // the daily update in the strip across the top of the map: shows while new figures are awaited, unless it was closed today
     let closed = ""; try{ closed = localStorage.getItem("syncClosed"); }catch(e){}
     showFigures(on && closed !== ukToday());
-    live.hidden = !on; if(!on) closePop(live);
+    live.hidden = !on || figOn; if(live.hidden) closePop(live);   // the chip only while the strip isn't saying it
     const at = meta && meta.checkedAt ? new Date(meta.checkedAt) : null;
     const wk = /Sat|Sun/.test(new Date().toLocaleDateString("en-GB",{weekday:"short",timeZone:"Europe/London"}));
     root.classList.toggle("wkend", wk);
     $("figTag").textContent = wk ? "Weekend" : "Updating";
-    $("figMeta").textContent = wk ? "Can take several hours at weekends · Sometimes not until Monday" : "Since 12:00 · Can take up to an hour";
+    $("figMeta").innerHTML = wk ? 'Can take several hours at weekends<span class="mn-more"> · Sometimes not until Monday</span>' : "Since 12:00 · Can take up to an hour";   // phones: the first part only, on one line
     $("fuToday").textContent = haveYesterday()
       ? (at && at.toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? (wk ? "New figures incoming. At weekends they can be hours late, or wait until Monday." : "New figures incoming. Please wait.") : "Today's figures aren't in yet. Checks start at 12:00.";
@@ -2143,11 +2175,13 @@ footer strong{color:var(--label);font-weight:600}
   // Last crossings: the day, the fortnight around it, and how it's worked out
   function renderLastPop(lx, last){
     const all = allDays(), i = all.findIndex(d => d.date === lx.date), strip = all.slice(-14), mx = Math.max(...strip.map(d => d.migrants), 1);
+    let top = strip.some(d => d.date === lx.date && d.migrants === mx) ? 1 : 0;   // the day and the busiest day get their numbers, each once
     const quiet = all.length - 1 - i;
     $("popLast").innerHTML = '<b>Last crossings</b>'
       + '<div class="lx-big num">' + fmt(lx.migrants) + '<small>' + (lx.migrants === 1 ? "person" : "people") + '</small></div>'
       + '<div class="lx-sub">' + dLong.format(parse(lx.date)) + " · " + plural(lx.boats, "boat", "boats") + '</div>'
-      + '<div class="lx-strip" aria-hidden="true">' + strip.map(d => '<i class="' + (d.date === lx.date ? "lx" : d.migrants ? "x" : "") + '" style="height:' + Math.max(6, d.migrants / mx * 100).toFixed(1) + '%"></i>').join("") + "</div>"
+      + '<div class="lx-strip" aria-hidden="true">' + strip.map(d => '<i class="' + (d.date === lx.date ? "lx" : d.migrants ? "x" : "") + (d.migrants ? "" : " z") + '" style="height:' + (d.migrants ? Math.max(12, d.migrants / mx * 100).toFixed(1) + "%" : "2px") + '">'
+        + (d.date === lx.date || d.migrants === mx && !top++ ? "<b>" + fmt(d.migrants) + "</b>" : "") + "</i>").join("") + "</div>"
       + '<div class="lx-axis"><span>' + dShort.format(parse(strip[0].date)) + "</span><span>Last 14 days</span><span>" + dShort.format(parse(last.date)) + "</span></div>"
       + '<div class="wp-stats"><div><span>Quiet days since</span><b class="num">' + quiet + '</b></div><div><span>People a boat</span><b class="num">' + (lx.boats ? Math.round(lx.migrants / lx.boats) : "–") + "</b></div></div>"
       + '<p>The Home Office publishes how many people were detected crossing in small boats each day, usually the next afternoon. A day it reports as zero, or leaves out, means no crossings were detected. This is the most recent day with at least one person, counted back from the latest figures (' + dMid.format(parse(last.date)) + ").</p>"
@@ -2542,6 +2576,8 @@ footer strong{color:var(--label);font-weight:600}
     const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
     pm.dataset.lv = lvl || "";
     $("chipMap").querySelector("i").className = lvl || (wxFailed ? "none" : "wait");
+    $("chipMap").querySelector("span").textContent = lvl ? "Weather: " + WORD[lvl] : "Weather outlook";   // the level in words, not just a coloured dot
+    $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions" : "Weather outlook") + " in the Channel. Open the outlook");
     let h;
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -2551,6 +2587,7 @@ footer strong{color:var(--label);font-weight:600}
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
+        + '<p class="wp-foot" style="margin:0 0 4px">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
@@ -2570,7 +2607,7 @@ footer strong{color:var(--label);font-weight:600}
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "°" : "") + "</em></li>"; }).join("");
+        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "° high" : "") + "</em></li>"; }).join("");
       const c = w.current;
       wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
         lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
@@ -3081,9 +3118,9 @@ footer strong{color:var(--label);font-weight:600}
       const closes = p.closes ? dShort.format(parse(p.closes)) + " " + p.closes.slice(0,4) : "";
       const need = target - p.signatures;
       if(p.state==="open") m.append(chip, (need > 0 ? fmt(need) + " more for " + (target===10000?"a government response":"a debate") : "Enough for a debate") + (closes ? " · until " + closes : ""));
-      else m.append(chip, closes);
+      else m.append(chip, (closes ? closes + " · " : "") + fmt(p.signatures) + " of " + fmt(target));   // the chip already says Closed
       if(p.response) m.append(" · Government responded");
-      const bar = document.createElement("span"); bar.className = "pbar";
+      const bar = document.createElement("span"); bar.className = "pbar" + (p.state === "open" ? "" : " done");   // closed: a grey bar
       const fill = document.createElement("i"); fill.style.width = Math.min(100, p.signatures/target*100).toFixed(1) + "%"; bar.append(fill);
       li.append(a, n, m, bar); ul.append(li);
     });
@@ -3110,7 +3147,7 @@ footer strong{color:var(--label);font-weight:600}
   /* ---------------------------------------------------- first-visit tour of the map */
   const TOUR = [
     {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
-    {el:() => document.querySelector("#lmap .boat"), h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
+    {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
     {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
     {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
     {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
@@ -3272,9 +3309,8 @@ footer strong{color:var(--label);font-weight:600}
     e.stopPropagation();
     if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
     else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
-    stripUpdate();
+    stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
-  addEventListener("resize", () => { if(!$("news").hidden) newsRoom(); });   // with the strip hidden, the resize handler above already refits the map card
 
   start(); loadWeather(); loadNews();
   whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
