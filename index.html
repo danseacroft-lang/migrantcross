@@ -77,6 +77,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
   --glass:rgba(255,255,255,.72); --bar:rgba(246,246,248,.78);
   --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
+  --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#86b6ef; --heat2:#5598e7; --heat3:#256abf; --heat4:#104281;   /* pressed button, orange text, the four shades of the year in squares */
   --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:var(--font);   /* one font across the site: Helvetica Neue, as on Ventusky (Arial where it is missing) */
 }
@@ -88,6 +89,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
+  --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -97,6 +99,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
+  --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -542,7 +545,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--fill);border-radius:9px;padding:2px}
 .seg button{border:0;background:none;color:var(--label);font:600 .765rem/1 var(--font);height:30px;padding:0 12px;border-radius:7px;cursor:pointer;position:relative}
 .seg button::after{content:"";position:absolute;inset:-7px 0}
-.seg button[aria-pressed="true"]{background:var(--card);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+.seg button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .chart{position:relative;margin-top:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .chart svg{display:block;width:100%;height:auto;overflow:visible}
 .chart .line{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
@@ -556,23 +559,30 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @keyframes drawIn{to{stroke-dashoffset:0}}
 
 /* ------------------------------------------------------------ the year in squares */
-.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:22px 4px 4px}
+.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:24px 4px 4px}
 .heat-scroll::-webkit-scrollbar{display:none}
+@media (hover:hover) and (pointer:fine){.heat-scroll{scrollbar-width:thin;scrollbar-color:var(--fill2) transparent;padding-bottom:8px}.heat-scroll::-webkit-scrollbar{display:block;height:6px}.heat-scroll::-webkit-scrollbar-thumb{background:var(--fill2);border-radius:3px}}   /* a mouse can reach January */
+.heat-scroll.more-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px);mask-image:linear-gradient(90deg,transparent,#000 24px)}   /* fades on the left when earlier weeks are hidden */
 .heat{--c:14px;position:relative;display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,var(--c));grid-auto-columns:var(--c);gap:4px;width:max-content}
-.heat i{border-radius:4px;background:var(--fill);transform:scale(.3);opacity:0;transition:transform .5s cubic-bezier(.2,.9,.3,1.3),opacity .4s}
-.on .heat.show i{transform:none;opacity:1}   /* the squares pop in when their page first slides into view */
-.heat i.l1{background:color-mix(in srgb,var(--blue) 25%,var(--fill))}
-.heat i.l2{background:color-mix(in srgb,var(--blue) 50%,var(--fill))}
-.heat i.l3{background:color-mix(in srgb,var(--blue) 75%,var(--fill))}
-.heat i.l4{background:var(--blue)}
+.heat i{border-radius:4px;background:var(--fill)}
+.heat i[data-d]{cursor:pointer}
+.heat{opacity:0;transition:opacity .5s ease}.on .heat.show{opacity:1}   /* the squares fade in when their page first slides into view */
+.heat-scale i{background:var(--fill)}
+.heat i.l1,.heat-scale i.l1{background:var(--heat1)}
+.heat i.l2,.heat-scale i.l2{background:var(--heat2)}
+.heat i.l3,.heat-scale i.l3{background:var(--heat3)}
+.heat i.l4,.heat-scale i.l4{background:var(--heat4)}
 .heat i.pk{box-shadow:0 0 0 2px var(--orange)}
 .heat i.fut{background:none;box-shadow:inset 0 0 0 1px var(--sep)}
-.heat i:hover,.heat i.sel{outline:2px solid var(--label);outline-offset:1px}
-.heat-m{position:absolute;top:-20px;font-size:.647rem;font-weight:600;color:var(--label2)}
+@media (hover:hover){.heat i:hover{outline:2px solid var(--label);outline-offset:1px}}
+.heat i.sel{outline:2px solid var(--label);outline-offset:1px}
+.heat-m{position:absolute;top:-21px;font-size:.706rem;font-weight:600;color:var(--label2)}
 .heat-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;font-size:.765rem;color:var(--label2);flex-wrap:wrap}
 .heat-key{display:flex;align-items:center;gap:4px}
 .heat-key i{width:12px;height:12px;border-radius:3px;display:inline-block}
-.heat-read{font-size:.882rem;color:var(--label);min-height:1.3em}
+.heat-scale{gap:6px}.heat-scale>span{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:.706rem;font-variant-numeric:tabular-nums;min-width:22px}
+.heat-read{font-size:.882rem;color:var(--label);min-height:2.6em;line-height:1.3}
+.heat-read b{display:block}
 
 /* ------------------------------------------------------------ year bars */
 .years{display:grid;gap:10px;margin-top:6px}
@@ -581,8 +591,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr b{font-weight:600}
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
-.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:linear-gradient(90deg,#5AC8FA,var(--blue));transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.yr.cur .fill{background:linear-gradient(90deg,#FFB340,var(--orange))}
+.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.yr.cur .fill{background:var(--orange)}
 .yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
@@ -704,7 +714,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rv{opacity:1;transform:none}
-  .spark span,.minibars span,.heat i,.otd-years i{transform:none;opacity:1}
+  .spark span,.minibars span,.heat,.otd-years i{transform:none;opacity:1}
   .draw{stroke-dasharray:none;stroke-dashoffset:0}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
@@ -784,6 +794,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (max-width:420px){.mb .cal-grid{gap:3px}.mb .cal-day{min-height:42px;border-radius:8px}.mb .cal-day .dv{font-size:.765rem}}
 .mb .race-card{display:grid;gap:8px}
 .mb .race{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.mb .race:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:9px}
 .mb .race svg{display:block;width:100%;height:auto}
 .mb .race svg text{font-family:var(--font);fill:var(--label2)}
 .mb .race .tip{min-width:170px}
@@ -791,6 +802,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .key-row{display:flex;flex-wrap:wrap;gap:4px 16px;padding-inline:4px;font-size:.824rem;color:var(--label2)}
 .mb .key-row span{display:inline-flex;align-items:center;gap:6px}
 .mb .key-row i{width:14px;height:3px;border-radius:2px}
+@media (max-width:360px){.mb .key-row{gap:4px 12px}}   /* the key stays on one line at 320 */
 .mb .tbl{width:100%;border-collapse:collapse;font-size:.882rem;font-variant-numeric:tabular-nums}
 .mb .tbl th{font-size:.706rem;font-weight:600;color:var(--label2);text-align:right;padding:10px 16px 6px;letter-spacing:.01em}
 .mb .tbl th:first-child,.mb .tbl td:first-child{text-align:left}
@@ -1066,17 +1078,17 @@ footer strong{color:var(--label);font-weight:600}
         </div>
         <div class="dd-face" id="ddSq" role="group" aria-label="The year in squares" inert>
           <div class="flip-h"><button type="button" class="flip-go back" data-go="0" aria-controls="ddDay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Every day</button><button type="button" class="flip-go" data-go="2" aria-controls="ddYr">Year by year<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
-          <div class="heat-read" id="heatRead">Tap a square to see that day.</div>
-          <div class="heat-scroll" id="heatScroll"><div class="heat" id="heat"></div></div>
+          <div class="heat-read" id="heatRead" aria-live="polite">Tap a square to see that day.</div>
+          <div class="heat-scroll" id="heatScroll" tabindex="0" role="group" aria-label="The year in squares. Arrow keys move between days."><div class="heat" id="heat"></div></div>
           <div class="heat-foot">
-            <span class="heat-key">None <i style="background:var(--fill)"></i><i style="background:color-mix(in srgb,var(--blue) 25%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 50%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 75%,var(--fill))"></i><i style="background:var(--blue)"></i> 600+</span>
+            <span class="heat-key heat-scale" role="img" aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
             <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
           </div>
         </div>
         <div class="dd-face" id="ddYr" role="group" aria-label="Year by year" inert>
-          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button></div>
+          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button><h3>People each year</h3></div>
           <div class="years" id="years"></div>
-          <p class="dd-foot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
+          <p class="dd-foot" id="yrFoot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
         </div>
       </div>
     </div>
@@ -1087,10 +1099,10 @@ footer strong{color:var(--label);font-weight:600}
     <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
     <div class="card race-card rv">
       <div class="key-row" id="raceKey" aria-hidden="true"></div>
-      <div class="race" id="race"><div class="empty">Loading the history since 2018…</div></div>
+      <div class="race" id="race" tabindex="0" aria-describedby="raceSay"><div class="empty">Loading the history since 2018…</div></div>
       <div class="sr" aria-live="polite" id="raceSay"></div>
     </div>
-    <p class="foot rv">Running total of arrivals from 1 January in each year.</p>
+    <p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
   </section>
 
   <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
@@ -2296,7 +2308,8 @@ footer strong{color:var(--label);font-weight:600}
 
   /* ---------------------------------------------------- the year in squares */
   function drawHeat(){
-    const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4), by = new Map(all.map(d => [d.date, d]));
+    const sc = $("heatScroll"), again = $("heat").childElementCount > 0, keep = again && $("heat").querySelector("i.sel")?.dataset.d, fromRight = sc.scrollWidth - sc.scrollLeft;   // a refresh keeps the chosen day and the scroll
+    const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4), by = new Map(all.map(d => [d.date, d])), tdy = ukToday();
     const jan1 = parse(yr + "-01-01"), lead = (jan1.getUTCDay() + 6) % 7, dec31 = parse(yr + "-12-31");
     const inYear = all.filter(d => d.date.slice(0,4) === yr);
     const top10 = new Set(inYear.slice().sort((a,b) => b.migrants - a.migrants).slice(0,10).filter(d => d.migrants > 0).map(d => d.date));
@@ -2304,40 +2317,65 @@ footer strong{color:var(--label);font-weight:600}
     let h = "", months = "";
     for(let k = 0; k < lead; k++) h += '<i style="visibility:hidden"></i>';
     for(let t = jan1.getTime(), k = lead; t <= dec31.getTime(); t += DAY, k++){
-      const iso = new Date(t).toISOString().slice(0,10), d = by.get(iso), fut = iso > last.date;
+      const iso = new Date(t).toISOString().slice(0,10), d = by.get(iso), fut = iso > last.date, wait = fut && iso <= tdy;   // wait: the day has passed but its figures are not out
       const col = Math.floor(k / 7);
       if(iso.slice(8) === "01") months += '<span class="heat-m" style="left:calc(' + col + ' * (var(--c) + 4px))">' + parse(iso).toLocaleDateString("en-GB",{month:"short",...UTC}) + "</span>";
-      h += '<i data-d="' + iso + '" class="' + (fut ? "fut" : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" style="transition-delay:' + Math.min(900, col * 16) + 'ms" role="img" aria-label="' + dMid.format(parse(iso)) + (fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
+      h += '<i data-d="' + iso + '" class="' + (fut ? "fut" + (wait ? " wait" : "") : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" role="img" aria-label="' + dMid.format(parse(iso)) + (wait ? ": figures not out yet" : fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
     }
     $("heat").innerHTML = months + h;
     heatCols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7); sizeHeat();
-    ddNotes[1] = yr + " · " + fmt(inYear.filter(d => d.migrants > 0).length) + " days with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
-    whenDd(1, () => $("heat").classList.add("show"));
-    const sc = $("heatScroll"), now = $("heat").querySelector("i.fut");   // today at the right edge, not the empty weeks to come
-    sc.scrollLeft = now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
+    heatYr = yr;
+    const kept = keep && $("heat").querySelector('i[data-d="' + keep + '"]');
+    if(kept){ kept.classList.add("sel"); heatSay(kept); } else heatIdle();
+    ddNotes[1] = yr + " · " + plural(inYear.filter(d => d.migrants > 0).length, "day", "days") + " with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
+    if(!again) whenDd(1, () => $("heat").classList.add("show"));
+    const now = $("heat").querySelector("i.fut");   // today at the right edge, not the empty weeks to come
+    sc.scrollLeft = again ? sc.scrollWidth - fromRight : now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
+    sc.classList.toggle("more-l", sc.scrollLeft > 4);
   }
-  // squares grow to fill wide screens (53 weeks), and stay finger-sized on phones (the grid scrolls)
-  let heatCols = 53;
+  // squares stay at least 14px; the grid scrolls sideways when the card is narrower than the year
+  let heatCols = 53, heatYr = "";
   const sizeHeat = () => $("heat").style.setProperty("--c", Math.max(14, Math.min(22, Math.floor(($("heatScroll").clientWidth - 8) / heatCols) - 4)) + "px");
-  $("heat").addEventListener("click", e => {
-    const c = e.target.closest("i[data-d]"); if(!c) return;
-    document.querySelectorAll("#heat i.sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel");
+  // the readout above the squares: the date on line one, the figures on line two, so the grid never jumps
+  function heatSay(c){
     const d = days.find(x => x.date === c.dataset.d), fut = c.classList.contains("fut");
-    $("heatRead").innerHTML = "<b>" + dLong.format(parse(c.dataset.d)) + "</b> · " + (fut ? "still to come" : d && d.migrants ? plural(d.migrants, "person", "people") + " in " + plural(d.boats, "boat", "boats") : "no crossings detected");
+    $("heatRead").innerHTML = "<b>" + dMid.format(parse(c.dataset.d)) + "</b>" + (c.classList.contains("wait") ? "Figures not published yet" : fut ? "Still to come" : d && d.migrants ? plural(d.migrants, "person", "people") + " in " + plural(d.boats, "boat", "boats") : "No crossings detected");
+  }
+  function heatIdle(){ $("heatRead").innerHTML = "<b>" + heatYr + ", a square a day</b>" + (touchOnly ? "Tap" : "Click") + " one to read it."; }
+  function heatPick(c){ document.querySelectorAll("#heat i.sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel"); heatSay(c); }
+  $("heat").addEventListener("click", e => { const c = e.target.closest("i[data-d]"); if(c) heatPick(c); });
+  // a mouse previews the day under it; leaving the squares goes back to the chosen day
+  $("heat").addEventListener("pointerover", e => { const c = e.pointerType === "mouse" && e.target.closest("i[data-d]"); if(c) heatSay(c); });
+  $("heatScroll").addEventListener("pointerleave", e => { if(e.pointerType !== "mouse") return; const c = $("heat").querySelector("i.sel"); if(c) heatSay(c); else heatIdle(); });
+  $("heatScroll").addEventListener("scroll", e => e.currentTarget.classList.toggle("more-l", e.currentTarget.scrollLeft > 4), {passive:true});
+  // arrow keys: left and right a week, up and down a day; the first press picks the latest day
+  $("heatScroll").addEventListener("keydown", e => {
+    const step = {ArrowLeft:-7, ArrowRight:7, ArrowUp:-1, ArrowDown:1}[e.key]; if(!step) return;
+    e.preventDefault();
+    const cells = [...$("heat").querySelectorAll("i[data-d]:not(.fut)")]; if(!cells.length) return;
+    const at = cells.findIndex(x => x.classList.contains("sel"));
+    const c = cells[at < 0 ? cells.length - 1 : Math.max(0, Math.min(cells.length - 1, at + step))];
+    heatPick(c); c.scrollIntoView({block:"nearest", inline:"nearest"});
   });
 
   /* ---------------------------------------------------- year by year */
   function drawYears(){
-    const all = allDays(), last = all[all.length-1], cur = +last.date.slice(0,4), rows = {};
+    const all = allDays(), last = all[all.length-1], cur = +last.date.slice(0,4), rows = {}, again = $("years").childElementCount > 0;
     all.forEach(d => { const y = +d.date.slice(0,4); rows[y] = (rows[y] || 0) + d.migrants; });
     const ys = Object.keys(rows).map(Number).sort((a,b) => b - a), mx = Math.max(...Object.values(rows));
     const prevSame = sum(all.filter(d => +d.date.slice(0,4) === cur - 1 && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const change = y => { const base = y === cur ? prevSame : rows[y - 1]; if(!base) return '<span class="ch"></span>';   // on the year before; this year on the same dates last year
       const pct = Math.round((rows[y] / base - 1) * 100); return '<span class="ch delta ' + (pct < 0 ? "down" : "up") + '">' + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>"; };
     $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : "") + '"><b>' + y + '</b><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
-      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" title="' + (cur - 1) + ' by this date: ' + fmt(prevSame) + '"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
-    ddNotes[2] = cur + " so far"; if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
-    whenDd(2, () => $("years").querySelectorAll(".fill").forEach((f, i) => setTimeout(() => f.style.width = f.dataset.w + "%", reduced ? 0 : i * 70)));   // the bars grow when their page slides into view
+      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" aria-hidden="true"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
+    $("yrFoot").textContent = "Each year is compared with the year before. " + cur + " runs to " + dShort.format(parse(last.date)) + "; the line on its bar marks " + (cur - 1) + " by the same date, " + fmt(prevSame) + ".";
+    const peak = ys.reduce((a,b) => rows[b] > rows[a] ? b : a);
+    ddNotes[2] = "Busiest year: " + peak + ", " + fmt(rows[peak]); if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
+    const fills = $("years").querySelectorAll(".fill");
+    if(again && ddSeen[2]){   // a refresh: the bars take their new widths at once instead of growing again
+      fills.forEach(f => { f.style.transition = "none"; f.style.width = f.dataset.w + "%"; });
+      void $("years").offsetWidth; fills.forEach(f => f.style.transition = "");
+    } else whenDd(2, () => fills.forEach((f, i) => setTimeout(() => f.style.width = f.dataset.w + "%", reduced ? 0 : i * 70)));   // the bars grow when their page slides into view
   }
 
   /* ---------------------------------------------------- who is crossing, per boat, returns */
@@ -2699,32 +2737,44 @@ footer strong{color:var(--label);font-weight:600}
 
 
   // ---- Year by year race
-  let race = null, raceDay = null;
-  function drawRace(){
-    const box = $("race");
-    const days = allDays(), lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4);
+  // drawRace builds the chart once per set of figures or width; moveRace only moves the line, the dots and the box of figures
+  let race = null, raceDay = null, raceSayT = 0, raceKeep = "", raceYrs = null;
+  const raceMon = new Intl.DateTimeFormat("en-GB",{month:"short",...UTC}), raceDM = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",...UTC});
+  const ordinal = n => n + (n % 100 > 10 && n % 100 < 14 ? "th" : ["th","st","nd","rd"][n % 10] || "th");
+  function raceYears(){   // each year's running total by day of the year, worked out once per set of figures
+    const key = sorted.length + "|" + sorted[sorted.length-1].date;
+    if(key === raceKeep) return raceYrs;
     const years = {};
-    days.forEach(d=>{
-      const y = +d.date.slice(0,4), doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY);
+    allDays().forEach(d=>{
+      const y = +d.date.slice(0,4);
+      let doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY); if(y%4===0 && doy>=59) doy -= 1;   // 29 February counts with the 28th, so 31 December is day 364 every year
       (years[y] = years[y] || {y, cum:[], tot:0});
       years[y].tot += d.migrants; years[y].cum[doy] = years[y].tot;
     });
-    const list = Object.values(years).sort((a,b)=>a.y-b.y);
-    const W = Math.max(280, Math.round(box.clientWidth || 320));
-    const H = Math.round(Math.min(340, Math.max(220, W*0.45)));
-    const m = {t:14, r:40, b:26, l:40}, iw = W-m.l-m.r, ih = H-m.t-m.b;
-    const maxV = Math.max(...list.map(v=>v.tot), 10), step = niceStep(maxV/4), top = Math.ceil(maxV/step)*step;
+    raceKeep = key; return raceYrs = Object.values(years).sort((a,b)=>a.y-b.y);
+  }
+  const raceOut = () => $("raceTip");   // where the figures for the chosen day are written
+  function drawRace(){
+    const box = $("race");
+    const list = raceYears(), curYr = +sorted[sorted.length-1].date.slice(0,4);
+    const W = Math.max(240, Math.round(box.clientWidth || 320));
+    const H = W < 520 ? Math.round(Math.min(300, Math.max(240, W*0.75))) : Math.round(Math.min(340, Math.max(220, W*0.45)));   // taller on phones
+    const m = {t:14, r:44, b:26, l:40}, iw = W-m.l-m.r, ih = H-m.t-m.b;
+    // the top of the scale sits just above the highest line: 3 to 5 steps, the closest fit wins
+    const maxV = Math.max(...list.map(v=>v.tot), 10);
+    const cands = [3,4,5].map(n=>niceStep(maxV/n)).map(st=>({st, top:Math.ceil(maxV/st)*st})).filter(c=>c.top/c.st<=6).sort((a,b)=>a.top-b.top||b.st-a.st);
+    const {st:step, top} = cands[0];
     const x = doy => m.l + doy/365*iw, y = v => m.t + ih - v/top*ih;
     const colour = yr => yr===curYr ? "var(--mbar)" : yr===curYr-1 ? "var(--boat)" : "var(--label3)";
     let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Running total of arrivals each year from 1 January, '+list[0].y+' to '+curYr+'. '
       + list.map(v=>v.y+(v.y===curYr?" so far":"")+": "+fmt(v.tot)).join(", ")+'.">';
     for(let v=0; v<=top; v+=step){
       s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--sep)" stroke-width=".5"'+(v?' stroke-dasharray="2 3"':'')+'/>';
-      s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+(v>=1000?(v/1000)+'k':v)+'</text>';
+      s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="12">'+(v>=1000?(v/1000)+'k':v)+'</text>';
     }
     ["J","F","M","A","M","J","J","A","S","O","N","D"].forEach((mn,i)=>{
       const doy = Math.round((Date.UTC(2023,i,1)-Date.UTC(2023,0,1))/DAY);
-      s += '<text x="'+(x(doy)+iw/24).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11">'+(W < 520 ? mn : new Date(Date.UTC(2023,i,1)).toLocaleString("en-GB",{month:"short",...UTC}))+'</text>';
+      s += '<text x="'+(x(doy)+iw/24).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12">'+(W < 520 ? mn : raceMon.format(Date.UTC(2023,i,1)))+'</text>';
     });
     // earlier years first (grey, thin), then last year, then this year on top
     const order = list.filter(v=>v.y<curYr-1).concat(list.filter(v=>v.y===curYr-1), list.filter(v=>v.y===curYr));
@@ -2734,48 +2784,93 @@ footer strong{color:var(--label);font-weight:600}
       const main = v.y>=curYr-1;
       s += '<path d="'+d+'" fill="none" stroke="'+colour(v.y)+'" stroke-width="'+(v.y===curYr?2.6:main?2:1.3)+'" stroke-linejoin="round" stroke-linecap="round"'+(main?'':' opacity=".9"')+'/>';
     });
-    // year labels at the line ends, skipping any that would overlap
-    const placed = [];
-    [list.find(v=>v.y===curYr), list.find(v=>v.y===curYr-1)].concat(list.filter(v=>v.y<curYr-1).sort((a,b)=>b.tot-a.tot)).forEach(v=>{
-      if(!v) return;
-      const endDoy = v.cum.length-1, ly = y(v.tot) + 4;
-      if(placed.some(p=>Math.abs(p-ly)<12 && endDoy>300)) return;
-      placed.push(ly);
-      s += '<text x="'+(x(endDoy)+4).toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="11" font-weight="'+(v.y>=curYr-1?600:400)+'" style="fill:'+(v.y>=curYr-1?colour(v.y):"var(--label2)")+'">'+v.y+'</text>';
+    // year labels at the line ends; the ones at the right edge are nudged apart so every year is named
+    const labs = list.map(v=>({v, end:v.cum.length-1, ly:y(v.tot)+4})), edge = labs.filter(l=>l.end>300).sort((a,b)=>a.ly-b.ly);
+    edge.forEach((l,i)=>{ if(i) l.ly = Math.max(l.ly, edge[i-1].ly+13); });
+    if(edge.length && edge[edge.length-1].ly > m.t+ih+4){   // too low: stack up from the bottom instead
+      const gap = Math.min(13, (ih - 4) / Math.max(1, edge.length-1));   // squeezed only if they cannot all fit
+      edge[edge.length-1].ly = m.t+ih+4;
+      for(let i = edge.length-2; i >= 0; i--) edge[i].ly = Math.min(edge[i].ly, edge[i+1].ly-gap);
+    }
+    labs.forEach(l=>{
+      const main = l.v.y>=curYr-1;
+      s += '<text x="'+(x(l.end)+4).toFixed(1)+'" y="'+l.ly.toFixed(1)+'" font-size="12" font-weight="'+(main?600:400)+'" style="fill:var(--'+(main?'label':'label2')+');paint-order:stroke;stroke:var(--card);stroke-width:3px;stroke-linejoin:round">'+l.v.y+'</text>';
     });
-    if(raceDay!=null){
-      s += '<line x1="'+x(raceDay)+'" x2="'+x(raceDay)+'" y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--label2)" stroke-width="1"/>';
-      list.forEach(v=>{ const c = v.cum[Math.min(raceDay, v.cum.length-1)]; if(c!=null && raceDay < v.cum.length) s += '<circle cx="'+x(raceDay)+'" cy="'+y(c)+'" r="'+(v.y>=curYr-1?4:3)+'" fill="'+colour(v.y)+'" stroke="var(--card)" stroke-width="1.5"/>'; });
-    }
-    s += '</svg>';
-    race = {m, iw, W, list, curYr};
-    let tip = "";
-    if(raceDay!=null){
-      const label = new Date(Date.UTC(2023,0,1)+raceDay*DAY).toLocaleDateString("en-GB",{day:"numeric",month:"long",...UTC});
-      const rows = list.filter(v=>raceDay < v.cum.length).map(v=>({y:v.y, n:v.cum[raceDay]})).sort((a,b)=>b.n-a.n);
-      tip = '<div class="tip" id="raceTip"><b>By ' + label + '</b>' + rows.map(r=>'<div class="row'+(r.y===curYr?' cur':'')+'"><i style="background:'+colour(r.y)+'"></i>'+r.y+'<em>'+fmt(r.n)+'</em></div>').join("") + '</div>';
-      $("raceSay").textContent = "By " + label + ": " + rows.map(r=>r.y+" "+fmt(r.n)).join(", ");
-    }
+    // the reading line and one dot per year, hidden until a day is picked
+    s += '<g id="raceHover" style="display:none"><line y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--label2)" stroke-width="1"/>'
+      + list.map(v=>'<circle r="'+(v.y>=curYr-1?4:3)+'" fill="'+colour(v.y)+'" stroke="var(--card)" stroke-width="1.5"/>').join("") + '</g></svg>';
+    const tip = '<div class="tip" id="raceTip" style="display:none"><b></b>' + list.map(v=>'<div class="row'+(v.y===curYr?' cur':'')+'"><i style="background:'+colour(v.y)+'"></i>'+v.y+'<em></em></div>').join("") + '</div>';
     box.innerHTML = s + tip;
-    if(raceDay!=null){
-      const t = $("raceTip"), sc = box.clientWidth / W, cx = x(raceDay)*sc, tw = t.offsetWidth;
-      let left = cx + 14; if(left + tw > box.clientWidth) left = cx - 14 - tw;
-      t.style.transform = "translateX(" + Math.max(0, Math.round(left)) + "px)";
+    const g = $("raceHover");
+    race = {m, iw, W, x, y, list, curYr, line:g.firstChild, dots:[...g.querySelectorAll("circle")], rows:[...$("raceTip").querySelectorAll(".row")]};
+    $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+String(curYr-2).slice(2)+'</span>';
+    // one line on where this year stands
+    const cur = list.find(v=>v.y===curYr);
+    if(cur){
+      const td = cur.cum.length-1, rank = 1 + list.filter(v=>v.y<curYr && (v.cum[td]||0) > cur.cum[td]).length;
+      $("raceFoot").textContent = "By " + raceDM.format(Date.UTC(2023,0,1)+td*DAY) + ", " + curYr + " is " + ordinal(rank) + " of the " + list.length + " years since " + list[0].y + ". Each line is a running total from 1 January.";
     }
-    $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+(curYr-2)+'</span>';
+    if(raceDay!=null) moveRace(raceDay);   // a rebuild keeps the day being read
   }
-  function racePick(clientX){
-    const svg = $("race").querySelector("svg"); if(!svg || !race) return;
-    const r = svg.getBoundingClientRect(), px = (clientX - r.left) * (race.W / r.width);
-    const d = Math.max(0, Math.min(364, Math.round((px - race.m.l)/race.iw*365)));
-    if(d !== raceDay){ raceDay = d; drawRace(); }
+  function moveRace(d){
+    if(!race) return;
+    const t = raceOut(), g = $("raceHover");
+    raceDay = d;
+    clearTimeout(raceSayT);
+    if(d==null){ g.style.display = "none"; t.style.display = "none"; $("raceSay").textContent = ""; return; }
+    const {x, y, list} = race, X = x(d).toFixed(1);
+    g.style.display = ""; t.style.display = "";
+    race.line.setAttribute("x1", X); race.line.setAttribute("x2", X);
+    race.dots.forEach((c,i)=>{ const n = list[i].cum[d]; if(n!=null){ c.style.display = ""; c.setAttribute("cx", X); c.setAttribute("cy", y(n).toFixed(1)); } else c.style.display = "none"; });
+    const label = raceDM.format(Date.UTC(2023,0,1)+d*DAY);
+    const rows = list.map((v,i)=>({i, y:v.y, n:v.cum[d]})).filter(r=>r.n!=null).sort((a,b)=>b.n-a.n);
+    t.firstChild.textContent = "By " + label;
+    race.rows.forEach(r=>r.style.display = "none");
+    rows.forEach(r=>{ const el = race.rows[r.i]; el.style.display = ""; el.lastChild.textContent = fmt(r.n); t.appendChild(el); });   // largest first
+    const box = $("race"), cx = x(d) * box.clientWidth / race.W, tw = t.offsetWidth;
+    let left = cx + 14; if(left + tw > box.clientWidth) left = cx - 14 - tw;
+    t.style.transform = "translateX(" + Math.max(0, Math.round(left)) + "px)";
+    raceSayT = setTimeout(()=>{ $("raceSay").textContent = "By " + label + ": " + rows.map(r=>r.y+" "+fmt(r.n)).join(", "); }, 300);   // read out once the finger or key settles
   }
-  let raceDrag = false;
-  $("race").addEventListener("pointerdown", e=>{ raceDrag = true; racePick(e.clientX); });
-  $("race").addEventListener("pointermove", e=>{ if(raceDrag || e.pointerType==="mouse") racePick(e.clientX); });
-  $("race").addEventListener("pointerleave", e=>{ if(e.pointerType==="mouse" && raceDay!=null){ raceDay = null; drawRace(); } });
+  let raceX = 0, raceRaf = 0;
+  function racePick(clientX){   // at most one move per frame while dragging
+    raceX = clientX;
+    if(raceRaf) return;
+    raceRaf = requestAnimationFrame(()=>{
+      raceRaf = 0;
+      const svg = $("race").querySelector("svg"); if(!svg || !race) return;
+      const r = svg.getBoundingClientRect(), px = (raceX - r.left) * (race.W / r.width);
+      const d = Math.max(0, Math.min(364, Math.round((px - race.m.l)/race.iw*365)));
+      if(d !== raceDay) moveRace(d);
+    });
+  }
+  function raceClear(){ cancelAnimationFrame(raceRaf); raceRaf = 0; if(raceDay!=null) moveRace(null); }
+  document.querySelector("#hRace + p").textContent = touchOnly ? "Tap or drag along the chart to compare" : "Hover to compare";
+  // a mouse reads as it moves; a finger reads on a tap or a sideways drag, so scrolling the page past the chart opens nothing
+  let raceDrag = false, rx0 = null, ry0 = null;
+  $("race").addEventListener("pointerdown", e=>{
+    if(e.pointerType==="mouse"){ raceDrag = true; racePick(e.clientX); return; }
+    rx0 = e.clientX; ry0 = e.clientY; raceDrag = false;
+  });
+  $("race").addEventListener("pointermove", e=>{
+    if(e.pointerType==="mouse"){ racePick(e.clientX); return; }
+    if(rx0!=null && !raceDrag){ const dx = Math.abs(e.clientX-rx0), dy = Math.abs(e.clientY-ry0); if(dx>6 && dx>dy) raceDrag = true; }
+    if(raceDrag) racePick(e.clientX);
+  });
+  $("race").addEventListener("pointerup", e=>{ if(e.pointerType!=="mouse" && rx0!=null && !raceDrag) racePick(rx0); rx0 = null; raceDrag = false; });
+  $("race").addEventListener("pointercancel", ()=>{ rx0 = null; raceDrag = false; });
+  $("race").addEventListener("pointerleave", e=>{ if(e.pointerType==="mouse") raceClear(); });
   addEventListener("pointerup", ()=>raceDrag=false);
-  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")){ raceDay = null; drawRace(); } }, true);
+  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")) raceClear(); }, true);
+  // keys: left and right a day (a week with Shift), Home and End the ends of the year, Escape closes
+  $("race").addEventListener("keydown", e=>{
+    if(!race) return;
+    if(e.key==="Escape"){ if(raceDay!=null){ e.preventDefault(); raceClear(); } return; }
+    const curEnd = (race.list.find(v=>v.y===race.curYr) || race.list[race.list.length-1]).cum.length-1, n = e.shiftKey ? 7 : 1;
+    const d = e.key==="Home" ? 0 : e.key==="End" ? 364 : e.key==="ArrowLeft" || e.key==="ArrowRight" ? (raceDay==null ? curEnd : raceDay + (e.key==="ArrowLeft" ? -n : n)) : null;
+    if(d==null) return;
+    e.preventDefault(); moveRace(Math.max(0, Math.min(364, d)));
+  });
 
   // ---- Arrivals between two dates
   function calc(){
