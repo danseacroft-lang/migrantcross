@@ -301,6 +301,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .wkend .fig-ring{display:none}
 .fu-wkend{display:none}
 .wkend .fu-wkend{display:block}
+.wkend .fu-wkday{display:none}
 .fig-ring .arc{stroke-dasharray:4 100;animation:ringArc 1.5s ease-in-out infinite}
 @keyframes ringArc{0%{stroke-dasharray:4 100;stroke-dashoffset:0}50%{stroke-dasharray:62 100;stroke-dashoffset:-14}100%{stroke-dasharray:4 100;stroke-dashoffset:-96}}
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
@@ -976,7 +977,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
     <circle cx="60" cy="60" r="5" fill="var(--blue)"/></svg>
   <b>Figure updates</b>
   <p class="fu-wkend">At weekends it can take several hours for the Home Office to release the figures, and it's not unusual for them to come out on the Monday instead.</p>
-  <p>Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
+  <p class="fu-wkday">Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
   <p class="fu-today" id="fuToday"></p>
 </div>
 
