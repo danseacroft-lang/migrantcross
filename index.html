@@ -548,7 +548,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 .otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--blue);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .otd-years i.zero{background:var(--fill2)}
-.otd-years i.last{background:var(--orange)}
+.otd-years i.last:not(.zero){background:var(--orange)}   /* a quiet latest year stays a grey stub */
 .on .otd-years i{transform:scaleY(1)}
 .otd-years b{font:600 .706rem/1 var(--round);white-space:nowrap}
 .otd-years em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
@@ -3125,7 +3125,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     });
     const top = runs.sort((a,b)=>b.len-a.len).slice(0,5);
     const yearOf = iso => " " + iso.slice(0,4);
-    const lastD = days[days.length-1].date;   // a spell ending on the latest day may still be going
+    const lastD = days.length ? days[days.length-1].date : "";   // a spell ending on the latest day may still be going
     let h = '<thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Days</th></tr></thead><tbody>';
     top.forEach(r=>{
       const live = r.end === lastD && days[days.length-1].migrants === 0;
