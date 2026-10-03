@@ -267,12 +267,19 @@ def update_page(data, recent):
 
     # The lines under the title and the big number, written as the page's script writes them, so Google and other
     # readers find the latest figures in the page itself, not only after the script has run
-    on = nice_date(latest).replace(" ", "&nbsp;")
-    sub = (f"people crossed in {last['boats']:,} small boat{'' if last['boats'] == 1 else 's'} on {on}"
-           if n else f"No crossings detected for {on}")
+    d = date.fromisoformat(latest)
+    long = f"{d.strftime('%A')}, {d.day} {d.strftime('%B')} {d.year}"
+    boats = last["boats"]
     html = re.sub(r'(<span id="freshText">)[^<]*', lambda m: m.group(1) + "Figures to " + short_date(latest), html, count=1)
-    html = re.sub(r'(id="heroSub">)[^<]*', lambda m: m.group(1) + sub, html, count=1)
-    html = re.sub(r'(id="heroSr" aria-live="polite">)[^<]*', lambda m: m.group(1) + (f"{n:,} {sub}" if n else ""), html, count=1)
+    # the day as a calendar tile, with "N people crossed" or "No crossings detected" beside it
+    html = re.sub(r'(id="hqMon">)[^<]*', lambda m: m.group(1) + d.strftime("%b"), html, count=1)
+    html = re.sub(r'(id="hqDay">)[^<]*', lambda m: m.group(1) + str(d.day), html, count=1)
+    html = re.sub(r'(id="heroNum">)[^<]*', lambda m: m.group(1) + (f"{n:,}" if n else ""), html, count=1)
+    html = re.sub(r'(id="hqT">)[^<]*', lambda m: m.group(1) + ((" person detected" if n == 1 else " people detected") if n else "No crossings detected"), html, count=1)
+    html = re.sub(r'(id="heroSub">)[^<]*', lambda m: m.group(1) + long + (f" · {boats:,}&nbsp;boat{'' if boats == 1 else 's'}" if n else ""), html, count=1)
+    sr = (f"{n:,} {'person' if n == 1 else 'people'} crossed in {boats:,} small boat{'' if boats == 1 else 's'} on {long}"
+          if n else f"No crossings detected for {long}")
+    html = re.sub(r'(id="heroSr" aria-live="polite">)[^<]*', lambda m: m.group(1) + sr, html, count=1)
 
     html = re.sub(r'"dateModified":\s*"[^"]*"', f'"dateModified": "{latest}"', html, count=1)
     html = re.sub(r'"temporalCoverage":\s*"[^"]*"', f'"temporalCoverage": "{data["days"][0]["date"]}/{latest}"', html, count=1)

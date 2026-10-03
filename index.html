@@ -325,6 +325,14 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .large-title h1{margin:0;font:700 2rem/1.1 var(--font);letter-spacing:.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 .big{font:700 clamp(4.6rem,17vw,9.5rem)/.95 var(--round);letter-spacing:-.02em;margin:6px 0 2px;text-shadow:0 4px 30px rgba(0,0,0,.35)}
+/* the latest day as a calendar tile, as in On This Day */
+.hero-quiet{display:flex;align-items:center;gap:18px;margin:6px 0 2px}
+.hero-quiet .cal{width:88px;height:92px;border-radius:20px;grid-template-rows:28px 1fr;background:rgba(28,28,30,.4);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 6px 24px rgba(0,0,0,.25)}
+.hero-quiet .cal span{font-size:.824rem;line-height:28px}
+.hero-quiet .cal b{font-size:2.9rem;color:#fff}
+.hq-t{font:700 clamp(1.7rem,5.6vw,3rem)/1.05 var(--font);letter-spacing:-.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
+.hq-s{margin-top:6px;font-size:1.06rem;font-weight:500;opacity:.88;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+@media (max-width:600px){.hero-quiet{gap:14px}.hero-quiet .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero-quiet .cal span{font-size:.706rem;line-height:22px}.hero-quiet .cal b{font-size:2.2rem}.hq-s{font-size:.941rem}}
 .big-sub{font-size:1.18rem;font-weight:500;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
 .chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
@@ -668,7 +676,6 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 /* phones on their side: the map fills the screen and the number shrinks to fit */
 @media (max-height:500px) and (orientation:landscape){
   .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
-  .big{font-size:clamp(3rem,13vh,5rem)}
   .hero-chips{margin-top:10px}
 }
 
@@ -945,8 +952,7 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker">Loading the latest figures…</div>
-    <div class="big num" id="heroNum" aria-hidden="true">–</div><span class="sr" id="heroSr" aria-live="polite"></span>
-    <div class="big-sub" id="heroSub">No crossings detected for Thu&nbsp;1&nbsp;October</div>
+    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">1</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum"></span><span id="hqT">No crossings detected</span></div><div class="hq-s" id="heroSub">Thursday, 1 October 2026</div></div></div><span class="sr" id="heroSr" aria-live="polite">No crossings detected for Thursday, 1 October 2026</span>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
       <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -2030,11 +2036,15 @@ html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px))}
   const sum = (a, k) => a.reduce((s, d) => s + (d[k] || 0), 0);
 
   function renderHero(){
-    const last = days[days.length-1], on = dMid.format(parse(last.date)).replace(/ /g, "\u00a0");   // the date stays on one line
+    const last = days[days.length-1];
     $("heroKicker").hidden = true;   // the date goes in the line under the number instead
-    countUp($("heroNum"), last.migrants);
-    $("heroSub").textContent = last.migrants ? "people crossed in " + plural(last.boats, "small boat", "small boats") + " on " + on : "No crossings detected for " + on;
-    $("heroSr").textContent = last.migrants ? fmt(last.migrants) + " " + $("heroSub").textContent : "";   // the number, read once (the count-up is hidden from screen readers)
+    const q = parse(last.date), n = last.migrants;   // the day as a calendar tile, as in On This Day
+    const long = q.toLocaleDateString("en-GB",{weekday:"long",...UTC}) + ", " + q.getUTCDate() + " " + q.toLocaleDateString("en-GB",{month:"long",...UTC}) + " " + q.getUTCFullYear();
+    $("hqMon").textContent = q.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3); $("hqDay").textContent = q.getUTCDate();
+    if(n) countUp($("heroNum"), n); else { $("heroNum")._count = ($("heroNum")._count || 0) + 1; $("heroNum").textContent = ""; }
+    $("hqT").textContent = n ? (n === 1 ? " person detected" : " people detected") : "No crossings detected";
+    $("heroSub").textContent = long + (n ? " · " + plural(last.boats, "boat", "boats").replace(" ", "\u00a0") : "");
+    $("heroSr").textContent = n ? fmt(n) + (n === 1 ? " person" : " people") + " crossed in " + plural(last.boats, "small boat", "small boats") + " on " + long : "No crossings detected for " + long;   // read once (the count-up is hidden from screen readers)
     const lx = last.migrants ? null : [...days].reverse().find(d => d.migrants > 0), cl = $("chipLast");   // a quiet day: say when the last crossings were
     cl.hidden = !lx;
     if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
