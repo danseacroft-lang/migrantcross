@@ -357,6 +357,7 @@ button.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulatio
 button.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 @media (hover:hover){button.chip:hover{background:rgba(255,255,255,.26)}}
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
+@media (max-width:360px){#chipYear{white-space:nowrap;flex-wrap:wrap;gap:0 5px;padding:0 11px}}   /* small phones: "2026 so far 19,287 ↓44% on 2025" on one line, never broken mid-phrase */
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
 .info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
