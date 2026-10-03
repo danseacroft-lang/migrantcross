@@ -81,6 +81,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#86b6ef; --heat2:#5598e7; --heat3:#256abf; --heat4:#104281;   /* pressed button, orange text, the four shades of the year in squares */
+  --age1:#acabeb; --age2:#8f8ee4; --age3:#7371dd; --age4:#5856d6;   /* the age bands in Who Is Crossing, youngest lightest */
   --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:var(--font);   /* one font across the site: Helvetica Neue, as on Ventusky (Arial where it is missing) */
 }
@@ -93,6 +94,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
+  --age1:#5e5ce6; --age2:#8180ec; --age3:#a2a0f1; --age4:#bfbef5;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -103,6 +105,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
+  --age1:#5e5ce6; --age2:#8180ec; --age3:#a2a0f1; --age4:#bfbef5;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -152,12 +155,12 @@ button,input,select,textarea{font:inherit}
 /* Map controls: frosted pills, matching the buttons along the bottom of the map */
 .wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
 .am-top{display:flex;gap:8px;align-items:center}
-.am-btn,.am-pill{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+.am-btn,.am-pill{background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 .am-btn{position:relative;flex:none;height:36px;min-width:36px;border:0;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
 .am-btn::after{content:"";position:absolute;inset:-4px}   /* still a 44pt tap target */
 .am-btn:active{transform:scale(.96)}
 .am-btn svg{width:15px;height:15px}
-@media (hover:hover){.am-btn:hover{background:rgba(255,255,255,.26)}}
+@media (hover:hover){.am-btn:hover{background:rgba(28,28,30,.48)}}
 .am-layer{padding:0 12px 0 13px}
 .am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
 .am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
@@ -187,7 +190,7 @@ button,input,select,textarea{font:inherit}
 .wx-time span{min-width:74px;text-align:right}
 .am-play{width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .am-play svg{width:13px;height:13px}.am-play .pa,.am-play[aria-pressed="true"] .pl{display:none}.am-play[aria-pressed="true"] .pa{display:block}
-.wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:28px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.28) var(--p,0%)) 0 50%/100% 4px no-repeat;touch-action:manipulation;cursor:pointer}
+.wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:28px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.4) var(--p,0%)) 0 50%/100% 4px no-repeat;touch-action:manipulation;cursor:pointer}
 .wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
 .wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
 /* place names in the style of Ventusky: dark navy Helvetica, a ring for each town, bigger places in bold, names centred above */
@@ -212,6 +215,15 @@ button,input,select,textarea{font:inherit}
 @media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
 .am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
+/* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
+.wx-key{display:flex;align-items:center;gap:7px;font:500 12px/1 var(--font);font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);white-space:nowrap}
+.wx-key i{flex:1;min-width:48px;height:6px;border-radius:3px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.15)}
+.wx-key .wk-t{font-weight:600;margin-right:2px}
+#wxKeyPick{margin:14px 2px 0}
+.wx-key-bar{width:220px;padding:7px 12px}
+#wxPick:not([hidden]) ~ .wx-key-bar{display:none}   /* the open picker shows its own */
+.am-sheet .wx-key{color:var(--label2);margin-top:10px}
+@media (max-width:600px){.wx-key-bar{display:none}}   /* phones: in the layer picker and the reading sheet */
 .am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
 .am-launch-tg[aria-pressed="false"]{color:rgba(255,255,255,.6)}
 .am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
@@ -265,7 +277,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .wx-pt .wp-stats div{padding:6px 8px}
 .wx-pt .wp-stats b{font-size:1rem}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(0,0,0,.34) 0,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 55%,rgba(0,0,0,.45) 85%,rgba(0,0,0,.55) 100%)}
+  background:linear-gradient(to bottom,rgba(0,0,0,.42) 0,rgba(0,0,0,.12) 26%,rgba(0,0,0,0) 40%,rgba(0,0,0,.35) 62%,rgba(0,0,0,.6) 100%)}   /* darker behind the title and the figures, so white text reads over the light map */
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
 .hero-chips > *{pointer-events:auto}
 /* across the top of the map: breaking news, which flashes when a story comes in, and from 12:00 UK time
@@ -318,7 +330,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
-.hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 6px rgba(0,0,0,.45),0 1px 8px rgba(0,0,0,.55)}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
 .fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
@@ -344,7 +356,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hq-s{margin-top:6px;font-size:1.06rem;font-weight:500;opacity:.88;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 @media (max-width:600px){.hero-quiet{gap:14px}.hero-quiet .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero-quiet .cal span{font-size:.706rem;line-height:22px}.hero-quiet .cal b{font-size:2.2rem}.hq-s{font-size:.941rem}}
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
+.chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
   font-size:.882rem;font-weight:600;color:#fff;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.25)}
 .chip i.moderate{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25)}
@@ -355,14 +367,15 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .chip .up{color:#FFB4AE}.chip .down{color:#9CF0B4}
 button.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulation;transition:background-color .2s}
 button.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
-@media (hover:hover){button.chip:hover{background:rgba(255,255,255,.26)}}
-button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
+@media (hover:hover){button.chip:hover{background:rgba(28,28,30,.48)}}
+button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 @media (max-width:360px){#chipYear{white-space:nowrap;flex-wrap:wrap;gap:0 5px;padding:0 11px}}   /* small phones: "2026 so far 19,287 ↓44% on 2025" on one line, never broken mid-phrase */
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
 .info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
+.info-pop.sheet{overflow:auto;overscroll-behavior:contain;border-radius:20px;padding:16px 18px}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
@@ -534,6 +547,12 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
+.cost-i{appearance:none;border:0;background:none;position:relative;display:inline-grid;place-items:center;width:22px;height:22px;margin:-4px 0 -4px 3px;padding:0;vertical-align:middle;color:var(--label2);cursor:pointer;touch-action:manipulation;border-radius:50%}
+.cost-i svg{width:17px;height:17px}
+.cost-i::after{content:"";position:absolute;inset:-11px}   /* a 44pt tap target */
+.cost-i:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.cost-i[aria-expanded="true"]{color:var(--label)}
+@media (hover:hover){.cost-i:hover{color:var(--label)}}
 .calm{color:var(--green-t)}.moderate{color:var(--orange-t)}.rough{color:var(--red-t)}
 
 /* ------------------------------------------------------------ on this day */
@@ -618,6 +637,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
+.stack-h{margin:16px 0 -6px;font-size:.765rem;font-weight:600;color:var(--label2)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px}
@@ -647,7 +667,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records{list-style:none;margin:0;padding:0}
 .records li{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-top:.5px solid var(--sep)}
 .records li:first-child{border-top:0;padding-top:4px}
-.records .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:#fff}
+.records .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--fill);color:var(--label)}
 .records .ic svg{width:19px;height:19px}
 .records .t{font-size:.941rem}.records .t small{display:block;color:var(--label2);font-size:.765rem;margin-top:1px}
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
@@ -662,14 +682,10 @@ footer strong{color:var(--label);font-weight:600}
 @media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
 /* share buttons: ready-made posts of the latest figures for each network (links only; nothing loads from them until clicked) */
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
-.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;color:#fff;touch-action:manipulation}
-.sh-x{background:#000}
-.sh-fb{background:#1877F2}.sh-wa{background:#1FA855}.sh-tg{background:#229ED9}
-.sh-copy,.sh-more{background:var(--fill);color:var(--blue)}
+.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:var(--label);touch-action:manipulation;transition:background-color .2s}   /* plain buttons, not brand colours */
+.sh-copy,.sh-more{color:var(--blue)}
 .sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.sh:hover{filter:brightness(1.1)}}
-:root[data-theme="dark"] .sh-x{background:#fff;color:#000}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sh-x{background:#fff;color:#000}}
+@media (hover:hover){.sh:hover{background:var(--fill2)}}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -725,7 +741,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .hero-in,.large-title{padding-left:20px;padding-right:20px}
   .large-title h1{white-space:nowrap}
   .bento{gap:12px}
-  .b-week,.b-ring{grid-column:1 / -1}
+  .b-week,.b-ring,.b-lab,.b-bur{grid-column:1 / -1}   /* one box to a row, so Labour and Burnham are not squeezed into two narrow columns */
+  .card.b-lab,.card.b-bur{min-height:190px;padding-bottom:16px}
+  .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:62%}
+  .b-bur .tile-art{width:44%}
+  /* the hero chips: one row that scrolls sideways, fading at the edges, so the figures stay above the fold */
+  .hero-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-20px;padding:2px 20px;scroll-padding-inline:20px;pointer-events:auto;
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 28px),transparent)}
+  .hero-chips::-webkit-scrollbar{display:none}
+  .hero-chips > *{flex:none}
   .flip > div{padding:16px}
   .flip > .fy{padding-bottom:100px}
   .flip > .fc{padding:14px 12px}
@@ -834,6 +858,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .race svg text{font-family:var(--font);fill:var(--label2)}
 .mb .race .tip{min-width:170px}
 .mb .race .tip .row.cur{font-weight:600;color:var(--label)}
+/* narrow boxes: the figures for the chosen day sit under the chart, three to a row, instead of covering it */
+.mb .race-read{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 12px;padding:2px 4px;font-size:.824rem;line-height:1.35;font-variant-numeric:tabular-nums;color:var(--label2)}
+.mb .race-read[hidden]{display:none}
+.mb .race-read b{grid-column:1 / -1;color:var(--label);font-weight:600;font-size:.882rem;margin-bottom:2px}
+.mb .race-read .row{display:flex;align-items:center;gap:5px;min-width:0;white-space:nowrap}
+.mb .race-read .row i{flex:none;width:8px;height:8px;border-radius:2px}
+.mb .race-read .row em{font-style:normal;margin-left:auto;color:var(--label);font-weight:500}
+.mb .race-read .row.cur,.mb .race-read .row.cur em{color:var(--label);font-weight:600}
+@media (max-width:360px){.mb .race-read{font-size:12px;gap:3px 8px;padding:2px 0}.mb .race-read .row{gap:4px}.mb .race-read .row i{width:7px;height:7px}}   /* small phones: three to a row still fit */
 .mb .key-row{display:flex;flex-wrap:wrap;gap:4px 16px;padding-inline:4px;font-size:.824rem;color:var(--label2)}
 .mb .key-row span{display:inline-flex;align-items:center;gap:6px}
 .mb .key-row i{width:14px;height:3px;border-radius:2px}
@@ -983,8 +1016,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
       <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button></div>
       <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
+      <div class="wx-key" id="wxKeyPick" role="img"></div>
     </div>
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
+    <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img"></div>
   </div>
 
   <div class="hero-in">
@@ -1019,6 +1054,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop boat-tip" id="boatTip" role="tooltip" hidden></div>
 
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
+<div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
 <main id="main">
 
@@ -1076,7 +1112,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <h3>Since Labour took office</h3>
         <div class="val num" id="labV">–</div>
         <div class="sub" id="labS">&nbsp;</div>
-        <div class="cost" id="labC"></div>
+        <div class="cost" id="labC"><span id="labCT"></span><button type="button" class="cost-i" id="labCI" aria-expanded="false" aria-controls="popCost" aria-label="How the support cost is worked out" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.35" fill="currentColor"/></svg></button></div>
       </article>
       <article class="card b-bur art rv">
         <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax slice"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div>
@@ -1140,6 +1176,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="card race-card rv">
       <div class="key-row" id="raceKey" aria-hidden="true"></div>
       <div class="race" id="race" tabindex="0" aria-describedby="raceSay"><div class="empty">Loading the history since 2018…</div></div>
+      <div class="race-read" id="raceRead" aria-hidden="true" hidden></div>
       <div class="sr" aria-live="polite" id="raceSay"></div>
     </div>
     <p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
@@ -1208,8 +1245,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <h3>Sex and age</h3>
         <div class="val num" id="menV">–</div>
         <div class="sub">adult men</div>
+        <div class="stack-h">Sex</div>
         <div class="stack" id="sexStack"></div>
         <div class="legend" id="sexLegend"></div>
+        <div class="stack-h">Age</div>
+        <div class="stack" id="ageStack"></div>
+        <div class="legend" id="ageLegend"></div>
       </article>
       <article class="card rv">
         <h3>Top nationalities</h3>
@@ -1300,6 +1341,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const dShort = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"short",...UTC});
   const dMid = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"long",...UTC});
   const dLong = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",...UTC});
+  const dDMY = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",...UTC});   // 5 July 2024
   const ukToday = () => new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
@@ -1698,6 +1740,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
   const TERRAIN = 'Terrain <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md">Mapzen</a>';
   let terrainOn = false;
+  function wxKey(l, name){   // "Wind 0 ▬▬▬ 40+ mph"
+    const sc = SCALE[l], st = sc.stops, lo = st[0][0], hi = sc.max != null ? sc.max : st[st.length - 1][0], f = v => String(+v.toFixed(1)).replace("-", "−");
+    const grad = st.filter(([v]) => v <= hi).map(([v, c]) => "rgb(" + c.map(Math.round).join(",") + ") " + ((v - lo) / (hi - lo) * 100).toFixed(1) + "%").join(",");
+    return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>" + f(lo) + (sc.unit === "°C" ? "°" : "") + '</span><i style="background:linear-gradient(to right,' + grad + ')"></i><span>' + f(hi) + (sc.max != null ? "+" : "") + (sc.unit === "°C" ? "°C" : " " + sc.unit) + "</span>";
+  }
   function setLayer(l, first){
     layer = l;
     if(LM && terrainOn !== (l === "temp")){ terrainOn = l === "temp"; LM.attributionControl[terrainOn ? "addAttribution" : "removeAttribution"](TERRAIN); }
@@ -1705,7 +1752,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const b = segBtns.find(x => x.dataset.l === l);
     $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML;
     $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
-    if(!first){ resetWx(); if(hoverAt) showHover(); }
+    const nm = b.querySelector(".am-tn").textContent;
+    $("wxKeyPick").innerHTML = wxKey(l); $("wxKeyBar").innerHTML = wxKey(l, nm);
+    const kp = [...$("wxKeyPick").querySelectorAll("span")].map(e => e.textContent);
+    [$("wxKeyPick"), $("wxKeyBar")].forEach(k => k.setAttribute("aria-label", nm + " colour key, " + kp[0] + " to " + kp[1]));
+    if(!first){ resetWx(); if(hoverAt) showHover(); if(ptAt && !$("amSheet").hidden) showPoint(ptAt); }
   }
   segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
   setLayer(layer, true);
@@ -1944,7 +1995,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup(); ptAt = ll;
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
+      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>";
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(!isFull() && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
@@ -2193,11 +2244,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   let cur = null, hideT;
   function placePop(){
     if(!cur) return;
-    const {chip, pop} = cur, r = chip.getBoundingClientRect(), w = pop.offsetWidth;
-    const left = Math.min(Math.max(12, r.left), innerWidth - w - 12);
-    pop.style.maxHeight = ""; let h = pop.offsetHeight;
+    const {chip, pop} = cur, r = chip.getBoundingClientRect();
+    pop.style.maxHeight = pop.style.bottom = pop.style.width = ""; pop.classList.remove("sheet");
+    const w = pop.offsetWidth, left = Math.min(Math.max(12, r.left), innerWidth - w - 12);
+    let h = pop.offsetHeight;
     // above the chip, unless there's no room; a long pop-up goes on the roomier side and scrolls, never over its chip
     const above = r.top - 74, under = innerHeight - r.bottom - 22;
+    if(innerWidth < 600 && pop.scrollHeight > Math.max(above, under)){   // small phones: too long for either side, so it docks as a sheet along the bottom
+      pop.classList.add("sheet");
+      Object.assign(pop.style, {left:"10px", top:"auto", width:"calc(100vw - 20px)", bottom:"calc(10px + env(safe-area-inset-bottom,0px))", maxHeight:(innerHeight - 76) + "px"});
+      pop.style.setProperty("--from", "bottom center");
+      return;
+    }
     const below = h > above && (h <= under || under > above), room = below ? under : above;
     if(h > room){ h = Math.max(120, room); pop.style.maxHeight = h + "px"; }
     let top = below ? Math.min(r.bottom + 10, innerHeight - h - 12) : r.top - h - 10;
@@ -2207,7 +2265,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function openPop(chip, pop){ clearTimeout(hideT); if(cur && cur.pop !== pop) closePop(); if(cur && cur.chip !== chip){ cur.chip.setAttribute("aria-expanded","false"); chip.setAttribute("aria-expanded","true"); cur.chip = chip; } if(cur) return placePop(); pop.hidden = false; chip.setAttribute("aria-expanded","true"); cur = {chip, pop}; placePop(); }
   function closePop(chip){ clearTimeout(hideT); if(!cur || (chip && cur.chip !== chip)) return; cur.pop.hidden = true; cur.chip.setAttribute("aria-expanded","false"); cur = null; }
   const later = () => { clearTimeout(hideT); hideT = setTimeout(() => closePop(), 180); };
-  document.querySelectorAll("button.chip[aria-controls], #fuBtn, #figHead").forEach(chip => {
+  document.querySelectorAll("button.chip[aria-controls], #fuBtn, #figHead, #labCI").forEach(chip => {
     const pop = $(chip.getAttribute("aria-controls")); let lastType = "";
     chip.addEventListener("pointerdown", e => { lastType = e.pointerType; });
     chip.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") openPop(chip, pop); });
@@ -2296,11 +2354,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const fill = () => $("ringArc").style.strokeDasharray = (Math.min(ratio, 1) * C).toFixed(1) + " " + C.toFixed(1);
     if(ringCard.classList.contains("on") || reduced) fill(); else ringCard.addEventListener("reveal", ()=>setTimeout(fill, 150), {once:true});
     // since Labour / Burnham (calendar days, so quiet days count)
-    [["2024-07-05","lab","since 5 July 2024"],["2026-07-20","bur","since 20 July 2026"]].forEach(([from, id, since])=>{
-      const span = all.filter(d => d.date >= from), n = sum(span, "migrants"), b = sum(span, "boats");
+    [[PERIODS.labour,"lab"],[PERIODS.burnham,"bur"]].forEach(([from, id])=>{
+      const span = all.filter(d => d.date >= from), n = sum(span, "migrants"), b = sum(span, "boats"), since = "since " + dDMY.format(parse(from));
       countUp($(id + "V"), n);
-      $(id + "S").textContent = plural(b, "boat", "boats") + " " + since + " · " + fmt(Math.round(n / span.length)) + " a day";
-      if(id === "lab") $("labC").innerHTML = "Estimated annual support cost <b>£" + (n * 4.0e9 / 106771 / 1e9).toFixed(1) + "bn</b>";
+      $(id + "S").textContent = plural(b, "boat", "boats") + " " + since + " · " + fmt(Math.round(n / span.length)) + "\u00a0a\u00a0day";
+      if(id === "lab"){   // a year's asylum support for everyone who has arrived since: a rough upper estimate, explained in the pop-up
+        const each = Math.round(SUPPORT.bill / SUPPORT.people / 100) * 100;
+        $("labC").append($("labCI"));   // out of the way while the line is rewritten (it is kept, with its listeners)
+        $("labCT").innerHTML = 'Estimated annual support <span style="white-space:nowrap">cost <b>£' + (n * SUPPORT.bill / SUPPORT.people / 1e9).toFixed(1) + "bn</b></span>";
+        $("labCT").lastChild.append($("labCI"));   // the info button stays with the figure, never on a line of its own
+        $("popCost").innerHTML = "<b>How the cost is worked out</b><p>About £" + fmt(each) + " a person a year: the £" + (SUPPORT.bill / 1e9).toFixed(1) + "bn spent on asylum support in 2024-25, divided by the "
+          + fmt(SUPPORT.people) + " people on asylum support at the end of March 2025.</p><p>That is multiplied by the " + fmt(n) + " people who have arrived by small boat " + since
+          + '. It is a rough upper estimate, as it assumes everyone who arrived is on asylum support.</p><p class="wp-note">Sources: ' + SUPPORT.source + "</p>";
+        $("labCI").hidden = false;
+      }
     });
     $("glanceNote").textContent = "Figures to " + dMid.format(parse(last.date));
     fitFlip();   // the year box lines up with its neighbours on desktop
@@ -2568,11 +2635,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(g && g.lastYear){
       const t = g.lastYear, pc = n => n / t.total * 100;
       countUp($("menV"), Math.round(pc(t.adultMen)), "%");
-      const parts = [["Male", t.sex.Male, "var(--blue)"], ["Female", t.sex.Female, "var(--pink)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]];
-      $("sexStack").innerHTML = parts.map(p => '<i data-w="' + pc(p[1]).toFixed(1) + '" style="background:' + p[2] + '"></i>').join("");
-      $("sexLegend").innerHTML = parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + " <b>" + Math.round(pc(p[1])) + "%</b></span>").join("")
-        + '<span><i style="background:var(--orange)"></i>Aged 17 and under <b>' + Math.round(pc(t.age["17 and under"])) + "%</b></span>";
-      onReveal($("sexStack"), () => $("sexStack").querySelectorAll("i").forEach(i => i.style.width = i.dataset.w + "%"));
+      const a = t.age || {}, bars = {
+        sex:[["Male", t.sex.Male, "var(--blue)"], ["Female", t.sex.Female, "var(--pink)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]],
+        age:[["17 and under", a["17 and under"], "var(--age1)"], ["18 to 24", a["18 to 24"], "var(--age2)"], ["25 to 39", a["25 to 39"], "var(--age3)"], ["40 and over", a["40 and over"], "var(--age4)"], ["Not recorded", a.Unknown, "var(--label3)"]]
+      };
+      Object.entries(bars).forEach(([k, parts]) => {   // one bar for sex and one for age, each with its key
+        parts = parts.filter(p => p[1] > 0);
+        $(k + "Stack").innerHTML = parts.map(p => '<i data-w="' + pc(p[1]).toFixed(1) + '" style="background:' + p[2] + '"></i>').join("");
+        $(k + "Legend").innerHTML = parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + " <b>" + Math.round(pc(p[1])) + "%</b></span>").join("");
+        onReveal($(k + "Stack"), () => $(k + "Stack").querySelectorAll("i").forEach(i => i.style.width = i.dataset.w + "%"));
+      });
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
@@ -2616,14 +2688,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let best = 0, run = 0, bStart = "", bEnd = "", s = "";
     inYear.forEach(d => { if(d.migrants === 0){ if(!run) s = d.date; run++; if(run > best){ best = run; bStart = s; bEnd = d.date; } } else run = 0; });
     const rows = [
-      ["trophy", "#FF9500", "Record day since 2018", dMid.format(parse(rec.date)) + " " + rec.date.slice(0,4), fmt(rec.migrants)],
-      busy.migrants ? ["bolt", "#007AFF", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)]
-        : ["bolt", "#007AFF", "No crossings yet in " + yr, "", "–"],   // early January
-      ["clock", "#5856D6", "Since the last crossing", !lastX ? "" : since === 0 ? "Crossings on " + dMid.format(parse(last.date)) : "Last: " + dMid.format(parse(lastX.date)),
+      ["trophy", "Record day since 2018", dMid.format(parse(rec.date)) + " " + rec.date.slice(0,4), fmt(rec.migrants)],
+      busy.migrants ? ["bolt", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)]
+        : ["bolt", "No crossings yet in " + yr, "", "–"],   // early January
+      ["clock", "Since the last crossing", !lastX ? "" : since === 0 ? "Crossings on " + dMid.format(parse(last.date)) : "Last: " + dMid.format(parse(lastX.date)),
         !lastX ? "–" : since + (since === 1 ? " day" : " days")],   // counted to the latest figures, not to today
-      ["waves", "#34C759", "Longest quiet spell in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "No quiet days yet", best ? best + (best === 1 ? " day" : " days") : "–"]
+      ["waves", "Longest quiet spell in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "No quiet days yet", best ? best + (best === 1 ? " day" : " days") : "–"]
     ];
-    $("records").innerHTML = rows.map(r => '<li><span class="ic" style="background:' + r[1] + '">' + RIC[r[0]] + '</span><span class="t">' + r[2] + "<small>" + r[3] + '</small></span><span class="v">' + r[4] + "</span></li>").join("");
+    $("records").innerHTML = rows.map(r => '<li><span class="ic">' + RIC[r[0]] + '</span><span class="t">' + r[1] + "<small>" + r[2] + '</small></span><span class="v">' + r[3] + "</span></li>").join("");
   }
 
   /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated calm, moderate or rough */
@@ -2718,6 +2790,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   };
   const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
   const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
+  // the cost line in the Labour box: the NAO's asylum support spend for 2024-25, shared across the people on asylum support at the end of March 2025
+  const SUPPORT = {bill:4.0e9, people:106771, source:"NAO, Dec 2025; Home Office, people on asylum support at end of March 2025"};
   const STEADY = "2020-01-01";   // crossings became a year-round pattern
   let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 30, extras = {};
 
@@ -2956,7 +3030,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     });
     raceKeep = all; return raceYrs = Object.values(years).sort((a,b)=>a.y-b.y);
   }
-  const raceOut = () => $("raceTip");   // where the figures for the chosen day are written
   function drawRace(){
     const box = $("race");
     const list = raceYears(), curYr = +sorted[sorted.length-1].date.slice(0,4);
@@ -3002,10 +3075,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     // the reading line and one dot per year, hidden until a day is picked
     s += '<g id="raceHover" style="display:none"><line y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--label2)" stroke-width="1"/>'
       + list.map(v=>'<circle r="'+(v.y>=curYr-1?4:3)+'" fill="'+colour(v.y)+'" stroke="var(--card)" stroke-width="1.5"/>').join("") + '</g></svg>';
-    const tip = '<div class="tip" id="raceTip" style="display:none"><b></b>' + list.map(v=>'<div class="row'+(v.y===curYr?' cur':'')+'"><i style="background:'+colour(v.y)+'"></i>'+v.y+'<em></em></div>').join("") + '</div>';
-    box.innerHTML = s + tip;
-    const g = $("raceHover");
-    race = {m, iw, W, x, y, list, curYr, line:g.firstChild, dots:[...g.querySelectorAll("circle")], rows:[...$("raceTip").querySelectorAll(".row")]};
+    // the figures for the chosen day: a floating box on wide charts; under the chart on narrow ones, so the lines stay in view
+    const rowsH = '<b></b>' + list.map(v=>'<div class="row'+(v.y===curYr?' cur':'')+'"><i style="background:'+colour(v.y)+'"></i>'+v.y+'<em></em></div>').join(""), narrow = W < 480, read = $("raceRead");
+    box.innerHTML = s + (narrow ? "" : '<div class="tip" id="raceTip" style="display:none">' + rowsH + '</div>');
+    read.innerHTML = narrow ? rowsH : ""; read.hidden = true;
+    const g = $("raceHover"), out = narrow ? read : $("raceTip");
+    race = {m, iw, W, x, y, list, curYr, narrow, out, line:g.firstChild, dots:[...g.querySelectorAll("circle")], rows:[...out.querySelectorAll(".row")]};
     $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+String(curYr-2).slice(2)+'</span>';
     // one line on where this year stands
     const cur = list.find(v=>v.y===curYr);
@@ -3017,12 +3092,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   function moveRace(d){
     if(!race) return;
-    const t = raceOut(), g = $("raceHover");
+    const t = race.out, g = $("raceHover"), show = on => { if(race.narrow) t.hidden = !on; else t.style.display = on ? "" : "none"; };
     raceDay = d;
     clearTimeout(raceSayT);
-    if(d==null){ g.style.display = "none"; t.style.display = "none"; $("raceSay").textContent = ""; return; }
+    if(d==null){ g.style.display = "none"; show(false); $("raceSay").textContent = ""; return; }
     const {x, y, list} = race, X = x(d).toFixed(1);
-    g.style.display = ""; t.style.display = "";
+    g.style.display = ""; show(true);
     race.line.setAttribute("x1", X); race.line.setAttribute("x2", X);
     race.dots.forEach((c,i)=>{ const n = list[i].cum[d]; if(n!=null){ c.style.display = ""; c.setAttribute("cx", X); c.setAttribute("cy", y(n).toFixed(1)); } else c.style.display = "none"; });
     const label = raceDM.format(Date.UTC(2023,0,1)+d*DAY);
@@ -3030,6 +3105,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     t.firstChild.textContent = "By " + label;
     race.rows.forEach(r=>r.style.display = "none");
     rows.forEach(r=>{ const el = race.rows[r.i]; el.style.display = ""; el.lastChild.textContent = fmt(r.n); t.appendChild(el); });   // largest first
+    if(race.narrow){ raceSayT = setTimeout(()=>{ $("raceSay").textContent = "By " + label + ": " + rows.map(r=>r.y+" "+fmt(r.n)).join(", "); }, 300); return; }
     const box = $("race"), cx = x(d) * box.clientWidth / race.W, tw = t.offsetWidth;
     let left = cx + 14; if(left + tw > box.clientWidth) left = cx - 14 - tw;
     t.style.transform = "translateX(" + Math.max(0, Math.round(left)) + "px)";
