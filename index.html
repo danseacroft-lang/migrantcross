@@ -9,6 +9,9 @@
 function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",t);
   var c=t==="auto"?null:(t==="light"?"#F2F2F7":"#000000");document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){if(!m.dataset.c)m.dataset.c=m.content;m.content=c||m.dataset.c;});}
 try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
+<script>/* the figures start downloading straight away, while the rest of the page loads */
+try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
+<link rel="preload" href="vendor/leaflet/leaflet.js" as="script">
 <meta name="description" content="91 people crossed the Channel in small boats on Fri 2 October. 2026 so far: 19,287. Daily Home Office figures, a migrant tracker and live Channel weather.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
@@ -77,6 +80,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
   --glass:rgba(255,255,255,.72); --bar:rgba(246,246,248,.78);
   --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
+  --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#86b6ef; --heat2:#5598e7; --heat3:#256abf; --heat4:#104281;   /* pressed button, orange text, the four shades of the year in squares */
   --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:var(--font);   /* one font across the site: Helvetica Neue, as on Ventusky (Arial where it is missing) */
 }
@@ -88,6 +92,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
+  --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -97,6 +102,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
   --glass:rgba(30,30,32,.66); --bar:rgba(22,22,24,.74);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
+  --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -132,6 +138,7 @@ button,input,select,textarea{font:inherit}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
 .wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
+.wx-heat.soft{filter:blur(2px)}   /* wind, gusts and waves: the readings blended smoothly */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -294,7 +301,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .mn-close svg{width:9px;height:9px}
 @media (max-width:600px){.map-news{padding:8px 8px 10px 10px}.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
   .mn-close{position:absolute;top:8px;right:8px;width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}
-  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem;min-height:2.6em}.mn-meta{white-space:normal}}   /* one line or two, the strip stays the same height */
+  .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem;min-height:2.6em}.mn-meta{white-space:nowrap}.mn-more{display:none}}   /* one line or two, the strip stays the same height */
 /* "new figures incoming": a ring that sweeps round, its arc stretching and shrinking like a download in progress */
 .fig-ring{flex:none;width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;animation:spin 1.8s linear infinite}
 .fig-ring .tr{opacity:.32}
@@ -307,11 +314,8 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @keyframes ringArc{0%{stroke-dasharray:4 100;stroke-dashoffset:0}50%{stroke-dasharray:62 100;stroke-dashoffset:-14}100%{stroke-dasharray:4 100;stroke-dashoffset:-96}}
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
-.hero.has-news .large-title{top:calc(22px + var(--mn-h,0px))}
-.hero.has-news .wx-ctl{top:calc(22px + var(--mn-h,0px))}
-.hero.full.has-news .wx-ctl{top:calc(14px + env(safe-area-inset-top,0px) + var(--mn-h,0px))}
+.hero.has-news .large-title,.hero.has-news .wx-ctl{transform:translateY(var(--mn-h,0px));transition:transform .45s cubic-bezier(.2,.9,.3,1)}
 .hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
-@media (max-width:600px){.hero.has-news .wx-ctl{top:calc(88px + var(--mn-h,0px))}}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 8px rgba(0,0,0,.55)}
@@ -322,7 +326,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
 .large-title > *{pointer-events:auto}
-@media (max-width:600px){.wx-ctl{top:88px;right:20px}}
+@media (max-width:600px){.wx-ctl{top:88px;right:20px;left:20px}.wx-time{align-self:stretch}.wx-time input{flex:1;width:auto;min-width:0}}   /* the forecast slider spans the map */
 .large-title .lt-logo{display:block;width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,.35);transition:transform .2s ease}
 .large-title .lt-logo svg{display:block;width:100%;height:100%}
 .large-title .lt-logo:focus-visible{outline:2px solid #fff;outline-offset:3px}
@@ -336,6 +340,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hero-quiet .cal span{font-size:.824rem;line-height:28px}
 .hero-quiet .cal b{font-size:2.9rem;color:#fff}
 .hq-t{font:700 clamp(1.7rem,5.6vw,3rem)/1.05 var(--font);letter-spacing:-.01em;text-shadow:0 2px 16px rgba(0,0,0,.35)}
+@media (max-width:360px){.hq-t{font-size:1.45rem}}   /* small phones: the headline fits two lines */
 .hq-s{margin-top:6px;font-size:1.06rem;font-weight:500;opacity:.88;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 @media (max-width:600px){.hero-quiet{gap:14px}.hero-quiet .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero-quiet .cal span{font-size:.706rem;line-height:22px}.hero-quiet .cal b{font-size:2.2rem}.hq-s{font-size:.941rem}}
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
@@ -352,9 +357,10 @@ button.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulatio
 button.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 @media (hover:hover){button.chip:hover{background:rgba(255,255,255,.26)}}
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
+@media (max-width:360px){#chipYear{white-space:nowrap;flex-wrap:wrap;gap:0 5px;padding:0 11px}}   /* small phones: "2026 so far 19,287 ↓44% on 2025" on one line, never broken mid-phrase */
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
-.info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 62%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
+.info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
@@ -364,10 +370,11 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
 .wx-pop{--lv:var(--blue);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 22%,transparent),transparent 110px)}
 .wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
+.wx-pop[data-lv="calm"]{--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv-t:var(--orange-t)}.wx-pop[data-lv="rough"]{--lv-t:var(--red-t)}   /* the level in words, in a readable shade */
 .wp-head{display:flex;align-items:center;gap:12px}
 .wp-ic{flex:none;width:52px;height:52px}
 .wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
-.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv)}
+.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv-t,var(--lv))}
 .wp-head span{display:block;color:var(--label);font-weight:600;font-size:.882rem;margin-top:2px}
 .wp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:14px 0 12px}
 .wp-stats div{background:var(--fill);border-radius:12px;padding:8px 10px}
@@ -382,7 +389,7 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .info-pop .wp-p{color:var(--label);margin:0 0 6px}
 .info-pop .wp-note{font-size:.765rem;margin:0 0 10px}
 .wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep)}
-.wp-days li{display:grid;grid-template-columns:1fr 26px 86px 30px;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
+.wp-days li{display:grid;grid-template-columns:1fr 26px 86px auto;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
 .wp-days li span{font-weight:600}
 .wp-days li div{width:26px;height:26px}
 .wp-days li b{margin:0;font-size:.824rem}
@@ -392,10 +399,12 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .lx-big{font:700 2.1rem/1.05 var(--round);letter-spacing:-.01em;margin-top:2px}
 .lx-big small{font:600 .941rem var(--font);color:var(--label2);margin-left:4px;letter-spacing:-.02em}
 .lx-sub{color:var(--label2);font-size:.824rem;margin-top:2px}
-.lx-strip{display:flex;align-items:flex-end;gap:3px;height:54px;margin:14px 0 4px}
-.lx-strip i{flex:1;min-height:3px;border-radius:3px;background:var(--fill2)}
+.lx-strip{display:flex;align-items:flex-end;gap:3px;height:54px;margin:28px 0 4px}
+.lx-strip i{position:relative;flex:1;min-height:3px;border-radius:3px 3px 0 0;background:var(--fill2)}
+.lx-strip i.z{min-height:2px}   /* no crossings: a flat line, lower than any real day */
+.lx-strip i b{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:3px;font:600 .706rem/1 var(--font);color:var(--label2);white-space:nowrap}
 .lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
-.lx-axis{display:flex;justify-content:space-between;font-size:.647rem;color:var(--label2);font-weight:600;margin-bottom:12px}
+.lx-axis{display:flex;justify-content:space-between;font-size:.706rem;color:var(--label2);font-weight:600;margin-bottom:12px}
 .lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
 .mp-pop{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
 .mp-pop .wp-days{margin-bottom:10px}
@@ -452,9 +461,14 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .rv{opacity:0;transform:translateY(24px) scale(.985);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
 .rv.on{opacity:1;transform:none}
 /* the boxes lean very slightly towards the mouse, lift a touch and catch a soft light where it points (mouse only) */
+/* registered and not inherited, so each mouse move restyles the box and its light, not everything inside it */
+@property --rx{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --ry{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --mx{syntax:"<percentage>";inherits:false;initial-value:50%}
+@property --my{syntax:"<percentage>";inherits:false;initial-value:50%}
 .card.lift{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-2px);box-shadow:var(--shadow-lift);
   transition:transform .18s ease-out,box-shadow .3s ease,opacity .7s cubic-bezier(.2,.8,.2,1)}
-.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
   background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),var(--glare),transparent 65%)}
 .card.lift::after{opacity:1}
 
@@ -520,7 +534,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .card.b-lab,.card.b-bur{min-height:250px;padding-bottom:112px}
 .cost{margin-top:10px;padding-top:10px;border-top:.5px solid var(--sep);font-size:.824rem;color:var(--label2)}
 .cost b{color:var(--label)}
-.calm{color:var(--green-t)}.moderate{color:var(--orange)}.rough{color:var(--red-t)}
+.calm{color:var(--green-t)}.moderate{color:var(--orange-t)}.rough{color:var(--red-t)}
 
 /* ------------------------------------------------------------ on this day */
 .otd-top{display:flex;align-items:center;gap:16px}
@@ -535,7 +549,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 .otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--blue);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .otd-years i.zero{background:var(--fill2)}
-.otd-years i.last{background:var(--orange)}
+.otd-years i.last:not(.zero){background:var(--orange)}   /* a quiet latest year stays a grey stub */
 .on .otd-years i{transform:scaleY(1)}
 .otd-years b{font:600 .706rem/1 var(--round);white-space:nowrap}
 .otd-years em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
@@ -548,7 +562,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--fill);border-radius:9px;padding:2px}
 .seg button{border:0;background:none;color:var(--label);font:600 .765rem/1 var(--font);height:30px;padding:0 12px;border-radius:7px;cursor:pointer;position:relative}
 .seg button::after{content:"";position:absolute;inset:-7px 0}
-.seg button[aria-pressed="true"]{background:var(--card);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
+.seg button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .chart{position:relative;margin-top:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .chart svg{display:block;width:100%;height:auto;overflow:visible}
 .chart .line{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
@@ -563,23 +577,30 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @keyframes drawIn{to{stroke-dashoffset:0}}
 
 /* ------------------------------------------------------------ the year in squares */
-.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:22px 4px 4px}
+.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:24px 4px 4px}
 .heat-scroll::-webkit-scrollbar{display:none}
+@media (hover:hover) and (pointer:fine){.heat-scroll{scrollbar-width:thin;scrollbar-color:var(--fill2) transparent;padding-bottom:8px}.heat-scroll::-webkit-scrollbar{display:block;height:6px}.heat-scroll::-webkit-scrollbar-thumb{background:var(--fill2);border-radius:3px}}   /* a mouse can reach January */
+.heat-scroll.more-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px);mask-image:linear-gradient(90deg,transparent,#000 24px)}   /* fades on the left when earlier weeks are hidden */
 .heat{--c:14px;position:relative;display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,var(--c));grid-auto-columns:var(--c);gap:4px;width:max-content}
-.heat i{border-radius:4px;background:var(--fill);transform:scale(.3);opacity:0;transition:transform .5s cubic-bezier(.2,.9,.3,1.3),opacity .4s}
-.on .heat.show i{transform:none;opacity:1}   /* the squares pop in when their page first slides into view */
-.heat i.l1{background:color-mix(in srgb,var(--blue) 25%,var(--fill))}
-.heat i.l2{background:color-mix(in srgb,var(--blue) 50%,var(--fill))}
-.heat i.l3{background:color-mix(in srgb,var(--blue) 75%,var(--fill))}
-.heat i.l4{background:var(--blue)}
+.heat i{border-radius:4px;background:var(--fill)}
+.heat i[data-d]{cursor:pointer}
+.heat{opacity:0;transition:opacity .5s ease}.on .heat.show{opacity:1}   /* the squares fade in when their page first slides into view */
+.heat-scale i{background:var(--fill)}
+.heat i.l1,.heat-scale i.l1{background:var(--heat1)}
+.heat i.l2,.heat-scale i.l2{background:var(--heat2)}
+.heat i.l3,.heat-scale i.l3{background:var(--heat3)}
+.heat i.l4,.heat-scale i.l4{background:var(--heat4)}
 .heat i.pk{box-shadow:0 0 0 2px var(--orange)}
 .heat i.fut{background:none;box-shadow:inset 0 0 0 1px var(--sep)}
-.heat i:hover,.heat i.sel{outline:2px solid var(--label);outline-offset:1px}
-.heat-m{position:absolute;top:-20px;font-size:.647rem;font-weight:600;color:var(--label2)}
+@media (hover:hover){.heat i:hover{outline:2px solid var(--label);outline-offset:1px}}
+.heat i.sel{outline:2px solid var(--label);outline-offset:1px}
+.heat-m{position:absolute;top:-21px;font-size:.706rem;font-weight:600;color:var(--label2)}
 .heat-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;font-size:.765rem;color:var(--label2);flex-wrap:wrap}
 .heat-key{display:flex;align-items:center;gap:4px}
 .heat-key i{width:12px;height:12px;border-radius:3px;display:inline-block}
-.heat-read{font-size:.882rem;color:var(--label);min-height:1.3em}
+.heat-scale{gap:6px}.heat-scale>span{display:inline-flex;flex-direction:column;align-items:center;gap:3px;font-size:.706rem;font-variant-numeric:tabular-nums;min-width:22px}
+.heat-read{font-size:.882rem;color:var(--label);min-height:2.6em;line-height:1.3}
+.heat-read b{display:block}
 
 /* ------------------------------------------------------------ year bars */
 .years{display:grid;gap:10px;margin-top:6px}
@@ -588,14 +609,15 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr b{font-weight:600}
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
-.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:linear-gradient(90deg,#5AC8FA,var(--blue));transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.yr.cur .fill{background:linear-gradient(90deg,#FFB340,var(--orange))}
+.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.yr.cur .fill{background:var(--orange)}
 .yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px}
@@ -607,11 +629,17 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .list .nm small{display:block;height:4px;border-radius:2px;background:var(--fill);margin-top:6px;overflow:hidden}
 .list .nm small b{display:block;height:100%;width:0;background:var(--indigo);border-radius:2px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .list .pc{font-weight:600;font-variant-numeric:tabular-nums;font-size:.882rem}
+/* Nationalities: same-length tracks so bars compare, and the change on a year earlier */
+#nats li{grid-template-columns:28px 1fr 3.6em}
+#nats .pc{text-align:right}
+#nats .nm small{background:transparent}
+#nats .chg{display:block;font-style:normal;font-size:.765rem;color:var(--label2)}
 .minibars{display:flex;align-items:flex-end;gap:6px;height:90px;margin-top:14px}
 .minibars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
 .minibars span{flex:none;width:100%;min-height:4px;border-radius:6px;background:var(--teal);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .on .minibars span{transform:scaleY(1)}
 .minibars em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
+.minibars b{font-size:.706rem;font-weight:600;color:var(--label2);font-variant-numeric:tabular-nums}
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .vs div{background:var(--fill);border-radius:16px;padding:12px 14px}
 .vs b{display:block;font:700 1.6rem/1.1 var(--round)}
@@ -623,6 +651,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records .ic svg{width:19px;height:19px}
 .records .t{font-size:.941rem}.records .t small{display:block;color:var(--label2);font-size:.765rem;margin-top:1px}
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
+@media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
 
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
@@ -670,8 +699,10 @@ footer strong{color:var(--label);font-weight:600}
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
 @media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
-.large-title .lt-logo,#wxPlay{position:relative}
-.mn-close::after,.large-title .lt-logo::after,#wxPlay::after{content:"";position:absolute;inset:-8px}
+.large-title .lt-logo,#wxPlay,.am-x,#tourNext,#tourSkip{position:relative}
+.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,#tourNext::after,#tourSkip::after{content:"";position:absolute;inset:-8px}
+button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
+.ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
 /* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
 .hero.full #lmap .leaflet-bottom .leaflet-control{margin-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 .hero.full #lmap .leaflet-right .leaflet-control{margin-right:max(12px,env(safe-area-inset-right,0px))}
@@ -712,7 +743,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rv{opacity:1;transform:none}
-  .spark span,.minibars span,.heat i,.otd-years i{transform:none;opacity:1}
+  .spark span,.minibars span,.heat,.otd-years i{transform:none;opacity:1}
   .draw{stroke-dasharray:none;stroke-dashoffset:0}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.nav.solid{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
@@ -743,6 +774,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .petitions .pm{grid-column:1 / -1;font-size:.765rem;color:var(--label2);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
 .mb .petitions .pbar{grid-column:1 / -1;height:4px;border-radius:2px;background:var(--fill);overflow:hidden;margin-top:4px}
 .mb .petitions .pbar i{display:block;height:100%;background:var(--blue);border-radius:2px}
+.mb .petitions .pbar.done i{background:var(--label3)}   /* closed: grey, not a live bar */
 .mb .chipst{display:inline-block;padding:1px 7px;border-radius:999px;font-size:.647rem;font-weight:600}
 .mb .chipst.open{background:var(--green-bg);color:var(--green-t)}
 .mb .chipst.closed{background:var(--fill);color:var(--label2)}
@@ -797,6 +829,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (max-width:360px){.mb .cal-day .mk{top:3px;width:5px;height:5px}.mb .cal-day .mk.busy{right:2px}.mb .cal-day .mk.new{left:2px}}   /* the dots clear two-digit days */
 .mb .race-card{display:grid;gap:8px}
 .mb .race{position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.mb .race:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:9px}
 .mb .race svg{display:block;width:100%;height:auto}
 .mb .race svg text{font-family:var(--font);fill:var(--label2)}
 .mb .race .tip{min-width:170px}
@@ -804,6 +837,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .key-row{display:flex;flex-wrap:wrap;gap:4px 16px;padding-inline:4px;font-size:.824rem;color:var(--label2)}
 .mb .key-row span{display:inline-flex;align-items:center;gap:6px}
 .mb .key-row i{width:14px;height:3px;border-radius:2px}
+@media (max-width:360px){.mb .key-row{gap:4px 12px}}   /* the key stays on one line at 320 */
 .mb .tbl{width:100%;border-collapse:collapse;font-size:.882rem;font-variant-numeric:tabular-nums}
 .mb .tbl th{font-size:.706rem;font-weight:600;color:var(--label2);text-align:right;padding:10px 16px 6px;letter-spacing:.01em}
 .mb .tbl th:first-child,.mb .tbl td:first-child{text-align:left}
@@ -816,16 +850,19 @@ footer strong{color:var(--label);font-weight:600}
 .mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
 .mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:10px;min-height:44px;padding:0 10px;width:100%;min-width:0}
 .mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+@media (hover:none) and (pointer:coarse){.mb .calc-dates input::-webkit-calendar-picker-indicator{display:none}}   /* phones open the picker on tap; the icon only crowds out the year */
 .mb .presets{display:flex;flex-wrap:wrap;gap:6px}
 .mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--label);font:600 .765rem/1 var(--font);border-radius:9px;padding:0 12px;height:34px;cursor:pointer}
 .mb .presets button::after{content:"";position:absolute;inset:-5px 0}
 .mb .presets button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.mb .presets button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 0 0 .5px var(--sep),0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .mb .calc-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:12px;border-top:.5px solid var(--sep)}
-.mb .calc-out div{display:grid;gap:1px}
-.mb .calc-out b{font:700 1.4rem/1.15 var(--round);font-variant-numeric:tabular-nums}
+.mb .calc-out div{display:grid;gap:1px;align-content:start}
+.mb .calc-out b{font:700 clamp(1.15rem,6vw,1.4rem)/1.15 var(--round);font-variant-numeric:tabular-nums}
 .mb .calc-out span{font-size:.765rem;color:var(--label2)}
 .mb .calc-note{font-size:.824rem;color:var(--label2)}
 /* Patterns */
+.mb .pat-h{font:600 .824rem/1.2 var(--font);color:var(--label2);margin:0 0 4px}
 .mb .pat svg{display:block;width:100%;height:auto}
 .mb .pat svg text{font-family:var(--font);fill:var(--label2)}
 .mb .rep-card{padding:16px;display:grid;gap:12px}
@@ -833,9 +870,9 @@ footer strong{color:var(--label);font-weight:600}
 .mb .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .mb .rep-head .sub{font-size:.882rem;color:var(--label2)}
 .mb .dots svg{display:block;width:100%;height:auto}
-.mb .dots .boats{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
-.mb .dots .dd{transition:opacity .15s ease}
-.mb .dots.hovering .dd:not(.on){opacity:.3}
+.mb .dots .dd.alt{fill:color-mix(in srgb,var(--mbar) 60%,var(--card))}   /* every other day a lighter blue, so days show */
+.mb .dots [data-day]{transition:opacity .15s ease}
+.mb .dots.hovering [data-day]:not(.on){opacity:.3}
 .mb .dots{animation:fadeIn .35s ease-out}
 .mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
 .mb .subscribe.leaving{animation:lift .25s ease-in both}
@@ -854,7 +891,7 @@ footer strong{color:var(--label);font-weight:600}
 .mb .sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.mb .sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
 .mb .sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
-.mb .sub-msg.ok{color:var(--green);font-weight:600}.mb .sub-msg.err{color:var(--red)}
+.mb .sub-msg.ok{color:var(--green-t);font-weight:600}.mb .sub-msg.err{color:var(--red-t)}
 .mb .subscribe.done .sub-form{display:none}
 @media (max-width:760px){.mb .sub-msg{grid-column:1 / -1}}
 @media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
@@ -951,7 +988,7 @@ footer strong{color:var(--label);font-weight:600}
   </div>
 
   <div class="hero-in">
-    <div class="kicker" id="heroKicker">Loading the latest figures…</div>
+    <div class="kicker" id="heroKicker" hidden></div>
     <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">2</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">91</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Friday, 2 October 2026 · 1&nbsp;boat</div></div></div><span class="sr" id="heroSr" aria-live="polite">91 people crossed in 1 small boat on Friday, 2 October 2026</span>
     <div class="hero-chips">
       <span class="chip" id="chipYear" hidden></span>
@@ -1081,17 +1118,17 @@ footer strong{color:var(--label);font-weight:600}
         </div>
         <div class="dd-face" id="ddSq" role="group" aria-label="The year in squares" inert>
           <div class="flip-h"><button type="button" class="flip-go back" data-go="0" aria-controls="ddDay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Every day</button><button type="button" class="flip-go" data-go="2" aria-controls="ddYr">Year by year<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
-          <div class="heat-read" id="heatRead">Tap a square to see that day.</div>
-          <div class="heat-scroll" id="heatScroll"><div class="heat" id="heat"></div></div>
+          <div class="heat-read" id="heatRead" aria-live="polite">Tap a square to see that day.</div>
+          <div class="heat-scroll" id="heatScroll" tabindex="0" role="group" aria-label="The year in squares. Arrow keys move between days."><div class="heat" id="heat"></div></div>
           <div class="heat-foot">
-            <span class="heat-key">None <i style="background:var(--fill)"></i><i style="background:color-mix(in srgb,var(--blue) 25%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 50%,var(--fill))"></i><i style="background:color-mix(in srgb,var(--blue) 75%,var(--fill))"></i><i style="background:var(--blue)"></i> 600+</span>
+            <span class="heat-key heat-scale" role="img" aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
             <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
           </div>
         </div>
         <div class="dd-face" id="ddYr" role="group" aria-label="Year by year" inert>
-          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button></div>
+          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button><h3>People each year</h3></div>
           <div class="years" id="years"></div>
-          <p class="dd-foot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
+          <p class="dd-foot" id="yrFoot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
         </div>
       </div>
     </div>
@@ -1102,10 +1139,10 @@ footer strong{color:var(--label);font-weight:600}
     <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
     <div class="card race-card rv">
       <div class="key-row" id="raceKey" aria-hidden="true"></div>
-      <div class="race" id="race"><div class="empty">Loading the history since 2018…</div></div>
+      <div class="race" id="race" tabindex="0" aria-describedby="raceSay"><div class="empty">Loading the history since 2018…</div></div>
       <div class="sr" aria-live="polite" id="raceSay"></div>
     </div>
-    <p class="foot rv">Running total of arrivals from 1 January in each year.</p>
+    <p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
   </section>
 
   <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
@@ -1119,11 +1156,11 @@ footer strong{color:var(--label);font-weight:600}
             <label>To<input type="date" id="calcTo"></label>
           </div>
           <div class="presets" id="calcPresets">
-            <button type="button" data-p="labour">Since Labour</button>
-            <button type="button" data-p="burnham">Since Burnham</button>
-            <button type="button" data-p="year">This year</button>
-            <button type="button" data-p="12m">Last 12 months</button>
-            <button type="button" data-p="30d">Last 30 days</button>
+            <button type="button" data-p="labour" aria-pressed="false">Since Labour</button>
+            <button type="button" data-p="burnham" aria-pressed="false">Since Burnham</button>
+            <button type="button" data-p="year" aria-pressed="false">This year</button>
+            <button type="button" data-p="12m" aria-pressed="false">Last 12 months</button>
+            <button type="button" data-p="30d" aria-pressed="false">Last 30 days</button>
           </div>
           <div class="calc-out" aria-live="polite">
             <div><b id="calcP">–</b><span>people</span></div>
@@ -1149,18 +1186,13 @@ footer strong{color:var(--label);font-weight:600}
         <button type="button" data-pat="month" aria-pressed="false">Month</button>
       </div>
     </div>
-    <div class="card pat-card rv"><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
+    <div class="card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
     <p class="foot rv" id="patNote"></p>
   </section>
 
   <!-- ============================================================ EVERY PERSON (desktop) -->
   <section class="mb area-rep" aria-labelledby="repTitle">
-    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 7 Days</h2>
-      <div class="seg" id="repSeg" role="group" aria-label="Period">
-        <button type="button" data-rep="7" aria-pressed="true">Week</button>
-        <button type="button" data-rep="30" aria-pressed="false">Month</button>
-      </div>
-    </div>
+    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
     <div class="card rep-card rv">
       <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
       <div class="dots" id="dots"></div>
@@ -1182,12 +1214,13 @@ footer strong{color:var(--label);font-weight:600}
       <article class="card rv">
         <h3>Top nationalities</h3>
         <ul class="list" id="nats"></ul>
+        <div class="cost" id="natNote"></div>
       </article>
       <article class="card rv">
         <h3>People per boat</h3>
         <div class="val num" id="pbV">–</div>
         <div class="sub" id="pbS">&nbsp;</div>
-        <div class="minibars" id="pbBars"></div>
+        <div class="minibars" id="pbBars" role="list"></div>
       </article>
       <article class="card rv">
         <h3>UK–France returns deal</h3>
@@ -1371,7 +1404,7 @@ footer strong{color:var(--label);font-weight:600}
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
-  let heat, flow, wxPane, boatK = 1;
+  let heat, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
   let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
@@ -1398,7 +1431,7 @@ footer strong{color:var(--label);font-weight:600}
     L.control.zoom({position:"bottomright"}).addTo(LM);
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
     LM.on("zoomend", () => {
-      boatK = Math.min(4, .75 / unitPx().sx);   // the boats stay the same size on screen at any zoom
+      boatK = Math.min(4, (LM.getSize().x < 600 ? .55 : .75) / unitPx().sx);   // the boats stay the same size on screen at any zoom (a little smaller on phones)
       // the Dover to Cap Gris-Nez line: its label and end dots stay the same size on screen at any zoom
       const k = (1 / unitPx().sx).toFixed(3);
       $("straitLbl").setAttribute("transform", "translate(394.1 335.6) scale(" + k + ")"); ["straitA", "straitB"].forEach(id => $(id).setAttribute("r", (3.5 * k).toFixed(2)));
@@ -1449,8 +1482,12 @@ footer strong{color:var(--label);font-weight:600}
   function placeTowns(){
     if(!LM) return;
     const z = LM.getZoom(), sz = LM.getSize(), mr = $("lmap").getBoundingClientRect(), view = LM.getBounds().pad(.05);
-    const taken = coverRects().concat(!$("straitLbl").getClientRects().length ? [] : [$("straitLbl").getBoundingClientRect()]).map(b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6]);
+    const box6 = b => [b.left - mr.left - 6, b.top - mr.top - 6, b.right - mr.left + 6, b.bottom - mr.top + 6];
+    coverPx = coverRects().map(box6);   // just the title, buttons and figures: boats under them fade (placeBoats)
+    const taken = coverPx.concat(!$("straitLbl").getClientRects().length ? [] : [box6($("straitLbl").getBoundingClientRect())]);
     const hit = q => taken.some(t => q[0] < t[2] && q[2] > t[0] && q[1] < t[3] && q[3] > t[1]);
+    // launch rings under the title, buttons or figures fade, and can't be tapped through them
+    if(launchLayer) launchLayer.eachLayer(m => { const el = m.getElement(); if(!el) return; const r = el.getBoundingClientRect(), h = hit([r.left - mr.left, r.top - mr.top, r.right - mr.left, r.bottom - mr.top]); el.style.opacity = h ? .25 : ""; el.style.pointerEvents = h ? "none" : ""; });
     for(const t of places){
       let show = z >= RANK_ZOOM[t.rank] && view.contains([t.lat, t.lon]), box;
       if(show){
@@ -1482,10 +1519,26 @@ footer strong{color:var(--label);font-weight:600}
     LM.invalidateSize({pan:false});
     const tall = W < H * .9;
     LM.setMinZoom(LM.getBoundsZoom(WIDE, true));
-    if(W !== fitW){ fitW = W; const f = L.latLngBounds(tall && !isFull() ? TALL : VIEW); LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false}); }
+    if(W !== fitW){
+      fitW = W; const f = L.latLngBounds(tall ? TALL : VIEW);
+      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});
+      if(isFull() && tall) LM.panBy([0, -(ctlBottom() + 8 - 40) / 2], {animate:false});   // full screen on a phone: Kent to France, framed below the buttons
+    }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
     else resetWx();
+    frameStrait();
     requestAnimationFrame(placeTowns);   // the names go on once the map has laid out its markers
+  }
+  // Where the map buttons end, from the top of the map card (where they're heading, if they're sliding down under the news strip)
+  function ctlBottom(){
+    const c = $("wxCtl"), mn = hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0;
+    return c.offsetTop + c.offsetHeight + mn;
+  }
+  // Phones: the strait sits in the open map between the buttons and the figures
+  function frameStrait(){
+    if(!LM || isFull() || hero.clientWidth >= 600) return;
+    const bot = hero.querySelector(".hero-in").offsetTop, y = LM.latLngToContainerPoint([51.0, 1.45]).y, d = y - (ctlBottom() + bot) / 2;
+    if(Math.abs(d) > 8) LM.panBy([0, d], {animate:false});
   }
 
   // Just off the beaches boats leave from, and off the Kent coast (map units; every point checked to be at sea)
@@ -1509,13 +1562,16 @@ footer strong{color:var(--label);font-weight:600}
     placeBoats(performance.now(), reduced);
   }
   function placeBoats(t, still){
+    const u0 = LM && coverPx.length ? unitPx() : null;   // to find the boats under the title, buttons and figures
     boats.forEach(b => {
       if(!b.hold) b.k = still ? .18 + b.off * .64 : ((t / 1000 / b.dur) + b.off) % 1;
       const k = b.k, u = 1 - k;
       const x = u * u * b.a[0] + 2 * u * k * b.c[0] + k * k * b.e[0], y = u * u * b.a[1] + 2 * u * k * b.c[1] + k * k * b.e[1];
       const dx = 2 * u * (b.c[0] - b.a[0]) + 2 * k * (b.e[0] - b.c[0]), dy = 2 * u * (b.c[1] - b.a[1]) + 2 * k * (b.e[1] - b.c[1]);
       b.g.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (Math.atan2(dy, dx) * 180 / Math.PI + 90).toFixed(1) + ") scale(" + (boatK * (b.hold ? 1.3 : 1)).toFixed(3) + ")");
-      b.g.style.opacity = still || b.hold ? 1 : Math.min(1, k * 10, u * 10).toFixed(2);
+      const px = u0 && u0.x0 + x * u0.sx, py = u0 && u0.y0 + y * u0.sy;
+      b.cov = !!u0 && coverPx.some(c => px > c[0] && px < c[2] && py > c[1] && py < c[3]);   // under the controls: faded, so the map reads clearly
+      b.g.style.opacity = b.hold ? 1 : Math.min(still ? 1 : Math.min(1, k * 10, u * 10), b.cov ? .35 : 1).toFixed(2);
     });
   }
   /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
@@ -1534,32 +1590,42 @@ footer strong{color:var(--label);font-weight:600}
     }
     return a;
   };
-  let hours = [], hourNow = 0, gridRetry = 0;   // 48 hours of readings: now and the forecast, chosen with the time slider
+  let hours = [], hourNow = 0, gridRetry = 0, gridAt = 0;   // 48 hours of readings: now and the forecast, chosen with the time slider
+  let gW = null, gM = null, gEL = null;   // the readings as they came in; each hour is built from them only when it's first shown
   const ukHour = () => new Date().toLocaleString("sv-SE", {timeZone:"Europe/London"}).slice(0, 13).replace(" ", "T") + ":00";
+  function buildHour(h){
+    const t = hours[h].t, W = gW, M = gM, EL = gEL;
+    const col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
+    const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
+    return {s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
+      gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
+      tsl:col("temperature_2m").map((x, k) => x == null ? null : x + LAPSE * EL[k]),   // as it would be at sea level, to blend between readings
+      wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
+      // which way the waves travel, as east and south components (the data says where they come from)
+      wdu: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : -Math.sin(d * Math.PI / 180); })) : null,
+      wdv: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : Math.cos(d * Math.PI / 180); })) : null};
+  }
+  const hourAt = i => { const h = hours[i]; if(h && !h.s) Object.assign(h, buildHour(i)); return h; };
   async function loadGrid(){
     const la = [], lo = [];
     GLAT.forEach(a => GLON.forEach(o => { la.push(a); lo.push(o); }));
     const q = "latitude=" + la.join(",") + "&longitude=" + lo.join(",") + "&forecast_hours=48&timezone=Europe%2FLondon";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation,cloud_cover&wind_speed_unit=mph"),
-                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
-      const W = [].concat(w), M = m ? [].concat(m) : null, EL = W.map(r => Math.max(0, +r.elevation || 0));   // each reading is for its own spot's height
-      hours = W[0].hourly.time.map((t, h) => {
-        const col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
-        const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
-        return {t, s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
-          gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
-          tsl:col("temperature_2m").map((x, k) => x == null ? null : x + LAPSE * EL[k]),   // as it would be at sea level, to blend between readings
-          wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
-          // which way the waves travel, as east and south components (the data says where they come from)
-          wdu: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : -Math.sin(d * Math.PI / 180); })) : null,
-          wdv: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : Math.cos(d * Math.PI / 180); })) : null};
-      });
+      // the same readings are reused for half an hour, so coming back to the page doesn't download them again
+      let w = null, m = null, at = Date.now();
+      try{ const c = JSON.parse(sessionStorage.getItem("wxGrid")); if(c && c.q === q && Date.now() - c.at < 30 * 6e4){ w = c.w; m = c.m; at = c.at; } }catch(e){}
+      if(!w){
+        [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation,cloud_cover&wind_speed_unit=mph"),
+                                    getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
+        if(m) try{ sessionStorage.setItem("wxGrid", JSON.stringify({at, q, w, m})); }catch(e){}
+      }
+      gW = [].concat(w); gM = m ? [].concat(m) : null; gEL = gW.map(r => Math.max(0, +r.elevation || 0));   // each reading is for its own spot's height
+      hours = gW[0].hourly.time.map(t => ({t}));
       const now = ukHour(); hourNow = Math.max(0, hours.findIndex(x => x.t >= now));
       const hs = $("wxHour"); hs.max = hours.length - 1; hs.value = hourNow;
-      grid = hours[hourNow];
+      grid = hourAt(hourNow); gridAt = at;
       clearTimeout(gridRetry);
-    }catch(e){ grid = null; hours = []; clearTimeout(gridRetry); gridRetry = setTimeout(loadGrid, 2 * 6e4); }   // try again soon if it didn't come in
+    }catch(e){ grid = null; hours = []; gridAt = 0; clearTimeout(gridRetry); gridRetry = setTimeout(loadGrid, 2 * 6e4); }   // try again soon if it didn't come in
     showWhen(); resetWx();
   }
   const whenText = () => !hours.length || +$("wxHour").value === hourNow ? "Now" : new Date(grid.t + ":00Z").toLocaleString("en-GB", {weekday:"short", hour:"2-digit", minute:"2-digit", timeZone:"UTC"});
@@ -1568,8 +1634,9 @@ footer strong{color:var(--label);font-weight:600}
     $("wxWhen").textContent = whenText(); hs.closest(".wx-time").hidden = !hours.length;
     hs.style.setProperty("--p", (hs.max > 0 ? hs.value / hs.max * 100 : 0) + "%");
   }
-  function toHour(i){ const h = hours[i]; if(!h) return; $("wxHour").value = i; grid = h; showWhen(); resetWx(); if(ptAt) showPoint(ptAt); if(hoverAt) showHover(); }
-  $("wxHour").addEventListener("input", e => { stopPlay(); toHour(+e.target.value); });
+  function toHour(i){ const h = hourAt(i); if(!h) return; $("wxHour").value = i; grid = h; showWhen(); resetWx(true); if(ptAt) showPoint(ptAt); if(hoverAt) showHover(); }
+  let hourRaf = 0;   // dragging the slider: at most one redraw a frame
+  $("wxHour").addEventListener("input", e => { stopPlay(); const v = +e.target.value; $("wxHour").value = v; cancelAnimationFrame(hourRaf); hourRaf = requestAnimationFrame(() => toHour(v)); });
   // Play: steps through the forecast an hour at a time, like Apple Weather's maps, and loops back to now
   let playT = 0;
   function stopPlay(){ clearInterval(playT); playT = 0; $("wxPlay").setAttribute("aria-pressed", false); $("wxPlay").setAttribute("aria-label", "Play the forecast"); }
@@ -1766,12 +1833,19 @@ footer strong{color:var(--label);font-weight:600}
     }
     return sample(lat, lon, "temp");
   }
-  function resetWx(){
+  let heatPad = 0;
+  function resetWx(keep){   // keep: a new hour on the slider, so the canvases and the moving trails stay as they are
     if(!LM) return;
-    const sz = LM.getSize(); vw = sz.x; vh = sz.y; if(!vw || !vh) return;
-    dpr = Math.min(2, devicePixelRatio || 1);
+    // wind, gusts and waves are softened by the browser (.wx-heat.soft), not redrawn blurred each time; their colour
+    // runs half a reading past the edges, so the softening doesn't fade the map's edges
+    const soft = layer !== "temp" && layer !== "rain", pad = soft ? CELL / 2 : 0;
+    const sz = LM.getSize(), d = Math.min(2, devicePixelRatio || 1), same = keep && sz.x === vw && sz.y === vh && d === dpr && pad === heatPad && parts.length;
+    vw = sz.x; vh = sz.y; if(!vw || !vh) return;
+    dpr = d; heatPad = pad;
     const tl = LM.containerPointToLayerPoint([0, 0]);
-    [heat, flow].forEach(c => { c.width = vw * dpr; c.height = vh * dpr; c.style.width = vw + "px"; c.style.height = vh + "px"; L.DomUtil.setPosition(c, tl); });
+    if(same){ const c = heat.getContext("2d"); c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, heat.width, heat.height); }
+    else [heat, flow].forEach(c => { const e = c === heat ? pad : 0; c.width = (vw + 2 * e) * dpr; c.height = (vh + 2 * e) * dpr; c.style.width = vw + 2 * e + "px"; c.style.height = vh + 2 * e + "px"; });
+    L.DomUtil.setPosition(heat, tl.subtract([pad, pad])); L.DomUtil.setPosition(flow, tl);
     const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
     const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n), val = new Float32Array(n);
     const mode = layer === "waves" ? "waves" : layer === "gusts" ? "gusts" : "wind", sea = seaMask(cols, rows);
@@ -1790,7 +1864,8 @@ footer strong{color:var(--label);font-weight:600}
       val[k] = layer === "rain" ? sample(la, lo, "rain") : m[k];
     }
     fld = {cols, rows, u, v, m, sea, mode};
-    const h = heat.getContext("2d"), p = unitPx();
+    const h = heat.getContext("2d"), p = unitPx(), e = pad * dpr;
+    heat.classList.toggle("soft", soft);
     if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings, with the hills
       drawTemp(h);
       // the sea a shade darker than the land, so the coast still shows through the colour
@@ -1809,12 +1884,12 @@ footer strong{color:var(--label);font-weight:600}
         px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : layer === "waves" ? 255 : 120;
       }
       sx.putImageData(img, 0, 0);
-      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = "blur(" + (2 * dpr) + "px)";
-      h.setTransform(dpr, 0, 0, dpr, 0, 0); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
+      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = soft ? "none" : "blur(" + (2 * dpr) + "px)";   // rain: its numbers stay sharp
+      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
       h.filter = "none";
       if(layer === "waves"){   // no waves on land: the colour stops at the coast
-        h.globalCompositeOperation = "destination-out"; h.filter = "blur(" + (1.5 * dpr) + "px)";
-        h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(coastPath);
+        h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
+        h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
         h.globalCompositeOperation = "source-over"; h.filter = "none";
       }
       h.setTransform(1, 0, 0, 1, 0, 0);
@@ -1836,9 +1911,11 @@ footer strong{color:var(--label);font-weight:600}
       h.restore();
     }
     const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1100, area / 2000) : Math.min(1800, area / 1300));
-    parts = Array.from({length:count}, () => spawn({}));
-    parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
-    flow.getContext("2d").clearRect(0, 0, flow.width, flow.height);
+    if(!same){
+      parts = Array.from({length:count}, () => spawn({}));
+      parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
+    }
+    if(!same || reduced) flow.getContext("2d").clearRect(0, 0, flow.width, flow.height);
     if(reduced) for(let i = 0; i < 40; i++) stepFlow(1);   // one still picture instead of motion
   }
   // Tap or click the map: the weather at that spot, at the time on the slider
@@ -1995,12 +2072,16 @@ footer strong{color:var(--label);font-weight:600}
   function fitHero(){
     if(hero.classList.contains("full")) return;
     const was = hero.style.minHeight; hero.style.minHeight = "";
-    const gap = Math.ceil($("wxCtl").getBoundingClientRect().bottom + 12 - hero.querySelector(".hero-in").getBoundingClientRect().top);
+    // phones keep about 120px of open map between them, for the strait, the launch beaches and the boats
+    const gap = Math.ceil(ctlBottom() + (hero.clientWidth < 600 ? 120 : 12) - hero.querySelector(".hero-in").offsetTop);
     if(gap > 0) hero.style.minHeight = hero.offsetHeight + gap + "px";
     const sz = hero.clientWidth + "x" + hero.clientHeight;
     if(hero.style.minHeight !== was && sz !== fitSz){ fitSz = sz; fitMap(); }
+    else frameStrait();
   }
-  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { fitHero(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
+  // the figures change size as the number counts up or the chips change: fit again, once a frame at most
+  if("ResizeObserver" in window){ let q = 0; new ResizeObserver(() => { if(!q) q = requestAnimationFrame(() => { q = 0; fitHero(); }); }).observe(hero.querySelector(".hero-in")); }
+  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { $("news").hidden ? fitHero() : newsRoom(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
   play();
 
   // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
@@ -2065,6 +2146,7 @@ footer strong{color:var(--label);font-weight:600}
     const q = parse(last.date), n = last.migrants;   // the day as a calendar tile, as in On This Day
     const long = q.toLocaleDateString("en-GB",{weekday:"long",...UTC}) + ", " + q.getUTCDate() + " " + q.toLocaleDateString("en-GB",{month:"long",...UTC}) + " " + q.getUTCFullYear();
     $("hqMon").textContent = q.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3); $("hqDay").textContent = q.getUTCDate();
+    $("heroNum").style.cssText = n ? "display:inline-block;min-width:" + (String(n).length + (fmt(n).length - String(n).length) * .3) + "ch" : "";   // room for the final number, so the line doesn't rewrap as it counts up
     if(n) countUp($("heroNum"), n); else { $("heroNum")._count = ($("heroNum")._count || 0) + 1; $("heroNum").textContent = ""; }
     $("hqT").textContent = n ? (n === 1 ? " person detected" : " people detected") : "No crossings detected";
     $("heroSub").textContent = long + (n ? " · " + plural(last.boats, "boat", "boats").replace(" ", "\u00a0") : "");
@@ -2079,7 +2161,7 @@ footer strong{color:var(--label);font-weight:600}
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const pct = prev ? Math.round((ytd / prev - 1) * 100) : null;
     const c = $("chipYear"); c.hidden = false;
-    c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>" : "");
+    c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "% on " + (yr - 1) + "</span>" : "");
     liveUi(); fitHero();
   }
 
@@ -2093,12 +2175,12 @@ footer strong{color:var(--label);font-weight:600}
     // the daily update in the strip across the top of the map: shows while new figures are awaited, unless it was closed today
     let closed = ""; try{ closed = localStorage.getItem("syncClosed"); }catch(e){}
     showFigures(on && closed !== ukToday());
-    live.hidden = !on; if(!on) closePop(live);
+    live.hidden = !on || figOn; if(live.hidden) closePop(live);   // the chip only while the strip isn't saying it
     const at = meta && meta.checkedAt ? new Date(meta.checkedAt) : null;
     const wk = /Sat|Sun/.test(new Date().toLocaleDateString("en-GB",{weekday:"short",timeZone:"Europe/London"}));
     root.classList.toggle("wkend", wk);
     $("figTag").textContent = wk ? "Weekend" : "Updating";
-    $("figMeta").textContent = wk ? "Can take several hours at weekends · Sometimes not until Monday" : "Since 12:00 · Can take up to an hour";
+    $("figMeta").innerHTML = wk ? 'Can take several hours at weekends<span class="mn-more"> · Sometimes not until Monday</span>' : "Since 12:00 · Can take up to an hour";   // phones: the first part only, on one line
     $("fuToday").textContent = haveYesterday()
       ? (at && at.toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? (wk ? "New figures incoming. At weekends they can be hours late, or wait until Monday." : "New figures incoming. Please wait.") : "Today's figures aren't in yet. Checks start at 12:00.";
@@ -2143,11 +2225,13 @@ footer strong{color:var(--label);font-weight:600}
   // Last crossings: the day, the fortnight around it, and how it's worked out
   function renderLastPop(lx, last){
     const all = allDays(), i = all.findIndex(d => d.date === lx.date), strip = all.slice(-14), mx = Math.max(...strip.map(d => d.migrants), 1);
+    let top = strip.some(d => d.date === lx.date && d.migrants === mx) ? 1 : 0;   // the day and the busiest day get their numbers, each once
     const quiet = all.length - 1 - i;
     $("popLast").innerHTML = '<b>Last crossings</b>'
       + '<div class="lx-big num">' + fmt(lx.migrants) + '<small>' + (lx.migrants === 1 ? "person" : "people") + '</small></div>'
       + '<div class="lx-sub">' + dLong.format(parse(lx.date)) + " · " + plural(lx.boats, "boat", "boats") + '</div>'
-      + '<div class="lx-strip" aria-hidden="true">' + strip.map(d => '<i class="' + (d.date === lx.date ? "lx" : d.migrants ? "x" : "") + '" style="height:' + Math.max(6, d.migrants / mx * 100).toFixed(1) + '%"></i>').join("") + "</div>"
+      + '<div class="lx-strip" aria-hidden="true">' + strip.map(d => '<i class="' + (d.date === lx.date ? "lx" : d.migrants ? "x" : "") + (d.migrants ? "" : " z") + '" style="height:' + (d.migrants ? Math.max(12, d.migrants / mx * 100).toFixed(1) + "%" : "2px") + '">'
+        + (d.date === lx.date || d.migrants === mx && !top++ ? "<b>" + fmt(d.migrants) + "</b>" : "") + "</i>").join("") + "</div>"
       + '<div class="lx-axis"><span>' + dShort.format(parse(strip[0].date)) + "</span><span>Last 14 days</span><span>" + dShort.format(parse(last.date)) + "</span></div>"
       + '<div class="wp-stats"><div><span>Quiet days since</span><b class="num">' + quiet + '</b></div><div><span>People a boat</span><b class="num">' + (lx.boats ? Math.round(lx.migrants / lx.boats) : "–") + "</b></div></div>"
       + '<p>The Home Office publishes how many people were detected crossing in small boats each day, usually the next afternoon. A day it reports as zero, or leaves out, means no crossings were detected. This is the most recent day with at least one person, counted back from the latest figures (' + dMid.format(parse(last.date)) + ").</p>"
@@ -2172,7 +2256,8 @@ footer strong{color:var(--label);font-weight:600}
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
     liveUi();
     if(Date.now() - statusAt >= (pending() ? 2 : 30) * MIN) checkStatus();
-    if(Date.now() - wxAt >= 30 * MIN){ loadWeather(); loadGrid(); }
+    if(Date.now() - wxAt >= 30 * MIN) loadWeather();
+    if(gridAt && Date.now() - gridAt >= 60 * MIN) loadGrid();   // the weather map's forecast: hourly is plenty
     if(Date.now() - newsAt >= 10 * MIN) loadNews();
   }
   setInterval(tick, MIN);
@@ -2406,7 +2491,8 @@ footer strong{color:var(--label);font-weight:600}
 
   /* ---------------------------------------------------- the year in squares */
   function drawHeat(){
-    const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4), by = new Map(all.map(d => [d.date, d]));
+    const sc = $("heatScroll"), again = $("heat").childElementCount > 0, keep = again && $("heat").querySelector("i.sel")?.dataset.d, fromRight = sc.scrollWidth - sc.scrollLeft;   // a refresh keeps the chosen day and the scroll
+    const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4), by = new Map(all.map(d => [d.date, d])), tdy = ukToday();
     const jan1 = parse(yr + "-01-01"), lead = (jan1.getUTCDay() + 6) % 7, dec31 = parse(yr + "-12-31");
     const inYear = all.filter(d => d.date.slice(0,4) === yr);
     const top10 = new Set(inYear.slice().sort((a,b) => b.migrants - a.migrants).slice(0,10).filter(d => d.migrants > 0).map(d => d.date));
@@ -2414,40 +2500,65 @@ footer strong{color:var(--label);font-weight:600}
     let h = "", months = "";
     for(let k = 0; k < lead; k++) h += '<i style="visibility:hidden"></i>';
     for(let t = jan1.getTime(), k = lead; t <= dec31.getTime(); t += DAY, k++){
-      const iso = new Date(t).toISOString().slice(0,10), d = by.get(iso), fut = iso > last.date;
+      const iso = new Date(t).toISOString().slice(0,10), d = by.get(iso), fut = iso > last.date, wait = fut && iso <= tdy;   // wait: the day has passed but its figures are not out
       const col = Math.floor(k / 7);
       if(iso.slice(8) === "01") months += '<span class="heat-m" style="left:calc(' + col + ' * (var(--c) + 4px))">' + parse(iso).toLocaleDateString("en-GB",{month:"short",...UTC}) + "</span>";
-      h += '<i data-d="' + iso + '" class="' + (fut ? "fut" : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" style="transition-delay:' + Math.min(900, col * 16) + 'ms" role="img" aria-label="' + dMid.format(parse(iso)) + (fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
+      h += '<i data-d="' + iso + '" class="' + (fut ? "fut" + (wait ? " wait" : "") : lv(d ? d.migrants : 0)) + (top10.has(iso) ? " pk" : "") + '" role="img" aria-label="' + dMid.format(parse(iso)) + (wait ? ": figures not out yet" : fut ? ": still to come" : ": " + fmt(d ? d.migrants : 0) + " people") + '"></i>';
     }
     $("heat").innerHTML = months + h;
     heatCols = Math.ceil((lead + Math.round((dec31 - jan1) / DAY) + 1) / 7); sizeHeat();
-    ddNotes[1] = yr + " · " + fmt(inYear.filter(d => d.migrants > 0).length) + " days with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
-    whenDd(1, () => $("heat").classList.add("show"));
-    const sc = $("heatScroll"), now = $("heat").querySelector("i.fut");   // today at the right edge, not the empty weeks to come
-    sc.scrollLeft = now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
+    heatYr = yr;
+    const kept = keep && $("heat").querySelector('i[data-d="' + keep + '"]');
+    if(kept){ kept.classList.add("sel"); heatSay(kept); } else heatIdle();
+    ddNotes[1] = yr + " · " + plural(inYear.filter(d => d.migrants > 0).length, "day", "days") + " with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
+    if(!again) whenDd(1, () => $("heat").classList.add("show"));
+    const now = $("heat").querySelector("i.fut");   // today at the right edge, not the empty weeks to come
+    sc.scrollLeft = again ? sc.scrollWidth - fromRight : now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
+    sc.classList.toggle("more-l", sc.scrollLeft > 4);
   }
-  // squares grow to fill wide screens (53 weeks), and stay finger-sized on phones (the grid scrolls)
-  let heatCols = 53;
+  // squares stay at least 14px; the grid scrolls sideways when the card is narrower than the year
+  let heatCols = 53, heatYr = "";
   const sizeHeat = () => $("heat").style.setProperty("--c", Math.max(14, Math.min(22, Math.floor(($("heatScroll").clientWidth - 8) / heatCols) - 4)) + "px");
-  $("heat").addEventListener("click", e => {
-    const c = e.target.closest("i[data-d]"); if(!c) return;
-    document.querySelectorAll("#heat i.sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel");
+  // the readout above the squares: the date on line one, the figures on line two, so the grid never jumps
+  function heatSay(c){
     const d = days.find(x => x.date === c.dataset.d), fut = c.classList.contains("fut");
-    $("heatRead").innerHTML = "<b>" + dLong.format(parse(c.dataset.d)) + "</b> · " + (fut ? "still to come" : d && d.migrants ? plural(d.migrants, "person", "people") + " in " + plural(d.boats, "boat", "boats") : "no crossings detected");
+    $("heatRead").innerHTML = "<b>" + dMid.format(parse(c.dataset.d)) + "</b>" + (c.classList.contains("wait") ? "Figures not published yet" : fut ? "Still to come" : d && d.migrants ? plural(d.migrants, "person", "people") + " in " + plural(d.boats, "boat", "boats") : "No crossings detected");
+  }
+  function heatIdle(){ $("heatRead").innerHTML = "<b>" + heatYr + ", a square a day</b>" + (touchOnly ? "Tap" : "Click") + " one to read it."; }
+  function heatPick(c){ document.querySelectorAll("#heat i.sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel"); heatSay(c); }
+  $("heat").addEventListener("click", e => { const c = e.target.closest("i[data-d]"); if(c) heatPick(c); });
+  // a mouse previews the day under it; leaving the squares goes back to the chosen day
+  $("heat").addEventListener("pointerover", e => { const c = e.pointerType === "mouse" && e.target.closest("i[data-d]"); if(c) heatSay(c); });
+  $("heatScroll").addEventListener("pointerleave", e => { if(e.pointerType !== "mouse") return; const c = $("heat").querySelector("i.sel"); if(c) heatSay(c); else heatIdle(); });
+  $("heatScroll").addEventListener("scroll", e => e.currentTarget.classList.toggle("more-l", e.currentTarget.scrollLeft > 4), {passive:true});
+  // arrow keys: left and right a week, up and down a day; the first press picks the latest day
+  $("heatScroll").addEventListener("keydown", e => {
+    const step = {ArrowLeft:-7, ArrowRight:7, ArrowUp:-1, ArrowDown:1}[e.key]; if(!step) return;
+    e.preventDefault();
+    const cells = [...$("heat").querySelectorAll("i[data-d]:not(.fut)")]; if(!cells.length) return;
+    const at = cells.findIndex(x => x.classList.contains("sel"));
+    const c = cells[at < 0 ? cells.length - 1 : Math.max(0, Math.min(cells.length - 1, at + step))];
+    heatPick(c); c.scrollIntoView({block:"nearest", inline:"nearest"});
   });
 
   /* ---------------------------------------------------- year by year */
   function drawYears(){
-    const all = allDays(), last = all[all.length-1], cur = +last.date.slice(0,4), rows = {};
+    const all = allDays(), last = all[all.length-1], cur = +last.date.slice(0,4), rows = {}, again = $("years").childElementCount > 0;
     all.forEach(d => { const y = +d.date.slice(0,4); rows[y] = (rows[y] || 0) + d.migrants; });
     const ys = Object.keys(rows).map(Number).sort((a,b) => b - a), mx = Math.max(...Object.values(rows));
     const prevSame = sum(all.filter(d => +d.date.slice(0,4) === cur - 1 && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const change = y => { const base = y === cur ? prevSame : rows[y - 1]; if(!base) return '<span class="ch"></span>';   // on the year before; this year on the same dates last year
       const pct = Math.round((rows[y] / base - 1) * 100); return '<span class="ch delta ' + (pct < 0 ? "down" : "up") + '">' + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>"; };
     $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : "") + '"><b>' + y + '</b><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
-      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" title="' + (cur - 1) + ' by this date: ' + fmt(prevSame) + '"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
-    ddNotes[2] = cur + " so far"; if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
-    whenDd(2, () => $("years").querySelectorAll(".fill").forEach((f, i) => setTimeout(() => f.style.width = f.dataset.w + "%", reduced ? 0 : i * 70)));   // the bars grow when their page slides into view
+      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" aria-hidden="true"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
+    $("yrFoot").textContent = "Each year is compared with the year before. " + cur + " runs to " + dShort.format(parse(last.date)) + "; the line on its bar marks " + (cur - 1) + " by the same date, " + fmt(prevSame) + ".";
+    const peak = ys.reduce((a,b) => rows[b] > rows[a] ? b : a);
+    ddNotes[2] = "Busiest year: " + peak + ", " + fmt(rows[peak]); if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
+    const fills = $("years").querySelectorAll(".fill");
+    if(again && ddSeen[2]){   // a refresh: the bars take their new widths at once instead of growing again
+      fills.forEach(f => { f.style.transition = "none"; f.style.width = f.dataset.w + "%"; });
+      void $("years").offsetWidth; fills.forEach(f => f.style.transition = "");
+    } else whenDd(2, () => fills.forEach((f, i) => setTimeout(() => f.style.width = f.dataset.w + "%", reduced ? 0 : i * 70)));   // the bars grow when their page slides into view
   }
 
   /* ---------------------------------------------------- who is crossing, per boat, returns */
@@ -2466,16 +2577,21 @@ footer strong{color:var(--label);font-weight:600}
     }
     if(nat && nat.top){
       const mx = nat.top[0].pc;
-      $("nats").innerHTML = nat.top.map(n => '<li><span class="flag" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name + '<small><b data-w="' + (n.pc / mx * 100).toFixed(1) + '"></b></small></span><span class="pc">' + n.pc + "%</span></li>").join("");
+      $("nats").innerHTML = nat.top.map(n => '<li><span class="flag" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
+        + (n.change != null ? '<em class="chg">' + (n.change > 0 ? "up " : "down ") + Math.abs(n.change) + "% on a year earlier</em>" : "")
+        + '<small><b data-w="' + (n.pc / mx * 100).toFixed(1) + '"></b></small></span><span class="pc">' + Number(n.pc).toFixed(1) + "%</span></li>").join("");
+      if(nat.other != null && nat.total) $("natNote").innerHTML = "Other nationalities <b>" + (nat.other / nat.total * 100).toFixed(1) + "%</b> of " + fmt(nat.total) + " people, " + nat.period;
       onReveal($("nats"), () => $("nats").querySelectorAll("small b").forEach((b, i) => setTimeout(() => b.style.width = b.dataset.w + "%", reduced ? 0 : i * 90)));
     }
   }
   function renderPerBoat(pb){
     if(!pb || !pb.years) return;
     countUp($("pbV"), pb.last90 ? pb.last90.avg : pb.years[pb.years.length-1].avg);
-    $("pbS").textContent = "a boat on average over the last 90 days" + (pb.years.length ? ", up from " + pb.years[0].avg + " in " + pb.years[0].y : "");
+    const part = pb.partialYear ? String(pb.partialYear) : "";   // this year is not over yet
+    $("pbS").textContent = "a boat on average over the last 90 days" + (pb.years.length ? ", up from " + pb.years[0].avg + " in " + pb.years[0].y : "") + (part ? " · *" + part + " so far" : "");
     const mx = Math.max(...pb.years.map(y => y.avg));
-    $("pbBars").innerHTML = pb.years.map((y, i) => '<div><span style="height:' + (y.avg / mx * 100) + '%;transition-delay:' + i * 70 + 'ms" title="' + y.y + ': ' + y.avg + ' a boat"></span><em>' + String(y.y).slice(2) + "</em></div>").join("");
+    // Each column shows its figure on top; the full numbers are read out by screen readers
+    $("pbBars").innerHTML = pb.years.map((y, i) => '<div role="listitem" aria-label="' + y.y + (String(y.y) === part ? " so far" : "") + ": " + y.avg + " people a boat" + (y.people != null ? ", " + fmt(y.people) + " people in " + fmt(y.boats) + " boats" : "") + '"><b aria-hidden="true">' + y.avg + '</b><span style="height:' + (y.avg / mx * 80) + '%;transition-delay:' + i * 70 + 'ms"></span><em aria-hidden="true">' + String(y.y).slice(2) + (String(y.y) === part ? "*" : "") + "</em></div>").join("");
   }
   function renderReturns(r){
     if(!r || r.out == null) return;
@@ -2500,10 +2616,12 @@ footer strong{color:var(--label);font-weight:600}
     let best = 0, run = 0, bStart = "", bEnd = "", s = "";
     inYear.forEach(d => { if(d.migrants === 0){ if(!run) s = d.date; run++; if(run > best){ best = run; bStart = s; bEnd = d.date; } } else run = 0; });
     const rows = [
-      ["trophy", "#FF9500", "Record day since 2018", dLong.format(parse(rec.date)), fmt(rec.migrants)],
-      ["bolt", "#007AFF", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)],
-      ["clock", "#5856D6", "Days since the last crossing", lastX ? "Last: " + dMid.format(parse(lastX.date)) : "", String(since)],
-      ["waves", "#34C759", "Longest spell without crossings in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "", best + (best === 1 ? " day" : " days")]
+      ["trophy", "#FF9500", "Record day since 2018", dMid.format(parse(rec.date)) + " " + rec.date.slice(0,4), fmt(rec.migrants)],
+      busy.migrants ? ["bolt", "#007AFF", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)]
+        : ["bolt", "#007AFF", "No crossings yet in " + yr, "", "–"],   // early January
+      ["clock", "#5856D6", "Since the last crossing", !lastX ? "" : since === 0 ? "Crossings on " + dMid.format(parse(last.date)) : "Last: " + dMid.format(parse(lastX.date)),
+        !lastX ? "–" : since + (since === 1 ? " day" : " days")],   // counted to the latest figures, not to today
+      ["waves", "#34C759", "Longest quiet spell in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "No quiet days yet", best ? best + (best === 1 ? " day" : " days") : "–"]
     ];
     $("records").innerHTML = rows.map(r => '<li><span class="ic" style="background:' + r[1] + '">' + RIC[r[0]] + '</span><span class="t">' + r[2] + "<small>" + r[3] + '</small></span><span class="v">' + r[4] + "</span></li>").join("");
   }
@@ -2542,6 +2660,8 @@ footer strong{color:var(--label);font-weight:600}
     const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
     pm.dataset.lv = lvl || "";
     $("chipMap").querySelector("i").className = lvl || (wxFailed ? "none" : "wait");
+    $("chipMap").querySelector("span").textContent = lvl ? "Weather: " + WORD[lvl] : "Weather outlook";   // the level in words, not just a coloured dot
+    $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions" : "Weather outlook") + " in the Channel. Open the outlook");
     let h;
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -2551,6 +2671,7 @@ footer strong{color:var(--label);font-weight:600}
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
+        + '<p class="wp-foot" style="margin:0 0 4px">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
@@ -2570,7 +2691,7 @@ footer strong{color:var(--label);font-weight:600}
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "°" : "") + "</em></li>"; }).join("");
+        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "° high" : "") + "</em></li>"; }).join("");
       const c = w.current;
       wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
         lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
@@ -2597,46 +2718,50 @@ footer strong{color:var(--label);font-weight:600}
   };
   const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
   const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
-  let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 7, extras = {};
+  const STEADY = "2020-01-01";   // crossings became a year-round pattern
+  let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 30, extras = {};
 
   function drawDots(){
     const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
-    const days = sorted.slice(-repDays);
+    const days = allDays().slice(-repDays);   // every calendar day, quiet ones too
     const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0);
     const from = dShort.format(parse(days[0].date)), to = dShort.format(parse(days[days.length-1].date));
     $("repTitle").textContent = "Every Person, Last " + repDays + " Days";
     $("repN").textContent = fmt(people) + (people===1 ? " person" : " people");
-    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to;
+    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to + " · crossings on " + days.filter(d=>d.migrants).length + " of " + days.length + " days";
     const W = Math.max(260, Math.round(box.clientWidth || 320));
     // Dot spacing shrinks for bigger totals so the block stays a sensible height
     let pitch = 9;
     while(pitch > 5 && Math.ceil(people/Math.floor(W/pitch))*pitch > 420) pitch -= .5;
     const d = pitch*.62, cols = Math.max(1, Math.floor((W - d)/pitch)), rows = Math.ceil(people/cols);
     const off = (W - (cols-1)*pitch)/2;
-    // Dots run day by day, drawn as exact circles (one shape per day). Hovering a day highlights it.
+    // Dots run day by day, drawn as exact circles (one shape per day), every other day a lighter blue. Hovering a day highlights it.
     const last = rows ? people - (rows-1)*cols : 0;
     const lastX = (W - (last-1)*pitch)/2, rr = (d/2).toFixed(2), dd = d.toFixed(2);
-    let s = "", k = 0;
+    let s = "", k = 0, j = 0;
     days.forEach(day=>{
       if(!day.migrants) return;
+      j++;
       let g = "";
       for(const end = k + day.migrants; k < end; k++){
         const r2 = Math.floor(k/cols), c = k - r2*cols;
         const x = (r2===rows-1 ? lastX : off) + c*pitch - d/2, y = r2*pitch + pitch/2;
         g += "M" + x.toFixed(1) + " " + y.toFixed(1) + "a" + rr + " " + rr + " 0 1 0 " + dd + " 0a" + rr + " " + rr + " 0 1 0 -" + dd + " 0";
       }
-      s += '<path class="dd" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
+      s += '<path class="dd' + (j%2 ? '' : ' alt') + '" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
     });
     const dotsH = rows*pitch;
-    // Boats: one boat emoji each (the device draws its own, e.g. Apple's on iPhone and Mac), wrapped and centred
+    // Boats: one plain boat shape each, day by day, wrapped and centred
     const bp = 22, bh = 24, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
-    let b2 = "";
-    for(let i=0; i<boats; i++){
-      const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
-      const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
-      b2 += '<text x="' + x.toFixed(1) + '" y="' + yy + '">\u{1F6A4}</text>';
-    }
-    if(b2) b2 = '<g class="boats" font-size="17" text-anchor="middle">' + b2 + '</g>';
+    let b2 = "", i = 0;
+    days.forEach(day=>{
+      for(let n2 = 0; n2 < day.boats; n2++, i++){
+        const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
+        const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
+        b2 += '<use href="#dg" x="' + (x-10).toFixed(1) + '" y="' + (yy-12) + '" width="20" height="8" data-day="' + day.date + '"/>';
+      }
+    });
+    if(b2) b2 = '<defs><symbol id="dg" viewBox="-30 -8 60 18"><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="var(--boat)"/></symbol></defs><g class="boats">' + b2 + '</g>';
     const H = Math.ceil(dotsH + (boats ? 14 + brows*bh : 0)) || 20;
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + fmt(people) + ' dots for ' + fmt(people) + ' people and ' + fmt(boats) + ' boat icons, ' + from + ' to ' + to + '">'
       + (people ? '<g fill="var(--mbar)">' + s + '</g>' : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
@@ -2646,10 +2771,10 @@ footer strong{color:var(--label);font-weight:600}
   // Hover a day's dots: that day stays bright and its figures show in the header
   let repHead = "";
   $("dots").addEventListener("mouseover", e=>{
-    const p = e.target.closest(".dd"); if(!p) return;
-    const day = sorted.find(x=>x.date===p.dataset.day); if(!day) return;
+    const p = e.target.closest("[data-day]"); if(!p) return;
+    const day = allDays().find(x=>x.date===p.dataset.day); if(!day) return;
     $("dots").classList.add("hovering");
-    $("dots").querySelectorAll(".dd").forEach(x=>x.classList.toggle("on", x===p));
+    $("dots").querySelectorAll("[data-day]").forEach(x=>x.classList.toggle("on", x.dataset.day===p.dataset.day));   // the day's dots and boats together
     if(!repHead) repHead = $("repS").textContent;
     $("repS").textContent = dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people · " + fmt(day.boats) + (day.boats===1?" boat":" boats");
   });
@@ -2659,11 +2784,6 @@ footer strong{color:var(--label);font-weight:600}
     $("dots").classList.remove("hovering");
     if(repHead){ $("repS").textContent = repHead; repHead = ""; }
   });
-  document.querySelectorAll("#repSeg button").forEach(b=>b.addEventListener("click", ()=>{
-    repDays = +b.dataset.rep;
-    document.querySelectorAll("#repSeg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
-    drawDots();
-  }));
 
 
   /* =========== Calendar =========== */
@@ -2820,32 +2940,44 @@ footer strong{color:var(--label);font-weight:600}
 
 
   // ---- Year by year race
-  let race = null, raceDay = null;
-  function drawRace(){
-    const box = $("race");
-    const days = allDays(), lastISO = sorted[sorted.length-1].date, curYr = +lastISO.slice(0,4);
+  // drawRace builds the chart once per set of figures or width; moveRace only moves the line, the dots and the box of figures
+  let race = null, raceDay = null, raceSayT = 0, raceKeep = null, raceYrs = null;
+  const raceMon = new Intl.DateTimeFormat("en-GB",{month:"short",...UTC}), raceDM = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",...UTC});
+  const ordinal = n => n + (n % 100 > 10 && n % 100 < 14 ? "th" : ["th","st","nd","rd"][n % 10] || "th");
+  function raceYears(){   // each year's running total by day of the year, worked out once per set of figures
+    const all = allDays();   // a new set of figures is a new list, even when only a figure was revised
+    if(all === raceKeep) return raceYrs;
     const years = {};
-    days.forEach(d=>{
-      const y = +d.date.slice(0,4), doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY);
+    all.forEach(d=>{
+      const y = +d.date.slice(0,4);
+      let doy = Math.round((parse(d.date) - Date.UTC(y,0,1))/DAY); if(y%4===0 && doy>=59) doy -= 1;   // 29 February counts with the 28th, so 31 December is day 364 every year
       (years[y] = years[y] || {y, cum:[], tot:0});
       years[y].tot += d.migrants; years[y].cum[doy] = years[y].tot;
     });
-    const list = Object.values(years).sort((a,b)=>a.y-b.y);
-    const W = Math.max(280, Math.round(box.clientWidth || 320));
-    const H = Math.round(Math.min(340, Math.max(220, W*0.45)));
-    const m = {t:14, r:40, b:26, l:40}, iw = W-m.l-m.r, ih = H-m.t-m.b;
-    const maxV = Math.max(...list.map(v=>v.tot), 10), step = niceStep(maxV/4), top = Math.ceil(maxV/step)*step;
+    raceKeep = all; return raceYrs = Object.values(years).sort((a,b)=>a.y-b.y);
+  }
+  const raceOut = () => $("raceTip");   // where the figures for the chosen day are written
+  function drawRace(){
+    const box = $("race");
+    const list = raceYears(), curYr = +sorted[sorted.length-1].date.slice(0,4);
+    const W = Math.max(240, Math.round(box.clientWidth || 320));
+    const H = W < 520 ? Math.round(Math.min(300, Math.max(240, W*0.75))) : Math.round(Math.min(340, Math.max(220, W*0.45)));   // taller on phones
+    const m = {t:14, r:44, b:26, l:40}, iw = W-m.l-m.r, ih = H-m.t-m.b;
+    // the top of the scale sits just above the highest line: 3 to 5 steps, the closest fit wins
+    const maxV = Math.max(...list.map(v=>v.tot), 10);
+    const cands = [3,4,5].map(n=>niceStep(maxV/n)).map(st=>({st, top:Math.ceil(maxV/st)*st})).filter(c=>c.top/c.st<=6).sort((a,b)=>a.top-b.top||b.st-a.st);
+    const {st:step, top} = cands[0];
     const x = doy => m.l + doy/365*iw, y = v => m.t + ih - v/top*ih;
     const colour = yr => yr===curYr ? "var(--mbar)" : yr===curYr-1 ? "var(--boat)" : "var(--label3)";
     let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Running total of arrivals each year from 1 January, '+list[0].y+' to '+curYr+'. '
       + list.map(v=>v.y+(v.y===curYr?" so far":"")+": "+fmt(v.tot)).join(", ")+'.">';
     for(let v=0; v<=top; v+=step){
       s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--sep)" stroke-width=".5"'+(v?' stroke-dasharray="2 3"':'')+'/>';
-      s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="11">'+(v>=1000?(v/1000)+'k':v)+'</text>';
+      s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="12">'+(v>=1000?(v/1000)+'k':v)+'</text>';
     }
     ["J","F","M","A","M","J","J","A","S","O","N","D"].forEach((mn,i)=>{
       const doy = Math.round((Date.UTC(2023,i,1)-Date.UTC(2023,0,1))/DAY);
-      s += '<text x="'+(x(doy)+iw/24).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11">'+(W < 520 ? mn : new Date(Date.UTC(2023,i,1)).toLocaleString("en-GB",{month:"short",...UTC}))+'</text>';
+      s += '<text x="'+(x(doy)+iw/24).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12">'+(W < 520 ? mn : raceMon.format(Date.UTC(2023,i,1)))+'</text>';
     });
     // earlier years first (grey, thin), then last year, then this year on top
     const order = list.filter(v=>v.y<curYr-1).concat(list.filter(v=>v.y===curYr-1), list.filter(v=>v.y===curYr));
@@ -2855,48 +2987,93 @@ footer strong{color:var(--label);font-weight:600}
       const main = v.y>=curYr-1;
       s += '<path d="'+d+'" fill="none" stroke="'+colour(v.y)+'" stroke-width="'+(v.y===curYr?2.6:main?2:1.3)+'" stroke-linejoin="round" stroke-linecap="round"'+(main?'':' opacity=".9"')+'/>';
     });
-    // year labels at the line ends, skipping any that would overlap
-    const placed = [];
-    [list.find(v=>v.y===curYr), list.find(v=>v.y===curYr-1)].concat(list.filter(v=>v.y<curYr-1).sort((a,b)=>b.tot-a.tot)).forEach(v=>{
-      if(!v) return;
-      const endDoy = v.cum.length-1, ly = y(v.tot) + 4;
-      if(placed.some(p=>Math.abs(p-ly)<12 && endDoy>300)) return;
-      placed.push(ly);
-      s += '<text x="'+(x(endDoy)+4).toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="11" font-weight="'+(v.y>=curYr-1?600:400)+'" style="fill:'+(v.y>=curYr-1?colour(v.y):"var(--label2)")+'">'+v.y+'</text>';
+    // year labels at the line ends; the ones at the right edge are nudged apart so every year is named
+    const labs = list.map(v=>({v, end:v.cum.length-1, ly:y(v.tot)+4})), edge = labs.filter(l=>l.end>300).sort((a,b)=>a.ly-b.ly);
+    edge.forEach((l,i)=>{ if(i) l.ly = Math.max(l.ly, edge[i-1].ly+13); });
+    if(edge.length && edge[edge.length-1].ly > m.t+ih+4){   // too low: stack up from the bottom instead
+      const gap = Math.min(13, (ih - 4) / Math.max(1, edge.length-1));   // squeezed only if they cannot all fit
+      edge[edge.length-1].ly = m.t+ih+4;
+      for(let i = edge.length-2; i >= 0; i--) edge[i].ly = Math.min(edge[i].ly, edge[i+1].ly-gap);
+    }
+    labs.forEach(l=>{
+      const main = l.v.y>=curYr-1;
+      s += '<text x="'+(x(l.end)+4).toFixed(1)+'" y="'+l.ly.toFixed(1)+'" font-size="12" font-weight="'+(main?600:400)+'" style="fill:var(--'+(main?'label':'label2')+');paint-order:stroke;stroke:var(--card);stroke-width:3px;stroke-linejoin:round">'+l.v.y+'</text>';
     });
-    if(raceDay!=null){
-      s += '<line x1="'+x(raceDay)+'" x2="'+x(raceDay)+'" y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--label2)" stroke-width="1"/>';
-      list.forEach(v=>{ const c = v.cum[Math.min(raceDay, v.cum.length-1)]; if(c!=null && raceDay < v.cum.length) s += '<circle cx="'+x(raceDay)+'" cy="'+y(c)+'" r="'+(v.y>=curYr-1?4:3)+'" fill="'+colour(v.y)+'" stroke="var(--card)" stroke-width="1.5"/>'; });
-    }
-    s += '</svg>';
-    race = {m, iw, W, list, curYr};
-    let tip = "";
-    if(raceDay!=null){
-      const label = new Date(Date.UTC(2023,0,1)+raceDay*DAY).toLocaleDateString("en-GB",{day:"numeric",month:"long",...UTC});
-      const rows = list.filter(v=>raceDay < v.cum.length).map(v=>({y:v.y, n:v.cum[raceDay]})).sort((a,b)=>b.n-a.n);
-      tip = '<div class="tip" id="raceTip"><b>By ' + label + '</b>' + rows.map(r=>'<div class="row'+(r.y===curYr?' cur':'')+'"><i style="background:'+colour(r.y)+'"></i>'+r.y+'<em>'+fmt(r.n)+'</em></div>').join("") + '</div>';
-      $("raceSay").textContent = "By " + label + ": " + rows.map(r=>r.y+" "+fmt(r.n)).join(", ");
-    }
+    // the reading line and one dot per year, hidden until a day is picked
+    s += '<g id="raceHover" style="display:none"><line y1="'+m.t+'" y2="'+(m.t+ih)+'" stroke="var(--label2)" stroke-width="1"/>'
+      + list.map(v=>'<circle r="'+(v.y>=curYr-1?4:3)+'" fill="'+colour(v.y)+'" stroke="var(--card)" stroke-width="1.5"/>').join("") + '</g></svg>';
+    const tip = '<div class="tip" id="raceTip" style="display:none"><b></b>' + list.map(v=>'<div class="row'+(v.y===curYr?' cur':'')+'"><i style="background:'+colour(v.y)+'"></i>'+v.y+'<em></em></div>').join("") + '</div>';
     box.innerHTML = s + tip;
-    if(raceDay!=null){
-      const t = $("raceTip"), sc = box.clientWidth / W, cx = x(raceDay)*sc, tw = t.offsetWidth;
-      let left = cx + 14; if(left + tw > box.clientWidth) left = cx - 14 - tw;
-      t.style.transform = "translateX(" + Math.max(0, Math.round(left)) + "px)";
+    const g = $("raceHover");
+    race = {m, iw, W, x, y, list, curYr, line:g.firstChild, dots:[...g.querySelectorAll("circle")], rows:[...$("raceTip").querySelectorAll(".row")]};
+    $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+String(curYr-2).slice(2)+'</span>';
+    // one line on where this year stands
+    const cur = list.find(v=>v.y===curYr);
+    if(cur){
+      const td = cur.cum.length-1, rank = 1 + list.filter(v=>v.y<curYr && (v.cum[td]||0) > cur.cum[td]).length;
+      $("raceFoot").textContent = "By " + raceDM.format(Date.UTC(2023,0,1)+td*DAY) + ", " + curYr + " is " + ordinal(rank) + " of the " + list.length + " years since " + list[0].y + ". Each line is a running total from 1 January.";
     }
-    $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+(curYr-2)+'</span>';
+    if(raceDay!=null) moveRace(raceDay);   // a rebuild keeps the day being read
   }
-  function racePick(clientX){
-    const svg = $("race").querySelector("svg"); if(!svg || !race) return;
-    const r = svg.getBoundingClientRect(), px = (clientX - r.left) * (race.W / r.width);
-    const d = Math.max(0, Math.min(364, Math.round((px - race.m.l)/race.iw*365)));
-    if(d !== raceDay){ raceDay = d; drawRace(); }
+  function moveRace(d){
+    if(!race) return;
+    const t = raceOut(), g = $("raceHover");
+    raceDay = d;
+    clearTimeout(raceSayT);
+    if(d==null){ g.style.display = "none"; t.style.display = "none"; $("raceSay").textContent = ""; return; }
+    const {x, y, list} = race, X = x(d).toFixed(1);
+    g.style.display = ""; t.style.display = "";
+    race.line.setAttribute("x1", X); race.line.setAttribute("x2", X);
+    race.dots.forEach((c,i)=>{ const n = list[i].cum[d]; if(n!=null){ c.style.display = ""; c.setAttribute("cx", X); c.setAttribute("cy", y(n).toFixed(1)); } else c.style.display = "none"; });
+    const label = raceDM.format(Date.UTC(2023,0,1)+d*DAY);
+    const rows = list.map((v,i)=>({i, y:v.y, n:v.cum[d]})).filter(r=>r.n!=null).sort((a,b)=>b.n-a.n);
+    t.firstChild.textContent = "By " + label;
+    race.rows.forEach(r=>r.style.display = "none");
+    rows.forEach(r=>{ const el = race.rows[r.i]; el.style.display = ""; el.lastChild.textContent = fmt(r.n); t.appendChild(el); });   // largest first
+    const box = $("race"), cx = x(d) * box.clientWidth / race.W, tw = t.offsetWidth;
+    let left = cx + 14; if(left + tw > box.clientWidth) left = cx - 14 - tw;
+    t.style.transform = "translateX(" + Math.max(0, Math.round(left)) + "px)";
+    raceSayT = setTimeout(()=>{ $("raceSay").textContent = "By " + label + ": " + rows.map(r=>r.y+" "+fmt(r.n)).join(", "); }, 300);   // read out once the finger or key settles
   }
-  let raceDrag = false;
-  $("race").addEventListener("pointerdown", e=>{ raceDrag = true; racePick(e.clientX); });
-  $("race").addEventListener("pointermove", e=>{ if(raceDrag || e.pointerType==="mouse") racePick(e.clientX); });
-  $("race").addEventListener("pointerleave", e=>{ if(e.pointerType==="mouse" && raceDay!=null){ raceDay = null; drawRace(); } });
+  let raceX = 0, raceRaf = 0;
+  function racePick(clientX){   // at most one move per frame while dragging
+    raceX = clientX;
+    if(raceRaf) return;
+    raceRaf = requestAnimationFrame(()=>{
+      raceRaf = 0;
+      const svg = $("race").querySelector("svg"); if(!svg || !race) return;
+      const r = svg.getBoundingClientRect(), px = (raceX - r.left) * (race.W / r.width);
+      const d = Math.max(0, Math.min(364, Math.round((px - race.m.l)/race.iw*365)));
+      if(d !== raceDay) moveRace(d);
+    });
+  }
+  function raceClear(){ cancelAnimationFrame(raceRaf); raceRaf = 0; if(raceDay!=null) moveRace(null); }
+  document.querySelector("#hRace + p").textContent = touchOnly ? "Tap or drag along the chart to compare" : "Hover to compare";
+  // a mouse reads as it moves; a finger reads on a tap or a sideways drag, so scrolling the page past the chart opens nothing
+  let raceDrag = false, rx0 = null, ry0 = null;
+  $("race").addEventListener("pointerdown", e=>{
+    if(e.pointerType==="mouse"){ raceDrag = true; racePick(e.clientX); return; }
+    rx0 = e.clientX; ry0 = e.clientY; raceDrag = false;
+  });
+  $("race").addEventListener("pointermove", e=>{
+    if(e.pointerType==="mouse"){ racePick(e.clientX); return; }
+    if(rx0!=null && !raceDrag){ const dx = Math.abs(e.clientX-rx0), dy = Math.abs(e.clientY-ry0); if(dx>6 && dx>dy) raceDrag = true; }
+    if(raceDrag) racePick(e.clientX);
+  });
+  $("race").addEventListener("pointerup", e=>{ if(e.pointerType!=="mouse" && rx0!=null && !raceDrag) racePick(rx0); rx0 = null; raceDrag = false; });
+  $("race").addEventListener("pointercancel", ()=>{ rx0 = null; raceDrag = false; });
+  $("race").addEventListener("pointerleave", e=>{ if(e.pointerType==="mouse") raceClear(); });
   addEventListener("pointerup", ()=>raceDrag=false);
-  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")){ raceDay = null; drawRace(); } }, true);
+  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && raceDay!=null && !e.target.closest("#race")) raceClear(); }, true);
+  // keys: left and right a day (a week with Shift), Home and End the ends of the year, Escape closes
+  $("race").addEventListener("keydown", e=>{
+    if(!race) return;
+    if(e.key==="Escape"){ if(raceDay!=null){ e.preventDefault(); raceClear(); } return; }
+    const curEnd = (race.list.find(v=>v.y===race.curYr) || race.list[race.list.length-1]).cum.length-1, n = e.shiftKey ? 7 : 1;
+    const d = e.key==="Home" ? 0 : e.key==="End" ? 364 : e.key==="ArrowLeft" || e.key==="ArrowRight" ? (raceDay==null ? curEnd : raceDay + (e.key==="ArrowLeft" ? -n : n)) : null;
+    if(d==null) return;
+    e.preventDefault(); moveRace(Math.max(0, Math.min(364, d)));
+  });
 
   // ---- Arrivals between two dates
   function calc(){
@@ -2918,7 +3095,11 @@ footer strong{color:var(--label);font-weight:600}
     $("calcNote").textContent = note + ".";
   }
   function setCalc(from, to){ $("calcFrom").value = from; $("calcTo").value = to; calc(); }
+  // The chosen preset stays lit, and follows new figures as they arrive
+  let calcMode = null;
+  const markPreset = p => document.querySelectorAll("#calcPresets button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.p === p)));
   function calcPreset(p){
+    calcMode = p; markPreset(p);
     const last = sorted[sorted.length-1].date, back = n => new Date(parse(last) - (n-1)*DAY).toISOString().slice(0,10);
     if(p==="labour") setCalc(PERIODS.labour, last);
     else if(p==="burnham") setCalc(PERIODS.burnham, last);
@@ -2926,51 +3107,55 @@ footer strong{color:var(--label);font-weight:600}
     else if(p==="12m") setCalc(back(365), last);
     else if(p==="30d") setCalc(back(30), last);
   }
-  $("calcFrom").addEventListener("change", calc); $("calcTo").addEventListener("change", calc);
+  ["calcFrom","calcTo"].forEach(id=>$(id).addEventListener("change", ()=>{ calcMode = null; markPreset(null); calc(); }));   // typed dates: no preset
   $("calcPresets").addEventListener("click", e=>{ const b = e.target.closest("button"); if(b && sorted.length) calcPreset(b.dataset.p); });
   let calcReady = false;
   function initCalc(){
     const first = "2018-01-01", last = sorted[sorted.length-1].date;
     ["calcFrom","calcTo"].forEach(id=>{ $(id).min = first; $(id).max = last; });
-    if(!calcReady){ calcReady = true; calcPreset("year"); } else calc();
+    if(!calcReady){ calcReady = true; calcPreset("year"); } else if(calcMode) calcPreset(calcMode); else calc();
   }
 
   // ---- Longest spells without crossings
   function drawQuiet(){
     const runs = []; let start = null, len = 0;
-    const days = allDays().filter(d=>d.date >= "2020-01-01");   // crossings were rare before 2020
+    const days = allDays().filter(d=>d.date >= STEADY);   // crossings were rare before 2020
     days.forEach((d,i)=>{
       if(d.migrants===0){ if(!len) start = d.date; len++; }
       if(d.migrants!==0 || i===days.length-1){ if(len) runs.push({start, end: d.migrants===0 ? d.date : days[i-1].date, len}); len = 0; }
     });
     const top = runs.sort((a,b)=>b.len-a.len).slice(0,5);
     const yearOf = iso => " " + iso.slice(0,4);
+    const lastD = days.length ? days[days.length-1].date : "";   // a spell ending on the latest day may still be going
     let h = '<thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Days</th></tr></thead><tbody>';
-    top.forEach(r=>{ h += '<tr><td>'+dShort.format(parse(r.start))+yearOf(r.start)+'</td><td>'+dShort.format(parse(r.end))+yearOf(r.end)+'</td><td>'+r.len+'</td></tr>'; });
+    top.forEach(r=>{
+      const live = r.end === lastD && days[days.length-1].migrants === 0;
+      h += '<tr><td>'+dShort.format(parse(r.start))+yearOf(r.start)+'</td><td>'+(live ? 'Still going' : dShort.format(parse(r.end))+yearOf(r.end))+'</td><td>'+r.len+(live ? ' so far' : '')+'</td></tr>';
+    });
     $("quietTbl").innerHTML = h + '</tbody>';
   }
 
   // ---- Patterns: average people a day by weekday or month
   let patMode = "dow";
   function drawPat(){
-    const box = $("pat"), days = allDays();
+    const box = $("pat"), days = allDays().filter(d=>d.date >= STEADY);   // same years as Quiet Spells
     const labels = patMode==="dow" ? ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const sum = labels.map(()=>0), cnt = labels.map(()=>0);
     days.forEach(d=>{ const t = parse(d.date); const k = patMode==="dow" ? (t.getUTCDay()+6)%7 : t.getUTCMonth(); sum[k] += d.migrants; cnt[k]++; });
     const avg = sum.map((v,i)=>cnt[i] ? v/cnt[i] : 0), mx = Math.max(...avg, 1);
-    const W = Math.max(280, Math.round(box.clientWidth || 320)), H = Math.round(Math.min(220, Math.max(170, W*0.3)));
+    const W = Math.round(box.clientWidth || 320), H = Math.round(Math.min(220, Math.max(170, W*0.3)));
     const m = {t:22, r:4, b:24, l:4}, iw = W-m.l-m.r, ih = H-m.t-m.b, slot = iw/labels.length, bw = Math.min(slot*.62, 56);
     const peak = avg.indexOf(Math.max(...avg));
-    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since 2018: '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'.">';
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since '+STEADY.slice(0,4)+': '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'.">';
     s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+(m.t+ih)+'" y2="'+(m.t+ih)+'" stroke="var(--sep)" stroke-width=".5"/>';
     labels.forEach((l,i)=>{
       const h = Math.max(avg[i]/mx*ih, 2), x0 = m.l + i*slot + (slot-bw)/2;
       s += '<rect x="'+x0.toFixed(1)+'" y="'+(m.t+ih-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+Math.min(4,bw/2)+'" fill="var(--mbar)"'+(i===peak?'':' opacity=".55"')+'><title>'+l+': '+Math.round(avg[i])+' a day on average</title></rect>';
-      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(m.t+ih-h-5).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="'+(i===peak?600:400)+'"'+(i===peak?' style="fill:var(--label)"':'')+'>'+Math.round(avg[i])+'</text>';
-      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="11">'+(W<420 && patMode==="month" ? l[0] : l)+'</text>';
+      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(m.t+ih-h-5).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="'+(i===peak?600:400)+'"'+(i===peak?' style="fill:var(--label)"':'')+'>'+Math.round(avg[i])+'</text>';
+      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="12">'+(slot >= 25 ? l : l[0])+'</text>';
     });
     box.innerHTML = s + '</svg>';
-    $("patNote").textContent = "Average number of people arriving a day, " + (patMode==="dow" ? "by day of the week" : "by month") + ", " + sorted[0].date.slice(0,4) + " to " + sorted[sorted.length-1].date.slice(0,4) + ". Busiest: " + (patMode==="dow" ? ["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"][peak] : ["January","February","March","April","May","June","July","August","September","October","November","December"][peak]) + ".";
+    $("patNote").textContent = "Since " + STEADY.slice(0,4) + ". Busiest: " + (patMode==="dow" ? ["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"][peak] : ["January","February","March","April","May","June","July","August","September","October","November","December"][peak]) + ".";
   }
   document.querySelectorAll("#patSeg button").forEach(b=>b.addEventListener("click", ()=>{
     patMode = b.dataset.pat;
@@ -3081,9 +3266,9 @@ footer strong{color:var(--label);font-weight:600}
       const closes = p.closes ? dShort.format(parse(p.closes)) + " " + p.closes.slice(0,4) : "";
       const need = target - p.signatures;
       if(p.state==="open") m.append(chip, (need > 0 ? fmt(need) + " more for " + (target===10000?"a government response":"a debate") : "Enough for a debate") + (closes ? " · until " + closes : ""));
-      else m.append(chip, closes);
+      else m.append(chip, (closes ? closes + " · " : "") + fmt(p.signatures) + " of " + fmt(target));   // the chip already says Closed
       if(p.response) m.append(" · Government responded");
-      const bar = document.createElement("span"); bar.className = "pbar";
+      const bar = document.createElement("span"); bar.className = "pbar" + (p.state === "open" ? "" : " done");   // closed: a grey bar
       const fill = document.createElement("i"); fill.style.width = Math.min(100, p.signatures/target*100).toFixed(1) + "%"; bar.append(fill);
       li.append(a, n, m, bar); ul.append(li);
     });
@@ -3110,7 +3295,7 @@ footer strong{color:var(--label);font-weight:600}
   /* ---------------------------------------------------- first-visit tour of the map */
   const TOUR = [
     {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
-    {el:() => document.querySelector("#lmap .boat"), h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
+    {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
     {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
     {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
     {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
@@ -3186,9 +3371,19 @@ footer strong{color:var(--label);font-weight:600}
   async function start(){
     statusAt = Date.now();
     try{
-      useData(await getJSON("data.json"));
+      const early = window.__data; window.__data = null;   // started in the <head>; fetched again if that one failed
+      useData(early ? await early.catch(() => getJSON("data.json")) : await getJSON("data.json"));
       if(!days.length) throw 0;
-      renderAll(true);
+      // the saved offline copy may be old: look for newer figures at the next minute's check
+      if(meta.checkedAt && Date.now() - new Date(meta.checkedAt) > 120 * MIN) statusAt = 0;
+      // drawn in short steps, so a tap straight after loading isn't kept waiting (same order as renderAll)
+      const y = () => new Promise(r => window.scheduler && scheduler.yield ? scheduler.yield().then(r) : setTimeout(r, 0));
+      renderHero(); renderGlance(); await y();
+      renderOtd(); await y();
+      drawHeat(); await y();
+      drawYears(); await y();
+      renderRecords(); await y();
+      renderMain(); await y();
       const line = drawChart();
       const cc = $("chart").closest(".rv"); if(cc.classList.contains("on") || reduced) animateLine(line); else cc.addEventListener("reveal", () => animateLine($("chart").querySelector("#chartLine,#chartBars")), {once:true});
       let lw = 0; if("ResizeObserver" in window) new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; drawChart(); sizeHeat(); } }).observe($("chart"));
@@ -3272,9 +3467,8 @@ footer strong{color:var(--label);font-weight:600}
     e.stopPropagation();
     if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
     else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
-    stripUpdate();
+    stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
-  addEventListener("resize", () => { if(!$("news").hidden) newsRoom(); });   // with the strip hidden, the resize handler above already refits the map card
 
   start(); loadWeather(); loadNews();
   whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
