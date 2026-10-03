@@ -606,6 +606,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px}
@@ -617,11 +618,17 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .list .nm small{display:block;height:4px;border-radius:2px;background:var(--fill);margin-top:6px;overflow:hidden}
 .list .nm small b{display:block;height:100%;width:0;background:var(--indigo);border-radius:2px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .list .pc{font-weight:600;font-variant-numeric:tabular-nums;font-size:.882rem}
+/* Nationalities: same-length tracks so bars compare, and the change on a year earlier */
+#nats li{grid-template-columns:28px 1fr 3.6em}
+#nats .pc{text-align:right}
+#nats .nm small{background:transparent}
+#nats .chg{display:block;font-style:normal;font-size:.765rem;color:var(--label2)}
 .minibars{display:flex;align-items:flex-end;gap:6px;height:90px;margin-top:14px}
 .minibars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
 .minibars span{flex:none;width:100%;min-height:4px;border-radius:6px;background:var(--teal);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .on .minibars span{transform:scaleY(1)}
 .minibars em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
+.minibars b{font-size:.706rem;font-weight:600;color:var(--label2);font-variant-numeric:tabular-nums}
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .vs div{background:var(--fill);border-radius:16px;padding:12px 14px}
 .vs b{display:block;font:700 1.6rem/1.1 var(--round)}
@@ -633,6 +640,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records .ic svg{width:19px;height:19px}
 .records .t{font-size:.941rem}.records .t small{display:block;color:var(--label2);font-size:.765rem;margin-top:1px}
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
+@media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
 
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
@@ -828,16 +836,19 @@ footer strong{color:var(--label);font-weight:600}
 .mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
 .mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:10px;min-height:44px;padding:0 10px;width:100%;min-width:0}
 .mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+@media (hover:none) and (pointer:coarse){.mb .calc-dates input::-webkit-calendar-picker-indicator{display:none}}   /* phones open the picker on tap; the icon only crowds out the year */
 .mb .presets{display:flex;flex-wrap:wrap;gap:6px}
 .mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--label);font:600 .765rem/1 var(--font);border-radius:9px;padding:0 12px;height:34px;cursor:pointer}
 .mb .presets button::after{content:"";position:absolute;inset:-5px 0}
 .mb .presets button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.mb .presets button[aria-pressed="true"]{background:var(--seg-on,var(--fill2));box-shadow:0 0 0 .5px var(--sep),0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .mb .calc-out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:12px;border-top:.5px solid var(--sep)}
-.mb .calc-out div{display:grid;gap:1px}
-.mb .calc-out b{font:700 1.4rem/1.15 var(--round);font-variant-numeric:tabular-nums}
+.mb .calc-out div{display:grid;gap:1px;align-content:start}
+.mb .calc-out b{font:700 clamp(1.15rem,6vw,1.4rem)/1.15 var(--round);font-variant-numeric:tabular-nums}
 .mb .calc-out span{font-size:.765rem;color:var(--label2)}
 .mb .calc-note{font-size:.824rem;color:var(--label2)}
 /* Patterns */
+.mb .pat-h{font:600 .824rem/1.2 var(--font);color:var(--label2);margin:0 0 4px}
 .mb .pat svg{display:block;width:100%;height:auto}
 .mb .pat svg text{font-family:var(--font);fill:var(--label2)}
 .mb .rep-card{padding:16px;display:grid;gap:12px}
@@ -845,9 +856,9 @@ footer strong{color:var(--label);font-weight:600}
 .mb .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .mb .rep-head .sub{font-size:.882rem;color:var(--label2)}
 .mb .dots svg{display:block;width:100%;height:auto}
-.mb .dots .boats{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
-.mb .dots .dd{transition:opacity .15s ease}
-.mb .dots.hovering .dd:not(.on){opacity:.3}
+.mb .dots .dd.alt{fill:color-mix(in srgb,var(--mbar) 60%,var(--card))}   /* every other day a lighter blue, so days show */
+.mb .dots [data-day]{transition:opacity .15s ease}
+.mb .dots.hovering [data-day]:not(.on){opacity:.3}
 .mb .dots{animation:fadeIn .35s ease-out}
 .mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
 .mb .subscribe.leaving{animation:lift .25s ease-in both}
@@ -1131,11 +1142,11 @@ footer strong{color:var(--label);font-weight:600}
             <label>To<input type="date" id="calcTo"></label>
           </div>
           <div class="presets" id="calcPresets">
-            <button type="button" data-p="labour">Since Labour</button>
-            <button type="button" data-p="burnham">Since Burnham</button>
-            <button type="button" data-p="year">This year</button>
-            <button type="button" data-p="12m">Last 12 months</button>
-            <button type="button" data-p="30d">Last 30 days</button>
+            <button type="button" data-p="labour" aria-pressed="false">Since Labour</button>
+            <button type="button" data-p="burnham" aria-pressed="false">Since Burnham</button>
+            <button type="button" data-p="year" aria-pressed="false">This year</button>
+            <button type="button" data-p="12m" aria-pressed="false">Last 12 months</button>
+            <button type="button" data-p="30d" aria-pressed="false">Last 30 days</button>
           </div>
           <div class="calc-out" aria-live="polite">
             <div><b id="calcP">–</b><span>people</span></div>
@@ -1161,18 +1172,13 @@ footer strong{color:var(--label);font-weight:600}
         <button type="button" data-pat="month" aria-pressed="false">Month</button>
       </div>
     </div>
-    <div class="card pat-card rv"><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
+    <div class="card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
     <p class="foot rv" id="patNote"></p>
   </section>
 
   <!-- ============================================================ EVERY PERSON (desktop) -->
   <section class="mb area-rep" aria-labelledby="repTitle">
-    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 7 Days</h2>
-      <div class="seg" id="repSeg" role="group" aria-label="Period">
-        <button type="button" data-rep="7" aria-pressed="true">Week</button>
-        <button type="button" data-rep="30" aria-pressed="false">Month</button>
-      </div>
-    </div>
+    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
     <div class="card rep-card rv">
       <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
       <div class="dots" id="dots"></div>
@@ -1194,12 +1200,13 @@ footer strong{color:var(--label);font-weight:600}
       <article class="card rv">
         <h3>Top nationalities</h3>
         <ul class="list" id="nats"></ul>
+        <div class="cost" id="natNote"></div>
       </article>
       <article class="card rv">
         <h3>People per boat</h3>
         <div class="val num" id="pbV">–</div>
         <div class="sub" id="pbS">&nbsp;</div>
-        <div class="minibars" id="pbBars"></div>
+        <div class="minibars" id="pbBars" role="list"></div>
       </article>
       <article class="card rv">
         <h3>UK–France returns deal</h3>
@@ -2504,16 +2511,21 @@ footer strong{color:var(--label);font-weight:600}
     }
     if(nat && nat.top){
       const mx = nat.top[0].pc;
-      $("nats").innerHTML = nat.top.map(n => '<li><span class="flag" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name + '<small><b data-w="' + (n.pc / mx * 100).toFixed(1) + '"></b></small></span><span class="pc">' + n.pc + "%</span></li>").join("");
+      $("nats").innerHTML = nat.top.map(n => '<li><span class="flag" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
+        + (n.change != null ? '<em class="chg">' + (n.change > 0 ? "up " : "down ") + Math.abs(n.change) + "% on a year earlier</em>" : "")
+        + '<small><b data-w="' + (n.pc / mx * 100).toFixed(1) + '"></b></small></span><span class="pc">' + Number(n.pc).toFixed(1) + "%</span></li>").join("");
+      if(nat.other != null && nat.total) $("natNote").innerHTML = "Other nationalities <b>" + (nat.other / nat.total * 100).toFixed(1) + "%</b> of " + fmt(nat.total) + " people, " + nat.period;
       onReveal($("nats"), () => $("nats").querySelectorAll("small b").forEach((b, i) => setTimeout(() => b.style.width = b.dataset.w + "%", reduced ? 0 : i * 90)));
     }
   }
   function renderPerBoat(pb){
     if(!pb || !pb.years) return;
     countUp($("pbV"), pb.last90 ? pb.last90.avg : pb.years[pb.years.length-1].avg);
-    $("pbS").textContent = "a boat on average over the last 90 days" + (pb.years.length ? ", up from " + pb.years[0].avg + " in " + pb.years[0].y : "");
+    const part = pb.partialYear ? String(pb.partialYear) : "";   // this year is not over yet
+    $("pbS").textContent = "a boat on average over the last 90 days" + (pb.years.length ? ", up from " + pb.years[0].avg + " in " + pb.years[0].y : "") + (part ? " · *" + part + " so far" : "");
     const mx = Math.max(...pb.years.map(y => y.avg));
-    $("pbBars").innerHTML = pb.years.map((y, i) => '<div><span style="height:' + (y.avg / mx * 100) + '%;transition-delay:' + i * 70 + 'ms" title="' + y.y + ': ' + y.avg + ' a boat"></span><em>' + String(y.y).slice(2) + "</em></div>").join("");
+    // Each column shows its figure on top; the full numbers are read out by screen readers
+    $("pbBars").innerHTML = pb.years.map((y, i) => '<div role="listitem" aria-label="' + y.y + (String(y.y) === part ? " so far" : "") + ": " + y.avg + " people a boat" + (y.people != null ? ", " + fmt(y.people) + " people in " + fmt(y.boats) + " boats" : "") + '"><b aria-hidden="true">' + y.avg + '</b><span style="height:' + (y.avg / mx * 80) + '%;transition-delay:' + i * 70 + 'ms"></span><em aria-hidden="true">' + String(y.y).slice(2) + (String(y.y) === part ? "*" : "") + "</em></div>").join("");
   }
   function renderReturns(r){
     if(!r || r.out == null) return;
@@ -2538,10 +2550,12 @@ footer strong{color:var(--label);font-weight:600}
     let best = 0, run = 0, bStart = "", bEnd = "", s = "";
     inYear.forEach(d => { if(d.migrants === 0){ if(!run) s = d.date; run++; if(run > best){ best = run; bStart = s; bEnd = d.date; } } else run = 0; });
     const rows = [
-      ["trophy", "#FF9500", "Record day since 2018", dLong.format(parse(rec.date)), fmt(rec.migrants)],
-      ["bolt", "#007AFF", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)],
-      ["clock", "#5856D6", "Days since the last crossing", lastX ? "Last: " + dMid.format(parse(lastX.date)) : "", String(since)],
-      ["waves", "#34C759", "Longest spell without crossings in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "", best + (best === 1 ? " day" : " days")]
+      ["trophy", "#FF9500", "Record day since 2018", dMid.format(parse(rec.date)) + " " + rec.date.slice(0,4), fmt(rec.migrants)],
+      busy.migrants ? ["bolt", "#007AFF", "Busiest day of " + yr, dMid.format(parse(busy.date)) + " · " + plural(busy.boats, "boat", "boats"), fmt(busy.migrants)]
+        : ["bolt", "#007AFF", "No crossings yet in " + yr, "", "–"],   // early January
+      ["clock", "#5856D6", "Since the last crossing", !lastX ? "" : since === 0 ? "Crossings on " + dMid.format(parse(last.date)) : "Last: " + dMid.format(parse(lastX.date)),
+        !lastX ? "–" : since === 0 ? "Today" : since + (since === 1 ? " day" : " days")],
+      ["waves", "#34C759", "Longest quiet spell in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "No quiet days yet", best ? best + (best === 1 ? " day" : " days") : "–"]
     ];
     $("records").innerHTML = rows.map(r => '<li><span class="ic" style="background:' + r[1] + '">' + RIC[r[0]] + '</span><span class="t">' + r[2] + "<small>" + r[3] + '</small></span><span class="v">' + r[4] + "</span></li>").join("");
   }
@@ -2635,46 +2649,50 @@ footer strong{color:var(--label);font-weight:600}
   };
   const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
   const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
-  let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 7, extras = {};
+  const STEADY = "2020-01-01";   // crossings became a year-round pattern
+  let newSince = null, busyMin = Infinity, seenChecked = false, repDays = 30, extras = {};
 
   function drawDots(){
     const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
-    const days = sorted.slice(-repDays);
+    const days = allDays().slice(-repDays);   // every calendar day, quiet ones too
     const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0);
     const from = dShort.format(parse(days[0].date)), to = dShort.format(parse(days[days.length-1].date));
     $("repTitle").textContent = "Every Person, Last " + repDays + " Days";
     $("repN").textContent = fmt(people) + (people===1 ? " person" : " people");
-    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to;
+    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to + " · crossings on " + days.filter(d=>d.migrants).length + " of " + days.length + " days";
     const W = Math.max(260, Math.round(box.clientWidth || 320));
     // Dot spacing shrinks for bigger totals so the block stays a sensible height
     let pitch = 9;
     while(pitch > 5 && Math.ceil(people/Math.floor(W/pitch))*pitch > 420) pitch -= .5;
     const d = pitch*.62, cols = Math.max(1, Math.floor((W - d)/pitch)), rows = Math.ceil(people/cols);
     const off = (W - (cols-1)*pitch)/2;
-    // Dots run day by day, drawn as exact circles (one shape per day). Hovering a day highlights it.
+    // Dots run day by day, drawn as exact circles (one shape per day), every other day a lighter blue. Hovering a day highlights it.
     const last = rows ? people - (rows-1)*cols : 0;
     const lastX = (W - (last-1)*pitch)/2, rr = (d/2).toFixed(2), dd = d.toFixed(2);
-    let s = "", k = 0;
+    let s = "", k = 0, j = 0;
     days.forEach(day=>{
       if(!day.migrants) return;
+      j++;
       let g = "";
       for(const end = k + day.migrants; k < end; k++){
         const r2 = Math.floor(k/cols), c = k - r2*cols;
         const x = (r2===rows-1 ? lastX : off) + c*pitch - d/2, y = r2*pitch + pitch/2;
         g += "M" + x.toFixed(1) + " " + y.toFixed(1) + "a" + rr + " " + rr + " 0 1 0 " + dd + " 0a" + rr + " " + rr + " 0 1 0 -" + dd + " 0";
       }
-      s += '<path class="dd" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
+      s += '<path class="dd' + (j%2 ? '' : ' alt') + '" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
     });
     const dotsH = rows*pitch;
-    // Boats: one boat emoji each (the device draws its own, e.g. Apple's on iPhone and Mac), wrapped and centred
+    // Boats: one plain boat shape each, day by day, wrapped and centred
     const bp = 22, bh = 24, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
-    let b2 = "";
-    for(let i=0; i<boats; i++){
-      const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
-      const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
-      b2 += '<text x="' + x.toFixed(1) + '" y="' + yy + '">\u{1F6A4}</text>';
-    }
-    if(b2) b2 = '<g class="boats" font-size="17" text-anchor="middle">' + b2 + '</g>';
+    let b2 = "", i = 0;
+    days.forEach(day=>{
+      for(let n2 = 0; n2 < day.boats; n2++, i++){
+        const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
+        const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
+        b2 += '<use href="#dg" x="' + (x-10).toFixed(1) + '" y="' + (yy-12) + '" width="20" height="8" data-day="' + day.date + '"/>';
+      }
+    });
+    if(b2) b2 = '<defs><symbol id="dg" viewBox="-30 -8 60 18"><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="var(--boat)"/></symbol></defs><g class="boats">' + b2 + '</g>';
     const H = Math.ceil(dotsH + (boats ? 14 + brows*bh : 0)) || 20;
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + fmt(people) + ' dots for ' + fmt(people) + ' people and ' + fmt(boats) + ' boat icons, ' + from + ' to ' + to + '">'
       + (people ? '<g fill="var(--mbar)">' + s + '</g>' : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
@@ -2684,10 +2702,10 @@ footer strong{color:var(--label);font-weight:600}
   // Hover a day's dots: that day stays bright and its figures show in the header
   let repHead = "";
   $("dots").addEventListener("mouseover", e=>{
-    const p = e.target.closest(".dd"); if(!p) return;
-    const day = sorted.find(x=>x.date===p.dataset.day); if(!day) return;
+    const p = e.target.closest("[data-day]"); if(!p) return;
+    const day = allDays().find(x=>x.date===p.dataset.day); if(!day) return;
     $("dots").classList.add("hovering");
-    $("dots").querySelectorAll(".dd").forEach(x=>x.classList.toggle("on", x===p));
+    $("dots").querySelectorAll("[data-day]").forEach(x=>x.classList.toggle("on", x.dataset.day===p.dataset.day));   // the day's dots and boats together
     if(!repHead) repHead = $("repS").textContent;
     $("repS").textContent = dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people · " + fmt(day.boats) + (day.boats===1?" boat":" boats");
   });
@@ -2697,11 +2715,6 @@ footer strong{color:var(--label);font-weight:600}
     $("dots").classList.remove("hovering");
     if(repHead){ $("repS").textContent = repHead; repHead = ""; }
   });
-  document.querySelectorAll("#repSeg button").forEach(b=>b.addEventListener("click", ()=>{
-    repDays = +b.dataset.rep;
-    document.querySelectorAll("#repSeg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
-    drawDots();
-  }));
 
 
   /* =========== Calendar =========== */
@@ -3013,7 +3026,11 @@ footer strong{color:var(--label);font-weight:600}
     $("calcNote").textContent = note + ".";
   }
   function setCalc(from, to){ $("calcFrom").value = from; $("calcTo").value = to; calc(); }
+  // The chosen preset stays lit, and follows new figures as they arrive
+  let calcMode = null;
+  const markPreset = p => document.querySelectorAll("#calcPresets button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.p === p)));
   function calcPreset(p){
+    calcMode = p; markPreset(p);
     const last = sorted[sorted.length-1].date, back = n => new Date(parse(last) - (n-1)*DAY).toISOString().slice(0,10);
     if(p==="labour") setCalc(PERIODS.labour, last);
     else if(p==="burnham") setCalc(PERIODS.burnham, last);
@@ -3021,51 +3038,55 @@ footer strong{color:var(--label);font-weight:600}
     else if(p==="12m") setCalc(back(365), last);
     else if(p==="30d") setCalc(back(30), last);
   }
-  $("calcFrom").addEventListener("change", calc); $("calcTo").addEventListener("change", calc);
+  ["calcFrom","calcTo"].forEach(id=>$(id).addEventListener("change", ()=>{ calcMode = null; markPreset(null); calc(); }));   // typed dates: no preset
   $("calcPresets").addEventListener("click", e=>{ const b = e.target.closest("button"); if(b && sorted.length) calcPreset(b.dataset.p); });
   let calcReady = false;
   function initCalc(){
     const first = "2018-01-01", last = sorted[sorted.length-1].date;
     ["calcFrom","calcTo"].forEach(id=>{ $(id).min = first; $(id).max = last; });
-    if(!calcReady){ calcReady = true; calcPreset("year"); } else calc();
+    if(!calcReady){ calcReady = true; calcPreset("year"); } else if(calcMode) calcPreset(calcMode); else calc();
   }
 
   // ---- Longest spells without crossings
   function drawQuiet(){
     const runs = []; let start = null, len = 0;
-    const days = allDays().filter(d=>d.date >= "2020-01-01");   // crossings were rare before 2020
+    const days = allDays().filter(d=>d.date >= STEADY);   // crossings were rare before 2020
     days.forEach((d,i)=>{
       if(d.migrants===0){ if(!len) start = d.date; len++; }
       if(d.migrants!==0 || i===days.length-1){ if(len) runs.push({start, end: d.migrants===0 ? d.date : days[i-1].date, len}); len = 0; }
     });
     const top = runs.sort((a,b)=>b.len-a.len).slice(0,5);
     const yearOf = iso => " " + iso.slice(0,4);
+    const lastD = days[days.length-1].date;   // a spell ending on the latest day may still be going
     let h = '<thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Days</th></tr></thead><tbody>';
-    top.forEach(r=>{ h += '<tr><td>'+dShort.format(parse(r.start))+yearOf(r.start)+'</td><td>'+dShort.format(parse(r.end))+yearOf(r.end)+'</td><td>'+r.len+'</td></tr>'; });
+    top.forEach(r=>{
+      const live = r.end === lastD && days[days.length-1].migrants === 0;
+      h += '<tr><td>'+dShort.format(parse(r.start))+yearOf(r.start)+'</td><td>'+(live ? 'Still going' : dShort.format(parse(r.end))+yearOf(r.end))+'</td><td>'+r.len+(live ? ' so far' : '')+'</td></tr>';
+    });
     $("quietTbl").innerHTML = h + '</tbody>';
   }
 
   // ---- Patterns: average people a day by weekday or month
   let patMode = "dow";
   function drawPat(){
-    const box = $("pat"), days = allDays();
+    const box = $("pat"), days = allDays().filter(d=>d.date >= STEADY);   // same years as Quiet Spells
     const labels = patMode==="dow" ? ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"] : ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const sum = labels.map(()=>0), cnt = labels.map(()=>0);
     days.forEach(d=>{ const t = parse(d.date); const k = patMode==="dow" ? (t.getUTCDay()+6)%7 : t.getUTCMonth(); sum[k] += d.migrants; cnt[k]++; });
     const avg = sum.map((v,i)=>cnt[i] ? v/cnt[i] : 0), mx = Math.max(...avg, 1);
-    const W = Math.max(280, Math.round(box.clientWidth || 320)), H = Math.round(Math.min(220, Math.max(170, W*0.3)));
+    const W = Math.round(box.clientWidth || 320), H = Math.round(Math.min(220, Math.max(170, W*0.3)));
     const m = {t:22, r:4, b:24, l:4}, iw = W-m.l-m.r, ih = H-m.t-m.b, slot = iw/labels.length, bw = Math.min(slot*.62, 56);
     const peak = avg.indexOf(Math.max(...avg));
-    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since 2018: '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'.">';
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since '+STEADY.slice(0,4)+': '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'.">';
     s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+(m.t+ih)+'" y2="'+(m.t+ih)+'" stroke="var(--sep)" stroke-width=".5"/>';
     labels.forEach((l,i)=>{
       const h = Math.max(avg[i]/mx*ih, 2), x0 = m.l + i*slot + (slot-bw)/2;
       s += '<rect x="'+x0.toFixed(1)+'" y="'+(m.t+ih-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+Math.min(4,bw/2)+'" fill="var(--mbar)"'+(i===peak?'':' opacity=".55"')+'><title>'+l+': '+Math.round(avg[i])+' a day on average</title></rect>';
-      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(m.t+ih-h-5).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="'+(i===peak?600:400)+'"'+(i===peak?' style="fill:var(--label)"':'')+'>'+Math.round(avg[i])+'</text>';
-      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="11">'+(W<420 && patMode==="month" ? l[0] : l)+'</text>';
+      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(m.t+ih-h-5).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="'+(i===peak?600:400)+'"'+(i===peak?' style="fill:var(--label)"':'')+'>'+Math.round(avg[i])+'</text>';
+      s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="12">'+(slot >= 25 ? l : l[0])+'</text>';
     });
     box.innerHTML = s + '</svg>';
-    $("patNote").textContent = "Average number of people arriving a day, " + (patMode==="dow" ? "by day of the week" : "by month") + ", " + sorted[0].date.slice(0,4) + " to " + sorted[sorted.length-1].date.slice(0,4) + ". Busiest: " + (patMode==="dow" ? ["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"][peak] : ["January","February","March","April","May","June","July","August","September","October","November","December"][peak]) + ".";
+    $("patNote").textContent = "Since " + STEADY.slice(0,4) + ". Busiest: " + (patMode==="dow" ? ["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"][peak] : ["January","February","March","April","May","June","July","August","September","October","November","December"][peak]) + ".";
   }
   document.querySelectorAll("#patSeg button").forEach(b=>b.addEventListener("click", ()=>{
     patMode = b.dataset.pat;
