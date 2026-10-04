@@ -1,40 +1,48 @@
 {
- "checkedAt": "2026-10-04T05:16:09Z",
+ "checkedAt": "2026-10-04T09:39:34Z",
  "items": [
   {
-   "title": "UK and European Union must 'urgently agree' on new deal or risk mass job losses across auto industry",
-   "url": "https://www.gbnews.com/lifestyle/cars/uk-european-union-new-deal-job-losses-auto-industry",
-   "source": "GB News",
-   "published": "2026-10-04T05:00:01Z",
-   "breaking": true
-  },
-  {
-   "title": "'Couldn't make it up!' Britain 'dishes out 1,000 hijabs to illegal migrants' - and YOU have to pay",
-   "url": "https://www.gbnews.com/news/migrant-crisis-hijabs-illegal-migrants",
-   "source": "GB News",
-   "published": "2026-10-04T04:32:48Z",
-   "breaking": true
-  },
-  {
-   "title": "SAS 'hunted and killed Iran-backed gang members who executed British troops'",
-   "url": "https://www.gbnews.com/news/sas-hunted-killed-iran-gang-members-iraq-war",
-   "source": "GB News",
-   "published": "2026-10-04T03:45:01Z",
-   "breaking": true
-  },
-  {
-   "title": "Burnham scraps controversial plans to curb jury trials",
-   "url": "https://www.bbc.co.uk/news/articles/crq5nd9dgz68o?at_medium=RSS&at_campaign=rss",
+   "title": "Badenoch says Tory policy is to keep pension triple lock",
+   "url": "https://www.bbc.co.uk/news/videos/cmed3094q7qqo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-04T03:07:30Z",
+   "published": "2026-10-04T09:01:34Z",
    "breaking": true
   },
   {
-   "title": "Wes Streeting admits Donald Trump is right about Britain after branding President 'sad little man'",
-   "url": "https://www.gbnews.com/politics/wes-streeting-donald-trump-britain-defence",
+   "title": "Daughter of domestic abuse victim hailed 'force of nature' after smashing charity fundraising target",
+   "url": "https://www.gbnews.com/news/cardiff-half-marathon-domestic-abuse-victim-karen-haynes",
    "source": "GB News",
-   "published": "2026-10-04T02:30:22Z",
+   "published": "2026-10-04T08:54:11Z",
+   "breaking": true
+  },
+  {
+   "title": "'Get on with the day job' - Welsh Tory leader attacks first minister's independence push",
+   "url": "https://www.bbc.co.uk/news/articles/cwjdmkgemmd4o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-04T08:03:21Z",
+   "breaking": true
+  },
+  {
+   "title": "Thousands of bikers make annual pilgrimage to remember fallen heroes",
+   "url": "https://www.gbnews.com/news/ride-to-the-wall-thousands-of-bikers-make-annual-pilgrimage-to-remember-fallen-heroes",
+   "source": "GB News",
+   "published": "2026-10-04T07:59:27Z",
+   "breaking": true
+  },
+  {
+   "title": "Man, 47, found 'shot in the head' in British van packed with 10 illegal migrants by side of French motorway",
+   "url": "https://www.gbnews.com/news/troyes-shooting-man-shot-in-the-head-british-van-illegal-migrants-french-motorway",
+   "source": "GB News",
+   "published": "2026-10-04T07:38:27Z",
    "breaking": true
   }
- ]
+ ],
+ "reported": {
+  "date": "2026-10-04",
+  "title": "'Couldn't make it up!' Britain 'dishes out 1,000 hijabs to illegal migrants' - and YOU have to pay",
+  "url": "https://www.gbnews.com/news/migrant-crisis-hijabs-illegal-migrants",
+  "source": "GB News",
+  "published": "2026-10-04T04:32:48Z",
+  "ground": false
+ }
 }
