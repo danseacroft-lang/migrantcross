@@ -369,6 +369,11 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
 .info-pop.sheet{overflow:auto;overscroll-behavior:contain;border-radius:20px;padding:16px 18px}
+.info-pop.sheet > :first-child{padding-right:34px}   /* room for the close button */
+/* the close button on a phone sheet: it floats over the sheet's top right corner, so it stays put while the sheet scrolls */
+.pop-x{position:fixed;z-index:62;width:30px;height:30px;border:0;border-radius:50%;background:var(--fill2);color:var(--label);display:grid;place-items:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.pop-x svg{width:10px;height:10px}
+.pop-x[hidden]{display:none}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
@@ -2268,6 +2273,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       pop.classList.add("sheet");
       Object.assign(pop.style, {left:"10px", top:"auto", width:(vpW() - 20) + "px", bottom:"calc(10px + env(safe-area-inset-bottom,0px))", maxHeight:(innerHeight - 76) + "px"});
       pop.style.setProperty("--from", "bottom center");
+      placeX();
       return;
     }
     const below = h > above && (h <= under || under > above), room = below ? under : above;
@@ -2276,8 +2282,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     pop.style.left = left + "px"; pop.style.top = Math.max(12, top) + "px";
     pop.style.setProperty("--from", (below ? "top " : "bottom ") + Math.round(Math.min(Math.max(r.left + 24 - left, 0), w)) + "px");
   }
+  // a close button for the phone sheet, kept on the sheet's top right as its content changes
+  const popX = document.createElement("button");
+  popX.type = "button"; popX.className = "pop-x"; popX.hidden = true; popX.setAttribute("aria-label", "Close");
+  popX.innerHTML = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  document.body.appendChild(popX);
+  popX.addEventListener("click", e => { e.stopPropagation(); closePop(); });
+  function placeX(){
+    if(!cur || !cur.pop.classList.contains("sheet") || cur.pop.hidden){ popX.hidden = true; return; }
+    const b = cur.pop.getBoundingClientRect();
+    popX.style.top = (b.top + 12) + "px"; popX.style.left = (b.right - 42) + "px"; popX.hidden = false;
+  }
+  if("ResizeObserver" in window) new ResizeObserver(() => placeX()).observe(document.body);
+  document.querySelectorAll(".info-pop").forEach(p => { if("ResizeObserver" in window) new ResizeObserver(() => placeX()).observe(p); p.addEventListener("animationend", placeX); });
   function openPop(chip, pop){ clearTimeout(hideT); if(cur && cur.pop !== pop) closePop(); if(cur && cur.chip !== chip){ cur.chip.setAttribute("aria-expanded","false"); chip.setAttribute("aria-expanded","true"); cur.chip = chip; } if(cur) return placePop(); pop.hidden = false; chip.setAttribute("aria-expanded","true"); cur = {chip, pop}; placePop(); }
-  function closePop(chip){ clearTimeout(hideT); if(!cur || (chip && cur.chip !== chip)) return; cur.pop.hidden = true; cur.chip.setAttribute("aria-expanded","false"); cur = null; }
+  function closePop(chip){ clearTimeout(hideT); if(!cur || (chip && cur.chip !== chip)) return; cur.pop.hidden = true; cur.chip.setAttribute("aria-expanded","false"); cur = null; popX.hidden = true; }
   const later = () => { clearTimeout(hideT); hideT = setTimeout(() => closePop(), 180); };
   document.querySelectorAll("button.chip[aria-controls], #fuBtn, #figHead, #labCI").forEach(chip => {
     const pop = $(chip.getAttribute("aria-controls")); let lastType = "";
