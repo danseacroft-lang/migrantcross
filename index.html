@@ -374,7 +374,7 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .fu-pop{overflow:hidden;isolation:isolate}
 /* Channel conditions pop-up, in the style of the Weather app */
 .wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
-.wx-pop{--lv:var(--blue);background-color:color-mix(in srgb,var(--card) 97%,transparent);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 12%,transparent),transparent 90px)}
+.wx-pop{--lv:var(--blue);background-color:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(44px) saturate(180%);backdrop-filter:blur(44px) saturate(180%);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 12%,transparent),transparent 90px)}
 .wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
 .wx-pop[data-lv="calm"]{--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv-t:var(--orange-t)}.wx-pop[data-lv="rough"]{--lv-t:var(--red-t)}   /* the level in words, in a readable shade */
 .wp-head{display:flex;align-items:center;gap:12px}
@@ -404,6 +404,7 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .wp-days li em{font-style:normal;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 @media (max-width:359px){.wp-days li em .hi{display:none}}   /* the smallest phones: just the number, so the row fits */
 .wp-foot{margin:8px 0 0!important;font-size:.706rem;color:var(--label2)}
+.wp-foot.wp-days-h{margin:4px 0 10px!important}   /* a gap between the heading and the three days */
 /* last crossings pop-up */
 .lx-big{font:700 2.1rem/1.05 var(--round);letter-spacing:-.01em;margin-top:2px}
 .lx-big small{font:600 .941rem var(--font);color:var(--label2);margin-left:4px;letter-spacing:-.02em}
@@ -2742,7 +2743,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
-        + '<p class="wp-foot" style="margin:0 0 4px">Next three mornings, midnight to noon</p>'
+        + '<p class="wp-foot wp-days-h">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
