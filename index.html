@@ -643,6 +643,23 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px}
+/* top nationalities: one strip of everyone who crossed, then the five largest groups, ranked */
+.nat-strip{display:flex;gap:2px;height:14px;margin:14px 0 4px;border-radius:7px;overflow:hidden}
+.nat-strip i{display:block;height:100%;flex:none;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.nat-strip i:first-child{border-radius:7px 0 0 7px}.nat-strip i:last-child{border-radius:0 7px 7px 0}
+.nat-list{list-style:none;margin:8px 0 0;padding:0}
+.nat-list li{display:grid;grid-template-columns:22px 26px 1fr auto;align-items:center;gap:10px;padding:10px 0;border-top:.5px solid var(--sep)}
+.nat-list li:first-child{border-top:0}
+.nat-list .rk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 .706rem/1 var(--font);color:#fff}
+.nat-list .rk.o{color:var(--label2)}
+.nat-list .fl{font:22px/1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;text-align:center}
+.nat-list .nm{font-size:.941rem;font-weight:600;min-width:0}
+.nat-list .nm small{display:block;font-size:.765rem;font-weight:400;color:var(--label2);margin-top:2px}
+.nat-list .ch{display:block;font-weight:600}
+.nat-list .rk.lt{color:var(--label)}   /* the paler badges take dark numbers in Day */
+.nat-list .pc{font:700 1.06rem/1 var(--round);font-variant-numeric:tabular-nums;text-align:right}
+.nat-list li.oth{padding-bottom:2px}
+.nat-list li.oth .nm,.nat-list li.oth .pc{color:var(--label2)}
 .list{list-style:none;margin:10px 0 0;padding:0}
 .list li{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:9px 0;border-top:.5px solid var(--sep)}
 .list li:first-child{border-top:0}
@@ -651,11 +668,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .list .nm small{display:block;height:4px;border-radius:2px;background:var(--fill);margin-top:6px;overflow:hidden}
 .list .nm small b{display:block;height:100%;width:0;background:var(--indigo);border-radius:2px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .list .pc{font-weight:600;font-variant-numeric:tabular-nums;font-size:.882rem}
-/* Nationalities: same-length tracks so bars compare, and the change on a year earlier */
-#nats li{grid-template-columns:28px 1fr 3.6em}
-#nats .pc{text-align:right}
-#nats .nm small{background:transparent}
-#nats .chg{display:block;font-style:normal;font-size:.765rem;color:var(--label2)}
 /* people per boat: two dinghies seen from above, one dot a person, then the years as a line */
 .pb-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .pb-x{font-size:.706rem;font-weight:700;color:color-mix(in srgb,var(--orange) 75%,var(--label));background:color-mix(in srgb,var(--orange) 16%,transparent);padding:3px 9px;border-radius:999px;white-space:nowrap}
@@ -1264,8 +1276,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       </article>
       <article class="card rv">
         <h3>Top nationalities</h3>
-        <ul class="list" id="nats"></ul>
-        <div class="cost" id="natNote"></div>
+        <div class="sub" id="natS">&nbsp;</div>
+        <div class="nat-strip" id="natStrip" role="img"></div>
+        <ol class="nat-list" id="nats"></ol>
       </article>
       <article class="card rv">
         <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
@@ -2681,12 +2694,19 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
-      const mx = nat.top[0].pc;
-      $("nats").innerHTML = nat.top.map(n => '<li><span class="flag" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
-        + (n.change != null ? '<em class="chg">' + (n.change > 0 ? "up " : "down ") + Math.abs(n.change) + "% on a year earlier</em>" : "")
-        + '<small><b data-w="' + (n.pc / mx * 100).toFixed(1) + '"></b></small></span><span class="pc">' + Number(n.pc).toFixed(1) + "%</span></li>").join("");
-      if(nat.other != null && nat.total) $("natNote").innerHTML = "Other nationalities <b>" + (nat.other / nat.total * 100).toFixed(1) + "%</b> of " + fmt(nat.total) + " people, " + nat.period;
-      onReveal($("nats"), () => $("nats").querySelectorAll("small b").forEach((b, i) => setTimeout(() => b.style.width = b.dataset.w + "%", reduced ? 0 : i * 90)));
+      // one hue, lighter down the ranks, and grey for everyone else: the strip and the rank badges share colours
+      const SH = [100, 80, 62, 46, 34], col = i => "color-mix(in srgb,var(--indigo) " + SH[i] + "%,var(--card))";
+      const other = nat.other != null && nat.total ? nat.other / nat.total * 100 : null;
+      $("natS").textContent = (nat.total ? fmt(nat.total) + " people, " : "") + nat.period;
+      const segs = nat.top.map((n, i) => ({w:n.pc, c:col(i), t:n.name + " " + Number(n.pc).toFixed(1) + "%"}));
+      if(other != null) segs.push({w:other, c:"var(--fill2)", t:"Other " + other.toFixed(1) + "%"});
+      $("natStrip").innerHTML = segs.map(g => '<i style="background:' + g.c + '" data-w="' + g.w.toFixed(2) + '" title="' + g.t + '"></i>').join("");
+      $("natStrip").setAttribute("aria-label", "Share of people crossing: " + segs.map(g => g.t).join(", "));
+      const chg = c => c == null ? "" : (c > 0 ? "▲ " : c < 0 ? "▼ " : "") + Math.abs(c) + "% on a year earlier";
+      $("nats").innerHTML = nat.top.map((n, i) => '<li><span class="rk' + (i > 2 ? " lt" : "") + '" style="background:' + col(i) + '">' + (i + 1) + '</span><span class="fl" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
+        + "<small>" + (n.n != null ? fmt(n.n) + " people" : "") + '<span class="ch">' + chg(n.change) + '</span></small></span><span class="pc">' + Number(n.pc).toFixed(1) + "%</span></li>").join("")
+        + (other != null ? '<li class="oth"><span class="rk o" style="background:var(--fill2)">·</span><span class="fl" aria-hidden="true">🌍</span><span class="nm">Everyone else<small>' + fmt(nat.other) + " people</small></span><span class=\"pc\">" + other.toFixed(1) + "%</span></li>" : "");
+      onReveal($("natStrip"), () => $("natStrip").querySelectorAll("i").forEach(i => i.style.width = "calc(" + i.dataset.w + "% - 2px)"));
     }
   }
   function renderPerBoat(pb){
