@@ -144,6 +144,28 @@ def read_telegram(source, channel):
     return out
 
 
+def read_telegram_api(source, channel):
+    """The latest posts of a Telegram channel through Telegram's own API (for channels with the web preview off).
+    Needs TG_API_ID, TG_API_HASH and TG_SESSION (made once with scripts/tg_login.py) as GitHub secrets."""
+    import asyncio
+    import os
+    from telethon import TelegramClient
+    from telethon.sessions import StringSession
+
+    async def go():
+        out = []
+        async with TelegramClient(StringSession(os.environ["TG_SESSION"]), int(os.environ["TG_API_ID"]),
+                                  os.environ["TG_API_HASH"]) as client:
+            async for m in client.iter_messages(channel, limit=30):
+                t = clean(m.message or "")
+                if not t or not m.date:
+                    continue
+                out.append({"source": source, "title": t[:160] + ("…" if len(t) > 160 else ""), "summary": t,
+                            "url": f"https://t.me/{channel}/{m.id}", "published": m.date, "ground": True})
+        return out
+    return asyncio.run(asyncio.wait_for(go(), 60))
+
+
 def words(title):
     return set(re.findall(r"[a-z]{4,}", title.lower()))
 
@@ -214,7 +236,9 @@ def main():
     items = pick(stories, now)
     for source, channel in GROUND:   # live sightings: only for "reported today", never the news strip
         try:
-            got = read_telegram(source, channel)
+            import os
+            api = all(os.environ.get(k) for k in ("TG_API_ID", "TG_API_HASH", "TG_SESSION"))
+            got = read_telegram_api(source, channel) if api else read_telegram(source, channel)
             stories += got
             print(f"{source} (Telegram): {len(got)} posts")
         except Exception as e:  # noqa: BLE001
