@@ -2152,7 +2152,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!tipBoat || tip.hidden) return;
     const r = tipBoat.g.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, cx = r.left + r.width / 2;
     let top = r.top - h - 8; const below = top < 70; if(below) top = Math.max(70, Math.min(r.bottom + 8, innerHeight - h - 8));
-    tip.style.left = Math.min(Math.max(12, cx - w / 2), innerWidth - w - 12) + "px"; tip.style.top = top + "px";
+    tip.style.left = Math.min(Math.max(12, cx - w / 2), vpW() - w - 12) + "px"; tip.style.top = top + "px";
     tip.style.setProperty("--from", (below ? "top " : "bottom ") + "center");
   }
   function release(b){
@@ -2241,17 +2241,19 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   // Pop-ups on the chips: open on hover (mouse), tap or keyboard; close on leaving, tapping elsewhere or Escape
   let cur = null, hideT;
+  // the width fixed pop-ups are placed in: the page's own width, which on iPhones can differ from innerWidth (zoomed or wider content)
+  function vpW(){ return document.documentElement.clientWidth || innerWidth; }
   function placePop(){
     if(!cur) return;
     const {chip, pop} = cur, r = chip.getBoundingClientRect();
     pop.style.maxHeight = pop.style.bottom = pop.style.width = ""; pop.classList.remove("sheet");
-    const w = pop.offsetWidth, left = Math.min(Math.max(12, r.left), innerWidth - w - 12);
+    const w = pop.offsetWidth, left = Math.min(Math.max(12, r.left), vpW() - w - 12);
     let h = pop.offsetHeight;
     // above the chip, unless there's no room; a long pop-up goes on the roomier side and scrolls, never over its chip
     const above = r.top - 74, under = innerHeight - r.bottom - 22;
-    if(innerWidth < 600 && pop.scrollHeight > Math.max(above, under)){   // small phones: too long for either side, so it docks as a sheet along the bottom
+    if(vpW() < 600 && pop.scrollHeight > Math.max(above, under)){   // small phones: too long for either side, so it docks as a sheet along the bottom
       pop.classList.add("sheet");
-      Object.assign(pop.style, {left:"10px", top:"auto", width:"calc(100vw - 20px)", bottom:"calc(10px + env(safe-area-inset-bottom,0px))", maxHeight:(innerHeight - 76) + "px"});
+      Object.assign(pop.style, {left:"10px", top:"auto", width:(vpW() - 20) + "px", bottom:"calc(10px + env(safe-area-inset-bottom,0px))", maxHeight:(innerHeight - 76) + "px"});
       pop.style.setProperty("--from", "bottom center");
       return;
     }
