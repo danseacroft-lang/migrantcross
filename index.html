@@ -361,13 +361,17 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.25)}
 .chip i.moderate{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25)}
 .chip i.rough{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.25)}
+.chip i.rep{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25);animation:repPulse 2s ease-in-out infinite}
+@keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(255,159,10,0)}}
+@media (prefers-reduced-motion:reduce){.chip i.rep{animation:none}}
+a.chip{text-decoration:none;color:inherit;white-space:nowrap}
 .chip i.none{background:rgba(255,255,255,.45);box-shadow:none}
 .chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
 @keyframes pulse{50%{opacity:.3}}
 .chip .up{color:#FFB4AE}.chip .down{color:#9CF0B4}
-button.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulation;transition:background-color .2s}
-button.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
-@media (hover:hover){button.chip:hover{background:rgba(28,28,30,.48)}}
+button.chip,a.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulation;transition:background-color .2s}
+button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
+@media (hover:hover){button.chip:hover,a.chip:hover{background:rgba(28,28,30,.48)}}
 button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 @media (max-width:360px){#chipYear{white-space:nowrap;flex-wrap:wrap;gap:0 5px;padding:0 11px}}   /* small phones: "2026 so far 19,287 ↓44% on 2025" on one line, never broken mid-phrase */
 
@@ -1027,6 +1031,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="kicker" id="heroKicker" hidden></div>
     <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">2</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">91</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Friday, 2 October 2026 · 1&nbsp;boat</div></div></div><span class="sr" id="heroSr" aria-live="polite">91 people crossed in 1 small boat on Friday, 2 October 2026</span>
     <div class="hero-chips">
+      <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
       <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -3524,6 +3529,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     newsAt = Date.now();
     try{
       const n = await getJSON("news.json"), box = $("news");
+      // "Crossings reported today": a news story from today saying boats are crossing, shown until the day's own figures are out
+      const r = n.reported, rc = $("chipRep"), rOn = !!(r && r.url && /^https?:/.test(r.url) && r.date === ukToday() && !(boatDay && boatDay.date >= r.date));
+      rc.hidden = !rOn;
+      if(rOn){ rc.href = r.url; rc.title = r.source + ": " + r.title; rc.setAttribute("aria-label", "Crossings reported in the news today. " + r.source + ": " + r.title + " (opens " + r.source + ")"); }
       const items = (n.items || []).filter(x => x.breaking && x.url && /^https?:/.test(x.url) && Date.now() - new Date(x.published) < NEWS_MAX_H * 36e5);
       if(!items.length || seenGet() === items[0].url){ newsOn = false; stripUpdate(); return; }
       const fresh = newsShown !== items[0].url;
