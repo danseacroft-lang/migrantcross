@@ -1926,9 +1926,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
-    } else if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
+    }
+    if(layer === "wind" || layer === "gusts" || layer === "rain"){   // the same blue sea as Waves, the land left clear grey
+      seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
+      h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
+      h.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
       // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
-      // Wind and gusts get no colour at all: just the clear map with the moving streaks on top
+      // Wind and gusts get only the blue sea, with the moving streaks on top
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
       const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
       for(let k = 0; k < n; k++){
@@ -2074,8 +2080,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* Wind and gusts, drawn straight onto the clear map, as on earth.nullschool and Ventusky: thousands of fine streaks flowing with the
      wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
      wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
-  const FLOW_INK = [[26,43,76],[26,43,76],[26,43,76],[201,110,20],[196,40,40]];   // navy, as the town names; amber and red for strong gusts
-  const FLOW_A = [.28, .46, .66, .85, .9];
+  const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
+  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,190,90],[255,96,96]];   // white, as the waves; amber and red for strong gusts
+  const FLOW_A = [.45, .65, .85, .95, .95];
   function stepStreaks(c, dt, gust){
     c.globalCompositeOperation = "destination-in";
     c.fillStyle = "rgba(0,0,0," + Math.pow(gust ? .968 : .958, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // older trails fade
@@ -2090,6 +2097,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const P = paths[band * L + Math.min(L - 1, life * L | 0)]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
       p.x = nx; p.y = ny;
     }
+    c.strokeStyle = "rgba(20,30,50,.10)"; c.lineWidth = 3; for(const P of paths) c.stroke(P);   // a faint dark edge, so white shows on the grey land too
     for(let b = 0; b < 5; b++) for(let l = 0; l < L; l++){
       const k = FLOW_INK[b]; c.strokeStyle = "rgba(" + k + "," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
       c.lineWidth = gust ? 1.4 + (b > 2 ? .3 : 0) : 1.15 + b * .15; c.stroke(paths[b * L + l]);
