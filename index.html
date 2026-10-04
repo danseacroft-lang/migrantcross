@@ -651,12 +651,26 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 #nats .pc{text-align:right}
 #nats .nm small{background:transparent}
 #nats .chg{display:block;font-style:normal;font-size:.765rem;color:var(--label2)}
-.minibars{display:flex;align-items:flex-end;gap:6px;height:90px;margin-top:14px}
-.minibars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%}
-.minibars span{flex:none;width:100%;min-height:4px;border-radius:6px;background:var(--teal);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-.on .minibars span{transform:scaleY(1)}
-.minibars em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
-.minibars b{font-size:.706rem;font-weight:600;color:var(--label2);font-variant-numeric:tabular-nums}
+/* people per boat: two dinghies seen from above, one dot a person, then the years as a line */
+.pb-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pb-x{font-size:.706rem;font-weight:700;color:color-mix(in srgb,var(--orange) 75%,var(--label));background:color-mix(in srgb,var(--orange) 16%,transparent);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pb-boats{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:10px 12px;margin-top:14px}
+.pb-boats em{font-style:normal;font-size:.706rem;font-weight:600;color:var(--label2);line-height:1.15}
+.pb-boats em b{display:block;font-size:.882rem;color:var(--label);font-variant-numeric:tabular-nums}
+.pb-boats svg{display:block;height:auto;overflow:visible}
+.pb-hull{fill:var(--fill);stroke:var(--fill2);stroke-width:1.5}
+.pb-p{fill:var(--orange);opacity:0;transition:opacity .25s ease}
+.on .pb-p{opacity:1}
+.pb-line{margin-top:16px;padding-top:12px;border-top:.5px solid var(--sep)}
+.pb-line svg{display:block;width:100%;height:auto;overflow:visible}
+.pb-line .ln{fill:none;stroke:var(--teal);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pb-line .ar{fill:var(--teal);opacity:.14}
+.pb-line .dt{fill:var(--teal);stroke:var(--card);stroke-width:2}
+.pb-line .hit{fill:transparent;cursor:default}
+.pb-line .hit:hover+.dt,.pb-line .hit:focus+.dt{r:5}
+.pb-line text{font:600 10px var(--font);fill:var(--label2);font-variant-numeric:tabular-nums}
+.pb-line text.v{fill:var(--label);font-size:11px}
+.pb-cap{margin:6px 0 0;font-size:.706rem;color:var(--label2)}
 .vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .vs div{background:var(--fill);border-radius:16px;padding:12px 14px}
 .vs b{display:block;font:700 1.6rem/1.1 var(--round)}
@@ -764,7 +778,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .rv{opacity:1;transform:none}
-  .spark span,.minibars span,.heat,.otd-years i{transform:none;opacity:1}
+  .spark span,.pb-p,.heat,.otd-years i{transform:none;opacity:1}
   .draw{stroke-dasharray:none;stroke-dashoffset:0}
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
@@ -1251,10 +1265,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <div class="cost" id="natNote"></div>
       </article>
       <article class="card rv">
-        <h3>People per boat</h3>
+        <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
         <div class="val num" id="pbV">–</div>
         <div class="sub" id="pbS">&nbsp;</div>
-        <div class="minibars" id="pbBars" role="list"></div>
+        <div class="pb-boats" id="pbBoats"></div>
+        <div class="pb-line" id="pbLine"></div>
       </article>
       <article class="card rv">
         <h3>UK–France returns deal</h3>
@@ -2658,13 +2673,37 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
   }
   function renderPerBoat(pb){
-    if(!pb || !pb.years) return;
-    countUp($("pbV"), pb.last90 ? pb.last90.avg : pb.years[pb.years.length-1].avg);
+    if(!pb || !pb.years || !pb.years.length) return;
+    const ys = pb.years, first = ys[0], now = pb.last90 ? pb.last90.avg : ys[ys.length-1].avg;
     const part = pb.partialYear ? String(pb.partialYear) : "";   // this year is not over yet
-    $("pbS").textContent = "a boat on average over the last 90 days" + (pb.years.length ? ", up from " + pb.years[0].avg + " in " + pb.years[0].y : "") + (part ? " · *" + part + " so far" : "");
-    const mx = Math.max(...pb.years.map(y => y.avg));
-    // Each column shows its figure on top; the full numbers are read out by screen readers
-    $("pbBars").innerHTML = pb.years.map((y, i) => '<div role="listitem" aria-label="' + y.y + (String(y.y) === part ? " so far" : "") + ": " + y.avg + " people a boat" + (y.people != null ? ", " + fmt(y.people) + " people in " + fmt(y.boats) + " boats" : "") + '"><b aria-hidden="true">' + y.avg + '</b><span style="height:' + (y.avg / mx * 80) + '%;transition-delay:' + i * 70 + 'ms"></span><em aria-hidden="true">' + String(y.y).slice(2) + (String(y.y) === part ? "*" : "") + "</em></div>").join("");
+    countUp($("pbV"), now);
+    $("pbS").textContent = "people a boat on average, last 90 days";
+    const x = Math.round(now / first.avg);
+    if(x >= 2){ $("pbX").textContent = x + "× more than " + first.y; $("pbX").hidden = false; }
+    // two dinghies from above: one dot a person, four abreast, so the boat grows with its load
+    const ROWS = 4, GAP = 9, maxCols = Math.ceil(now / ROWS);
+    const boat = (n, delay) => {
+      const cols = Math.ceil(n / ROWS), len = cols * GAP + 14, W = maxCols * GAP + 30, H = ROWS * GAP + 10;
+      let dots = "";
+      for(let i = 0; i < n; i++){ const c = Math.floor(i / ROWS), rr = i % ROWS; dots += '<circle class="pb-p" cx="' + (8 + c * GAP + GAP / 2) + '" cy="' + (5 + rr * GAP + GAP / 2) + '" r="3.2" style="transition-delay:' + (delay + c * 30) + 'ms"/>'; }
+      return '<svg viewBox="0 0 ' + W + " " + H + '" style="width:' + (W / (maxCols * GAP + 30) * 100) + '%" aria-hidden="true"><path class="pb-hull" d="M4 ' + (H / 2 - 10) + "Q4 1 14 1H" + len + "Q" + (len + 14) + " 1 " + (len + 16) + " " + H / 2 + "Q" + (len + 14) + " " + (H - 1) + " " + len + " " + (H - 1) + "H14Q4 " + (H - 1) + " 4 " + (H / 2 + 10) + 'Z"/>' + dots + "</svg>";
+    };
+    $("pbBoats").innerHTML = '<em>' + first.y + '<b>' + first.avg + '</b></em>' + boat(first.avg, 0)
+      + '<em>Now<b>' + now + '</b></em>' + boat(now, 200);
+    $("pbBoats").setAttribute("role", "img");
+    $("pbBoats").setAttribute("aria-label", "A boat in " + first.y + " carried " + first.avg + " people on average; over the last 90 days it was " + now);
+    // the years as one line, figures on the first and last points; hover or focus any year for its figure
+    const W = 300, H = 74, L = 10, R = 10, T = 16, B = 18, mx = Math.max(...ys.map(y => y.avg)), step = (W - L - R) / Math.max(1, ys.length - 1);
+    const pt = ys.map((y, i) => [L + i * step, T + (1 - y.avg / mx) * (H - T - B)]);
+    const line = pt.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+    const lab = y => String(y.y) + (String(y.y) === part ? " so far" : "");
+    $("pbLine").innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="list" aria-label="Average people a boat, each year">'
+      + '<path class="ar" d="' + line + "L" + pt[pt.length-1][0].toFixed(1) + " " + (H - B) + "L" + L + " " + (H - B) + 'Z"/><path class="ln" d="' + line + '"/>'
+      + ys.map((y, i) => '<g role="listitem" aria-label="' + lab(y) + ": " + y.avg + " people a boat" + (y.people != null ? ", " + fmt(y.people) + " people in " + fmt(y.boats) + " boats" : "") + '"><rect class="hit" x="' + (pt[i][0] - step / 2) + '" y="0" width="' + step + '" height="' + H + '"><title>' + lab(y) + ": " + y.avg + " a boat</title></rect>"
+        + '<circle class="dt" cx="' + pt[i][0].toFixed(1) + '" cy="' + pt[i][1].toFixed(1) + '" r="' + (i === ys.length - 1 ? 4.5 : 3) + '"/>'
+        + (i === 0 || i === ys.length - 1 ? '<text class="v" x="' + pt[i][0].toFixed(1) + '" y="' + (pt[i][1] - 8).toFixed(1) + '" text-anchor="' + (i ? "end" : "start") + '">' + y.avg + "</text>" : "")
+        + '<text x="' + pt[i][0].toFixed(1) + '" y="' + (H - 3) + '" text-anchor="' + (i === 0 ? "start" : i === ys.length - 1 ? "end" : "middle") + '">' + "’" + String(y.y).slice(2) + (String(y.y) === part ? "*" : "") + "</text></g>").join("")
+      + '</svg><p class="pb-cap">Average each year' + (part ? " · *" + part + " so far" : "") + "</p>";
   }
   function renderReturns(r){
     if(!r || r.out == null) return;
