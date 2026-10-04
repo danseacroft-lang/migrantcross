@@ -402,10 +402,11 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .info-pop .wp-p{color:var(--label);margin:0 0 6px}
 .info-pop .wp-note{font-size:.765rem;margin:0 0 10px}
 .wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep)}
-.wp-days li{display:grid;grid-template-columns:1fr 26px 86px auto;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
+.wp-days li{display:grid;grid-template-columns:1fr 26px minmax(86px,auto) auto;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
 .wp-days li span{font-weight:600}
 .wp-days li div{width:26px;height:26px}
 .wp-days li b{margin:0;font-size:.824rem}
+.wp-lk{display:block;font-weight:500;font-size:.706rem;color:var(--label2);margin-top:1px;white-space:nowrap}
 .wp-days li em{font-style:normal;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 .wp-foot{margin:8px 0 0!important;font-size:.706rem;color:var(--label2)}
 /* last crossings pop-up */
@@ -2709,6 +2710,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
+  const LIKE = {calm:"Crossings likely", moderate:"Crossings possible", rough:"Crossings unlikely"};   // the outlook's short form
   const MEANS = {calm:"Light winds and a flat sea. These are the conditions most small boats set out in, so crossings are likely.",
     moderate:"A breeze and some chop. Some boats may still try, usually in the calmer early hours.",
     rough:"Strong winds or big waves make the crossing dangerous, so crossings are unlikely until it settles."};
@@ -2739,12 +2741,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
     pm.dataset.lv = lvl || "";
     $("chipMap").querySelector("i").className = lvl || (wxFailed ? "none" : "wait");
-    $("chipMap").querySelector("span").textContent = lvl ? "Weather: " + WORD[lvl] : "Weather outlook";   // the level in words, not just a coloured dot
-    $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions" : "Weather outlook") + " in the Channel. Open the outlook");
+    $("chipMap").querySelector("span").textContent = lvl ? WORD[lvl] + " · " + LINE[lvl] : "Weather outlook";   // the level and what it means for crossings, not just a coloured dot
+    $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions in the Channel, " + LINE[lvl] : "Weather outlook in the Channel") + ". Open the outlook");
     let h;
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? WORD[lvl] + " in the Channel" : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
+      h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? WORD[lvl] + " · " + LIKE[lvl].toLowerCase() : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
         + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
         + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
@@ -2770,7 +2772,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "° high" : "") + "</em></li>"; }).join("");
+        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "° high" : "") + "</em></li>"; }).join("");
       const c = w.current;
       wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
         lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
