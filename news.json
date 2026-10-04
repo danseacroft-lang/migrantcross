@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-04T23:09:52Z",
+ "checkedAt": "2026-10-04T23:56:02Z",
  "items": [
+  {
+   "title": "Murder probe launched after woman found dead at house in Norfolk",
+   "url": "https://www.gbnews.com/news/norfolk-news-murder-probe-launched-woman-found-dead",
+   "source": "GB News",
+   "published": "2026-10-04T23:45:14Z",
+   "breaking": true
+  },
   {
    "title": "Hundreds of animals found crammed into homes as 'struggling' RSPCA warns of mounting crisis",
    "url": "https://www.gbnews.com/news/rspca-animals-crammed-homes-crisis",
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cmrly809n8p6o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-04T21:37:03Z",
-   "breaking": true
-  },
-  {
-   "title": "Shadow chancellor to unveil Tory plans to cut taxes and regulations",
-   "url": "https://www.bbc.co.uk/news/articles/cqj9kje82jm1o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-04T21:35:30Z",
    "breaking": true
   }
  ],
