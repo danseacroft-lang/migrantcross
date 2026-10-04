@@ -3,7 +3,9 @@
 Runs hourly from .github/workflows/news.yml. Reads the public news feeds of a few
 UK outlets, keeps breaking stories (last 3 hours) about small boats, the Channel,
 migration or UK politics (Dan, 2 Oct 2026: "anything to do with political news ...
-migration, the boats ... can show"), and writes news.json. Every feed is optional: if one
+migration, the boats ... can show"), and writes news.json. It also notes the newest story from
+today saying boats are crossing the Channel today ("reported"), which the site shows as a
+"Crossings reported today" chip until the Home Office figures for the day are out. Every feed is optional: if one
 is down or changes, the others still work.
 
 To change what's shown, edit FEEDS, POLITICS_FEEDS, STRONG, BLOCK or MAX_AGE_HOURS below.
@@ -54,6 +56,20 @@ STRONG = re.compile(
     r"starmer|burnham|farage|rupert lowe|badenoch|mahmood|jenrick|braverman|rayner|reeves|streeting|polanski",
     re.I)
 # ...and must not be about something else that happens to share the words
+# "Crossings reported today": a story published today (UK time) that says boats are crossing now. Both must match:
+# what happened (people crossing, arriving or being brought ashore)...
+CROSS_EVENT = re.compile(
+    r"cross(?:ed|ing|es)? the channel|channel crossings? (?:today|this morning)|"
+    r"(?:brought|taken) (?:ashore|in)(?:to)? (?:at |in )?dover|arriv\w* (?:in|at) dover|landed (?:at|in|on) (?:dover|kent|the kent coast)|"
+    r"(?:picked up|intercepted|rescued) (?:in|from|off) the channel|small boats? (?:arriv|land|cross)\w*|"
+    r"(?:migrants?|people) (?:in|on) (?:a |small )?(?:boats?|dinghy|dinghies)",
+    re.I)
+# ...and that it is today's news, not a monthly or yearly total
+CROSS_TODAY = re.compile(r"\btoday\b|this morning|\bovernight\b|\bearlier\b|\bright now\b|\bthis afternoon\b|"
+                         r"\bdozens\b|\bhundreds\b|\bmore than \d|\b\d{2,4} (?:people|migrants)\b", re.I)
+CROSS_NOT = re.compile(r"so far this year|this year|last year|in 20\d\d|since (?:jan|the start|labour|july)|record year|"
+                       r"\bmonth\b|\bweekly\b|\bannual\b|\bstatistics\b|\btotal\b|court|trial|jailed|sentenced", re.I)
+
 BLOCK = re.compile(r"channel 4|channel 5|tv channel|youtube channel|channel swim|swim the channel|"
                    r"channel islands|jersey|guernsey|sky channel|"
                    r"^track |in charts|in numbers|explained|explainer|at a glance|key facts", re.I)   # explainers, not news
@@ -129,6 +145,27 @@ def pick(stories, now):
     return kept[:5]
 
 
+def reported_today(stories, now):
+    """The newest story from today (UK time) saying boats are crossing the Channel today, or None."""
+    from zoneinfo import ZoneInfo
+    uk = ZoneInfo("Europe/London")
+    today = now.astimezone(uk).date()
+    hits = []
+    for s in stories:
+        if not s["title"] or not s["url"].startswith("http") or not s["published"]:
+            continue
+        if s["published"].astimezone(uk).date() != today or s["published"] > now + timedelta(minutes=10):
+            continue
+        blob = s["title"] + " " + s["summary"]
+        if CROSS_EVENT.search(blob) and CROSS_TODAY.search(blob) and not CROSS_NOT.search(s["title"]) and not BLOCK.search(blob):
+            hits.append(s)
+    if not hits:
+        return None
+    s = max(hits, key=lambda x: x["published"])
+    return {"date": today.isoformat(), "title": s["title"], "url": s["url"], "source": s["source"],
+            "published": s["published"].astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
+
+
 def main():
     now = datetime.now(timezone.utc)
     stories = []
@@ -142,6 +179,7 @@ def main():
         except Exception as e:  # noqa: BLE001 - one broken feed shouldn't stop the others
             print(f"{source}: skipped ({e})")
     items = pick(stories, now)
+    reported = reported_today(stories, now)
 
     # Manual control: news-override.json can hide stories (by URL) or pin one to the top
     # {"hide": ["https://..."], "pin": {"title": "...", "url": "https://...", "source": "...", "until": "2026-09-30T18:00:00Z"}}
@@ -161,11 +199,11 @@ def main():
         {"title": s["title"], "url": s["url"], "source": s["source"],
          "published": s["published"].astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
          "breaking": s.get("pinned", False) or (now - s["published"]) <= timedelta(hours=BREAKING_HOURS)}
-        for s in items]}
+        for s in items], "reported": reported}
     # Only rewrite the file when the stories change, so the site isn't republished every hour for nothing
     try:
         old = json.loads(OUT.read_text())
-        if old.get("items") == out["items"]:
+        if old.get("items") == out["items"] and old.get("reported") == out["reported"]:
             print("No change")
             return
     except (OSError, ValueError):
