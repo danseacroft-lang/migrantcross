@@ -643,20 +643,16 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px}
-/* top nationalities: one strip of everyone who crossed, then the five largest groups, ranked */
-.nat-strip{display:flex;gap:2px;height:14px;margin:14px 0 4px;border-radius:7px;overflow:hidden}
-.nat-strip i{display:block;height:100%;flex:none;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
-.nat-strip i:first-child{border-radius:7px 0 0 7px}.nat-strip i:last-child{border-radius:0 7px 7px 0}
-.nat-list{list-style:none;margin:8px 0 0;padding:0}
+/* top nationalities: the five largest groups, ranked, then everyone else */
+.nat-list{list-style:none;margin:6px 0 0;padding:0}
 .nat-list li{display:grid;grid-template-columns:22px 26px 1fr auto;align-items:center;gap:10px;padding:10px 0;border-top:.5px solid var(--sep)}
 .nat-list li:first-child{border-top:0}
-.nat-list .rk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 .706rem/1 var(--font);color:#fff}
+.nat-list .rk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 .706rem/1 var(--font);color:#fff;background:var(--indigo)}
 .nat-list .rk.o{color:var(--label2)}
 .nat-list .fl{font:22px/1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;text-align:center}
 .nat-list .nm{font-size:.941rem;font-weight:600;min-width:0}
 .nat-list .nm small{display:block;font-size:.765rem;font-weight:400;color:var(--label2);margin-top:2px}
 .nat-list .ch{display:block;font-weight:600}
-.nat-list .rk.lt{color:var(--label)}   /* the paler badges take dark numbers in Day */
 .nat-list .pc{font:700 1.06rem/1 var(--round);font-variant-numeric:tabular-nums;text-align:right}
 .nat-list li.oth{padding-bottom:2px}
 .nat-list li.oth .nm,.nat-list li.oth .pc{color:var(--label2)}
@@ -928,10 +924,17 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .rep-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
 .mb .rep-head .big{font:700 28px/1.1 var(--round);letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .mb .rep-head .sub{font-size:.882rem;color:var(--label2)}
-.mb .dots svg{display:block;width:100%;height:auto}
-.mb .dots .dd.alt{fill:color-mix(in srgb,var(--mbar) 60%,var(--card))}   /* every other day a lighter blue, so days show */
-.mb .dots [data-day]{transition:opacity .15s ease}
-.mb .dots.hovering [data-day]:not(.on){opacity:.3}
+/* each day with crossings is a row: the date and figures, then its boats from above, one dot a person */
+.mb .rep-days{display:grid;gap:0}
+.mb .rep-day{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:center;padding:10px 0;border-top:.5px solid var(--sep)}
+.mb .rep-day:first-child{border-top:0;padding-top:2px}
+.mb .rep-day > span{font-size:.824rem;color:var(--label2);line-height:1.3}
+.mb .rep-day > span b{display:block;color:var(--label);font-size:.882rem}
+.mb .rep-boats{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.mb .rep-boats svg{display:block;height:auto;overflow:visible}
+.mb .rep-boats .hl{fill:var(--fill);stroke:var(--fill2);stroke-width:1.2}
+.mb .rep-boats .pp{fill:var(--orange)}
+.mb .rep-none{font-size:.882rem;color:var(--label2)}
 .mb .dots{animation:fadeIn .35s ease-out}
 .mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
 .mb .subscribe.leaving{animation:lift .25s ease-in both}
@@ -1256,7 +1259,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
       <div class="dots" id="dots"></div>
     </div>
-    <p class="foot rv">Each dot is one person and each boat is one boat. Hover over the dots to see each day.</p>
+    <p class="foot rv">Each dinghy is one boat, seen from above, and each dot one person. The Home Office gives a daily total, so a day's people are shared evenly across its boats.</p>
   </section>
 
   <!-- ============================================================ WHO, PER BOAT, RETURNS -->
@@ -1277,7 +1280,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <article class="card rv">
         <h3>Top nationalities</h3>
         <div class="sub" id="natS">&nbsp;</div>
-        <div class="nat-strip" id="natStrip" role="img"></div>
         <ol class="nat-list" id="nats"></ol>
       </article>
       <article class="card rv">
@@ -2694,19 +2696,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
-      // one hue, lighter down the ranks, and grey for everyone else: the strip and the rank badges share colours
-      const SH = [100, 80, 62, 46, 34], col = i => "color-mix(in srgb,var(--indigo) " + SH[i] + "%,var(--card))";
+
       const other = nat.other != null && nat.total ? nat.other / nat.total * 100 : null;
       $("natS").textContent = (nat.total ? fmt(nat.total) + " people, " : "") + nat.period;
-      const segs = nat.top.map((n, i) => ({w:n.pc, c:col(i), t:n.name + " " + Number(n.pc).toFixed(1) + "%"}));
-      if(other != null) segs.push({w:other, c:"var(--fill2)", t:"Other " + other.toFixed(1) + "%"});
-      $("natStrip").innerHTML = segs.map(g => '<i style="background:' + g.c + '" data-w="' + g.w.toFixed(2) + '" title="' + g.t + '"></i>').join("");
-      $("natStrip").setAttribute("aria-label", "Share of people crossing: " + segs.map(g => g.t).join(", "));
       const chg = c => c == null ? "" : (c > 0 ? "▲ " : c < 0 ? "▼ " : "") + Math.abs(c) + "% on a year earlier";
-      $("nats").innerHTML = nat.top.map((n, i) => '<li><span class="rk' + (i > 2 ? " lt" : "") + '" style="background:' + col(i) + '">' + (i + 1) + '</span><span class="fl" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
+      $("nats").innerHTML = nat.top.map((n, i) => '<li><span class="rk">' + (i + 1) + '</span><span class="fl" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
         + "<small>" + (n.n != null ? fmt(n.n) + " people" : "") + '<span class="ch">' + chg(n.change) + '</span></small></span><span class="pc">' + Number(n.pc).toFixed(1) + "%</span></li>").join("")
         + (other != null ? '<li class="oth"><span class="rk o" style="background:var(--fill2)">·</span><span class="fl" aria-hidden="true">🌍</span><span class="nm">Everyone else<small>' + fmt(nat.other) + " people</small></span><span class=\"pc\">" + other.toFixed(1) + "%</span></li>" : "");
-      onReveal($("natStrip"), () => $("natStrip").querySelectorAll("i").forEach(i => i.style.width = "calc(" + i.dataset.w + "% - 2px)"));
     }
   }
   function renderPerBoat(pb){
@@ -2876,67 +2872,27 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function drawDots(){
     const box = $("dots"); if(!sorted.length || !box.offsetParent) return;   // not on screen: skip the work
     const days = allDays().slice(-repDays);   // every calendar day, quiet ones too
-    const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0);
+    const people = days.reduce((a,d)=>a+d.migrants,0), boats = days.reduce((a,d)=>a+d.boats,0), busy = days.filter(d=>d.migrants);
     const from = dShort.format(parse(days[0].date)), to = dShort.format(parse(days[days.length-1].date));
     $("repTitle").textContent = "Every Person, Last " + repDays + " Days";
     $("repN").textContent = fmt(people) + (people===1 ? " person" : " people");
-    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to + " · crossings on " + days.filter(d=>d.migrants).length + " of " + days.length + " days";
-    const W = Math.max(260, Math.round(box.clientWidth || 320));
-    // Dot spacing shrinks for bigger totals so the block stays a sensible height
-    let pitch = 9;
-    while(pitch > 5 && Math.ceil(people/Math.floor(W/pitch))*pitch > 420) pitch -= .5;
-    const d = pitch*.62, cols = Math.max(1, Math.floor((W - d)/pitch)), rows = Math.ceil(people/cols);
-    const off = (W - (cols-1)*pitch)/2;
-    // Dots run day by day, drawn as exact circles (one shape per day), every other day a lighter blue. Hovering a day highlights it.
-    const last = rows ? people - (rows-1)*cols : 0;
-    const lastX = (W - (last-1)*pitch)/2, rr = (d/2).toFixed(2), dd = d.toFixed(2);
-    let s = "", k = 0, j = 0;
-    days.forEach(day=>{
-      if(!day.migrants) return;
-      j++;
-      let g = "";
-      for(const end = k + day.migrants; k < end; k++){
-        const r2 = Math.floor(k/cols), c = k - r2*cols;
-        const x = (r2===rows-1 ? lastX : off) + c*pitch - d/2, y = r2*pitch + pitch/2;
-        g += "M" + x.toFixed(1) + " " + y.toFixed(1) + "a" + rr + " " + rr + " 0 1 0 " + dd + " 0a" + rr + " " + rr + " 0 1 0 -" + dd + " 0";
-      }
-      s += '<path class="dd' + (j%2 ? '' : ' alt') + '" data-day="' + day.date + '" d="' + g + '"><title>' + dMid.format(parse(day.date)) + ': ' + fmt(day.migrants) + ' people, ' + fmt(day.boats) + ' boats</title></path>';
-    });
-    const dotsH = rows*pitch;
-    // Boats: one plain boat shape each, day by day, wrapped and centred
-    const bp = 22, bh = 24, bcols = Math.max(1, Math.floor(W/bp)), brows = Math.ceil(boats/bcols);
-    let b2 = "", i = 0;
-    days.forEach(day=>{
-      for(let n2 = 0; n2 < day.boats; n2++, i++){
-        const rr = Math.floor(i/bcols), n = Math.min(bcols, boats - rr*bcols), c = i - rr*bcols;
-        const x = (W - n*bp)/2 + c*bp + bp/2, yy = dotsH + 14 + rr*bh + 17;
-        b2 += '<use href="#dg" x="' + (x-10).toFixed(1) + '" y="' + (yy-12) + '" width="20" height="8" data-day="' + day.date + '"/>';
-      }
-    });
-    if(b2) b2 = '<defs><symbol id="dg" viewBox="-30 -8 60 18"><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="var(--boat)"/></symbol></defs><g class="boats">' + b2 + '</g>';
-    const H = Math.ceil(dotsH + (boats ? 14 + brows*bh : 0)) || 20;
-    box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + fmt(people) + ' dots for ' + fmt(people) + ' people and ' + fmt(boats) + ' boat icons, ' + from + ' to ' + to + '">'
-      + (people ? '<g fill="var(--mbar)">' + s + '</g>' : '<text x="' + W/2 + '" y="14" text-anchor="middle" font-size="13" style="fill:var(--label2)">No crossings in this period</text>')
-      + b2 + '</svg>';
+    $("repS").textContent = fmt(boats) + (boats===1 ? " boat" : " boats") + " · " + from + " – " + to + " · crossings on " + busy.length + " of " + days.length + " days";
+    // one dinghy per boat, seen from above, four abreast like the People per boat box; its length grows with its load
+    const ROWS = 4, P = 5.2, R = 1.8;
+    const boat = n => {
+      const cols = Math.max(1, Math.ceil(n / ROWS)), len = cols * P + 8, W = len + 12, H = ROWS * P + 8;
+      let dots = "";
+      for(let i = 0; i < n; i++){ const c = Math.floor(i / ROWS); dots += "M" + (6 + c * P + P / 2 - R).toFixed(1) + " " + (4 + (i % ROWS) * P + P / 2) + "a" + R + " " + R + " 0 1 0 " + 2 * R + " 0a" + R + " " + R + " 0 1 0 -" + 2 * R + " 0"; }
+      return '<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" aria-hidden="true"><path class="hl" d="M3 ' + (H / 2 - 8) + "Q3 1 10 1H" + len + "Q" + (len + 10) + " 1 " + (len + 11) + " " + H / 2 + "Q" + (len + 10) + " " + (H - 1) + " " + len + " " + (H - 1) + "H10Q3 " + (H - 1) + " 3 " + (H / 2 + 8) + 'Z"/>' + (n ? '<path class="pp" d="' + dots + '"/>' : "") + "</svg>";
+    };
+    box.innerHTML = busy.length ? '<div class="rep-days">' + busy.slice().reverse().map(day => {
+      const b = Math.max(1, day.boats), base = Math.floor(day.migrants / b), extra = day.migrants - base * b;   // share the day's people evenly across its boats
+      let boatsHtml = "";
+      for(let i = 0; i < b; i++) boatsHtml += boat(base + (i < extra ? 1 : 0));
+      return '<div class="rep-day" role="group" aria-label="' + dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people in " + plural(day.boats, "boat", "boats") + '"><span><b>' + dMid.format(parse(day.date)) + "</b>" + fmt(day.migrants) + " people · " + plural(day.boats, "boat", "boats") + '</span><div class="rep-boats">' + boatsHtml + "</div></div>";
+    }).join("") + "</div>" : '<p class="rep-none">No crossings in this period</p>';
     box.style.animation = "none"; box.offsetWidth; box.style.animation = "";
   }
-  // Hover a day's dots: that day stays bright and its figures show in the header
-  let repHead = "";
-  $("dots").addEventListener("mouseover", e=>{
-    const p = e.target.closest("[data-day]"); if(!p) return;
-    const day = allDays().find(x=>x.date===p.dataset.day); if(!day) return;
-    $("dots").classList.add("hovering");
-    $("dots").querySelectorAll("[data-day]").forEach(x=>x.classList.toggle("on", x.dataset.day===p.dataset.day));   // the day's dots and boats together
-    if(!repHead) repHead = $("repS").textContent;
-    $("repS").textContent = dMid.format(parse(day.date)) + ": " + fmt(day.migrants) + " people · " + fmt(day.boats) + (day.boats===1?" boat":" boats");
-  });
-  // On touch screens, tapping anywhere else clears the highlight
-  document.addEventListener("pointerdown", e=>{ if(e.pointerType!=="mouse" && $("dots").classList.contains("hovering") && !e.target.closest("#dots")) $("dots").dispatchEvent(new Event("mouseleave")); });
-  $("dots").addEventListener("mouseleave", ()=>{
-    $("dots").classList.remove("hovering");
-    if(repHead){ $("repS").textContent = repHead; repHead = ""; }
-  });
-
 
   /* =========== Calendar =========== */
   let calMonth = null, calPick = null;   // "YYYY-MM" shown, and the chosen day
