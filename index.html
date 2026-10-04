@@ -756,11 +756,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .card.b-lab,.card.b-bur{min-height:190px;padding-bottom:16px}
   .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:62%}
   .b-bur .tile-art{width:44%}
-  /* the hero chips: one row that scrolls sideways, fading at the edges, so the figures stay above the fold */
-  .hero-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-20px;padding:2px 20px;scroll-padding-inline:20px;pointer-events:auto;
-    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 28px),transparent)}
-  .hero-chips::-webkit-scrollbar{display:none}
-  .hero-chips > *{flex:none}
+  /* the hero chips wrap onto a second line rather than running off the edge */
+  .hero-chips{gap:6px}
+  .hero-chips > *{max-width:100%;white-space:nowrap}
   .flip > div{padding:16px}
   .flip > .fy{padding-bottom:100px}
   .flip > .fc{padding:14px 12px}
@@ -2773,7 +2771,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
     pm.dataset.lv = lvl || "";
     $("chipMap").querySelector("i").className = lvl || (wxFailed ? "none" : "wait");
-    $("chipMap").querySelector("span").textContent = lvl ? WORD[lvl] + " · " + LINE[lvl] : "Weather outlook";   // the level and what it means for crossings, not just a coloured dot
+    $("chipMap").querySelector("span").textContent = lvl ? WORD[lvl] + " · " + LIKE[lvl].toLowerCase() : "Weather outlook";   // the level and what it means for crossings, not just a coloured dot
     $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions in the Channel, " + LINE[lvl] : "Weather outlook in the Channel") + ". Open the outlook");
     let h;
     if(wx){
