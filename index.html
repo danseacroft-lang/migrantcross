@@ -374,33 +374,35 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .fu-pop{overflow:hidden;isolation:isolate}
 /* Channel conditions pop-up, in the style of the Weather app */
 .wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
-.wx-pop{--lv:var(--blue);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 22%,transparent),transparent 110px)}
+.wx-pop{--lv:var(--blue);background-color:color-mix(in srgb,var(--card) 97%,transparent);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 12%,transparent),transparent 90px)}
 .wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
 .wx-pop[data-lv="calm"]{--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv-t:var(--orange-t)}.wx-pop[data-lv="rough"]{--lv-t:var(--red-t)}   /* the level in words, in a readable shade */
 .wp-head{display:flex;align-items:center;gap:12px}
-.wp-ic{flex:none;width:52px;height:52px}
+.wp-ic{flex:none;width:44px;height:44px}
 .wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
-.wp-head b{margin:0;font:700 1.35rem/1.1 var(--round);color:var(--lv-t,var(--lv))}
-.wp-head span{display:block;color:var(--label);font-weight:600;font-size:.882rem;margin-top:2px}
+.wp-head b{margin:0;font:700 1.18rem/1.15 var(--round);color:var(--lv-t,var(--lv))}
+.wp-head span{display:block;color:var(--label2);font-weight:500;font-size:.824rem;margin-top:3px}
 .wp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:14px 0 12px}
-.wp-stats div{background:var(--fill);border-radius:12px;padding:8px 10px}
+.wp-stats div{background:var(--fill);border-radius:12px;padding:8px 10px;white-space:nowrap}
 .wp-stats span{display:block;font-size:.647rem;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em}
 .wp-stats b{display:inline;margin:0;font:700 1.12rem/1.2 var(--round);color:var(--label)}
 .wp-stats small{font-size:.706rem;font-weight:600;color:var(--label2)}
 .wp-scale{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
 .wp-scale i{height:6px;border-radius:3px;background:var(--fill2)}
 .wp-scale i.on.calm{background:var(--green)}.wp-scale i.on.moderate{background:var(--orange)}.wp-scale i.on.rough{background:var(--red)}
-.wp-scale em{font-style:normal;font-size:.647rem;font-weight:600;color:var(--label2);margin-top:4px}
+.wp-scale em{font-style:normal;font-size:.647rem;font-weight:600;color:var(--label2);margin-top:4px;text-align:center}
 .wp-scale em.on{color:var(--label)}
 .info-pop .wp-p{color:var(--label);margin:0 0 6px}
 .info-pop .wp-note{font-size:.765rem;margin:0 0 10px}
-.wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep)}
-.wp-days li{display:grid;grid-template-columns:1fr 26px minmax(86px,auto) auto;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
+.wp-days{list-style:none;margin:0;padding:0;border-top:.5px solid var(--sep);display:grid;grid-template-columns:auto 24px 1fr auto;column-gap:10px}
+.wp-days li{grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:center;padding:8px 0;border-bottom:.5px solid var(--sep);font-size:.824rem}
+.mp-pop .wp-days li:last-child{border-bottom:0}
 .wp-days li span{font-weight:600}
-.wp-days li div{width:26px;height:26px}
-.wp-days li b{margin:0;font-size:.824rem}
+.wp-days li div{width:24px;height:24px}
+.wp-days li b{margin:0;font-size:.824rem;line-height:1.2}
 .wp-lk{display:block;font-weight:500;font-size:.706rem;color:var(--label2);margin-top:1px;white-space:nowrap}
-.wp-days li em{font-style:normal;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.wp-days li em{font-style:normal;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:359px){.wp-days li em .hi{display:none}}   /* the smallest phones: just the number, so the row fits */
 .wp-foot{margin:8px 0 0!important;font-size:.706rem;color:var(--label2)}
 /* last crossings pop-up */
 .lx-big{font:700 2.1rem/1.05 var(--round);letter-spacing:-.01em;margin-top:2px}
@@ -2734,7 +2736,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let h;
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? WORD[lvl] + " · " + LIKE[lvl].toLowerCase() : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
+      h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? LIKE[lvl] : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
         + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
         + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
@@ -2760,7 +2762,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + "° high" : "") + "</em></li>"; }).join("");
+        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
       const c = w.current;
       wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
         lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
