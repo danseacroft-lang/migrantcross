@@ -188,7 +188,8 @@ def reported_today(stories, now):
         if s.get("ground"):
             if GROUND_EVENT.search(blob) and not GROUND_NOT.search(blob):
                 hits.append(s)
-        elif CROSS_EVENT.search(blob) and CROSS_TODAY.search(blob) and not CROSS_NOT.search(s["title"]) and not BLOCK.search(blob):
+        # news: the headline itself must be about boats crossing (a passing mention in the summary isn't enough)
+        elif CROSS_EVENT.search(s["title"]) and CROSS_TODAY.search(blob) and not CROSS_NOT.search(s["title"]) and not BLOCK.search(blob):
             hits.append(s)
     if not hits:
         return None
