@@ -3532,7 +3532,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       // "Crossings reported today": a news story from today saying boats are crossing, shown until the day's own figures are out
       const r = n.reported, rc = $("chipRep"), rOn = !!(r && r.url && /^https?:/.test(r.url) && r.date === ukToday() && !(boatDay && boatDay.date >= r.date));
       rc.hidden = !rOn;
-      if(rOn){ rc.href = r.url; rc.title = r.source + ": " + r.title; rc.setAttribute("aria-label", "Crossings reported in the news today. " + r.source + ": " + r.title + " (opens " + r.source + ")"); }
+      if(rOn){
+        rc.href = r.url; rc.title = r.source + ": " + r.title;
+        rc.querySelector("span").textContent = r.ground ? "Boats reported today" : "Crossings reported today";   // ground: a live sighting from someone at the coast
+        rc.setAttribute("aria-label", (r.ground ? "Boats reported at the coast today by " + r.source : "Crossings reported in the news today. " + r.source) + ": " + r.title + " (opens " + (r.ground ? "Telegram" : r.source) + ")");
+      }
       const items = (n.items || []).filter(x => x.breaking && x.url && /^https?:/.test(x.url) && Date.now() - new Date(x.published) < NEWS_MAX_H * 36e5);
       if(!items.length || seenGet() === items[0].url){ newsOn = false; stripUpdate(); return; }
       const fresh = newsShown !== items[0].url;

@@ -2,7 +2,7 @@ name: Update breaking news
 
 on:
   schedule:
-    - cron: "10 * * * *"   # every hour, at 10 past
+    - cron: "*/15 * * * *"   # every 15 minutes, so live sightings from the coast show quickly
   workflow_dispatch:
 
 permissions:

@@ -1,6 +1,6 @@
 """Breaking news about Channel small boat crossings, for the box at the top of the site.
 
-Runs hourly from .github/workflows/news.yml. Reads the public news feeds of a few
+Runs every 15 minutes from .github/workflows/news.yml. Reads the public news feeds of a few
 UK outlets, keeps breaking stories (last 3 hours) about small boats, the Channel,
 migration or UK politics (Dan, 2 Oct 2026: "anything to do with political news ...
 migration, the boats ... can show"), and writes news.json. It also notes the newest story from
@@ -70,6 +70,16 @@ CROSS_TODAY = re.compile(r"\btoday\b|this morning|\bovernight\b|\bearlier\b|\bri
 CROSS_NOT = re.compile(r"so far this year|this year|last year|in 20\d\d|since (?:jan|the start|labour|july)|record year|"
                        r"\bmonth\b|\bweekly\b|\bannual\b|\bstatistics\b|\btotal\b|court|trial|jailed|sentenced", re.I)
 
+# People on the ground who post sightings as they happen (Dan, 4 Oct 2026: "Those people are on the ground").
+# Their public Telegram channels are read from t.me/s/<channel>, which needs no key. A post from today that
+# mentions boats arriving or crossing counts by itself: no "today" wording needed, it's live.
+GROUND = [("Active Patriot UK", "RealActivePatriotUK")]   # also @PatriotActive on X
+GROUND_EVENT = re.compile(
+    r"\barriv\w*|\blanding|\blanded|\bboats?\b|dinghy|dinghies|border force|\brnli\b|lifeboat|"
+    r"\bdover\b|dungeness|folkestone|\bdeal\b|kingsdown|\bcrossings?\b|in the channel", re.I)
+GROUND_NOT = re.compile(r"\bcourt\b|\btrial\b|\bcharged\b|\bjailed\b|\bsentenc\w*|\bhotel\b|\bpetition\b|"
+                        r"so far this year|this year|last year|\bweek\b|\bmonth\b", re.I)
+
 BLOCK = re.compile(r"channel 4|channel 5|tv channel|youtube channel|channel swim|swim the channel|"
                    r"channel islands|jersey|guernsey|sky channel|"
                    r"^track |in charts|in numbers|explained|explainer|at a glance|key facts", re.I)   # explainers, not news
@@ -116,6 +126,24 @@ def read_feed(source, url):
     return out
 
 
+def read_telegram(source, channel):
+    """The latest posts of a public Telegram channel, from its web preview (t.me/s/...)."""
+    import html
+    import requests
+    page = requests.get(f"https://t.me/s/{channel}", headers=HEADERS, timeout=30).text
+    out = []
+    for block in page.split('class="tgme_widget_message_wrap')[1:]:
+        post = re.search(r'data-post="([^"]+)"', block)
+        when = re.search(r'<time[^>]*datetime="([^"]+)"', block)
+        body = re.search(r'class="tgme_widget_message_text[^"]*"[^>]*>(.*?)</div>', block, re.S)
+        if not (post and when and body):
+            continue
+        t = clean(html.unescape(re.sub(r"<br\s*/?>", " ", body.group(1))))
+        out.append({"source": source, "title": t[:160] + ("…" if len(t) > 160 else ""), "summary": t,
+                    "url": "https://t.me/" + post.group(1), "published": parse_date(when.group(1)), "ground": True})
+    return out
+
+
 def words(title):
     return set(re.findall(r"[a-z]{4,}", title.lower()))
 
@@ -157,13 +185,17 @@ def reported_today(stories, now):
         if s["published"].astimezone(uk).date() != today or s["published"] > now + timedelta(minutes=10):
             continue
         blob = s["title"] + " " + s["summary"]
-        if CROSS_EVENT.search(blob) and CROSS_TODAY.search(blob) and not CROSS_NOT.search(s["title"]) and not BLOCK.search(blob):
+        if s.get("ground"):
+            if GROUND_EVENT.search(blob) and not GROUND_NOT.search(blob):
+                hits.append(s)
+        elif CROSS_EVENT.search(blob) and CROSS_TODAY.search(blob) and not CROSS_NOT.search(s["title"]) and not BLOCK.search(blob):
             hits.append(s)
     if not hits:
         return None
     s = max(hits, key=lambda x: x["published"])
     return {"date": today.isoformat(), "title": s["title"], "url": s["url"], "source": s["source"],
-            "published": s["published"].astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
+            "published": s["published"].astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "ground": bool(s.get("ground"))}
 
 
 def main():
@@ -179,6 +211,13 @@ def main():
         except Exception as e:  # noqa: BLE001 - one broken feed shouldn't stop the others
             print(f"{source}: skipped ({e})")
     items = pick(stories, now)
+    for source, channel in GROUND:   # live sightings: only for "reported today", never the news strip
+        try:
+            got = read_telegram(source, channel)
+            stories += got
+            print(f"{source} (Telegram): {len(got)} posts")
+        except Exception as e:  # noqa: BLE001
+            print(f"{source} (Telegram): skipped ({e})")
     reported = reported_today(stories, now)
 
     # Manual control: news-override.json can hide stories (by URL) or pin one to the top
