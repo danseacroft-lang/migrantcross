@@ -1754,6 +1754,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
     const nm = b.querySelector(".am-tn").textContent;
     $("wxKeyPick").innerHTML = wxKey(l); $("wxKeyBar").innerHTML = wxKey(l, nm);
+    const noKey = l === "wind" || l === "gusts";   // no colours on the map for these, so nothing to explain
+    $("wxKeyPick").hidden = $("wxKeyBar").hidden = noKey;
     const kp = [...$("wxKeyPick").querySelectorAll("span")].map(e => e.textContent);
     [$("wxKeyPick"), $("wxKeyBar")].forEach(k => k.setAttribute("aria-label", nm + " colour key, " + kp[0] + " to " + kp[1]));
     if(!first){ resetWx(); if(hoverAt) showHover(); if(ptAt && !$("amSheet").hidden) showPoint(ptAt); }
@@ -1924,15 +1926,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
-    } else {   // as on Ventusky: the layer in colour, blended smoothly between the readings. Wind and gusts over land and sea;
-      // waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain
+    } else if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
+      // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
+      // Wind and gusts get no colour at all: just the clear map with the moving streaks on top
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
       const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
       for(let k = 0; k < n; k++){
         const x = val[k], c = colour(x, st), q = k * 4;
         px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
-        // wind, gusts and rain are see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
-        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : layer === "waves" ? 255 : 120;
+        // rain is see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
+        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : 255;
       }
       sx.putImageData(img, 0, 0);
       h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = soft ? "none" : "blur(" + (2 * dpr) + "px)";   // rain: its numbers stay sharp
@@ -1961,7 +1964,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       }
       h.restore();
     }
-    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1100, area / 2000) : Math.min(1800, area / 1300));
+    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 850));
     if(!same){
       parts = Array.from({length:count}, () => spawn({}));
       parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
@@ -1995,7 +1998,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup(); ptAt = ll;
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>";
+      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + (layer === "wind" || layer === "gusts" ? "" : '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>");
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(!isFull() && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
@@ -2040,7 +2043,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function spawn(p){
     // waves only start at sea: a few tries for a spot on the water
     for(let i = 0; i < 8; i++){ p.x = Math.random() * vw; p.y = Math.random() * vh; if(!fld || fld.mode !== "waves" || fld.sea[cellAt(p.x, p.y)]) break; }
-    p.age = 0; p.max = fld && fld.mode === "waves" ? 140 + Math.random() * 120 : 50 + Math.random() * 70; p.cap = Math.random(); return p;
+    p.age = 0; p.max = fld && fld.mode === "waves" ? 140 + Math.random() * 120 : 60 + Math.random() * 90; p.cap = Math.random(); return p;
   }
   function vel(x, y, a){
     const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
@@ -2068,35 +2071,31 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
-  // Gusts: smooth white streaks running downwind, faster and longer than the wind's, brighter for stronger gusts
-  function stepGusts(c, dt){
-    c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0," + Math.pow(.94, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // long, soft trails
-    c.globalCompositeOperation = "source-over"; c.lineCap = "round";
-    const paths = batches(3);
+  /* Wind and gusts, drawn straight onto the clear map, as on earth.nullschool and Ventusky: thousands of fine streaks flowing with the
+     wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
+     wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
+  const FLOW_INK = [[26,43,76],[26,43,76],[26,43,76],[201,110,20],[196,40,40]];   // navy, as the town names; amber and red for strong gusts
+  const FLOW_A = [.28, .46, .66, .85, .9];
+  function stepStreaks(c, dt, gust){
+    c.globalCompositeOperation = "destination-in";
+    c.fillStyle = "rgba(0,0,0," + Math.pow(gust ? .968 : .958, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // older trails fade
+    c.globalCompositeOperation = "source-over"; c.lineCap = "round"; c.lineJoin = "round";
+    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.6 : 1.35) * dt;
     for(const p of parts){
-      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), g = vel(p.x, p.y, fld.m), s = SPEED * 1.25 * dt;
-      const nx = p.x + u * s, ny = p.y + v * s;
+      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), s = vel(p.x, p.y, fld.m), nx = p.x + u * sp, ny = p.y + v * sp;
       p.age += dt;
       if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
-      const P = paths[g >= 40 ? 2 : g >= 28 ? 1 : 0]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
+      const t = p.age / p.max, life = Math.min(1, t * 5, (1 - t) * 4);   // quick fade in, gentle fade out
+      const band = gust ? (s >= 40 ? 4 : s >= 28 ? 3 : s >= 15 ? 2 : s >= 7 ? 1 : 0) : (s >= 20 ? 2 : s >= 9 ? 1 : 0);
+      const P = paths[band * L + Math.min(L - 1, life * L | 0)]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
       p.x = nx; p.y = ny;
     }
-    [[.6, 1.3], [.8, 1.5], [.85, 1.7]].forEach(([a, w], i) => { c.strokeStyle = "rgba(255,255,255," + a + ")"; c.lineWidth = w; c.stroke(paths[i]); });
-  }
-  // Wind: particles drifting with the wind, brighter where it's stronger
-  function stepWind(c, dt){
-    c.globalCompositeOperation = "destination-in"; c.fillStyle = "rgba(0,0,0," + Math.pow(.92, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // older trails fade
-    c.globalCompositeOperation = "source-over"; c.lineCap = "round";
-    const paths = batches(3);
-    for(const p of parts){
-      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), nx = p.x + u * SPEED * dt, ny = p.y + v * SPEED * dt;
-      p.age += dt;
-      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
-      const s = Math.hypot(u, v); paths[s < 10 ? 0 : s < 20 ? 1 : 2].moveTo(p.x, p.y); paths[s < 10 ? 0 : s < 20 ? 1 : 2].lineTo(nx, ny);
-      p.x = nx; p.y = ny;
+    for(let b = 0; b < 5; b++) for(let l = 0; l < L; l++){
+      const k = FLOW_INK[b]; c.strokeStyle = "rgba(" + k + "," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
+      c.lineWidth = gust ? 1.4 + (b > 2 ? .3 : 0) : 1.15 + b * .15; c.stroke(paths[b * L + l]);
     }
-    [[.38, 1], [.55, 1.15], [.75, 1.35]].forEach(([a, w], i) => { c.strokeStyle = "rgba(255,255,255," + a + ")"; c.lineWidth = w; c.stroke(paths[i]); });
   }
+  const stepGusts = (c, dt) => stepStreaks(c, dt, true), stepWind = (c, dt) => stepStreaks(c, dt, false);
   function stepFlow(dt){
     if(!fld || !flow) return;
     const c = flow.getContext("2d");
