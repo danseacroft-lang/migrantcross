@@ -295,6 +295,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .mn-tag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:nbPing 1.6s ease-out infinite}
 @keyframes nbPing{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
 .mn-fig .mn-tag{background:#0A84FF;padding-left:6px}
+.mn-support .mn-support-tag{background:#B58B5A;padding-left:8px}.mn-support .mn-head{text-decoration:none}.mn-support .mn-head:hover{text-decoration:underline}
 .mn-stage{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px}
 .mn-stage.in{animation:mnIn .45s cubic-bezier(.2,.9,.3,1) both}
 @keyframes mnIn{from{transform:translateY(70%);opacity:0}}
@@ -1074,6 +1075,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <div class="mn-slide mn-fig" id="figSlide" role="status" data-nosnippet hidden>
         <span class="mn-tag"><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span id="figTag">Updating</span></span>
         <div class="mn-stage"><button type="button" class="mn-head" id="figHead" aria-expanded="false" aria-controls="popFU">New figures incoming from the Home Office</button><span class="mn-meta" id="figMeta">Since 12:00 · Can take up to an hour</span></div>
+      </div>
+      <div class="mn-slide mn-support" id="supportSlide" data-nosnippet hidden>
+        <span class="mn-tag mn-support-tag">🍺 <span>Support</span></span>
+        <div class="mn-stage"><a class="mn-head" href="https://buymeacoffee.com/danseacroft" target="_blank" rel="noopener">Enjoying Channel Crossings? Buy me a beer to help keep it running</a><span class="mn-meta">Thank you for your support</span></div>
       </div>
     </div>
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -3600,7 +3605,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The daily update, "New figures incoming": from 12:00 UK time until the new figures are in, unless closed today (liveUi).
   // When both are on they take turns: the news for 15 seconds, then the daily update, then back. Pointing at the strip holds it.
   const NEWS_MAX_H = 3, NEWS_EACH = 7500, NEWS_TURN = 15000, FIG_TURN = 15000;
-  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
+  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, supportOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
   const seenGet = () => { try{ return localStorage.getItem("newsSeen"); }catch(e){ return null; } };
   const agoShort = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4)); return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m / 60) + (Math.round(m / 60) === 1 ? " hour ago" : " hours ago"); };
   function newsRoom(){
@@ -3609,19 +3614,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(h !== roomH){ roomH = h; setTimeout(placeTowns, 600); }   // once the strip has dropped in, the place names keep clear of it
   }
   function setSlide(which, animate){
-    const on = $(which === "news" ? "newsSlide" : "figSlide"), off = $(which === "news" ? "figSlide" : "newsSlide");
+    const ids = {news:"newsSlide", fig:"figSlide", support:"supportSlide"};
+    const on = $(ids[which]);
+    const off = Object.keys(ids).filter(k => k !== which).map(k => $(ids[k]));
     slide = which; turnMs = storyMs = 0; animate = animate && !reduced;
     on.classList.remove("off", "leave", "in");
-    off.classList.remove("in"); off.classList.add("off"); off.classList.toggle("leave", animate);
+    for(const el of off){ el.classList.remove("in"); el.classList.add("off"); el.classList.toggle("leave", animate); }
     if(animate){ on.offsetWidth; on.classList.add("in"); }
-    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : "Daily update");
-    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : "Close the new figures notice for today");
+    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : which === "fig" ? "Daily update" : "Support Channel Crossings");
+    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : which === "fig" ? "Close the new figures notice for today" : "Dismiss support message");
   }
   function stripUpdate(){
     const box = $("news");
-    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
-    if(!newsOn && !figOn){ box.hidden = true; slide = ""; newsRoom(); return; }
-    const want = slide === "news" && newsOn || slide === "fig" && figOn ? slide : newsOn ? "news" : "fig";
+    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn], [$("supportSlide"), supportOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
+    if(!newsOn && !figOn && !supportOn){ box.hidden = true; slide = ""; newsRoom(); return; }
+    const want = slide === "news" && newsOn || slide === "fig" && figOn || slide === "support" && supportOn ? slide : newsOn ? "news" : figOn ? "fig" : "support";
     if(box.hidden || want !== slide) setSlide(want, !box.hidden);
     box.hidden = false; newsRoom();
   }
@@ -3678,11 +3685,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   $("newsClose").addEventListener("click", e => {
     e.stopPropagation();
     if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
-    else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
+    else if(slide === "fig"){ try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
+    else { try{ localStorage.setItem("supportClosed", "1"); }catch(err){} supportOn = false; }
     stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
 
+  supportOn = (() => { try{ return localStorage.getItem("supportClosed") !== "1"; }catch(e){ return true; } })();
   start(); loadWeather(); loadNews();
+  stripUpdate();
   requestAnimationFrame(() => requestAnimationFrame(setupGraphCollapses));
   whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
 })();
