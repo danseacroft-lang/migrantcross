@@ -1503,10 +1503,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.createPane("labels").style.zIndex = 350;
     // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
     // Free to use with credit, and needs no key.
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png", {
-      subdomains:"abcd", maxZoom:20,
-      attribution:'Map © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a> · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'
-    }).addTo(LM);
+    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
+    esri("World_Topo_Map", {attribution:'Map © <a href="https://www.esri.com/">Esri</a> · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
