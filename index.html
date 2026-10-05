@@ -464,6 +464,11 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
 .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
+.chip-change .delta{font-weight:700}
+.hero-fresh{display:inline-flex;align-items:center;gap:6px;margin-top:5px;color:rgba(255,255,255,.78);font:500 .7rem/1.2 var(--font);text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.hero-fresh i{width:6px;height:6px;border-radius:50%;background:#30D158;box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
+.hero-fresh.stale i{background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.16)}
+.hero-fresh.failed i{background:#FF453A;box-shadow:0 0 0 3px rgba(255,69,58,.16)}
 /* graph cards stay visually compact; genuinely tall graphs become expandable */
 .graph-card{width:100%;max-width:860px;margin-inline:auto}
 .graph-card.graph-collapsible{max-height:360px;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.8,.2,1)}
@@ -1061,10 +1066,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker" hidden></div>
-    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">3</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">164</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Saturday, 3 October 2026 · 2&nbsp;boats</div></div></div><span class="sr" id="heroSr" aria-live="polite">164 people crossed in 2 small boats on Saturday, 3 October 2026</span>
+    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">3</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">164</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Saturday, 3 October 2026 · 2&nbsp;boats</div><div class="hero-fresh" id="heroFresh" hidden><i></i><span></span></div></div></div><span class="sr" id="heroSr" aria-live="polite">164 people crossed in 2 small boats on Saturday, 3 October 2026</span>
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
+      <span class="chip chip-change" id="chipChange" hidden></span>
       <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -2236,6 +2242,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   const sum = (a, k) => a.reduce((s, d) => s + (d[k] || 0), 0);
 
+  function renderFreshness(st){
+    const el = $("heroFresh"); if(!el) return;
+    const at = st && (st.dataAt || st.checkedAt);
+    if(!at){ el.hidden = true; return; }
+    const d = new Date(at), age = Date.now() - d.getTime();
+    const fresh = age >= 0 && age < 36 * 60 * 60 * 1000;
+    const label = d.toLocaleString("en-GB", {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
+    el.hidden = false; el.classList.toggle("stale", !fresh); el.classList.remove("failed");
+    el.querySelector("span").textContent = fresh ? "Data checked " + label : "Last data check " + label;
+  }
   function renderHero(){
     const last = days[days.length-1];
     $("heroKicker").hidden = true;   // the date goes in the line under the number instead
@@ -2258,6 +2274,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const pct = prev ? Math.round((ytd / prev - 1) * 100) : null;
     const c = $("chipYear"); c.hidden = false;
     c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "% on " + (yr - 1) + "</span>" : "");
+    const prevDay = days.length > 1 ? days[days.length - 2] : null, ch = $("chipChange");
+    if(prevDay){ const delta = last.migrants - prevDay.migrants; ch.hidden = false; ch.innerHTML = (delta < 0 ? "↓ " : delta > 0 ? "↑ " : "→ ") + "<b class='delta " + (delta < 0 ? "down" : delta > 0 ? "up" : "") + '">'  + fmt(Math.abs(delta)) + "</b> vs previous day"; } else ch.hidden = true;
     liveUi(); fitHero();
   }
 
@@ -2366,8 +2384,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
+      renderFreshness(st);
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){ useData(await getJSON("data.json")); renderAll(); loadExtras(); }
-    }catch(e){ /* try again next time */ }
+    }catch(e){ renderFreshness({dataAt: meta && meta.checkedAt}); }
     liveUi();
   }
   function tick(){
@@ -3534,7 +3553,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       if(meta.checkedAt && Date.now() - new Date(meta.checkedAt) > 120 * MIN) statusAt = 0;
       // drawn in short steps, so a tap straight after loading isn't kept waiting (same order as renderAll)
       const y = () => new Promise(r => window.scheduler && scheduler.yield ? scheduler.yield().then(r) : setTimeout(r, 0));
-      renderHero(); renderGlance(); await y();
+      renderHero(); renderFreshness({dataAt:meta.checkedAt}); renderGlance(); await y();
       renderOtd(); await y();
       drawHeat(); await y();
       drawYears(); await y();
