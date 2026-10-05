@@ -12,7 +12,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
 <link rel="preload" href="vendor/leaflet/leaflet.js" as="script">
-<meta name="description" content="164 people crossed the Channel in small boats on Sat 3 October. 2026 so far: 19,451. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="description" content="418 people crossed the Channel in small boats on Sun 4 October. 2026 so far: 19,869. Daily Home Office figures, a migrant tracker and live Channel weather.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -26,14 +26,14 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta property="og:title" content="Channel Crossings: daily small boat arrivals">
 <meta property="og:description" content="How many people crossed the Channel in small boats yesterday? Daily Home Office figures, records and live Channel conditions.">
 <meta property="og:url" content="https://channelcrossings.world/">
-<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-03">
+<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-04">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Channel Crossings logo with the latest daily arrivals figure">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
-<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-03">
+<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-04">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
@@ -56,9 +56,9 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   "isAccessibleForFree": true,
   "keywords": ["small boat crossings", "Channel crossings", "small boat arrivals", "migrant crossings", "boat crossing figures", "English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
   "creator": {"@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "email": "x.chancrossings@gmail.com"},
-  "temporalCoverage": "2018-01-01/2026-10-03",
+  "temporalCoverage": "2018-01-01/2026-10-04",
   "spatialCoverage": "English Channel, United Kingdom",
-  "dateModified": "2026-10-03",
+  "dateModified": "2026-10-04",
   "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://channelcrossings.world/data.csv"}]
 }
 </script>
@@ -1084,7 +1084,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 3 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 4 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
@@ -1108,7 +1108,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker" hidden></div>
-    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">3</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">164</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Saturday, 3 October 2026 · 2&nbsp;boats</div><div class="hero-fresh" id="heroFresh" hidden><i></i><span></span></div></div></div><span class="sr" id="heroSr" aria-live="polite">164 people crossed in 2 small boats on Saturday, 3 October 2026</span>
+    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">4</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">418</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Sunday, 4 October 2026 · 5&nbsp;boats</div><div class="hero-fresh" id="heroFresh" hidden><i></i><span></span></div></div></div><span class="sr" id="heroSr" aria-live="polite">418 people crossed in 5 small boats on Sunday, 4 October 2026</span>
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
