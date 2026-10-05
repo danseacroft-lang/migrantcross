@@ -126,9 +126,9 @@ button,input,select,textarea{font:inherit}
   height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
 .hero-map{position:absolute;inset:0;will-change:transform}
-.hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-map > svg{position:absolute;width:0;height:0;overflow:hidden}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
-#lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
+#lmap{position:absolute;inset:0;background:#A7C7E3;font:inherit}
 .wx-heat{display:none}
 .wx-time,.wx-key,.wx-key-bar{display:none !important}
 .wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
@@ -1504,14 +1504,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
     // Free to use with credit, and needs no key.
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("World_Street_Map", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
       .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
-    L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
+    /* drawn chart stays off the tiles so the real map shows */
     // the extra town names, added biggest first after the ones in the page, once the page has settled
     whenMapShown(() => getJSON("towns.json").then(a => {
       const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
