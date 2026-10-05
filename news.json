@@ -1,41 +1,48 @@
 {
- "checkedAt": "2026-10-05T12:23:36Z",
+ "checkedAt": "2026-10-05T12:51:09Z",
  "items": [
+  {
+   "title": "Failed asylum seeker jailed for 20 years after trying to break into Israeli embassy in London to launch knife attack",
+   "url": "https://www.gbnews.com/news/israel-embassy-knife-attack-failed-asylum-seeker-jailed-20-year-break-israeli-embassy-london-knife-attack",
+   "source": "GB News",
+   "published": "2026-10-05T12:48:27Z",
+   "breaking": true
+  },
   {
    "title": "No 10 insists RAF Fairford is safe after US withdraws bombers",
    "url": "https://www.bbc.co.uk/news/articles/cmy56yvv1kxxo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-05T12:21:32Z",
-   "breaking": true
-  },
-  {
-   "title": "RAF Fairford is 'safe', No10 says despite US withdrawing bombers after suspected terror plot",
-   "url": "https://www.gbnews.com/news/raf-fairford-no10-statement-safe-us-bombers-withdrawn-terror-plot",
-   "source": "GB News",
-   "published": "2026-10-05T12:19:26Z",
+   "published": "2026-10-05T12:48:01Z",
    "breaking": true
   },
   {
    "title": "Two people die trying to cross Channel as anti-migrant protesters clash with police in Gosport",
    "url": "https://www.theguardian.com/uk-news/2026/oct/05/anti-migrant-protesters-scuffle-police-gosport-channel-rescue",
    "source": "The Guardian",
-   "published": "2026-10-05T11:59:19Z",
+   "published": "2026-10-05T12:47:34Z",
    "breaking": true
   },
   {
-   "title": "Jewish Greens chair says she could leave party over 'Zionism is racism' motion",
-   "url": "https://www.bbc.co.uk/news/articles/cm4g1dxe50nyo?at_medium=RSS&at_campaign=rss",
+   "title": "Twelve arrests after protest over migrant boat arrival",
+   "url": "https://www.bbc.co.uk/news/articles/cr20w64ll61lo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-05T11:23:02Z",
+   "published": "2026-10-05T12:42:39Z",
    "breaking": true
   },
   {
-   "title": "Shadow chancellor to unveil Tory plans to cut taxes and regulations",
-   "url": "https://www.bbc.co.uk/news/articles/cqj9kje82jm1o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-05T10:44:51Z",
+   "title": "Twelve people arrested after anti-migrant protest engulfs seaside town amid 150-strong small boat arrival",
+   "url": "https://www.gbnews.com/news/migrant-crisis-twelve-people-arrested-anti-migrant-protests-small-boat-arrival",
+   "source": "GB News",
+   "published": "2026-10-05T12:24:59Z",
    "breaking": true
   }
  ],
- "reported": null
+ "reported": {
+  "date": "2026-10-05",
+  "title": "Twelve people arrested after anti-migrant protest engulfs seaside town amid 150-strong small boat arrival",
+  "url": "https://www.gbnews.com/news/migrant-crisis-twelve-people-arrested-anti-migrant-protests-small-boat-arrival",
+  "source": "GB News",
+  "published": "2026-10-05T12:24:59Z",
+  "ground": false
+ }
 }
