@@ -125,8 +125,18 @@ button,input,select,textarea{font:inherit}
 .hero{position:relative;width:min(1148px,calc(100% - 2 * max(16px,env(safe-area-inset-left,0px))));margin:calc(56px + env(safe-area-inset-top,0px)) auto 0;
   height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
-.hero-map{position:absolute;inset:0;will-change:transform}
-.hero-map > svg{position:absolute;width:0;height:0;overflow:hidden}
+.hero-map{position:absolute;inset:0;visibility:hidden;pointer-events:none}
+.hero-stage{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:28px 24px 32px;color:#fff;background:radial-gradient(120% 90% at 80% 0%,#1a4e86 0%,#0c2344 52%,#081627 100%)}
+.stage-kicker{margin:0;font:600 .75rem/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.stage-h{margin:0;font:700 clamp(2rem,6vw,3.4rem)/1.02 var(--font);letter-spacing:-.035em}
+.stage-sub{margin:0;font:500 1rem/1.35 var(--font);color:rgba(255,255,255,.82)}
+.stage-search{position:relative;margin-top:10px;max-width:560px}
+.stage-search input{width:100%;height:48px;border:0;border-radius:14px;padding:0 16px;background:rgba(255,255,255,.14);color:#fff;font:500 1rem/1 var(--font);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3);outline:none}
+.stage-search input::placeholder{color:rgba(255,255,255,.62)}
+.stage-hits{position:absolute;left:0;right:0;top:56px;z-index:5;list-style:none;margin:0;padding:6px;border-radius:14px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.stage-hits button{width:100%;text-align:left;border:0;background:none;color:#fff;font:500 .95rem/1.2 var(--font);padding:10px 12px;border-radius:10px;cursor:pointer}
+.stage-hits button:hover,.stage-hits button[aria-selected=true]{background:rgba(255,255,255,.1)}
+main > section.is-dim{display:none !important}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:linear-gradient(180deg,#8EC8E6,#6AAFD4);font:inherit}
 .cc-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
@@ -1019,6 +1029,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
+  <div class="hero-stage" id="heroStage">
+    <p class="stage-kicker">Channel Crossings</p>
+    <h1 class="stage-h"><span id="stageNum">—</span> <span id="stageT">people detected</span></h1>
+    <p class="stage-sub" id="stageSub">Today’s figures</p>
+    <form class="stage-search" role="search" action="javascript:void(0)">
+      <label class="sr" for="boxSearch">Search the figures</label>
+      <input id="boxSearch" type="search" placeholder="Search figures, records, nationalities" autocomplete="off" enterkeyhint="search">
+      <ul id="boxHits" class="stage-hits" hidden></ul>
+    </form>
+  </div>
   <div class="hero-map" id="heroMap">
     <div id="lmap"></div>
     <svg viewBox="0 0 1000 686" preserveAspectRatio="none" id="map">
@@ -3676,6 +3696,37 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
+</script>
+
+<script>
+(function(){
+  const q = document.getElementById("boxSearch"), hits = document.getElementById("boxHits");
+  const num = document.getElementById("stageNum"), sub = document.getElementById("stageSub"), t = document.getElementById("stageT");
+  function sync(){
+    const n = document.getElementById("heroNum"), s = document.getElementById("heroSub"), ht = document.getElementById("hqT");
+    if(n && num) num.textContent = n.textContent || "—";
+    if(s && sub) sub.textContent = s.textContent || "";
+    if(ht && t) t.textContent = ht.textContent || "";
+  }
+  sync(); setInterval(sync, 1000);
+  const secs = [...document.querySelectorAll("main > section")];
+  const items = secs.map(sec => ({sec, title:(sec.querySelector("h2")||{}).textContent || sec.getAttribute("aria-label") || "Section", text:(sec.innerText||"").toLowerCase()}));
+  function apply(v){
+    const n = v.trim().toLowerCase();
+    hits.innerHTML = "";
+    if(!n){ secs.forEach(s => s.classList.remove("is-dim")); hits.hidden = true; return; }
+    const matched = items.filter(it => it.title.toLowerCase().includes(n) || it.text.includes(n));
+    secs.forEach(s => s.classList.toggle("is-dim", !matched.some(it => it.sec === s)));
+    matched.slice(0,6).forEach(it => {
+      const li = document.createElement("li");
+      const b = document.createElement("button"); b.type = "button"; b.textContent = it.title.trim();
+      b.addEventListener("click", () => { q.value = it.title.trim(); apply(q.value); it.sec.scrollIntoView({behavior:"smooth", block:"start"}); });
+      li.append(b); hits.append(li);
+    });
+    hits.hidden = !matched.length;
+  }
+  q.addEventListener("input", () => apply(q.value));
+})();
 </script>
 </body>
 </html>
