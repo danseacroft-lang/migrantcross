@@ -756,6 +756,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .hero-chips{margin-top:10px}
 }
 
+/* phones: one column, no sideways spill, below-fold sections stay cheap to scroll */
+@media (max-width:899px){
+  main{display:block;padding-top:20px;padding-bottom:36px;gap:28px}
+  main > section{content-visibility:auto;contain-intrinsic-size:auto 420px;margin-bottom:28px}
+  main > section:first-child{content-visibility:visible}
+  .card,.duo,.bento{max-width:100%}
+  body{overflow-x:hidden}
+  .more-toggle{height:34px;padding:0 14px}
+}
 /* ------------------------------------------------------------ smaller screens */
 @media (max-width:900px){
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -970,6 +979,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 }
 /* Long boxes open downwards only. Width stays the column width. */
 .card.can-more{max-height:420px;padding-bottom:52px}
+@media (max-width:899px){.card.can-more{max-height:320px}}
 .card.can-more.is-open{max-height:none}
 .more-toggle{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:2px;height:30px;padding:0 10px 0 12px;border:0;border-radius:999px;color:var(--blue);font:600 .8rem/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
   background:color-mix(in srgb,var(--fill) 88%,var(--card));box-shadow:inset 0 0 0 .5px var(--sep)}
@@ -3413,11 +3423,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   function pinColumns(){
     const wide = innerWidth >= 900;
-    const secs = [...document.querySelectorAll("main > section")].filter(s => getComputedStyle(s).display !== "none");
+    if(!wide){
+      document.querySelectorAll("main > section.span").forEach(sec => { sec.classList.remove("span"); sec.style.gridColumn = ""; });
+      return;
+    }
+    const secs = [...document.querySelectorAll("main > section")].filter(s => s.offsetParent !== null);
     let n = 0;
     secs.forEach((sec, i) => {
       sec.classList.remove("span");
-      if(!wide){ sec.style.gridColumn = ""; return; }
       const next = secs[i + 1];
       if(sec.classList.contains("wide")){ n = 0; return; }
       if(n % 2 === 0 && (!next || next.classList.contains("wide"))){ sec.classList.add("span"); n = 0; return; }
