@@ -1512,7 +1512,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     // the extra town names, added biggest first after the ones in the page, once the page has settled
-    whenIdle(() => getJSON("towns.json").then(a => {
+    whenMapShown(() => getJSON("towns.json").then(a => {
       const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
       places = places.concat(extra).sort((x, y) => x.rank - y.rank);   // a stable sort: the page's own towns stay ahead within each rank
       placeTowns();
@@ -1533,6 +1533,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
   }
   function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
+  function whenMapShown(fn){
+    const phone = matchMedia("(max-width:899px)").matches, map = $("lmap");
+    if(!phone){ whenIdle(fn, 1500); return; }
+    if(!map || !("IntersectionObserver" in window)){ setTimeout(fn, 1600); return; }
+    const io = new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)){ io.disconnect(); whenIdle(fn, 700); } }, {rootMargin:"160px"});
+    io.observe(map);
+  }
   // Full screen: drag, pinch and scroll to zoom anywhere, on phones too (in the page, phones keep the map still so it scrolls)
   const isFull = () => hero.classList.contains("full");
   function setFull(on){
@@ -3670,7 +3677,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
   start(); loadWeather(); loadNews();
-  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
+  whenMapShown(loadGrid);   // phones: the 48-hour weather map waits until the map is on screen
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
