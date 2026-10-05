@@ -129,7 +129,7 @@ button,input,select,textarea{font:inherit}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
-.wx-heat{mix-blend-mode:multiply;opacity:.96}
+.wx-heat{display:none}
 .wx-time,.wx-key,.wx-key-bar{display:none !important}
 .wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
@@ -2130,10 +2130,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
      wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
   const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
   const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
-  const FLOW_A = [.55, .7, .82, .9, .95];
+  const FLOW_A = [.28, .4, .5, .58, .62];
   function stepStreaks(c, dt, gust){
     c.globalCompositeOperation = "destination-in";
-    c.fillStyle = "rgba(0,0,0," + Math.pow(.988, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // long soft trails
+    c.fillStyle = "rgba(0,0,0," + Math.pow(.9, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);
     c.globalCompositeOperation = "source-over"; c.lineCap = "round"; c.lineJoin = "round";
     const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.25 : 1.05) * dt;
     for(const p of parts){
