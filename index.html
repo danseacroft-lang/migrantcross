@@ -1820,7 +1820,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Rebuilt whenever the map moves or new readings arrive: the sea (or the temperature colours), any numbers, and the motion drawn over it.
   // Wind: streams of particles. Gusts: faster, longer streaks, warmer for stronger gusts.
   // Waves: crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
-  const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
+  const CELL = 8, SPEED = .04;   // grid spacing in pixels; pixels a frame for each mph
   let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null, seaPath = null;
   let maskKey = "", maskVal = null;
   function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
@@ -2024,7 +2024,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       }
       h.restore();
     }
-    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 850));
+    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 520));
     if(!same){
       parts = Array.from({length:count}, () => spawn({}));
       parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
@@ -2103,7 +2103,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function spawn(p){
     // waves only start at sea: a few tries for a spot on the water
     for(let i = 0; i < 8; i++){ p.x = Math.random() * vw; p.y = Math.random() * vh; if(!fld || fld.mode !== "waves" || fld.sea[cellAt(p.x, p.y)]) break; }
-    p.age = 0; p.max = fld && fld.mode === "waves" ? 140 + Math.random() * 120 : 60 + Math.random() * 90; p.cap = Math.random(); return p;
+    p.age = 0; p.max = fld && fld.mode === "waves" ? 160 + Math.random() * 140 : 90 + Math.random() * 120; p.cap = Math.random(); return p;
   }
   function vel(x, y, a){
     const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
@@ -2135,26 +2135,27 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
      wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
      wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
   const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
-  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,190,90],[255,96,96]];   // white, as the waves; amber and red for strong gusts
-  const FLOW_A = [.45, .65, .85, .95, .95];
+  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
+  const FLOW_A = [.55, .7, .82, .9, .95];
   function stepStreaks(c, dt, gust){
     c.globalCompositeOperation = "destination-in";
-    c.fillStyle = "rgba(0,0,0," + Math.pow(gust ? .968 : .958, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // older trails fade
+    c.fillStyle = "rgba(0,0,0," + Math.pow(.988, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // long soft trails
     c.globalCompositeOperation = "source-over"; c.lineCap = "round"; c.lineJoin = "round";
-    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.6 : 1.35) * dt;
+    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.25 : 1.05) * dt;
     for(const p of parts){
       const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), s = vel(p.x, p.y, fld.m), nx = p.x + u * sp, ny = p.y + v * sp;
       p.age += dt;
-      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
-      const t = p.age / p.max, life = Math.min(1, t * 5, (1 - t) * 4);   // quick fade in, gentle fade out
+      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); p.px = p.x; p.py = p.y; continue; }
+      const t = p.age / p.max, life = Math.min(1, t * 4, (1 - t) * 5);
       const band = gust ? (s >= 40 ? 4 : s >= 28 ? 3 : s >= 15 ? 2 : s >= 7 ? 1 : 0) : (s >= 20 ? 2 : s >= 9 ? 1 : 0);
-      const P = paths[band * L + Math.min(L - 1, life * L | 0)]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
-      p.x = nx; p.y = ny;
+      const P = paths[band * L + Math.min(L - 1, life * L | 0)];
+      const px = p.px == null ? p.x : p.px, py = p.py == null ? p.y : p.py;
+      P.moveTo(px, py); P.quadraticCurveTo(p.x, p.y, nx, ny);
+      p.px = p.x; p.py = p.y; p.x = nx; p.y = ny;
     }
-    c.strokeStyle = "rgba(20,30,50,.10)"; c.lineWidth = 3; for(const P of paths) c.stroke(P);   // a faint dark edge, so white shows on the grey land too
     for(let b = 0; b < 5; b++) for(let l = 0; l < L; l++){
-      const k = FLOW_INK[b]; c.strokeStyle = "rgba(" + k + "," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
-      c.lineWidth = gust ? 1.4 + (b > 2 ? .3 : 0) : 1.15 + b * .15; c.stroke(paths[b * L + l]);
+      c.strokeStyle = "rgba(255,255,255," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
+      c.lineWidth = gust ? 1.15 : .95; c.stroke(paths[b * L + l]);
     }
   }
   const stepGusts = (c, dt) => stepStreaks(c, dt, true), stepWind = (c, dt) => stepStreaks(c, dt, false);
