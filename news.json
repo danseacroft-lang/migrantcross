@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-05T22:54:40Z",
+ "checkedAt": "2026-10-05T23:10:27Z",
  "items": [
+  {
+   "title": "US envoy for antisemitism brands Green Party 'hypocritical' over controversial anti-Zionist motion",
+   "url": "https://www.gbnews.com/politics/us-envoy-antisemitism-brands-green-party-hypocritical",
+   "source": "GB News",
+   "published": "2026-10-05T22:54:58Z",
+   "breaking": true
+  },
   {
    "title": "I won't accept exclusion, says Polanski after criticism of Zionism motion",
    "url": "https://www.bbc.co.uk/news/articles/cjy56yxxwy3po?at_medium=RSS&at_campaign=rss",
@@ -28,21 +35,7 @@
    "source": "GB News",
    "published": "2026-10-05T21:28:22Z",
    "breaking": true
-  },
-  {
-   "title": "Jeffrey Archer: successful novelist, disgraced politician and convicted liar",
-   "url": "https://www.bbc.co.uk/news/articles/c80095q7p7jo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-05T20:39:45Z",
-   "breaking": true
   }
  ],
- "reported": {
-  "date": "2026-10-05",
-  "title": "Twelve people arrested after anti-migrant protest engulfs seaside town amid 150-strong small boat arrival",
-  "url": "https://www.gbnews.com/news/migrant-crisis-twelve-people-arrested-anti-migrant-protests-small-boat-arrival",
-  "source": "GB News",
-  "published": "2026-10-05T12:24:59Z",
-  "ground": false
- }
+ "reported": null
 }
