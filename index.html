@@ -111,9 +111,15 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px;scroll-behavior:smooth;scroll-padding-top:calc(12px + env(safe-area-inset-top,0px))}
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
-body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+.skip-link{position:fixed;z-index:1000;top:8px;left:8px;transform:translateY(-160%);padding:10px 14px;border-radius:12px;background:#fff;color:#000;font-weight:700;text-decoration:none;box-shadow:0 4px 18px rgba(0,0,0,.2);transition:transform .15s ease}.skip-link:focus{transform:translateY(0)}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+button,a,input,select{touch-action:manipulation}
+img{max-width:100%;height:auto}
+
 a{color:var(--blue);text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
+
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 button,input,select,textarea{font:inherit}
 .leaflet-container,.leaflet-container *{font-family:var(--font)}
@@ -469,35 +475,32 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .hero-fresh.stale i{background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .hero-fresh.failed i{background:#FF453A;box-shadow:0 0 0 3px rgba(255,69,58,.16)}
 /* ------------------------------------------------------------ data intelligence */
-.insight-card{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.85fr);gap:22px;align-items:stretch}
+.insight-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:22px;align-items:stretch}
+.insight-main{min-width:0}
 .insight-main h3{margin:0 0 8px;font-size:1.12rem}
 .insight-main p{margin:0;color:var(--label2);line-height:1.45}
-.insight-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
-.insight-stat{padding:12px 13px;border-radius:15px;background:var(--fill);min-width:0}
-.insight-stat b{display:block;font:700 1.35rem/1.1 var(--round);font-variant-numeric:tabular-nums}
-.insight-stat span{display:block;margin-top:5px;color:var(--label2);font-size:.735rem;line-height:1.25}
+.insight-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.insight-stat{padding:15px 14px;border-radius:16px;background:var(--fill);min-width:0;min-height:112px;box-sizing:border-box}
+.insight-stat b{display:block;font:700 1.35rem/1.1 var(--round);font-variant-numeric:tabular-nums;white-space:nowrap}
+.insight-stat span{display:block;margin-top:7px;color:var(--label2);font-size:.735rem;line-height:1.25}
 .insight-stat .up{color:var(--green-t)}.insight-stat .down{color:var(--red-t)}
-.report-box{padding:15px 16px;border-radius:17px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:14px}
-.report-box h4{margin:0 0 7px;font-size:.824rem;color:var(--label2);font-weight:600}
-.report-status{display:flex;align-items:center;gap:9px;font-weight:650}
-.report-status i{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
+.insight-stat .insight-delta{display:block;margin-top:10px;font-size:.78rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.report-box{padding:20px;border-radius:18px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-width:0}
+.report-box h4{margin:0 0 10px;font-size:.86rem;color:var(--label2);font-weight:600}
+.report-status{display:flex;align-items:flex-start;gap:11px;font-size:1.08rem;line-height:1.2;font-weight:650;min-width:0}
+.report-status span{min-width:0}
+.report-status i{width:9px;height:9px;margin-top:.34em;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
 .report-status.wait i{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .report-status.bad i{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.16)}
-.report-meta{margin:0;color:var(--label2);font-size:.765rem;line-height:1.4}
-.report-source{margin:0;color:var(--label3);font-size:.706rem}
+.report-meta{margin:0;color:var(--label2);font-size:.765rem;line-height:1.45}
+.report-source{margin:0;color:var(--label3);font-size:.706rem;line-height:1.35}
 .chart-tools{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex:none}
 .chart-tool-label{font-size:.647rem;color:var(--label2);font-weight:650;text-transform:uppercase;letter-spacing:.05em}
 .chart-tools .seg{max-width:100%}
 .chart-tools .seg button{padding-inline:10px}
-.chart-modal-open{overflow:hidden}
-.chart-expanded{position:fixed!important;z-index:70;inset:18px;max-width:none!important;margin:0!important;padding:22px!important;background:var(--card);box-shadow:0 20px 70px rgba(0,0,0,.28),0 0 0 .5px var(--sep);overflow:auto}
-.chart-expanded .chart{min-height:calc(100vh - 180px)}
-.chart-expanded .chart svg{min-height:calc(100vh - 180px)}
-.chart-expand{appearance:none;border:0;background:var(--fill);color:var(--label);border-radius:999px;padding:7px 10px;font:600 .706rem/1 var(--font);cursor:pointer}.chart-close{display:none;appearance:none;border:0;background:var(--fill);color:var(--label);border-radius:999px;padding:8px 12px;font:600 .765rem/1 var(--font);cursor:pointer}
-.chart-expanded .chart-close{display:inline-flex}
-@media (max-width:900px){.insight-card{grid-template-columns:1fr}.report-box{min-height:0}.chart-tools{align-items:stretch;width:100%}.chart-tools .seg{width:100%}.chart-tools .seg button{padding-inline:7px}.chart-head{min-height:0}.chart-expanded{inset:8px;padding:16px!important}.chart-expanded .chart,.chart-expanded .chart svg{min-height:calc(100dvh - 165px)}}
-@media (max-width:600px){.insight-stats{grid-template-columns:1fr 1fr}.insight-stat:last-child{grid-column:1 / -1}.report-box{padding:14px}.chart-tools .seg button{font-size:.706rem;padding-inline:5px}.chart-expanded{border-radius:18px}}
-@media (max-width:420px){.chart-tools .seg button{padding-inline:4px}.chart-tools .seg{grid-auto-columns:minmax(0,1fr)}}
+@media (max-width:900px){.insight-card{grid-template-columns:1fr}.report-box{min-height:0}.chart-tools{align-items:stretch;width:100%}.chart-tools .seg{width:100%}.chart-tools .seg button{padding-inline:7px}.chart-head{min-height:0}}
+@media (max-width:600px){.insight-stats{grid-template-columns:1fr 1fr;gap:10px}.insight-stat{min-height:104px;padding:13px 12px}.insight-stat:last-child{grid-column:1 / -1}.report-box{padding:16px}.chart-tools .seg button{font-size:.706rem;padding-inline:5px}}
+@media (max-width:420px){.insight-stats{grid-template-columns:1fr}.insight-stat:last-child{grid-column:auto}.chart-tools .seg button{padding-inline:4px}.chart-tools .seg{grid-auto-columns:minmax(0,1fr)}}
 /* graph cards stay visually compact; genuinely tall graphs become expandable */
 .graph-card{width:100%;max-width:860px;margin-inline:auto}
 .graph-card.graph-collapsible{max-height:360px;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.8,.2,1)}
@@ -744,6 +747,32 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
 @media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
 
+/* ------------------------------------------------------------ accessibility, performance and mobile polish */
+@media (max-width:760px){
+  main{width:100%;overflow:clip}
+  .section-h{padding-inline:16px}
+  .section-h h2{font-size:1.22rem}
+  .section-h p{font-size:.824rem}
+  .card{max-width:none}
+  .chart-head{gap:10px}
+  .chart-tools{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+  .chart-tools::-webkit-scrollbar{display:none}
+  .chart-tools .seg{min-width:0}
+  .chart-tools .seg button{min-height:40px}
+  .calc-fields{grid-template-columns:1fr 1fr}
+  .ft-share{width:100%;gap:8px}
+  .ft-share .sh{flex:1 1 calc(50% - 8px);min-width:0}
+  footer{padding-inline:16px}
+}
+@media (max-width:380px){
+  .ft-share .sh{flex-basis:100%}
+  .calc-fields{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .skip-link{transition:none}
+}
+
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer p{margin:0;max-width:52ch;line-height:1.45}
@@ -755,8 +784,23 @@ footer strong{color:var(--label);font-weight:600}
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
 .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:var(--label);touch-action:manipulation;transition:background-color .2s}   /* plain buttons, not brand colours */
 .sh-copy,.sh-more{color:var(--blue)}
-.sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.sh:hover{background:var(--fill2)}}
+/* Platform colours for the sharing buttons. Keep the brand buttons distinct from the site's neutral controls. */
+.sh-x{background:#000;color:#fff}
+.sh-fb{background:#1877F2;color:#fff}
+.sh-wa{background:#25D366;color:#fff}
+.sh-tg{background:#229ED9;color:#fff}
+.sh-x:focus-visible{outline:2px solid #fff;outline-offset:2px;box-shadow:0 0 0 4px #000}
+.sh-fb:focus-visible{outline:2px solid #1877F2;outline-offset:2px}
+.sh-wa:focus-visible{outline:2px solid #25D366;outline-offset:2px}
+.sh-tg:focus-visible{outline:2px solid #229ED9;outline-offset:2px}
+.sh-copy:focus-visible,.sh-more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){
+  .sh-x:hover{background:#1a1a1a}
+  .sh-fb:hover{background:#166fe5}
+  .sh-wa:hover{background:#20bd5a}
+  .sh-tg:hover{background:#1f8fca}
+  .sh-copy:hover,.sh-more:hover{background:var(--fill2)}
+}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -1035,6 +1079,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
   <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
@@ -1128,7 +1173,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
-<main id="main">
+<main id="main" tabindex="-1">
 
   <!-- ============================================================ AT A GLANCE -->
   <section class="wide" aria-labelledby="hGlance">
@@ -1196,7 +1241,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </section>
 
   <!-- ============================================================ WHAT CHANGED -->
-  <section aria-labelledby="hInsight">
+  <section class="wide" aria-labelledby="hInsight">
     <div class="section-h rv"><h2 id="hInsight">What Changed</h2><p id="insightPeriod"></p></div>
     <article class="card insight-card rv">
       <div class="insight-main">
@@ -1238,14 +1283,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           <div class="chart-head">
             <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
             <div class="chart-tools">
-              <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px"><div class="chart-tool-label">Explore the data</div><button type="button" class="chart-expand" id="chartExpand">Expand</button></div>
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px"><div class="chart-tool-label">Explore the data</div></div>
               <div class="seg" role="group" aria-label="Measure" id="metricSeg">
                 <button type="button" data-m="people" aria-pressed="true">People</button><button type="button" data-m="boats" aria-pressed="false">Boats</button><button type="button" data-m="ratio" aria-pressed="false">Per boat</button>
               </div>
               <div class="seg" role="group" aria-label="Range" id="rangeSeg">
                 <button type="button" data-r="7">7D</button><button type="button" data-r="30" aria-pressed="true">30D</button><button type="button" data-r="90">90D</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
               </div>
-              <button type="button" class="chart-close" id="chartClose">Close expanded chart</button>
             </div>
           </div>
           <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
@@ -1423,7 +1467,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 
 <footer>
-  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
+  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" aria-label="Share on X" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
@@ -2472,14 +2516,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("insightPeriod").textContent = dShort.format(parse(wk[0].date)) + " to " + dShort.format(parse(last.date));
     $("insightTitle").textContent = pct == null ? "The latest week at a glance" : pct === 0 ? "A similar week to the one before" : (pct > 0 ? "A busier week" : "A quieter week") + " than the one before";
     $("insightSummary").innerHTML = "The latest 7 days recorded <b>" + fmt(people) + " people</b> in <b>" + fmt(boats) + " boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with " + fmt(peak.migrants) + " people.";
-    const pctSpan = pct == null ? "" : " · <span class='" + (pct > 0 ? "up" : pct < 0 ? "down" : "") + "'>" + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
-    const ratioSpan = ratioPct == null ? "" : " · <span class='" + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + "'>" + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
+    const pctSpan = pct == null ? "" : '<span class="insight-delta ' + (pct > 0 ? "up" : pct < 0 ? "down" : "") + '">' + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
+    const ratioSpan = ratioPct == null ? "" : '<span class="insight-delta ' + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + '">' + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
+    const swingLabel = (swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta));
     $("insightStats").innerHTML = [
-      [fmt(people), "People this week" + pctSpan],
-      [fmt(boats), "Boats this week"],
-      [ratio ? ratio.toFixed(1) : "–", "People per boat" + ratioSpan],
-      [(swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta)), "Biggest daily move · " + dShort.format(parse(swing.date))]
-    ].map(x => '<div class="insight-stat"><b class="num">' + x[0] + '</b><span>' + x[1] + '</span></div>').join("");
+      [fmt(people), "People this week", pctSpan],
+      [fmt(boats), "Boats this week", ""],
+      [ratio ? ratio.toFixed(1) : "–", "People per boat", ratioSpan],
+      [swingLabel, "Biggest daily move · " + dShort.format(parse(swing.date)), ""]
+    ].map(x => '<div class="insight-stat"><b class="num">' + x[0] + '</b><span>' + x[1] + '</span>' + x[2] + '</div>').join("");
     const status = statusMeta || {dataAt:meta && meta.checkedAt, latest:last.date};
     const latest = status.latest || last.date, yesterday = new Date(Date.parse(ukToday() + "T00:00:00Z") - DAY).toISOString().slice(0,10);
     const current = latest >= yesterday;
@@ -2735,12 +2780,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     document.querySelectorAll("#rangeSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
     animateLine(drawChart());
   }));
-  const chartCard = $("chart").closest(".graph-card"), chartExpand = $("chartExpand"), chartClose = $("chartClose");
-  function toggleChartExpand(on){ chartCard.classList.toggle("chart-expanded", on); document.documentElement.classList.toggle("chart-modal-open", on); drawChart(); }
-  chartExpand.addEventListener("click", () => toggleChartExpand(true));
-  chartClose.addEventListener("click", () => toggleChartExpand(false));
-  document.addEventListener("keydown", e => { if(e.key === "Escape" && chartCard.classList.contains("chart-expanded")) toggleChartExpand(false); });
-
   /* ---------------------------------------------------- the year in squares */
   function drawHeat(){
     const sc = $("heatScroll"), again = $("heat").childElementCount > 0, keep = again && $("heat").querySelector("i.sel")?.dataset.d, fromRight = sc.scrollWidth - sc.scrollLeft;   // a refresh keeps the chosen day and the scroll
