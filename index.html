@@ -1540,7 +1540,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
   let heat, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
-  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
+  let wx = null, wxFailed = false, wxMarineFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
@@ -2905,7 +2905,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
 
   /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated calm, moderate or rough */
-  const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
+  const rate = (w, v) => w == null ? null : v == null ? (w < 12 ? "calm" : w < 18 ? "moderate" : "rough") : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
   const LIKE = {calm:"Crossings likely", moderate:"Crossings possible", rough:"Crossings unlikely"};   // the outlook's short form
@@ -2945,11 +2945,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? LIKE[lvl] : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
-        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
+        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + (wxMarineFailed ? ' · waves temporarily unavailable' : '') + "</div>"
         + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
-        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
+        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.' + (wxMarineFailed ? ' Wave readings are temporarily unavailable, so the outlook is based on wind until the marine service responds.' : '') + '</p>'
         + '<p class="wp-foot wp-days-h">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
@@ -2963,8 +2963,17 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
-                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
+      // Keep the two weather providers independent. A temporary marine API failure must not blank the whole weather panel.
+      const [wr, mr] = await Promise.allSettled([
+        getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
+        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")
+      ]);
+      if(wr.status !== "fulfilled") throw wr.reason || new Error("Forecast service unavailable");
+      const w = wr.value;
+      const marineOk = mr.status === "fulfilled" && mr.value && mr.value.current;
+      const m = marineOk ? mr.value : {current:{wave_height:null}, hourly:{time:[],wave_height:[]}};
+      wxMarineFailed = !marineOk;
+
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
@@ -2972,12 +2981,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
         return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
       const c = w.current;
-      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
-        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
+      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height, lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
     }catch(e){
       wxFailed = true;
-      wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
+      wxMarineFailed = false;
+      wxAt = Date.now() - 28 * MIN;   // retry on the next tick in about two minutes
     }
     renderMapPop();
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
@@ -3686,11 +3695,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     e.stopPropagation();
     if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
     else if(slide === "fig"){ try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
-    else { try{ localStorage.setItem("supportClosed", "1"); }catch(err){} supportOn = false; }
+    else { try{ localStorage.setItem("supportClosed_v2", "1"); }catch(err){} supportOn = false; }
     stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
 
-  supportOn = (() => { try{ return localStorage.getItem("supportClosed") !== "1"; }catch(e){ return true; } })();
+  supportOn = (() => { try{ return localStorage.getItem("supportClosed_v2") !== "1"; }catch(e){ return true; } })();
   start(); loadWeather(); loadNews();
   stripUpdate();
   requestAnimationFrame(() => requestAnimationFrame(setupGraphCollapses));
