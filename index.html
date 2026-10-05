@@ -128,14 +128,15 @@ button,input,select,textarea{font:inherit}
 .hero-map{position:absolute;inset:0;will-change:transform}
 .hero-map > svg{position:absolute;width:0;height:0;overflow:hidden}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
-#lmap{position:absolute;inset:0;background:#A4CCE4;font:inherit}
+#lmap{position:absolute;inset:0;background:linear-gradient(180deg,#8EC8E6,#6AAFD4);font:inherit}
+.cc-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .wx-heat{display:none}
 .wx-time,.wx-key,.wx-key-bar{display:none !important}
 .wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
-#lmap .leaflet-control-attribution{background:rgba(255,255,255,.72);color:rgba(60,60,67,.7);font-size:10px;line-height:1.5;padding:2px 8px;border-radius:8px 0 0 0;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#lmap .leaflet-control-attribution{background:rgba(255,255,255,.62);color:rgba(60,60,67,.72);font-size:10px;line-height:1.5;padding:2px 8px;border-radius:8px 0 0 0;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #lmap .leaflet-control-attribution a{color:inherit}
 #lmap .leaflet-bar{border:0;overflow:hidden;border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 #lmap .leaflet-bar a{width:36px;height:40px;font:500 20px/40px var(--font);background:none;color:#fff;border-color:rgba(255,255,255,.18)}
@@ -1503,8 +1504,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.createPane("labels").style.zIndex = 350;
     // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
     // Free to use with credit, and needs no key.
-    const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("World_Topo_Map", {attribution:'Map © <a href="https://www.esri.com/">Esri</a> · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    LM.attributionControl.addAttribution('Coast Natural Earth · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>');
+    const land = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    land.setAttribute("class", "cc-land"); land.setAttribute("aria-hidden", "true");
+    const lp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    lp.setAttribute("d", $("coast").getAttribute("d")); lp.setAttribute("fill", "#E7E3D8"); lp.setAttribute("stroke", "#D4CFC4"); lp.setAttribute("stroke-width", "1.4");
+    land.append(lp); wxPane.append(land);
+    const paintLand = () => { const p = unitPx(); lp.setAttribute("transform", "translate(" + p.x0 + " " + p.y0 + ") scale(" + p.sx + " " + p.sy + ")"); };
+    LM.on("move zoom resize", paintLand); paintLand();
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
