@@ -111,15 +111,9 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px;scroll-behavior:smooth;scroll-padding-top:calc(12px + env(safe-area-inset-top,0px))}
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
-body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
-.skip-link{position:fixed;z-index:1000;top:8px;left:8px;transform:translateY(-160%);padding:10px 14px;border-radius:12px;background:#fff;color:#000;font-weight:700;text-decoration:none;box-shadow:0 4px 18px rgba(0,0,0,.2);transition:transform .15s ease}.skip-link:focus{transform:translateY(0)}
-:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-button,a,input,select{touch-action:manipulation}
-img{max-width:100%;height:auto}
-
+body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
 a{color:var(--blue);text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
-
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 button,input,select,textarea{font:inherit}
 .leaflet-container,.leaflet-container *{font-family:var(--font)}
@@ -295,7 +289,6 @@ html.map-full,html.map-full body{overflow:hidden}
 .mn-tag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:nbPing 1.6s ease-out infinite}
 @keyframes nbPing{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
 .mn-fig .mn-tag{background:#0A84FF;padding-left:6px}
-.mn-support .mn-support-tag{background:#B58B5A;padding-left:8px}.mn-support .mn-head{text-decoration:none}.mn-support .mn-head:hover{text-decoration:underline}
 .mn-stage{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px}
 .mn-stage.in{animation:mnIn .45s cubic-bezier(.2,.9,.3,1) both}
 @keyframes mnIn{from{transform:translateY(70%);opacity:0}}
@@ -476,32 +469,35 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .hero-fresh.stale i{background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .hero-fresh.failed i{background:#FF453A;box-shadow:0 0 0 3px rgba(255,69,58,.16)}
 /* ------------------------------------------------------------ data intelligence */
-.insight-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:22px;align-items:stretch;min-width:0;max-width:100%;box-sizing:border-box}
-.insight-main{min-width:0}
-.insight-main h3{margin:0 0 8px;font-size:1.02rem}
+.insight-card{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.85fr);gap:22px;align-items:stretch}
+.insight-main h3{margin:0 0 8px;font-size:1.12rem}
 .insight-main p{margin:0;color:var(--label2);line-height:1.45}
-.insight-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
-.insight-stat{padding:15px 14px;border-radius:16px;background:var(--fill);min-width:0;min-height:112px;box-sizing:border-box}
-.insight-stat b{display:block;font:700 1.35rem/1.1 var(--round);font-variant-numeric:tabular-nums;white-space:nowrap}
-.insight-stat span{display:block;margin-top:7px;color:var(--label2);font-size:.735rem;line-height:1.25}
+.insight-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+.insight-stat{padding:12px 13px;border-radius:15px;background:var(--fill);min-width:0}
+.insight-stat b{display:block;font:700 1.35rem/1.1 var(--round);font-variant-numeric:tabular-nums}
+.insight-stat span{display:block;margin-top:5px;color:var(--label2);font-size:.735rem;line-height:1.25}
 .insight-stat .up{color:var(--green-t)}.insight-stat .down{color:var(--red-t)}
-.insight-stat .insight-delta{display:block;margin-top:10px;font-size:.78rem;line-height:1.15;font-variant-numeric:tabular-nums}
-.report-box{padding:20px;border-radius:18px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-width:0}
-.report-box h4{margin:0 0 10px;font-size:.86rem;color:var(--label2);font-weight:600}
-.report-status{display:flex;align-items:flex-start;gap:11px;font-size:1.08rem;line-height:1.2;font-weight:650;min-width:0}
-.report-status span{min-width:0;overflow-wrap:anywhere}
-.report-status i{width:9px;height:9px;margin-top:.34em;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
+.report-box{padding:15px 16px;border-radius:17px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+.report-box h4{margin:0 0 7px;font-size:.824rem;color:var(--label2);font-weight:600}
+.report-status{display:flex;align-items:center;gap:9px;font-weight:650}
+.report-status i{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
 .report-status.wait i{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .report-status.bad i{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.16)}
-.report-meta{margin:0;color:var(--label2);font-size:.765rem;line-height:1.45}
-.report-source{margin:0;color:var(--label3);font-size:.706rem;line-height:1.35}
+.report-meta{margin:0;color:var(--label2);font-size:.765rem;line-height:1.4}
+.report-source{margin:0;color:var(--label3);font-size:.706rem}
 .chart-tools{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex:none}
 .chart-tool-label{font-size:.647rem;color:var(--label2);font-weight:650;text-transform:uppercase;letter-spacing:.05em}
 .chart-tools .seg{max-width:100%}
 .chart-tools .seg button{padding-inline:10px}
-@media (max-width:900px){.insight-card{grid-template-columns:1fr}.report-box{min-height:0}.chart-tools{align-items:stretch;width:100%}.chart-tools .seg{width:100%}.chart-tools .seg button{padding-inline:7px}.chart-head{min-height:0}}
-@media (max-width:600px){.insight-stats{grid-template-columns:1fr 1fr;gap:10px}.insight-stat{min-height:104px;padding:13px 12px}.insight-stat:last-child{grid-column:1 / -1}.report-box{padding:16px}.chart-tools .seg button{font-size:.706rem;padding-inline:5px}}
-@media (max-width:420px){.insight-stats{grid-template-columns:1fr}.insight-stat:last-child{grid-column:auto}.chart-tools .seg button{padding-inline:4px}.chart-tools .seg{grid-auto-columns:minmax(0,1fr)}}
+.chart-modal-open{overflow:hidden}
+.chart-expanded{position:fixed!important;z-index:70;inset:18px;max-width:none!important;margin:0!important;padding:22px!important;background:var(--card);box-shadow:0 20px 70px rgba(0,0,0,.28),0 0 0 .5px var(--sep);overflow:auto}
+.chart-expanded .chart{min-height:calc(100vh - 180px)}
+.chart-expanded .chart svg{min-height:calc(100vh - 180px)}
+.chart-expand{appearance:none;border:0;background:var(--fill);color:var(--label);border-radius:999px;padding:7px 10px;font:600 .706rem/1 var(--font);cursor:pointer}.chart-close{display:none;appearance:none;border:0;background:var(--fill);color:var(--label);border-radius:999px;padding:8px 12px;font:600 .765rem/1 var(--font);cursor:pointer}
+.chart-expanded .chart-close{display:inline-flex}
+@media (max-width:900px){.insight-card{grid-template-columns:1fr}.report-box{min-height:0}.chart-tools{align-items:stretch;width:100%}.chart-tools .seg{width:100%}.chart-tools .seg button{padding-inline:7px}.chart-head{min-height:0}.chart-expanded{inset:8px;padding:16px!important}.chart-expanded .chart,.chart-expanded .chart svg{min-height:calc(100dvh - 165px)}}
+@media (max-width:600px){.insight-stats{grid-template-columns:1fr 1fr}.insight-stat:last-child{grid-column:1 / -1}.report-box{padding:14px}.chart-tools .seg button{font-size:.706rem;padding-inline:5px}.chart-expanded{border-radius:18px}}
+@media (max-width:420px){.chart-tools .seg button{padding-inline:4px}.chart-tools .seg{grid-auto-columns:minmax(0,1fr)}}
 /* graph cards stay visually compact; genuinely tall graphs become expandable */
 .graph-card{width:100%;max-width:860px;margin-inline:auto}
 .graph-card.graph-collapsible{max-height:360px;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.8,.2,1)}
@@ -686,12 +682,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start;min-width:0;width:100%}
-.duo-col{display:flex;flex-direction:column;gap:14px;min-width:0;width:100%}
-.duo-col > .card,.duo > .mb-col{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
-.duo .tbl-wrap{min-width:0;max-width:100%;overflow:hidden}
-.duo .tbl{width:100%;max-width:100%;table-layout:fixed}
-.duo .graph-card{width:100%;max-width:100%;margin-inline:0}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
@@ -753,32 +744,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
 @media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
 
-/* ------------------------------------------------------------ accessibility, performance and mobile polish */
-@media (max-width:760px){
-  main{width:100%;overflow:clip}
-  .section-h{padding-inline:16px}
-  .section-h h2{font-size:1.22rem}
-  .section-h p{font-size:.824rem}
-  .card{max-width:none}
-  .chart-head{gap:10px}
-  .chart-tools{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
-  .chart-tools::-webkit-scrollbar{display:none}
-  .chart-tools .seg{min-width:0}
-  .chart-tools .seg button{min-height:40px}
-  .calc-fields{grid-template-columns:1fr 1fr}
-  .ft-share{width:100%;gap:8px}
-  .ft-share .sh{flex:1 1 calc(50% - 8px);min-width:0}
-  footer{padding-inline:16px}
-}
-@media (max-width:380px){
-  .ft-share .sh{flex-basis:100%}
-  .calc-fields{grid-template-columns:1fr}
-}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .skip-link{transition:none}
-}
-
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer p{margin:0;max-width:52ch;line-height:1.45}
@@ -790,23 +755,8 @@ footer strong{color:var(--label);font-weight:600}
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
 .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:var(--label);touch-action:manipulation;transition:background-color .2s}   /* plain buttons, not brand colours */
 .sh-copy,.sh-more{color:var(--blue)}
-/* Platform colours for the sharing buttons. Keep the brand buttons distinct from the site's neutral controls. */
-.sh-x{background:#000;color:#fff}
-.sh-fb{background:#1877F2;color:#fff}
-.sh-wa{background:#25D366;color:#fff}
-.sh-tg{background:#229ED9;color:#fff}
-.sh-x:focus-visible{outline:2px solid #fff;outline-offset:2px;box-shadow:0 0 0 4px #000}
-.sh-fb:focus-visible{outline:2px solid #1877F2;outline-offset:2px}
-.sh-wa:focus-visible{outline:2px solid #25D366;outline-offset:2px}
-.sh-tg:focus-visible{outline:2px solid #229ED9;outline-offset:2px}
-.sh-copy:focus-visible,.sh-more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){
-  .sh-x:hover{background:#1a1a1a}
-  .sh-fb:hover{background:#166fe5}
-  .sh-wa:hover{background:#20bd5a}
-  .sh-tg:hover{background:#1f8fca}
-  .sh-copy:hover,.sh-more:hover{background:var(--fill2)}
-}
+.sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.sh:hover{background:var(--fill2)}}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -818,9 +768,26 @@ footer strong{color:var(--label);font-weight:600}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
+/* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
+.beta{position:static;flex:none;pointer-events:auto}
+.beta-pill{appearance:none;border:0;min-height:40px;padding:0 15px;border-radius:999px;display:inline-flex;align-items:center;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
+  background:var(--fill,rgba(118,118,128,.12));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);transition:transform .2s ease}
+.beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
+.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:max-content;max-width:min(300px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 14.5px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
+  background:color-mix(in srgb,var(--card) 92%,transparent);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:0 10px 30px rgba(0,0,0,.16);
+  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
+.beta-tip b{display:block;margin-bottom:3px;font-weight:600}
+.beta:hover .beta-tip,.beta.open .beta-tip,.beta-pill:focus-visible + .beta-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
+@media (prefers-reduced-transparency:reduce){.beta-tip{background:var(--card)}}
+@media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}.beta-pill{padding:0 12px}}   /* small phones: both still fit */
+.top-theme button{min-height:34px;padding:0 13px}
+
+/* ------------------------------------------------------------ phones: room, safe areas and sideways */
+@media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
-.large-title .lt-logo,#wxPlay,.am-x{position:relative}
-.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after{content:"";position:absolute;inset:-8px}
+.large-title .lt-logo,#wxPlay,.am-x,#tourNext,#tourSkip{position:relative}
+.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,#tourNext::after,#tourSkip::after{content:"";position:absolute;inset:-8px}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
 /* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
@@ -839,7 +806,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
   .b-ring{grid-row:auto}
   .duo{grid-template-columns:minmax(0,1fr)}
-  .duo-col{gap:14px}
 }
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
@@ -1043,16 +1009,35 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 /* Wider screens: the boxes sit side by side in two columns; the big ones keep the full width */
 @media (min-width:900px){
-  main{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;row-gap:24px;align-items:start}
-  main > section.wide{grid-column:1 / -1;min-width:0;max-width:100%}
+  main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:24px;align-items:start}
+  main > section.wide{grid-column:1 / -1}
 }
+/* First-visit tour of the map: a spotlight on each control with a small card explaining it */
+.tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
+.tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.tour-card{position:fixed;width:min(320px,calc(100vw - 32px));padding:16px 16px 14px;border-radius:18px;background:var(--card);color:var(--label);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1);animation:popIn .3s ease-out both}
+.tour-card .tc-step{font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--blue)}
+.tour-card h3{margin:6px 0 4px;font:700 1.06rem/1.25 var(--font);letter-spacing:-.02em}
+.tour-card p{margin:0;font-size:.882rem;line-height:1.4;color:var(--label2)}
+.tour-row{display:flex;align-items:center;gap:8px;margin-top:14px}
+.tour-dots{display:flex;gap:5px;margin-right:auto}
+.tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--fill)}
+.tour-dots i.on{background:var(--blue)}
+.tour-row button{border:0;border-radius:999px;min-height:36px;padding:0 14px;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
+.tour-skip{background:none;color:var(--label2)}
+.tour-next{background:var(--blue);color:#fff}
+.tour-row button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.tour-spot,.tour-card{transition:none;animation:none}}
+
+/* Night: every box is frosted glass */
+:root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}}
 </style>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to main content</a>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1081,10 +1066,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <div class="mn-slide mn-fig" id="figSlide" role="status" data-nosnippet hidden>
         <span class="mn-tag"><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span id="figTag">Updating</span></span>
         <div class="mn-stage"><button type="button" class="mn-head" id="figHead" aria-expanded="false" aria-controls="popFU">New figures incoming from the Home Office</button><span class="mn-meta" id="figMeta">Since 12:00 · Can take up to an hour</span></div>
-      </div>
-      <div class="mn-slide mn-support" id="supportSlide" data-nosnippet hidden>
-        <span class="mn-tag mn-support-tag">🍺 <span>Support</span></span>
-        <div class="mn-stage"><a class="mn-head" href="https://buymeacoffee.com/danseacroft" target="_blank" rel="noopener">Enjoying Channel Crossings? Buy me a beer to help keep it running</a><span class="mn-meta">Thank you for your support</span></div>
       </div>
     </div>
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -1147,7 +1128,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
-<main id="main" tabindex="-1">
+<main id="main">
 
   <!-- ============================================================ AT A GLANCE -->
   <section class="wide" aria-labelledby="hGlance">
@@ -1215,7 +1196,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </section>
 
   <!-- ============================================================ WHAT CHANGED -->
-  <section class="wide" aria-labelledby="hInsight">
+  <section aria-labelledby="hInsight">
     <div class="section-h rv"><h2 id="hInsight">What Changed</h2><p id="insightPeriod"></p></div>
     <article class="card insight-card rv">
       <div class="insight-main">
@@ -1257,13 +1238,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           <div class="chart-head">
             <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
             <div class="chart-tools">
-              
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px"><div class="chart-tool-label">Explore the data</div><button type="button" class="chart-expand" id="chartExpand">Expand</button></div>
               <div class="seg" role="group" aria-label="Measure" id="metricSeg">
                 <button type="button" data-m="people" aria-pressed="true">People</button><button type="button" data-m="boats" aria-pressed="false">Boats</button><button type="button" data-m="ratio" aria-pressed="false">Per boat</button>
               </div>
               <div class="seg" role="group" aria-label="Range" id="rangeSeg">
                 <button type="button" data-r="7">7D</button><button type="button" data-r="30" aria-pressed="true">30D</button><button type="button" data-r="90">90D</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
               </div>
+              <button type="button" class="chart-close" id="chartClose">Close expanded chart</button>
             </div>
           </div>
           <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
@@ -1358,42 +1340,38 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <section class="wide" aria-labelledby="hWho">
     <div class="section-h rv"><h2 id="hWho">Who Is Crossing</h2><p id="whoNote"></p></div>
     <div class="duo">
-      <div class="duo-col">
-        <article class="card rv">
-          <h3>Sex and age</h3>
-          <div class="val num" id="menV">–</div>
-          <div class="sub">adult men</div>
-          <div class="stack-h">Sex</div>
-          <div class="stack" id="sexStack"></div>
-          <div class="legend" id="sexLegend"></div>
-          <div class="stack-h">Age</div>
-          <div class="stack" id="ageStack"></div>
-          <div class="legend" id="ageLegend"></div>
-        </article>
-        <article class="card graph-card rv">
-          <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
-          <div class="val num" id="pbV">–</div>
-          <div class="sub" id="pbS">&nbsp;</div>
-          <div class="pb-boats" id="pbBoats"></div>
-          <div class="pb-line" id="pbLine"></div>
-        </article>
-      </div>
-      <div class="duo-col">
-        <article class="card rv">
-          <h3>Top nationalities</h3>
-          <div class="sub" id="natS">&nbsp;</div>
-          <ol class="nat-list" id="nats"></ol>
-        </article>
-        <article class="card rv">
-          <h3>UK–France returns deal</h3>
-          <div class="sub" id="retS" style="margin-top:6px">&nbsp;</div>
-          <div class="vs">
-            <div><b class="num" id="retOut">–</b><span>returned to France</span></div>
-            <div><b class="num" id="retIn">–</b><span>transferred to the UK</span></div>
-          </div>
-          <div class="cost" id="retNote"></div>
-        </article>
-      </div>
+      <article class="card rv">
+        <h3>Sex and age</h3>
+        <div class="val num" id="menV">–</div>
+        <div class="sub">adult men</div>
+        <div class="stack-h">Sex</div>
+        <div class="stack" id="sexStack"></div>
+        <div class="legend" id="sexLegend"></div>
+        <div class="stack-h">Age</div>
+        <div class="stack" id="ageStack"></div>
+        <div class="legend" id="ageLegend"></div>
+      </article>
+      <article class="card rv">
+        <h3>Top nationalities</h3>
+        <div class="sub" id="natS">&nbsp;</div>
+        <ol class="nat-list" id="nats"></ol>
+      </article>
+      <article class="card graph-card rv">
+        <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
+        <div class="val num" id="pbV">–</div>
+        <div class="sub" id="pbS">&nbsp;</div>
+        <div class="pb-boats" id="pbBoats"></div>
+        <div class="pb-line" id="pbLine"></div>
+      </article>
+      <article class="card rv">
+        <h3>UK–France returns deal</h3>
+        <div class="sub" id="retS" style="margin-top:6px">&nbsp;</div>
+        <div class="vs">
+          <div><b class="num" id="retOut">–</b><span>returned to France</span></div>
+          <div><b class="num" id="retIn">–</b><span>transferred to the UK</span></div>
+        </div>
+        <div class="cost" id="retNote"></div>
+      </article>
     </div>
   </section>
 
@@ -1433,11 +1411,22 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="tour" id="tour" role="dialog" aria-modal="true" aria-labelledby="tourH" hidden>
+  <div class="tour-spot" id="tourSpot"></div>
+  <div class="tour-card" id="tourCard">
+    <div class="tc-step" id="tourStep"></div>
+    <h3 id="tourH"></h3>
+    <p id="tourP"></p>
+    <div class="tour-row"><span class="tour-dots" id="tourDots"></span><button type="button" class="tour-skip" id="tourSkip">Skip</button><button type="button" class="tour-next" id="tourNext">Next</button></div>
+  </div>
+</div>
+
+
 <footer>
-  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" aria-label="Share on X" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
+  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
-  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
 <script src="vendor/leaflet/leaflet.js"></script>
@@ -1468,6 +1457,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     showTheme();
   }));
   showTheme();
+  // The Beta pill: its note shows on hover, or on a tap (phones); tapping elsewhere or Escape hides it
+  const beta = $("beta"), betaBtn = $("betaBtn");
+  const betaOpen = on => { beta.classList.toggle("open", on); betaBtn.setAttribute("aria-expanded", on); };
+  betaBtn.addEventListener("click", e => { e.stopPropagation(); betaOpen(!beta.classList.contains("open")); });
+  document.addEventListener("click", () => betaOpen(false));
+  document.addEventListener("keydown", e => { if(e.key === "Escape") betaOpen(false); });
+
   // The boxes react to the mouse: a slight lean towards it and a soft light where it points. Mouse only, never with reduced motion.
   if(matchMedia("(hover: hover) and (pointer: fine)").matches && !reduced){
     let tiltCard = null, tiltEv = null, tiltRaf = 0;
@@ -1502,14 +1498,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const io = "IntersectionObserver" in window ? new IntersectionObserver(en => en.forEach(e => { if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target); e.target.dispatchEvent(new Event("reveal")); } }), {rootMargin:"0px 0px -8% 0px", threshold:.12}) : null;
   function watch(el){ if(io && !reduced) io.observe(el); else { el.classList.add("on"); setTimeout(()=>el.dispatchEvent(new Event("reveal"))); } }
   document.querySelectorAll(".rv").forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + "ms"; watch(el); });
-  function countUp(el, to, suffix, decimals){
-    suffix = suffix || ""; decimals = decimals || 0;
+  function countUp(el, to, suffix){
+    suffix = suffix || "";
     const run = el._count = (el._count || 0) + 1;   // a newer count on the same number replaces this one
-    if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? (decimals ? Number(to).toFixed(decimals) : fmt(to)) : "–") + suffix; return; }
+    if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? fmt(to) : "–") + suffix; return; }
     const card = el.closest(".rv"), start = () => {
       if(run !== el._count) return;
       const t0 = performance.now(), dur = Math.min(1600, 500 + Math.log10(to + 10) * 280);
-      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = (decimals ? (to * e).toFixed(decimals) : fmt(Math.round(to * e))) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
+      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = fmt(Math.round(to * e)) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
     };
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
@@ -1550,7 +1546,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
   let heat, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
-  let wx = null, wxFailed = false, wxMarineFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
+  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
@@ -2475,23 +2471,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const swing = wk.slice(1).reduce((best,d,i) => { const before = wk[i], delta = d.migrants - before.migrants; return Math.abs(delta) > Math.abs(best.delta) ? {delta,date:d.date} : best; }, {delta:0,date:last.date});
     $("insightPeriod").textContent = dShort.format(parse(wk[0].date)) + " to " + dShort.format(parse(last.date));
     $("insightTitle").textContent = pct == null ? "The latest week at a glance" : pct === 0 ? "A similar week to the one before" : (pct > 0 ? "A busier week" : "A quieter week") + " than the one before";
-    $("insightSummary").innerHTML = "The latest 7 days recorded <b><span id='insightPeopleInline'>0</span> people</b> in <b><span id='insightBoatsInline'>0</span> boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with <b><span id='insightPeakInline'>0</span> people</b>.";
-    countUp($("insightPeopleInline"), people);
-    countUp($("insightBoatsInline"), boats);
-    countUp($("insightPeakInline"), peak.migrants);
-    const pctSpan = pct == null ? "" : '<span class="insight-delta ' + (pct > 0 ? "up" : pct < 0 ? "down" : "") + '">' + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
-    const ratioSpan = ratioPct == null ? "" : '<span class="insight-delta ' + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + '">' + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
-    const swingLabel = (swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta));
+    $("insightSummary").innerHTML = "The latest 7 days recorded <b>" + fmt(people) + " people</b> in <b>" + fmt(boats) + " boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with " + fmt(peak.migrants) + " people.";
+    const pctSpan = pct == null ? "" : " · <span class='" + (pct > 0 ? "up" : pct < 0 ? "down" : "") + "'>" + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
+    const ratioSpan = ratioPct == null ? "" : " · <span class='" + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + "'>" + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
     $("insightStats").innerHTML = [
-      ['insightPeople', "People this week", pctSpan],
-      ['insightBoats', "Boats this week", ""],
-      ['insightRatio', "People per boat", ratioSpan],
-      ['insightSwing', "Biggest daily move · " + dShort.format(parse(swing.date)), ""]
-    ].map(x => '<div class="insight-stat"><b class="num"' + (x[0] === "insightSwing" ? '><span id="insightSwingArrow">' + (swing.delta < 0 ? "↓" : swing.delta > 0 ? "↑" : "→") + '</span> <span id="insightSwing">0</span>' : ' id="' + x[0] + '">0') + '</b><span>' + x[1] + '</span>' + x[2] + '</div>').join("");
-    countUp($("insightPeople"), people);
-    countUp($("insightBoats"), boats);
-    if(ratio) countUp($("insightRatio"), ratio, "", 1); else $("insightRatio").textContent = "–";
-    countUp($("insightSwing"), Math.abs(swing.delta));
+      [fmt(people), "People this week" + pctSpan],
+      [fmt(boats), "Boats this week"],
+      [ratio ? ratio.toFixed(1) : "–", "People per boat" + ratioSpan],
+      [(swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta)), "Biggest daily move · " + dShort.format(parse(swing.date))]
+    ].map(x => '<div class="insight-stat"><b class="num">' + x[0] + '</b><span>' + x[1] + '</span></div>').join("");
     const status = statusMeta || {dataAt:meta && meta.checkedAt, latest:last.date};
     const latest = status.latest || last.date, yesterday = new Date(Date.parse(ukToday() + "T00:00:00Z") - DAY).toISOString().slice(0,10);
     const current = latest >= yesterday;
@@ -2747,6 +2735,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     document.querySelectorAll("#rangeSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
     animateLine(drawChart());
   }));
+  const chartCard = $("chart").closest(".graph-card"), chartExpand = $("chartExpand"), chartClose = $("chartClose");
+  function toggleChartExpand(on){ chartCard.classList.toggle("chart-expanded", on); document.documentElement.classList.toggle("chart-modal-open", on); drawChart(); }
+  chartExpand.addEventListener("click", () => toggleChartExpand(true));
+  chartClose.addEventListener("click", () => toggleChartExpand(false));
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && chartCard.classList.contains("chart-expanded")) toggleChartExpand(false); });
+
   /* ---------------------------------------------------- the year in squares */
   function drawHeat(){
     const sc = $("heatScroll"), again = $("heat").childElementCount > 0, keep = again && $("heat").querySelector("i.sel")?.dataset.d, fromRight = sc.scrollWidth - sc.scrollLeft;   // a refresh keeps the chosen day and the scroll
@@ -2915,7 +2909,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
 
   /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated calm, moderate or rough */
-  const rate = (w, v) => w == null ? null : v == null ? (w < 12 ? "calm" : w < 18 ? "moderate" : "rough") : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
+  const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
   const LIKE = {calm:"Crossings likely", moderate:"Crossings possible", rough:"Crossings unlikely"};   // the outlook's short form
@@ -2955,11 +2949,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? LIKE[lvl] : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
-        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + (wxMarineFailed ? ' · waves temporarily unavailable' : '') + "</div>"
+        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
         + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
-        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.' + (wxMarineFailed ? ' Wave readings are temporarily unavailable, so the outlook is based on wind until the marine service responds.' : '') + '</p>'
+        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
         + '<p class="wp-foot wp-days-h">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
@@ -2973,17 +2967,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
-      // Keep the two weather providers independent. A temporary marine API failure must not blank the whole weather panel.
-      const [wr, mr] = await Promise.allSettled([
-        getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
-        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")
-      ]);
-      if(wr.status !== "fulfilled") throw wr.reason || new Error("Forecast service unavailable");
-      const w = wr.value;
-      const marineOk = mr.status === "fulfilled" && mr.value && mr.value.current;
-      const m = marineOk ? mr.value : {current:{wave_height:null}, hourly:{time:[],wave_height:[]}};
-      wxMarineFailed = !marineOk;
-
+      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
+                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
@@ -2991,12 +2976,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
         return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
       const c = w.current;
-      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height, lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
+      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
+        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
     }catch(e){
       wxFailed = true;
-      wxMarineFailed = false;
-      wxAt = Date.now() - 28 * MIN;   // retry on the next tick in about two minutes
+      wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
     }
     renderMapPop();
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
@@ -3587,6 +3572,73 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
 
+  /* ---------------------------------------------------- first-visit tour of the map */
+  const TOUR = [
+    {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
+    {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
+    {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
+    {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
+    {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
+    {el:() => $("lmap"), h: touchOnly ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchOnly ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
+    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
+    {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
+  ];
+  let tourSteps = [], tourI = 0, tourTick = null;
+  const tourSeen = () => { try{ return localStorage.getItem("mapTourDone"); }catch(e){ return "1"; } };
+  function tourPlace(){
+    const st = tourSteps[tourI]; if(!st) return;
+    const el = st.el(); if(!el) return;
+    const r = el.getBoundingClientRect(), big = r.width > innerWidth * .6, pad = big ? -10 : 6;
+    const spot = $("tourSpot"), card = $("tourCard");
+    Object.assign(spot.style, {left:(r.left - pad) + "px", top:(r.top - pad) + "px", width:(r.width + pad * 2) + "px", height:(r.height + pad * 2) + "px", borderRadius:big ? "24px" : "16px"});
+    const cw = card.offsetWidth, ch = card.offsetHeight, m = 14;
+    let left, top;
+    if(big){ left = r.left + (r.width - cw) / 2; top = Math.min(r.bottom - ch - 40, Math.max(r.top + 40, innerHeight / 2 - ch / 2)); }
+    else {
+      left = r.left + r.width / 2 - cw / 2;
+      top = r.bottom + pad + m; if(top + ch > innerHeight - 12) top = r.top - pad - m - ch;
+    }
+    card.style.left = Math.max(16, Math.min(innerWidth - cw - 16, left)) + "px";
+    card.style.top = Math.max(12, Math.min(innerHeight - ch - 12, top)) + "px";
+  }
+  function tourShow(i){
+    tourI = i; const st = tourSteps[i];
+    $("tourStep").textContent = "Map tour · " + (i + 1) + " of " + tourSteps.length;
+    $("tourH").textContent = st.h; $("tourP").textContent = st.p;
+    $("tourDots").innerHTML = tourSteps.map((_, k) => "<i" + (k === i ? ' class="on"' : "") + "></i>").join("");
+    $("tourNext").textContent = i === tourSteps.length - 1 ? "Done" : "Next";
+    $("tourSkip").hidden = i === tourSteps.length - 1;
+    tourPlace(); $("tourNext").focus({preventScroll:true});
+  }
+  function tourEnd(){
+    $("tour").hidden = true; document.documentElement.style.overflow = "";
+    try{ localStorage.setItem("mapTourDone", "1"); }catch(e){}
+    removeEventListener("resize", tourPlace); removeEventListener("scroll", tourPlace); clearInterval(tourTick);
+  }
+  function startTour(){
+    if(!$("tour").hidden) return;
+    const shown = el => { if(!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+    if(isFull()) return;
+    tourSteps = TOUR.filter(t => shown(t.el())); if(tourSteps.length < 2) return;
+    scrollTo({top:0, behavior:"auto"}); document.documentElement.style.overflow = "hidden";
+    $("tour").hidden = false; addEventListener("resize", tourPlace); addEventListener("scroll", tourPlace, {passive:true});
+    tourTick = setInterval(tourPlace, 250);   // the boats move, so the spotlight follows them
+    tourShow(0);
+  }
+  $("tourNext").addEventListener("click", e => { e.stopPropagation(); tourI < tourSteps.length - 1 ? tourShow(tourI + 1) : tourEnd(); });
+  $("tourSkip").addEventListener("click", e => { e.stopPropagation(); tourEnd(); });
+  $("tour").addEventListener("click", e => { if(e.target === $("tour")) $("tourNext").click(); });
+  $("tour").addEventListener("keydown", e => {
+    if(e.key === "Escape"){ e.stopPropagation(); tourEnd(); }
+    if(e.key === "ArrowRight") $("tourNext").click();
+    if(e.key === "ArrowLeft" && tourI > 0) tourShow(tourI - 1);
+    if(e.key === "Tab"){ e.preventDefault(); (document.activeElement === $("tourNext") && !$("tourSkip").hidden ? $("tourSkip") : $("tourNext")).focus(); }
+  });
+  $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
+  // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
+  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // the Map tour link on the other pages
+  else if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
+
   /* ---------------------------------------------------- go */
   function useData(d){
     const list = (d.days || []).filter(x => x && x.date).sort((a,b) => a.date < b.date ? -1 : 1);
@@ -3624,7 +3676,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The daily update, "New figures incoming": from 12:00 UK time until the new figures are in, unless closed today (liveUi).
   // When both are on they take turns: the news for 15 seconds, then the daily update, then back. Pointing at the strip holds it.
   const NEWS_MAX_H = 3, NEWS_EACH = 7500, NEWS_TURN = 15000, FIG_TURN = 15000;
-  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, supportOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
+  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
   const seenGet = () => { try{ return localStorage.getItem("newsSeen"); }catch(e){ return null; } };
   const agoShort = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4)); return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m / 60) + (Math.round(m / 60) === 1 ? " hour ago" : " hours ago"); };
   function newsRoom(){
@@ -3633,21 +3685,19 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(h !== roomH){ roomH = h; setTimeout(placeTowns, 600); }   // once the strip has dropped in, the place names keep clear of it
   }
   function setSlide(which, animate){
-    const ids = {news:"newsSlide", fig:"figSlide", support:"supportSlide"};
-    const on = $(ids[which]);
-    const off = Object.keys(ids).filter(k => k !== which).map(k => $(ids[k]));
+    const on = $(which === "news" ? "newsSlide" : "figSlide"), off = $(which === "news" ? "figSlide" : "newsSlide");
     slide = which; turnMs = storyMs = 0; animate = animate && !reduced;
     on.classList.remove("off", "leave", "in");
-    for(const el of off){ el.classList.remove("in"); el.classList.add("off"); el.classList.toggle("leave", animate); }
+    off.classList.remove("in"); off.classList.add("off"); off.classList.toggle("leave", animate);
     if(animate){ on.offsetWidth; on.classList.add("in"); }
-    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : which === "fig" ? "Daily update" : "Support Channel Crossings");
-    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : which === "fig" ? "Close the new figures notice for today" : "Dismiss support message");
+    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : "Daily update");
+    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : "Close the new figures notice for today");
   }
   function stripUpdate(){
     const box = $("news");
-    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn], [$("supportSlide"), supportOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
-    if(!newsOn && !figOn && !supportOn){ box.hidden = true; slide = ""; newsRoom(); return; }
-    const want = slide === "news" && newsOn || slide === "fig" && figOn || slide === "support" && supportOn ? slide : newsOn ? "news" : figOn ? "fig" : "support";
+    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
+    if(!newsOn && !figOn){ box.hidden = true; slide = ""; newsRoom(); return; }
+    const want = slide === "news" && newsOn || slide === "fig" && figOn ? slide : newsOn ? "news" : "fig";
     if(box.hidden || want !== slide) setSlide(want, !box.hidden);
     box.hidden = false; newsRoom();
   }
@@ -3704,14 +3754,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   $("newsClose").addEventListener("click", e => {
     e.stopPropagation();
     if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
-    else if(slide === "fig"){ try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
-    else { try{ localStorage.setItem("supportClosed_v2", "1"); }catch(err){} supportOn = false; }
+    else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
     stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
 
-  supportOn = (() => { try{ return localStorage.getItem("supportClosed_v2") !== "1"; }catch(e){ return true; } })();
   start(); loadWeather(); loadNews();
-  stripUpdate();
   requestAnimationFrame(() => requestAnimationFrame(setupGraphCollapses));
   whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
 })();
