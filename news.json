@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-04T23:56:02Z",
+ "checkedAt": "2026-10-05T00:51:19Z",
  "items": [
+  {
+   "title": "The Papers: Badenoch's 'bonfire of green laws' and 'Drop in global dealmaking'",
+   "url": "https://www.bbc.co.uk/news/articles/ck5yn30zn288o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-05T00:18:06Z",
+   "breaking": true
+  },
   {
    "title": "Murder probe launched after woman found dead at house in Norfolk",
    "url": "https://www.gbnews.com/news/norfolk-news-murder-probe-launched-woman-found-dead",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/news/us/cornell-university-victim-vile-gang-rape-case-targeted-disgusting-threats",
    "source": "GB News",
    "published": "2026-10-04T22:08:29Z",
-   "breaking": true
-  },
-  {
-   "title": "Protesters gather as migrants brought ashore on south coast",
-   "url": "https://www.bbc.co.uk/news/articles/cmrly809n8p6o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-04T21:37:03Z",
    "breaking": true
   }
  ],
