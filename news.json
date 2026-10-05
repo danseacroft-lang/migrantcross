@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-05T06:56:53Z",
+ "checkedAt": "2026-10-05T07:20:24Z",
  "items": [
+  {
+   "title": "Anti-migrant protesters scuffle with police in Gosport after Channel rescue",
+   "url": "https://www.theguardian.com/uk-news/2026/oct/05/anti-migrant-protesters-scuffle-police-gosport-channel-rescue",
+   "source": "The Guardian",
+   "published": "2026-10-05T07:16:56Z",
+   "breaking": true
+  },
+  {
+   "title": "Two migrant men killed attempting to cross English Channel in small boat",
+   "url": "https://www.gbnews.com/news/migrant-crisis-two-men-killed-english-channel-small-boat",
+   "source": "GB News",
+   "published": "2026-10-05T07:10:14Z",
+   "breaking": true
+  },
   {
    "title": "Protesters scuffle with police as migrants brought ashore on south coast",
    "url": "https://www.bbc.co.uk/news/articles/cmrly809n8p6o?at_medium=RSS&at_campaign=rss",
@@ -20,20 +34,6 @@
    "url": "https://news.sky.com/story/anti-migrant-protesters-gather-at-seaside-town-as-dinghy-crosses-channel-to-uk-13595218",
    "source": "Sky News",
    "published": "2026-10-05T05:32:00Z",
-   "breaking": true
-  },
-  {
-   "title": "'Don't axe Youth Parliament' pleads teen member",
-   "url": "https://www.bbc.co.uk/news/articles/c6kglm3381p1o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-05T05:27:55Z",
-   "breaking": true
-  },
-  {
-   "title": "Traveller site rejected after council suspects 'fraudulent letters of support' in favour",
-   "url": "https://www.gbnews.com/news/traveller-site-rejected-council-suspects-fraudulent-letters",
-   "source": "GB News",
-   "published": "2026-10-05T05:17:56Z",
    "breaking": true
   }
  ],
