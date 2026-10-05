@@ -464,6 +464,19 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
 .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
+/* graph cards stay visually compact; genuinely tall graphs become expandable */
+.graph-card{width:100%;max-width:860px;margin-inline:auto}
+.graph-card.graph-collapsible{max-height:360px;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.8,.2,1)}
+.graph-card.graph-collapsible::before{content:"";position:absolute;z-index:3;left:0;right:0;bottom:0;height:92px;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--card) 72%)}
+.graph-card.graph-collapsible.graph-open{max-height:5000px}
+.graph-card.graph-collapsible.graph-open::before{display:none}
+.graph-toggle{position:absolute;z-index:4;left:50%;bottom:12px;transform:translateX(-50%);appearance:none;border:0;border-radius:999px;background:var(--glass);color:var(--label);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);box-shadow:0 5px 18px rgba(0,0,0,.14),0 0 0 .5px var(--sep);font:600 .765rem/1 var(--font);padding:9px 14px;cursor:pointer;white-space:nowrap}
+.graph-toggle::after{content:"⌄";display:inline-block;margin-left:7px;font-size:1rem;line-height:.7;transform:translateY(-1px);transition:transform .25s ease}
+.graph-open .graph-toggle{bottom:10px}
+.graph-open .graph-toggle::after{transform:rotate(180deg) translateY(1px)}
+.graph-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.graph-toggle:hover{background:var(--fill2)}}
+@media (max-width:759px){.graph-card{max-width:none}.graph-card.graph-collapsible{max-height:330px}}
 .card h3{margin:0 0 2px;font:600 .824rem/1.2 var(--font);color:var(--label2);display:flex;align-items:center;gap:6px}
 .card h3 svg{width:15px;height:15px}
 .val{font:700 2.2rem/1.1 var(--round);letter-spacing:-.01em;margin-top:4px}
@@ -1164,7 +1177,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
        three pages in one box slid across with the arrows, or a swipe that doesn't start on the chart or the squares (they have their own drag) -->
   <section aria-labelledby="hDaily">
     <div class="section-h rv"><h2 id="hDaily">Crossings Over Time</h2><p id="ddNote">Drag across to read any day</p></div>
-    <div class="card dd-card rv" id="ddBox">
+    <div class="card graph-card dd-card rv" id="ddBox">
       <div class="flip" id="ddFlip">
         <div class="dd-face" id="ddDay" role="group" aria-label="Every day">
           <div class="flip-h"><h3>Every day</h3><button type="button" class="flip-go" data-go="1" aria-controls="ddSq">Year in squares<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
@@ -1198,7 +1211,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <!-- ============================================================ RUNNING TOTALS -->
   <section class="mb" aria-labelledby="hRace">
     <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
-    <div class="card race-card rv">
+    <div class="card graph-card race-card rv">
       <div class="key-row" id="raceKey" aria-hidden="true"></div>
       <div class="race" id="race" tabindex="0" aria-describedby="raceSay"><div class="empty">Loading the history since 2018…</div></div>
       <div class="race-read" id="raceRead" aria-hidden="true" hidden></div>
@@ -1248,14 +1261,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <button type="button" data-pat="month" aria-pressed="false">Month</button>
       </div>
     </div>
-    <div class="card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
+    <div class="card graph-card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
     <p class="foot rv" id="patNote"></p>
   </section>
 
   <!-- ============================================================ EVERY PERSON (desktop) -->
   <section class="mb area-rep" aria-labelledby="repTitle">
     <div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
-    <div class="card rep-card rv">
+    <div class="card graph-card rep-card rv">
       <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
       <div class="dots" id="dots"></div>
     </div>
@@ -1282,7 +1295,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <div class="sub" id="natS">&nbsp;</div>
         <ol class="nat-list" id="nats"></ol>
       </article>
-      <article class="card rv">
+      <article class="card graph-card rv">
         <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
         <div class="val num" id="pbV">–</div>
         <div class="sub" id="pbS">&nbsp;</div>
@@ -3273,7 +3286,40 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     drawPat();
   }));
 
-  function drawHistory(){ drawRace(); drawQuiet(); drawPat(); }
+  // Keep long graph cards compact. If a graph genuinely grows beyond the comfortable height,
+  // turn it into an expandable card rather than letting it dominate the page.
+  function setupGraphCollapses(){
+    document.querySelectorAll(".graph-card").forEach(card => {
+      const existing = card.querySelector(":scope > .graph-toggle");
+      const limit = innerWidth < 760 ? 330 : 360;
+      const needs = card.scrollHeight > limit + 18;
+      if(needs && !existing){
+        card.classList.add("graph-collapsible");
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "graph-toggle";
+        b.setAttribute("aria-expanded","false");
+        b.textContent = "Show more";
+        b.addEventListener("click", () => {
+          const open = card.classList.toggle("graph-open");
+          b.setAttribute("aria-expanded", String(open));
+          b.firstChild.nodeValue = open ? "Show less" : "Show more";
+          if(open) card.scrollIntoView({block:"nearest",behavior:reduced ? "auto" : "smooth"});
+        });
+        card.appendChild(b);
+      } else if(!needs && existing){
+        existing.remove();
+        card.classList.remove("graph-collapsible","graph-open");
+      }
+    });
+  }
+  let graphCollapseRaf = 0;
+  addEventListener("resize", () => {
+    cancelAnimationFrame(graphCollapseRaf);
+    graphCollapseRaf = requestAnimationFrame(setupGraphCollapses);
+  });
+
+  function drawHistory(){ drawRace(); drawQuiet(); drawPat(); setupGraphCollapses(); }
 
   // Show a day on the Every day chart (from the calendar)
   function showOnChart(date){
@@ -3589,6 +3635,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
   start(); loadWeather(); loadNews();
+  requestAnimationFrame(() => requestAnimationFrame(setupGraphCollapses));
   whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
