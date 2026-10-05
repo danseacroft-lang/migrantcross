@@ -129,7 +129,8 @@ button,input,select,textarea{font:inherit}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
-.wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
+.wx-heat{mix-blend-mode:multiply;opacity:.96}
+.wx-time,.wx-key,.wx-key-bar{display:none !important}
 .wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
@@ -1061,7 +1062,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     </div>
     <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
       <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button></div>
+      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button></div>
       <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
       <div class="wx-key" id="wxKeyPick" role="img"></div>
     </div>
@@ -1801,7 +1802,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>" + f(lo) + (sc.unit === "°C" ? "°" : "") + '</span><i style="background:linear-gradient(to right,' + grad + ')"></i><span>' + f(hi) + (sc.max != null ? "+" : "") + (sc.unit === "°C" ? "°C" : " " + sc.unit) + "</span>";
   }
   function setLayer(l, first){
-    layer = l;
+    layer = (l === "wind" || l === "waves") ? l : "wind";
     if(LM && terrainOn !== (l === "temp")){ terrainOn = l === "temp"; LM.attributionControl[terrainOn ? "addAttribution" : "removeAttribution"](TERRAIN); }
     segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
     const b = segBtns.find(x => x.dataset.l === l);
@@ -1982,12 +1983,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
     }
-    if(layer === "wind" || layer === "gusts" || layer === "rain"){   // the same blue sea as Waves, the land left clear grey
+    if(false){   // solid sea tint parked with the colour layers
       seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
       h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0);
     }
-    if(layer === "waves" || layer === "rain" || layer === "wind" || layer === "gusts" || layer === "temp"){   // Ventusky: a smooth colour field, not hard cells
+    if(false){   // colour fields parked until the layers are rebuilt
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
       const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
       const seaOnly = layer === "waves" || layer === "wind" || layer === "gusts";
@@ -2075,16 +2076,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const box = $("amHover"), e = hoverAt;
     if(!e || touchOnly || !LM){ box.classList.add("off"); return; }
     const ll = e.latlng, sc = SCALE[layer], g = k => sample(ll.lat, ll.lng, k);
-    let val, unit = sc.unit, extra = "";
-    if(layer === "wind"){
-      const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360; val = Math.round(Math.hypot(u, v));
-      extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + "</em>";
-    }
-    else if(layer === "waves"){ if(!atSea(ll)){ box.innerHTML = "<em>On land</em>"; place(); return; } val = g("wave").toFixed(1); }
-    else if(layer === "rain"){ val = g("rain").toFixed(1); }
-    else val = Math.round(layer === "temp" ? tempAt(ll.lat, ll.lng) : g(sc.key));
-    const col = colour(+val, sc.stops).map(Math.round).join(",");
-    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
+    const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, val = Math.round(Math.hypot(u, v));
+    const extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + " · gusts " + Math.round(g("gust")) + " mph</em>";
+    box.innerHTML = "<b>" + val + '</b><small> mph</small>' + extra;
     place();
     function place(){
       box.classList.remove("off");
