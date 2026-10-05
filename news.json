@@ -1,5 +1,5 @@
 {
- "checkedAt": "2026-10-05T10:45:10Z",
+ "checkedAt": "2026-10-05T11:00:26Z",
  "items": [
   {
    "title": "Shadow chancellor to unveil Tory plans to cut taxes and regulations",
@@ -16,6 +16,13 @@
    "breaking": true
   },
   {
+   "title": "Two men die in Channel crossing attempt off northern France",
+   "url": "https://www.bbc.co.uk/news/articles/cq8jz7k4n8d1o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-05T10:21:15Z",
+   "breaking": true
+  },
+  {
    "title": "FlyDubai hijacker's target revealed as Israel claims 'Islamist' planned attack before being hired",
    "url": "https://www.gbnews.com/news/world/flydubai-hijacker-target-revealed-islamist-planned-attack",
    "source": "GB News",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/lifestyle/cars/major-car-brand-milestone-uk-factory-toyota",
    "source": "GB News",
    "published": "2026-10-05T09:53:20Z",
-   "breaking": true
-  },
-  {
-   "title": "Plane goes missing off US coast as all passengers presumed dead",
-   "url": "https://www.gbnews.com/news/us/us-plane-crash-missing-coast-all-passengers-presumed-dead",
-   "source": "GB News",
-   "published": "2026-10-05T09:19:32Z",
    "breaking": true
   }
  ],
