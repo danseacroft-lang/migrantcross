@@ -126,11 +126,11 @@ button,input,select,textarea{font:inherit}
   height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
 .hero-map{position:absolute;inset:0;visibility:hidden;pointer-events:none}
-.hero-stage{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:28px 24px 32px;color:#fff;background:radial-gradient(120% 90% at 80% 0%,#1a4e86 0%,#0c2344 52%,#081627 100%)}
+.hero-stage{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:108px 24px 150px;background:radial-gradient(120% 90% at 80% 0%,#1a4e86 0%,#0c2344 52%,#081627 100%)}
 .stage-kicker{margin:0;font:600 .75rem/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .stage-h{margin:0;font:700 clamp(2rem,6vw,3.4rem)/1.02 var(--font);letter-spacing:-.035em}
 .stage-sub{margin:0;font:500 1rem/1.35 var(--font);color:rgba(255,255,255,.82)}
-.stage-search{position:relative;margin-top:10px;max-width:560px}
+.stage-search{position:relative;width:min(560px,100%)}
 .stage-search input{width:100%;height:48px;border:0;border-radius:14px;padding:0 16px;background:rgba(255,255,255,.14);color:#fff;font:500 1rem/1 var(--font);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3);outline:none}
 .stage-search input::placeholder{color:rgba(255,255,255,.62)}
 .stage-hits{position:absolute;left:0;right:0;top:56px;z-index:5;list-style:none;margin:0;padding:6px;border-radius:14px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
@@ -1030,9 +1030,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
   <div class="hero-stage" id="heroStage">
-    <p class="stage-kicker">Channel Crossings</p>
-    <h1 class="stage-h"><span id="stageNum">—</span> <span id="stageT">people detected</span></h1>
-    <p class="stage-sub" id="stageSub">Today’s figures</p>
     <form class="stage-search" role="search" action="javascript:void(0)">
       <label class="sr" for="boxSearch">Search the figures</label>
       <input id="boxSearch" type="search" placeholder="Search figures, records, nationalities" autocomplete="off" enterkeyhint="search">
@@ -3701,14 +3698,6 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
 <script>
 (function(){
   const q = document.getElementById("boxSearch"), hits = document.getElementById("boxHits");
-  const num = document.getElementById("stageNum"), sub = document.getElementById("stageSub"), t = document.getElementById("stageT");
-  function sync(){
-    const n = document.getElementById("heroNum"), s = document.getElementById("heroSub"), ht = document.getElementById("hqT");
-    if(n && num) num.textContent = n.textContent || "—";
-    if(s && sub) sub.textContent = s.textContent || "";
-    if(ht && t) t.textContent = ht.textContent || "";
-  }
-  sync(); setInterval(sync, 1000);
   const secs = [...document.querySelectorAll("main > section")];
   const items = secs.map(sec => ({sec, title:(sec.querySelector("h2")||{}).textContent || sec.getAttribute("aria-label") || "Section", text:(sec.innerText||"").toLowerCase()}));
   function apply(v){
