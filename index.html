@@ -964,14 +964,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 /* Wider screens: two fixed columns. A box may grow taller (Show more) but never wider, and it stays in its column. */
 @media (min-width:900px){
-  main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:16px;row-gap:20px;align-items:start;justify-items:stretch}
-  main > section{min-width:0;max-width:100%;width:100%;overflow-x:clip}
-  main > section.wide{grid-column:1 / -1}
+  main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;column-gap:16px;row-gap:20px;align-items:start;justify-items:stretch}
+  main > section{min-width:0;max-width:100%;width:100%}
+  main > section.wide,main > section.span{grid-column:1 / -1}
 }
 /* Long boxes open downwards only. Width stays the column width. */
 .card.can-more{max-height:420px;padding-bottom:52px}
 .card.can-more.is-open{max-height:none}
-.b-ring.can-more,.card:has(.flip).can-more{max-height:none;padding-bottom:18px}
 .more-toggle{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:2px;height:30px;padding:0 10px 0 12px;border:0;border-radius:999px;color:var(--blue);font:600 .8rem/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
   background:color-mix(in srgb,var(--fill) 88%,var(--card));box-shadow:inset 0 0 0 .5px var(--sep)}
 .more-toggle svg{width:13px;height:13px;flex:none;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
@@ -3412,15 +3411,36 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     drawCalendar(); drawDots(); drawHistory(); initCalc(); renderShare();
     fitBoxes();
   }
+  function pinColumns(){
+    const wide = innerWidth >= 900;
+    const secs = [...document.querySelectorAll("main > section")].filter(s => getComputedStyle(s).display !== "none");
+    let n = 0;
+    secs.forEach((sec, i) => {
+      sec.classList.remove("span");
+      if(!wide){ sec.style.gridColumn = ""; return; }
+      const next = secs[i + 1];
+      if(sec.classList.contains("wide")){ n = 0; return; }
+      if(n % 2 === 0 && (!next || next.classList.contains("wide"))){ sec.classList.add("span"); n = 0; return; }
+      sec.style.gridColumn = (n % 2 ? "2" : "1");
+      n++;
+    });
+  }
   function fitBoxes(){
-    document.querySelectorAll("main .card:not(.b-ring):not(:has(.flip))").forEach(card => {
+    pinColumns();
+    document.querySelectorAll("main .card").forEach(card => {
+      const skip = card.classList.contains("b-ring") || card.classList.contains("race-card") || card.classList.contains("calc-card") || card.classList.contains("pat-card") || card.querySelector(".flip, .chart, .heat-scroll");
+      let btn = card.querySelector(":scope > .more-toggle");
+      if(skip){
+        card.classList.remove("can-more", "is-open");
+        if(btn) btn.remove();
+        return;
+      }
       const open = card.classList.contains("is-open");
       card.classList.remove("can-more");
       const tall = card.scrollHeight > 460;
-      let btn = card.querySelector(":scope > .more-toggle");
       if(!tall){
         card.classList.remove("is-open");
-        if(btn) btn.hidden = true;
+        if(btn) btn.remove();
         return;
       }
       card.classList.add("can-more");
