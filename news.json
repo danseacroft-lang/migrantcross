@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-05T09:38:49Z",
+ "checkedAt": "2026-10-05T09:58:29Z",
  "items": [
+  {
+   "title": "Shadow chancellor to unveil Tory plans to cut taxes and regulations",
+   "url": "https://www.bbc.co.uk/news/articles/cqj9kje82jm1o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-05T09:57:06Z",
+   "breaking": true
+  },
   {
    "title": "Plane goes missing off US coast as all passengers presumed dead",
    "url": "https://www.gbnews.com/news/us/us-plane-crash-missing-coast-all-passengers-presumed-dead",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/lifestyle/cars/uk-tariffs-china-electric-vehicles-eu",
    "source": "GB News",
    "published": "2026-10-05T08:03:09Z",
-   "breaking": true
-  },
-  {
-   "title": "Potty training scheme to roll out to 20 more areas",
-   "url": "https://www.bbc.co.uk/news/articles/ck4glnl2v9p5o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-05T07:56:41Z",
    "breaking": true
   }
  ],
