@@ -1487,14 +1487,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const io = "IntersectionObserver" in window ? new IntersectionObserver(en => en.forEach(e => { if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target); e.target.dispatchEvent(new Event("reveal")); } }), {rootMargin:"0px 0px -8% 0px", threshold:.12}) : null;
   function watch(el){ if(io && !reduced) io.observe(el); else { el.classList.add("on"); setTimeout(()=>el.dispatchEvent(new Event("reveal"))); } }
   document.querySelectorAll(".rv").forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + "ms"; watch(el); });
-  function countUp(el, to, suffix){
-    suffix = suffix || "";
+  function countUp(el, to, suffix, decimals){
+    suffix = suffix || ""; decimals = decimals || 0;
     const run = el._count = (el._count || 0) + 1;   // a newer count on the same number replaces this one
-    if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? fmt(to) : "–") + suffix; return; }
+    if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? (decimals ? Number(to).toFixed(decimals) : fmt(to)) : "–") + suffix; return; }
     const card = el.closest(".rv"), start = () => {
       if(run !== el._count) return;
       const t0 = performance.now(), dur = Math.min(1600, 500 + Math.log10(to + 10) * 280);
-      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = fmt(Math.round(to * e)) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
+      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = (decimals ? (to * e).toFixed(decimals) : fmt(Math.round(to * e))) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
     };
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
@@ -2460,16 +2460,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const swing = wk.slice(1).reduce((best,d,i) => { const before = wk[i], delta = d.migrants - before.migrants; return Math.abs(delta) > Math.abs(best.delta) ? {delta,date:d.date} : best; }, {delta:0,date:last.date});
     $("insightPeriod").textContent = dShort.format(parse(wk[0].date)) + " to " + dShort.format(parse(last.date));
     $("insightTitle").textContent = pct == null ? "The latest week at a glance" : pct === 0 ? "A similar week to the one before" : (pct > 0 ? "A busier week" : "A quieter week") + " than the one before";
-    $("insightSummary").innerHTML = "The latest 7 days recorded <b>" + fmt(people) + " people</b> in <b>" + fmt(boats) + " boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with " + fmt(peak.migrants) + " people.";
+    $("insightSummary").innerHTML = "The latest 7 days recorded <b><span id='insightPeopleInline'>0</span> people</b> in <b><span id='insightBoatsInline'>0</span> boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with <b><span id='insightPeakInline'>0</span> people</b>.";
+    countUp($("insightPeopleInline"), people);
+    countUp($("insightBoatsInline"), boats);
+    countUp($("insightPeakInline"), peak.migrants);
     const pctSpan = pct == null ? "" : '<span class="insight-delta ' + (pct > 0 ? "up" : pct < 0 ? "down" : "") + '">' + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
     const ratioSpan = ratioPct == null ? "" : '<span class="insight-delta ' + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + '">' + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
     const swingLabel = (swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta));
     $("insightStats").innerHTML = [
-      [fmt(people), "People this week", pctSpan],
-      [fmt(boats), "Boats this week", ""],
-      [ratio ? ratio.toFixed(1) : "–", "People per boat", ratioSpan],
-      [swingLabel, "Biggest daily move · " + dShort.format(parse(swing.date)), ""]
-    ].map(x => '<div class="insight-stat"><b class="num">' + x[0] + '</b><span>' + x[1] + '</span>' + x[2] + '</div>').join("");
+      ['insightPeople', "People this week", pctSpan],
+      ['insightBoats', "Boats this week", ""],
+      ['insightRatio', "People per boat", ratioSpan],
+      ['insightSwing', "Biggest daily move · " + dShort.format(parse(swing.date)), ""]
+    ].map(x => '<div class="insight-stat"><b class="num"' + (x[0] === "insightSwing" ? '><span id="insightSwingArrow">' + (swing.delta < 0 ? "↓" : swing.delta > 0 ? "↑" : "→") + '</span> <span id="insightSwing">0</span>' : ' id="' + x[0] + '">0') + '</b><span>' + x[1] + '</span>' + x[2] + '</div>').join("");
+    countUp($("insightPeople"), people);
+    countUp($("insightBoats"), boats);
+    if(ratio) countUp($("insightRatio"), ratio, "", 1); else $("insightRatio").textContent = "–";
+    countUp($("insightSwing"), Math.abs(swing.delta));
     const status = statusMeta || {dataAt:meta && meta.checkedAt, latest:last.date};
     const latest = status.latest || last.date, yesterday = new Date(Date.parse(ukToday() + "T00:00:00Z") - DAY).toISOString().slice(0,10);
     const current = latest >= yesterday;
