@@ -475,7 +475,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .hero-fresh.stale i{background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .hero-fresh.failed i{background:#FF453A;box-shadow:0 0 0 3px rgba(255,69,58,.16)}
 /* ------------------------------------------------------------ data intelligence */
-.insight-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:22px;align-items:stretch}
+.insight-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:22px;align-items:stretch;min-width:0;max-width:100%;box-sizing:border-box}
 .insight-main{min-width:0}
 .insight-main h3{margin:0 0 8px;font-size:1.02rem}
 .insight-main p{margin:0;color:var(--label2);line-height:1.45}
@@ -488,7 +488,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .report-box{padding:20px;border-radius:18px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-width:0}
 .report-box h4{margin:0 0 10px;font-size:.86rem;color:var(--label2);font-weight:600}
 .report-status{display:flex;align-items:flex-start;gap:11px;font-size:1.08rem;line-height:1.2;font-weight:650;min-width:0}
-.report-status span{min-width:0}
+.report-status span{min-width:0;overflow-wrap:anywhere}
 .report-status i{width:9px;height:9px;margin-top:.34em;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
 .report-status.wait i{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .report-status.bad i{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.16)}
@@ -1037,7 +1037,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* Wider screens: the boxes sit side by side in two columns; the big ones keep the full width */
 @media (min-width:900px){
   main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:24px;align-items:start}
-  main > section.wide{grid-column:1 / -1}
+  main > section.wide{grid-column:1 / -1;min-width:0;max-width:100%}
 }
 </style>
 </head>
@@ -1246,7 +1246,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           <div class="chart-head">
             <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
             <div class="chart-tools">
-              <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px"><div class="chart-tool-label">Explore the data</div></div>
+              
               <div class="seg" role="group" aria-label="Measure" id="metricSeg">
                 <button type="button" data-m="people" aria-pressed="true">People</button><button type="button" data-m="boats" aria-pressed="false">Boats</button><button type="button" data-m="ratio" aria-pressed="false">Per boat</button>
               </div>
