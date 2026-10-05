@@ -464,11 +464,40 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
 .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
-.chip-change .delta{font-weight:700}
 .hero-fresh{display:inline-flex;align-items:center;gap:6px;margin-top:5px;color:rgba(255,255,255,.78);font:500 .7rem/1.2 var(--font);text-shadow:0 1px 8px rgba(0,0,0,.4)}
 .hero-fresh i{width:6px;height:6px;border-radius:50%;background:#30D158;box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
 .hero-fresh.stale i{background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.16)}
 .hero-fresh.failed i{background:#FF453A;box-shadow:0 0 0 3px rgba(255,69,58,.16)}
+/* ------------------------------------------------------------ data intelligence */
+.insight-card{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.85fr);gap:22px;align-items:stretch}
+.insight-main h3{margin:0 0 8px;font-size:1.12rem}
+.insight-main p{margin:0;color:var(--label2);line-height:1.45}
+.insight-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+.insight-stat{padding:12px 13px;border-radius:15px;background:var(--fill);min-width:0}
+.insight-stat b{display:block;font:700 1.35rem/1.1 var(--round);font-variant-numeric:tabular-nums}
+.insight-stat span{display:block;margin-top:5px;color:var(--label2);font-size:.735rem;line-height:1.25}
+.insight-stat .up{color:var(--green-t)}.insight-stat .down{color:var(--red-t)}
+.report-box{padding:15px 16px;border-radius:17px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:14px}
+.report-box h4{margin:0 0 7px;font-size:.824rem;color:var(--label2);font-weight:600}
+.report-status{display:flex;align-items:center;gap:9px;font-weight:650}
+.report-status i{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
+.report-status.wait i{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.16)}
+.report-status.bad i{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.16)}
+.report-meta{margin:0;color:var(--label2);font-size:.765rem;line-height:1.4}
+.report-source{margin:0;color:var(--label3);font-size:.706rem}
+.chart-tools{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex:none}
+.chart-tool-label{font-size:.647rem;color:var(--label2);font-weight:650;text-transform:uppercase;letter-spacing:.05em}
+.chart-tools .seg{max-width:100%}
+.chart-tools .seg button{padding-inline:10px}
+.chart-modal-open{overflow:hidden}
+.chart-expanded{position:fixed!important;z-index:70;inset:18px;max-width:none!important;margin:0!important;padding:22px!important;background:var(--card);box-shadow:0 20px 70px rgba(0,0,0,.28),0 0 0 .5px var(--sep);overflow:auto}
+.chart-expanded .chart{min-height:calc(100vh - 180px)}
+.chart-expanded .chart svg{min-height:calc(100vh - 180px)}
+.chart-expand{appearance:none;border:0;background:var(--fill);color:var(--label);border-radius:999px;padding:7px 10px;font:600 .706rem/1 var(--font);cursor:pointer}.chart-close{display:none;appearance:none;border:0;background:var(--fill);color:var(--label);border-radius:999px;padding:8px 12px;font:600 .765rem/1 var(--font);cursor:pointer}
+.chart-expanded .chart-close{display:inline-flex}
+@media (max-width:900px){.insight-card{grid-template-columns:1fr}.report-box{min-height:0}.chart-tools{align-items:stretch;width:100%}.chart-tools .seg{width:100%}.chart-tools .seg button{padding-inline:7px}.chart-head{min-height:0}.chart-expanded{inset:8px;padding:16px!important}.chart-expanded .chart,.chart-expanded .chart svg{min-height:calc(100dvh - 165px)}}
+@media (max-width:600px){.insight-stats{grid-template-columns:1fr 1fr}.insight-stat:last-child{grid-column:1 / -1}.report-box{padding:14px}.chart-tools .seg button{font-size:.706rem;padding-inline:5px}.chart-expanded{border-radius:18px}}
+@media (max-width:420px){.chart-tools .seg button{padding-inline:4px}.chart-tools .seg{grid-auto-columns:minmax(0,1fr)}}
 /* graph cards stay visually compact; genuinely tall graphs become expandable */
 .graph-card{width:100%;max-width:860px;margin-inline:auto}
 .graph-card.graph-collapsible{max-height:360px;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.8,.2,1)}
@@ -1070,7 +1099,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
-      <span class="chip chip-change" id="chipChange" hidden></span>
       <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -1167,6 +1195,26 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     </div>
   </section>
 
+  <!-- ============================================================ WHAT CHANGED -->
+  <section aria-labelledby="hInsight">
+    <div class="section-h rv"><h2 id="hInsight">What Changed</h2><p id="insightPeriod"></p></div>
+    <article class="card insight-card rv">
+      <div class="insight-main">
+        <h3 id="insightTitle">The latest week at a glance</h3>
+        <p id="insightSummary">Loading the latest changes…</p>
+        <div class="insight-stats" id="insightStats"></div>
+      </div>
+      <aside class="report-box" aria-label="Reporting status">
+        <div>
+          <h4>Reporting status</h4>
+          <div class="report-status" id="reportStatus"><i></i><span>Checking the latest figures…</span></div>
+        </div>
+        <p class="report-meta" id="reportMeta"></p>
+        <p class="report-source">Source: UK Home Office · figures are provisional</p>
+      </aside>
+    </article>
+  </section>
+
   <!-- ============================================================ ON THIS DAY -->
   <section aria-labelledby="hOtd" id="otd">
     <div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
@@ -1189,8 +1237,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           <div class="flip-h"><h3>Every day</h3><button type="button" class="flip-go" data-go="1" aria-controls="ddSq">Year in squares<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
           <div class="chart-head">
             <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
-            <div class="seg" role="group" aria-label="Range" id="rangeSeg">
-              <button type="button" data-r="30">1M</button><button type="button" data-r="90" aria-pressed="true">3M</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
+            <div class="chart-tools">
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px"><div class="chart-tool-label">Explore the data</div><button type="button" class="chart-expand" id="chartExpand">Expand</button></div>
+              <div class="seg" role="group" aria-label="Measure" id="metricSeg">
+                <button type="button" data-m="people" aria-pressed="true">People</button><button type="button" data-m="boats" aria-pressed="false">Boats</button><button type="button" data-m="ratio" aria-pressed="false">Per boat</button>
+              </div>
+              <div class="seg" role="group" aria-label="Range" id="rangeSeg">
+                <button type="button" data-r="7">7D</button><button type="button" data-r="30" aria-pressed="true">30D</button><button type="button" data-r="90">90D</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
+              </div>
+              <button type="button" class="chart-close" id="chartClose">Close expanded chart</button>
             </div>
           </div>
           <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
@@ -2230,7 +2285,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   addEventListener("scroll", placeTip, {passive:true});
 
   /* ---------------------------------------------------- data */
-  let days = [], meta = null;
+  let days = [], meta = null, statusMeta = null;
   let allFor = null, allOut = null;
   function allDays(){   // every calendar day, gaps as zero (worked out once per set of figures)
     if(allFor === days) return allOut;
@@ -2274,8 +2329,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const pct = prev ? Math.round((ytd / prev - 1) * 100) : null;
     const c = $("chipYear"); c.hidden = false;
     c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "% on " + (yr - 1) + "</span>" : "");
-    const prevDay = days.length > 1 ? days[days.length - 2] : null, ch = $("chipChange");
-    if(prevDay){ const delta = last.migrants - prevDay.migrants; ch.hidden = false; ch.innerHTML = (delta < 0 ? "↓ " : delta > 0 ? "↑ " : "→ ") + "<b class='delta " + (delta < 0 ? "down" : delta > 0 ? "up" : "") + '">'  + fmt(Math.abs(delta)) + "</b> vs previous day"; } else ch.hidden = true;
     liveUi(); fitHero();
   }
 
@@ -2384,9 +2437,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
+      statusMeta = st;
       renderFreshness(st);
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){ useData(await getJSON("data.json")); renderAll(); loadExtras(); }
     }catch(e){ renderFreshness({dataAt: meta && meta.checkedAt}); }
+    renderInsight();
     liveUi();
   }
   function tick(){
@@ -2404,6 +2459,35 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(Date.now() - openedAt > 180 * MIN) return location.reload();   // picks up any newer version of the page
     tick();
   });
+
+  function renderInsight(){
+    const all = allDays(); if(!all.length) return;
+    const last = all[all.length-1], wk = all.slice(-7), prev = all.slice(-14,-7);
+    const people = sum(wk,"migrants"), boats = sum(wk,"boats"), prevPeople = sum(prev,"migrants"), prevBoats = sum(prev,"boats");
+    const ratio = boats ? people / boats : 0, prevRatio = prevBoats ? prevPeople / prevBoats : 0;
+    const pct = prevPeople ? Math.round((people / prevPeople - 1) * 100) : null;
+    const ratioPct = prevRatio ? Math.round((ratio / prevRatio - 1) * 100) : null;
+    const peak = wk.reduce((a,b) => b.migrants > a.migrants ? b : a, wk[0]);
+    const swing = wk.slice(1).reduce((best,d,i) => { const before = wk[i], delta = d.migrants - before.migrants; return Math.abs(delta) > Math.abs(best.delta) ? {delta,date:d.date} : best; }, {delta:0,date:last.date});
+    $("insightPeriod").textContent = dShort.format(parse(wk[0].date)) + " to " + dShort.format(parse(last.date));
+    $("insightTitle").textContent = pct == null ? "The latest week at a glance" : pct === 0 ? "A similar week to the one before" : (pct > 0 ? "A busier week" : "A quieter week") + " than the one before";
+    $("insightSummary").innerHTML = "The latest 7 days recorded <b>" + fmt(people) + " people</b> in <b>" + fmt(boats) + " boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with " + fmt(peak.migrants) + " people.";
+    const pctSpan = pct == null ? "" : " · <span class='" + (pct > 0 ? "up" : pct < 0 ? "down" : "") + "'>" + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
+    const ratioSpan = ratioPct == null ? "" : " · <span class='" + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + "'>" + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
+    $("insightStats").innerHTML = [
+      [fmt(people), "People this week" + pctSpan],
+      [fmt(boats), "Boats this week"],
+      [ratio ? ratio.toFixed(1) : "–", "People per boat" + ratioSpan],
+      [(swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta)), "Biggest daily move · " + dShort.format(parse(swing.date))]
+    ].map(x => '<div class="insight-stat"><b class="num">' + x[0] + '</b><span>' + x[1] + '</span></div>').join("");
+    const status = statusMeta || {dataAt:meta && meta.checkedAt, latest:last.date};
+    const latest = status.latest || last.date, yesterday = new Date(Date.parse(ukToday() + "T00:00:00Z") - DAY).toISOString().slice(0,10);
+    const current = latest >= yesterday;
+    const rs = $("reportStatus"); rs.classList.toggle("wait", !current); rs.classList.remove("bad");
+    rs.querySelector("span").textContent = current ? "Current through " + dShort.format(parse(latest)) : "Awaiting figures after " + dShort.format(parse(latest));
+    const at = status.dataAt || status.checkedAt || meta.checkedAt;
+    $("reportMeta").textContent = at ? "Last successful data build: " + new Date(at).toLocaleString("en-GB", {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + ". The site checks GOV.UK every 15 minutes during the daily release window." : "The site checks GOV.UK every 15 minutes during the daily release window.";
+  }
 
   function renderGlance(){
     const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4);
@@ -2514,7 +2598,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   /* ---------------------------------------------------- Stocks-style chart */
   // the day picked is kept by its date, so it stays put when the figures refresh or the range changes
-  let range = 90, sel = null, selDate = null, geo = null;
+  let range = 30, metric = "people", sel = null, selDate = null, geo = null;
   const dShortWF = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",...UTC});
   const dShortW = iso => dShortWF.format(parse(iso)).replace(",", "");   // Sat 14 Feb 2026
   // draws the chart for a new range, width or figures; picking a day only moves the cursor (setSel)
@@ -2525,8 +2609,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const m = {t:14, r:6, b:26, l:38}, iw = W - m.l - m.r, ih = H - m.t - m.b;
     // long ranges are smoothed to a centred average (a week for a year, four weeks for All) so the shape reads clearly
     const per = data.length / iw, smooth = data.length <= 120 ? 1 : per > 3 ? 28 : 7, hw = smooth >> 1;
-    const run = [0]; data.forEach((d, i) => run.push(run[i] + d.migrants));   // running sum, so each average is one subtraction
-    const vals = data.map((d, i) => { if(smooth === 1) return d.migrants; const lo = Math.max(0, i - hw), hi = Math.min(data.length, i - hw + smooth); return (run[hi] - run[lo]) / (hi - lo); });
+    const metricName = metric === "boats" ? "boats" : metric === "ratio" ? "people per boat" : "people";
+    const runPeople = [0], runBoats = [0]; data.forEach((d, i) => { runPeople.push(runPeople[i] + (d.migrants || 0)); runBoats.push(runBoats[i] + (d.boats || 0)); });
+    const vals = data.map((d, i) => {
+      if(smooth === 1) return metric === "boats" ? (d.boats || 0) : metric === "ratio" ? (d.boats ? d.migrants / d.boats : 0) : (d.migrants || 0);
+      const lo = Math.max(0, i - hw), hi = Math.min(data.length, i - hw + smooth), count = hi - lo;
+      if(metric === "boats") return (runBoats[hi] - runBoats[lo]) / count;
+      if(metric === "ratio") { const people = runPeople[hi] - runPeople[lo], boats = runBoats[hi] - runBoats[lo]; return boats ? people / boats : 0; }
+      return (runPeople[hi] - runPeople[lo]) / count;
+    });
     const top = Math.max(...vals, 10), st = niceStep(top / 4), nice = Math.ceil(top / st) * st;
     const x = i => m.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw), y = v => m.t + ih - v / nice * ih;
     // no more than about two points a pixel: the rest can't be seen and only slow the drawing
@@ -2535,7 +2626,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     vals.forEach((v, i) => { if(i % every && i !== vals.length - 1) return; d += (d ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); });
     a = d + "L" + x(vals.length - 1).toFixed(1) + " " + (m.t + ih) + "L" + x(0).toFixed(1) + " " + (m.t + ih) + "Z";
     let g = "";
-    for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (m.l - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + (v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : v) + "</text>"; }
+    const axis = v => metric === "ratio" ? (v >= 10 ? Math.round(v) : Math.round(v * 10) / 10) : v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : Math.round(v);
+    for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (m.l - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + axis(v) + "</text>"; }
     const bars = smooth === 1, slot = iw / data.length, xc = bars ? i => m.l + (i + .5) * slot : x;
     if(range && range <= 90){
       const ticks = 5; for(let k = 0; k < ticks; k++){ const i = Math.round(k / (ticks - 1) * (data.length - 1));
@@ -2552,12 +2644,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let body;
     if(bars){
       const bw = Math.max(2, slot * .66), r = Math.min(bw / 2, 4);
-      body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const h = Math.max(dd.migrants ? 3 : 1.5, dd.migrants / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
-        return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
+      body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const v = vals[i], h = Math.max(v ? 3 : 1.5, v / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
+        return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (v ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
     } else body = '<path d="' + a + '" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
-    geo = {x: xc, y, data, vals, m, iw, ih, W, nice, smooth, bars};
-    const a0 = data[0].date, z0 = data[data.length-1].date;
-    box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
+    geo = {x: xc, y, data, vals, m, iw, ih, W, nice, smooth, bars, metric};
+    const a0 = data[0].date, z0 = data[data.length-1].date, totalPeople = sum(data, "migrants"), totalBoats = sum(data, "boats"), totalRatio = totalBoats ? totalPeople / totalBoats : 0;
+    const totalLabel = metric === "boats" ? fmt(totalBoats) + " boats" : metric === "ratio" ? (totalRatio ? totalRatio.toFixed(1) : "0") + " people per boat" : fmt(totalPeople) + " people";
+    box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + metricName + ', ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + totalLabel + '"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
     setSel(sel);
     ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day" + (smooth > 1 ? " · line is a " + smooth + "-day average" : "");
@@ -2581,16 +2674,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   function readout(){
     const r = $("chartRead"), data = geo.data;
+    const showValue = v => metric === "ratio" ? (v ? v.toFixed(1) : "0") : fmt(Math.round(v));
+    const unit = metric === "boats" ? "boats" : metric === "ratio" ? "people per boat" : "people";
     if(sel != null && data[sel]){
-      // the day itself first, so it matches the calendar; on 1Y and All the average the line shows comes second
-      const dd = data[sel];
-      r.innerHTML = '<b class="num">' + fmt(dd.migrants) + '</b><span>' + dShortW(dd.date) + " · "
-        + (dd.migrants ? plural(dd.boats, "boat", "boats") : geo.smooth > 1 ? "no crossings" : "no crossings detected")
-        + (geo.smooth > 1 ? " · avg " + fmt(Math.round(geo.vals[sel])) + "/day" : "") + "</span>";
+      const dd = data[sel], raw = metric === "boats" ? dd.boats : metric === "ratio" ? (dd.boats ? dd.migrants / dd.boats : 0) : dd.migrants;
+      r.innerHTML = '<b class="num">' + showValue(raw) + '</b><span>' + dShortW(dd.date) + " · " + unit
+        + (metric !== "boats" && dd.boats ? " · " + plural(dd.boats, "boat", "boats") : "")
+        + (geo.smooth > 1 ? " · avg " + showValue(geo.vals[sel]) + "/day" : "") + "</span>";
     } else {
-      const a = data[0].date, z = data[data.length-1].date;
+      const a = data[0].date, z = data[data.length-1].date, people = sum(data, "migrants"), boats = sum(data, "boats"), ratio = boats ? people / boats : 0;
+      const total = metric === "boats" ? boats : metric === "ratio" ? ratio : people;
       const span = dShort.format(parse(a)) + (a.slice(0,4) === z.slice(0,4) ? "" : " " + a.slice(0,4)) + " – " + dShort.format(parse(z)) + " " + z.slice(0,4);
-      r.innerHTML = '<b class="num">' + fmt(sum(data, "migrants")) + '</b><span>people · ' + span + "</span>";
+      r.innerHTML = '<b class="num">' + showValue(total) + '</b><span>' + unit + ' · ' + span + "</span>";
     }
   }
   function animateLine(path){
@@ -2630,11 +2725,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     if(e.key === "Escape"){ pinned = false; setSel(null); }
   });
+  document.querySelectorAll("#metricSeg button").forEach(b => b.addEventListener("click", () => {
+    metric = b.dataset.m; sel = null; selDate = null; pinned = false;
+    document.querySelectorAll("#metricSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    animateLine(drawChart());
+  }));
   document.querySelectorAll("#rangeSeg button").forEach(b => b.addEventListener("click", () => {
     range = +b.dataset.r; sel = null; selDate = null; pinned = false;
     document.querySelectorAll("#rangeSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
     animateLine(drawChart());
   }));
+  const chartCard = $("chart").closest(".graph-card"), chartExpand = $("chartExpand"), chartClose = $("chartClose");
+  function toggleChartExpand(on){ chartCard.classList.toggle("chart-expanded", on); document.documentElement.classList.toggle("chart-modal-open", on); drawChart(); }
+  chartExpand.addEventListener("click", () => toggleChartExpand(true));
+  chartClose.addEventListener("click", () => toggleChartExpand(false));
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && chartCard.classList.contains("chart-expanded")) toggleChartExpand(false); });
 
   /* ---------------------------------------------------- the year in squares */
   function drawHeat(){
@@ -2882,7 +2987,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
+  function renderAll(first){ renderHero(); renderInsight(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
@@ -3553,7 +3658,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       if(meta.checkedAt && Date.now() - new Date(meta.checkedAt) > 120 * MIN) statusAt = 0;
       // drawn in short steps, so a tap straight after loading isn't kept waiting (same order as renderAll)
       const y = () => new Promise(r => window.scheduler && scheduler.yield ? scheduler.yield().then(r) : setTimeout(r, 0));
-      renderHero(); renderFreshness({dataAt:meta.checkedAt}); renderGlance(); await y();
+      renderHero(); renderFreshness({dataAt:meta.checkedAt}); renderInsight(); renderGlance(); await y();
       renderOtd(); await y();
       drawHeat(); await y();
       drawYears(); await y();
