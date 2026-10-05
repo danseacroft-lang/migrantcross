@@ -1,18 +1,25 @@
 {
- "checkedAt": "2026-10-05T10:21:28Z",
+ "checkedAt": "2026-10-05T10:45:10Z",
  "items": [
+  {
+   "title": "Shadow chancellor to unveil Tory plans to cut taxes and regulations",
+   "url": "https://www.bbc.co.uk/news/articles/cqj9kje82jm1o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-05T10:44:51Z",
+   "breaking": true
+  },
+  {
+   "title": "Power cut plunges London into chaos as thousands could be left without electricity for HOURS",
+   "url": "https://www.gbnews.com/news/london-power-cut-no-electricity-capital-chaos-outage",
+   "source": "GB News",
+   "published": "2026-10-05T10:26:21Z",
+   "breaking": true
+  },
   {
    "title": "FlyDubai hijacker's target revealed as Israel claims 'Islamist' planned attack before being hired",
    "url": "https://www.gbnews.com/news/world/flydubai-hijacker-target-revealed-islamist-planned-attack",
    "source": "GB News",
    "published": "2026-10-05T10:06:14Z",
-   "breaking": true
-  },
-  {
-   "title": "Shadow chancellor to unveil Tory plans to cut taxes and regulations",
-   "url": "https://www.bbc.co.uk/news/articles/cqj9kje82jm1o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-05T09:57:06Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/news/us/us-plane-crash-missing-coast-all-passengers-presumed-dead",
    "source": "GB News",
    "published": "2026-10-05T09:19:32Z",
-   "breaking": true
-  },
-  {
-   "title": "Shabana Mahmood lashes out at Labour ministers over 'sheer number' of pleas for MORE migrant visas",
-   "url": "https://www.gbnews.com/politics/migrant-crisis-shabana-mahmood-labour-ministers-visas",
-   "source": "GB News",
-   "published": "2026-10-05T08:36:50Z",
    "breaking": true
   }
  ],
