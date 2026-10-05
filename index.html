@@ -686,7 +686,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-width:0}.duo > *,.mb-col{min-width:0}
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
@@ -974,7 +974,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .tbl td{padding:9px 16px;text-align:right;border-top:.5px solid var(--sep);white-space:nowrap}
 @media (max-width:420px){.mb .tbl th,.mb .tbl td{padding-inline:10px}}
 .mb #quietTbl th:nth-child(2),.mb #quietTbl td:nth-child(2){text-align:left}
-.mb .tbl-wrap{overflow-x:auto}
+.mb .tbl-wrap{overflow-x:auto;min-width:0}
 .mb .calc-card{padding:14px 16px;display:grid;gap:12px}
 .mb .calc-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
