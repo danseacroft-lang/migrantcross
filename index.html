@@ -130,7 +130,7 @@ button,input,select,textarea{font:inherit}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
 .wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
-.wx-heat.soft{filter:blur(2px)}   /* wind, gusts and waves: the readings blended smoothly */
+.wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
@@ -1756,15 +1756,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
   // Colour scales, close to Ventusky's: used for the map's colours and the swatch in the readings
-  const WIND = [[0,[98,113,183]],[6,[57,97,159]],[10,[74,148,169]],[14,[77,141,123]],[18,[83,165,83]],[23,[201,186,63]],[28,[221,135,50]],[34,[208,70,60]],[40,[173,40,110]]];
+  const WIND = [[0,[168,196,232]],[4,[98,156,214]],[8,[72,168,176]],[12,[86,176,122]],[18,[176,196,72]],[24,[232,196,64]],[30,[232,140,52]],[36,[214,78,62]],[44,[176,48,120]],[54,[148,64,168]]];
   const SCALE = {
     wind:{key:"s", max:40, unit:"mph", stops:WIND},
     gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
-    waves:{key:"wave", max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
+    waves:{key:"wave", max:4, unit:"m", stops:[[0,[86,150,214]],[.4,[64,176,196]],[.8,[72,186,150]],[1.3,[150,204,92]],[2,[232,198,64]],[2.8,[232,132,52]],[4,[196,58,92]]]},
     // temperature in Ventusky's warm earthy colours: blue in the cold, green at 10°, golden tan in the mid teens, terracotta and mauve
     // in the heat. Matched to Ventusky (Dan's screenshot, 2 Oct 2026) once multiplied over the light grey map
     temp:{key:"temp", unit:"°C", stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]},
-    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]}
+    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[120,176,232]],[.4,[72,132,220]],[1.2,[86,96,214]],[2.5,[150,72,196]],[5,[210,64,150]]]}
   };
   function colour(v, st){
     if(v <= st[0][0]) return st[0][1];
@@ -1987,22 +1987,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0);
     }
-    if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
-      // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
-      // Wind and gusts get only the blue sea, with the moving streaks on top
+    if(layer === "waves" || layer === "rain" || layer === "wind" || layer === "gusts" || layer === "temp"){   // Ventusky: a smooth colour field, not hard cells
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
       const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
+      const seaOnly = layer === "waves" || layer === "wind" || layer === "gusts";
       for(let k = 0; k < n; k++){
         const x = val[k], c = colour(x, st), q = k * 4;
         px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
-        // rain is see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
-        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : 255;
+        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(90 + 140 * Math.min(1, x / 3))) : (layer === "temp" ? 210 : 235);
       }
       sx.putImageData(img, 0, 0);
-      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = soft ? "none" : "blur(" + (2 * dpr) + "px)";   // rain: its numbers stay sharp
-      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
+      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
+      h.filter = "blur(" + Math.max(8, CELL * .55) * dpr + "px)";
+      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);
       h.filter = "none";
-      if(layer === "waves"){   // no waves on land: the colour stops at the coast
+      if(seaOnly){   // colour stays on the water; land keeps the grey map
         h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
         h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
         h.globalCompositeOperation = "source-over"; h.filter = "none";
