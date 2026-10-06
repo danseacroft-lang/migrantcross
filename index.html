@@ -459,9 +459,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @property --my{syntax:"<percentage>";inherits:false;initial-value:50%}
 .card.lift{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-2px);box-shadow:var(--shadow-lift);
   transition:transform .18s ease-out,box-shadow .3s ease,opacity .7s cubic-bezier(.2,.8,.2,1)}
-.card::after{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
   background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),var(--glare),transparent 65%)}
-.card > *{position:relative;z-index:1}
 .card.lift::after{opacity:1}
 
 /* ------------------------------------------------------------ bento */
@@ -611,46 +610,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .yr.cur .fill{background:var(--orange)}
 .yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
-
-
-/* ------------------------------------------------------------ Apple style yearly view */
-.year-panel-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:20px;padding-bottom:16px;border-bottom:.5px solid var(--sep)}
-.year-panel-title{min-width:0}
-.year-kicker{display:block;margin-bottom:5px;color:var(--label3);font-size:.65rem;line-height:1;font-weight:700;letter-spacing:.11em}
-.year-panel-title h3{margin:0;font-size:1.15rem;letter-spacing:-.025em}
-.year-panel-title p{margin:5px 0 0;color:var(--label2);font-size:.78rem}
-.year-switch{margin:0;height:32px;padding:0 10px;border-radius:9px;background:var(--fill);box-shadow:none;white-space:nowrap}
-.year-switch:hover{background:var(--fill2)}
-.years{display:grid;gap:9px;margin-top:0}
-.yr{display:grid;grid-template-columns:62px minmax(0,1fr) auto;align-items:center;gap:14px;padding:10px 0;font-size:.88rem}
-.yr-label{display:flex;align-items:baseline;gap:6px;min-width:0}
-.yr-label b{font-size:.94rem;font-weight:650;letter-spacing:-.015em}
-.yr-label small{color:var(--label3);font-size:.63rem;font-weight:600}
-.yr-mid{min-width:0}
-.yr .track{position:relative;height:12px;border-radius:999px;background:var(--fill);overflow:visible}
-.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:var(--label3);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.yr.cur .fill{background:var(--orange)}
-.yr.prev .fill{background:var(--blue)}
-.yr .mark{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:2px;background:var(--label);opacity:.7;box-shadow:0 0 0 2px var(--card)}
-.yr-meta{display:grid;grid-template-columns:minmax(72px,auto) 58px;align-items:center;gap:12px;min-width:145px}
-.yr .n{text-align:right;font-size:.94rem;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.015em}
-.yr .ch{text-align:left;font-size:.76rem;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
-.yr .ch.up{color:var(--red)}
-.yr .ch.down{color:var(--green)}
-.yr.cur{padding-top:12px;padding-bottom:12px}
-.yr.cur .yr-label b,.yr.cur .n{font-weight:750}
-.yr.cur .yr-label{position:relative}
-.yr.cur .yr-label::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--orange);margin-right:4px;box-shadow:0 0 0 3px color-mix(in srgb,var(--orange) 14%,transparent)}
-@media (max-width:680px){
-  .year-panel-head{align-items:flex-start}
-  .year-switch span{display:none}
-  .year-switch{width:34px;justify-content:center;padding:0}
-  .yr{grid-template-columns:50px minmax(0,1fr) auto;gap:10px;padding:9px 0}
-  .yr-meta{grid-template-columns:auto;min-width:62px;gap:2px}
-  .yr .ch{text-align:right;font-size:.68rem}
-  .yr .track{height:10px}
-}
-@media (prefers-reduced-motion:reduce){.yr .fill{transition:none}}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;min-width:0}
@@ -1020,6 +979,118 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* Night: every box is frosted glass */
 :root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}}
+</style>
+
+<style id="apple-crossings-redesign">
+/* Crossings Over Time, Apple inspired refresh. Kept deliberately scoped to this component. */
+.dd-card .dd-face#ddYr{padding:22px 24px 24px}
+.dd-card .dd-face#ddYr > .flip-h{
+  margin:0 0 20px;
+  padding-bottom:15px;
+  border-bottom:.5px solid var(--sep);
+  min-height:32px;
+}
+.dd-card .dd-face#ddYr > .flip-h h3{
+  font-size:1.15rem;
+  line-height:1.2;
+  letter-spacing:-.025em;
+  font-weight:650;
+}
+.dd-card .dd-face#ddYr > .flip-h .flip-go{
+  height:32px;
+  padding:0 10px;
+  margin:0;
+  border-radius:10px;
+  background:var(--fill);
+  color:var(--label2);
+  font-size:.75rem;
+  font-weight:600;
+  box-shadow:none;
+}
+.dd-card .dd-face#ddYr > .flip-h .flip-go:hover{background:var(--fill2);color:var(--label)}
+.dd-card .dd-face#ddYr > .flip-h .flip-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.dd-card .dd-face#ddYr .years{gap:3px;margin:0}
+.dd-card .dd-face#ddYr .yr{
+  grid-template-columns:58px minmax(0,1fr) auto;
+  gap:15px;
+  padding:9px 0;
+  min-height:38px;
+  font-size:.88rem;
+}
+.dd-card .dd-face#ddYr .yr-label{display:flex;align-items:baseline;gap:5px;min-width:0}
+.dd-card .dd-face#ddYr .yr-label b{font-size:.92rem;font-weight:650;letter-spacing:-.015em}
+.dd-card .dd-face#ddYr .yr-label small{font-size:.63rem;font-weight:600;color:var(--label3)}
+.dd-card .dd-face#ddYr .yr-mid{min-width:0}
+.dd-card .dd-face#ddYr .yr .track{
+  height:11px;
+  border-radius:999px;
+  background:var(--fill);
+  overflow:visible;
+}
+.dd-card .dd-face#ddYr .yr .fill{
+  border-radius:999px;
+  background:var(--label3);
+}
+.dd-card .dd-face#ddYr .yr.prev .fill{background:var(--blue)}
+.dd-card .dd-face#ddYr .yr.cur .fill{background:var(--orange)}
+.dd-card .dd-face#ddYr .yr .mark{
+  top:-4px;
+  bottom:-4px;
+  width:2px;
+  border-radius:2px;
+  background:var(--label);
+  opacity:.65;
+  box-shadow:0 0 0 2px var(--card);
+}
+.dd-card .dd-face#ddYr .yr-meta{
+  display:grid;
+  grid-template-columns:92px 55px;
+  gap:10px;
+  align-items:center;
+  min-width:157px;
+}
+.dd-card .dd-face#ddYr .yr .n{
+  text-align:right;
+  font-size:.94rem;
+  font-weight:650;
+  letter-spacing:-.015em;
+  font-variant-numeric:tabular-nums;
+}
+.dd-card .dd-face#ddYr .yr .ch{
+  text-align:left;
+  font-size:.75rem;
+  font-weight:650;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.dd-card .dd-face#ddYr .yr.cur{padding-top:10px;padding-bottom:10px}
+.dd-card .dd-face#ddYr .yr.cur .yr-label b,
+.dd-card .dd-face#ddYr .yr.cur .n{font-weight:750}
+.dd-card .dd-face#ddYr .yr.cur .yr-label::before{
+  content:"";
+  display:inline-block;
+  width:5px;
+  height:5px;
+  flex:0 0 5px;
+  border-radius:50%;
+  background:var(--orange);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--orange) 14%,transparent);
+}
+.dd-card .dd-face#ddYr .dd-foot{
+  margin:18px 0 0;
+  padding-top:14px;
+  border-top:.5px solid var(--sep);
+  color:var(--label2);
+  font-size:.75rem;
+  line-height:1.45;
+}
+@media (max-width:680px){
+  .dd-card .dd-face#ddYr{padding:18px 16px 20px}
+  .dd-card .dd-face#ddYr .yr{grid-template-columns:48px minmax(0,1fr) auto;gap:9px;padding:8px 0}
+  .dd-card .dd-face#ddYr .yr-meta{grid-template-columns:auto;min-width:60px;gap:1px}
+  .dd-card .dd-face#ddYr .yr .n{font-size:.88rem}
+  .dd-card .dd-face#ddYr .yr .ch{text-align:right;font-size:.67rem}
+}
 </style>
 </head>
 <body>
@@ -2641,10 +2712,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const prevSame = sum(all.filter(d => +d.date.slice(0,4) === cur - 1 && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const change = y => { const base = y === cur ? prevSame : rows[y - 1]; if(!base) return '<span class="ch"></span>';   // on the year before; this year on the same dates last year
       const pct = Math.round((rows[y] / base - 1) * 100); return '<span class="ch delta ' + (pct < 0 ? "down" : "up") + '">' + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>"; };
-    $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : y === cur - 1 ? " prev" : "") + '"><div class="yr-label"><b>' + y + '</b>' + (y === cur ? '<small>so far</small>' : '') + '</div><div class="yr-mid"><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
-      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" aria-label="Last year at the same date" title="Last year at the same date"></div>' : "") + '</div></div><div class="yr-meta"><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div></div>").join("");
-    $("yrSummary").textContent = ys[0] + " to " + cur + " · " + fmt(rows[cur]) + " so far";
-    $("yrFoot").textContent = "Each year is compared with the year before. " + cur + " runs to " + dShort.format(parse(last.date)) + "; the marker shows " + (cur - 1) + " at the same date, " + fmt(prevSame) + ".";
+    $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : "") + '"><b>' + y + '</b><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
+      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" aria-hidden="true"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
+    $("yrFoot").textContent = "Each year is compared with the year before. " + cur + " runs to " + dShort.format(parse(last.date)) + "; the line on its bar marks " + (cur - 1) + " by the same date, " + fmt(prevSame) + ".";
     const peak = ys.reduce((a,b) => rows[b] > rows[a] ? b : a);
     ddNotes[2] = "Busiest year: " + peak + ", " + fmt(rows[peak]); if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
     const fills = $("years").querySelectorAll(".fill");
@@ -2880,7 +2950,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function drawCalendar(){
     if(!sorted.length) return;
     const first = sorted[0].date, last = sorted[sorted.length-1].date;
-    // Always open on the latest available month. The current month should not jump back to September just because October has only a few published days.
+    // opens on the latest month, but a new month with less than a week of figures would look almost empty,
+    // so until then it opens on the month before (the arrow still goes to the new one)
     if(!calMonth || calMonth > last.slice(0,7)) calMonth = last.slice(0,7);
     if(calMonth < first.slice(0,7)) calMonth = first.slice(0,7);
     const byDate = new Map(sorted.map(d=>[d.date, d]));
@@ -3008,7 +3079,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("ddNote").textContent = ddNotes[i];
     fitDd();
     if(!ddSeen[i]){ ddSeen[i] = true; ddWait[i].splice(0).forEach(fn => fn()); }
-    if(had && document.activeElement === document.body) ddFaces[i].querySelector(".flip-go").focus({preventScroll:true});
+    if(had) ddFaces[i].querySelector(".flip-go").focus({preventScroll:true});
   }
   function whenDd(i, fn){ onReveal(ddBox, () => { if(ddSeen[i]) fn(); else ddWait[i].push(fn); }); }   // once page i has been seen
   ddFlip.addEventListener("click", e => { const b = e.target.closest(".flip-go[data-go]"); if(b) showDd(+b.dataset.go); });
