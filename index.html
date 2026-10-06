@@ -136,7 +136,7 @@ button,input,select,textarea{font:inherit}
 .stage-hits{position:fixed;z-index:80;list-style:none;margin:0;padding:6px;border-radius:14px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
 .stage-hits button{width:100%;text-align:left;border:0;background:none;color:#fff;font:500 .95rem/1.2 var(--font);padding:10px 12px;border-radius:10px;cursor:pointer}
 .stage-hits button:hover,.stage-hits button[aria-selected=true]{background:rgba(255,255,255,.1)}
-main > section.is-dim{display:none !important}
+main .cc-section.is-dim{display:none !important}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
 #lmap{position:absolute;inset:0;background:linear-gradient(180deg,#8EC8E6,#6AAFD4);font:inherit}
 .cc-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
@@ -155,16 +155,36 @@ main > section.is-dim{display:none !important}
 #lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
 /* Map controls: frosted pills, matching the buttons along the bottom of the map */
 .wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
-.am-top{display:flex;gap:8px;align-items:center}
-.am-btn,.am-pill{background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
-.am-btn{position:relative;flex:none;height:36px;min-width:36px;border:0;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
-.am-btn::after{content:"";position:absolute;inset:-4px}   /* still a 44pt tap target */
-.am-btn:active{transform:scale(.96)}
-.am-btn svg{width:15px;height:15px}
-@media (hover:hover){.am-btn:hover{background:rgba(28,28,30,.48)}}
-.am-layer{padding:0 12px 0 13px}
-.am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
-.am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
+
+
+
+   /* still a 44pt tap target */
+
+
+
+
+
+
+#wxLayerIc{display:grid;place-items:center}
+#wxLayerIc svg{width:16px;height:16px}
+
+
+/* the layer picker: a frosted card of tiles, like Apple Maps' map chooser */
+
+@keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
+
+
+.am-x{width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer}
+.am-x svg{width:9px;height:9px}
+
+
+
+
+
+
+@media (hover:hover){
+
+
 /* the forecast timeline, as a frosted pill */
 .am-pill{border-radius:999px}
 .wx-time{display:flex;align-items:center;gap:8px;padding:3px 14px 3px 3px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
@@ -194,17 +214,22 @@ main > section.is-dim{display:none !important}
 .am-launch b{border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
-.am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}/* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
+.am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
+
+/* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
 .wx-key{display:flex;align-items:center;gap:7px;font:500 12px/1 var(--font);font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);white-space:nowrap}
 .wx-key i{flex:1;min-width:48px;height:6px;border-radius:3px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.15)}
-.wx-key .wk-t{font-weight:600;margin-right:2px}.wx-key-bar{width:220px;padding:7px 12px}
+.wx-key .wk-t{font-weight:600;margin-right:2px}
+#wxKeyPick{margin:14px 2px 0}
+.wx-key-bar{width:220px;padding:7px 12px}
+
 .am-sheet .wx-key{color:var(--label2);margin-top:10px}
 @media (max-width:600px){.wx-key-bar{display:none}}   /* phones: in the layer picker and the reading sheet */
-.am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
-.am-launch-tg[aria-pressed="false"]{color:rgba(255,255,255,.6)}
-.am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
-.am-launch-tg::after{content:"On";margin-left:auto;font-weight:500;color:rgba(255,255,255,.7)}
-.am-launch-tg[aria-pressed="false"]::after{content:"Off"}
+
+
+
+
+
 /* with a mouse: the reading under the pointer, for the layer on show */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
   font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(255,255,255,.94);color:#1A2B4C;box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.18);transition:opacity .15s}
@@ -230,7 +255,18 @@ main > section.is-dim{display:none !important}
 .am-pin b{position:absolute;left:10px;top:15px;width:2px;height:13px;border-radius:1px;background:linear-gradient(#8E8E93,#C7C7CC)}
 .am-pin s{position:absolute;left:7px;top:26px;width:8px;height:4px;border-radius:50%;background:rgba(0,0,0,.4);filter:blur(1px)}
 @keyframes pinDrop{from{transform:translateY(-22px);opacity:0}}
+/* scale bar, shown in full screen */
+#lmap .leaflet-control-scale{display:none;margin:0 0 14px 16px}
+
+#lmap .leaflet-control-scale-line{border:2px solid #fff;border-top:0;background:none;color:#fff;font:600 10px/1.4 var(--font);text-shadow:0 0 3px rgba(0,0,0,.9);box-shadow:0 1px 2px rgba(0,0,0,.35);padding:0 4px}
+/* full screen: the whole Channel to explore */
+
+
+
+
+
 @media (hover:none){#lmap .leaflet-control-zoom{display:none}}
+
 /* tap the map: the weather at that spot */
 #lmap .wx-pt .leaflet-popup-content-wrapper{border-radius:16px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);color:var(--label);box-shadow:var(--shadow),0 0 0 .5px var(--sep)}
 #lmap .wx-pt .leaflet-popup-tip{background:color-mix(in srgb,var(--card) 80%,transparent)}
@@ -292,6 +328,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
 .hero.has-news .large-title,.hero.has-news .wx-ctl{transform:translateY(var(--mn-h,0px));transition:transform .45s cubic-bezier(.2,.9,.3,1)}
+
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 6px rgba(0,0,0,.45),0 1px 8px rgba(0,0,0,.55)}
@@ -434,8 +471,11 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .boat .ring{opacity:0;fill:none;stroke:#fff;stroke-width:2;transition:opacity .2s}
 
 /* ------------------------------------------------------------ layout */
-main > section,.card,.bento > *,.duo > *{min-width:0;max-width:100%}
-main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:grid;gap:40px}
+main > section,.cc-section,.card,.bento > *,.duo > *{min-width:0;max-width:100%}
+main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:40px}
+.cc-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 16px;align-items:start;min-width:0}
+.cc-column{display:flex;flex-direction:column;gap:20px;min-width:0}
+.cc-column>.cc-section{width:100%;min-width:0;max-width:100%}
 .section-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 12px}
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
@@ -699,28 +739,19 @@ footer strong{color:var(--label);font-weight:600}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
-/* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
-.beta{position:static;flex:none;pointer-events:auto}
-.beta-pill{appearance:none;border:0;min-height:40px;padding:0 15px;border-radius:999px;display:inline-flex;align-items:center;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
-  background:var(--fill,rgba(118,118,128,.12));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);transition:transform .2s ease}
-.beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
-.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:max-content;max-width:min(300px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 14.5px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
-  background:color-mix(in srgb,var(--card) 92%,transparent);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:0 10px 30px rgba(0,0,0,.16);
-  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
-.beta-tip b{display:block;margin-bottom:3px;font-weight:600}
-.beta:hover .beta-tip,.beta.open .beta-tip,.beta-pill:focus-visible + .beta-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
-@media (prefers-reduced-transparency:reduce){.beta-tip{background:var(--card)}}
-@media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}.beta-pill{padding:0 12px}}   /* small phones: both still fit */
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
-@media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
-.large-title .lt-logo,#wxPlay,.am-x,#tourNext,#tourSkip{position:relative}
-.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,#tourNext::after,#tourSkip::after{content:"";position:absolute;inset:-8px}
+.large-title .lt-logo,#wxPlay,.am-x{position:relative}
+.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after{content:"";position:absolute;inset:-8px}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
+/* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
+
+
+
+
 /* phones on their side: the map fills the screen and the number shrinks to fit */
 @media (max-height:500px) and (orientation:landscape){
   .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
@@ -729,9 +760,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 /* phones: one column, no sideways spill, below-fold sections stay cheap to scroll */
 @media (max-width:899px){
-  main{display:block;padding-top:20px;padding-bottom:36px;gap:28px}
-  main > section{content-visibility:auto;contain-intrinsic-size:auto 420px;margin-bottom:28px}
-  main > section:first-child{content-visibility:visible}
+  main{padding-top:20px;padding-bottom:36px;gap:28px}
+  .cc-columns{display:flex;flex-direction:column;gap:28px}
+  .cc-column{display:contents}
+  .cc-columns .cc-column:first-child > .cc-section:first-child{order:1}
+  .cc-columns .cc-column:nth-child(2) > .cc-section:first-child{order:2}
+  .cc-columns .cc-column:first-child > .cc-section:nth-child(2){order:3}
   .card,.duo,.bento{max-width:100%}
   body{overflow-x:hidden}
   .more-toggle{height:34px;padding:0 14px}
@@ -745,7 +779,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
   .hero-in,.large-title{padding-left:20px;padding-right:20px}
-  .large-title h1{white-space:nowrap}
+  .large-title h1{white-space:normal}
   .bento{gap:12px}
   .b-week,.b-ring,.b-lab,.b-bur{grid-column:1 / -1}   /* one box to a row, so Labour and Burnham are not squeezed into two narrow columns */
   .card.b-lab,.card.b-bur{min-height:190px;padding-bottom:16px}
@@ -766,6 +800,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
+}
+/* Narrow-phone polish: keep controls readable without horizontal spill. */
+@media (max-width:420px){
+  .cc-columns{gap:24px}
+  .cc-column{gap:24px}
+  .section-h{gap:8px}
+  .section-h h2{font-size:1.2rem}
+  .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{flex:none}
+  .ft-share{gap:6px}
+  .sh{padding-inline:12px}
 }
 /* ------------------------------------------------------------ accessibility settings */
 @media (prefers-reduced-motion:reduce){
@@ -942,13 +988,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
-/* Wider screens: two fixed columns. A box may grow taller (Show more) but never wider, and it stays in its column. */
-@media (min-width:900px){
-  main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;column-gap:16px;row-gap:20px;align-items:start;justify-items:stretch}
-  main > section{min-width:0;max-width:100%;width:100%}
-  main > section.wide,main > section.span{grid-column:1 / -1}
-}
-/* Long boxes open downwards only. Width stays the column width. */
+/* Two independent column stacks: widths are fixed by the parent; cards can only grow vertically. */
 .card.can-more{max-height:420px;padding-bottom:52px}
 @media (max-width:899px){.card.can-more{max-height:320px}}
 .card.can-more.is-open{max-height:none}
@@ -959,22 +999,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .card.can-more:not(.is-open)::after{content:"";position:absolute;left:0;right:0;bottom:42px;height:28px;background:linear-gradient(transparent,var(--card));pointer-events:none;z-index:2}
 .more-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.more-toggle:hover{background:var(--fill2)}}
-/* First-visit tour of the map: a spotlight on each control with a small card explaining it */
-.tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
-.tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.tour-card{position:fixed;width:min(320px,calc(100vw - 32px));padding:16px 16px 14px;border-radius:18px;background:var(--card);color:var(--label);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1);animation:popIn .3s ease-out both}
-.tour-card .tc-step{font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--blue)}
-.tour-card h3{margin:6px 0 4px;font:700 1.06rem/1.25 var(--font);letter-spacing:-.02em}
-.tour-card p{margin:0;font-size:.882rem;line-height:1.4;color:var(--label2)}
-.tour-row{display:flex;align-items:center;gap:8px;margin-top:14px}
-.tour-dots{display:flex;gap:5px;margin-right:auto}
-.tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--fill)}
-.tour-dots i.on{background:var(--blue)}
-.tour-row button{border:0;border-radius:999px;min-height:36px;padding:0 14px;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
-.tour-skip{background:none;color:var(--label2)}
-.tour-next{background:var(--blue);color:#fff}
-.tour-row button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){.tour-spot,.tour-card{transition:none;animation:none}}
+
 
 /* Night: every box is frosted glass */
 :root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
@@ -984,7 +1009,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <body>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+  <div class="top-row"><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1031,7 +1056,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
   <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
 
-  <!-- Map controls: forecast timeline -->
+  <!-- Map controls: forecast timeline and fixed wave key -->
   <div class="wx-ctl" id="wxCtl">
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
     <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img"></div>
@@ -1072,278 +1097,233 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
-<main id="main">
-
-  <!-- ============================================================ AT A GLANCE -->
-  <section class="wide" aria-labelledby="hGlance">
-    <div class="section-h rv"><h2 id="hGlance">At a Glance</h2><p id="glanceNote"></p></div>
-    <div class="bento">
-      <article class="card b-week rv">
-        <h3>Last 7 days</h3>
-        <div class="val num" id="weekV">–</div>
-        <div class="sub" id="weekS">&nbsp;</div>
-        <div class="spark" id="spark" role="img" aria-label="Last 7 days"></div>
-        <div class="spark-days" id="sparkDays" aria-hidden="true"></div>
-      </article>
-      <article class="card b-ring art rv" id="ytdBox">
-        <!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
-        <div class="flip" id="flip">
-          <div class="fy" id="yearFace">
-            <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="twSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="twTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"/><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"/><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
-            <div class="flip-h"><h3 id="ringYear">This year so far</h3><button type="button" class="flip-go" id="flipCal" aria-controls="calFace">Calendar<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
-            <div class="ring-wrap">
-              <svg class="ring" viewBox="0 0 170 170" role="img" id="ringSvg" aria-label="This year against last year">
-                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF375F"/></linearGradient></defs>
-                <circle class="track" cx="85" cy="85" r="72" stroke-width="18"/>
-                <circle class="arc" id="ringArc" cx="85" cy="85" r="72" stroke-width="18" transform="rotate(-90 85 85)"/>
-                <text x="85" y="84" text-anchor="middle" class="ring-num" fill="var(--label)" id="ringPct">–</text>
-                <text x="85" y="108" text-anchor="middle" font-size="13" font-weight="600" fill="var(--label2)" id="ringOf">of last year</text>
-                <text x="85" y="126" text-anchor="middle" font-size="12" fill="var(--label2)" id="ringTot"></text>
-              </svg>
-              <div class="ring-legend">
-                <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
-                <div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
-                <div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="fc mb" id="calFace" role="group" aria-label="Calendar" inert>
-            <div class="flip-h"><button type="button" class="flip-go back" id="flipYear" aria-controls="yearFace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span id="flipYearT">This year so far</span></button></div>
-            <div class="cal-nav">
-              <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
-              <h3 id="calTitle" aria-live="polite">–</h3>
-              <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
-            </div>
-            <div class="cal-grid" id="calGrid"></div>
-            <div class="cal-detail" id="calDetail" aria-live="polite"></div>
-            <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
-            <div class="cal-foot">
-              <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i class="k4" style="--h:88%"></i>600+</span>
-            </div>
-          </div>
-        </div>
-      </article>
-      <article class="card b-lab art rv">
-        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax slice"><defs><linearGradient id="tlSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="tlStone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"/><stop offset="1" stop-color="var(--ta-stone2)"/></linearGradient><radialGradient id="tlGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"/><stop offset="1" stop-color="#E4003B" stop-opacity="0"/></radialGradient></defs><circle cx="190" cy="88" r="70" fill="url(#tlGlow)"/><g transform="translate(190 28)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"/><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"/><rect x="-12" y="36" width="24" height="12" fill="url(#tlStone)"/><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"/><rect x="-14" y="48" width="28" height="30" fill="url(#tlStone)"/><circle cx="0" cy="63" r="10" fill="var(--ta-clock)" stroke="var(--ta-stone3)" stroke-width="1.5"/><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-width="1.4" stroke-linecap="round"/><rect x="-12" y="78" width="24" height="52" fill="url(#tlStone)"/><path d="M-7 84 v42 M0 84 v42 M7 84 v42" stroke="var(--ta-stone3)" stroke-width="1.2" opacity=".7"/><path d="M-60 94 H-12 V76 H-48z M12 76 H70 V94 H12z" fill="url(#tlStone)" opacity=".75"/></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
-        <h3>Since Labour took office</h3>
-        <div class="val num" id="labV">–</div>
-        <div class="sub" id="labS">&nbsp;</div>
-        <div class="cost" id="labC"><span id="labCT"></span><button type="button" class="cost-i" id="labCI" aria-expanded="false" aria-controls="popCost" aria-label="How the support cost is worked out" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.35" fill="currentColor"/></svg></button></div>
-      </article>
-      <article class="card b-bur art rv">
-        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax slice"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div>
-        <h3>Since Burnham became PM</h3>
-        <div class="val num" id="burV">–</div>
-        <div class="sub" id="burS">&nbsp;</div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============================================================ ON THIS DAY -->
-  <section aria-labelledby="hOtd" id="otd">
-    <div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
-    <article class="card rv">
-      <div class="otd-top">
-        <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
-        <div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS">&nbsp;</div></div>
-      </div>
-      <div class="otd-years" id="otdYears" role="group" aria-label="The same date in earlier years"></div>
-    </article>
-  </section>
-
-  <!-- ============================================================ CROSSINGS OVER TIME: every day, the year in squares and year by year,
-       three pages in one box slid across with the arrows, or a swipe that doesn't start on the chart or the squares (they have their own drag) -->
-  <section aria-labelledby="hDaily">
-    <div class="section-h rv"><h2 id="hDaily">Crossings Over Time</h2><p id="ddNote">Drag across to read any day</p></div>
-    <div class="card dd-card rv" id="ddBox">
-      <div class="flip" id="ddFlip">
-        <div class="dd-face" id="ddDay" role="group" aria-label="Every day">
-          <div class="flip-h"><h3>Every day</h3><button type="button" class="flip-go" data-go="1" aria-controls="ddSq">Year in squares<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
-          <div class="chart-head">
-            <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
-            <div class="seg" role="group" aria-label="Range" id="rangeSeg">
-              <button type="button" data-r="30">1M</button><button type="button" data-r="90" aria-pressed="true">3M</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
-            </div>
-          </div>
-          <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
-          <div class="sr" id="chartLive" aria-live="polite"></div>
-        </div>
-        <div class="dd-face" id="ddSq" role="group" aria-label="The year in squares" inert>
-          <div class="flip-h"><button type="button" class="flip-go back" data-go="0" aria-controls="ddDay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Every day</button><button type="button" class="flip-go" data-go="2" aria-controls="ddYr">Year by year<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
-          <div class="heat-read" id="heatRead" aria-live="polite">Tap a square to see that day.</div>
-          <div class="heat-scroll" id="heatScroll" tabindex="0" role="group" aria-label="The year in squares. Arrow keys move between days."><div class="heat" id="heat"></div></div>
-          <div class="heat-foot">
-            <span class="heat-key heat-scale" role="img" aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
-            <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
-          </div>
-        </div>
-        <div class="dd-face" id="ddYr" role="group" aria-label="Year by year" inert>
-          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button><h3>People each year</h3></div>
-          <div class="years" id="years"></div>
-          <p class="dd-foot" id="yrFoot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ RUNNING TOTALS -->
-  <section class="mb" aria-labelledby="hRace">
-    <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
-    <div class="card race-card rv">
-      <div class="key-row" id="raceKey" aria-hidden="true"></div>
-      <div class="race" id="race" tabindex="0" aria-describedby="raceSay"><div class="empty">Loading the history since 2018…</div></div>
-      <div class="race-read" id="raceRead" aria-hidden="true" hidden></div>
-      <div class="sr" aria-live="polite" id="raceSay"></div>
-    </div>
-    <p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
-  </section>
-
-  <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
-  <section class="mb wide" aria-labelledby="hCalc">
-    <div class="duo">
-      <div class="mb-col">
-        <div class="section-h rv"><h2 id="hCalc">Between Two Dates</h2></div>
-        <div class="card calc-card rv">
-          <div class="calc-dates">
-            <label>From<input type="date" id="calcFrom"></label>
-            <label>To<input type="date" id="calcTo"></label>
-          </div>
-          <div class="presets" id="calcPresets">
-            <button type="button" data-p="labour" aria-pressed="false">Since Labour</button>
-            <button type="button" data-p="burnham" aria-pressed="false">Since Burnham</button>
-            <button type="button" data-p="year" aria-pressed="false">This year</button>
-            <button type="button" data-p="12m" aria-pressed="false">Last 12 months</button>
-            <button type="button" data-p="30d" aria-pressed="false">Last 30 days</button>
-          </div>
-          <div class="calc-out" aria-live="polite">
-            <div><b id="calcP">–</b><span>people</span></div>
-            <div><b id="calcB">–</b><span>boats</span></div>
-            <div><b id="calcA">–</b><span>a day on average</span></div>
-          </div>
-          <div class="calc-note" id="calcNote"></div>
-        </div>
-      </div>
-      <div class="mb-col">
-        <div class="section-h rv"><h2>Longest Quiet Spells</h2></div>
-        <div class="card flush tbl-wrap rv"><table class="tbl" id="quietTbl" aria-label="Longest spells without crossings"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
-        <p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ PATTERNS -->
-  <section class="mb" aria-labelledby="hPat">
-    <div class="section-h rv"><h2 id="hPat">Patterns</h2>
-      <div class="seg" id="patSeg" role="group" aria-label="Pattern">
-        <button type="button" data-pat="dow" aria-pressed="true">Day of Week</button>
-        <button type="button" data-pat="month" aria-pressed="false">Month</button>
-      </div>
-    </div>
-    <div class="card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
-    <p class="foot rv" id="patNote"></p>
-  </section>
-
-  <!-- ============================================================ EVERY PERSON (desktop) -->
-  <section class="mb area-rep" aria-labelledby="repTitle">
-    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
-    <div class="card rep-card rv">
-      <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
-      <div class="dots" id="dots"></div>
-    </div>
-    <p class="foot rv">Each dinghy is one boat, seen from above, and each dot one person. The Home Office gives a daily total, so a day's people are shared evenly across its boats.</p>
-  </section>
-
-  <!-- ============================================================ WHO, PER BOAT, RETURNS -->
-  <section class="wide" aria-labelledby="hWho">
-    <div class="section-h rv"><h2 id="hWho">Who Is Crossing</h2><p id="whoNote"></p></div>
-    <div class="duo">
-      <article class="card rv">
-        <h3>Sex and age</h3>
-        <div class="val num" id="menV">–</div>
-        <div class="sub">adult men</div>
-        <div class="stack-h">Sex</div>
-        <div class="stack" id="sexStack"></div>
-        <div class="legend" id="sexLegend"></div>
-        <div class="stack-h">Age</div>
-        <div class="stack" id="ageStack"></div>
-        <div class="legend" id="ageLegend"></div>
-      </article>
-      <article class="card rv">
-        <h3>Top nationalities</h3>
-        <div class="sub" id="natS">&nbsp;</div>
-        <ol class="nat-list" id="nats"></ol>
-      </article>
-      <article class="card rv">
-        <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
-        <div class="val num" id="pbV">–</div>
-        <div class="sub" id="pbS">&nbsp;</div>
-        <div class="pb-boats" id="pbBoats"></div>
-        <div class="pb-line" id="pbLine"></div>
-      </article>
-      <article class="card rv">
-        <h3>UK–France returns deal</h3>
-        <div class="sub" id="retS" style="margin-top:6px">&nbsp;</div>
-        <div class="vs">
-          <div><b class="num" id="retOut">–</b><span>returned to France</span></div>
-          <div><b class="num" id="retIn">–</b><span>transferred to the UK</span></div>
-        </div>
-        <div class="cost" id="retNote"></div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============================================================ RECORDS -->
-  <section aria-labelledby="hRec">
-    <div class="section-h rv"><h2 id="hRec">Records</h2></div>
-    <div class="card rv"><ul class="records" id="records"></ul></div>
-  </section>
-
-  <!-- ============================================================ PETITIONS -->
-  <section class="mb" aria-labelledby="hPet">
-    <div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
-    <div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
-    <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
-  </section>
-
-  <!-- ============================================================ WEEKLY ROUNDUP -->
-  <section class="mb" aria-labelledby="subTitle">
-    <div class="subscribe rv" id="subscribe" aria-labelledby="subTitle">
-      <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
-      <div class="sub-copy">
-        <h2 id="subTitle">Weekly roundup of the figures</h2>
-        <p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
-      </div>
-      <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
-        <label class="sr" for="subEmail">Email address</label>
-        <input type="email" id="subEmail" name="field_0" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
-        <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" id="subBtn">Subscribe</button>
-      </form>
-      <button type="button" class="b-close" id="subClose" aria-label="Close the weekly roundup sign-up">
-        <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-      </button>
-      <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
-    </div>
-  </section>
-
-</main>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="tour" id="tour" role="dialog" aria-modal="true" aria-labelledby="tourH" hidden>
-  <div class="tour-spot" id="tourSpot"></div>
-  <div class="tour-card" id="tourCard">
-    <div class="tc-step" id="tourStep"></div>
-    <h3 id="tourH"></h3>
-    <p id="tourP"></p>
-    <div class="tour-row"><span class="tour-dots" id="tourDots"></span><button type="button" class="tour-skip" id="tourSkip">Skip</button><button type="button" class="tour-next" id="tourNext">Next</button></div>
-  </div>
+<main id="main"><section aria-labelledby="hGlance" class="wide cc-section">
+<div class="section-h rv"><h2 id="hGlance">At a Glance</h2><p id="glanceNote"></p></div>
+<div class="bento">
+<article class="card b-week rv">
+<h3>Last 7 days</h3>
+<div class="val num" id="weekV">–</div>
+<div class="sub" id="weekS"> </div>
+<div aria-label="Last 7 days" class="spark" id="spark" role="img"></div>
+<div aria-hidden="true" class="spark-days" id="sparkDays"></div>
+</article>
+<article class="card b-ring art rv" id="ytdBox">
+<!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
+<div class="flip" id="flip">
+<div class="fy" id="yearFace">
+<div aria-hidden="true" class="tile-art"><svg preserveaspectratio="xMaxYMax meet" viewbox="0 0 260 150"><defs><lineargradient id="twSea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"></stop><stop offset="1" stop-color="var(--ta-sea2)"></stop></lineargradient><lineargradient id="twTube" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"></stop><stop offset="1" stop-color="var(--ta-tube3)"></stop></lineargradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"></path><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"></path><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="0" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="0" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="0" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-20" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="20" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"></path><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"></path></svg></div>
+<div class="flip-h"><h3 id="ringYear">This year so far</h3><button aria-controls="calFace" class="flip-go" id="flipCal" type="button">Calendar<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button></div>
+<div class="ring-wrap">
+<svg aria-label="This year against last year" class="ring" id="ringSvg" role="img" viewbox="0 0 170 170">
+<defs><lineargradient id="ringGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FF9F0A"></stop><stop offset="1" stop-color="#FF375F"></stop></lineargradient></defs>
+<circle class="track" cx="85" cy="85" r="72" stroke-width="18"></circle>
+<circle class="arc" cx="85" cy="85" id="ringArc" r="72" stroke-width="18" transform="rotate(-90 85 85)"></circle>
+<text class="ring-num" fill="var(--label)" id="ringPct" text-anchor="middle" x="85" y="84">–</text>
+<text fill="var(--label2)" font-size="13" font-weight="600" id="ringOf" text-anchor="middle" x="85" y="108">of last year</text>
+<text fill="var(--label2)" font-size="12" id="ringTot" text-anchor="middle" x="85" y="126"></text>
+</svg>
+<div class="ring-legend">
+<div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
+<div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
+<div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
 </div>
+</div>
+</div>
+<div aria-label="Calendar" class="fc mb" id="calFace" inert="" role="group">
+<div class="flip-h"><button aria-controls="yearFace" class="flip-go back" id="flipYear" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg><span id="flipYearT">This year so far</span></button></div>
+<div class="cal-nav">
+<button aria-label="Previous month" class="cal-btn" id="calPrev" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button>
+<h3 aria-live="polite" id="calTitle">–</h3>
+<button aria-label="Next month" class="cal-btn" id="calNext" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button>
+</div>
+<div class="cal-grid" id="calGrid"></div>
+<div aria-live="polite" class="cal-detail" id="calDetail"></div>
+<div class="cal-marks" id="calMarks"><span hidden="" id="calBusyKey"><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span hidden="" id="calNewKey"><i style="background:var(--blue)"></i>New since your last visit</span><span hidden="" id="calRevKey"><u>123</u> Revised figure</span></div>
+<div class="cal-foot">
+<span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i class="k4" style="--h:88%"></i>600+</span>
+</div>
+</div>
+</div>
+</article>
+<article class="card b-lab art rv">
+<div aria-hidden="true" class="tile-art"><svg preserveaspectratio="xMaxYMax slice" viewbox="0 0 260 150"><defs><lineargradient id="tlSea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"></stop><stop offset="1" stop-color="var(--ta-sea2)"></stop></lineargradient><lineargradient id="tlStone" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"></stop><stop offset="1" stop-color="var(--ta-stone2)"></stop></lineargradient><radialgradient cx=".5" cy=".5" id="tlGlow" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"></stop><stop offset="1" stop-color="#E4003B" stop-opacity="0"></stop></radialgradient></defs><circle cx="190" cy="88" fill="url(#tlGlow)" r="70"></circle><g transform="translate(190 28)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"></path><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"></path><rect fill="url(#tlStone)" height="12" width="24" x="-12" y="36"></rect><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"></path><rect fill="url(#tlStone)" height="30" width="28" x="-14" y="48"></rect><circle cx="0" cy="63" fill="var(--ta-clock)" r="10" stroke="var(--ta-stone3)" stroke-width="1.5"></circle><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-linecap="round" stroke-width="1.4"></path><rect fill="url(#tlStone)" height="52" width="24" x="-12" y="78"></rect><path d="M-7 84 v42 M0 84 v42 M7 84 v42" opacity=".7" stroke="var(--ta-stone3)" stroke-width="1.2"></path><path d="M-60 94 H-12 V76 H-48z M12 76 H70 V94 H12z" fill="url(#tlStone)" opacity=".75"></path></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"></path><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"></path></svg></div>
+<h3>Since Labour took office</h3>
+<div class="val num" id="labV">–</div>
+<div class="sub" id="labS"> </div>
+<div class="cost" id="labC"><span id="labCT"></span><button aria-controls="popCost" aria-expanded="false" aria-label="How the support cost is worked out" class="cost-i" hidden="" id="labCI" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="none" r="9.5" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 11v6" stroke="currentColor" stroke-linecap="round" stroke-width="2.2"></path><circle cx="12" cy="7.6" fill="currentColor" r="1.35"></circle></svg></button></div>
+</article>
+<article class="card b-bur art rv">
+<div aria-hidden="true" class="tile-art"><svg preserveaspectratio="xMaxYMax slice" viewbox="0 0 260 150"><defs><pattern height="12" id="tbBrick" patternunits="userSpaceOnUse" width="24"><rect fill="var(--ta-brick1)" height="12" width="24"></rect><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"></path></pattern><lineargradient id="tbDoor" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#15171A"></stop><stop offset=".5" stop-color="#2A2D33"></stop><stop offset="1" stop-color="#101114"></stop></lineargradient></defs><rect fill="url(#tbBrick)" height="150" width="260" x="0" y="0"></rect><g transform="translate(180 0)"><rect fill="var(--ta-frame)" height="120" width="80" x="-40" y="30"></rect><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"></path><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"></path><path d="M0 36 V62 M-18 45 L0 62 L18 45" fill="none" stroke="var(--ta-frame)" stroke-width="2"></path><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"></path><rect fill="none" height="30" rx="1" stroke="#000" stroke-opacity=".35" width="18" x="-22" y="76"></rect><rect fill="none" height="30" rx="1" stroke="#000" stroke-opacity=".35" width="18" x="4" y="76"></rect><text fill="#F2F2F2" font-family="Georgia, serif" font-size="15" font-weight="700" text-anchor="middle" x="0" y="96">10</text><circle cx="0" cy="117" fill="#C9A227" r="4"></circle><rect fill="var(--ta-step)" height="10" width="120" x="-60" y="140"></rect></g></svg></div>
+<h3>Since Burnham became PM</h3>
+<div class="val num" id="burV">–</div>
+<div class="sub" id="burS"> </div>
+</article>
+</div>
+</section><div class="cc-columns"><div class="cc-column"><section aria-labelledby="hOtd" class="cc-section" id="otd">
+<div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
+<article class="card rv">
+<div class="otd-top">
+<div aria-hidden="true" class="cal"><span id="otdMon"></span><b id="otdDay"></b></div>
+<div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS"> </div></div>
+</div>
+<div aria-label="The same date in earlier years" class="otd-years" id="otdYears" role="group"></div>
+</article>
+</section><section aria-labelledby="hRace" class="mb cc-section">
+<div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
+<div class="card race-card rv">
+<div aria-hidden="true" class="key-row" id="raceKey"></div>
+<div aria-describedby="raceSay" class="race" id="race" tabindex="0"><div class="empty">Loading the history since 2018…</div></div>
+<div aria-hidden="true" class="race-read" hidden="" id="raceRead"></div>
+<div aria-live="polite" class="sr" id="raceSay"></div>
+</div>
+<p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
+</section></div><div class="cc-column"><section aria-labelledby="hDaily" class="cc-section">
+<div class="section-h rv"><h2 id="hDaily">Crossings Over Time</h2><p id="ddNote">Drag across to read any day</p></div>
+<div class="card dd-card rv" id="ddBox">
+<div class="flip" id="ddFlip">
+<div aria-label="Every day" class="dd-face" id="ddDay" role="group">
+<div class="flip-h"><h3>Every day</h3><button aria-controls="ddSq" class="flip-go" data-go="1" type="button">Year in squares<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button></div>
+<div class="chart-head">
+<div class="chart-read" id="chartRead"><b class="num">–</b><span> </span></div>
+<div aria-label="Range" class="seg" id="rangeSeg" role="group">
+<button data-r="30" type="button">1M</button><button aria-pressed="true" data-r="90" type="button">3M</button><button data-r="365" type="button">1Y</button><button data-r="0" type="button">All</button>
+</div>
+</div>
+<div aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days." class="chart" id="chart" role="group" tabindex="0"></div>
+<div aria-live="polite" class="sr" id="chartLive"></div>
+</div>
+<div aria-label="The year in squares" class="dd-face" id="ddSq" inert="" role="group">
+<div class="flip-h"><button aria-controls="ddDay" class="flip-go back" data-go="0" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>Every day</button><button aria-controls="ddYr" class="flip-go" data-go="2" type="button">Year by year<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button></div>
+<div aria-live="polite" class="heat-read" id="heatRead">Tap a square to see that day.</div>
+<div aria-label="The year in squares. Arrow keys move between days." class="heat-scroll" id="heatScroll" role="group" tabindex="0"><div class="heat" id="heat"></div></div>
+<div class="heat-foot">
+<span aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more" class="heat-key heat-scale" role="img"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
+<span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i> Busiest 10 days</span>
+</div>
+</div>
+<div aria-label="Year by year" class="dd-face" id="ddYr" inert="" role="group">
+<div class="flip-h"><button aria-controls="ddSq" class="flip-go back" data-go="1" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>Year in squares</button><h3>People each year</h3></div>
+<div class="years" id="years"></div>
+<p class="dd-foot" id="yrFoot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
+</div>
+</div>
+</div>
+</section></div></div><section aria-labelledby="hCalc" class="mb wide cc-section">
+<div class="duo">
+<div class="mb-col">
+<div class="section-h rv"><h2 id="hCalc">Between Two Dates</h2></div>
+<div class="card calc-card rv">
+<div class="calc-dates">
+<label>From<input id="calcFrom" type="date"/></label>
+<label>To<input id="calcTo" type="date"/></label>
+</div>
+<div class="presets" id="calcPresets">
+<button aria-pressed="false" data-p="labour" type="button">Since Labour</button>
+<button aria-pressed="false" data-p="burnham" type="button">Since Burnham</button>
+<button aria-pressed="false" data-p="year" type="button">This year</button>
+<button aria-pressed="false" data-p="12m" type="button">Last 12 months</button>
+<button aria-pressed="false" data-p="30d" type="button">Last 30 days</button>
+</div>
+<div aria-live="polite" class="calc-out">
+<div><b id="calcP">–</b><span>people</span></div>
+<div><b id="calcB">–</b><span>boats</span></div>
+<div><b id="calcA">–</b><span>a day on average</span></div>
+</div>
+<div class="calc-note" id="calcNote"></div>
+</div>
+</div>
+<div class="mb-col">
+<div class="section-h rv"><h2>Longest Quiet Spells</h2></div>
+<div class="card flush tbl-wrap rv"><table aria-label="Longest spells without crossings" class="tbl" id="quietTbl"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
+<p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
+</div>
+</div>
+</section><div class="cc-columns"><div class="cc-column"><section aria-labelledby="hPat" class="mb cc-section">
+<div class="section-h rv"><h2 id="hPat">Patterns</h2>
+<div aria-label="Pattern" class="seg" id="patSeg" role="group">
+<button aria-pressed="true" data-pat="dow" type="button">Day of Week</button>
+<button aria-pressed="false" data-pat="month" type="button">Month</button>
+</div>
+</div>
+<div class="card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
+<p class="foot rv" id="patNote"></p>
+</section></div><div class="cc-column"><section aria-labelledby="repTitle" class="mb area-rep cc-section">
+<div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
+<div class="card rep-card rv">
+<div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
+<div class="dots" id="dots"></div>
+</div>
+<p class="foot rv">Each dinghy is one boat, seen from above, and each dot one person. The Home Office gives a daily total, so a day's people are shared evenly across its boats.</p>
+</section></div></div><section aria-labelledby="hWho" class="wide cc-section">
+<div class="section-h rv"><h2 id="hWho">Who Is Crossing</h2><p id="whoNote"></p></div>
+<div class="duo">
+<article class="card rv">
+<h3>Sex and age</h3>
+<div class="val num" id="menV">–</div>
+<div class="sub">adult men</div>
+<div class="stack-h">Sex</div>
+<div class="stack" id="sexStack"></div>
+<div class="legend" id="sexLegend"></div>
+<div class="stack-h">Age</div>
+<div class="stack" id="ageStack"></div>
+<div class="legend" id="ageLegend"></div>
+</article>
+<article class="card rv">
+<h3>Top nationalities</h3>
+<div class="sub" id="natS"> </div>
+<ol class="nat-list" id="nats"></ol>
+</article>
+<article class="card rv">
+<div class="pb-top"><h3>People per boat</h3><span class="pb-x" hidden="" id="pbX"></span></div>
+<div class="val num" id="pbV">–</div>
+<div class="sub" id="pbS"> </div>
+<div class="pb-boats" id="pbBoats"></div>
+<div class="pb-line" id="pbLine"></div>
+</article>
+<article class="card rv">
+<h3>UK–France returns deal</h3>
+<div class="sub" id="retS" style="margin-top:6px"> </div>
+<div class="vs">
+<div><b class="num" id="retOut">–</b><span>returned to France</span></div>
+<div><b class="num" id="retIn">–</b><span>transferred to the UK</span></div>
+</div>
+<div class="cost" id="retNote"></div>
+</article>
+</div>
+</section><div class="cc-columns"><div class="cc-column"><section aria-labelledby="hRec" class="cc-section">
+<div class="section-h rv"><h2 id="hRec">Records</h2></div>
+<div class="card rv"><ul class="records" id="records"></ul></div>
+</section><section aria-labelledby="subTitle" class="mb cc-section">
+<div aria-labelledby="subTitle" class="subscribe rv" id="subscribe">
+<div aria-hidden="true" class="sub-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="14" rx="3" width="18" x="3" y="5"></rect><path d="M3.5 7.5l8.5 6 8.5-6"></path></svg></div>
+<div class="sub-copy">
+<h2 id="subTitle">Weekly roundup of the figures</h2>
+<p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
+</div>
+<form action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" class="sub-form" id="subForm" method="post" novalidate="" target="_blank">
+<label class="sr" for="subEmail">Email address</label>
+<input autocapitalize="off" autocomplete="email" id="subEmail" inputmode="email" name="field_0" placeholder="Email" required="" spellcheck="false" type="email"/>
+<input aria-hidden="true" autocomplete="off" class="hp" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" type="text"/>
+<button id="subBtn" type="submit">Subscribe</button>
+</form>
+<button aria-label="Close the weekly roundup sign-up" class="b-close" id="subClose" type="button">
+<span><svg aria-hidden="true" viewbox="0 0 10 10"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span>
+</button>
+<p aria-live="polite" class="sub-msg" id="subMsg">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
+</div>
+</section></div><div class="cc-column"><section aria-labelledby="hPet" class="mb cc-section">
+<div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
+<div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
+<p class="foot rv">From the <a href="https://petition.parliament.uk/" rel="noopener" target="_blank">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
+</section></div></div></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 
 <footer>
   <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
-  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
 <script src="vendor/leaflet/leaflet.js"></script>
@@ -1361,7 +1341,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const dDMY = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",...UTC});   // 5 July 2024
   const ukToday = () => new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
-  const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
+  const getJSON = u => {
+    const opts = {cache:"no-cache"};
+    if("AbortSignal" in window && typeof AbortSignal.timeout === "function") opts.signal = AbortSignal.timeout(12000);
+    return fetch(u, opts).then(r => { if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  };
 
   /* ---------------------------------------------------- appearance: Auto, Day or Night, from the switch in the footer (shared with the other pages) */
   const root = document.documentElement, modeBtns = document.querySelectorAll(".ft-theme button");
@@ -1374,12 +1358,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     showTheme();
   }));
   showTheme();
-  // The Beta pill: its note shows on hover, or on a tap (phones); tapping elsewhere or Escape hides it
-  const beta = $("beta"), betaBtn = $("betaBtn");
-  const betaOpen = on => { beta.classList.toggle("open", on); betaBtn.setAttribute("aria-expanded", on); };
-  betaBtn.addEventListener("click", e => { e.stopPropagation(); betaOpen(!beta.classList.contains("open")); });
-  document.addEventListener("click", () => betaOpen(false));
-  document.addEventListener("keydown", e => { if(e.key === "Escape") betaOpen(false); });
 
   // The boxes react to the mouse: a slight lean towards it and a soft light where it points. Mouse only, never with reduced motion.
   if(matchMedia("(hover: hover) and (pointer: fine)").matches && !reduced){
@@ -1407,7 +1385,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const hero = $("hero"), heroMap = $("heroMap");
   function onScroll(){
     const y = scrollY, h = hero.offsetHeight;
-    if(!reduced && y < h && !hero.classList.contains("full")){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px)"; }
+    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px)"; }
   }
   addEventListener("scroll", onScroll, {passive:true}); onScroll();
 
@@ -1508,7 +1486,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const io = new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)){ io.disconnect(); whenIdle(fn, 700); } }, {rootMargin:"160px"});
     io.observe(map);
   }
-  // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
+
+  // Place names: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
   // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
   const RANK_ZOOM = [0, 0, 0, 7.6, 8.7, 9.7];   // the zoom each rank of town appears from
   const measure = document.createElement("canvas").getContext("2d");
@@ -1570,8 +1549,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.setMinZoom(LM.getBoundsZoom(WIDE, true));
     if(W !== fitW){
       fitW = W; const f = L.latLngBounds(tall ? TALL : VIEW);
-      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});
-      
+      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});;   // full screen on a phone: Kent to France, framed below the buttons
     }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
     else resetWx();
@@ -1626,10 +1604,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
      drawn as moving lines, waves or numbers over the sea. Refreshed with the conditions every 30 minutes. */
   const GLAT = [], GLON = [], GDLAT = .3, GDLON = .4;   // about 20 miles apart, over the whole map
-  const LAPSE = .0065;   // the air is about 0.65°C cooler for every 100 m up
   for(let i = 0; i < 16; i++) GLAT.push(+(48.2 + i * GDLAT).toFixed(2));
   for(let i = 0; i < 22; i++) GLON.push(+(-2.8 + i * GDLON).toFixed(2));
-  let grid = null, layer = "waves";
+  let grid = null; const layer = "waves";
   const fillGaps = a => {   // the marine model has no waves over land: borrow from the nearest sea
     if(!a.some(x => x != null)) return null;
     for(let pass = 0; pass < 20 && a.some(x => x == null); pass++){
@@ -1640,16 +1617,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return a;
   };
   let hours = [], hourNow = 0, gridRetry = 0, gridAt = 0;   // 48 hours of readings: now and the forecast, chosen with the time slider
-  let gW = null, gM = null, gEL = null;   // the readings as they came in; each hour is built from them only when it's first shown
+  let gW = null, gM = null;   // the readings as they came in; each hour is built from them only when it's first shown
   const ukHour = () => new Date().toLocaleString("sv-SE", {timeZone:"Europe/London"}).slice(0, 13).replace(" ", "T") + ":00";
   function buildHour(h){
     const t = hours[h].t, W = gW, M = gM, EL = gEL;
     const col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
     const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
     return {s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
-      gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
-      tsl:col("temperature_2m").map((x, k) => x == null ? null : x + LAPSE * EL[k]),   // as it would be at sea level, to blend between readings
-      wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
+      gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),      wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
       // which way the waves travel, as east and south components (the data says where they come from)
       wdu: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : -Math.sin(d * Math.PI / 180); })) : null,
       wdv: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : Math.cos(d * Math.PI / 180); })) : null};
@@ -1668,7 +1643,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
                                     getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
         if(m) try{ sessionStorage.setItem("wxGrid", JSON.stringify({at, q, w, m})); }catch(e){}
       }
-      gW = [].concat(w); gM = m ? [].concat(m) : null; gEL = gW.map(r => Math.max(0, +r.elevation || 0));   // each reading is for its own spot's height
+      gW = [].concat(w); gM = m ? [].concat(m) : null;
       hours = gW[0].hourly.time.map(t => ({t}));
       const now = ukHour(); hourNow = Math.max(0, hours.findIndex(x => x.t >= now));
       const hs = $("wxHour"); hs.max = hours.length - 1; hs.value = hourNow;
@@ -1708,33 +1683,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
   // Colour scales, close to Ventusky's: used for the map's colours and the swatch in the readings
-  const WIND = [[0,[168,196,232]],[4,[98,156,214]],[8,[72,168,176]],[12,[86,176,122]],[18,[176,196,72]],[24,[232,196,64]],[30,[232,140,52]],[36,[214,78,62]],[44,[176,48,120]],[54,[148,64,168]]];
-  const SCALE = {
-    wind:{key:"s", max:40, unit:"mph", stops:WIND},
-    gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
-    waves:{key:"wave", max:4, unit:"m", stops:[[0,[86,150,214]],[.4,[64,176,196]],[.8,[72,186,150]],[1.3,[150,204,92]],[2,[232,198,64]],[2.8,[232,132,52]],[4,[196,58,92]]]},
-    // temperature in Ventusky's warm earthy colours: blue in the cold, green at 10°, golden tan in the mid teens, terracotta and mauve
-    // in the heat. Matched to Ventusky (Dan's screenshot, 2 Oct 2026) once multiplied over the light grey map
-    temp:{key:"temp", unit:"°C", stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]},
-    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[120,176,232]],[.4,[72,132,220]],[1.2,[86,96,214]],[2.5,[150,72,196]],[5,[210,64,150]]]}
-  };
-  function colour(v, st){
-    if(v <= st[0][0]) return st[0][1];
-    for(let k = 1; k < st.length; k++) if(v <= st[k][0]){ const [a, ca] = st[k - 1], [b, cb] = st[k], t = (v - a) / (b - a); return ca.map((x, n) => x + (cb[n] - x) * t); }
-    return st[st.length - 1][1];
-  }
+  const SCALE = {waves:{key:"wave", max:4, unit:"m", stops:[[0,[86,150,214]],[.4,[64,176,196]],[.8,[72,186,150]],[1.3,[150,204,92]],[2,[232,198,64]],[2.8,[232,132,52]],[4,[196,58,92]]]}};
   function wxKey(l, name){
-    const sc = SCALE[l], st = sc.stops, lo = st[0][0], hi = sc.max != null ? sc.max : st[st.length - 1][0], f = v => String(+v.toFixed(1)).replace("-", "−");
-    const grad = st.filter(([v]) => v <= hi).map(([v, c]) => "rgb(" + c.map(Math.round).join(",") + ") " + ((v - lo) / (hi - lo) * 100).toFixed(1) + "%").join(",");
-    return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>" + f(lo) + (sc.unit === "°C" ? "°" : "") + '</span><i style="background:linear-gradient(to right,' + grad + ')"></i><span>' + f(hi) + (sc.max != null ? "+" : "") + (sc.unit === "°C" ? "°C" : " " + sc.unit) + "</span>";
+    const sc = SCALE.waves, st = sc.stops, lo = st[0][0], hi = sc.max;
+    const grad = st.map(([v,c]) => "rgb(" + c.join(",") + ") " + ((v-lo)/(hi-lo)*100).toFixed(1) + "%").join(",");
+    return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>0</span><i style='background:linear-gradient(to right," + grad + ")'></i><span>4+ m</span>";
   }
   $("wxKeyBar").innerHTML = wxKey("waves", "Waves");
-  $("wxKeyBar").setAttribute("aria-label", "Waves colour key");
-  // Rebuilt whenever the map moves or new readings arrive: the sea (or the temperature colours), any numbers, and the motion drawn over it.
-  // Wind: streams of particles. Gusts: faster, longer streaks, warmer for stronger gusts.
-  // Waves: crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
-  const CELL = 8, SPEED = .04;   // grid spacing in pixels; pixels a frame for each mph
-  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null, seaPath = null;
+  $("wxKeyBar").setAttribute("aria-label", "Waves colour key, 0 to 4 metres or more");
+
+  // Rebuilt whenever the map moves or new readings arrive: the sea, the wave field and the motion drawn over it.
+  const CELL = 8;   // grid spacing in pixels
+  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null;
   let maskKey = "", maskVal = null;
   function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
     const p = unitPx(), key = [cols, rows, p.x0, p.y0, p.sx, p.sy].map(v => Math.round(v * 100)).join();
@@ -1748,118 +1708,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     maskKey = key; maskVal = sea;
     return sea;
   }
-  /* Hills on the Temperature layer, as on Ventusky: shaded as if lit from the north-west, and a little cooler the higher they are.
-     Each forecast is for its own spot's height, so it is taken down to sea level, blended across the map and brought back up to
-     the height of every hill and valley. Heights come from the free Terrain Tiles on AWS (Mapzen's Terrarium tiles:
-     metres = red × 256 + green + blue ÷ 256 − 32768), fetched only while Temperature is showing. */
-  const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/";
-  const demTiles = new Map(), demWait = new Set();
-  let demCx = null, demT = 0, relief = null, tLut = null;
-  function demTile(z, x, y, get){   // a tile's heights, or null while it's on its way (each is asked for once)
-    const k = z + "/" + x + "/" + y, t = demTiles.get(k);
-    if(t){ demTiles.delete(k); demTiles.set(k, t); return t; }   // kept in the order they were used, so the oldest go first
-    if(!get || demWait.has(k) || !window.createImageBitmap) return null;
-    demWait.add(k);
-    fetch(DEM + k + ".png").then(r => r.ok ? r.blob() : Promise.reject())
-      .then(b => createImageBitmap(b, {colorSpaceConversion:"none", premultiplyAlpha:"none"}).catch(() => createImageBitmap(b)))   // the heights exactly as stored
-      .then(bm => {
-        demCx = demCx || Object.assign(document.createElement("canvas"), {width:256, height:256}).getContext("2d", {willReadFrequently:true});
-        demCx.clearRect(0, 0, 256, 256); demCx.drawImage(bm, 0, 0); if(bm.close) bm.close();
-        const px = demCx.getImageData(0, 0, 256, 256).data, a = new Float32Array(65536);
-        for(let i = 0, j = 0; i < 65536; i++, j += 4) a[i] = Math.max(0, px[j] * 256 + px[j + 1] + px[j + 2] / 256 - 32768);   // the sea, and land below it, as flat
-        demTiles.set(k, a); demWait.delete(k);
-        if(demTiles.size > 36) demTiles.delete(demTiles.keys().next().value);
-        clearTimeout(demT); demT = setTimeout(() => { if(layer === "temp") resetWx(); }, 150);   // redrawn once a batch is in
-      }).catch(() => {});   // not asked for again: that part of the map just stays flat
-    return null;
-  }
-  function reliefNow(){   // heights and shading across the view, in the tiles' own pixels; kept while the view and the tiles stay the same
-    const Z = LM.getZoom(), o = LM.project(LM.containerPointToLatLng([0, 0]), Z);
-    // tiles about one and a half to three screen pixels to each of theirs, but no more than 12 of them for the view
-    let zd = Math.max(4, Math.min(11, Math.floor(Z - .5))), f, x0, y0, w, ht;
-    for(;; zd--){
-      f = Math.pow(2, zd - Z); x0 = Math.floor(o.x * f) - 1; y0 = Math.floor(o.y * f) - 1; w = Math.ceil(vw * f) + 3; ht = Math.ceil(vh * f) + 3;
-      if(zd <= 4 || (((x0 + w - 1) >> 8) - (x0 >> 8) + 1) * (((y0 + ht - 1) >> 8) - (y0 >> 8) + 1) <= 12) break;
-    }
-    const n = 1 << zd, N = 256 * n, got = [];
-    for(let ty = Math.max(0, y0 >> 8); ty <= Math.min(n - 1, (y0 + ht - 1) >> 8); ty++) for(let tx = x0 >> 8; tx <= (x0 + w - 1) >> 8; tx++){
-      let t = demTile(zd, tx, ty, true), up = 0;
-      while(!t && up < 3){ up++; t = demTile(zd - up, tx >> up, ty >> up, false); }   // still coming: a coarser one meanwhile, if there is one
-      got.push([tx, ty, t, t ? up : 9]);
-    }
-    const key = [zd, x0, y0, w, ht, got.map(g => g[3]).join("")].join();
-    if(relief && relief.key === key){ relief.o = o; relief.f = f; return relief; }
-    const E = new Float32Array(w * ht).fill(NaN);   // heights in metres (NaN: not known yet)
-    for(const [tx, ty, t, up] of got){
-      if(!t) continue;
-      const ax = Math.max(x0, tx * 256), bx = Math.min(x0 + w, tx * 256 + 256), ay = Math.max(y0, ty * 256), by = Math.min(y0 + ht, ty * 256 + 256);
-      if(!up) for(let y = ay; y < by; y++){ const s = (y - ty * 256) * 256 - tx * 256, d = (y - y0) * w - x0; for(let x = ax; x < bx; x++) E[d + x] = t[s + x]; }
-      else {   // the coarser tile, blended up to size
-        const sc = 1 << up, ox = (tx >> up) * 256, oy = (ty >> up) * 256;
-        for(let y = ay; y < by; y++){
-          const fy = Math.min(255, Math.max(0, (y + .5) / sc - .5 - oy)), i = Math.min(254, fy | 0), v = fy - i;
-          for(let x = ax; x < bx; x++){
-            const fx = Math.min(255, Math.max(0, (x + .5) / sc - .5 - ox)), j = Math.min(254, fx | 0), u = fx - j, k = i * 256 + j;
-            E[(y - y0) * w + x - x0] = (t[k] * (1 - u) + t[k + 1] * u) * (1 - v) + (t[k + 256] * (1 - u) + t[k + 257] * u) * v;
-          }
-        }
-      }
-    }
-    // the shading: 1 on the flat, lighter on slopes facing the north-west light, darker on those facing away. Gentle, as these
-    // are low hills; the slopes are steepened a little more when zoomed out, where the tiles smooth them over
-    const S = new Float32Array(w * ht).fill(1), ex = 1.8 * Math.pow(2, (10 - zd) * .25), latAt = y => Math.atan(Math.sinh(Math.PI * (1 - 2 * (y0 + y + .5) / N)));
-    for(let y = 1; y < ht - 1; y++){
-      const q = ex / (2 * 40075016.686 / N * Math.cos(latAt(y)));   // metres across a tile pixel, at this latitude
-      for(let x = 1, i = y * w + 1; x < w - 1; x++, i++){
-        const gx = (E[i + 1] - E[i - 1]) * q, gy = (E[i + w] - E[i - w]) * q, g2 = gx * gx + gy * gy;   // rising to the east, and to the south
-        if(!(g2 > 0)) continue;   // flat, or not known yet
-        S[i] = Math.min(1.15, Math.max(.72, 1 + .7 * ((.5 * gx + .5 * gy + .7071) / Math.sqrt(1 + g2) / .7071 - 1)));
-      }
-    }
-    // where each tile pixel falls among the forecast readings
-    const cl = (v, m) => Math.min(Math.max(v, 0), m - 1.001), gi = new Int32Array(ht), gv = new Float32Array(ht), gj = new Int32Array(w), gu = new Float32Array(w);
-    for(let y = 0; y < ht; y++){ const fy = cl((latAt(y) * 180 / Math.PI - GLAT[0]) / GDLAT, GLAT.length); gi[y] = fy | 0; gv[y] = fy - gi[y]; }
-    for(let x = 0; x < w; x++){ const fx = cl(((x0 + x + .5) / N * 360 - 180 - GLON[0]) / GDLON, GLON.length); gj[x] = fx | 0; gu[x] = fx - gj[x]; }
-    const cv = document.createElement("canvas"); cv.width = w; cv.height = ht;
-    const cx = cv.getContext("2d");
-    return relief = {key, zd, f, o, x0, y0, w, ht, E, S, gi, gv, gj, gu, cv, cx, img:cx.createImageData(w, ht)};
-  }
-  function drawTemp(h){   // the temperature in colour, cooler up the hills and shaded like them
-    const R = reliefNow(), {w, ht, E, S, gi, gv, gj, gu} = R, px = R.img.data, nO = GLON.length;
-    const a = grid && grid.tsl, b = grid && grid.temp, t0 = sample(50.9, 1.5, "temp");
-    if(!tLut){ tLut = new Uint8Array(751 * 3); for(let i = 0; i <= 750; i++) tLut.set(colour(i / 10 - 30, SCALE.temp.stops).map(Math.round), i * 3); }   // -30 to 45°C
-    for(let y = 0, k = 0; y < ht; y++){
-      const i = gi[y], v = gv[y];
-      for(let x = 0; x < w; x++, k++){
-        const e = E[k], A = e === e && a ? a : b;
-        let t = t0;
-        if(A){ const p = i * nO + gj[x], u = gu[x]; t = ((A[p] || 0) * (1 - u) + (A[p + 1] || 0) * u) * (1 - v) + ((A[p + nO] || 0) * (1 - u) + (A[p + nO + 1] || 0) * u) * v; if(A === a) t -= LAPSE * e; }
-        const c = Math.max(0, Math.min(750, Math.round((t + 30) * 10))) * 3, sh = S[k], q = k * 4;
-        px[q] = tLut[c] * sh; px[q + 1] = tLut[c + 1] * sh; px[q + 2] = tLut[c + 2] * sh; px[q + 3] = 255;
-      }
-    }
-    R.cx.putImageData(R.img, 0, 0);
-    h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
-    h.setTransform(dpr / R.f, 0, 0, dpr / R.f, dpr * (R.x0 / R.f - R.o.x), dpr * (R.y0 / R.f - R.o.y));   // the tile pixels, scaled onto the screen
-    h.drawImage(R.cv, 0, 0); h.setTransform(1, 0, 0, 1, 0, 0);
-  }
-  function tempAt(lat, lon){   // the temperature at a spot, at its own height once that's known
-    const R = relief;
-    if(R && grid && grid.tsl){
-      const p = LM.project([lat, lon], R.zd), x = p.x - .5 - R.x0, y = p.y - .5 - R.y0, i = Math.floor(y), j = Math.floor(x);
-      if(i >= 0 && j >= 0 && i < R.ht - 1 && j < R.w - 1){
-        const u = x - j, v = y - i, k = i * R.w + j, E = R.E, e = (E[k] * (1 - u) + E[k + 1] * u) * (1 - v) + (E[k + R.w] * (1 - u) + E[k + R.w + 1] * u) * v;
-        if(e === e) return sample(lat, lon, "tsl") - LAPSE * e;
-      }
-    }
-    return sample(lat, lon, "temp");
-  }
+  function tempAt(lat, lon){ return sample(lat, lon, "temp"); }
   let heatPad = 0;
   function resetWx(keep){   // keep: a new hour on the slider, so the canvases and the moving trails stay as they are
     if(!LM) return;
     // wind, gusts and waves are softened by the browser (.wx-heat.soft), not redrawn blurred each time; their colour
     // runs half a reading past the edges, so the softening doesn't fade the map's edges
-    const soft = layer !== "temp" && layer !== "rain", pad = soft ? CELL / 2 : 0;
+    const soft = true, pad = CELL / 2;
     const sz = LM.getSize(), d = Math.min(2, devicePixelRatio || 1), same = keep && sz.x === vw && sz.y === vh && d === dpr && pad === heatPad && parts.length;
     vw = sz.x; vh = sz.y; if(!vw || !vh) return;
     dpr = d; heatPad = pad;
@@ -1868,8 +1723,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     else [heat, flow].forEach(c => { const e = c === heat ? pad : 0; c.width = (vw + 2 * e) * dpr; c.height = (vh + 2 * e) * dpr; c.style.width = vw + 2 * e + "px"; c.style.height = vh + 2 * e + "px"; });
     L.DomUtil.setPosition(heat, tl.subtract([pad, pad])); L.DomUtil.setPosition(flow, tl);
     const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
-    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n), val = new Float32Array(n);
-    const mode = layer === "waves" ? "waves" : layer === "gusts" ? "gusts" : "wind", sea = seaMask(cols, rows);
+    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n);
+    const mode = "waves", sea = seaMask(cols, rows);
     // the grid is regular in latitude and longitude, so each column and row is looked up once
     const lat = Float64Array.from({length:rows}, (_, r) => LM.containerPointToLatLng([0, r * CELL]).lat), lon = Float64Array.from({length:cols}, (_, c) => LM.containerPointToLatLng([c * CELL, 0]).lng);
     for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
@@ -1879,65 +1734,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         let du = wu / (ws || 1), dv = wv / (ws || 1);
         if(ws < 4){ const su2 = sample(la, lo, "wdu"), sv2 = sample(la, lo, "wdv"), w2 = Math.hypot(su2, sv2) || 1, t = ws / 4; du = du * t + su2 / w2 * (1 - t); dv = dv * t + sv2 / w2 * (1 - t); const q = Math.hypot(du, dv) || 1; du /= q; dv /= q; }
         u[k] = du; v[k] = dv; m[k] = sample(la, lo, "wave");
-      } else if(mode === "gusts"){
-        const g = sample(la, lo, "gust"); u[k] = wu / (ws || 1) * g; v[k] = wv / (ws || 1) * g; m[k] = g;
-      } else { u[k] = wu; v[k] = wv; m[k] = ws; }
-      val[k] = layer === "rain" ? sample(la, lo, "rain") : m[k];
+      }
     }
     fld = {cols, rows, u, v, m, sea, mode};
     const h = heat.getContext("2d"), p = unitPx(), e = pad * dpr;
     heat.classList.toggle("soft", soft);
-    if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings, with the hills
-      drawTemp(h);
-      // the sea a shade darker than the land, so the coast still shows through the colour
-      seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
-      h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
-      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
-      h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
-    }
-    if(false){   // solid sea tint parked with the colour layers
-      seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
-      h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
-      h.setTransform(1, 0, 0, 1, 0, 0);
-    }
-    if(false){   // colour fields parked until the layers are rebuilt
-      const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
-      const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
-      const seaOnly = layer === "waves" || layer === "wind" || layer === "gusts";
-      for(let k = 0; k < n; k++){
-        const x = val[k], c = colour(x, st), q = k * 4;
-        px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
-        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(90 + 140 * Math.min(1, x / 3))) : (layer === "temp" ? 210 : 235);
-      }
-      sx.putImageData(img, 0, 0);
-      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
-      h.filter = "blur(" + Math.max(8, CELL * .55) * dpr + "px)";
-      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);
-      h.filter = "none";
-      if(seaOnly){   // colour stays on the water; land keeps the grey map
-        h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
-        h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
-        h.globalCompositeOperation = "source-over"; h.filter = "none";
-      }
-      h.setTransform(1, 0, 0, 1, 0, 0);
-    }
-    const LABEL = {rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm"}[layer];
-    if(LABEL){   // rain, written across the map every so often (temperature is shown in colour)
-      const gap = vw < 600 ? 120 : 170, fs = 13;
-      h.save(); h.scale(dpr, dpr);
-      h.font = "700 " + fs + "px " + getComputedStyle(document.body).fontFamily; h.textAlign = "center"; h.textBaseline = "middle";
-      h.lineJoin = "round"; h.lineWidth = 3.5; h.strokeStyle = "rgba(0,0,0,.6)"; h.fillStyle = "#fff";
-      const mr = $("lmap").getBoundingClientRect(), keep = coverRects()
-        .concat([$("straitLbl"), ...document.querySelectorAll(".am-town > *, .am-area > span")].filter(e => e && e.getClientRects().length).map(e => e.getBoundingClientRect()));   // not under the controls or the place names
-      const under = (x, y) => keep.some(cr => x > cr.left - mr.left - 24 && x < cr.right - mr.left + 24 && y > cr.top - mr.top - 14 && y < cr.bottom - mr.top + 14);
-      for(let y = gap * .6; y < vh; y += gap) for(let x = gap * (Math.round(y / gap) % 2 ? .5 : 1); x < vw; x += gap){
-        if(under(x, y)) continue;
-        const ll = LM.containerPointToLatLng([x, y]), t = LABEL(sample(ll.lat, ll.lng, SCALE[layer].key)); if(!t) continue;
-        h.strokeText(t, x, y); h.fillText(t, x, y);
-      }
-      h.restore();
-    }
-    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 520));
+    const area = vw * vh, count = Math.round(Math.min(innerWidth < 600 ? 280 : 560, area / 2100));
     if(!same){
       parts = Array.from({length:count}, () => spawn({}));
       parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
@@ -1971,7 +1773,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup(); ptAt = ll;
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + (layer === "wind" || layer === "gusts" ? "" : '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>");
+      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + '<div class="wx-key">' + wxKey("waves", "Map colours") + "</div>";
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
@@ -1981,13 +1783,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
   let pin = null;
-  // With a mouse, the layer's reading follows the pointer: wind with its direction, gusts, wave height, temperature or rain
+  // With a mouse, the map reading follows the pointer and shows the current weather
   let hoverAt = null, hoverRaf = 0;
   function showHover(){
     hoverRaf = 0;
     const box = $("amHover"), e = hoverAt;
     if(!e || touchOnly || !LM){ box.classList.add("off"); return; }
-    const ll = e.latlng, sc = SCALE[layer], g = k => sample(ll.lat, ll.lng, k);
+    const ll = e.latlng, g = k => sample(ll.lat, ll.lng, k);
     const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, val = Math.round(Math.hypot(u, v));
     const extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + " · gusts " + Math.round(g("gust")) + " mph</em>";
     box.innerHTML = "<b>" + val + '</b><small> mph</small>' + extra;
@@ -2009,7 +1811,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function spawn(p){
     // waves only start at sea: a few tries for a spot on the water
     for(let i = 0; i < 8; i++){ p.x = Math.random() * vw; p.y = Math.random() * vh; if(!fld || fld.mode !== "waves" || fld.sea[cellAt(p.x, p.y)]) break; }
-    p.age = 0; p.max = fld && fld.mode === "waves" ? 160 + Math.random() * 140 : 90 + Math.random() * 120; p.cap = Math.random(); return p;
+    p.age = 0; p.max = 160 + Math.random() * 140; p.cap = Math.random(); return p;
   }
   function vel(x, y, a){
     const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
@@ -2037,39 +1839,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
-  /* Wind and gusts, drawn straight onto the clear map, as on earth.nullschool and Ventusky: thousands of fine streaks flowing with the
-     wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
-     wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
-  const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
-  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
-  const FLOW_A = [.28, .4, .5, .58, .62];
-  function stepStreaks(c, dt, gust){
-    c.globalCompositeOperation = "destination-in";
-    c.fillStyle = "rgba(0,0,0," + Math.pow(.9, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);
-    c.globalCompositeOperation = "source-over"; c.lineCap = "round"; c.lineJoin = "round";
-    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.25 : 1.05) * dt;
-    for(const p of parts){
-      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), s = vel(p.x, p.y, fld.m), nx = p.x + u * sp, ny = p.y + v * sp;
-      p.age += dt;
-      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); p.px = p.x; p.py = p.y; continue; }
-      const t = p.age / p.max, life = Math.min(1, t * 4, (1 - t) * 5);
-      const band = gust ? (s >= 40 ? 4 : s >= 28 ? 3 : s >= 15 ? 2 : s >= 7 ? 1 : 0) : (s >= 20 ? 2 : s >= 9 ? 1 : 0);
-      const P = paths[band * L + Math.min(L - 1, life * L | 0)];
-      const px = p.px == null ? p.x : p.px, py = p.py == null ? p.y : p.py;
-      P.moveTo(px, py); P.quadraticCurveTo(p.x, p.y, nx, ny);
-      p.px = p.x; p.py = p.y; p.x = nx; p.y = ny;
-    }
-    for(let b = 0; b < 5; b++) for(let l = 0; l < L; l++){
-      c.strokeStyle = "rgba(255,255,255," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
-      c.lineWidth = gust ? 1.15 : .95; c.stroke(paths[b * L + l]);
-    }
-  }
-  const stepGusts = (c, dt) => stepStreaks(c, dt, true), stepWind = (c, dt) => stepStreaks(c, dt, false);
   function stepFlow(dt){
     if(!fld || !flow) return;
-    const c = flow.getContext("2d");
-    c.setTransform(dpr, 0, 0, dpr, 0, 0);
-    (fld.mode === "waves" ? stepWaves : fld.mode === "gusts" ? stepGusts : stepWind)(c, dt);
+    const c=flow.getContext("2d"); c.setTransform(dpr,0,0,dpr,0,0); stepWaves(c,dt);
   }
   // Runs only while the Channel is on screen and the tab is visible; movement is per time, not per frame, so 120 Hz screens match 60 Hz ones
   let raf = 0, heroOn = true, prevT = 0;
@@ -2089,7 +1861,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   fitMap(); fitSz = hero.clientWidth + "x" + hero.clientHeight;
   // Small or busy phones: the map card grows just enough that the big number never runs into the weather buttons
   function fitHero(){
-    if(hero.classList.contains("full")) return;
+    
     const was = hero.style.minHeight; hero.style.minHeight = "";
     // phones keep about 120px of open map between them, for the strait, the launch beaches and the boats
     const gap = Math.ceil(ctlBottom() + (hero.clientWidth < 600 ? 120 : 12) - hero.querySelector(".hero-in").offsetTop);
@@ -2284,7 +2056,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The site's heartbeat (status.json) says when new or revised figures were published: checked every
   // 2 minutes while new figures are awaited, otherwise every 30. Conditions refresh every 30 minutes.
   const MIN = 6e4, openedAt = Date.now();
-  let statusAt = 0, wxAt = 0, today = ukToday();
+  let statusAt = 0, wxAt = 0, today = ukToday(), wxMarineFailed = false;
   async function checkStatus(){
     statusAt = Date.now();
     try{
@@ -2708,7 +2480,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
 
   /* ---------------------------------------------------- Channel conditions (Open-Meteo), rated calm, moderate or rough */
-  const rate = (w, v) => w == null || v == null ? null : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
+  const rate = (w, v) => w == null ? null : v == null ? (w < 12 ? "calm" : w < 18 ? "moderate" : "rough") : (w < 12 && v < .5) ? "calm" : (w < 18 && v < 1) ? "moderate" : "rough";
   const WORD = {calm:"Calm", moderate:"Moderate", rough:"Rough"};
   const LINE = {calm:"crossings likely", moderate:"some crossings possible", rough:"crossings unlikely"};
   const LIKE = {calm:"Crossings likely", moderate:"Crossings possible", rough:"Crossings unlikely"};   // the outlook's short form
@@ -2766,8 +2538,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
-                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
+      const [wr, mr] = await Promise.allSettled([
+        getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
+        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")
+      ]);
+      if(wr.status !== "fulfilled") throw wr.reason || new Error("forecast unavailable");
+      const w = wr.value;
+      const marineOk = mr.status === "fulfilled" && mr.value && mr.value.current;
+      const m = marineOk ? mr.value : {current:{wave_height:null}, hourly:{time:[],wave_height:[]}};
+      wxMarineFailed = !marineOk;
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
@@ -2779,8 +2558,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
     }catch(e){
+      wxMarineFailed = false;
       wxFailed = true;
-      wxAt = Date.now() - 25 * MIN;   // try again in about 5 minutes
+      wxAt = Date.now() - 28 * MIN;   // retry in about 2 minutes
     }
     renderMapPop();
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
@@ -3334,25 +3114,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     drawCalendar(); drawDots(); drawHistory(); initCalc(); renderShare();
     fitBoxes();
   }
-  function pinColumns(){
-    const wide = innerWidth >= 900;
-    if(!wide){
-      document.querySelectorAll("main > section.span").forEach(sec => { sec.classList.remove("span"); sec.style.gridColumn = ""; });
-      return;
-    }
-    const secs = [...document.querySelectorAll("main > section")].filter(s => s.offsetParent !== null);
-    let n = 0;
-    secs.forEach((sec, i) => {
-      sec.classList.remove("span");
-      const next = secs[i + 1];
-      if(sec.classList.contains("wide")){ n = 0; return; }
-      if(n % 2 === 0 && (!next || next.classList.contains("wide"))){ sec.classList.add("span"); n = 0; return; }
-      sec.style.gridColumn = (n % 2 ? "2" : "1");
-      n++;
-    });
-  }
   function fitBoxes(){
-    pinColumns();
     document.querySelectorAll("main .card").forEach(card => {
       const skip = card.classList.contains("b-ring") || card.classList.contains("race-card") || card.classList.contains("calc-card") || card.classList.contains("pat-card") || card.querySelector(".flip, .chart, .heat-scroll");
       let btn = card.querySelector(":scope > .more-toggle");
@@ -3394,71 +3156,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   if("ResizeObserver" in window) [["dots", drawDots], ["race", drawRace], ["pat", drawPat]].forEach(([id, fn]) => {
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
-
-
-  /* ---------------------------------------------------- first-visit tour of the map */
-  const TOUR = [
-    {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
-    {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
-    {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
-    {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
-    {el:() => $("lmap"), h: touchOnly ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchOnly ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
-    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
-  ];
-  let tourSteps = [], tourI = 0, tourTick = null;
-  const tourSeen = () => { try{ return localStorage.getItem("mapTourDone"); }catch(e){ return "1"; } };
-  function tourPlace(){
-    const st = tourSteps[tourI]; if(!st) return;
-    const el = st.el(); if(!el) return;
-    const r = el.getBoundingClientRect(), big = r.width > innerWidth * .6, pad = big ? -10 : 6;
-    const spot = $("tourSpot"), card = $("tourCard");
-    Object.assign(spot.style, {left:(r.left - pad) + "px", top:(r.top - pad) + "px", width:(r.width + pad * 2) + "px", height:(r.height + pad * 2) + "px", borderRadius:big ? "24px" : "16px"});
-    const cw = card.offsetWidth, ch = card.offsetHeight, m = 14;
-    let left, top;
-    if(big){ left = r.left + (r.width - cw) / 2; top = Math.min(r.bottom - ch - 40, Math.max(r.top + 40, innerHeight / 2 - ch / 2)); }
-    else {
-      left = r.left + r.width / 2 - cw / 2;
-      top = r.bottom + pad + m; if(top + ch > innerHeight - 12) top = r.top - pad - m - ch;
-    }
-    card.style.left = Math.max(16, Math.min(innerWidth - cw - 16, left)) + "px";
-    card.style.top = Math.max(12, Math.min(innerHeight - ch - 12, top)) + "px";
-  }
-  function tourShow(i){
-    tourI = i; const st = tourSteps[i];
-    $("tourStep").textContent = "Map tour · " + (i + 1) + " of " + tourSteps.length;
-    $("tourH").textContent = st.h; $("tourP").textContent = st.p;
-    $("tourDots").innerHTML = tourSteps.map((_, k) => "<i" + (k === i ? ' class="on"' : "") + "></i>").join("");
-    $("tourNext").textContent = i === tourSteps.length - 1 ? "Done" : "Next";
-    $("tourSkip").hidden = i === tourSteps.length - 1;
-    tourPlace(); $("tourNext").focus({preventScroll:true});
-  }
-  function tourEnd(){
-    $("tour").hidden = true; document.documentElement.style.overflow = "";
-    try{ localStorage.setItem("mapTourDone", "1"); }catch(e){}
-    removeEventListener("resize", tourPlace); removeEventListener("scroll", tourPlace); clearInterval(tourTick);
-  }
-  function startTour(){
-    if(!$("tour").hidden) return;
-    const shown = el => { if(!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
-    tourSteps = TOUR.filter(t => shown(t.el())); if(tourSteps.length < 2) return;
-    scrollTo({top:0, behavior:"auto"}); document.documentElement.style.overflow = "hidden";
-    $("tour").hidden = false; addEventListener("resize", tourPlace); addEventListener("scroll", tourPlace, {passive:true});
-    tourTick = setInterval(tourPlace, 250);   // the boats move, so the spotlight follows them
-    tourShow(0);
-  }
-  $("tourNext").addEventListener("click", e => { e.stopPropagation(); tourI < tourSteps.length - 1 ? tourShow(tourI + 1) : tourEnd(); });
-  $("tourSkip").addEventListener("click", e => { e.stopPropagation(); tourEnd(); });
-  $("tour").addEventListener("click", e => { if(e.target === $("tour")) $("tourNext").click(); });
-  $("tour").addEventListener("keydown", e => {
-    if(e.key === "Escape"){ e.stopPropagation(); tourEnd(); }
-    if(e.key === "ArrowRight") $("tourNext").click();
-    if(e.key === "ArrowLeft" && tourI > 0) tourShow(tourI - 1);
-    if(e.key === "Tab"){ e.preventDefault(); (document.activeElement === $("tourNext") && !$("tourSkip").hidden ? $("tourSkip") : $("tourNext")).focus(); }
-  });
-  $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
-  // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
-  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // the Map tour link on the other pages
-  else if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
 
   /* ---------------------------------------------------- go */
   function useData(d){
@@ -3589,7 +3286,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
 <script>
 (function(){
   const q = document.getElementById("boxSearch"), hits = document.getElementById("boxHits");
-  const secs = [...document.querySelectorAll("main > section")];
+  const secs = [...document.querySelectorAll("main .cc-section")];
   const items = secs.map(sec => ({sec, title:(sec.querySelector("h2")||{}).textContent || sec.getAttribute("aria-label") || "Section", text:(sec.innerText||"").toLowerCase()}));
   function apply(v){
     const n = v.trim().toLowerCase();
