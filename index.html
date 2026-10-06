@@ -12,7 +12,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
 <link rel="preload" href="vendor/leaflet/leaflet.js" as="script">
-<meta name="description" content="609 people crossed the Channel in small boats on Mon 5 October. 2026 so far: 20,478. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="description" content="164 people crossed the Channel in small boats on Sat 3 October. 2026 so far: 19,451. Daily Home Office figures, a migrant tracker and live Channel weather.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -26,14 +26,14 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta property="og:title" content="Channel Crossings: daily small boat arrivals">
 <meta property="og:description" content="How many people crossed the Channel in small boats yesterday? Daily Home Office figures, records and live Channel conditions.">
 <meta property="og:url" content="https://channelcrossings.world/">
-<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-05">
+<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-03">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Channel Crossings logo with the latest daily arrivals figure">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
-<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-05">
+<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-03">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
@@ -56,9 +56,9 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   "isAccessibleForFree": true,
   "keywords": ["small boat crossings", "Channel crossings", "small boat arrivals", "migrant crossings", "boat crossing figures", "English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
   "creator": {"@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "email": "x.chancrossings@gmail.com"},
-  "temporalCoverage": "2018-01-01/2026-10-05",
+  "temporalCoverage": "2018-01-01/2026-10-03",
   "spatialCoverage": "English Channel, United Kingdom",
-  "dateModified": "2026-10-05",
+  "dateModified": "2026-10-03",
   "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://channelcrossings.world/data.csv"}]
 }
 </script>
@@ -111,9 +111,15 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px;scroll-behavior:smooth;scroll-padding-top:calc(12px + env(safe-area-inset-top,0px))}
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
-body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;overflow-x:hidden}
+.skip-link{position:fixed;z-index:1000;top:8px;left:8px;transform:translateY(-160%);padding:10px 14px;border-radius:12px;background:#fff;color:#000;font-weight:700;text-decoration:none;box-shadow:0 4px 18px rgba(0,0,0,.2);transition:transform .15s ease}.skip-link:focus{transform:translateY(0)}
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+button,a,input,select{touch-action:manipulation}
+img{max-width:100%;height:auto}
+
 a{color:var(--blue);text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
+
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 button,input,select,textarea{font:inherit}
 .leaflet-container,.leaflet-container *{font-family:var(--font)}
@@ -125,28 +131,16 @@ button,input,select,textarea{font:inherit}
 .hero{position:relative;width:min(1148px,calc(100% - 2 * max(16px,env(safe-area-inset-left,0px))));margin:calc(56px + env(safe-area-inset-top,0px)) auto 0;
   height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
-.hero-map{position:absolute;inset:0;visibility:hidden;pointer-events:none}
-.hero-stage{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:108px 24px 180px;background:radial-gradient(120% 90% at 80% 0%,#1a4e86 0%,#0c2344 52%,#081627 100%)}
-.stage-kicker{margin:0;font:600 .75rem/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)}
-.stage-h{margin:0;font:700 clamp(2rem,6vw,3.4rem)/1.02 var(--font);letter-spacing:-.035em}
-.stage-sub{margin:0;font:500 1rem/1.35 var(--font);color:rgba(255,255,255,.82)}
-.stage-search{position:relative;width:min(560px,100%)}
-.stage-search input{width:100%;height:48px;border:0;border-radius:14px;padding:0 16px;background:rgba(255,255,255,.14);color:#fff;font:500 1rem/1 var(--font);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3);outline:none}
-.stage-search input::placeholder{color:rgba(255,255,255,.62)}
-.stage-hits{position:fixed;z-index:80;list-style:none;margin:0;padding:6px;border-radius:14px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
-.stage-hits button{width:100%;text-align:left;border:0;background:none;color:#fff;font:500 .95rem/1.2 var(--font);padding:10px 12px;border-radius:10px;cursor:pointer}
-.stage-hits button:hover,.stage-hits button[aria-selected=true]{background:rgba(255,255,255,.1)}
-main .cc-section.is-dim{display:none !important}
+.hero-map{position:absolute;inset:0;will-change:transform}
+.hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
-#lmap{position:absolute;inset:0;background:linear-gradient(180deg,#8EC8E6,#6AAFD4);font:inherit}
-.cc-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-.wx-heat{display:none}
-.wx-time,.wx-key,.wx-key-bar{display:none !important}
-.wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
+#lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
+.wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
+.wx-heat.soft{filter:blur(2px)}   /* wind, gusts and waves: the readings blended smoothly */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
-#lmap .leaflet-control-attribution{background:rgba(255,255,255,.62);color:rgba(60,60,67,.72);font-size:10px;line-height:1.5;padding:2px 8px;border-radius:8px 0 0 0;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
 #lmap .leaflet-control-attribution a{color:inherit}
 #lmap .leaflet-bar{border:0;overflow:hidden;border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 #lmap .leaflet-bar a{width:36px;height:40px;font:500 20px/40px var(--font);background:none;color:#fff;border-color:rgba(255,255,255,.18)}
@@ -155,36 +149,36 @@ main .cc-section.is-dim{display:none !important}
 #lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
 /* Map controls: frosted pills, matching the buttons along the bottom of the map */
 .wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
-
-
-
-   /* still a 44pt tap target */
-
-
-
-
-
-
+.am-top{display:flex;gap:8px;align-items:center}
+.am-btn,.am-pill{background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
+.am-btn{position:relative;flex:none;height:36px;min-width:36px;border:0;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
+.am-btn::after{content:"";position:absolute;inset:-4px}   /* still a 44pt tap target */
+.am-btn:active{transform:scale(.96)}
+.am-btn svg{width:15px;height:15px}
+@media (hover:hover){.am-btn:hover{background:rgba(28,28,30,.48)}}
+.am-layer{padding:0 12px 0 13px}
+.am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
+.am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
 #wxLayerIc{display:grid;place-items:center}
 #wxLayerIc svg{width:16px;height:16px}
-
-
+.wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
+.wx-full svg{width:17px;height:17px}
 /* the layer picker: a frosted card of tiles, like Apple Maps' map chooser */
-
+.am-pick{position:absolute;top:44px;right:0;z-index:5;width:min(288px,calc(100vw - 56px));max-height:calc(100svh - 24px);overflow:auto;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
 @keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
-
-
+.am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
+.am-pick-h b{font:700 1.06rem/1 var(--font);letter-spacing:-.02em}
 .am-x{width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer}
 .am-x svg{width:9px;height:9px}
-
-
-
-
-
-
-@media (hover:hover){
-
-
+.wx-seg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 10px}
+.wx-seg button{grid-column:span 2}
+.wx-seg button:nth-child(4){grid-column:2 / span 2}   /* five layers: three on top, two centred below */
+.wx-seg button{border:0;background:none;padding:0;color:#fff;cursor:pointer;display:grid;gap:6px;justify-items:center;font:600 .706rem/1.1 var(--font);touch-action:manipulation}
+.am-tile{width:100%;height:58px;border-radius:14px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);transition:background .2s,color .2s,transform .15s}
+.am-tile svg{width:24px;height:24px}
+@media (hover:hover){.wx-seg button:hover .am-tile{background:rgba(255,255,255,.22)}}
+.wx-seg button:active .am-tile{transform:scale(.95)}
+.wx-seg button[aria-pressed="true"] .am-tile{background:rgba(255,255,255,.92);color:#1C1C1E}
 /* the forecast timeline, as a frosted pill */
 .am-pill{border-radius:999px}
 .wx-time{display:flex;align-items:center;gap:8px;padding:3px 14px 3px 3px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
@@ -215,21 +209,21 @@ main .cc-section.is-dim{display:none !important}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
-
+.am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
 /* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
 .wx-key{display:flex;align-items:center;gap:7px;font:500 12px/1 var(--font);font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);white-space:nowrap}
 .wx-key i{flex:1;min-width:48px;height:6px;border-radius:3px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.15)}
 .wx-key .wk-t{font-weight:600;margin-right:2px}
 #wxKeyPick{margin:14px 2px 0}
 .wx-key-bar{width:220px;padding:7px 12px}
-
+#wxPick:not([hidden]) ~ .wx-key-bar{display:none}   /* the open picker shows its own */
 .am-sheet .wx-key{color:var(--label2);margin-top:10px}
 @media (max-width:600px){.wx-key-bar{display:none}}   /* phones: in the layer picker and the reading sheet */
-
-
-
-
-
+.am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
+.am-launch-tg[aria-pressed="false"]{color:rgba(255,255,255,.6)}
+.am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
+.am-launch-tg::after{content:"On";margin-left:auto;font-weight:500;color:rgba(255,255,255,.7)}
+.am-launch-tg[aria-pressed="false"]::after{content:"Off"}
 /* with a mouse: the reading under the pointer, for the layer on show */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
   font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(255,255,255,.94);color:#1A2B4C;box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.18);transition:opacity .15s}
@@ -257,16 +251,16 @@ main .cc-section.is-dim{display:none !important}
 @keyframes pinDrop{from{transform:translateY(-22px);opacity:0}}
 /* scale bar, shown in full screen */
 #lmap .leaflet-control-scale{display:none;margin:0 0 14px 16px}
-
+.hero.full #lmap .leaflet-control-scale{display:block}
 #lmap .leaflet-control-scale-line{border:2px solid #fff;border-top:0;background:none;color:#fff;font:600 10px/1.4 var(--font);text-shadow:0 0 3px rgba(0,0,0,.9);box-shadow:0 1px 2px rgba(0,0,0,.35);padding:0 4px}
 /* full screen: the whole Channel to explore */
-
-
-
-
-
+.hero.full{position:fixed;inset:0;z-index:55;width:auto;height:auto;min-height:0;max-height:none;margin:0;border-radius:0}
+.hero.full .hero-in,.hero.full .scroll-cue,.hero.full .large-title,.hero.full::after{display:none}
+.hero.full .wx-ctl{top:calc(14px + env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px))}
+.hero.full ~ .boat-tip{z-index:61}
+html.map-full,html.map-full body{overflow:hidden}
 @media (hover:none){#lmap .leaflet-control-zoom{display:none}}
-
+.hero.full #lmap .leaflet-control-zoom{display:block}
 /* tap the map: the weather at that spot */
 #lmap .wx-pt .leaflet-popup-content-wrapper{border-radius:16px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);color:var(--label);box-shadow:var(--shadow),0 0 0 .5px var(--sep)}
 #lmap .wx-pt .leaflet-popup-tip{background:color-mix(in srgb,var(--card) 80%,transparent)}
@@ -279,7 +273,7 @@ main .cc-section.is-dim{display:none !important}
 .wx-pt .wp-stats b{font-size:1rem}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.42) 0,rgba(0,0,0,.12) 26%,rgba(0,0,0,0) 40%,rgba(0,0,0,.35) 62%,rgba(0,0,0,.6) 100%)}   /* darker behind the title and the figures, so white text reads over the light map */
-.hero-in{position:absolute;z-index:6;inset:auto 0 0;padding:0 24px 28px;color:#fff;pointer-events:none}
+.hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
 .hero-chips > *{pointer-events:auto}
 /* across the top of the map: breaking news, which flashes when a story comes in, and from 12:00 UK time
    until the new figures are in, the daily update. When both are on they take turns in the same strip. */
@@ -301,6 +295,7 @@ main .cc-section.is-dim{display:none !important}
 .mn-tag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:nbPing 1.6s ease-out infinite}
 @keyframes nbPing{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
 .mn-fig .mn-tag{background:#0A84FF;padding-left:6px}
+.mn-support .mn-support-tag{background:#B58B5A;padding-left:8px}.mn-support .mn-head{text-decoration:none}.mn-support .mn-head:hover{text-decoration:underline}
 .mn-stage{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px}
 .mn-stage.in{animation:mnIn .45s cubic-bezier(.2,.9,.3,1) both}
 @keyframes mnIn{from{transform:translateY(70%);opacity:0}}
@@ -328,13 +323,13 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
 .hero.has-news .large-title,.hero.has-news .wx-ctl{transform:translateY(var(--mn-h,0px));transition:transform .45s cubic-bezier(.2,.9,.3,1)}
-
+.hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 6px rgba(0,0,0,.45),0 1px 8px rgba(0,0,0,.55)}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
-.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:none;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
+.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
 .fu-btn::after{content:"";position:absolute;inset:-12px -8px}   /* a comfortable tap target */
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
@@ -349,7 +344,6 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 /* the latest day as a calendar tile, as in On This Day */
 .hero-quiet{display:flex;align-items:center;gap:18px;margin:6px 0 2px}
-.hero-quiet .cal{display:grid}
 .hero-quiet .cal{width:88px;height:92px;border-radius:20px;grid-template-rows:28px 1fr;background:rgba(28,28,30,.4);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 6px 24px rgba(0,0,0,.25)}
 .hero-quiet .cal span{font-size:.824rem;line-height:28px}
 .hero-quiet .cal b{font-size:2.9rem;color:#fff}
@@ -471,15 +465,56 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .boat .ring{opacity:0;fill:none;stroke:#fff;stroke-width:2;transition:opacity .2s}
 
 /* ------------------------------------------------------------ layout */
-main > section,.cc-section,.card,.bento > *,.duo > *{min-width:0;max-width:100%}
-main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:40px}
-.cc-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 16px;align-items:start;min-width:0}
-.cc-column{display:flex;flex-direction:column;gap:20px;min-width:0}
-.cc-column>.cc-section{width:100%;min-width:0;max-width:100%}
+main > section,.card,.bento > *{min-width:0}
+main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:grid;gap:40px}
 .section-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 12px}
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
-.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden;width:100%;max-width:100%}
+.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
+.hero-fresh{display:inline-flex;align-items:center;gap:6px;margin-top:5px;color:rgba(255,255,255,.78);font:500 .7rem/1.2 var(--font);text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.hero-fresh i{width:6px;height:6px;border-radius:50%;background:#30D158;box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
+.hero-fresh.stale i{background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.16)}
+.hero-fresh.failed i{background:#FF453A;box-shadow:0 0 0 3px rgba(255,69,58,.16)}
+/* ------------------------------------------------------------ data intelligence */
+.insight-card{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:22px;align-items:stretch;min-width:0;max-width:100%;box-sizing:border-box}
+.insight-main{min-width:0}
+.insight-main h3{margin:0 0 8px;font-size:1.02rem}
+.insight-main p{margin:0;color:var(--label2);line-height:1.45}
+.insight-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.insight-stat{padding:15px 14px;border-radius:16px;background:var(--fill);min-width:0;min-height:112px;box-sizing:border-box}
+.insight-stat b{display:block;font:700 1.35rem/1.1 var(--round);font-variant-numeric:tabular-nums;white-space:nowrap}
+.insight-stat span{display:block;margin-top:7px;color:var(--label2);font-size:.735rem;line-height:1.25}
+.insight-stat .up{color:var(--green-t)}.insight-stat .down{color:var(--red-t)}
+.insight-stat .insight-delta{display:block;margin-top:10px;font-size:.78rem;line-height:1.15;font-variant-numeric:tabular-nums}
+.report-box{padding:20px;border-radius:18px;background:var(--fill);display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-width:0}
+.report-box h4{margin:0 0 10px;font-size:.86rem;color:var(--label2);font-weight:600}
+.report-status{display:flex;align-items:flex-start;gap:11px;font-size:1.08rem;line-height:1.2;font-weight:650;min-width:0}
+.report-status span{min-width:0;overflow-wrap:anywhere}
+.report-status i{width:9px;height:9px;margin-top:.34em;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.16);flex:none}
+.report-status.wait i{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.16)}
+.report-status.bad i{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.16)}
+.report-meta{margin:0;color:var(--label2);font-size:.765rem;line-height:1.45}
+.report-source{margin:0;color:var(--label3);font-size:.706rem;line-height:1.35}
+.chart-tools{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex:none}
+.chart-tool-label{font-size:.647rem;color:var(--label2);font-weight:650;text-transform:uppercase;letter-spacing:.05em}
+.chart-tools .seg{max-width:100%}
+.chart-tools .seg button{padding-inline:10px}
+@media (max-width:900px){.insight-card{grid-template-columns:1fr}.report-box{min-height:0}.chart-tools{align-items:stretch;width:100%}.chart-tools .seg{width:100%}.chart-tools .seg button{padding-inline:7px}.chart-head{min-height:0}}
+@media (max-width:600px){.insight-stats{grid-template-columns:1fr 1fr;gap:10px}.insight-stat{min-height:104px;padding:13px 12px}.insight-stat:last-child{grid-column:1 / -1}.report-box{padding:16px}.chart-tools .seg button{font-size:.706rem;padding-inline:5px}}
+@media (max-width:420px){.insight-stats{grid-template-columns:1fr}.insight-stat:last-child{grid-column:auto}.chart-tools .seg button{padding-inline:4px}.chart-tools .seg{grid-auto-columns:minmax(0,1fr)}}
+/* graph cards stay visually compact; genuinely tall graphs become expandable */
+.graph-card{width:100%;max-width:860px;margin-inline:auto}
+.graph-card.graph-collapsible{max-height:360px;overflow:hidden;transition:max-height .42s cubic-bezier(.2,.8,.2,1)}
+.graph-card.graph-collapsible::before{content:"";position:absolute;z-index:3;left:0;right:0;bottom:0;height:92px;pointer-events:none;background:linear-gradient(to bottom,transparent,var(--card) 72%)}
+.graph-card.graph-collapsible.graph-open{max-height:5000px}
+.graph-card.graph-collapsible.graph-open::before{display:none}
+.graph-toggle{position:absolute;z-index:4;left:50%;bottom:12px;transform:translateX(-50%);appearance:none;border:0;border-radius:999px;background:var(--glass);color:var(--label);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);box-shadow:0 5px 18px rgba(0,0,0,.14),0 0 0 .5px var(--sep);font:600 .765rem/1 var(--font);padding:9px 14px;cursor:pointer;white-space:nowrap}
+.graph-toggle::after{content:"⌄";display:inline-block;margin-left:7px;font-size:1rem;line-height:.7;transform:translateY(-1px);transition:transform .25s ease}
+.graph-open .graph-toggle{bottom:10px}
+.graph-open .graph-toggle::after{transform:rotate(180deg) translateY(1px)}
+.graph-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.graph-toggle:hover{background:var(--fill2)}}
+@media (max-width:759px){.graph-card{max-width:none}.graph-card.graph-collapsible{max-height:330px}}
 .card h3{margin:0 0 2px;font:600 .824rem/1.2 var(--font);color:var(--label2);display:flex;align-items:center;gap:6px}
 .card h3 svg{width:15px;height:15px}
 .val{font:700 2.2rem/1.1 var(--round);letter-spacing:-.01em;margin-top:4px}
@@ -499,9 +534,10 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @property --my{syntax:"<percentage>";inherits:false;initial-value:50%}
 .card.lift{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-2px);box-shadow:var(--shadow-lift);
   transition:transform .18s ease-out,box-shadow .3s ease,opacity .7s cubic-bezier(.2,.8,.2,1)}
-.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
+.card::after{content:"";position:absolute;z-index:0;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
   background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),var(--glare),transparent 65%)}
 .card.lift::after{opacity:1}
+.card > *{position:relative;z-index:1}
 
 /* ------------------------------------------------------------ bento */
 .bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -601,8 +637,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .seg button::after{content:"";position:absolute;inset:-7px 0}
 .seg button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .chart{position:relative;margin-top:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
-.chart,.race,.spark,.pb-boats,.pb-line,.heat-scroll{max-width:100%;min-width:0}
-.chart svg{display:block;width:100%;max-width:100%;height:auto;overflow:hidden}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
 .chart .line{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .chart .grid{stroke:var(--sep);stroke-width:.6}
 .chart text{fill:var(--label2);font:500 12px var(--font)}
@@ -615,7 +650,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @keyframes drawIn{to{stroke-dashoffset:0}}
 
 /* ------------------------------------------------------------ the year in squares */
-.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:24px 4px 4px;max-width:100%}
+.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:24px 4px 4px}
 .heat-scroll::-webkit-scrollbar{display:none}
 @media (hover:hover) and (pointer:fine){.heat-scroll{scrollbar-width:thin;scrollbar-color:var(--fill2) transparent;padding-bottom:8px}.heat-scroll::-webkit-scrollbar{display:block;height:6px}.heat-scroll::-webkit-scrollbar-thumb{background:var(--fill2);border-radius:3px}}   /* a mouse can reach January */
 .heat-scroll.more-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px);mask-image:linear-gradient(90deg,transparent,#000 24px)}   /* fades on the left when earlier weeks are hidden */
@@ -648,12 +683,11 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
 .yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.yr.cur .fill{background:var(--orange)}
-.yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
+.yr.cur .fill{background:var(--blue)}
+.yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.32}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;min-width:0}
-.duo > *{min-width:0;max-width:100%;overflow:hidden}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
@@ -715,6 +749,32 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
 @media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
 
+/* ------------------------------------------------------------ accessibility, performance and mobile polish */
+@media (max-width:760px){
+  main{width:100%;overflow:clip}
+  .section-h{padding-inline:16px}
+  .section-h h2{font-size:1.22rem}
+  .section-h p{font-size:.824rem}
+  .card{max-width:none}
+  .chart-head{gap:10px}
+  .chart-tools{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+  .chart-tools::-webkit-scrollbar{display:none}
+  .chart-tools .seg{min-width:0}
+  .chart-tools .seg button{min-height:40px}
+  .calc-fields{grid-template-columns:1fr 1fr}
+  .ft-share{width:100%;gap:8px}
+  .ft-share .sh{flex:1 1 calc(50% - 8px);min-width:0}
+  footer{padding-inline:16px}
+}
+@media (max-width:380px){
+  .ft-share .sh{flex-basis:100%}
+  .calc-fields{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .skip-link{transition:none}
+}
+
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer p{margin:0;max-width:52ch;line-height:1.45}
@@ -726,8 +786,23 @@ footer strong{color:var(--label);font-weight:600}
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
 .sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:var(--label);touch-action:manipulation;transition:background-color .2s}   /* plain buttons, not brand colours */
 .sh-copy,.sh-more{color:var(--blue)}
-.sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.sh:hover{background:var(--fill2)}}
+/* Platform colours for the sharing buttons. Keep the brand buttons distinct from the site's neutral controls. */
+.sh-x{background:#000;color:#fff}
+.sh-fb{background:#1877F2;color:#fff}
+.sh-wa{background:#25D366;color:#fff}
+.sh-tg{background:#229ED9;color:#fff}
+.sh-x:focus-visible{outline:2px solid #fff;outline-offset:2px;box-shadow:0 0 0 4px #000}
+.sh-fb:focus-visible{outline:2px solid #1877F2;outline-offset:2px}
+.sh-wa:focus-visible{outline:2px solid #25D366;outline-offset:2px}
+.sh-tg:focus-visible{outline:2px solid #229ED9;outline-offset:2px}
+.sh-copy:focus-visible,.sh-more:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){
+  .sh-x:hover{background:#1a1a1a}
+  .sh-fb:hover{background:#166fe5}
+  .sh-wa:hover{background:#20bd5a}
+  .sh-tg:hover{background:#1f8fca}
+  .sh-copy:hover,.sh-more:hover{background:var(--fill2)}
+}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -739,37 +814,22 @@ footer strong{color:var(--label);font-weight:600}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
-.top-theme button{min-height:34px;padding:0 13px}
-
-/* ------------------------------------------------------------ phones: room, safe areas and sideways */
 /* small buttons keep their look but get a finger-sized tap area */
 .large-title .lt-logo,#wxPlay,.am-x{position:relative}
 .mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after{content:"";position:absolute;inset:-8px}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
 /* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
-
-
-
-
+.hero.full #lmap .leaflet-bottom .leaflet-control{margin-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.hero.full #lmap .leaflet-right .leaflet-control{margin-right:max(12px,env(safe-area-inset-right,0px))}
+.hero.full #lmap .leaflet-left .leaflet-control{margin-left:max(12px,env(safe-area-inset-left,0px))}
+.hero.full .map-news{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px))}
 /* phones on their side: the map fills the screen and the number shrinks to fit */
 @media (max-height:500px) and (orientation:landscape){
   .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
   .hero-chips{margin-top:10px}
 }
 
-/* phones: one column, no sideways spill, below-fold sections stay cheap to scroll */
-@media (max-width:899px){
-  main{padding-top:20px;padding-bottom:36px;gap:28px}
-  .cc-columns{display:flex;flex-direction:column;gap:28px}
-  .cc-column{display:contents}
-  .cc-columns .cc-column:first-child > .cc-section:first-child{order:1}
-  .cc-columns .cc-column:nth-child(2) > .cc-section:first-child{order:2}
-  .cc-columns .cc-column:first-child > .cc-section:nth-child(2){order:3}
-  .card,.duo,.bento{max-width:100%}
-  body{overflow-x:hidden}
-  .more-toggle{height:34px;padding:0 14px}
-}
 /* ------------------------------------------------------------ smaller screens */
 @media (max-width:900px){
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -779,7 +839,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
   .hero-in,.large-title{padding-left:20px;padding-right:20px}
-  .large-title h1{white-space:normal}
+  .large-title h1{white-space:nowrap}
   .bento{gap:12px}
   .b-week,.b-ring,.b-lab,.b-bur{grid-column:1 / -1}   /* one box to a row, so Labour and Burnham are not squeezed into two narrow columns */
   .card.b-lab,.card.b-bur{min-height:190px;padding-bottom:16px}
@@ -800,18 +860,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
-}
-/* Narrow-phone polish: keep controls readable without horizontal spill. */
-@media (max-width:420px){
-  .cc-columns{gap:24px}
-  .cc-column{gap:24px}
-  .section-h{gap:8px}
-  .section-h h2{font-size:1.2rem}
-  .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}
-  .seg::-webkit-scrollbar{display:none}
-  .seg button{flex:none}
-  .ft-share{gap:6px}
-  .sh{padding-inline:12px}
 }
 /* ------------------------------------------------------------ accessibility settings */
 @media (prefers-reduced-motion:reduce){
@@ -988,38 +1036,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
-/* Two independent column stacks: widths are fixed by the parent; cards can only grow vertically. */
-.card.can-more{max-height:420px;padding-bottom:52px}
-@media (max-width:899px){.card.can-more{max-height:320px}}
-.card.can-more.is-open{max-height:none}
-.more-toggle{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:2px;height:30px;padding:0 10px 0 12px;border:0;border-radius:999px;color:var(--blue);font:600 .8rem/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
-  background:color-mix(in srgb,var(--fill) 88%,var(--card));box-shadow:inset 0 0 0 .5px var(--sep)}
-.more-toggle svg{width:13px;height:13px;flex:none;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
-.card.is-open > .more-toggle svg{transform:rotate(180deg)}
-.card.can-more:not(.is-open)::after{content:"";position:absolute;left:0;right:0;bottom:42px;height:28px;background:linear-gradient(transparent,var(--card));pointer-events:none;z-index:2}
-.more-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.more-toggle:hover{background:var(--fill2)}}
-
-
-/* Night: every box is frosted glass */
-:root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}}
+/* Wider screens: the boxes sit side by side in two columns; the big ones keep the full width */
+@media (min-width:900px){
+  main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:24px;align-items:start}
+  main > section.wide{grid-column:1 / -1;min-width:0;max-width:100%}
+}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
   <div class="top-row"><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
-  <div class="hero-stage" id="heroStage">
-    <form class="stage-search" role="search" action="javascript:void(0)">
-      <label class="sr" for="boxSearch">Search the figures</label>
-      <input id="boxSearch" type="search" placeholder="Search figures, records, nationalities" autocomplete="off" enterkeyhint="search">
-      <ul id="boxHits" class="stage-hits" hidden></ul>
-    </form>
-  </div>
   <div class="hero-map" id="heroMap">
     <div id="lmap"></div>
     <svg viewBox="0 0 1000 686" preserveAspectRatio="none" id="map">
@@ -1046,25 +1077,39 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <span class="mn-tag"><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span id="figTag">Updating</span></span>
         <div class="mn-stage"><button type="button" class="mn-head" id="figHead" aria-expanded="false" aria-controls="popFU">New figures incoming from the Home Office</button><span class="mn-meta" id="figMeta">Since 12:00 · Can take up to an hour</span></div>
       </div>
+      <div class="mn-slide mn-support" id="supportSlide" data-nosnippet hidden>
+        <span class="mn-tag mn-support-tag">🍺 <span>Support</span></span>
+        <div class="mn-stage"><a class="mn-head" href="https://buymeacoffee.com/danseacroft" target="_blank" rel="noopener">Enjoying Channel Crossings? Buy me a beer to help keep it running</a><span class="mn-meta">Thank you for your support</span></div>
+      </div>
     </div>
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 5 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 3 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
   <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
 
-  <!-- Map controls: forecast timeline and fixed wave key -->
+  <!-- Map controls, laid out like Apple Maps: a layer button, a full-screen button and a forecast timeline -->
   <div class="wx-ctl" id="wxCtl">
+    <div class="am-top">
+      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span id="wxLayerName">Waves</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button type="button" class="am-btn wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
+      <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button></div>
+      <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
+      <div class="wx-key" id="wxKeyPick" role="img"></div>
+    </div>
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
     <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img"></div>
   </div>
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker" hidden></div>
-    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">5</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">609</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Monday, 5 October 2026 · 8&nbsp;boats</div></div></div><span class="sr" id="heroSr" aria-live="polite">609 people crossed in 8 small boats on Monday, 5 October 2026</span>
+    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">3</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">164</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Saturday, 3 October 2026 · 2&nbsp;boats</div><div class="hero-fresh" id="heroFresh" hidden><i></i><span></span></div></div></div><span class="sr" id="heroSr" aria-live="polite">164 people crossed in 2 small boats on Saturday, 3 October 2026</span>
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
@@ -1097,230 +1142,290 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
-<main id="main"><section aria-labelledby="hGlance" class="wide cc-section">
-<div class="section-h rv"><h2 id="hGlance">At a Glance</h2><p id="glanceNote"></p></div>
-<div class="bento">
-<article class="card b-week rv">
-<h3>Last 7 days</h3>
-<div class="val num" id="weekV">–</div>
-<div class="sub" id="weekS"> </div>
-<div aria-label="Last 7 days" class="spark" id="spark" role="img"></div>
-<div aria-hidden="true" class="spark-days" id="sparkDays"></div>
-</article>
-<article class="card b-ring art rv" id="ytdBox">
-<!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
-<div class="flip" id="flip">
-<div class="fy" id="yearFace">
-<div aria-hidden="true" class="tile-art"><svg preserveaspectratio="xMaxYMax meet" viewbox="0 0 260 150"><defs><lineargradient id="twSea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"></stop><stop offset="1" stop-color="var(--ta-sea2)"></stop></lineargradient><lineargradient id="twTube" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"></stop><stop offset="1" stop-color="var(--ta-tube3)"></stop></lineargradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"></path><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"></path><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="0" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="0" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="0" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="8" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="16" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-20" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="-12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="-4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="4" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"></path><circle cx="12" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"></path><circle cx="20" cy="-9.5" fill="var(--ta-skin)" r="2.6"></circle><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"></path></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"></path><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"></path></svg></div>
-<div class="flip-h"><h3 id="ringYear">This year so far</h3><button aria-controls="calFace" class="flip-go" id="flipCal" type="button">Calendar<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button></div>
-<div class="ring-wrap">
-<svg aria-label="This year against last year" class="ring" id="ringSvg" role="img" viewbox="0 0 170 170">
-<defs><lineargradient id="ringGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#FF9F0A"></stop><stop offset="1" stop-color="#FF375F"></stop></lineargradient></defs>
-<circle class="track" cx="85" cy="85" r="72" stroke-width="18"></circle>
-<circle class="arc" cx="85" cy="85" id="ringArc" r="72" stroke-width="18" transform="rotate(-90 85 85)"></circle>
-<text class="ring-num" fill="var(--label)" id="ringPct" text-anchor="middle" x="85" y="84">–</text>
-<text fill="var(--label2)" font-size="13" font-weight="600" id="ringOf" text-anchor="middle" x="85" y="108">of last year</text>
-<text fill="var(--label2)" font-size="12" id="ringTot" text-anchor="middle" x="85" y="126"></text>
-</svg>
-<div class="ring-legend">
-<div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
-<div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
-<div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
-</div>
-</div>
-</div>
-<div aria-label="Calendar" class="fc mb" id="calFace" inert="" role="group">
-<div class="flip-h"><button aria-controls="yearFace" class="flip-go back" id="flipYear" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg><span id="flipYearT">This year so far</span></button></div>
-<div class="cal-nav">
-<button aria-label="Previous month" class="cal-btn" id="calPrev" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg></button>
-<h3 aria-live="polite" id="calTitle">–</h3>
-<button aria-label="Next month" class="cal-btn" id="calNext" type="button"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button>
-</div>
-<div class="cal-grid" id="calGrid"></div>
-<div aria-live="polite" class="cal-detail" id="calDetail"></div>
-<div class="cal-marks" id="calMarks"><span hidden="" id="calBusyKey"><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span hidden="" id="calNewKey"><i style="background:var(--blue)"></i>New since your last visit</span><span hidden="" id="calRevKey"><u>123</u> Revised figure</span></div>
-<div class="cal-foot">
-<span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i class="k4" style="--h:88%"></i>600+</span>
-</div>
-</div>
-</div>
-</article>
-<article class="card b-lab art rv">
-<div aria-hidden="true" class="tile-art"><svg preserveaspectratio="xMaxYMax slice" viewbox="0 0 260 150"><defs><lineargradient id="tlSea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"></stop><stop offset="1" stop-color="var(--ta-sea2)"></stop></lineargradient><lineargradient id="tlStone" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"></stop><stop offset="1" stop-color="var(--ta-stone2)"></stop></lineargradient><radialgradient cx=".5" cy=".5" id="tlGlow" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"></stop><stop offset="1" stop-color="#E4003B" stop-opacity="0"></stop></radialgradient></defs><circle cx="190" cy="88" fill="url(#tlGlow)" r="70"></circle><g transform="translate(190 28)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"></path><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"></path><rect fill="url(#tlStone)" height="12" width="24" x="-12" y="36"></rect><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"></path><rect fill="url(#tlStone)" height="30" width="28" x="-14" y="48"></rect><circle cx="0" cy="63" fill="var(--ta-clock)" r="10" stroke="var(--ta-stone3)" stroke-width="1.5"></circle><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-linecap="round" stroke-width="1.4"></path><rect fill="url(#tlStone)" height="52" width="24" x="-12" y="78"></rect><path d="M-7 84 v42 M0 84 v42 M7 84 v42" opacity=".7" stroke="var(--ta-stone3)" stroke-width="1.2"></path><path d="M-60 94 H-12 V76 H-48z M12 76 H70 V94 H12z" fill="url(#tlStone)" opacity=".75"></path></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"></path><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"></path></svg></div>
-<h3>Since Labour took office</h3>
-<div class="val num" id="labV">–</div>
-<div class="sub" id="labS"> </div>
-<div class="cost" id="labC"><span id="labCT"></span><button aria-controls="popCost" aria-expanded="false" aria-label="How the support cost is worked out" class="cost-i" hidden="" id="labCI" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="none" r="9.5" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 11v6" stroke="currentColor" stroke-linecap="round" stroke-width="2.2"></path><circle cx="12" cy="7.6" fill="currentColor" r="1.35"></circle></svg></button></div>
-</article>
-<article class="card b-bur art rv">
-<div aria-hidden="true" class="tile-art"><svg preserveaspectratio="xMaxYMax slice" viewbox="0 0 260 150"><defs><pattern height="12" id="tbBrick" patternunits="userSpaceOnUse" width="24"><rect fill="var(--ta-brick1)" height="12" width="24"></rect><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"></path></pattern><lineargradient id="tbDoor" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#15171A"></stop><stop offset=".5" stop-color="#2A2D33"></stop><stop offset="1" stop-color="#101114"></stop></lineargradient></defs><rect fill="url(#tbBrick)" height="150" width="260" x="0" y="0"></rect><g transform="translate(180 0)"><rect fill="var(--ta-frame)" height="120" width="80" x="-40" y="30"></rect><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"></path><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"></path><path d="M0 36 V62 M-18 45 L0 62 L18 45" fill="none" stroke="var(--ta-frame)" stroke-width="2"></path><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"></path><rect fill="none" height="30" rx="1" stroke="#000" stroke-opacity=".35" width="18" x="-22" y="76"></rect><rect fill="none" height="30" rx="1" stroke="#000" stroke-opacity=".35" width="18" x="4" y="76"></rect><text fill="#F2F2F2" font-family="Georgia, serif" font-size="15" font-weight="700" text-anchor="middle" x="0" y="96">10</text><circle cx="0" cy="117" fill="#C9A227" r="4"></circle><rect fill="var(--ta-step)" height="10" width="120" x="-60" y="140"></rect></g></svg></div>
-<h3>Since Burnham became PM</h3>
-<div class="val num" id="burV">–</div>
-<div class="sub" id="burS"> </div>
-</article>
-</div>
-</section><div class="cc-columns"><div class="cc-column"><section aria-labelledby="hOtd" class="cc-section" id="otd">
-<div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
-<article class="card rv">
-<div class="otd-top">
-<div aria-hidden="true" class="cal"><span id="otdMon"></span><b id="otdDay"></b></div>
-<div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS"> </div></div>
-</div>
-<div aria-label="The same date in earlier years" class="otd-years" id="otdYears" role="group"></div>
-</article>
-</section><section aria-labelledby="hRace" class="mb cc-section">
-<div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
-<div class="card race-card rv">
-<div aria-hidden="true" class="key-row" id="raceKey"></div>
-<div aria-describedby="raceSay" class="race" id="race" tabindex="0"><div class="empty">Loading the history since 2018…</div></div>
-<div aria-hidden="true" class="race-read" hidden="" id="raceRead"></div>
-<div aria-live="polite" class="sr" id="raceSay"></div>
-</div>
-<p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
-</section></div><div class="cc-column"><section aria-labelledby="hDaily" class="cc-section">
-<div class="section-h rv"><h2 id="hDaily">Crossings Over Time</h2><p id="ddNote">Drag across to read any day</p></div>
-<div class="card dd-card rv" id="ddBox">
-<div class="flip" id="ddFlip">
-<div aria-label="Every day" class="dd-face" id="ddDay" role="group">
-<div class="flip-h"><h3>Every day</h3><button aria-controls="ddSq" class="flip-go" data-go="1" type="button">Year in squares<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button></div>
-<div class="chart-head">
-<div class="chart-read" id="chartRead"><b class="num">–</b><span> </span></div>
-<div aria-label="Range" class="seg" id="rangeSeg" role="group">
-<button data-r="30" type="button">1M</button><button aria-pressed="true" data-r="90" type="button">3M</button><button data-r="365" type="button">1Y</button><button data-r="0" type="button">All</button>
-</div>
-</div>
-<div aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days." class="chart" id="chart" role="group" tabindex="0"></div>
-<div aria-live="polite" class="sr" id="chartLive"></div>
-</div>
-<div aria-label="The year in squares" class="dd-face" id="ddSq" inert="" role="group">
-<div class="flip-h"><button aria-controls="ddDay" class="flip-go back" data-go="0" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>Every day</button><button aria-controls="ddYr" class="flip-go" data-go="2" type="button">Year by year<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg></button></div>
-<div aria-live="polite" class="heat-read" id="heatRead">Tap a square to see that day.</div>
-<div aria-label="The year in squares. Arrow keys move between days." class="heat-scroll" id="heatScroll" role="group" tabindex="0"><div class="heat" id="heat"></div></div>
-<div class="heat-foot">
-<span aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more" class="heat-key heat-scale" role="img"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
-<span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i> Busiest 10 days</span>
-</div>
-</div>
-<div aria-label="Year by year" class="dd-face" id="ddYr" inert="" role="group">
-<div class="flip-h"><button aria-controls="ddSq" class="flip-go back" data-go="1" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>Year in squares</button><h3>People each year</h3></div>
-<div class="years" id="years"></div>
-<p class="dd-foot" id="yrFoot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
-</div>
-</div>
-</div>
-</section></div></div><section aria-labelledby="hCalc" class="mb wide cc-section">
-<div class="duo">
-<div class="mb-col">
-<div class="section-h rv"><h2 id="hCalc">Between Two Dates</h2></div>
-<div class="card calc-card rv">
-<div class="calc-dates">
-<label>From<input id="calcFrom" type="date"/></label>
-<label>To<input id="calcTo" type="date"/></label>
-</div>
-<div class="presets" id="calcPresets">
-<button aria-pressed="false" data-p="labour" type="button">Since Labour</button>
-<button aria-pressed="false" data-p="burnham" type="button">Since Burnham</button>
-<button aria-pressed="false" data-p="year" type="button">This year</button>
-<button aria-pressed="false" data-p="12m" type="button">Last 12 months</button>
-<button aria-pressed="false" data-p="30d" type="button">Last 30 days</button>
-</div>
-<div aria-live="polite" class="calc-out">
-<div><b id="calcP">–</b><span>people</span></div>
-<div><b id="calcB">–</b><span>boats</span></div>
-<div><b id="calcA">–</b><span>a day on average</span></div>
-</div>
-<div class="calc-note" id="calcNote"></div>
-</div>
-</div>
-<div class="mb-col">
-<div class="section-h rv"><h2>Longest Quiet Spells</h2></div>
-<div class="card flush tbl-wrap rv"><table aria-label="Longest spells without crossings" class="tbl" id="quietTbl"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
-<p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
-</div>
-</div>
-</section><div class="cc-columns"><div class="cc-column"><section aria-labelledby="hPat" class="mb cc-section">
-<div class="section-h rv"><h2 id="hPat">Patterns</h2>
-<div aria-label="Pattern" class="seg" id="patSeg" role="group">
-<button aria-pressed="true" data-pat="dow" type="button">Day of Week</button>
-<button aria-pressed="false" data-pat="month" type="button">Month</button>
-</div>
-</div>
-<div class="card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
-<p class="foot rv" id="patNote"></p>
-</section></div><div class="cc-column"><section aria-labelledby="repTitle" class="mb area-rep cc-section">
-<div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
-<div class="card rep-card rv">
-<div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
-<div class="dots" id="dots"></div>
-</div>
-<p class="foot rv">Each dinghy is one boat, seen from above, and each dot one person. The Home Office gives a daily total, so a day's people are shared evenly across its boats.</p>
-</section></div></div><section aria-labelledby="hWho" class="wide cc-section">
-<div class="section-h rv"><h2 id="hWho">Who Is Crossing</h2><p id="whoNote"></p></div>
-<div class="duo">
-<article class="card rv">
-<h3>Sex and age</h3>
-<div class="val num" id="menV">–</div>
-<div class="sub">adult men</div>
-<div class="stack-h">Sex</div>
-<div class="stack" id="sexStack"></div>
-<div class="legend" id="sexLegend"></div>
-<div class="stack-h">Age</div>
-<div class="stack" id="ageStack"></div>
-<div class="legend" id="ageLegend"></div>
-</article>
-<article class="card rv">
-<h3>Top nationalities</h3>
-<div class="sub" id="natS"> </div>
-<ol class="nat-list" id="nats"></ol>
-</article>
-<article class="card rv">
-<div class="pb-top"><h3>People per boat</h3><span class="pb-x" hidden="" id="pbX"></span></div>
-<div class="val num" id="pbV">–</div>
-<div class="sub" id="pbS"> </div>
-<div class="pb-boats" id="pbBoats"></div>
-<div class="pb-line" id="pbLine"></div>
-</article>
-<article class="card rv">
-<h3>UK–France returns deal</h3>
-<div class="sub" id="retS" style="margin-top:6px"> </div>
-<div class="vs">
-<div><b class="num" id="retOut">–</b><span>returned to France</span></div>
-<div><b class="num" id="retIn">–</b><span>transferred to the UK</span></div>
-</div>
-<div class="cost" id="retNote"></div>
-</article>
-</div>
-</section><div class="cc-columns"><div class="cc-column"><section aria-labelledby="hRec" class="cc-section">
-<div class="section-h rv"><h2 id="hRec">Records</h2></div>
-<div class="card rv"><ul class="records" id="records"></ul></div>
-</section><section aria-labelledby="subTitle" class="mb cc-section">
-<div aria-labelledby="subTitle" class="subscribe rv" id="subscribe">
-<div aria-hidden="true" class="sub-icon"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="14" rx="3" width="18" x="3" y="5"></rect><path d="M3.5 7.5l8.5 6 8.5-6"></path></svg></div>
-<div class="sub-copy">
-<h2 id="subTitle">Weekly roundup of the figures</h2>
-<p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
-</div>
-<form action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" class="sub-form" id="subForm" method="post" novalidate="" target="_blank">
-<label class="sr" for="subEmail">Email address</label>
-<input autocapitalize="off" autocomplete="email" id="subEmail" inputmode="email" name="field_0" placeholder="Email" required="" spellcheck="false" type="email"/>
-<input aria-hidden="true" autocomplete="off" class="hp" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" type="text"/>
-<button id="subBtn" type="submit">Subscribe</button>
-</form>
-<button aria-label="Close the weekly roundup sign-up" class="b-close" id="subClose" type="button">
-<span><svg aria-hidden="true" viewbox="0 0 10 10"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path></svg></span>
-</button>
-<p aria-live="polite" class="sub-msg" id="subMsg">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
-</div>
-</section></div><div class="cc-column"><section aria-labelledby="hPet" class="mb cc-section">
-<div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
-<div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
-<p class="foot rv">From the <a href="https://petition.parliament.uk/" rel="noopener" target="_blank">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
-</section></div></div></main>
+<main id="main" tabindex="-1">
+
+  <!-- ============================================================ AT A GLANCE -->
+  <section class="wide" aria-labelledby="hGlance">
+    <div class="section-h rv"><h2 id="hGlance">At a Glance</h2><p id="glanceNote"></p></div>
+    <div class="bento">
+      <article class="card b-week rv">
+        <h3>Last 7 days</h3>
+        <div class="val num" id="weekV">–</div>
+        <div class="sub" id="weekS">&nbsp;</div>
+        <div class="spark" id="spark" role="img" aria-label="Last 7 days"></div>
+        <div class="spark-days" id="sparkDays" aria-hidden="true"></div>
+      </article>
+      <article class="card b-ring art rv" id="ytdBox">
+        <!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
+        <div class="flip" id="flip">
+          <div class="fy" id="yearFace">
+            <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax meet"><defs><linearGradient id="twSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="twTube" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-tube1)"/><stop offset="1" stop-color="var(--ta-tube3)"/></linearGradient></defs><path d="M-20 78 Q20 73 60 78 T140 78 T220 78 T300 78 V150 H-20z" fill="url(#twSea)" opacity=".45"/><path d="M-20 98 Q20 92 60 98 T140 98 T220 98 T300 98 V150 H-20z" fill="url(#twSea)" opacity=".6"/><g class="ta-boat" style="animation-delay:-4.0s"><g transform="translate(120 80) scale(0.55)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-2.5s"><g transform="translate(175 76) scale(0.5)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.6s"><g transform="translate(228 82) scale(0.55)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-1.5s"><g transform="translate(95 102) scale(0.75)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-0.5s"><g transform="translate(165 100) scale(0.8)"><path d="M-19 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-11 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-3 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="0" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M5 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="8" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M13 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="16" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-26 -1 H24 q7 0 7 5 q0 5 -7 5 H-23 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.4s"><g transform="translate(232 104) scale(0.75)"><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-22 -1 H20 q7 0 7 5 q0 5 -7 5 H-19 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><g class="ta-boat" style="animation-delay:-3.0s"><g transform="translate(186 116) scale(1)"><path d="M-23 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-15 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="-12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-7 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="-4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M1 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="4" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M9 0 q0-7 3-7 q3 0 3 7z" fill="#FF7A1A"/><circle cx="12" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M17 0 q0-7 3-7 q3 0 3 7z" fill="#FF9500"/><circle cx="20" cy="-9.5" r="2.6" fill="var(--ta-skin)"/><path d="M-30 -1 H28 q7 0 7 5 q0 5 -7 5 H-27 q-6 0 -8 -5 q0 -5 5 -5z" fill="url(#twTube)"/></g></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#twSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
+            <div class="flip-h"><h3 id="ringYear">This year so far</h3><button type="button" class="flip-go" id="flipCal" aria-controls="calFace">Calendar<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+            <div class="ring-wrap">
+              <svg class="ring" viewBox="0 0 170 170" role="img" id="ringSvg" aria-label="This year against last year">
+                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF375F"/></linearGradient></defs>
+                <circle class="track" cx="85" cy="85" r="72" stroke-width="18"/>
+                <circle class="arc" id="ringArc" cx="85" cy="85" r="72" stroke-width="18" transform="rotate(-90 85 85)"/>
+                <text x="85" y="84" text-anchor="middle" class="ring-num" fill="var(--label)" id="ringPct">–</text>
+                <text x="85" y="108" text-anchor="middle" font-size="13" font-weight="600" fill="var(--label2)" id="ringOf">of last year</text>
+                <text x="85" y="126" text-anchor="middle" font-size="12" fill="var(--label2)" id="ringTot"></text>
+              </svg>
+              <div class="ring-legend">
+                <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
+                <div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
+                <div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="fc mb" id="calFace" role="group" aria-label="Calendar" inert>
+            <div class="flip-h"><button type="button" class="flip-go back" id="flipYear" aria-controls="yearFace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span id="flipYearT">This year so far</span></button></div>
+            <div class="cal-nav">
+              <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+              <h3 id="calTitle" aria-live="polite">–</h3>
+              <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-detail" id="calDetail" aria-live="polite"></div>
+            <div class="cal-marks" id="calMarks"><span id="calBusyKey" hidden><i style="background:var(--bar-peak)"></i>Busiest 5% of days since 2018</span><span id="calNewKey" hidden><i style="background:var(--blue)"></i>New since your last visit</span><span id="calRevKey" hidden><u>123</u> Revised figure</span></div>
+            <div class="cal-foot">
+              <span class="cal-key"><i style="--h:0%"></i>None</span><span class="cal-key"><i style="--h:18%"></i>1–99</span><span class="cal-key"><i style="--h:38%"></i>100–299</span><span class="cal-key"><i style="--h:62%"></i>300–599</span><span class="cal-key"><i class="k4" style="--h:88%"></i>600+</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="card b-lab art rv">
+        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax slice"><defs><linearGradient id="tlSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ta-sea1)"/><stop offset="1" stop-color="var(--ta-sea2)"/></linearGradient><linearGradient id="tlStone" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--ta-stone1)"/><stop offset="1" stop-color="var(--ta-stone2)"/></linearGradient><radialGradient id="tlGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E4003B" stop-opacity=".35"/><stop offset="1" stop-color="#E4003B" stop-opacity="0"/></radialGradient></defs><circle cx="190" cy="88" r="70" fill="url(#tlGlow)"/><g transform="translate(190 28)"><path d="M0 6 L-5 26 H5z" fill="url(#tlStone)"/><path d="M-11 26 H11 L9 36 H-9z" fill="url(#tlStone)"/><rect x="-12" y="36" width="24" height="12" fill="url(#tlStone)"/><path d="M-8 38 v8 M-3 38 v8 M3 38 v8 M8 38 v8" stroke="var(--ta-stone3)" stroke-width="1.6"/><rect x="-14" y="48" width="28" height="30" fill="url(#tlStone)"/><circle cx="0" cy="63" r="10" fill="var(--ta-clock)" stroke="var(--ta-stone3)" stroke-width="1.5"/><path d="M0 63 V56.5 M0 63 L4.5 65.5" stroke="#2B2B2B" stroke-width="1.4" stroke-linecap="round"/><rect x="-12" y="78" width="24" height="52" fill="url(#tlStone)"/><path d="M-7 84 v42 M0 84 v42 M7 84 v42" stroke="var(--ta-stone3)" stroke-width="1.2" opacity=".7"/><path d="M-60 94 H-12 V76 H-48z M12 76 H70 V94 H12z" fill="url(#tlStone)" opacity=".75"/></g><path class="ta-wave" d="M-40 124 Q-20 116 0 124 T40 124 T80 124 T120 124 T160 124 T200 124 T240 124 T280 124 T320 124 V150 H-40z" fill="url(#tlSea)"/><path class="ta-wave2" d="M-40 134 Q-15 128 10 134 T60 134 T110 134 T160 134 T210 134 T260 134 T310 134 V150 H-40z" fill="var(--ta-sea2)" opacity=".85"/></svg></div>
+        <h3>Since Labour took office</h3>
+        <div class="val num" id="labV">–</div>
+        <div class="sub" id="labS">&nbsp;</div>
+        <div class="cost" id="labC"><span id="labCT"></span><button type="button" class="cost-i" id="labCI" aria-expanded="false" aria-controls="popCost" aria-label="How the support cost is worked out" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.35" fill="currentColor"/></svg></button></div>
+      </article>
+      <article class="card b-bur art rv">
+        <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 260 150" preserveAspectRatio="xMaxYMax slice"><defs><pattern id="tbBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="var(--ta-brick1)"/><path d="M0 11.5 H24 M12 0 V6 M0 6 H24 M0 6 V12 M24 6 V12" stroke="var(--ta-mortar)" stroke-width="1"/></pattern><linearGradient id="tbDoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15171A"/><stop offset=".5" stop-color="#2A2D33"/><stop offset="1" stop-color="#101114"/></linearGradient></defs><rect x="0" y="0" width="260" height="150" fill="url(#tbBrick)"/><g transform="translate(180 0)"><rect x="-40" y="30" width="80" height="120" fill="var(--ta-frame)"/><path d="M-30 150 V64 H30 V150z" fill="url(#tbDoor)"/><path d="M-30 62 A30 26 0 0 1 30 62z" fill="var(--ta-fan)" stroke="var(--ta-frame)" stroke-width="3"/><path d="M0 36 V62 M-18 45 L0 62 L18 45" stroke="var(--ta-frame)" stroke-width="2" fill="none"/><path d="M-24 72 H24 M-24 110 H24" stroke="#000" stroke-opacity=".35" stroke-width="1"/><rect x="-22" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><rect x="4" y="76" width="18" height="30" rx="1" fill="none" stroke="#000" stroke-opacity=".35"/><text x="0" y="96" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="700" fill="#F2F2F2">10</text><circle cx="0" cy="117" r="4" fill="#C9A227"/><rect x="-60" y="140" width="120" height="10" fill="var(--ta-step)"/></g></svg></div>
+        <h3>Since Burnham became PM</h3>
+        <div class="val num" id="burV">–</div>
+        <div class="sub" id="burS">&nbsp;</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ WHAT CHANGED -->
+  <section class="wide" aria-labelledby="hInsight">
+    <div class="section-h rv"><h2 id="hInsight">What Changed</h2><p id="insightPeriod"></p></div>
+    <article class="card insight-card rv">
+      <div class="insight-main">
+        <h3 id="insightTitle">The latest week at a glance</h3>
+        <p id="insightSummary">Loading the latest changes…</p>
+        <div class="insight-stats" id="insightStats"></div>
+      </div>
+      <aside class="report-box" aria-label="Reporting status">
+        <div>
+          <h4>Reporting status</h4>
+          <div class="report-status" id="reportStatus"><i></i><span>Checking the latest figures…</span></div>
+        </div>
+        <p class="report-meta" id="reportMeta"></p>
+        <p class="report-source">Source: UK Home Office · figures are provisional</p>
+      </aside>
+    </article>
+  </section>
+
+  <!-- ============================================================ ON THIS DAY -->
+  <section aria-labelledby="hOtd" id="otd">
+    <div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
+    <article class="card rv">
+      <div class="otd-top">
+        <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
+        <div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS">&nbsp;</div></div>
+      </div>
+      <div class="otd-years" id="otdYears" role="group" aria-label="The same date in earlier years"></div>
+    </article>
+  </section>
+
+  <!-- ============================================================ CROSSINGS OVER TIME: every day, the year in squares and year by year,
+       three pages in one box slid across with the arrows, or a swipe that doesn't start on the chart or the squares (they have their own drag) -->
+  <section aria-labelledby="hDaily">
+    <div class="section-h rv"><h2 id="hDaily">Crossings Over Time</h2><p id="ddNote">Drag across to read any day</p></div>
+    <div class="card graph-card dd-card rv" id="ddBox">
+      <div class="flip" id="ddFlip">
+        <div class="dd-face" id="ddDay" role="group" aria-label="Every day">
+          <div class="flip-h"><h3>Every day</h3><button type="button" class="flip-go" data-go="1" aria-controls="ddSq">Year in squares<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+          <div class="chart-head">
+            <div class="chart-read" id="chartRead"><b class="num">–</b><span>&nbsp;</span></div>
+            <div class="chart-tools">
+              
+              <div class="seg" role="group" aria-label="Measure" id="metricSeg">
+                <button type="button" data-m="people" aria-pressed="true">People</button><button type="button" data-m="boats" aria-pressed="false">Boats</button><button type="button" data-m="ratio" aria-pressed="false">Per boat</button>
+              </div>
+              <div class="seg" role="group" aria-label="Range" id="rangeSeg">
+                <button type="button" data-r="7">7D</button><button type="button" data-r="30" aria-pressed="true">30D</button><button type="button" data-r="90">90D</button><button type="button" data-r="365">1Y</button><button type="button" data-r="0">All</button>
+              </div>
+            </div>
+          </div>
+          <div class="chart" id="chart" tabindex="0" role="group" aria-label="Daily arrivals chart. Use the left and right arrow keys to move between days."></div>
+          <div class="sr" id="chartLive" aria-live="polite"></div>
+        </div>
+        <div class="dd-face" id="ddSq" role="group" aria-label="The year in squares" inert>
+          <div class="flip-h"><button type="button" class="flip-go back" data-go="0" aria-controls="ddDay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Every day</button><button type="button" class="flip-go" data-go="2" aria-controls="ddYr">Year by year<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+          <div class="heat-read" id="heatRead" aria-live="polite">Tap a square to see that day.</div>
+          <div class="heat-scroll" id="heatScroll" tabindex="0" role="group" aria-label="The year in squares. Arrow keys move between days."><div class="heat" id="heat"></div></div>
+          <div class="heat-foot">
+            <span class="heat-key heat-scale" role="img" aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
+            <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
+          </div>
+        </div>
+        <div class="dd-face" id="ddYr" role="group" aria-label="Year by year" inert>
+          <div class="flip-h"><button type="button" class="flip-go back" data-go="1" aria-controls="ddSq"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Year in squares</button><h3>People each year</h3></div>
+          <div class="years" id="years"></div>
+          <p class="dd-foot" id="yrFoot">Each year is compared with the year before, and this year with the same dates last year, which the line on its bar marks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ RUNNING TOTALS -->
+  <section class="mb" aria-labelledby="hRace">
+    <div class="section-h rv"><h2 id="hRace">Running Total by Year</h2><p>Hover or drag to compare</p></div>
+    <div class="card graph-card race-card rv">
+      <div class="key-row" id="raceKey" aria-hidden="true"></div>
+      <div class="race" id="race" tabindex="0" aria-describedby="raceSay"><div class="empty">Loading the history since 2018…</div></div>
+      <div class="race-read" id="raceRead" aria-hidden="true" hidden></div>
+      <div class="sr" aria-live="polite" id="raceSay"></div>
+    </div>
+    <p class="foot rv" id="raceFoot">Running total of arrivals from 1 January in each year.</p>
+  </section>
+
+  <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
+  <section class="mb wide" aria-labelledby="hCalc">
+    <div class="duo">
+      <div class="mb-col">
+        <div class="section-h rv"><h2 id="hCalc">Between Two Dates</h2></div>
+        <div class="card calc-card rv">
+          <div class="calc-dates">
+            <label>From<input type="date" id="calcFrom"></label>
+            <label>To<input type="date" id="calcTo"></label>
+          </div>
+          <div class="presets" id="calcPresets">
+            <button type="button" data-p="labour" aria-pressed="false">Since Labour</button>
+            <button type="button" data-p="burnham" aria-pressed="false">Since Burnham</button>
+            <button type="button" data-p="year" aria-pressed="false">This year</button>
+            <button type="button" data-p="12m" aria-pressed="false">Last 12 months</button>
+            <button type="button" data-p="30d" aria-pressed="false">Last 30 days</button>
+          </div>
+          <div class="calc-out" aria-live="polite">
+            <div><b id="calcP">–</b><span>people</span></div>
+            <div><b id="calcB">–</b><span>boats</span></div>
+            <div><b id="calcA">–</b><span>a day on average</span></div>
+          </div>
+          <div class="calc-note" id="calcNote"></div>
+        </div>
+      </div>
+      <div class="mb-col">
+        <div class="section-h rv"><h2>Longest Quiet Spells</h2></div>
+        <div class="card flush tbl-wrap rv"><table class="tbl" id="quietTbl" aria-label="Longest spells without crossings"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
+        <p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ PATTERNS -->
+  <section class="mb" aria-labelledby="hPat">
+    <div class="section-h rv"><h2 id="hPat">Patterns</h2>
+      <div class="seg" id="patSeg" role="group" aria-label="Pattern">
+        <button type="button" data-pat="dow" aria-pressed="true">Day of Week</button>
+        <button type="button" data-pat="month" aria-pressed="false">Month</button>
+      </div>
+    </div>
+    <div class="card graph-card pat-card rv"><h3 class="pat-h">People a day, on average</h3><div class="pat" id="pat"><div class="empty">Loading…</div></div></div>
+    <p class="foot rv" id="patNote"></p>
+  </section>
+
+  <!-- ============================================================ EVERY PERSON (desktop) -->
+  <section class="mb area-rep" aria-labelledby="repTitle">
+    <div class="section-h rv"><h2 id="repTitle">Every Person, Last 30 Days</h2></div>
+    <div class="card graph-card rep-card rv">
+      <div class="rep-head"><span class="big" id="repN">–</span><span class="sub" id="repS"></span></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <p class="foot rv">Each dinghy is one boat, seen from above, and each dot one person. The Home Office gives a daily total, so a day's people are shared evenly across its boats.</p>
+  </section>
+
+  <!-- ============================================================ WHO, PER BOAT, RETURNS -->
+  <section class="wide" aria-labelledby="hWho">
+    <div class="section-h rv"><h2 id="hWho">Who Is Crossing</h2><p id="whoNote"></p></div>
+    <div class="duo">
+      <article class="card rv">
+        <h3>Sex and age</h3>
+        <div class="val num" id="menV">–</div>
+        <div class="sub">adult men</div>
+        <div class="stack-h">Sex</div>
+        <div class="stack" id="sexStack"></div>
+        <div class="legend" id="sexLegend"></div>
+        <div class="stack-h">Age</div>
+        <div class="stack" id="ageStack"></div>
+        <div class="legend" id="ageLegend"></div>
+      </article>
+      <article class="card rv">
+        <h3>Top nationalities</h3>
+        <div class="sub" id="natS">&nbsp;</div>
+        <ol class="nat-list" id="nats"></ol>
+      </article>
+      <article class="card graph-card rv">
+        <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
+        <div class="val num" id="pbV">–</div>
+        <div class="sub" id="pbS">&nbsp;</div>
+        <div class="pb-boats" id="pbBoats"></div>
+        <div class="pb-line" id="pbLine"></div>
+      </article>
+      <article class="card rv">
+        <h3>UK–France returns deal</h3>
+        <div class="sub" id="retS" style="margin-top:6px">&nbsp;</div>
+        <div class="vs">
+          <div><b class="num" id="retOut">–</b><span>returned to France</span></div>
+          <div><b class="num" id="retIn">–</b><span>transferred to the UK</span></div>
+        </div>
+        <div class="cost" id="retNote"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ RECORDS -->
+  <section aria-labelledby="hRec">
+    <div class="section-h rv"><h2 id="hRec">Records</h2></div>
+    <div class="card rv"><ul class="records" id="records"></ul></div>
+  </section>
+
+  <!-- ============================================================ PETITIONS -->
+  <section class="mb" aria-labelledby="hPet">
+    <div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
+    <div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
+    <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
+  </section>
+
+  <!-- ============================================================ WEEKLY ROUNDUP -->
+  <section class="mb" aria-labelledby="subTitle">
+    <div class="subscribe rv" id="subscribe" aria-labelledby="subTitle">
+      <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
+      <div class="sub-copy">
+        <h2 id="subTitle">Weekly roundup of the figures</h2>
+        <p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
+      </div>
+      <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
+        <label class="sr" for="subEmail">Email address</label>
+        <input type="email" id="subEmail" name="field_0" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+        <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" id="subBtn">Subscribe</button>
+      </form>
+      <button type="button" class="b-close" id="subClose" aria-label="Close the weekly roundup sign-up">
+        <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+      </button>
+      <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
+    </div>
+  </section>
+
+</main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-
 <footer>
-  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
+  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" aria-label="Share on X" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
@@ -1341,11 +1446,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const dDMY = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",...UTC});   // 5 July 2024
   const ukToday = () => new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
-  const getJSON = u => {
-    const opts = {cache:"no-cache"};
-    if("AbortSignal" in window && typeof AbortSignal.timeout === "function") opts.signal = AbortSignal.timeout(12000);
-    return fetch(u, opts).then(r => { if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
-  };
+  const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
   /* ---------------------------------------------------- appearance: Auto, Day or Night, from the switch in the footer (shared with the other pages) */
   const root = document.documentElement, modeBtns = document.querySelectorAll(".ft-theme button");
@@ -1358,7 +1459,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     showTheme();
   }));
   showTheme();
-
   // The boxes react to the mouse: a slight lean towards it and a soft light where it points. Mouse only, never with reduced motion.
   if(matchMedia("(hover: hover) and (pointer: fine)").matches && !reduced){
     let tiltCard = null, tiltEv = null, tiltRaf = 0;
@@ -1385,7 +1485,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const hero = $("hero"), heroMap = $("heroMap");
   function onScroll(){
     const y = scrollY, h = hero.offsetHeight;
-    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px)"; }
+    if(!reduced && y < h && !hero.classList.contains("full")){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px)"; }
   }
   addEventListener("scroll", onScroll, {passive:true}); onScroll();
 
@@ -1393,14 +1493,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const io = "IntersectionObserver" in window ? new IntersectionObserver(en => en.forEach(e => { if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target); e.target.dispatchEvent(new Event("reveal")); } }), {rootMargin:"0px 0px -8% 0px", threshold:.12}) : null;
   function watch(el){ if(io && !reduced) io.observe(el); else { el.classList.add("on"); setTimeout(()=>el.dispatchEvent(new Event("reveal"))); } }
   document.querySelectorAll(".rv").forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + "ms"; watch(el); });
-  function countUp(el, to, suffix){
-    suffix = suffix || "";
+  function countUp(el, to, suffix, decimals){
+    suffix = suffix || ""; decimals = decimals || 0;
     const run = el._count = (el._count || 0) + 1;   // a newer count on the same number replaces this one
-    if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? fmt(to) : "–") + suffix; return; }
+    if(reduced || !isFinite(to)){ el.textContent = (isFinite(to) ? (decimals ? Number(to).toFixed(decimals) : fmt(to)) : "–") + suffix; return; }
     const card = el.closest(".rv"), start = () => {
       if(run !== el._count) return;
       const t0 = performance.now(), dur = Math.min(1600, 500 + Math.log10(to + 10) * 280);
-      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = fmt(Math.round(to * e)) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
+      (function step(t){ if(run !== el._count) return; const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4); el.textContent = (decimals ? (to * e).toFixed(decimals) : fmt(Math.round(to * e))) + suffix; if(k < 1) requestAnimationFrame(step); })(t0);
     };
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
@@ -1441,7 +1541,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
   let heat, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
-  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
+  let wx = null, wxFailed = false, wxMarineFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
@@ -1449,16 +1549,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
     // Free to use with credit, and needs no key.
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("World_Topo_Map", {attribution:'Map © <a href="https://www.esri.com/">Esri</a> · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
       .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
-    /* drawn chart stays off the tiles so the real map shows */
+    L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     // the extra town names, added biggest first after the ones in the page, once the page has settled
-    whenMapShown(() => getJSON("towns.json").then(a => {
+    whenIdle(() => getJSON("towns.json").then(a => {
       const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
       places = places.concat(extra).sort((x, y) => x.rank - y.rank);   // a stable sort: the page's own towns stay ahead within each rank
       placeTowns();
@@ -1479,15 +1579,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
   }
   function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
-  function whenMapShown(fn){
-    const phone = matchMedia("(max-width:899px)").matches, map = $("lmap");
-    if(!phone){ whenIdle(fn, 1500); return; }
-    if(!map || !("IntersectionObserver" in window)){ setTimeout(fn, 1600); return; }
-    const io = new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)){ io.disconnect(); whenIdle(fn, 700); } }, {rootMargin:"160px"});
-    io.observe(map);
+  // Full screen: drag, pinch and scroll to zoom anywhere, on phones too (in the page, phones keep the map still so it scrolls)
+  const isFull = () => hero.classList.contains("full");
+  function setFull(on){
+    if(!LM) return;
+    hero.classList.toggle("full", on); root.classList.toggle("map-full", on);
+    const fb = $("wxFull"); fb.setAttribute("aria-pressed", on); fb.setAttribute("aria-label", on ? "Close the full-screen map" : "Open the full-screen map");
+    heroMap.style.transform = "";
+    ["dragging", "touchZoom", "doubleClickZoom", "scrollWheelZoom", "keyboard"].forEach(h => {
+      const want = on || (!touchOnly && (h === "dragging" || h === "doubleClickZoom"));
+      want ? LM[h].enable() : LM[h].disable();
+    });
+    if(on) hero.style.minHeight = "";
+    LM.closePopup(); fitW = 0; fitMap(); if(!on) fitHero();
   }
-
-  // Place names: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
+  $("wxFull").addEventListener("click", e => { e.stopPropagation(); setFull(!isFull()); });
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && isFull() && !cur) setFull(false); });
+  // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
   // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
   const RANK_ZOOM = [0, 0, 0, 7.6, 8.7, 9.7];   // the zoom each rank of town appears from
   const measure = document.createElement("canvas").getContext("2d");
@@ -1549,7 +1657,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.setMinZoom(LM.getBoundsZoom(WIDE, true));
     if(W !== fitW){
       fitW = W; const f = L.latLngBounds(tall ? TALL : VIEW);
-      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});;   // full screen on a phone: Kent to France, framed below the buttons
+      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});
+      if(isFull() && tall) LM.panBy([0, -(ctlBottom() + 8 - 40) / 2], {animate:false});   // full screen on a phone: Kent to France, framed below the buttons
     }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
     else resetWx();
@@ -1563,7 +1672,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   // Phones: the strait sits in the open map between the buttons and the figures
   function frameStrait(){
-    if(!LM || hero.clientWidth >= 600) return;
+    if(!LM || isFull() || hero.clientWidth >= 600) return;
     const bot = hero.querySelector(".hero-in").offsetTop, y = LM.latLngToContainerPoint([51.0, 1.45]).y, d = y - (ctlBottom() + bot) / 2;
     if(Math.abs(d) > 8) LM.panBy([0, d], {animate:false});
   }
@@ -1604,9 +1713,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
      drawn as moving lines, waves or numbers over the sea. Refreshed with the conditions every 30 minutes. */
   const GLAT = [], GLON = [], GDLAT = .3, GDLON = .4;   // about 20 miles apart, over the whole map
+  const LAPSE = .0065;   // the air is about 0.65°C cooler for every 100 m up
   for(let i = 0; i < 16; i++) GLAT.push(+(48.2 + i * GDLAT).toFixed(2));
   for(let i = 0; i < 22; i++) GLON.push(+(-2.8 + i * GDLON).toFixed(2));
-  let grid = null; const layer = "waves";
+  let grid = null, layer = "waves";
   const fillGaps = a => {   // the marine model has no waves over land: borrow from the nearest sea
     if(!a.some(x => x != null)) return null;
     for(let pass = 0; pass < 20 && a.some(x => x == null); pass++){
@@ -1617,14 +1727,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return a;
   };
   let hours = [], hourNow = 0, gridRetry = 0, gridAt = 0;   // 48 hours of readings: now and the forecast, chosen with the time slider
-  let gW = null, gM = null;   // the readings as they came in; each hour is built from them only when it's first shown
+  let gW = null, gM = null, gEL = null;   // the readings as they came in; each hour is built from them only when it's first shown
   const ukHour = () => new Date().toLocaleString("sv-SE", {timeZone:"Europe/London"}).slice(0, 13).replace(" ", "T") + ":00";
   function buildHour(h){
     const t = hours[h].t, W = gW, M = gM, EL = gEL;
     const col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
     const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
     return {s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
-      gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),      wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
+      gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
+      tsl:col("temperature_2m").map((x, k) => x == null ? null : x + LAPSE * EL[k]),   // as it would be at sea level, to blend between readings
+      wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
       // which way the waves travel, as east and south components (the data says where they come from)
       wdu: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : -Math.sin(d * Math.PI / 180); })) : null,
       wdv: mi >= 0 ? fillGaps(M.map(r => { const d = r && r.hourly ? r.hourly.wave_direction[mi] : null; return d == null ? null : Math.cos(d * Math.PI / 180); })) : null};
@@ -1643,7 +1755,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
                                     getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
         if(m) try{ sessionStorage.setItem("wxGrid", JSON.stringify({at, q, w, m})); }catch(e){}
       }
-      gW = [].concat(w); gM = m ? [].concat(m) : null;
+      gW = [].concat(w); gM = m ? [].concat(m) : null; gEL = gW.map(r => Math.max(0, +r.elevation || 0));   // each reading is for its own spot's height
       hours = gW[0].hourly.time.map(t => ({t}));
       const now = ukHour(); hourNow = Math.max(0, hours.findIndex(x => x.t >= now));
       const hs = $("wxHour"); hs.max = hours.length - 1; hs.value = hourNow;
@@ -1683,18 +1795,72 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
   // Colour scales, close to Ventusky's: used for the map's colours and the swatch in the readings
-  const SCALE = {waves:{key:"wave", max:4, unit:"m", stops:[[0,[86,150,214]],[.4,[64,176,196]],[.8,[72,186,150]],[1.3,[150,204,92]],[2,[232,198,64]],[2.8,[232,132,52]],[4,[196,58,92]]]}};
-  function wxKey(l, name){
-    const sc = SCALE.waves, st = sc.stops, lo = st[0][0], hi = sc.max;
-    const grad = st.map(([v,c]) => "rgb(" + c.join(",") + ") " + ((v-lo)/(hi-lo)*100).toFixed(1) + "%").join(",");
-    return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>0</span><i style='background:linear-gradient(to right," + grad + ")'></i><span>4+ m</span>";
+  const WIND = [[0,[98,113,183]],[6,[57,97,159]],[10,[74,148,169]],[14,[77,141,123]],[18,[83,165,83]],[23,[201,186,63]],[28,[221,135,50]],[34,[208,70,60]],[40,[173,40,110]]];
+  const SCALE = {
+    wind:{key:"s", max:40, unit:"mph", stops:WIND},
+    gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
+    waves:{key:"wave", max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
+    // temperature in Ventusky's warm earthy colours: blue in the cold, green at 10°, golden tan in the mid teens, terracotta and mauve
+    // in the heat. Matched to Ventusky (Dan's screenshot, 2 Oct 2026) once multiplied over the light grey map
+    temp:{key:"temp", unit:"°C", stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]},
+    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]}
+  };
+  function colour(v, st){
+    if(v <= st[0][0]) return st[0][1];
+    for(let k = 1; k < st.length; k++) if(v <= st[k][0]){ const [a, ca] = st[k - 1], [b, cb] = st[k], t = (v - a) / (b - a); return ca.map((x, n) => x + (cb[n] - x) * t); }
+    return st[st.length - 1][1];
   }
-  $("wxKeyBar").innerHTML = wxKey("waves", "Waves");
-  $("wxKeyBar").setAttribute("aria-label", "Waves colour key, 0 to 4 metres or more");
-
-  // Rebuilt whenever the map moves or new readings arrive: the sea, the wave field and the motion drawn over it.
-  const CELL = 8;   // grid spacing in pixels
-  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null;
+  // The layer picker: a frosted card of plain white icon tiles
+  const segBtns = [...document.querySelectorAll("#wxCtl .wx-seg button")], pickEl = $("wxPick"), pickBtn = $("wxLayerBtn");
+  function showPick(on){
+    pickEl.hidden = !on; pickBtn.setAttribute("aria-expanded", on);
+    if(on){
+      const b = segBtns.find(x => x.dataset.l === layer); if(b) b.focus({preventScroll:true});
+      // small phones: the list scrolls inside the map rather than running off it, and the page brings it into view
+      pickEl.style.maxHeight = ""; const top = pickEl.getBoundingClientRect().top, room = Math.min(innerHeight, hero.getBoundingClientRect().bottom) - top - 12;
+      if(pickEl.offsetHeight > room) pickEl.style.maxHeight = Math.max(220, room) + "px";
+      if(pickEl.getBoundingClientRect().bottom > innerHeight) pickEl.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});
+    }
+  }
+  pickBtn.addEventListener("click", e => { e.stopPropagation(); showPick(pickEl.hidden); });
+  $("wxPickX").addEventListener("click", e => { e.stopPropagation(); showPick(false); pickBtn.focus({preventScroll:true}); });
+  document.addEventListener("pointerdown", e => { if(!pickEl.hidden && !pickEl.contains(e.target) && !pickBtn.contains(e.target)) showPick(false); });
+  addEventListener("keydown", e => { if(e.key === "Escape" && !pickEl.hidden){ e.stopImmediatePropagation(); showPick(false); pickBtn.focus({preventScroll:true}); } }, true);
+  $("launchTg").addEventListener("click", e => {
+    e.stopPropagation();
+    const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
+    e.currentTarget.setAttribute("aria-pressed", String(on));
+    if(launchLayer) on ? launchLayer.addTo(LM) : launchLayer.remove();
+  });
+  const TERRAIN = 'Terrain <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md">Mapzen</a>';
+  let terrainOn = false;
+  function wxKey(l, name){   // "Wind 0 ▬▬▬ 40+ mph"
+    const sc = SCALE[l], st = sc.stops, lo = st[0][0], hi = sc.max != null ? sc.max : st[st.length - 1][0], f = v => String(+v.toFixed(1)).replace("-", "−");
+    const grad = st.filter(([v]) => v <= hi).map(([v, c]) => "rgb(" + c.map(Math.round).join(",") + ") " + ((v - lo) / (hi - lo) * 100).toFixed(1) + "%").join(",");
+    return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>" + f(lo) + (sc.unit === "°C" ? "°" : "") + '</span><i style="background:linear-gradient(to right,' + grad + ')"></i><span>' + f(hi) + (sc.max != null ? "+" : "") + (sc.unit === "°C" ? "°C" : " " + sc.unit) + "</span>";
+  }
+  function setLayer(l, first){
+    layer = l;
+    if(LM && terrainOn !== (l === "temp")){ terrainOn = l === "temp"; LM.attributionControl[terrainOn ? "addAttribution" : "removeAttribution"](TERRAIN); }
+    segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
+    const b = segBtns.find(x => x.dataset.l === l);
+    $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML;
+    $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
+    const nm = b.querySelector(".am-tn").textContent;
+    $("wxKeyPick").innerHTML = wxKey(l); $("wxKeyBar").innerHTML = wxKey(l, nm);
+    const noKey = l === "wind" || l === "gusts";   // no colours on the map for these, so nothing to explain
+    $("wxKeyPick").hidden = $("wxKeyBar").hidden = noKey;
+    const kp = [...$("wxKeyPick").querySelectorAll("span")].map(e => e.textContent);
+    [$("wxKeyPick"), $("wxKeyBar")].forEach(k => k.setAttribute("aria-label", nm + " colour key, " + kp[0] + " to " + kp[1]));
+    if(!first){ resetWx(); if(hoverAt) showHover(); if(ptAt && !$("amSheet").hidden) showPoint(ptAt); }
+  }
+  segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
+  setLayer(layer, true);
+  // Rebuilt whenever the map moves or new readings arrive: the sea (or the temperature colours), any numbers, and the motion drawn over it.
+  // Wind: streams of particles. Gusts: faster, longer streaks, warmer for stronger gusts.
+  // Waves: crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
+  const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
+  let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null, seaPath = null;
   let maskKey = "", maskVal = null;
   function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
     const p = unitPx(), key = [cols, rows, p.x0, p.y0, p.sx, p.sy].map(v => Math.round(v * 100)).join();
@@ -1708,13 +1874,118 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     maskKey = key; maskVal = sea;
     return sea;
   }
-  function tempAt(lat, lon){ return sample(lat, lon, "temp"); }
+  /* Hills on the Temperature layer, as on Ventusky: shaded as if lit from the north-west, and a little cooler the higher they are.
+     Each forecast is for its own spot's height, so it is taken down to sea level, blended across the map and brought back up to
+     the height of every hill and valley. Heights come from the free Terrain Tiles on AWS (Mapzen's Terrarium tiles:
+     metres = red × 256 + green + blue ÷ 256 − 32768), fetched only while Temperature is showing. */
+  const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/";
+  const demTiles = new Map(), demWait = new Set();
+  let demCx = null, demT = 0, relief = null, tLut = null;
+  function demTile(z, x, y, get){   // a tile's heights, or null while it's on its way (each is asked for once)
+    const k = z + "/" + x + "/" + y, t = demTiles.get(k);
+    if(t){ demTiles.delete(k); demTiles.set(k, t); return t; }   // kept in the order they were used, so the oldest go first
+    if(!get || demWait.has(k) || !window.createImageBitmap) return null;
+    demWait.add(k);
+    fetch(DEM + k + ".png").then(r => r.ok ? r.blob() : Promise.reject())
+      .then(b => createImageBitmap(b, {colorSpaceConversion:"none", premultiplyAlpha:"none"}).catch(() => createImageBitmap(b)))   // the heights exactly as stored
+      .then(bm => {
+        demCx = demCx || Object.assign(document.createElement("canvas"), {width:256, height:256}).getContext("2d", {willReadFrequently:true});
+        demCx.clearRect(0, 0, 256, 256); demCx.drawImage(bm, 0, 0); if(bm.close) bm.close();
+        const px = demCx.getImageData(0, 0, 256, 256).data, a = new Float32Array(65536);
+        for(let i = 0, j = 0; i < 65536; i++, j += 4) a[i] = Math.max(0, px[j] * 256 + px[j + 1] + px[j + 2] / 256 - 32768);   // the sea, and land below it, as flat
+        demTiles.set(k, a); demWait.delete(k);
+        if(demTiles.size > 36) demTiles.delete(demTiles.keys().next().value);
+        clearTimeout(demT); demT = setTimeout(() => { if(layer === "temp") resetWx(); }, 150);   // redrawn once a batch is in
+      }).catch(() => {});   // not asked for again: that part of the map just stays flat
+    return null;
+  }
+  function reliefNow(){   // heights and shading across the view, in the tiles' own pixels; kept while the view and the tiles stay the same
+    const Z = LM.getZoom(), o = LM.project(LM.containerPointToLatLng([0, 0]), Z);
+    // tiles about one and a half to three screen pixels to each of theirs, but no more than 12 of them for the view
+    let zd = Math.max(4, Math.min(11, Math.floor(Z - .5))), f, x0, y0, w, ht;
+    for(;; zd--){
+      f = Math.pow(2, zd - Z); x0 = Math.floor(o.x * f) - 1; y0 = Math.floor(o.y * f) - 1; w = Math.ceil(vw * f) + 3; ht = Math.ceil(vh * f) + 3;
+      if(zd <= 4 || (((x0 + w - 1) >> 8) - (x0 >> 8) + 1) * (((y0 + ht - 1) >> 8) - (y0 >> 8) + 1) <= 12) break;
+    }
+    const n = 1 << zd, N = 256 * n, got = [];
+    for(let ty = Math.max(0, y0 >> 8); ty <= Math.min(n - 1, (y0 + ht - 1) >> 8); ty++) for(let tx = x0 >> 8; tx <= (x0 + w - 1) >> 8; tx++){
+      let t = demTile(zd, tx, ty, true), up = 0;
+      while(!t && up < 3){ up++; t = demTile(zd - up, tx >> up, ty >> up, false); }   // still coming: a coarser one meanwhile, if there is one
+      got.push([tx, ty, t, t ? up : 9]);
+    }
+    const key = [zd, x0, y0, w, ht, got.map(g => g[3]).join("")].join();
+    if(relief && relief.key === key){ relief.o = o; relief.f = f; return relief; }
+    const E = new Float32Array(w * ht).fill(NaN);   // heights in metres (NaN: not known yet)
+    for(const [tx, ty, t, up] of got){
+      if(!t) continue;
+      const ax = Math.max(x0, tx * 256), bx = Math.min(x0 + w, tx * 256 + 256), ay = Math.max(y0, ty * 256), by = Math.min(y0 + ht, ty * 256 + 256);
+      if(!up) for(let y = ay; y < by; y++){ const s = (y - ty * 256) * 256 - tx * 256, d = (y - y0) * w - x0; for(let x = ax; x < bx; x++) E[d + x] = t[s + x]; }
+      else {   // the coarser tile, blended up to size
+        const sc = 1 << up, ox = (tx >> up) * 256, oy = (ty >> up) * 256;
+        for(let y = ay; y < by; y++){
+          const fy = Math.min(255, Math.max(0, (y + .5) / sc - .5 - oy)), i = Math.min(254, fy | 0), v = fy - i;
+          for(let x = ax; x < bx; x++){
+            const fx = Math.min(255, Math.max(0, (x + .5) / sc - .5 - ox)), j = Math.min(254, fx | 0), u = fx - j, k = i * 256 + j;
+            E[(y - y0) * w + x - x0] = (t[k] * (1 - u) + t[k + 1] * u) * (1 - v) + (t[k + 256] * (1 - u) + t[k + 257] * u) * v;
+          }
+        }
+      }
+    }
+    // the shading: 1 on the flat, lighter on slopes facing the north-west light, darker on those facing away. Gentle, as these
+    // are low hills; the slopes are steepened a little more when zoomed out, where the tiles smooth them over
+    const S = new Float32Array(w * ht).fill(1), ex = 1.8 * Math.pow(2, (10 - zd) * .25), latAt = y => Math.atan(Math.sinh(Math.PI * (1 - 2 * (y0 + y + .5) / N)));
+    for(let y = 1; y < ht - 1; y++){
+      const q = ex / (2 * 40075016.686 / N * Math.cos(latAt(y)));   // metres across a tile pixel, at this latitude
+      for(let x = 1, i = y * w + 1; x < w - 1; x++, i++){
+        const gx = (E[i + 1] - E[i - 1]) * q, gy = (E[i + w] - E[i - w]) * q, g2 = gx * gx + gy * gy;   // rising to the east, and to the south
+        if(!(g2 > 0)) continue;   // flat, or not known yet
+        S[i] = Math.min(1.15, Math.max(.72, 1 + .7 * ((.5 * gx + .5 * gy + .7071) / Math.sqrt(1 + g2) / .7071 - 1)));
+      }
+    }
+    // where each tile pixel falls among the forecast readings
+    const cl = (v, m) => Math.min(Math.max(v, 0), m - 1.001), gi = new Int32Array(ht), gv = new Float32Array(ht), gj = new Int32Array(w), gu = new Float32Array(w);
+    for(let y = 0; y < ht; y++){ const fy = cl((latAt(y) * 180 / Math.PI - GLAT[0]) / GDLAT, GLAT.length); gi[y] = fy | 0; gv[y] = fy - gi[y]; }
+    for(let x = 0; x < w; x++){ const fx = cl(((x0 + x + .5) / N * 360 - 180 - GLON[0]) / GDLON, GLON.length); gj[x] = fx | 0; gu[x] = fx - gj[x]; }
+    const cv = document.createElement("canvas"); cv.width = w; cv.height = ht;
+    const cx = cv.getContext("2d");
+    return relief = {key, zd, f, o, x0, y0, w, ht, E, S, gi, gv, gj, gu, cv, cx, img:cx.createImageData(w, ht)};
+  }
+  function drawTemp(h){   // the temperature in colour, cooler up the hills and shaded like them
+    const R = reliefNow(), {w, ht, E, S, gi, gv, gj, gu} = R, px = R.img.data, nO = GLON.length;
+    const a = grid && grid.tsl, b = grid && grid.temp, t0 = sample(50.9, 1.5, "temp");
+    if(!tLut){ tLut = new Uint8Array(751 * 3); for(let i = 0; i <= 750; i++) tLut.set(colour(i / 10 - 30, SCALE.temp.stops).map(Math.round), i * 3); }   // -30 to 45°C
+    for(let y = 0, k = 0; y < ht; y++){
+      const i = gi[y], v = gv[y];
+      for(let x = 0; x < w; x++, k++){
+        const e = E[k], A = e === e && a ? a : b;
+        let t = t0;
+        if(A){ const p = i * nO + gj[x], u = gu[x]; t = ((A[p] || 0) * (1 - u) + (A[p + 1] || 0) * u) * (1 - v) + ((A[p + nO] || 0) * (1 - u) + (A[p + nO + 1] || 0) * u) * v; if(A === a) t -= LAPSE * e; }
+        const c = Math.max(0, Math.min(750, Math.round((t + 30) * 10))) * 3, sh = S[k], q = k * 4;
+        px[q] = tLut[c] * sh; px[q + 1] = tLut[c + 1] * sh; px[q + 2] = tLut[c + 2] * sh; px[q + 3] = 255;
+      }
+    }
+    R.cx.putImageData(R.img, 0, 0);
+    h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
+    h.setTransform(dpr / R.f, 0, 0, dpr / R.f, dpr * (R.x0 / R.f - R.o.x), dpr * (R.y0 / R.f - R.o.y));   // the tile pixels, scaled onto the screen
+    h.drawImage(R.cv, 0, 0); h.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  function tempAt(lat, lon){   // the temperature at a spot, at its own height once that's known
+    const R = relief;
+    if(R && grid && grid.tsl){
+      const p = LM.project([lat, lon], R.zd), x = p.x - .5 - R.x0, y = p.y - .5 - R.y0, i = Math.floor(y), j = Math.floor(x);
+      if(i >= 0 && j >= 0 && i < R.ht - 1 && j < R.w - 1){
+        const u = x - j, v = y - i, k = i * R.w + j, E = R.E, e = (E[k] * (1 - u) + E[k + 1] * u) * (1 - v) + (E[k + R.w] * (1 - u) + E[k + R.w + 1] * u) * v;
+        if(e === e) return sample(lat, lon, "tsl") - LAPSE * e;
+      }
+    }
+    return sample(lat, lon, "temp");
+  }
   let heatPad = 0;
   function resetWx(keep){   // keep: a new hour on the slider, so the canvases and the moving trails stay as they are
     if(!LM) return;
     // wind, gusts and waves are softened by the browser (.wx-heat.soft), not redrawn blurred each time; their colour
     // runs half a reading past the edges, so the softening doesn't fade the map's edges
-    const soft = true, pad = CELL / 2;
+    const soft = layer !== "temp" && layer !== "rain", pad = soft ? CELL / 2 : 0;
     const sz = LM.getSize(), d = Math.min(2, devicePixelRatio || 1), same = keep && sz.x === vw && sz.y === vh && d === dpr && pad === heatPad && parts.length;
     vw = sz.x; vh = sz.y; if(!vw || !vh) return;
     dpr = d; heatPad = pad;
@@ -1723,8 +1994,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     else [heat, flow].forEach(c => { const e = c === heat ? pad : 0; c.width = (vw + 2 * e) * dpr; c.height = (vh + 2 * e) * dpr; c.style.width = vw + 2 * e + "px"; c.style.height = vh + 2 * e + "px"; });
     L.DomUtil.setPosition(heat, tl.subtract([pad, pad])); L.DomUtil.setPosition(flow, tl);
     const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
-    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n);
-    const mode = "waves", sea = seaMask(cols, rows);
+    const u = new Float32Array(n), v = new Float32Array(n), m = new Float32Array(n), val = new Float32Array(n);
+    const mode = layer === "waves" ? "waves" : layer === "gusts" ? "gusts" : "wind", sea = seaMask(cols, rows);
     // the grid is regular in latitude and longitude, so each column and row is looked up once
     const lat = Float64Array.from({length:rows}, (_, r) => LM.containerPointToLatLng([0, r * CELL]).lat), lon = Float64Array.from({length:cols}, (_, c) => LM.containerPointToLatLng([c * CELL, 0]).lng);
     for(let r = 0; r < rows; r++) for(let c = 0; c < cols; c++){
@@ -1734,12 +2005,66 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         let du = wu / (ws || 1), dv = wv / (ws || 1);
         if(ws < 4){ const su2 = sample(la, lo, "wdu"), sv2 = sample(la, lo, "wdv"), w2 = Math.hypot(su2, sv2) || 1, t = ws / 4; du = du * t + su2 / w2 * (1 - t); dv = dv * t + sv2 / w2 * (1 - t); const q = Math.hypot(du, dv) || 1; du /= q; dv /= q; }
         u[k] = du; v[k] = dv; m[k] = sample(la, lo, "wave");
-      }
+      } else if(mode === "gusts"){
+        const g = sample(la, lo, "gust"); u[k] = wu / (ws || 1) * g; v[k] = wv / (ws || 1) * g; m[k] = g;
+      } else { u[k] = wu; v[k] = wv; m[k] = ws; }
+      val[k] = layer === "rain" ? sample(la, lo, "rain") : m[k];
     }
     fld = {cols, rows, u, v, m, sea, mode};
     const h = heat.getContext("2d"), p = unitPx(), e = pad * dpr;
     heat.classList.toggle("soft", soft);
-    const area = vw * vh, count = Math.round(Math.min(innerWidth < 600 ? 280 : 560, area / 2100));
+    if(layer === "temp"){   // temperature in colour over land and sea, as on Ventusky: blended smoothly between the readings, with the hills
+      drawTemp(h);
+      // the sea a shade darker than the land, so the coast still shows through the colour
+      seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
+      h.filter = "blur(" + dpr + "px)"; h.fillStyle = "rgba(96,64,0,.22)";   // deeper and more olive, like Ventusky's sea
+      h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
+      h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
+    }
+    if(layer === "wind" || layer === "gusts" || layer === "rain"){   // the same blue sea as Waves, the land left clear grey
+      seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
+      h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
+      h.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
+      // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
+      // Wind and gusts get only the blue sea, with the moving streaks on top
+      const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
+      const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
+      for(let k = 0; k < n; k++){
+        const x = val[k], c = colour(x, st), q = k * 4;
+        px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
+        // rain is see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
+        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : 255;
+      }
+      sx.putImageData(img, 0, 0);
+      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = soft ? "none" : "blur(" + (2 * dpr) + "px)";   // rain: its numbers stay sharp
+      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
+      h.filter = "none";
+      if(layer === "waves"){   // no waves on land: the colour stops at the coast
+        h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
+        h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
+        h.globalCompositeOperation = "source-over"; h.filter = "none";
+      }
+      h.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    const LABEL = {rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm"}[layer];
+    if(LABEL){   // rain, written across the map every so often (temperature is shown in colour)
+      const gap = vw < 600 ? 120 : 170, fs = 13;
+      h.save(); h.scale(dpr, dpr);
+      h.font = "700 " + fs + "px " + getComputedStyle(document.body).fontFamily; h.textAlign = "center"; h.textBaseline = "middle";
+      h.lineJoin = "round"; h.lineWidth = 3.5; h.strokeStyle = "rgba(0,0,0,.6)"; h.fillStyle = "#fff";
+      const mr = $("lmap").getBoundingClientRect(), keep = coverRects()
+        .concat([$("straitLbl"), ...document.querySelectorAll(".am-town > *, .am-area > span")].filter(e => e && e.getClientRects().length).map(e => e.getBoundingClientRect()));   // not under the controls or the place names
+      const under = (x, y) => keep.some(cr => x > cr.left - mr.left - 24 && x < cr.right - mr.left + 24 && y > cr.top - mr.top - 14 && y < cr.bottom - mr.top + 14);
+      for(let y = gap * .6; y < vh; y += gap) for(let x = gap * (Math.round(y / gap) % 2 ? .5 : 1); x < vw; x += gap){
+        if(under(x, y)) continue;
+        const ll = LM.containerPointToLatLng([x, y]), t = LABEL(sample(ll.lat, ll.lng, SCALE[layer].key)); if(!t) continue;
+        h.strokeText(t, x, y); h.fillText(t, x, y);
+      }
+      h.restore();
+    }
+    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 850));
     if(!same){
       parts = Array.from({length:count}, () => spawn({}));
       parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
@@ -1773,9 +2098,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup(); ptAt = ll;
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + '<div class="wx-key">' + wxKey("waves", "Map colours") + "</div>";
+      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + (layer === "wind" || layer === "gusts" ? "" : '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>");
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
-      if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
+      if(!isFull() && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
     }
     // keep the card clear of the controls at the top
@@ -1783,16 +2108,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
   let pin = null;
-  // With a mouse, the map reading follows the pointer and shows the current weather
+  // With a mouse, the layer's reading follows the pointer: wind with its direction, gusts, wave height, temperature or rain
   let hoverAt = null, hoverRaf = 0;
   function showHover(){
     hoverRaf = 0;
     const box = $("amHover"), e = hoverAt;
     if(!e || touchOnly || !LM){ box.classList.add("off"); return; }
-    const ll = e.latlng, g = k => sample(ll.lat, ll.lng, k);
-    const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, val = Math.round(Math.hypot(u, v));
-    const extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + " · gusts " + Math.round(g("gust")) + " mph</em>";
-    box.innerHTML = "<b>" + val + '</b><small> mph</small>' + extra;
+    const ll = e.latlng, sc = SCALE[layer], g = k => sample(ll.lat, ll.lng, k);
+    let val, unit = sc.unit, extra = "";
+    if(layer === "wind"){
+      const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360; val = Math.round(Math.hypot(u, v));
+      extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + "</em>";
+    }
+    else if(layer === "waves"){ if(!atSea(ll)){ box.innerHTML = "<em>On land</em>"; place(); return; } val = g("wave").toFixed(1); }
+    else if(layer === "rain"){ val = g("rain").toFixed(1); }
+    else val = Math.round(layer === "temp" ? tempAt(ll.lat, ll.lng) : g(sc.key));
+    const col = colour(+val, sc.stops).map(Math.round).join(",");
+    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
     place();
     function place(){
       box.classList.remove("off");
@@ -1811,7 +2143,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function spawn(p){
     // waves only start at sea: a few tries for a spot on the water
     for(let i = 0; i < 8; i++){ p.x = Math.random() * vw; p.y = Math.random() * vh; if(!fld || fld.mode !== "waves" || fld.sea[cellAt(p.x, p.y)]) break; }
-    p.age = 0; p.max = 160 + Math.random() * 140; p.cap = Math.random(); return p;
+    p.age = 0; p.max = fld && fld.mode === "waves" ? 140 + Math.random() * 120 : 60 + Math.random() * 90; p.cap = Math.random(); return p;
   }
   function vel(x, y, a){
     const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
@@ -1839,9 +2171,38 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
+  /* Wind and gusts, drawn straight onto the clear map, as on earth.nullschool and Ventusky: thousands of fine streaks flowing with the
+     wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
+     wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
+  const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
+  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,190,90],[255,96,96]];   // white, as the waves; amber and red for strong gusts
+  const FLOW_A = [.45, .65, .85, .95, .95];
+  function stepStreaks(c, dt, gust){
+    c.globalCompositeOperation = "destination-in";
+    c.fillStyle = "rgba(0,0,0," + Math.pow(gust ? .968 : .958, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // older trails fade
+    c.globalCompositeOperation = "source-over"; c.lineCap = "round"; c.lineJoin = "round";
+    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.6 : 1.35) * dt;
+    for(const p of parts){
+      const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), s = vel(p.x, p.y, fld.m), nx = p.x + u * sp, ny = p.y + v * sp;
+      p.age += dt;
+      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
+      const t = p.age / p.max, life = Math.min(1, t * 5, (1 - t) * 4);   // quick fade in, gentle fade out
+      const band = gust ? (s >= 40 ? 4 : s >= 28 ? 3 : s >= 15 ? 2 : s >= 7 ? 1 : 0) : (s >= 20 ? 2 : s >= 9 ? 1 : 0);
+      const P = paths[band * L + Math.min(L - 1, life * L | 0)]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
+      p.x = nx; p.y = ny;
+    }
+    c.strokeStyle = "rgba(20,30,50,.10)"; c.lineWidth = 3; for(const P of paths) c.stroke(P);   // a faint dark edge, so white shows on the grey land too
+    for(let b = 0; b < 5; b++) for(let l = 0; l < L; l++){
+      const k = FLOW_INK[b]; c.strokeStyle = "rgba(" + k + "," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
+      c.lineWidth = gust ? 1.4 + (b > 2 ? .3 : 0) : 1.15 + b * .15; c.stroke(paths[b * L + l]);
+    }
+  }
+  const stepGusts = (c, dt) => stepStreaks(c, dt, true), stepWind = (c, dt) => stepStreaks(c, dt, false);
   function stepFlow(dt){
     if(!fld || !flow) return;
-    const c=flow.getContext("2d"); c.setTransform(dpr,0,0,dpr,0,0); stepWaves(c,dt);
+    const c = flow.getContext("2d");
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    (fld.mode === "waves" ? stepWaves : fld.mode === "gusts" ? stepGusts : stepWind)(c, dt);
   }
   // Runs only while the Channel is on screen and the tab is visible; movement is per time, not per frame, so 120 Hz screens match 60 Hz ones
   let raf = 0, heroOn = true, prevT = 0;
@@ -1861,7 +2222,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   fitMap(); fitSz = hero.clientWidth + "x" + hero.clientHeight;
   // Small or busy phones: the map card grows just enough that the big number never runs into the weather buttons
   function fitHero(){
-    
+    if(hero.classList.contains("full")) return;
     const was = hero.style.minHeight; hero.style.minHeight = "";
     // phones keep about 120px of open map between them, for the strait, the launch beaches and the boats
     const gap = Math.ceil(ctlBottom() + (hero.clientWidth < 600 ? 120 : 12) - hero.querySelector(".hero-in").offsetTop);
@@ -1919,7 +2280,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   addEventListener("scroll", placeTip, {passive:true});
 
   /* ---------------------------------------------------- data */
-  let days = [], meta = null;
+  let days = [], meta = null, statusMeta = null;
   let allFor = null, allOut = null;
   function allDays(){   // every calendar day, gaps as zero (worked out once per set of figures)
     if(allFor === days) return allOut;
@@ -1931,6 +2292,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   const sum = (a, k) => a.reduce((s, d) => s + (d[k] || 0), 0);
 
+  function renderFreshness(st){
+    const el = $("heroFresh"); if(!el) return;
+    const at = st && (st.dataAt || st.checkedAt);
+    if(!at){ el.hidden = true; return; }
+    const d = new Date(at), age = Date.now() - d.getTime();
+    const fresh = age >= 0 && age < 36 * 60 * 60 * 1000;
+    const label = d.toLocaleString("en-GB", {day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
+    el.hidden = false; el.classList.toggle("stale", !fresh); el.classList.remove("failed");
+    el.querySelector("span").textContent = fresh ? "Data checked " + label : "Last data check " + label;
+  }
   function renderHero(){
     const last = days[days.length-1];
     $("heroKicker").hidden = true;   // the date goes in the line under the number instead
@@ -2056,13 +2427,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The site's heartbeat (status.json) says when new or revised figures were published: checked every
   // 2 minutes while new figures are awaited, otherwise every 30. Conditions refresh every 30 minutes.
   const MIN = 6e4, openedAt = Date.now();
-  let statusAt = 0, wxAt = 0, today = ukToday(), wxMarineFailed = false;
+  let statusAt = 0, wxAt = 0, today = ukToday();
   async function checkStatus(){
     statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
+      statusMeta = st;
+      renderFreshness(st);
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){ useData(await getJSON("data.json")); renderAll(); loadExtras(); }
-    }catch(e){ /* try again next time */ }
+    }catch(e){ renderFreshness({dataAt: meta && meta.checkedAt}); }
+    renderInsight();
     liveUi();
   }
   function tick(){
@@ -2080,6 +2454,43 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(Date.now() - openedAt > 180 * MIN) return location.reload();   // picks up any newer version of the page
     tick();
   });
+
+  function renderInsight(){
+    const all = allDays(); if(!all.length) return;
+    const last = all[all.length-1], wk = all.slice(-7), prev = all.slice(-14,-7);
+    const people = sum(wk,"migrants"), boats = sum(wk,"boats"), prevPeople = sum(prev,"migrants"), prevBoats = sum(prev,"boats");
+    const ratio = boats ? people / boats : 0, prevRatio = prevBoats ? prevPeople / prevBoats : 0;
+    const pct = prevPeople ? Math.round((people / prevPeople - 1) * 100) : null;
+    const ratioPct = prevRatio ? Math.round((ratio / prevRatio - 1) * 100) : null;
+    const peak = wk.reduce((a,b) => b.migrants > a.migrants ? b : a, wk[0]);
+    const swing = wk.slice(1).reduce((best,d,i) => { const before = wk[i], delta = d.migrants - before.migrants; return Math.abs(delta) > Math.abs(best.delta) ? {delta,date:d.date} : best; }, {delta:0,date:last.date});
+    $("insightPeriod").textContent = dShort.format(parse(wk[0].date)) + " to " + dShort.format(parse(last.date));
+    $("insightTitle").textContent = pct == null ? "The latest week at a glance" : pct === 0 ? "A similar week to the one before" : (pct > 0 ? "A busier week" : "A quieter week") + " than the one before";
+    $("insightSummary").innerHTML = "The latest 7 days recorded <b><span id='insightPeopleInline'>0</span> people</b> in <b><span id='insightBoatsInline'>0</span> boats</b>" + (pct != null ? ", " + (pct > 0 ? "up " : pct < 0 ? "down " : "unchanged at ") + (pct ? Math.abs(pct) + "%" : "") + " from the previous 7 days" : "") + ". The busiest day was <b>" + dShort.format(parse(peak.date)) + "</b> with <b><span id='insightPeakInline'>0</span> people</b>.";
+    countUp($("insightPeopleInline"), people);
+    countUp($("insightBoatsInline"), boats);
+    countUp($("insightPeakInline"), peak.migrants);
+    const pctSpan = pct == null ? "" : '<span class="insight-delta ' + (pct > 0 ? "up" : pct < 0 ? "down" : "") + '">' + (pct > 0 ? "↑ " : pct < 0 ? "↓ " : "→ ") + Math.abs(pct) + "%</span>";
+    const ratioSpan = ratioPct == null ? "" : '<span class="insight-delta ' + (ratioPct > 0 ? "up" : ratioPct < 0 ? "down" : "") + '">' + (ratioPct > 0 ? "↑ " : ratioPct < 0 ? "↓ " : "→ ") + Math.abs(ratioPct) + "%</span>";
+    const swingLabel = (swing.delta > 0 ? "↑ " : swing.delta < 0 ? "↓ " : "→ ") + fmt(Math.abs(swing.delta));
+    $("insightStats").innerHTML = [
+      ['insightPeople', "People this week", pctSpan],
+      ['insightBoats', "Boats this week", ""],
+      ['insightRatio', "People per boat", ratioSpan],
+      ['insightSwing', "Biggest daily move · " + dShort.format(parse(swing.date)), ""]
+    ].map(x => '<div class="insight-stat"><b class="num"' + (x[0] === "insightSwing" ? '><span id="insightSwingArrow">' + (swing.delta < 0 ? "↓" : swing.delta > 0 ? "↑" : "→") + '</span> <span id="insightSwing">0</span>' : ' id="' + x[0] + '">0') + '</b><span>' + x[1] + '</span>' + x[2] + '</div>').join("");
+    countUp($("insightPeople"), people);
+    countUp($("insightBoats"), boats);
+    if(ratio) countUp($("insightRatio"), ratio, "", 1); else $("insightRatio").textContent = "–";
+    countUp($("insightSwing"), Math.abs(swing.delta));
+    const status = statusMeta || {dataAt:meta && meta.checkedAt, latest:last.date};
+    const latest = status.latest || last.date, yesterday = new Date(Date.parse(ukToday() + "T00:00:00Z") - DAY).toISOString().slice(0,10);
+    const current = latest >= yesterday;
+    const rs = $("reportStatus"); rs.classList.toggle("wait", !current); rs.classList.remove("bad");
+    rs.querySelector("span").textContent = current ? "Current through " + dShort.format(parse(latest)) : "Awaiting figures after " + dShort.format(parse(latest));
+    const at = status.dataAt || status.checkedAt || meta.checkedAt;
+    $("reportMeta").textContent = at ? "Last successful data build: " + new Date(at).toLocaleString("en-GB", {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + ". The site checks GOV.UK every 15 minutes during the daily release window." : "The site checks GOV.UK every 15 minutes during the daily release window.";
+  }
 
   function renderGlance(){
     const all = allDays(), last = all[all.length-1], yr = last.date.slice(0,4);
@@ -2190,7 +2601,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   /* ---------------------------------------------------- Stocks-style chart */
   // the day picked is kept by its date, so it stays put when the figures refresh or the range changes
-  let range = 90, sel = null, selDate = null, geo = null;
+  let range = 30, metric = "people", sel = null, selDate = null, geo = null;
   const dShortWF = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",...UTC});
   const dShortW = iso => dShortWF.format(parse(iso)).replace(",", "");   // Sat 14 Feb 2026
   // draws the chart for a new range, width or figures; picking a day only moves the cursor (setSel)
@@ -2201,8 +2612,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const m = {t:14, r:6, b:26, l:38}, iw = W - m.l - m.r, ih = H - m.t - m.b;
     // long ranges are smoothed to a centred average (a week for a year, four weeks for All) so the shape reads clearly
     const per = data.length / iw, smooth = data.length <= 120 ? 1 : per > 3 ? 28 : 7, hw = smooth >> 1;
-    const run = [0]; data.forEach((d, i) => run.push(run[i] + d.migrants));   // running sum, so each average is one subtraction
-    const vals = data.map((d, i) => { if(smooth === 1) return d.migrants; const lo = Math.max(0, i - hw), hi = Math.min(data.length, i - hw + smooth); return (run[hi] - run[lo]) / (hi - lo); });
+    const metricName = metric === "boats" ? "boats" : metric === "ratio" ? "people per boat" : "people";
+    const runPeople = [0], runBoats = [0]; data.forEach((d, i) => { runPeople.push(runPeople[i] + (d.migrants || 0)); runBoats.push(runBoats[i] + (d.boats || 0)); });
+    const vals = data.map((d, i) => {
+      if(smooth === 1) return metric === "boats" ? (d.boats || 0) : metric === "ratio" ? (d.boats ? d.migrants / d.boats : 0) : (d.migrants || 0);
+      const lo = Math.max(0, i - hw), hi = Math.min(data.length, i - hw + smooth), count = hi - lo;
+      if(metric === "boats") return (runBoats[hi] - runBoats[lo]) / count;
+      if(metric === "ratio") { const people = runPeople[hi] - runPeople[lo], boats = runBoats[hi] - runBoats[lo]; return boats ? people / boats : 0; }
+      return (runPeople[hi] - runPeople[lo]) / count;
+    });
     const top = Math.max(...vals, 10), st = niceStep(top / 4), nice = Math.ceil(top / st) * st;
     const x = i => m.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw), y = v => m.t + ih - v / nice * ih;
     // no more than about two points a pixel: the rest can't be seen and only slow the drawing
@@ -2211,7 +2629,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     vals.forEach((v, i) => { if(i % every && i !== vals.length - 1) return; d += (d ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); });
     a = d + "L" + x(vals.length - 1).toFixed(1) + " " + (m.t + ih) + "L" + x(0).toFixed(1) + " " + (m.t + ih) + "Z";
     let g = "";
-    for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (m.l - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + (v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : v) + "</text>"; }
+    const axis = v => metric === "ratio" ? (v >= 10 ? Math.round(v) : Math.round(v * 10) / 10) : v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : Math.round(v);
+    for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (m.l - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + axis(v) + "</text>"; }
     const bars = smooth === 1, slot = iw / data.length, xc = bars ? i => m.l + (i + .5) * slot : x;
     if(range && range <= 90){
       const ticks = 5; for(let k = 0; k < ticks; k++){ const i = Math.round(k / (ticks - 1) * (data.length - 1));
@@ -2228,12 +2647,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let body;
     if(bars){
       const bw = Math.max(2, slot * .66), r = Math.min(bw / 2, 4);
-      body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const h = Math.max(dd.migrants ? 3 : 1.5, dd.migrants / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
-        return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
+      body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const v = vals[i], h = Math.max(v ? 3 : 1.5, v / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
+        return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (v ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
     } else body = '<path d="' + a + '" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
-    geo = {x: xc, y, data, vals, m, iw, ih, W, nice, smooth, bars};
-    const a0 = data[0].date, z0 = data[data.length-1].date;
-    box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
+    geo = {x: xc, y, data, vals, m, iw, ih, W, nice, smooth, bars, metric};
+    const a0 = data[0].date, z0 = data[data.length-1].date, totalPeople = sum(data, "migrants"), totalBoats = sum(data, "boats"), totalRatio = totalBoats ? totalPeople / totalBoats : 0;
+    const totalLabel = metric === "boats" ? fmt(totalBoats) + " boats" : metric === "ratio" ? (totalRatio ? totalRatio.toFixed(1) : "0") + " people per boat" : fmt(totalPeople) + " people";
+    box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + metricName + ', ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + totalLabel + '"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
     setSel(sel);
     ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day" + (smooth > 1 ? " · line is a " + smooth + "-day average" : "");
@@ -2257,16 +2677,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   function readout(){
     const r = $("chartRead"), data = geo.data;
+    const showValue = v => metric === "ratio" ? (v ? v.toFixed(1) : "0") : fmt(Math.round(v));
+    const unit = metric === "boats" ? "boats" : metric === "ratio" ? "people per boat" : "people";
     if(sel != null && data[sel]){
-      // the day itself first, so it matches the calendar; on 1Y and All the average the line shows comes second
-      const dd = data[sel];
-      r.innerHTML = '<b class="num">' + fmt(dd.migrants) + '</b><span>' + dShortW(dd.date) + " · "
-        + (dd.migrants ? plural(dd.boats, "boat", "boats") : geo.smooth > 1 ? "no crossings" : "no crossings detected")
-        + (geo.smooth > 1 ? " · avg " + fmt(Math.round(geo.vals[sel])) + "/day" : "") + "</span>";
+      const dd = data[sel], raw = metric === "boats" ? dd.boats : metric === "ratio" ? (dd.boats ? dd.migrants / dd.boats : 0) : dd.migrants;
+      r.innerHTML = '<b class="num">' + showValue(raw) + '</b><span>' + dShortW(dd.date) + " · " + unit
+        + (metric !== "boats" && dd.boats ? " · " + plural(dd.boats, "boat", "boats") : "")
+        + (geo.smooth > 1 ? " · avg " + showValue(geo.vals[sel]) + "/day" : "") + "</span>";
     } else {
-      const a = data[0].date, z = data[data.length-1].date;
+      const a = data[0].date, z = data[data.length-1].date, people = sum(data, "migrants"), boats = sum(data, "boats"), ratio = boats ? people / boats : 0;
+      const total = metric === "boats" ? boats : metric === "ratio" ? ratio : people;
       const span = dShort.format(parse(a)) + (a.slice(0,4) === z.slice(0,4) ? "" : " " + a.slice(0,4)) + " – " + dShort.format(parse(z)) + " " + z.slice(0,4);
-      r.innerHTML = '<b class="num">' + fmt(sum(data, "migrants")) + '</b><span>people · ' + span + "</span>";
+      r.innerHTML = '<b class="num">' + showValue(total) + '</b><span>' + unit + ' · ' + span + "</span>";
     }
   }
   function animateLine(path){
@@ -2306,12 +2728,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     if(e.key === "Escape"){ pinned = false; setSel(null); }
   });
+  document.querySelectorAll("#metricSeg button").forEach(b => b.addEventListener("click", () => {
+    metric = b.dataset.m; sel = null; selDate = null; pinned = false;
+    document.querySelectorAll("#metricSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    animateLine(drawChart());
+  }));
   document.querySelectorAll("#rangeSeg button").forEach(b => b.addEventListener("click", () => {
     range = +b.dataset.r; sel = null; selDate = null; pinned = false;
     document.querySelectorAll("#rangeSeg button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
     animateLine(drawChart());
   }));
-
   /* ---------------------------------------------------- the year in squares */
   function drawHeat(){
     const sc = $("heatScroll"), again = $("heat").childElementCount > 0, keep = again && $("heat").querySelector("i.sel")?.dataset.d, fromRight = sc.scrollWidth - sc.scrollLeft;   // a refresh keeps the chosen day and the scroll
@@ -2520,11 +2946,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? LIKE[lvl] : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
-        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
+        + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + (wxMarineFailed ? ' · waves temporarily unavailable' : '') + "</div>"
         + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
-        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
+        + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.' + (wxMarineFailed ? ' Wave readings are temporarily unavailable, so the outlook is based on wind until the marine service responds.' : '') + '</p>'
         + '<p class="wp-foot wp-days-h">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
@@ -2538,15 +2964,17 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
+      // Keep the two weather providers independent. A temporary marine API failure must not blank the whole weather panel.
       const [wr, mr] = await Promise.allSettled([
         getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
         getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")
       ]);
-      if(wr.status !== "fulfilled") throw wr.reason || new Error("forecast unavailable");
+      if(wr.status !== "fulfilled") throw wr.reason || new Error("Forecast service unavailable");
       const w = wr.value;
       const marineOk = mr.status === "fulfilled" && mr.value && mr.value.current;
       const m = marineOk ? mr.value : {current:{wave_height:null}, hourly:{time:[],wave_height:[]}};
       wxMarineFailed = !marineOk;
+
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
@@ -2554,19 +2982,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
         return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
       const c = w.current;
-      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
-        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
+      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height, lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
     }catch(e){
-      wxMarineFailed = false;
       wxFailed = true;
-      wxAt = Date.now() - 28 * MIN;   // retry in about 2 minutes
+      wxMarineFailed = false;
+      wxAt = Date.now() - 28 * MIN;   // retry on the next tick in about two minutes
     }
     renderMapPop();
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
+  function renderAll(first){ renderHero(); renderInsight(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
@@ -2989,7 +3416,40 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     drawPat();
   }));
 
-  function drawHistory(){ drawRace(); drawQuiet(); drawPat(); }
+  // Keep long graph cards compact. If a graph genuinely grows beyond the comfortable height,
+  // turn it into an expandable card rather than letting it dominate the page.
+  function setupGraphCollapses(){
+    document.querySelectorAll(".graph-card").forEach(card => {
+      const existing = card.querySelector(":scope > .graph-toggle");
+      const limit = innerWidth < 760 ? 330 : 360;
+      const needs = card.scrollHeight > limit + 18;
+      if(needs && !existing){
+        card.classList.add("graph-collapsible");
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "graph-toggle";
+        b.setAttribute("aria-expanded","false");
+        b.textContent = "Show more";
+        b.addEventListener("click", () => {
+          const open = card.classList.toggle("graph-open");
+          b.setAttribute("aria-expanded", String(open));
+          b.firstChild.nodeValue = open ? "Show less" : "Show more";
+          if(open) card.scrollIntoView({block:"nearest",behavior:reduced ? "auto" : "smooth"});
+        });
+        card.appendChild(b);
+      } else if(!needs && existing){
+        existing.remove();
+        card.classList.remove("graph-collapsible","graph-open");
+      }
+    });
+  }
+  let graphCollapseRaf = 0;
+  addEventListener("resize", () => {
+    cancelAnimationFrame(graphCollapseRaf);
+    graphCollapseRaf = requestAnimationFrame(setupGraphCollapses);
+  });
+
+  function drawHistory(){ drawRace(); drawQuiet(); drawPat(); setupGraphCollapses(); }
 
   // Show a day on the Every day chart (from the calendar)
   function showOnChart(date){
@@ -3099,7 +3559,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       li.append(a, n, m, bar); ul.append(li);
     });
   }
-  async function loadPetitions(){ try{ extras.petitions = await getJSON("petitions.json"); }catch(e){ extras.petitions = null; } renderPetitions(); if(typeof fitBoxes==="function") fitBoxes(); }
+  async function loadPetitions(){ try{ extras.petitions = await getJSON("petitions.json"); }catch(e){ extras.petitions = null; } renderPetitions(); }
 
   function renderMain(){
     sorted = days; if(!sorted.length) return;
@@ -3112,50 +3572,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     if(sorted.length >= 365){ const vals = sorted.map(d => d.migrants).sort((a,b) => a-b); busyMin = Math.max(1, vals[Math.floor(vals.length*0.95)]); }
     drawCalendar(); drawDots(); drawHistory(); initCalc(); renderShare();
-    fitBoxes();
   }
-  function fitBoxes(){
-    document.querySelectorAll("main .card").forEach(card => {
-      const skip = card.classList.contains("b-ring") || card.classList.contains("race-card") || card.classList.contains("calc-card") || card.classList.contains("pat-card") || card.querySelector(".flip, .chart, .heat-scroll");
-      let btn = card.querySelector(":scope > .more-toggle");
-      if(skip){
-        card.classList.remove("can-more", "is-open");
-        if(btn) btn.remove();
-        return;
-      }
-      const open = card.classList.contains("is-open");
-      card.classList.remove("can-more");
-      const tall = card.scrollHeight > 460;
-      if(!tall){
-        card.classList.remove("is-open");
-        if(btn) btn.remove();
-        return;
-      }
-      card.classList.add("can-more");
-      if(open) card.classList.add("is-open");
-      if(!btn){
-        btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "more-toggle";
-        btn.innerHTML = '<span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-        btn.addEventListener("click", () => {
-          const on = card.classList.toggle("is-open");
-          btn.querySelector("span").textContent = on ? "Show less" : "Show more";
-          btn.setAttribute("aria-expanded", on ? "true" : "false");
-        });
-        card.append(btn);
-      }
-      btn.hidden = false;
-      btn.querySelector("span").textContent = card.classList.contains("is-open") ? "Show less" : "Show more";
-      btn.setAttribute("aria-expanded", card.classList.contains("is-open") ? "true" : "false");
-    });
-  }
-  addEventListener("resize", () => { clearTimeout(fitBoxes._t); fitBoxes._t = setTimeout(fitBoxes, 80); });
-  setTimeout(fitBoxes, 400);
-  setTimeout(fitBoxes, 1200);
   if("ResizeObserver" in window) [["dots", drawDots], ["race", drawRace], ["pat", drawPat]].forEach(([id, fn]) => {
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
+
 
   /* ---------------------------------------------------- go */
   function useData(d){
@@ -3176,7 +3597,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       if(meta.checkedAt && Date.now() - new Date(meta.checkedAt) > 120 * MIN) statusAt = 0;
       // drawn in short steps, so a tap straight after loading isn't kept waiting (same order as renderAll)
       const y = () => new Promise(r => window.scheduler && scheduler.yield ? scheduler.yield().then(r) : setTimeout(r, 0));
-      renderHero(); renderGlance(); await y();
+      renderHero(); renderFreshness({dataAt:meta.checkedAt}); renderInsight(); renderGlance(); await y();
       renderOtd(); await y();
       drawHeat(); await y();
       drawYears(); await y();
@@ -3194,7 +3615,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The daily update, "New figures incoming": from 12:00 UK time until the new figures are in, unless closed today (liveUi).
   // When both are on they take turns: the news for 15 seconds, then the daily update, then back. Pointing at the strip holds it.
   const NEWS_MAX_H = 3, NEWS_EACH = 7500, NEWS_TURN = 15000, FIG_TURN = 15000;
-  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
+  let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, supportOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
   const seenGet = () => { try{ return localStorage.getItem("newsSeen"); }catch(e){ return null; } };
   const agoShort = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4)); return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m / 60) + (Math.round(m / 60) === 1 ? " hour ago" : " hours ago"); };
   function newsRoom(){
@@ -3203,19 +3624,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(h !== roomH){ roomH = h; setTimeout(placeTowns, 600); }   // once the strip has dropped in, the place names keep clear of it
   }
   function setSlide(which, animate){
-    const on = $(which === "news" ? "newsSlide" : "figSlide"), off = $(which === "news" ? "figSlide" : "newsSlide");
+    const ids = {news:"newsSlide", fig:"figSlide", support:"supportSlide"};
+    const on = $(ids[which]);
+    const off = Object.keys(ids).filter(k => k !== which).map(k => $(ids[k]));
     slide = which; turnMs = storyMs = 0; animate = animate && !reduced;
     on.classList.remove("off", "leave", "in");
-    off.classList.remove("in"); off.classList.add("off"); off.classList.toggle("leave", animate);
+    for(const el of off){ el.classList.remove("in"); el.classList.add("off"); el.classList.toggle("leave", animate); }
     if(animate){ on.offsetWidth; on.classList.add("in"); }
-    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : "Daily update");
-    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : "Close the new figures notice for today");
+    $("news").setAttribute("aria-label", which === "news" ? "Breaking news" : which === "fig" ? "Daily update" : "Support Channel Crossings");
+    $("newsClose").setAttribute("aria-label", which === "news" ? "Dismiss breaking news" : which === "fig" ? "Close the new figures notice for today" : "Dismiss support message");
   }
   function stripUpdate(){
     const box = $("news");
-    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
-    if(!newsOn && !figOn){ box.hidden = true; slide = ""; newsRoom(); return; }
-    const want = slide === "news" && newsOn || slide === "fig" && figOn ? slide : newsOn ? "news" : "fig";
+    for(const [el, on] of [[$("newsSlide"), newsOn], [$("figSlide"), figOn], [$("supportSlide"), supportOn]]){ if(el.hidden && on) el.classList.remove("leave"); el.hidden = !on; }
+    if(!newsOn && !figOn && !supportOn){ box.hidden = true; slide = ""; newsRoom(); return; }
+    const want = slide === "news" && newsOn || slide === "fig" && figOn || slide === "support" && supportOn ? slide : newsOn ? "news" : figOn ? "fig" : "support";
     if(box.hidden || want !== slide) setSlide(want, !box.hidden);
     box.hidden = false; newsRoom();
   }
@@ -3272,48 +3695,19 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   $("newsClose").addEventListener("click", e => {
     e.stopPropagation();
     if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
-    else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
+    else if(slide === "fig"){ try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
+    else { try{ localStorage.setItem("supportClosed_v2", "1"); }catch(err){} supportOn = false; }
     stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
 
+  supportOn = (() => { try{ return localStorage.getItem("supportClosed_v2") !== "1"; }catch(e){ return true; } })();
   start(); loadWeather(); loadNews();
-  whenMapShown(loadGrid);   // phones: the 48-hour weather map waits until the map is on screen
+  stripUpdate();
+  requestAnimationFrame(() => requestAnimationFrame(setupGraphCollapses));
+  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
-</script>
-
-<script>
-(function(){
-  const q = document.getElementById("boxSearch"), hits = document.getElementById("boxHits");
-  const secs = [...document.querySelectorAll("main .cc-section")];
-  const items = secs.map(sec => ({sec, title:(sec.querySelector("h2")||{}).textContent || sec.getAttribute("aria-label") || "Section", text:(sec.innerText||"").toLowerCase()}));
-  function apply(v){
-    const n = v.trim().toLowerCase();
-    hits.innerHTML = "";
-    if(!n){ secs.forEach(s => s.classList.remove("is-dim")); hits.hidden = true; return; }
-    const matched = items.filter(it => it.title.toLowerCase().includes(n) || it.text.includes(n));
-    secs.forEach(s => s.classList.toggle("is-dim", !matched.some(it => it.sec === s)));
-    matched.slice(0,6).forEach(it => {
-      const li = document.createElement("li");
-      const b = document.createElement("button"); b.type = "button"; b.textContent = it.title.trim();
-      b.addEventListener("click", () => { q.value = it.title.trim(); apply(q.value); it.sec.scrollIntoView({behavior:"smooth", block:"start"}); });
-      li.append(b); hits.append(li);
-    });
-    hits.hidden = !matched.length;
-    if(!hits.hidden) place();
-  }
-  function place(){
-    const r = q.getBoundingClientRect();
-    hits.style.left = r.left + "px";
-    hits.style.width = r.width + "px";
-    hits.style.top = (r.bottom + 8) + "px";
-  }
-  document.body.append(hits);
-  q.addEventListener("input", () => apply(q.value));
-  addEventListener("scroll", () => { if(!hits.hidden) place(); }, true);
-  addEventListener("resize", () => { if(!hits.hidden) place(); });
-})();
 </script>
 </body>
 </html>
