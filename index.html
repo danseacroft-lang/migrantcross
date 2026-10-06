@@ -12,7 +12,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
 <link rel="preload" href="vendor/leaflet/leaflet.js" as="script">
-<meta name="description" content="164 people crossed the Channel in small boats on Sat 3 October. 2026 so far: 19,451. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="description" content="609 people crossed the Channel in small boats on Mon 5 October. 2026 so far: 20,478. Daily Home Office figures, a migrant tracker and live Channel weather.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -26,14 +26,14 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta property="og:title" content="Channel Crossings: daily small boat arrivals">
 <meta property="og:description" content="How many people crossed the Channel in small boats yesterday? Daily Home Office figures, records and live Channel conditions.">
 <meta property="og:url" content="https://channelcrossings.world/">
-<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-03">
+<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-05">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Channel Crossings logo with the latest daily arrivals figure">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
-<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-03">
+<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-05">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
@@ -56,9 +56,9 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   "isAccessibleForFree": true,
   "keywords": ["small boat crossings", "Channel crossings", "small boat arrivals", "migrant crossings", "boat crossing figures", "English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
   "creator": {"@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "email": "x.chancrossings@gmail.com"},
-  "temporalCoverage": "2018-01-01/2026-10-03",
+  "temporalCoverage": "2018-01-01/2026-10-05",
   "spatialCoverage": "English Channel, United Kingdom",
-  "dateModified": "2026-10-03",
+  "dateModified": "2026-10-05",
   "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://channelcrossings.world/data.csv"}]
 }
 </script>
@@ -125,16 +125,28 @@ button,input,select,textarea{font:inherit}
 .hero{position:relative;width:min(1148px,calc(100% - 2 * max(16px,env(safe-area-inset-left,0px))));margin:calc(56px + env(safe-area-inset-top,0px)) auto 0;
   height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
-.hero-map{position:absolute;inset:0;will-change:transform}
-.hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-map{position:absolute;inset:0;visibility:hidden;pointer-events:none}
+.hero-stage{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:108px 24px 180px;background:radial-gradient(120% 90% at 80% 0%,#1a4e86 0%,#0c2344 52%,#081627 100%)}
+.stage-kicker{margin:0;font:600 .75rem/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.stage-h{margin:0;font:700 clamp(2rem,6vw,3.4rem)/1.02 var(--font);letter-spacing:-.035em}
+.stage-sub{margin:0;font:500 1rem/1.35 var(--font);color:rgba(255,255,255,.82)}
+.stage-search{position:relative;width:min(560px,100%)}
+.stage-search input{width:100%;height:48px;border:0;border-radius:14px;padding:0 16px;background:rgba(255,255,255,.14);color:#fff;font:500 1rem/1 var(--font);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3);outline:none}
+.stage-search input::placeholder{color:rgba(255,255,255,.62)}
+.stage-hits{position:fixed;z-index:80;list-style:none;margin:0;padding:6px;border-radius:14px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.stage-hits button{width:100%;text-align:left;border:0;background:none;color:#fff;font:500 .95rem/1.2 var(--font);padding:10px 12px;border-radius:10px;cursor:pointer}
+.stage-hits button:hover,.stage-hits button[aria-selected=true]{background:rgba(255,255,255,.1)}
+main > section.is-dim{display:none !important}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
-#lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
-.wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
-.wx-heat.soft{filter:blur(2px)}   /* wind, gusts and waves: the readings blended smoothly */
+#lmap{position:absolute;inset:0;background:linear-gradient(180deg,#8EC8E6,#6AAFD4);font:inherit}
+.cc-land{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.wx-heat{display:none}
+.wx-time,.wx-key,.wx-key-bar{display:none !important}
+.wx-heat.soft{filter:blur(1.5px)}   /* a last soft pass, like Ventusky's blended field */
 .wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
 .leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
 #map .boat{pointer-events:auto}
-#lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
+#lmap .leaflet-control-attribution{background:rgba(255,255,255,.62);color:rgba(60,60,67,.72);font-size:10px;line-height:1.5;padding:2px 8px;border-radius:8px 0 0 0;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #lmap .leaflet-control-attribution a{color:inherit}
 #lmap .leaflet-bar{border:0;overflow:hidden;border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 #lmap .leaflet-bar a{width:36px;height:40px;font:500 20px/40px var(--font);background:none;color:#fff;border-color:rgba(255,255,255,.18)}
@@ -153,26 +165,6 @@ button,input,select,textarea{font:inherit}
 .am-layer{padding:0 12px 0 13px}
 .am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
 .am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
-#wxLayerIc{display:grid;place-items:center}
-#wxLayerIc svg{width:16px;height:16px}
-.wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
-.wx-full svg{width:17px;height:17px}
-/* the layer picker: a frosted card of tiles, like Apple Maps' map chooser */
-.am-pick{position:absolute;top:44px;right:0;z-index:5;width:min(288px,calc(100vw - 56px));max-height:calc(100svh - 24px);overflow:auto;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
-@keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
-.am-pick-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
-.am-pick-h b{font:700 1.06rem/1 var(--font);letter-spacing:-.02em}
-.am-x{width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer}
-.am-x svg{width:9px;height:9px}
-.wx-seg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 10px}
-.wx-seg button{grid-column:span 2}
-.wx-seg button:nth-child(4){grid-column:2 / span 2}   /* five layers: three on top, two centred below */
-.wx-seg button{border:0;background:none;padding:0;color:#fff;cursor:pointer;display:grid;gap:6px;justify-items:center;font:600 .706rem/1.1 var(--font);touch-action:manipulation}
-.am-tile{width:100%;height:58px;border-radius:14px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);transition:background .2s,color .2s,transform .15s}
-.am-tile svg{width:24px;height:24px}
-@media (hover:hover){.wx-seg button:hover .am-tile{background:rgba(255,255,255,.22)}}
-.wx-seg button:active .am-tile{transform:scale(.95)}
-.wx-seg button[aria-pressed="true"] .am-tile{background:rgba(255,255,255,.92);color:#1C1C1E}
 /* the forecast timeline, as a frosted pill */
 .am-pill{border-radius:999px}
 .wx-time{display:flex;align-items:center;gap:8px;padding:3px 14px 3px 3px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
@@ -202,15 +194,10 @@ button,input,select,textarea{font:inherit}
 .am-launch b{border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
-.am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
-.am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
-/* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
+.am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}/* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
 .wx-key{display:flex;align-items:center;gap:7px;font:500 12px/1 var(--font);font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);white-space:nowrap}
 .wx-key i{flex:1;min-width:48px;height:6px;border-radius:3px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.15)}
-.wx-key .wk-t{font-weight:600;margin-right:2px}
-#wxKeyPick{margin:14px 2px 0}
-.wx-key-bar{width:220px;padding:7px 12px}
-#wxPick:not([hidden]) ~ .wx-key-bar{display:none}   /* the open picker shows its own */
+.wx-key .wk-t{font-weight:600;margin-right:2px}.wx-key-bar{width:220px;padding:7px 12px}
 .am-sheet .wx-key{color:var(--label2);margin-top:10px}
 @media (max-width:600px){.wx-key-bar{display:none}}   /* phones: in the layer picker and the reading sheet */
 .am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
@@ -243,18 +230,7 @@ button,input,select,textarea{font:inherit}
 .am-pin b{position:absolute;left:10px;top:15px;width:2px;height:13px;border-radius:1px;background:linear-gradient(#8E8E93,#C7C7CC)}
 .am-pin s{position:absolute;left:7px;top:26px;width:8px;height:4px;border-radius:50%;background:rgba(0,0,0,.4);filter:blur(1px)}
 @keyframes pinDrop{from{transform:translateY(-22px);opacity:0}}
-/* scale bar, shown in full screen */
-#lmap .leaflet-control-scale{display:none;margin:0 0 14px 16px}
-.hero.full #lmap .leaflet-control-scale{display:block}
-#lmap .leaflet-control-scale-line{border:2px solid #fff;border-top:0;background:none;color:#fff;font:600 10px/1.4 var(--font);text-shadow:0 0 3px rgba(0,0,0,.9);box-shadow:0 1px 2px rgba(0,0,0,.35);padding:0 4px}
-/* full screen: the whole Channel to explore */
-.hero.full{position:fixed;inset:0;z-index:55;width:auto;height:auto;min-height:0;max-height:none;margin:0;border-radius:0}
-.hero.full .hero-in,.hero.full .scroll-cue,.hero.full .large-title,.hero.full::after{display:none}
-.hero.full .wx-ctl{top:calc(14px + env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px))}
-.hero.full ~ .boat-tip{z-index:61}
-html.map-full,html.map-full body{overflow:hidden}
 @media (hover:none){#lmap .leaflet-control-zoom{display:none}}
-.hero.full #lmap .leaflet-control-zoom{display:block}
 /* tap the map: the weather at that spot */
 #lmap .wx-pt .leaflet-popup-content-wrapper{border-radius:16px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);color:var(--label);box-shadow:var(--shadow),0 0 0 .5px var(--sep)}
 #lmap .wx-pt .leaflet-popup-tip{background:color-mix(in srgb,var(--card) 80%,transparent)}
@@ -267,7 +243,7 @@ html.map-full,html.map-full body{overflow:hidden}
 .wx-pt .wp-stats b{font-size:1rem}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.42) 0,rgba(0,0,0,.12) 26%,rgba(0,0,0,0) 40%,rgba(0,0,0,.35) 62%,rgba(0,0,0,.6) 100%)}   /* darker behind the title and the figures, so white text reads over the light map */
-.hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
+.hero-in{position:absolute;z-index:6;inset:auto 0 0;padding:0 24px 28px;color:#fff;pointer-events:none}
 .hero-chips > *{pointer-events:auto}
 /* across the top of the map: breaking news, which flashes when a story comes in, and from 12:00 UK time
    until the new figures are in, the daily update. When both are on they take turns in the same strip. */
@@ -316,13 +292,12 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
 .hero.has-news .large-title,.hero.has-news .wx-ctl{transform:translateY(var(--mn-h,0px));transition:transform .45s cubic-bezier(.2,.9,.3,1)}
-.hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
 .hero-fresh{flex-basis:100%;display:flex;align-items:center;gap:6px;font:500 .824rem/1.3 var(--font);color:rgba(255,255,255,.85);text-shadow:0 1px 6px rgba(0,0,0,.45),0 1px 8px rgba(0,0,0,.55)}
 .hero-fresh > i{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 2px rgba(0,0,0,.2)}
 .hero-fresh.stale > i{background:var(--orange)}
-.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.5);text-underline-offset:3px;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
+.fu-btn{position:relative;flex:none;appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;color:#fff;text-decoration:none;white-space:nowrap;cursor:pointer;text-shadow:inherit;touch-action:manipulation}
 .fu-btn::after{content:"";position:absolute;inset:-12px -8px}   /* a comfortable tap target */
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
@@ -337,6 +312,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 /* the latest day as a calendar tile, as in On This Day */
 .hero-quiet{display:flex;align-items:center;gap:18px;margin:6px 0 2px}
+.hero-quiet .cal{display:grid}
 .hero-quiet .cal{width:88px;height:92px;border-radius:20px;grid-template-rows:28px 1fr;background:rgba(28,28,30,.4);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 6px 24px rgba(0,0,0,.25)}
 .hero-quiet .cal span{font-size:.824rem;line-height:28px}
 .hero-quiet .cal b{font-size:2.9rem;color:#fff}
@@ -458,12 +434,12 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .boat .ring{opacity:0;fill:none;stroke:#fff;stroke-width:2;transition:opacity .2s}
 
 /* ------------------------------------------------------------ layout */
-main > section,.card,.bento > *{min-width:0}
+main > section,.card,.bento > *,.duo > *{min-width:0;max-width:100%}
 main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px));display:grid;gap:40px}
 .section-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 12px}
 .section-h h2{margin:0;font:700 1.35rem/1.2 var(--font);letter-spacing:.01em}
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
-.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
+.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden;width:100%;max-width:100%}
 .card h3{margin:0 0 2px;font:600 .824rem/1.2 var(--font);color:var(--label2);display:flex;align-items:center;gap:6px}
 .card h3 svg{width:15px;height:15px}
 .val{font:700 2.2rem/1.1 var(--round);letter-spacing:-.01em;margin-top:4px}
@@ -483,8 +459,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @property --my{syntax:"<percentage>";inherits:false;initial-value:50%}
 .card.lift{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-2px);box-shadow:var(--shadow-lift);
   transition:transform .18s ease-out,box-shadow .3s ease,opacity .7s cubic-bezier(.2,.8,.2,1)}
-.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
+.card::after{content:"";position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
   background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),var(--glare),transparent 65%)}
+.card > *{position:relative;z-index:1}
 .card.lift::after{opacity:1}
 
 /* ------------------------------------------------------------ bento */
@@ -585,7 +562,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .seg button::after{content:"";position:absolute;inset:-7px 0}
 .seg button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .chart{position:relative;margin-top:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
-.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart,.race,.spark,.pb-boats,.pb-line,.heat-scroll{max-width:100%;min-width:0}
+.chart svg{display:block;width:100%;max-width:100%;height:auto;overflow:hidden}
 .chart .line{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .chart .grid{stroke:var(--sep);stroke-width:.6}
 .chart text{fill:var(--label2);font:500 12px var(--font)}
@@ -598,7 +576,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @keyframes drawIn{to{stroke-dashoffset:0}}
 
 /* ------------------------------------------------------------ the year in squares */
-.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:24px 4px 4px}
+.heat-scroll{overflow-x:auto;scrollbar-width:none;margin:8px -4px 0;padding:24px 4px 4px;max-width:100%}
 .heat-scroll::-webkit-scrollbar{display:none}
 @media (hover:hover) and (pointer:fine){.heat-scroll{scrollbar-width:thin;scrollbar-color:var(--fill2) transparent;padding-bottom:8px}.heat-scroll::-webkit-scrollbar{display:block;height:6px}.heat-scroll::-webkit-scrollbar-thumb{background:var(--fill2);border-radius:3px}}   /* a mouse can reach January */
 .heat-scroll.more-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 24px);mask-image:linear-gradient(90deg,transparent,#000 24px)}   /* fades on the left when earlier weeks are hidden */
@@ -624,21 +602,56 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .heat-read b{display:block}
 
 /* ------------------------------------------------------------ year bars */
-.years{display:grid;gap:4px;margin-top:2px}
-.yr{display:grid;grid-template-columns:52px minmax(0,1fr) 74px 58px;align-items:center;gap:14px;min-height:42px;padding:5px 0;font-size:.882rem}
-.yr .ch{text-align:right;font-size:.75rem;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
-.yr b{font-weight:650;letter-spacing:-.015em}
-.yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:650;white-space:nowrap}
-.yr .track{position:relative;height:12px;border-radius:999px;background:var(--fill);overflow:visible}
-.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:var(--label3);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.years{display:grid;gap:10px;margin-top:6px}
+.yr{display:grid;grid-template-columns:44px 1fr 64px 52px;align-items:center;gap:12px;font-size:.882rem}
+.yr .ch{text-align:right;font-size:.824rem;font-variant-numeric:tabular-nums}
+.yr b{font-weight:600}
+.yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
+.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .yr.cur .fill{background:var(--orange)}
-.yr .mark{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:2px;background:var(--label);opacity:.7;box-shadow:0 0 0 2px var(--card)}
-.yr.cur b,.yr.cur .n{font-weight:750}
-.yr.cur b::before{content:"";display:inline-block;width:5px;height:5px;margin:0 7px 2px 0;border-radius:50%;background:var(--orange);vertical-align:middle}
+.yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
+
+/* ------------------------------------------------------------ Apple style yearly view */
+#ddYr{padding:22px 24px 20px}
+#ddYr .flip-h{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;margin:0 0 18px;padding:0 0 14px;border-bottom:1px solid var(--sep)}
+#ddYr .flip-h h3{grid-column:2;margin:0;font-size:1.15rem;line-height:1.2;font-weight:650;letter-spacing:-.025em;white-space:nowrap}
+#ddYr .flip-h .flip-go{grid-column:1;justify-self:start;height:32px;padding:0 11px;border:0;border-radius:10px;background:var(--fill);box-shadow:none;color:var(--label2);font-size:.75rem;font-weight:600}
+#ddYr .flip-h .flip-go:hover{background:var(--fill2);color:var(--label)}
+#ddYr .flip-h .flip-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#ddYr .years{display:grid;gap:2px;margin:0}
+#ddYr .yr{display:grid;grid-template-columns:58px minmax(0,1fr) 88px 54px;align-items:center;column-gap:14px;padding:8px 0;min-height:34px;font-size:.88rem}
+#ddYr .yr-label{display:flex;align-items:center;min-width:0}
+#ddYr .yr-label b{font-size:.9rem;font-weight:600;letter-spacing:-.015em}
+#ddYr .yr-label small{display:none}
+#ddYr .yr-mid{min-width:0}
+#ddYr .yr .track{position:relative;height:10px;border-radius:999px;background:var(--fill);overflow:visible}
+#ddYr .yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:var(--label3);transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+#ddYr .yr.cur .fill{background:var(--orange)}
+#ddYr .yr.prev .fill{background:var(--blue)}
+#ddYr .yr .mark{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:2px;background:var(--label);opacity:.65;box-shadow:0 0 0 2px var(--card)}
+#ddYr .yr .n{display:block;text-align:right;font-size:.9rem;font-weight:650;font-variant-numeric:tabular-nums;letter-spacing:-.015em;white-space:nowrap}
+#ddYr .yr .ch{display:block;text-align:left;font-size:.75rem;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+#ddYr .yr .ch.up{color:var(--red)}
+#ddYr .yr .ch.down{color:var(--green)}
+#ddYr .yr.cur .yr-label b,#ddYr .yr.cur .n{font-weight:750}
+#ddYr .yr.cur .yr-label::before{content:"";width:5px;height:5px;flex:0 0 5px;border-radius:50%;background:var(--orange);margin-right:6px}
+#ddYr .dd-foot{margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--sep);color:var(--label2);font-size:.74rem;line-height:1.45}
+@media (max-width:680px){
+#ddYr{padding:18px 16px 18px}
+#ddYr .flip-h{grid-template-columns:1fr auto;gap:10px}
+#ddYr .flip-h h3{grid-column:1;grid-row:1;justify-self:start}
+#ddYr .flip-h .flip-go{grid-column:2;grid-row:1}
+#ddYr .yr{grid-template-columns:46px minmax(0,1fr) 76px 48px;column-gap:8px;padding:7px 0}
+#ddYr .yr .n{font-size:.82rem}
+#ddYr .yr .ch{font-size:.68rem}
+}
+@media (prefers-reduced-motion:reduce){#ddYr .yr .fill{transition:none}}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;min-width:0}
+.duo > *{min-width:0;max-width:100%;overflow:hidden}
 .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
 .stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 .stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
@@ -746,17 +759,21 @@ footer strong{color:var(--label);font-weight:600}
 .mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,#tourNext::after,#tourSkip::after{content:"";position:absolute;inset:-8px}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
-/* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
-.hero.full #lmap .leaflet-bottom .leaflet-control{margin-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
-.hero.full #lmap .leaflet-right .leaflet-control{margin-right:max(12px,env(safe-area-inset-right,0px))}
-.hero.full #lmap .leaflet-left .leaflet-control{margin-left:max(12px,env(safe-area-inset-left,0px))}
-.hero.full .map-news{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px))}
 /* phones on their side: the map fills the screen and the number shrinks to fit */
 @media (max-height:500px) and (orientation:landscape){
   .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
   .hero-chips{margin-top:10px}
 }
 
+/* phones: one column, no sideways spill, below-fold sections stay cheap to scroll */
+@media (max-width:899px){
+  main{display:block;padding-top:20px;padding-bottom:36px;gap:28px}
+  main > section{content-visibility:auto;contain-intrinsic-size:auto 420px;margin-bottom:28px}
+  main > section:first-child{content-visibility:visible}
+  .card,.duo,.bento{max-width:100%}
+  body{overflow-x:hidden}
+  .more-toggle{height:34px;padding:0 14px}
+}
 /* ------------------------------------------------------------ smaller screens */
 @media (max-width:900px){
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -785,7 +802,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .val{font-size:1.8rem}
   .val.otd-v{font-size:1.45rem;min-height:2.2em}
   .chart-head{flex-direction:column}
-  .yr{grid-template-columns:42px minmax(0,1fr) 64px 48px;gap:8px;min-height:38px}.yr .ch{font-size:.68rem}.yr .n{font-size:.82rem}
+  .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
 }
 /* ------------------------------------------------------------ accessibility settings */
@@ -963,11 +980,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
-/* Wider screens: the boxes sit side by side in two columns; the big ones keep the full width */
+/* Wider screens: two fixed columns. A box may grow taller (Show more) but never wider, and it stays in its column. */
 @media (min-width:900px){
-  main{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row dense;column-gap:24px;align-items:start}
-  main > section.wide{grid-column:1 / -1}
+  main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;column-gap:16px;row-gap:20px;align-items:start;justify-items:stretch}
+  main > section{min-width:0;max-width:100%;width:100%}
+  main > section.wide,main > section.span{grid-column:1 / -1}
 }
+/* Long boxes open downwards only. Width stays the column width. */
+.card.can-more{max-height:420px;padding-bottom:52px}
+@media (max-width:899px){.card.can-more{max-height:320px}}
+.card.can-more.is-open{max-height:none}
+.more-toggle{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:inline-flex;align-items:center;gap:2px;height:30px;padding:0 10px 0 12px;border:0;border-radius:999px;color:var(--blue);font:600 .8rem/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
+  background:color-mix(in srgb,var(--fill) 88%,var(--card));box-shadow:inset 0 0 0 .5px var(--sep)}
+.more-toggle svg{width:13px;height:13px;flex:none;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.card.is-open > .more-toggle svg{transform:rotate(180deg)}
+.card.can-more:not(.is-open)::after{content:"";position:absolute;left:0;right:0;bottom:42px;height:28px;background:linear-gradient(transparent,var(--card));pointer-events:none;z-index:2}
+.more-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.more-toggle:hover{background:var(--fill2)}}
 /* First-visit tour of the map: a spotlight on each control with a small card explaining it */
 .tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
 .tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
@@ -997,6 +1026,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
+  <div class="hero-stage" id="heroStage">
+    <form class="stage-search" role="search" action="javascript:void(0)">
+      <label class="sr" for="boxSearch">Search the figures</label>
+      <input id="boxSearch" type="search" placeholder="Search figures, records, nationalities" autocomplete="off" enterkeyhint="search">
+      <ul id="boxHits" class="stage-hits" hidden></ul>
+    </form>
+  </div>
   <div class="hero-map" id="heroMap">
     <div id="lmap"></div>
     <svg viewBox="0 0 1000 686" preserveAspectRatio="none" id="map">
@@ -1027,31 +1063,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 3 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
+  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 5 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
   <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
 
-  <!-- Map controls, laid out like Apple Maps: a layer button, a full-screen button and a forecast timeline -->
+  <!-- Map controls: forecast timeline -->
   <div class="wx-ctl" id="wxCtl">
-    <div class="am-top">
-      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span id="wxLayerName">Waves</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <button type="button" class="am-btn wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    </div>
-    <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
-      <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button></div>
-      <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
-      <div class="wx-key" id="wxKeyPick" role="img"></div>
-    </div>
     <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
     <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img"></div>
   </div>
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker" hidden></div>
-    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">3</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">164</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Saturday, 3 October 2026 · 2&nbsp;boats</div></div></div><span class="sr" id="heroSr" aria-live="polite">164 people crossed in 2 small boats on Saturday, 3 October 2026</span>
+    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">5</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">609</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Monday, 5 October 2026 · 8&nbsp;boats</div></div></div><span class="sr" id="heroSr" aria-live="polite">609 people crossed in 8 small boats on Monday, 5 October 2026</span>
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
@@ -1483,16 +1509,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
     // Free to use with credit, and needs no key.
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("World_Topo_Map", {attribution:'Map © <a href="https://www.esri.com/">Esri</a> · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
       .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
-    L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
+    /* drawn chart stays off the tiles so the real map shows */
     // the extra town names, added biggest first after the ones in the page, once the page has settled
-    whenIdle(() => getJSON("towns.json").then(a => {
+    whenMapShown(() => getJSON("towns.json").then(a => {
       const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
       places = places.concat(extra).sort((x, y) => x.rank - y.rank);   // a stable sort: the page's own towns stay ahead within each rank
       placeTowns();
@@ -1513,22 +1539,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.on("mouseout dragstart zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
   }
   function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
-  // Full screen: drag, pinch and scroll to zoom anywhere, on phones too (in the page, phones keep the map still so it scrolls)
-  const isFull = () => hero.classList.contains("full");
-  function setFull(on){
-    if(!LM) return;
-    hero.classList.toggle("full", on); root.classList.toggle("map-full", on);
-    const fb = $("wxFull"); fb.setAttribute("aria-pressed", on); fb.setAttribute("aria-label", on ? "Close the full-screen map" : "Open the full-screen map");
-    heroMap.style.transform = "";
-    ["dragging", "touchZoom", "doubleClickZoom", "scrollWheelZoom", "keyboard"].forEach(h => {
-      const want = on || (!touchOnly && (h === "dragging" || h === "doubleClickZoom"));
-      want ? LM[h].enable() : LM[h].disable();
-    });
-    if(on) hero.style.minHeight = "";
-    LM.closePopup(); fitW = 0; fitMap(); if(!on) fitHero();
+  function whenMapShown(fn){
+    const phone = matchMedia("(max-width:899px)").matches, map = $("lmap");
+    if(!phone){ whenIdle(fn, 1500); return; }
+    if(!map || !("IntersectionObserver" in window)){ setTimeout(fn, 1600); return; }
+    const io = new IntersectionObserver(es => { if(es.some(e => e.isIntersecting)){ io.disconnect(); whenIdle(fn, 700); } }, {rootMargin:"160px"});
+    io.observe(map);
   }
-  $("wxFull").addEventListener("click", e => { e.stopPropagation(); setFull(!isFull()); });
-  document.addEventListener("keydown", e => { if(e.key === "Escape" && isFull() && !cur) setFull(false); });
   // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
   // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
   const RANK_ZOOM = [0, 0, 0, 7.6, 8.7, 9.7];   // the zoom each rank of town appears from
@@ -1592,7 +1609,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(W !== fitW){
       fitW = W; const f = L.latLngBounds(tall ? TALL : VIEW);
       LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});
-      if(isFull() && tall) LM.panBy([0, -(ctlBottom() + 8 - 40) / 2], {animate:false});   // full screen on a phone: Kent to France, framed below the buttons
+      
     }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
     else resetWx();
@@ -1606,7 +1623,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   // Phones: the strait sits in the open map between the buttons and the figures
   function frameStrait(){
-    if(!LM || isFull() || hero.clientWidth >= 600) return;
+    if(!LM || hero.clientWidth >= 600) return;
     const bot = hero.querySelector(".hero-in").offsetTop, y = LM.latLngToContainerPoint([51.0, 1.45]).y, d = y - (ctlBottom() + bot) / 2;
     if(Math.abs(d) > 8) LM.panBy([0, d], {animate:false});
   }
@@ -1729,71 +1746,32 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
   // Colour scales, close to Ventusky's: used for the map's colours and the swatch in the readings
-  const WIND = [[0,[98,113,183]],[6,[57,97,159]],[10,[74,148,169]],[14,[77,141,123]],[18,[83,165,83]],[23,[201,186,63]],[28,[221,135,50]],[34,[208,70,60]],[40,[173,40,110]]];
+  const WIND = [[0,[168,196,232]],[4,[98,156,214]],[8,[72,168,176]],[12,[86,176,122]],[18,[176,196,72]],[24,[232,196,64]],[30,[232,140,52]],[36,[214,78,62]],[44,[176,48,120]],[54,[148,64,168]]];
   const SCALE = {
     wind:{key:"s", max:40, unit:"mph", stops:WIND},
     gusts:{key:"gust", max:50, unit:"mph", stops:WIND.map(([v, c]) => [v * 1.25, c])},
-    waves:{key:"wave", max:4, unit:"m", stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
+    waves:{key:"wave", max:4, unit:"m", stops:[[0,[86,150,214]],[.4,[64,176,196]],[.8,[72,186,150]],[1.3,[150,204,92]],[2,[232,198,64]],[2.8,[232,132,52]],[4,[196,58,92]]]},
     // temperature in Ventusky's warm earthy colours: blue in the cold, green at 10°, golden tan in the mid teens, terracotta and mauve
     // in the heat. Matched to Ventusky (Dan's screenshot, 2 Oct 2026) once multiplied over the light grey map
     temp:{key:"temp", unit:"°C", stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]},
-    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]}
+    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[120,176,232]],[.4,[72,132,220]],[1.2,[86,96,214]],[2.5,[150,72,196]],[5,[210,64,150]]]}
   };
   function colour(v, st){
     if(v <= st[0][0]) return st[0][1];
     for(let k = 1; k < st.length; k++) if(v <= st[k][0]){ const [a, ca] = st[k - 1], [b, cb] = st[k], t = (v - a) / (b - a); return ca.map((x, n) => x + (cb[n] - x) * t); }
     return st[st.length - 1][1];
   }
-  // The layer picker: a frosted card of plain white icon tiles
-  const segBtns = [...document.querySelectorAll("#wxCtl .wx-seg button")], pickEl = $("wxPick"), pickBtn = $("wxLayerBtn");
-  function showPick(on){
-    pickEl.hidden = !on; pickBtn.setAttribute("aria-expanded", on);
-    if(on){
-      const b = segBtns.find(x => x.dataset.l === layer); if(b) b.focus({preventScroll:true});
-      // small phones: the list scrolls inside the map rather than running off it, and the page brings it into view
-      pickEl.style.maxHeight = ""; const top = pickEl.getBoundingClientRect().top, room = Math.min(innerHeight, hero.getBoundingClientRect().bottom) - top - 12;
-      if(pickEl.offsetHeight > room) pickEl.style.maxHeight = Math.max(220, room) + "px";
-      if(pickEl.getBoundingClientRect().bottom > innerHeight) pickEl.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});
-    }
-  }
-  pickBtn.addEventListener("click", e => { e.stopPropagation(); showPick(pickEl.hidden); });
-  $("wxPickX").addEventListener("click", e => { e.stopPropagation(); showPick(false); pickBtn.focus({preventScroll:true}); });
-  document.addEventListener("pointerdown", e => { if(!pickEl.hidden && !pickEl.contains(e.target) && !pickBtn.contains(e.target)) showPick(false); });
-  addEventListener("keydown", e => { if(e.key === "Escape" && !pickEl.hidden){ e.stopImmediatePropagation(); showPick(false); pickBtn.focus({preventScroll:true}); } }, true);
-  $("launchTg").addEventListener("click", e => {
-    e.stopPropagation();
-    const on = e.currentTarget.getAttribute("aria-pressed") !== "true";
-    e.currentTarget.setAttribute("aria-pressed", String(on));
-    if(launchLayer) on ? launchLayer.addTo(LM) : launchLayer.remove();
-  });
-  const TERRAIN = 'Terrain <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md">Mapzen</a>';
-  let terrainOn = false;
-  function wxKey(l, name){   // "Wind 0 ▬▬▬ 40+ mph"
+  function wxKey(l, name){
     const sc = SCALE[l], st = sc.stops, lo = st[0][0], hi = sc.max != null ? sc.max : st[st.length - 1][0], f = v => String(+v.toFixed(1)).replace("-", "−");
     const grad = st.filter(([v]) => v <= hi).map(([v, c]) => "rgb(" + c.map(Math.round).join(",") + ") " + ((v - lo) / (hi - lo) * 100).toFixed(1) + "%").join(",");
     return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>" + f(lo) + (sc.unit === "°C" ? "°" : "") + '</span><i style="background:linear-gradient(to right,' + grad + ')"></i><span>' + f(hi) + (sc.max != null ? "+" : "") + (sc.unit === "°C" ? "°C" : " " + sc.unit) + "</span>";
   }
-  function setLayer(l, first){
-    layer = l;
-    if(LM && terrainOn !== (l === "temp")){ terrainOn = l === "temp"; LM.attributionControl[terrainOn ? "addAttribution" : "removeAttribution"](TERRAIN); }
-    segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
-    const b = segBtns.find(x => x.dataset.l === l);
-    $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML;
-    $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
-    const nm = b.querySelector(".am-tn").textContent;
-    $("wxKeyPick").innerHTML = wxKey(l); $("wxKeyBar").innerHTML = wxKey(l, nm);
-    const noKey = l === "wind" || l === "gusts";   // no colours on the map for these, so nothing to explain
-    $("wxKeyPick").hidden = $("wxKeyBar").hidden = noKey;
-    const kp = [...$("wxKeyPick").querySelectorAll("span")].map(e => e.textContent);
-    [$("wxKeyPick"), $("wxKeyBar")].forEach(k => k.setAttribute("aria-label", nm + " colour key, " + kp[0] + " to " + kp[1]));
-    if(!first){ resetWx(); if(hoverAt) showHover(); if(ptAt && !$("amSheet").hidden) showPoint(ptAt); }
-  }
-  segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
-  setLayer(layer, true);
+  $("wxKeyBar").innerHTML = wxKey("waves", "Waves");
+  $("wxKeyBar").setAttribute("aria-label", "Waves colour key");
   // Rebuilt whenever the map moves or new readings arrive: the sea (or the temperature colours), any numbers, and the motion drawn over it.
   // Wind: streams of particles. Gusts: faster, longer streaks, warmer for stronger gusts.
   // Waves: crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
-  const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
+  const CELL = 8, SPEED = .04;   // grid spacing in pixels; pixels a frame for each mph
   let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null, seaPath = null;
   let maskKey = "", maskVal = null;
   function seaMask(cols, rows){   // which grid points are at sea, from the coastline drawn once at grid size (kept while the view is the same)
@@ -1955,27 +1933,26 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
     }
-    if(layer === "wind" || layer === "gusts" || layer === "rain"){   // the same blue sea as Waves, the land left clear grey
+    if(false){   // solid sea tint parked with the colour layers
       seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
       h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0);
     }
-    if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
-      // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
-      // Wind and gusts get only the blue sea, with the moving streaks on top
+    if(false){   // colour fields parked until the layers are rebuilt
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
       const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
+      const seaOnly = layer === "waves" || layer === "wind" || layer === "gusts";
       for(let k = 0; k < n; k++){
         const x = val[k], c = colour(x, st), q = k * 4;
         px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
-        // rain is see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
-        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : 255;
+        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(90 + 140 * Math.min(1, x / 3))) : (layer === "temp" ? 210 : 235);
       }
       sx.putImageData(img, 0, 0);
-      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = soft ? "none" : "blur(" + (2 * dpr) + "px)";   // rain: its numbers stay sharp
-      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
+      h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high";
+      h.filter = "blur(" + Math.max(8, CELL * .55) * dpr + "px)";
+      h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);
       h.filter = "none";
-      if(layer === "waves"){   // no waves on land: the colour stops at the coast
+      if(seaOnly){   // colour stays on the water; land keeps the grey map
         h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
         h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
         h.globalCompositeOperation = "source-over"; h.filter = "none";
@@ -1998,7 +1975,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       }
       h.restore();
     }
-    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 850));
+    const area = vw * vh, count = Math.round(mode === "waves" ? Math.min(560, area / 2100) : mode === "gusts" ? Math.min(1800, area / 1200) : Math.min(2600, area / 520));
     if(!same){
       parts = Array.from({length:count}, () => spawn({}));
       parts.forEach(p => { p.age = Math.random() * p.max; });   // start mid-life, so nothing pops in all at once
@@ -2034,7 +2011,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       LM.closePopup(); ptAt = ll;
       const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + (layer === "wind" || layer === "gusts" ? "" : '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>");
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
-      if(!isFull() && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
+      if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
     }
     // keep the card clear of the controls at the top
@@ -2049,16 +2026,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const box = $("amHover"), e = hoverAt;
     if(!e || touchOnly || !LM){ box.classList.add("off"); return; }
     const ll = e.latlng, sc = SCALE[layer], g = k => sample(ll.lat, ll.lng, k);
-    let val, unit = sc.unit, extra = "";
-    if(layer === "wind"){
-      const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360; val = Math.round(Math.hypot(u, v));
-      extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + "</em>";
-    }
-    else if(layer === "waves"){ if(!atSea(ll)){ box.innerHTML = "<em>On land</em>"; place(); return; } val = g("wave").toFixed(1); }
-    else if(layer === "rain"){ val = g("rain").toFixed(1); }
-    else val = Math.round(layer === "temp" ? tempAt(ll.lat, ll.lng) : g(sc.key));
-    const col = colour(+val, sc.stops).map(Math.round).join(",");
-    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
+    const u = g("u"), v = g("v"), from = (Math.atan2(-u, -v) * 180 / Math.PI + 360) % 360, val = Math.round(Math.hypot(u, v));
+    const extra = '<svg viewBox="0 0 24 24" style="transform:rotate(' + Math.round(from + 180) + 'deg)"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><em>from the ' + COMPASS[Math.round(from / 45) % 8] + " · gusts " + Math.round(g("gust")) + " mph</em>";
+    box.innerHTML = "<b>" + val + '</b><small> mph</small>' + extra;
     place();
     function place(){
       box.classList.remove("off");
@@ -2077,7 +2047,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function spawn(p){
     // waves only start at sea: a few tries for a spot on the water
     for(let i = 0; i < 8; i++){ p.x = Math.random() * vw; p.y = Math.random() * vh; if(!fld || fld.mode !== "waves" || fld.sea[cellAt(p.x, p.y)]) break; }
-    p.age = 0; p.max = fld && fld.mode === "waves" ? 140 + Math.random() * 120 : 60 + Math.random() * 90; p.cap = Math.random(); return p;
+    p.age = 0; p.max = fld && fld.mode === "waves" ? 160 + Math.random() * 140 : 90 + Math.random() * 120; p.cap = Math.random(); return p;
   }
   function vel(x, y, a){
     const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
@@ -2109,26 +2079,27 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
      wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
      wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
   const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
-  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,190,90],[255,96,96]];   // white, as the waves; amber and red for strong gusts
-  const FLOW_A = [.45, .65, .85, .95, .95];
+  const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,255,255],[255,255,255]];
+  const FLOW_A = [.28, .4, .5, .58, .62];
   function stepStreaks(c, dt, gust){
     c.globalCompositeOperation = "destination-in";
-    c.fillStyle = "rgba(0,0,0," + Math.pow(gust ? .968 : .958, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);   // older trails fade
+    c.fillStyle = "rgba(0,0,0," + Math.pow(.9, dt).toFixed(3) + ")"; c.fillRect(0, 0, vw, vh);
     c.globalCompositeOperation = "source-over"; c.lineCap = "round"; c.lineJoin = "round";
-    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.6 : 1.35) * dt;
+    const L = 4, paths = batches(5 * L), sp = SPEED * (gust ? 1.25 : 1.05) * dt;
     for(const p of parts){
       const u = vel(p.x, p.y, fld.u), v = vel(p.x, p.y, fld.v), s = vel(p.x, p.y, fld.m), nx = p.x + u * sp, ny = p.y + v * sp;
       p.age += dt;
-      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); continue; }
-      const t = p.age / p.max, life = Math.min(1, t * 5, (1 - t) * 4);   // quick fade in, gentle fade out
+      if(p.age > p.max || nx < 0 || ny < 0 || nx > vw || ny > vh){ spawn(p); p.px = p.x; p.py = p.y; continue; }
+      const t = p.age / p.max, life = Math.min(1, t * 4, (1 - t) * 5);
       const band = gust ? (s >= 40 ? 4 : s >= 28 ? 3 : s >= 15 ? 2 : s >= 7 ? 1 : 0) : (s >= 20 ? 2 : s >= 9 ? 1 : 0);
-      const P = paths[band * L + Math.min(L - 1, life * L | 0)]; P.moveTo(p.x, p.y); P.lineTo(nx, ny);
-      p.x = nx; p.y = ny;
+      const P = paths[band * L + Math.min(L - 1, life * L | 0)];
+      const px = p.px == null ? p.x : p.px, py = p.py == null ? p.y : p.py;
+      P.moveTo(px, py); P.quadraticCurveTo(p.x, p.y, nx, ny);
+      p.px = p.x; p.py = p.y; p.x = nx; p.y = ny;
     }
-    c.strokeStyle = "rgba(20,30,50,.10)"; c.lineWidth = 3; for(const P of paths) c.stroke(P);   // a faint dark edge, so white shows on the grey land too
     for(let b = 0; b < 5; b++) for(let l = 0; l < L; l++){
-      const k = FLOW_INK[b]; c.strokeStyle = "rgba(" + k + "," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
-      c.lineWidth = gust ? 1.4 + (b > 2 ? .3 : 0) : 1.15 + b * .15; c.stroke(paths[b * L + l]);
+      c.strokeStyle = "rgba(255,255,255," + (FLOW_A[b] * (l + 1) / L).toFixed(3) + ")";
+      c.lineWidth = gust ? 1.15 : .95; c.stroke(paths[b * L + l]);
     }
   }
   const stepGusts = (c, dt) => stepStreaks(c, dt, true), stepWind = (c, dt) => stepStreaks(c, dt, false);
@@ -2667,9 +2638,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const prevSame = sum(all.filter(d => +d.date.slice(0,4) === cur - 1 && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const change = y => { const base = y === cur ? prevSame : rows[y - 1]; if(!base) return '<span class="ch"></span>';   // on the year before; this year on the same dates last year
       const pct = Math.round((rows[y] / base - 1) * 100); return '<span class="ch delta ' + (pct < 0 ? "down" : "up") + '">' + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "%</span>"; };
-    $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : "") + '"><b>' + y + '</b><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
-      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" aria-hidden="true"></div>' : "") + '</div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
-    $("yrFoot").textContent = "Each year is compared with the year before. " + cur + " runs to " + dShort.format(parse(last.date)) + "; the line on its bar marks " + (cur - 1) + " by the same date, " + fmt(prevSame) + ".";
+    $("years").innerHTML = ys.map(y => '<div class="yr' + (y === cur ? " cur" : y === cur - 1 ? " prev" : "") + '"><div class="yr-label"><b>' + y + '</b>' + (y === cur ? '<small>so far</small>' : '') + '</div><div class="yr-mid"><div class="track"><div class="fill" data-w="' + (rows[y] / mx * 100).toFixed(1) + '"></div>'
+      + (y === cur ? '<div class="mark" style="left:calc(' + (prevSame / mx * 100).toFixed(1) + '% - 1px)" aria-label="Last year at the same date" title="Last year at the same date"></div>' : "") + '</div></div><span class="n">' + fmt(rows[y]) + "</span>" + change(y) + "</div>").join("");
+    $("yrSummary").textContent = ys[0] + " to " + cur + " · " + fmt(rows[cur]) + " so far";
+    $("yrFoot").textContent = "Each year is compared with the year before. " + cur + " runs to " + dShort.format(parse(last.date)) + "; the marker shows " + (cur - 1) + " at the same date, " + fmt(prevSame) + ".";
     const peak = ys.reduce((a,b) => rows[b] > rows[a] ? b : a);
     ddNotes[2] = "Busiest year: " + peak + ", " + fmt(rows[peak]); if(ddCur === 2) $("ddNote").textContent = ddNotes[2];
     const fills = $("years").querySelectorAll(".fill");
@@ -2905,8 +2877,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function drawCalendar(){
     if(!sorted.length) return;
     const first = sorted[0].date, last = sorted[sorted.length-1].date;
-    // opens on the latest month, but a new month with less than a week of figures would look almost empty,
-    // so until then it opens on the month before (the arrow still goes to the new one)
+    // Always open on the latest available month. The current month should not jump back to September just because October has only a few published days.
     if(!calMonth || calMonth > last.slice(0,7)) calMonth = last.slice(0,7);
     if(calMonth < first.slice(0,7)) calMonth = first.slice(0,7);
     const byDate = new Map(sorted.map(d=>[d.date, d]));
@@ -3034,7 +3005,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("ddNote").textContent = ddNotes[i];
     fitDd();
     if(!ddSeen[i]){ ddSeen[i] = true; ddWait[i].splice(0).forEach(fn => fn()); }
-    if(had) ddFaces[i].querySelector(".flip-go").focus({preventScroll:true});
+    if(had && document.activeElement === document.body) ddFaces[i].querySelector(".flip-go").focus({preventScroll:true});
   }
   function whenDd(i, fn){ onReveal(ddBox, () => { if(ddSeen[i]) fn(); else ddWait[i].push(fn); }); }   // once page i has been seen
   ddFlip.addEventListener("click", e => { const b = e.target.closest(".flip-go[data-go]"); if(b) showDd(+b.dataset.go); });
@@ -3386,7 +3357,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       li.append(a, n, m, bar); ul.append(li);
     });
   }
-  async function loadPetitions(){ try{ extras.petitions = await getJSON("petitions.json"); }catch(e){ extras.petitions = null; } renderPetitions(); }
+  async function loadPetitions(){ try{ extras.petitions = await getJSON("petitions.json"); }catch(e){ extras.petitions = null; } renderPetitions(); if(typeof fitBoxes==="function") fitBoxes(); }
 
   function renderMain(){
     sorted = days; if(!sorted.length) return;
@@ -3399,7 +3370,65 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     if(sorted.length >= 365){ const vals = sorted.map(d => d.migrants).sort((a,b) => a-b); busyMin = Math.max(1, vals[Math.floor(vals.length*0.95)]); }
     drawCalendar(); drawDots(); drawHistory(); initCalc(); renderShare();
+    fitBoxes();
   }
+  function pinColumns(){
+    const wide = innerWidth >= 900;
+    if(!wide){
+      document.querySelectorAll("main > section.span").forEach(sec => { sec.classList.remove("span"); sec.style.gridColumn = ""; });
+      return;
+    }
+    const secs = [...document.querySelectorAll("main > section")].filter(s => s.offsetParent !== null);
+    let n = 0;
+    secs.forEach((sec, i) => {
+      sec.classList.remove("span");
+      const next = secs[i + 1];
+      if(sec.classList.contains("wide")){ n = 0; return; }
+      if(n % 2 === 0 && (!next || next.classList.contains("wide"))){ sec.classList.add("span"); n = 0; return; }
+      sec.style.gridColumn = (n % 2 ? "2" : "1");
+      n++;
+    });
+  }
+  function fitBoxes(){
+    pinColumns();
+    document.querySelectorAll("main .card").forEach(card => {
+      const skip = card.classList.contains("b-ring") || card.classList.contains("race-card") || card.classList.contains("calc-card") || card.classList.contains("pat-card") || card.querySelector(".flip, .chart, .heat-scroll");
+      let btn = card.querySelector(":scope > .more-toggle");
+      if(skip){
+        card.classList.remove("can-more", "is-open");
+        if(btn) btn.remove();
+        return;
+      }
+      const open = card.classList.contains("is-open");
+      card.classList.remove("can-more");
+      const tall = card.scrollHeight > 460;
+      if(!tall){
+        card.classList.remove("is-open");
+        if(btn) btn.remove();
+        return;
+      }
+      card.classList.add("can-more");
+      if(open) card.classList.add("is-open");
+      if(!btn){
+        btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "more-toggle";
+        btn.innerHTML = '<span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+        btn.addEventListener("click", () => {
+          const on = card.classList.toggle("is-open");
+          btn.querySelector("span").textContent = on ? "Show less" : "Show more";
+          btn.setAttribute("aria-expanded", on ? "true" : "false");
+        });
+        card.append(btn);
+      }
+      btn.hidden = false;
+      btn.querySelector("span").textContent = card.classList.contains("is-open") ? "Show less" : "Show more";
+      btn.setAttribute("aria-expanded", card.classList.contains("is-open") ? "true" : "false");
+    });
+  }
+  addEventListener("resize", () => { clearTimeout(fitBoxes._t); fitBoxes._t = setTimeout(fitBoxes, 80); });
+  setTimeout(fitBoxes, 400);
+  setTimeout(fitBoxes, 1200);
   if("ResizeObserver" in window) [["dots", drawDots], ["race", drawRace], ["pat", drawPat]].forEach(([id, fn]) => {
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
@@ -3410,11 +3439,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
     {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
     {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
-    {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
     {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
     {el:() => $("lmap"), h: touchOnly ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchOnly ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
     {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
-    {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
   ];
   let tourSteps = [], tourI = 0, tourTick = null;
   const tourSeen = () => { try{ return localStorage.getItem("mapTourDone"); }catch(e){ return "1"; } };
@@ -3451,7 +3478,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function startTour(){
     if(!$("tour").hidden) return;
     const shown = el => { if(!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
-    if(isFull()) return;
     tourSteps = TOUR.filter(t => shown(t.el())); if(tourSteps.length < 2) return;
     scrollTo({top:0, behavior:"auto"}); document.documentElement.style.overflow = "hidden";
     $("tour").hidden = false; addEventListener("resize", tourPlace); addEventListener("scroll", tourPlace, {passive:true});
@@ -3592,10 +3618,43 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
   start(); loadWeather(); loadNews();
-  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
+  whenMapShown(loadGrid);   // phones: the 48-hour weather map waits until the map is on screen
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
+</script>
+
+<script>
+(function(){
+  const q = document.getElementById("boxSearch"), hits = document.getElementById("boxHits");
+  const secs = [...document.querySelectorAll("main > section")];
+  const items = secs.map(sec => ({sec, title:(sec.querySelector("h2")||{}).textContent || sec.getAttribute("aria-label") || "Section", text:(sec.innerText||"").toLowerCase()}));
+  function apply(v){
+    const n = v.trim().toLowerCase();
+    hits.innerHTML = "";
+    if(!n){ secs.forEach(s => s.classList.remove("is-dim")); hits.hidden = true; return; }
+    const matched = items.filter(it => it.title.toLowerCase().includes(n) || it.text.includes(n));
+    secs.forEach(s => s.classList.toggle("is-dim", !matched.some(it => it.sec === s)));
+    matched.slice(0,6).forEach(it => {
+      const li = document.createElement("li");
+      const b = document.createElement("button"); b.type = "button"; b.textContent = it.title.trim();
+      b.addEventListener("click", () => { q.value = it.title.trim(); apply(q.value); it.sec.scrollIntoView({behavior:"smooth", block:"start"}); });
+      li.append(b); hits.append(li);
+    });
+    hits.hidden = !matched.length;
+    if(!hits.hidden) place();
+  }
+  function place(){
+    const r = q.getBoundingClientRect();
+    hits.style.left = r.left + "px";
+    hits.style.width = r.width + "px";
+    hits.style.top = (r.bottom + 8) + "px";
+  }
+  document.body.append(hits);
+  q.addEventListener("input", () => apply(q.value));
+  addEventListener("scroll", () => { if(!hits.hidden) place(); }, true);
+  addEventListener("resize", () => { if(!hits.hidden) place(); });
+})();
 </script>
 </body>
 </html>
