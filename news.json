@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-06T09:57:08Z",
+ "checkedAt": "2026-10-06T10:16:51Z",
  "items": [
   {
    "title": "Tories pledge \u00a310bn British 'Iron Dome' air defence system",
    "url": "https://www.bbc.co.uk/news/articles/cxvgdl5npl86o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-06T09:50:54Z",
+   "breaking": true
+  },
+  {
+   "title": "Boats 'set for people smugglers' seized at airport",
+   "url": "https://www.bbc.co.uk/news/articles/cme8r9267dpko?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-06T09:26:19Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cglg04dd4nko?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-06T08:46:51Z",
-   "breaking": true
-  },
-  {
-   "title": "Coco Gauff shares she suffered racist abuse online after China Open win",
-   "url": "https://www.gbnews.com/sport/tennis/coco-gauff-racist-abuse-china-open",
-   "source": "GB News",
-   "published": "2026-10-06T08:38:29Z",
    "breaking": true
   }
  ],
