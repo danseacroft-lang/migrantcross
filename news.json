@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-06T04:59:39Z",
+ "checkedAt": "2026-10-06T06:24:42Z",
  "items": [
+  {
+   "title": "\u2018Bully in every way\u2019: domestic abuse survivors say ex-partners behind far-right UK street patrols",
+   "url": "https://www.theguardian.com/society/2026/oct/06/uk-domestic-abuse-survivors-ex-partners-behind-far-right-street-patrols",
+   "source": "The Guardian",
+   "published": "2026-10-06T06:00:05Z",
+   "breaking": true
+  },
+  {
+   "title": "Should the UK be protected by an 'Iron Dome'?",
+   "url": "https://news.sky.com/story/should-the-uk-be-protected-by-an-iron-dome-13595610",
+   "source": "Sky News",
+   "published": "2026-10-06T05:50:00Z",
+   "breaking": true
+  },
   {
    "title": "France bracing for national day of protests and high-school blockades with thousands expected to join marches",
    "url": "https://www.gbnews.com/news/world/france-national-day-protests-high-school-blockades-thousands-expected-join-marches",
@@ -20,20 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cw1m4l09mmr0o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-06T04:09:04Z",
-   "breaking": true
-  },
-  {
-   "title": "Boat crash tragedy leaves 30 dead and dozens missing off African coast",
-   "url": "https://www.gbnews.com/news/world/boat-crash-tragedy-30-dead-dozens-missing-river-congo",
-   "source": "GB News",
-   "published": "2026-10-06T03:34:22Z",
-   "breaking": true
-  },
-  {
-   "title": "Author and former politician Jeffrey Archer dies aged 86",
-   "url": "https://www.bbc.co.uk/news/articles/ckj0l401dvpgo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-06T03:19:57Z",
    "breaking": true
   }
  ],
