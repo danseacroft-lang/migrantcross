@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-06T03:35:20Z",
+ "checkedAt": "2026-10-06T04:18:27Z",
  "items": [
+  {
+   "title": "The Papers: Badenoch's 'Britannia Dome' and 'King tells Andrew 'I won't fund court fight''",
+   "url": "https://www.bbc.co.uk/news/articles/cw1m4l09mmr0o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-06T04:09:04Z",
+   "breaking": true
+  },
   {
    "title": "Boat crash tragedy leaves 30 dead and dozens missing off African coast",
    "url": "https://www.gbnews.com/news/world/boat-crash-tragedy-30-dead-dozens-missing-river-congo",
@@ -27,13 +34,6 @@
    "url": "https://news.sky.com/story/lord-archer-the-outrageous-extrovert-who-lived-a-life-tainted-by-scandal-13595584",
    "source": "Sky News",
    "published": "2026-10-06T02:06:00Z",
-   "breaking": true
-  },
-  {
-   "title": "Major fire in Nottingham city centre causes travel disruption",
-   "url": "https://www.gbnews.com/news/nottingham-fire-city-centre-travel-disruption",
-   "source": "GB News",
-   "published": "2026-10-06T01:15:41Z",
    "breaking": true
   }
  ],
