@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-06T01:12:36Z",
+ "checkedAt": "2026-10-06T01:31:17Z",
  "items": [
+  {
+   "title": "Major fire in Nottingham city centre causes travel disruption",
+   "url": "https://www.gbnews.com/news/nottingham-fire-city-centre-travel-disruption",
+   "source": "GB News",
+   "published": "2026-10-06T01:15:41Z",
+   "breaking": true
+  },
   {
    "title": "I won't accept exclusion, says Polanski after criticism of Zionism motion",
    "url": "https://www.bbc.co.uk/news/articles/cjy56yxxwy3po?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-06T01:11:48Z",
+   "breaking": true
+  },
+  {
+   "title": "Police impose dispersal order after schoolchildren told to raid Tesco in viral trend",
+   "url": "https://www.gbnews.com/news/london-news-woolwich-police-impose-dispersal-order-raid-tesco-viral-trend-schools",
+   "source": "GB News",
+   "published": "2026-10-06T00:34:54Z",
    "breaking": true
   },
   {
@@ -20,20 +34,6 @@
    "url": "https://www.gbnews.com/news/world/spain-flooding-multiple-people-killed-torrential-rain",
    "source": "GB News",
    "published": "2026-10-06T00:04:03Z",
-   "breaking": true
-  },
-  {
-   "title": "MPs call for investigation after Lutnick-Epstein whistleblower dies",
-   "url": "https://www.bbc.co.uk/news/articles/cwm2686gl6kno?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-05T23:29:02Z",
-   "breaking": true
-  },
-  {
-   "title": "Kemi Badenoch pledges \u00a310billion for 'Iron Dome' to protect Britain",
-   "url": "https://www.gbnews.com/politics/kemi-badenoch-10billion-iron-dome-britannia-shield-defence",
-   "source": "GB News",
-   "published": "2026-10-05T23:16:20Z",
    "breaking": true
   }
  ],
