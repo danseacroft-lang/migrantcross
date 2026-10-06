@@ -1,8 +1,22 @@
 {
- "checkedAt": "2026-10-06T19:17:40Z",
+ "checkedAt": "2026-10-06T19:43:23Z",
  "items": [
   {
-   "title": "Watch: BBC sees police raid on fake gay asylum claims gang",
+   "title": "Three arrested after raid on gang accused of helping migrants pretend to be gay to get asylum",
+   "url": "https://www.bbc.co.uk/news/articles/cmp3gnd1e4gyo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-06T19:25:08Z",
+   "breaking": true
+  },
+  {
+   "title": "UK to make last-ditch effort to stop Israel closing East Jerusalem consulate",
+   "url": "https://www.bbc.co.uk/news/articles/c5n4922n00wgo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-06T19:17:44Z",
+   "breaking": true
+  },
+  {
+   "title": "Watch: Police raid on gang behind fake gay asylum claims",
    "url": "https://www.bbc.co.uk/news/videos/crgj97n2x1j4o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-06T19:01:17Z",
@@ -20,20 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cmp3g5qg1gxzo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-06T17:38:29Z",
-   "breaking": true
-  },
-  {
-   "title": "Badenoch's \u00a310bn air defence plan points to growing concern over protecting UK's skies",
-   "url": "https://www.bbc.co.uk/news/articles/cm86zqg553q8o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-06T17:27:19Z",
-   "breaking": true
-  },
-  {
-   "title": "Nato on high alert after crew of ship hit by drone strike disappears in Black Sea",
-   "url": "https://www.gbnews.com/news/world/nato-alert-crew-ship-hit-drone-strike-black-sea-russia-ukraine",
-   "source": "GB News",
-   "published": "2026-10-06T17:19:54Z",
    "breaking": true
   }
  ],
