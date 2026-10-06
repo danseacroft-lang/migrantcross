@@ -534,10 +534,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @property --my{syntax:"<percentage>";inherits:false;initial-value:50%}
 .card.lift{transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-2px);box-shadow:var(--shadow-lift);
   transition:transform .18s ease-out,box-shadow .3s ease,opacity .7s cubic-bezier(.2,.8,.2,1)}
-.card::after{content:"";position:absolute;z-index:0;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;--mx:inherit;--my:inherit;
   background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),var(--glare),transparent 65%)}
 .card.lift::after{opacity:1}
-.card > *{position:relative;z-index:1}
 
 /* ------------------------------------------------------------ bento */
 .bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -683,8 +682,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
 .yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.yr.cur .fill{background:var(--blue)}
-.yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.32}
+.yr.cur .fill{background:var(--orange)}
+.yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
