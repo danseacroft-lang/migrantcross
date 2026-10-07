@@ -262,7 +262,7 @@ def update_page(data, recent):
     ytd = recent["ytdBase"] + sum(d["migrants"] for d in recent["days"] if d["date"] > recent["ytdBaseDate"] and d["date"][:4] == latest[:4])
     lead = (f"{n:,} {'person' if n == 1 else 'people'} crossed the Channel in small boats on {nice_date(latest)}."
             if n else f"No small boat crossings of the Channel were detected on {nice_date(latest)}.")
-    desc = f"{lead} {latest[:4]} so far: {ytd:,}. Daily Home Office figures, a migrant tracker and live Channel weather."
+    desc = f"{lead} {latest[:4]} so far: {ytd:,}. Daily Home Office figures, a migrant tracker."
     html = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{desc}">', html, count=1)
 
     # The lines under the title and the big number, written as the page's script writes them, so Google and other
@@ -270,7 +270,7 @@ def update_page(data, recent):
     d = date.fromisoformat(latest)
     long = f"{d.strftime('%A')}, {d.day} {d.strftime('%B')} {d.year}"
     boats = last["boats"]
-    html = re.sub(r'(<span id="freshText">)[^<]*', lambda m: m.group(1) + "Figures to " + short_date(latest), html, count=1)
+    html = re.sub(r'(<b id="stHead">)[^<]*', lambda m: m.group(1) + "Figures to " + short_date(latest), html, count=1)
     # the day as a calendar tile, with "N people crossed" or "No crossings detected" beside it
     html = re.sub(r'(id="hqMon">)[^<]*', lambda m: m.group(1) + d.strftime("%b"), html, count=1)
     html = re.sub(r'(id="hqDay">)[^<]*', lambda m: m.group(1) + str(d.day), html, count=1)

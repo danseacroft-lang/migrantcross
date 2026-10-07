@@ -59,7 +59,7 @@ def caption(days, new):
     lines.append(line + ".")
     week = [d for d in days if d["date"] <= last["date"]][-7:]
     lines.append(f"Last 7 days: {sum(d['migrants'] for d in week):,}.")
-    lines += ["", "Source: Home Office provisional figures.", f"Charts, records and live Channel conditions: {SITE}"]
+    lines += ["", "Source: Home Office provisional figures.", f"Charts, records and running totals: {SITE}"]
     return "\n".join(lines)
 
 
