@@ -1,5 +1,4 @@
 <!doctype html>
-We're experencing higher traffic then usual, we are working to optimise the site for everyone. 
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
@@ -12,7 +11,7 @@ function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribu
 try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
-<meta name="description" content="609 people crossed the Channel in small boats on Mon 5 October. 2026 so far: 20,478. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="description" content="609 people crossed the Channel in small boats on Mon 5 October. 2026 so far: 20,478. Daily Home Office figures and a migrant tracker.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -188,7 +187,13 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.24)}
   .hero-main{gap:14px}.hero .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero .cal span{line-height:22px;font-size:.735rem}.hero .cal b{font-size:2.2rem}
   .hero-chips{gap:6px}.hero-chips > *{max-width:100%}
   .st-text{flex-direction:column;gap:2px}
-  .nw-body{flex-direction:column;gap:2px}.nw-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .news{position:relative;flex-direction:column;align-items:stretch;gap:7px;padding:12px 42px 12px 12px}
+  .news .nw-tag{align-self:flex-start}
+  .news .nw-body{flex-direction:column;align-items:flex-start;gap:5px}
+  .news .nw-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;font-size:1.02rem;line-height:1.3}
+  .news .nw-meta{white-space:normal;font-size:.8rem}
+  .news .nw-count{position:absolute;right:46px;top:11px}
+  .news .nw-x{position:absolute;right:8px;top:8px}
 }
 @media (max-width:360px){.hq-t{font-size:1.45rem}}
 
@@ -497,7 +502,7 @@ footer strong{color:var(--label);font-weight:600}
 :root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
-.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
+.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px + var(--notice-h,0px));left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
 /* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
@@ -753,9 +758,42 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* Night: every box is frosted glass */
 :root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}}
+
+/* Traffic notice: frosted strip at the very top */
+.cc-notice{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:center;gap:9px;padding:10px 46px 10px 16px;font-size:15px;line-height:1.4;text-align:center;color:inherit;background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border-bottom:.5px solid rgba(0,0,0,.08)}
+.cc-notice-dot{flex:none;width:8px;height:8px;border-radius:50%;background:#FF9F0A}
+.cc-notice-x{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;border-radius:50%;background:transparent;color:inherit;opacity:.55;cursor:pointer}
+.cc-notice-x:hover{opacity:1;background:rgba(0,0,0,.06)}
+.cc-notice-x svg{width:13px;height:13px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cc-notice{color:#f2f2f7;background:rgba(28,28,30,.78);border-bottom-color:rgba(255,255,255,.1)}:root:not([data-theme="light"]) .cc-notice-x:hover{background:rgba(255,255,255,.1)}}
+:root[data-theme="dark"] .cc-notice{color:#f2f2f7;background:rgba(28,28,30,.78);border-bottom-color:rgba(255,255,255,.1)}
+:root[data-theme="dark"] .cc-notice-x:hover{background:rgba(255,255,255,.1)}
+@media (max-width:700px){.cc-notice{padding:11px 44px 11px 14px;gap:8px}}
+@media (prefers-reduced-transparency:reduce){.cc-notice{background:#f2f2f7}:root[data-theme="dark"] .cc-notice{background:#1c1c1e}}
 </style>
 </head>
 <body>
+
+<!-- Traffic notice: frosted strip at the top, shown whilst the site is being optimised -->
+<div class="cc-notice" id="cc-notice" role="status">
+  <span class="cc-notice-dot" aria-hidden="true"></span>
+  <span>We're seeing higher traffic than usual and are optimising the site so it stays fast for everyone.</span>
+  <button type="button" class="cc-notice-x" aria-label="Dismiss" onclick="document.getElementById('cc-notice').remove()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+<script>
+/* keeps the Beta pill and the Day/Night switch clear of the notice, and back in place once it's dismissed */
+(function(){
+  var n = document.getElementById('cc-notice'); if(!n) return;
+  var set = function(){ document.documentElement.style.setProperty('--notice-h', n.offsetHeight + 'px'); };
+  set();
+  addEventListener('resize', set);
+  new MutationObserver(function(){ if(!document.getElementById('cc-notice')) document.documentElement.style.setProperty('--notice-h','0px'); })
+    .observe(n.parentNode, {childList:true});
+})();
+</script>
+
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
   <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
@@ -774,8 +812,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">5</b></div>
     <div>
       <div class="kicker" id="heroKicker" hidden></div>
-      <div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">609</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Monday, 5 October 2026 · 8&nbsp;boats</div></div>
-      <span class="sr" id="heroSr" aria-live="polite">609 people crossed in 8 small boats on Monday, 5 October 2026</span>
+      <div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum"></span><span id="hqT"></span></div><div class="hq-s" id="heroSub"></div></div>
+      <span class="sr" id="heroSr" aria-live="polite"></span>
     </div>
   </div>
   <div class="hero-chips">
