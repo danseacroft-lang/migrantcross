@@ -11,7 +11,7 @@ function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribu
 try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
-<meta name="description" content="338 people crossed the Channel in small boats on Tue 6 October. 2026 so far: 20,816. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="description" content="338 people crossed the Channel in small boats on Tue 6 October. 2026 so far: 20,816. Daily Home Office figures, a migrant tracker.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -31,7 +31,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta property="og:image:alt" content="Channel Crossings logo with the latest daily arrivals figure">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
-<meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
+<meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and running totals.">
 <meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-06">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
@@ -72,12 +72,12 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --label:#000; --label2:rgba(60,60,67,.72); --label3:rgba(60,60,67,.36); --sep:rgba(60,60,67,.18);
   --blue:#007AFF; --green:#34C759; --green-t:#248A3D; --orange:#FF9500; --red:#FF3B30; --red-t:#D70015; --indigo:#5856D6; --teal:#30B0C7; --pink:#FF2D55;
   --glass:rgba(255,255,255,.72);
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05);
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#86b6ef; --heat2:#5598e7; --heat3:#256abf; --heat4:#104281;   /* pressed button, orange text, the four shades of the year in squares */
   --age1:#acabeb; --age2:#8f8ee4; --age3:#7371dd; --age4:#5856d6;   /* the age bands in Who Is Crossing, youngest lightest */
   --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
-  --round:var(--font);   /* one font across the site: Helvetica Neue, as on Ventusky (Arial where it is missing) */
+  --round:var(--font);   /* one font across the site: Helvetica Neue (Arial where it is missing) */
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
@@ -85,7 +85,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66);
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
   --age1:#5e5ce6; --age2:#8180ec; --age3:#a2a0f1; --age4:#bfbef5;
@@ -96,7 +96,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66);
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#1f4f87; --heat2:#2f6fbf; --heat3:#4c94ec; --heat4:#8cc2ff;
   --age1:#5e5ce6; --age2:#8180ec; --age3:#a2a0f1; --age4:#bfbef5;
@@ -113,13 +113,6 @@ button,input,select,textarea{font:inherit}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 
 
-.stage-search{position:relative;width:min(560px,100%)}
-.stage-search input{width:100%;height:48px;border:0;border-radius:14px;padding:0 16px;background:rgba(255,255,255,.14);color:#fff;font:500 1rem/1 var(--font);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3);outline:none}
-.stage-search input::placeholder{color:rgba(255,255,255,.62)}
-.stage-hits{position:fixed;z-index:80;list-style:none;margin:0;padding:6px;border-radius:14px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
-.stage-hits button{width:100%;text-align:left;border:0;background:none;color:#fff;font:500 .95rem/1.2 var(--font);padding:10px 12px;border-radius:10px;cursor:pointer}
-.stage-hits button:hover,.stage-hits button[aria-selected=true]{background:rgba(255,255,255,.1)}
-main > section.is-dim{display:none !important}
 /* ------------------------------------------------------------ hero: the latest day's figures */
 .hero{position:relative;width:min(1148px,calc(100% - 2 * max(16px,env(safe-area-inset-left,0px))));margin:calc(64px + env(safe-area-inset-top,0px)) auto 0;padding:24px 28px 22px;border-radius:28px;color:#fff;isolation:isolate;overflow:hidden;box-shadow:var(--shadow);display:grid;gap:24px;background:radial-gradient(120% 110% at 88% 0%,#1d5a9a 0%,#0c2344 56%,#081627 100%)}
 .hero [hidden]{display:none!important}
@@ -129,7 +122,6 @@ main > section.is-dim{display:none !important}
 .hero-logo svg{display:block;width:100%;height:100%}
 .hero-logo:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .hero h1{margin:0;font:700 1.6rem/1.1 var(--font);letter-spacing:.01em;white-space:nowrap}
-.hero .stage-search{flex:0 1 380px}
 .hero-main{display:flex;align-items:center;gap:20px}
 .hero .cal{display:grid;width:88px;height:92px;flex:none;grid-template-rows:28px 1fr;border-radius:20px;overflow:hidden;text-align:center;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 .hero .cal span{background:#FF3B30;font:700 .824rem/28px var(--font);text-transform:uppercase;letter-spacing:.04em}
@@ -147,6 +139,9 @@ button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.24)}
 @keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(255,159,10,0)}}
 @media (prefers-reduced-motion:reduce){.chip i.rep{animation:none}}
+/* the year-so-far figure: the chip as it always was, but with the breaking-news box's corners so the hero reads as one family */
+.chip.ytd-box{border-radius:16px;margin-bottom:-12px}   /* tucked close to the update bar below */
+.chip.ytd-box svg{width:11px;height:11px;margin-right:2px;vertical-align:-1px;opacity:.95}
 /* the update bar: one place that says how fresh the figures are, and what is happening while new ones are awaited */
 .status{display:flex;align-items:center;gap:10px;min-width:0;padding:9px 10px 9px 14px;border-radius:16px;background:rgba(255,255,255,.09);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.2)}
 .status.just{animation:stJust 1.8s ease-out}
@@ -168,8 +163,8 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.24)}
 .st-btn{flex:none;border:0;border-radius:999px;min-height:32px;padding:0 13px;background:rgba(255,255,255,.14);color:#fff;font:600 .8rem/1 var(--font);cursor:pointer;touch-action:manipulation}
 @media (hover:hover){.st-btn:hover{background:rgba(255,255,255,.24)}}
 .st-btn:focus-visible,.nw-head:focus-visible,.nw-x:focus-visible{outline:2px solid #64B5FF;outline-offset:2px}
-/* breaking news: sits under the update bar only while there's a story from the last few hours */
-.news{display:flex;align-items:center;gap:10px;min-width:0;padding:8px 8px 8px 10px;margin-top:-12px;border-radius:16px;background:rgba(255,59,48,.2);box-shadow:inset 0 0 0 .5px rgba(255,120,110,.5)}
+/* breaking news: the first thing in the hero, right under the theme switcher, only while there's a story from the last few hours */
+.news{display:flex;align-items:center;gap:10px;min-width:0;padding:8px 8px 8px 10px;border-radius:16px;background:rgba(255,59,48,.2);box-shadow:inset 0 0 0 .5px rgba(255,120,110,.5)}
 .news.flash{animation:nwFlash 1s ease-in-out .2s 3}
 @keyframes nwFlash{50%{background:rgba(255,59,48,.55)}}
 .nw-tag{flex:none;padding:5px 10px;border-radius:999px;background:#FF3B30;font:700 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase}
@@ -183,9 +178,9 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.24)}
 @media (max-width:700px){
   .hero{padding:18px;border-radius:24px;gap:18px}
   .hero-top{flex-wrap:wrap}.hero h1{font-size:1.35rem}.hero-logo{width:30px;height:30px}
-  .hero .stage-search{flex:1 1 100%;order:3}
   .hero-main{gap:14px}.hero .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero .cal span{line-height:22px;font-size:.735rem}.hero .cal b{font-size:2.2rem}
   .hero-chips{gap:6px}.hero-chips > *{max-width:100%}
+  .chip.ytd-box{margin-bottom:-8px}
   .st-text{flex-direction:column;gap:2px}
   .news{position:relative;flex-direction:column;align-items:stretch;gap:7px;padding:12px 42px 12px 12px}
   .news .nw-tag{align-self:flex-start}
@@ -195,7 +190,7 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.24)}
   .news .nw-count{position:absolute;right:46px;top:11px}
   .news .nw-x{position:absolute;right:8px;top:8px}
 }
-@media (max-width:360px){.hq-t{font-size:1.45rem}}
+@media (max-width:360px){.hq-t{font-size:1.45rem}.chip.ytd-box{font-size:.8rem}.st-btn{padding:0 10px;font-size:.75rem}}   /* small phones: figures bar and year chip stay inside the padding */
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
 .info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
@@ -337,7 +332,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .cost-i:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .cost-i[aria-expanded="true"]{color:var(--label)}
 @media (hover:hover){.cost-i:hover{color:var(--label)}}
-.calm{color:var(--green-t)}.moderate{color:var(--orange-t)}.rough{color:var(--red-t)}
 
 /* ------------------------------------------------------------ on this day */
 .otd-top{display:flex;align-items:center;gap:16px}
@@ -472,14 +466,20 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .vs div{background:var(--fill);border-radius:16px;padding:12px 14px}
 .vs b{display:block;font:700 1.6rem/1.1 var(--round)}
 .vs span{font-size:.765rem;color:var(--label2)}
-.records{list-style:none;margin:0;padding:0}
-.records li{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:12px;padding:12px 0;border-top:.5px solid var(--sep)}
-.records li:first-child{border-top:0;padding-top:4px}
-.records .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--fill);color:var(--label)}
+/* Four tiles in a 2×2 grid, the shape of the system's summary widgets: a tinted icon seal, the figure
+   itself in the shared numeric face, then what it refers to underneath. Figures sit on one line across each row. */
+.records{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.records li{display:flex;flex-direction:column;min-width:0;padding:15px 15px 16px;border-radius:16px;background:var(--fill);box-shadow:inset 0 0 0 .5px var(--sep)}
+.records .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;margin-bottom:12px}
 .records .ic svg{width:19px;height:19px}
-.records .t{font-size:.941rem}.records .t small{display:block;color:var(--label2);font-size:.765rem;margin-top:1px}
-.records .v{font:700 1.1rem var(--round);font-variant-numeric:tabular-nums}
-@media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
+.records .ic-trophy{background:color-mix(in srgb,var(--orange) 16%,transparent);color:color-mix(in srgb,var(--orange) 75%,var(--label))}
+.records .ic-bolt{background:color-mix(in srgb,var(--red) 16%,transparent);color:color-mix(in srgb,var(--red) 75%,var(--label))}
+.records .ic-clock{background:color-mix(in srgb,var(--blue) 16%,transparent);color:color-mix(in srgb,var(--blue) 75%,var(--label))}
+.records .ic-waves{background:color-mix(in srgb,var(--teal) 16%,transparent);color:color-mix(in srgb,var(--teal) 75%,var(--label))}
+.records .t{font:600 .824rem/1.25 var(--font);letter-spacing:-.01em}
+.records .v{margin-top:auto;padding-top:12px;font:700 clamp(1.45rem,4.6vw,1.95rem)/1.05 var(--round);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.records li > small{display:block;min-height:2.7em;margin-top:4px;font-size:.765rem;line-height:1.35;color:var(--label2)}   /* room for two lines, so the figures above stay level across a row */
+@media (max-width:380px){.records{gap:10px}.records li{padding:13px 12px 14px}.records .ic{width:30px;height:30px;border-radius:9px;margin-bottom:10px}.records .ic svg{width:17px;height:17px}}
 
 /* ------------------------------------------------------------ footer */
 footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
@@ -487,13 +487,18 @@ footer p{margin:0;max-width:52ch;line-height:1.45}
 footer strong{color:var(--label);font-weight:600}
 .ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
 .ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
+footer p a{text-decoration:underline;text-underline-offset:2px}   /* links inside sentences read as links, not just colour */
 @media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
 /* share buttons: ready-made posts of the latest figures for each network (links only; nothing loads from them until clicked) */
 .ft-share{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
-.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:var(--label);touch-action:manipulation;transition:background-color .2s}   /* plain buttons, not brand colours */
-.sh-copy,.sh-more{color:var(--blue)}
+.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:#fff;touch-action:manipulation;transition:background-color .2s,filter .2s}   /* each network in its own colour */
+.sh-x{background:#000}
+.sh-fb{background:#1877F2}.sh-wa{background:#1FA855}.sh-tg{background:#229ED9}
+.sh-copy,.sh-more{background:var(--fill);color:var(--blue)}
 .sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.sh:hover{background:var(--fill2)}}
+:root[data-theme="dark"] .sh-x{background:#fff;color:#000}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sh-x{background:#fff;color:#000}}
+@media (hover:hover){.sh:hover{filter:brightness(1.1)}.sh-copy:hover,.sh-more:hover{filter:none;background:var(--fill2)}}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -504,24 +509,23 @@ footer strong{color:var(--label);font-weight:600}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px + var(--notice-h,0px));left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
-@media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
-/* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
-.beta{position:static;flex:none;pointer-events:auto}
-.beta-pill{appearance:none;border:0;min-height:40px;padding:0 15px;border-radius:999px;display:inline-flex;align-items:center;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
-  background:var(--fill,rgba(118,118,128,.12));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);transition:transform .2s ease}
-.beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
-.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:max-content;max-width:min(300px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 14.5px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
-  background:color-mix(in srgb,var(--card) 92%,transparent);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:0 10px 30px rgba(0,0,0,.16);
-  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
-.beta-tip b{display:block;margin-bottom:3px;font-weight:600}
-.beta:hover .beta-tip,.beta.open .beta-tip,.beta-pill:focus-visible + .beta-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
-@media (prefers-reduced-transparency:reduce){.beta-tip{background:var(--card)}}
-@media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}.beta-pill{padding:0 12px}}   /* small phones: both still fit */
+@media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the page's content column */
+/* the New pill beside the switch: frosted like it, with the build-update note on hover or tap */
+.whats-new{position:static;flex:none;pointer-events:auto}
+.wn-pill{min-height:40px;padding:0 13px;border:0;border-radius:999px;background:var(--fill,rgba(118,118,128,.12));color:var(--label);font:700 14px/1 var(--font);letter-spacing:.05em;text-transform:uppercase;cursor:pointer;touch-action:manipulation;transition:background .15s,transform .15s}
+.wn-pill:focus-visible{outline:2px solid #64B5FF;outline-offset:2px}
+@media (hover:hover){.whats-new:hover .wn-pill{background:var(--fill2,rgba(118,118,128,.2));transform:translateY(-1px)}}
+.wn-tip{position:absolute;top:calc(100% + 8px);right:0;width:280px;padding:13px 15px;border-radius:16px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.84rem;line-height:1.45;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease,transform .16s ease,visibility .16s;pointer-events:none}
+.wn-tip b{display:block;margin-bottom:5px;font-size:.9rem}
+@media (hover:hover){.whats-new:hover .wn-tip,.whats-new .wn-pill:focus-visible + .wn-tip{opacity:1;visibility:visible;transform:none}}
+.whats-new.open .wn-tip{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+@media (prefers-reduced-transparency:reduce){.wn-tip{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media (max-width:370px){.top-row .wn-pill{padding:0 9px}}
+@media (min-width:1180px){.wn-tip{right:calc((100% - 1148px) / 2)}}   /* lined up with the page's content column */
+@media (max-width:370px){.top-row .top-theme button{padding:0 9px;gap:4px}}   /* small phones: the switch still fits */
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
-@media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
 .hero-logo,.st-btn,.nw-x{position:relative}
 .hero-logo::after,.st-btn::after,.nw-x::after{content:"";position:absolute;inset:-8px}
@@ -571,7 +575,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
-/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, roundup) */
+/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions) */
 .mb{--mbar4:#0066D6;--mbar:var(--blue);--bar-peak:var(--orange);--boat:#DB7100;--green-bg:rgba(52,199,89,.14)}
 :root[data-theme="dark"] .mb{--mbar4:#0A6FD8;--boat:#D97200;--green-bg:rgba(48,209,88,.18)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--mbar4:#0A6FD8;--boat:#D97200;--green-bg:rgba(48,209,88,.18)}}
@@ -586,10 +590,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
 .toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.mb .b-close{position:absolute;z-index:2;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
-.mb .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
-.mb .b-close svg{width:10px;height:10px}
-.mb .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
 .mb .petitions li{grid-template-columns:1fr auto;gap:2px 12px;padding:12px 0}
 .mb .petitions a.pt{color:var(--label);text-decoration:none;font-size:.882rem;font-weight:600;line-height:1.3}
 .mb .petitions a.pt:hover{color:var(--blue)}
@@ -713,29 +713,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .rep-boats .pp{fill:var(--orange)}
 .mb .rep-none{font-size:.882rem;color:var(--label2)}
 .mb .dots{animation:fadeIn .35s ease-out}
-.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
-.mb .subscribe.leaving{animation:lift .25s ease-in both}
-.mb .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
-.mb .sub-icon svg{width:24px;height:24px}
-.mb .sub-copy{display:grid;gap:2px;min-width:0;padding-right:32px}
-.mb .sub-copy h2{font:600 1rem/1.25 var(--font);letter-spacing:-.024em}
-.mb .sub-copy p{margin:0;font-size:.824rem;color:var(--label2)}
-.mb .sub-form{grid-column:1 / -1;display:flex;gap:8px;min-width:0}
-.mb .sub-form input[type=email]{flex:1;min-width:0;appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 14px}
-.mb .sub-form input[type=email]::placeholder{color:var(--label2)}
-.mb .sub-form input[type=email]:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
-.mb .sub-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.mb .sub-form button{flex:none;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer}
-.mb .sub-form button:disabled{opacity:.5;cursor:default}
-.mb .sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.mb .sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
-.mb .sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
-.mb .sub-msg.ok{color:var(--green-t);font-weight:600}.mb .sub-msg.err{color:var(--red-t)}
-.mb .subscribe.done .sub-form{display:none}
-@media (max-width:760px){.mb .sub-msg{grid-column:1 / -1}}
-@media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
 /* Wider screens: two fixed columns. A box may grow taller (Show more) but never wider, and it stays in its column. */
 @media (min-width:900px){
@@ -751,7 +729,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   background:color-mix(in srgb,var(--fill) 88%,var(--card));box-shadow:inset 0 0 0 .5px var(--sep)}
 .more-toggle svg{width:13px;height:13px;flex:none;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
 .card.is-open > .more-toggle svg{transform:rotate(180deg)}
-.card.can-more:not(.is-open)::after{content:"";position:absolute;left:0;right:0;bottom:42px;height:28px;background:linear-gradient(transparent,var(--card));pointer-events:none;z-index:2}
+/* The fade above the Show more button needs its own pseudo-element. Sharing ::after with the mouse
+   glare above left it with the glare's top:0 and opacity:0, so on hover it appeared as a rounded bar
+   across the top of the box instead of sitting quietly above the button. */
+.card.can-more:not(.is-open)::before{content:"";position:absolute;left:0;right:0;bottom:42px;height:28px;background:linear-gradient(transparent,var(--card));pointer-events:none;z-index:2}
 .more-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.more-toggle:hover{background:var(--fill2)}}
 
@@ -783,7 +764,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </button>
 </div>
 <script>
-/* keeps the Beta pill and the Day/Night switch clear of the notice, and back in place once it's dismissed */
+/* keeps the Day/Night switch clear of the notice, and back in place once it's dismissed */
 (function(){
   var n = document.getElementById('cc-notice'); if(!n) return;
   var set = function(){ document.documentElement.style.setProperty('--notice-h', n.offsetHeight + 'px'); };
@@ -795,18 +776,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 </script>
 
 
-<!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+<!-- the appearance switch again at the top, in line with the page's content column -->
+  <div class="top-row"><div class="whats-new" id="whatsNew"><button type="button" class="wn-pill" id="wnBtn" aria-expanded="false" aria-describedby="wnTip">New</button><div class="wn-tip" id="wnTip" role="tooltip" data-nosnippet><b>New build update!</b>We have seen thousands of new visitors using the site recently so we have fixed bugs, improved the reliability and added in some fresh new graphs along with redesigns of key areas. Enjoy!</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the latest day's figures -->
 <header class="hero" id="hero">
+  <!-- Breaking news sits at the very top of the page, underneath the theme switcher -->
+  <aside class="news" id="news" aria-label="Breaking news" data-nosnippet hidden>
+    <span class="nw-tag">Breaking</span>
+    <div class="nw-body"><a class="nw-head" id="newsHead" href="#" target="_blank" rel="noopener"></a><span class="nw-meta"><span id="newsSrc"></span> · <span id="newsAge"></span></span></div>
+    <span class="nw-count" id="newsCount" aria-hidden="true" hidden></span>
+    <button type="button" class="nw-x" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  </aside>
   <div class="hero-top">
     <div class="hero-brand"><a class="hero-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div>
-    <form class="stage-search" role="search" action="javascript:void(0)">
-      <label class="sr" for="boxSearch">Search the figures</label>
-      <input id="boxSearch" type="search" placeholder="Search figures, records, nationalities" autocomplete="off" enterkeyhint="search">
-      <ul id="boxHits" class="stage-hits" hidden></ul>
-    </form>
   </div>
   <div class="hero-main">
     <div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">6</b></div>
@@ -818,22 +801,17 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </div>
   <div class="hero-chips">
     <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
-    <span class="chip" id="chipYear" hidden></span>
     <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+    <!-- "2026 so far": the same chip as always, with the breaking-news box's corners, straight above the update bar -->
+    <span class="chip ytd-box" id="chipYear" hidden></span>
   </div>
   <!-- The update bar: how fresh the figures are, and what is happening while new ones are awaited (see Updates in the script) -->
   <div class="status" id="status" role="status" data-state="fresh">
     <i class="st-dot" aria-hidden="true"></i>
     <svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg>
-    <div class="st-text"><b id="stHead">Checking the figures</b><span id="stMeta"></span></div>
+    <div class="st-text"><b id="stHead">Figures to 6 Oct</b><span id="stMeta"></span></div>
     <button type="button" class="st-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button>
   </div>
-  <aside class="news" id="news" aria-label="Breaking news" data-nosnippet hidden>
-    <span class="nw-tag">Breaking</span>
-    <div class="nw-body"><a class="nw-head" id="newsHead" href="#" target="_blank" rel="noopener"></a><span class="nw-meta"><span id="newsSrc"></span> · <span id="newsAge"></span></span></div>
-    <span class="nw-count" id="newsCount" aria-hidden="true" hidden></span>
-    <button type="button" class="nw-x" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-  </aside>
 </header>
 
 <div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" data-nosnippet hidden>
@@ -1088,27 +1066,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
   </section>
 
-  <!-- ============================================================ WEEKLY ROUNDUP -->
-  <section class="mb" aria-labelledby="subTitle">
-    <div class="subscribe rv" id="subscribe" aria-labelledby="subTitle">
-      <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
-      <div class="sub-copy">
-        <h2 id="subTitle">Weekly roundup of the figures</h2>
-        <p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
-      </div>
-      <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
-        <label class="sr" for="subEmail">Email address</label>
-        <input type="email" id="subEmail" name="field_0" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
-        <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" id="subBtn">Subscribe</button>
-      </form>
-      <button type="button" class="b-close" id="subClose" aria-label="Close the weekly roundup sign-up">
-        <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-      </button>
-      <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
-    </div>
-  </section>
-
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1116,7 +1073,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <footer>
   <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
-  <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every few minutes from noon each day,. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+  <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every few minutes from noon each day. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
@@ -1147,12 +1104,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     showTheme();
   }));
   showTheme();
-  // The Beta pill: its note shows on hover, or on a tap (phones); tapping elsewhere or Escape hides it
-  const beta = $("beta"), betaBtn = $("betaBtn");
-  const betaOpen = on => { beta.classList.toggle("open", on); betaBtn.setAttribute("aria-expanded", on); };
-  betaBtn.addEventListener("click", e => { e.stopPropagation(); betaOpen(!beta.classList.contains("open")); });
-  document.addEventListener("click", () => betaOpen(false));
-  document.addEventListener("keydown", e => { if(e.key === "Escape") betaOpen(false); });
 
   // The boxes react to the mouse: a slight lean towards it and a soft light where it points. Mouse only, never with reduced motion.
   if(matchMedia("(hover: hover) and (pointer: fine)").matches && !reduced){
@@ -1226,7 +1177,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
     const pct = prev ? Math.round((ytd / prev - 1) * 100) : null;
     const c = $("chipYear"); c.hidden = false;
-    c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (pct < 0 ? "down" : "up") + "'>" + (pct < 0 ? "↓" : "↑") + Math.abs(pct) + "% on " + (yr - 1) + "</span>" : "");
+    const dn = pct != null && pct < 0;   // the year-on-year arrow: a proper little SVG rather than a text glyph
+    c.innerHTML = yr + " so far <b class='num'>" + fmt(ytd) + "</b>" + (pct != null ? " <span class='" + (dn ? "down" : "up") + "'><span class='sr'>" + (dn ? "down" : "up") + "</span><svg viewBox='0 0 12 12' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='" + (dn ? "M6 2.2v7.6M2.9 6.7L6 9.8l3.1-3.1" : "M6 9.8V2.2M2.9 5.3L6 2.2l3.1 3.1") + "'/></svg>" + Math.abs(pct) + "% on " + (yr - 1) + "</span>" : "");
     Updates.render();
   }
 
@@ -1283,6 +1235,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
   document.addEventListener("click", e => { if(cur && !cur.pop.contains(e.target)) closePop(); });
   document.addEventListener("keydown", e => { if(e.key === "Escape" && cur){ const c = cur.chip; closePop(); c.focus(); } });
+
+  // The New pill: its note shows on hover, or on a tap (phones); tapping elsewhere or Escape hides it
+  const wn = $("whatsNew"), wnBtn = $("wnBtn");
+  const wnOpen = on => { wn.classList.toggle("open", on); wnBtn.setAttribute("aria-expanded", on); };
+  wnBtn.addEventListener("click", e => { e.stopPropagation(); wnOpen(!wn.classList.contains("open")); });
+  document.addEventListener("click", () => wnOpen(false));
+  document.addEventListener("keydown", e => { if(e.key === "Escape") wnOpen(false); });
   addEventListener("scroll", placePop, {passive:true});
   addEventListener("resize", placePop);
 
@@ -1822,14 +1781,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         !lastX ? "–" : since + (since === 1 ? " day" : " days")],   // counted to the latest figures, not to today
       ["waves", "Longest quiet spell in " + yr, best ? dShort.format(parse(bStart)) + " – " + dShort.format(parse(bEnd)) : "No quiet days yet", best ? best + (best === 1 ? " day" : " days") : "–"]
     ];
-    $("records").innerHTML = rows.map(r => '<li><span class="ic">' + RIC[r[0]] + '</span><span class="t">' + r[1] + "<small>" + r[2] + '</small></span><span class="v">' + r[3] + "</span></li>").join("");
+    $("records").innerHTML = rows.map(r => '<li><span class="ic ic-' + r[0] + '">' + RIC[r[0]] + '</span><span class="t">' + r[1] + '</span><span class="v">' + r[3] + "</span><small>" + r[2] + "</small></li>").join("");
   }
 
   function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
-     between two dates, quiet spells, patterns, every person, petitions and the weekly roundup */
+     between two dates, quiet spells, patterns, every person and petitions */
   let sorted = [];   // the same figures as days, under the name these boxes were written with
   const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
   const niceStep = raw => { const p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; };
@@ -1837,7 +1796,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
     set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
   };
-  const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
   const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
   // the cost line in the Labour box: the NAO's asylum support spend for 2024-25, shared across the people on asylum support at the end of March 2025
   const SUPPORT = {bill:4.0e9, people:106771, source:"NAO, Dec 2025; Home Office, people on asylum support at end of March 2025"};
@@ -1877,9 +1835,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function drawCalendar(){
     if(!sorted.length) return;
     const first = sorted[0].date, last = sorted[sorted.length-1].date;
-    // opens on the latest month, but a new month with less than a week of figures would look almost empty,
-    // so until then it opens on the month before (the arrow still goes to the new one)
-    if(!calMonth || calMonth > last.slice(0,7)) calMonth = +last.slice(8) < 7 && shiftMonth(last.slice(0,7), -1) >= first.slice(0,7) ? shiftMonth(last.slice(0,7), -1) : last.slice(0,7);
+    // opens on the latest month, even when it has only just begun
+    if(!calMonth || calMonth > last.slice(0,7)) calMonth = last.slice(0,7);
     if(calMonth < first.slice(0,7)) calMonth = first.slice(0,7);
     const byDate = new Map(sorted.map(d=>[d.date, d]));
     const start = new Date(calMonth + "-01T00:00:00Z");
@@ -2313,30 +2270,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
   });
 
-  /* =========== Email updates =========== */
-  $("subForm").addEventListener("submit", async e=>{
-    const f = e.currentTarget, email = $("subEmail"), msg = $("subMsg");
-    e.preventDefault();
-    if(!email.checkValidity()){ msg.className = "sub-msg err"; msg.textContent = "Enter a valid email address."; email.focus(); return; }
-    $("subBtn").disabled = true;
-    try{
-      await fetch(f.action, {method:"POST", mode:"no-cors", body:new URLSearchParams(new FormData(f)), ...limit()});
-      $("subscribe").classList.add("done");
-      msg.className = "sub-msg ok";
-      msg.textContent = "Nearly done. Check your inbox and tap the link to confirm.";
-    }catch(err){
-      $("subBtn").disabled = false;
-      f.submit();   // couldn't send from here: open EmailOctopus's own page instead
-    }
-  });
-
-  $("subClose").addEventListener("click", () => {
-    store.set("subClosed", "1");
-    const box = $("subscribe"), sec = box.parentElement; if(reduced){ sec.hidden = true; return; }
-    box.classList.add("leaving"); box.addEventListener("animationend", () => sec.hidden = true, {once:true});
-  });
-  if(store.get("subClosed")) $("subscribe").parentElement.hidden = true;   // its section, so no empty gap is left above the footer
-
   function renderPetitions(){
     const list = extras.petitions && extras.petitions.petitions || [];
     const ul = $("petitions"); ul.textContent = "";
@@ -2468,39 +2401,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
-</script>
-
-<script>
-(function(){
-  const q = document.getElementById("boxSearch"), hits = document.getElementById("boxHits");
-  const secs = [...document.querySelectorAll("main > section")];
-  const items = secs.map(sec => ({sec, title:(sec.querySelector("h2")||{}).textContent || sec.getAttribute("aria-label") || "Section", text:(sec.innerText||"").toLowerCase()}));
-  function apply(v){
-    const n = v.trim().toLowerCase();
-    hits.innerHTML = "";
-    if(!n){ secs.forEach(s => s.classList.remove("is-dim")); hits.hidden = true; return; }
-    const matched = items.filter(it => it.title.toLowerCase().includes(n) || it.text.includes(n));
-    secs.forEach(s => s.classList.toggle("is-dim", !matched.some(it => it.sec === s)));
-    matched.slice(0,6).forEach(it => {
-      const li = document.createElement("li");
-      const b = document.createElement("button"); b.type = "button"; b.textContent = it.title.trim();
-      b.addEventListener("click", () => { q.value = it.title.trim(); apply(q.value); it.sec.scrollIntoView({behavior:"smooth", block:"start"}); });
-      li.append(b); hits.append(li);
-    });
-    hits.hidden = !matched.length;
-    if(!hits.hidden) place();
-  }
-  function place(){
-    const r = q.getBoundingClientRect();
-    hits.style.left = r.left + "px";
-    hits.style.width = r.width + "px";
-    hits.style.top = (r.bottom + 8) + "px";
-  }
-  document.body.append(hits);
-  q.addEventListener("input", () => apply(q.value));
-  addEventListener("scroll", () => { if(!hits.hidden) place(); }, true);
-  addEventListener("resize", () => { if(!hits.hidden) place(); });
-})();
 </script>
 </body>
 </html>
