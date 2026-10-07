@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-07T01:15:39Z",
+ "checkedAt": "2026-10-07T01:56:33Z",
  "items": [
+  {
+   "title": "The Papers: 'Badenoch promises tax cuts' and 'Asos hacker havoc'",
+   "url": "https://www.bbc.co.uk/news/articles/c317k0zqz5lzo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-07T01:41:20Z",
+   "breaking": true
+  },
   {
    "title": "Islamist allowed to stay in UK faces prison after ISIS recruit found with 'suicide bomb manual'",
    "url": "https://www.gbnews.com/news/islamist-faces-prison-isis-recruit-suicide-bomb-manual",
@@ -9,24 +16,10 @@
    "breaking": true
   },
   {
-   "title": "The Papers: 'Badenoch promises tax cuts' and 'Asos hacker havoc'",
-   "url": "https://www.bbc.co.uk/news/articles/c317k0zqz5lzo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-07T00:33:05Z",
-   "breaking": true
-  },
-  {
    "title": "MAPPED: The 10 UK areas claiming the most in benefits - How does your area compare?",
    "url": "https://www.gbnews.com/news/welfare-spending-uk-areas-claiming-most-benefits-map-taxpayer-alliance",
    "source": "GB News",
    "published": "2026-10-06T23:01:02Z",
-   "breaking": true
-  },
-  {
-   "title": "Balaclava-wearing burglar jailed after falling asleep in victim\u2019s property",
-   "url": "https://www.gbnews.com/news/hertfordshire-news-balaclava-wearing-burglar-jailed-falling-asleep-victims-property",
-   "source": "GB News",
-   "published": "2026-10-06T22:49:45Z",
    "breaking": true
   }
  ],
