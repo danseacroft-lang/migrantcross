@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-07T16:34:08Z",
+ "checkedAt": "2026-10-07T17:58:08Z",
  "items": [
+  {
+   "title": "Chris Philp issues direct message to GB News viewers with small boats warning about Nigel Farage",
+   "url": "https://www.gbnews.com/politics/chris-philp-gb-news-migrant-crisis-nigel-farage",
+   "source": "GB News",
+   "published": "2026-10-07T17:42:47Z",
+   "breaking": true
+  },
   {
    "title": "Tories united behind Badenoch - but party still needs to win over voters",
    "url": "https://www.bbc.co.uk/news/articles/cm1j3rj2r72xo?at_medium=RSS&at_campaign=rss",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/news/london-news-fire-800-year-old-market-kingston",
    "source": "GB News",
    "published": "2026-10-07T15:34:58Z",
-   "breaking": true
-  },
-  {
-   "title": "Greens investigate party member behind Zionism motion",
-   "url": "https://www.bbc.co.uk/news/articles/cmwyq4yq0y6do?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-07T15:26:25Z",
    "breaking": true
   }
  ],
