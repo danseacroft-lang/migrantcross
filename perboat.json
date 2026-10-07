@@ -50,21 +50,21 @@
   },
   {
    "y": "2026",
-   "people": 20478,
-   "boats": 298,
+   "people": 20816,
+   "boats": 303,
    "avg": 69
   }
  ],
  "partialYear": "2026",
  "last90": {
-  "people": 8594,
-  "boats": 116,
+  "people": 8683,
+  "boats": 117,
   "avg": 74,
-  "to": "2026-10-05"
+  "to": "2026-10-06"
  },
  "recordMonth": {
   "month": "2026-10",
-  "avg": 80
+  "avg": 77
  },
- "updatedAt": "2026-10-07T11:07:08Z"
+ "updatedAt": "2026-10-07T12:09:56Z"
 }
