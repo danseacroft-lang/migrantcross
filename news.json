@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-07T07:14:01Z",
+ "checkedAt": "2026-10-07T07:36:08Z",
  "items": [
   {
    "title": "Battle of ideas looming in British politics, Badenoch to say",
    "url": "https://www.bbc.co.uk/news/articles/c8r4ylp6657zo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-07T06:50:58Z",
+   "published": "2026-10-07T07:35:19Z",
+   "breaking": true
+  },
+  {
+   "title": "German spy chief may have leaked British secrets 'in biggest espionage scandal in modern history', MI6 fears",
+   "url": "https://www.gbnews.com/news/world/german-spy-chief-british-secrets-leaked-foreign-power",
+   "source": "GB News",
+   "published": "2026-10-07T07:03:51Z",
    "breaking": true
   },
   {
@@ -16,24 +23,17 @@
    "breaking": true
   },
   {
+   "title": "The candidates hoping to be London's second Tory mayor",
+   "url": "https://www.bbc.co.uk/news/articles/cwe8lvjlp0d5o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-07T05:14:46Z",
+   "breaking": true
+  },
+  {
    "title": "Metal detectorist finds second Bronze Age hoard in Scottish Borders",
    "url": "https://www.bbc.co.uk/news/articles/cm62y4j5w149o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-07T05:03:01Z",
-   "breaking": true
-  },
-  {
-   "title": "The Papers: 'Badenoch promises tax cuts' and 'Asos hacker havoc'",
-   "url": "https://www.bbc.co.uk/news/articles/c317k0zqz5lzo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-07T04:57:44Z",
-   "breaking": true
-  },
-  {
-   "title": "Donald Trump to call Vladimir Putin over Russia plague fears as Marco Rubio demands answers",
-   "url": "https://www.gbnews.com/politics/us/donald-trump-vladimir-putin-russia-pneumonic-plague-fears-marco-rubio",
-   "source": "GB News",
-   "published": "2026-10-07T04:40:48Z",
    "breaking": true
   }
  ],
