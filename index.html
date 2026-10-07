@@ -12,7 +12,7 @@ function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribu
 try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
-<meta name="description" content="609 people crossed the Channel in small boats on Mon 5 October. 2026 so far: 20,478. Daily Home Office figures and a migrant tracker.">
+<meta name="description" content="609 people crossed the Channel in small boats on Mon 5 October. 2026 so far: 20,478. Daily Home Office figures, a migrant tracker and live Channel weather.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -774,8 +774,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">5</b></div>
     <div>
       <div class="kicker" id="heroKicker" hidden></div>
-      <div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum"></span><span id="hqT"></span></div><div class="hq-s" id="heroSub"></div></div>
-      <span class="sr" id="heroSr" aria-live="polite"></span>
+      <div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">609</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Monday, 5 October 2026 · 8&nbsp;boats</div></div>
+      <span class="sr" id="heroSr" aria-live="polite">609 people crossed in 8 small boats on Monday, 5 October 2026</span>
     </div>
   </div>
   <div class="hero-chips">
