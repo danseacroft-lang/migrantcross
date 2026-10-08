@@ -12,7 +12,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
 <link rel="preload" href="vendor/leaflet/leaflet.js" as="script">
-<meta name="description" content="119 people crossed the Channel in small boats on Wed 7 October. 2026 so far: 20,935. Daily Home Office figures, a migrant tracker.">
+<meta name="description" content="338 people crossed the Channel in small boats on Tue 6 October. 2026 so far: 20,816. Daily Home Office figures, a migrant tracker.">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -26,14 +26,14 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta property="og:title" content="Channel Crossings: daily small boat arrivals">
 <meta property="og:description" content="How many people crossed the Channel in small boats yesterday? Daily Home Office figures, records and live Channel conditions.">
 <meta property="og:url" content="https://channelcrossings.world/">
-<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-07">
+<meta property="og:image" content="https://channelcrossings.world/og-image.png?v=2026-10-06">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Channel Crossings logo with the latest daily arrivals figure">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
-<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-07">
+<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-06">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
@@ -56,9 +56,9 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   "isAccessibleForFree": true,
   "keywords": ["small boat crossings", "Channel crossings", "small boat arrivals", "migrant crossings", "boat crossing figures", "English Channel", "small boats", "migration", "UK", "Home Office", "daily statistics"],
   "creator": {"@type": "Organization", "name": "Channel Crossings", "url": "https://channelcrossings.world/", "email": "x.chancrossings@gmail.com"},
-  "temporalCoverage": "2018-01-01/2026-10-07",
+  "temporalCoverage": "2018-01-01/2026-10-06",
   "spatialCoverage": "English Channel, United Kingdom",
-  "dateModified": "2026-10-07",
+  "dateModified": "2026-10-06",
   "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://channelcrossings.world/data.csv"}]
 }
 </script>
@@ -82,7 +82,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
   --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#86b6ef; --heat2:#5598e7; --heat3:#256abf; --heat4:#104281;   /* pressed button, orange text, the four shades of the year in squares */
   --age1:#acabeb; --age2:#8f8ee4; --age3:#7371dd; --age4:#5856d6;   /* the age bands in Who Is Crossing, youngest lightest */
-  --font:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:var(--font);   /* one font across the site: Helvetica Neue, as on Ventusky (Arial where it is missing) */
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -115,9 +115,9 @@ body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font)
 a{color:var(--blue);text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-button,input,select,textarea{font:inherit}
+button,input,select,textarea{font:inherit;font-family:var(--font)}
 .leaflet-container,.leaflet-container *{font-family:var(--font)}
-:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
 
 
 /* ------------------------------------------------------------ hero: the live Channel */
@@ -365,7 +365,7 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 @media (max-width:360px){#chipYear{white-space:nowrap;flex-wrap:wrap;gap:0 5px;padding:0 11px}}   /* small phones: "2026 so far 19,287 ↓44% on 2025" on one line, never broken mid-phrase */
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
-.info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:14px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.4;color:var(--label);letter-spacing:-.01em}
+.info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:16px 18px;border-radius:18px;background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.45;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
 .info-pop.sheet{overflow:auto;overscroll-behavior:contain;border-radius:20px;padding:16px 18px}
@@ -567,7 +567,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .otd-years .oy{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
 .otd-years .oy{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}   /* each year is a button: tap to read it above */
 .otd-years .oy[aria-pressed=true] em{color:var(--label)}
-.otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+.otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
 .otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--blue);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .otd-years i.zero{background:var(--fill2)}
 .otd-years i.last:not(.zero){background:var(--orange)}   /* a quiet latest year stays a grey stub */
@@ -718,7 +718,7 @@ footer strong{color:var(--label);font-weight:600}
 :root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
-.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
+.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 16px;pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
 /* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
@@ -739,8 +739,8 @@ footer strong{color:var(--label);font-weight:600}
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
 @media (min-width:1180px){.beta-tip{right:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
-.large-title .lt-logo,#wxPlay,.am-x,#tourNext,#tourSkip{position:relative}
-.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,#tourNext::after,#tourSkip::after{content:"";position:absolute;inset:-8px}
+.large-title .lt-logo,#wxPlay,.am-x,
+.mn-close::after,.large-title .lt-logo::after,#wxPlay::after,.am-x::after,
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
 /* full screen: the zoom buttons, scale and credits keep clear of the notch and the home bar */
@@ -807,7 +807,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .petitions li:last-child{padding-bottom:0}
 .mb.area-rep{display:none}
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
-.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:var(--shadow);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
+.toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .mb .b-close{position:absolute;z-index:2;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
 .mb .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
@@ -966,21 +966,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   main > section.wide{grid-column:1 / -1}
 }
 /* First-visit tour of the map: a spotlight on each control with a small card explaining it */
-.tour{position:fixed;inset:0;z-index:60;pointer-events:auto}
-.tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.9);transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.tour-card{position:fixed;width:min(320px,calc(100vw - 32px));padding:16px 16px 14px;border-radius:18px;background:var(--card);color:var(--label);box-shadow:0 12px 40px rgba(0,0,0,.35);transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1);animation:popIn .3s ease-out both}
-.tour-card .tc-step{font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--blue)}
-.tour-card h3{margin:6px 0 4px;font:700 1.06rem/1.25 var(--font);letter-spacing:-.02em}
-.tour-card p{margin:0;font-size:.882rem;line-height:1.4;color:var(--label2)}
-.tour-row{display:flex;align-items:center;gap:8px;margin-top:14px}
-.tour-dots{display:flex;gap:5px;margin-right:auto}
-.tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--fill)}
-.tour-dots i.on{background:var(--blue)}
-.tour-row button{border:0;border-radius:999px;min-height:36px;padding:0 14px;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
-.tour-skip{background:none;color:var(--label2)}
-.tour-next{background:var(--blue);color:#fff}
-.tour-row button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){.tour-spot,.tour-card{transition:none;animation:none}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (prefers-reduced-motion:reduce){}
 
 /* Night: every box is frosted glass */
 :root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
@@ -990,7 +990,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <body>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+  <div class="top-row"><div class="hero-brand"><a class="hero-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 3 Oct</span><span aria-hidden="true">&middot;</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1024,8 +1024,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <button type="button" class="mn-close" id="newsClose" aria-label="Dismiss breaking news"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   </aside>
 
-  <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 3 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
-
   <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
   <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
@@ -1033,22 +1031,22 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <!-- Map controls, laid out like Apple Maps: a layer button, a full-screen button and a forecast timeline -->
   <div class="wx-ctl" id="wxCtl">
     <div class="am-top">
-      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span id="wxLayerName">Waves</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <button type="button" class="am-btn wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button type="button" class="am-btn am-layer" id="wxLayerBtn" style="display:none" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span id="wxLayerName">Waves</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button type="button" class="am-btn wx-full" id="wxFull" style="display:none" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
-    <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
+    <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" style="display:none" hidden>
       <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
       <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button></div>
       <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
-      <div class="wx-key" id="wxKeyPick" role="img"></div>
+      <div class="wx-key" id="wxKeyPick" role="img" style="display:none"></div>
     </div>
-    <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
-    <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img"></div>
+    <div class="wx-time am-pill" style="display:none"><button type="button" class="am-play" id="wxPlay" style="display:none" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
+    <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img" style="display:none"></div>
   </div>
 
   <div class="hero-in">
     <div class="kicker" id="heroKicker" hidden></div>
-    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">7</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">119</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Wednesday, 7 October 2026 · 2&nbsp;boats</div></div></div><span class="sr" id="heroSr" aria-live="polite">119 people crossed in 2 small boats on Wednesday, 7 October 2026</span>
+    <div class="hero-quiet"><div class="cal" aria-hidden="true"><span id="hqMon">Oct</span><b id="hqDay">6</b></div><div aria-hidden="true"><div class="hq-t"><span class="num" id="heroNum">338</span><span id="hqT"> people detected</span></div><div class="hq-s" id="heroSub">Tuesday, 6 October 2026 · 5&nbsp;boats</div></div></div><span class="sr" id="heroSr" aria-live="polite">338 people crossed in 5 small boats on Tuesday, 6 October 2026</span>
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
@@ -1337,22 +1335,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="tour" id="tour" role="dialog" aria-modal="true" aria-labelledby="tourH" hidden>
-  <div class="tour-spot" id="tourSpot"></div>
-  <div class="tour-card" id="tourCard">
-    <div class="tc-step" id="tourStep"></div>
-    <h3 id="tourH"></h3>
-    <p id="tourP"></p>
-    <div class="tour-row"><span class="tour-dots" id="tourDots"></span><button type="button" class="tour-skip" id="tourSkip">Skip</button><button type="button" class="tour-next" id="tourNext">Next</button></div>
-  </div>
-</div>
+
 
 
 <footer>
   <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
-  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
+  <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
 <script src="vendor/leaflet/leaflet.js"></script>
@@ -1481,7 +1471,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     // Free to use with credit, and needs no key.
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
     esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
-    L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
+    // scale control removed
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
@@ -1495,7 +1485,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       placeTowns();
     }).catch(() => {}), 3000);
     [heat, flow] = ["heat", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
-    L.control.zoom({position:"bottomright"}).addTo(LM);
+    // zoom control removed
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
     LM.on("zoomend", () => {
       boatK = Math.min(4, (LM.getSize().x < 600 ? .55 : .75) / unitPx().sx);   // the boats stay the same size on screen at any zoom (a little smaller on phones)
@@ -1647,7 +1637,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const LAPSE = .0065;   // the air is about 0.65°C cooler for every 100 m up
   for(let i = 0; i < 16; i++) GLAT.push(+(48.2 + i * GDLAT).toFixed(2));
   for(let i = 0; i < 22; i++) GLON.push(+(-2.8 + i * GDLON).toFixed(2));
-  let grid = null, layer = "waves";
+  let grid = null, layer = "wavesrain";
   const fillGaps = a => {   // the marine model has no waves over land: borrow from the nearest sea
     if(!a.some(x => x != null)) return null;
     for(let pass = 0; pass < 20 && a.some(x => x == null); pass++){
@@ -1734,7 +1724,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     // temperature in Ventusky's warm earthy colours: blue in the cold, green at 10°, golden tan in the mid teens, terracotta and mauve
     // in the heat. Matched to Ventusky (Dan's screenshot, 2 Oct 2026) once multiplied over the light grey map
     temp:{key:"temp", unit:"°C", stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]},
-    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]}
+    rain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
+    wavesrain:{key:"rain", max:5, unit:"mm/h", stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]}
   };
   function colour(v, st){
     if(v <= st[0][0]) return st[0][1];
@@ -1957,7 +1948,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0);
     }
-    if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
+    if(layer === "waves" || layer === "rain" || layer === "wavesrain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
       // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
       // Wind and gusts get only the blue sea, with the moving streaks on top
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
@@ -1966,13 +1957,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         const x = val[k], c = colour(x, st), q = k * 4;
         px[q] = c[0]; px[q + 1] = c[1]; px[q + 2] = c[2];
         // rain is see-through, so the coast, towns and roads stay clear underneath (waves cover the sea only)
-        px[q + 3] = layer === "rain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : 255;
+        px[q + 3] = layer === "rain" || layer === "wavesrain" ? (x < .05 ? 0 : Math.round(150 * Math.min(1, .35 + x * .65))) : 255;
       }
       sx.putImageData(img, 0, 0);
       h.imageSmoothingEnabled = true; h.imageSmoothingQuality = "high"; h.filter = soft ? "none" : "blur(" + (2 * dpr) + "px)";   // rain: its numbers stay sharp
       h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
       h.filter = "none";
-      if(layer === "waves"){   // no waves on land: the colour stops at the coast
+      if(layer === "waves" || layer === "wavesrain"){   // no waves on land: the colour stops at the coast
         h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
         h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
         h.globalCompositeOperation = "source-over"; h.filter = "none";
@@ -2055,7 +2046,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     else if(layer === "rain"){ val = g("rain").toFixed(1); }
     else val = Math.round(layer === "temp" ? tempAt(ll.lat, ll.lng) : g(sc.key));
     const col = colour(+val, sc.stops).map(Math.round).join(",");
-    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val + "</b><small>" + (unit === "°C" ? "°C" : " " + unit) + "</small>" + extra;
+    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ');border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:13px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)">' + val + "°</i>";
     place();
     function place(){
       box.classList.remove("off");
@@ -3402,71 +3393,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
 
-  /* ---------------------------------------------------- first-visit tour of the map */
-  const TOUR = [
-    {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
-    {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
-    {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
-    {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
-    {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
-    {el:() => $("lmap"), h: touchOnly ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchOnly ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
-    {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
-    {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
-  ];
-  let tourSteps = [], tourI = 0, tourTick = null;
-  const tourSeen = () => { try{ return localStorage.getItem("mapTourDone"); }catch(e){ return "1"; } };
-  function tourPlace(){
-    const st = tourSteps[tourI]; if(!st) return;
-    const el = st.el(); if(!el) return;
-    const r = el.getBoundingClientRect(), big = r.width > innerWidth * .6, pad = big ? -10 : 6;
-    const spot = $("tourSpot"), card = $("tourCard");
-    Object.assign(spot.style, {left:(r.left - pad) + "px", top:(r.top - pad) + "px", width:(r.width + pad * 2) + "px", height:(r.height + pad * 2) + "px", borderRadius:big ? "24px" : "16px"});
-    const cw = card.offsetWidth, ch = card.offsetHeight, m = 14;
-    let left, top;
-    if(big){ left = r.left + (r.width - cw) / 2; top = Math.min(r.bottom - ch - 40, Math.max(r.top + 40, innerHeight / 2 - ch / 2)); }
-    else {
-      left = r.left + r.width / 2 - cw / 2;
-      top = r.bottom + pad + m; if(top + ch > innerHeight - 12) top = r.top - pad - m - ch;
-    }
-    card.style.left = Math.max(16, Math.min(innerWidth - cw - 16, left)) + "px";
-    card.style.top = Math.max(12, Math.min(innerHeight - ch - 12, top)) + "px";
-  }
-  function tourShow(i){
-    tourI = i; const st = tourSteps[i];
-    $("tourStep").textContent = "Map tour · " + (i + 1) + " of " + tourSteps.length;
-    $("tourH").textContent = st.h; $("tourP").textContent = st.p;
-    $("tourDots").innerHTML = tourSteps.map((_, k) => "<i" + (k === i ? ' class="on"' : "") + "></i>").join("");
-    $("tourNext").textContent = i === tourSteps.length - 1 ? "Done" : "Next";
-    $("tourSkip").hidden = i === tourSteps.length - 1;
-    tourPlace(); $("tourNext").focus({preventScroll:true});
-  }
-  function tourEnd(){
-    $("tour").hidden = true; document.documentElement.style.overflow = "";
-    try{ localStorage.setItem("mapTourDone", "1"); }catch(e){}
-    removeEventListener("resize", tourPlace); removeEventListener("scroll", tourPlace); clearInterval(tourTick);
-  }
-  function startTour(){
-    if(!$("tour").hidden) return;
-    const shown = el => { if(!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
-    if(isFull()) return;
-    tourSteps = TOUR.filter(t => shown(t.el())); if(tourSteps.length < 2) return;
-    scrollTo({top:0, behavior:"auto"}); document.documentElement.style.overflow = "hidden";
-    $("tour").hidden = false; addEventListener("resize", tourPlace); addEventListener("scroll", tourPlace, {passive:true});
-    tourTick = setInterval(tourPlace, 250);   // the boats move, so the spotlight follows them
-    tourShow(0);
-  }
-  $("tourNext").addEventListener("click", e => { e.stopPropagation(); tourI < tourSteps.length - 1 ? tourShow(tourI + 1) : tourEnd(); });
-  $("tourSkip").addEventListener("click", e => { e.stopPropagation(); tourEnd(); });
-  $("tour").addEventListener("click", e => { if(e.target === $("tour")) $("tourNext").click(); });
-  $("tour").addEventListener("keydown", e => {
-    if(e.key === "Escape"){ e.stopPropagation(); tourEnd(); }
-    if(e.key === "ArrowRight") $("tourNext").click();
-    if(e.key === "ArrowLeft" && tourI > 0) tourShow(tourI - 1);
-    if(e.key === "Tab"){ e.preventDefault(); (document.activeElement === $("tourNext") && !$("tourSkip").hidden ? $("tourSkip") : $("tourNext")).focus(); }
-  });
-  $("tourAgain").addEventListener("click", e => { e.preventDefault(); startTour(); });
+   });
   // first visit only: wait for the map and boats to settle, and don't interrupt someone already using the page
-  if(location.hash === "#tour"){ history.replaceState(null, "", location.pathname + location.search); setTimeout(startTour, 1800); }   // the Map tour link on the other pages
+  if(location.hash === "   // the Map tour link on the other pages
   else if(!tourSeen()) setTimeout(() => { if(scrollY < 80 && !document.querySelector(".info-pop:not([hidden])")) startTour(); }, 2600);
 
   /* ---------------------------------------------------- go */
