@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-08T06:28:06Z",
+ "checkedAt": "2026-10-08T07:45:57Z",
  "items": [
+  {
+   "title": "Royal Navy service member charged with spying",
+   "url": "https://www.bbc.co.uk/news/articles/cw203n6emde8o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-08T07:40:30Z",
+   "breaking": true
+  },
+  {
+   "title": "Royal Navy serviceman, 24, charged with spying offences after counter-terror sting",
+   "url": "https://www.gbnews.com/news/royal-navy-spying-offences-bedfordshire-charged-counter-terror-police",
+   "source": "GB News",
+   "published": "2026-10-08T07:00:07Z",
+   "breaking": true
+  },
   {
    "title": "British consulate in Jerusalem shuts with more than 20 diplomats forced to leave Israel",
    "url": "https://www.gbnews.com/news/world/israel-british-consulate-jerusalem-shuts-diplomats-forced-to-leave-gaza-war",
@@ -20,20 +34,6 @@
    "url": "https://www.gbnews.com/news/world/israel-signs-removed-british-consulate-jerusalem-shutdown-order-expires",
    "source": "GB News",
    "published": "2026-10-08T05:32:54Z",
-   "breaking": true
-  },
-  {
-   "title": "Burnham to hold security talks with German chancellor in Berlin",
-   "url": "https://www.bbc.co.uk/news/articles/cmwyq34qexdzo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-08T04:45:56Z",
-   "breaking": true
-  },
-  {
-   "title": "Man to face trial for attempted murder of British girl in Alps knife attack",
-   "url": "https://www.gbnews.com/news/annecy-man-face-trial-attempted-murder-british-girl-alps-knife-attack",
-   "source": "GB News",
-   "published": "2026-10-08T04:39:12Z",
    "breaking": true
   }
  ],
