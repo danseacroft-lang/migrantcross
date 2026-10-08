@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-08T00:52:55Z",
+ "checkedAt": "2026-10-08T01:14:28Z",
  "items": [
+  {
+   "title": "Russian plague outbreak could force European Union to shut borders 'within hours' should crisis deepen",
+   "url": "https://www.gbnews.com/news/world/russian-plague-outbreak-fears-european-union-border-shut-who",
+   "source": "GB News",
+   "published": "2026-10-08T01:10:39Z",
+   "breaking": true
+  },
+  {
+   "title": "The Papers: 'Kemi's family home pledge' and 'Badenoch invokes core Tory values'",
+   "url": "https://www.bbc.co.uk/news/articles/cm3el33kvn3wo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-08T01:06:55Z",
+   "breaking": true
+  },
   {
    "title": "\u200b\u200bDonald Trump\u200b makes last-minute appeal for Nobel Peace Prize - 'I'm not bragging!'",
    "url": "https://www.gbnews.com/news/us/president-donald-trump-nobel-peace-prize-bragging",
@@ -20,20 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cmwyq34qexdzo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-07T23:01:31Z",
-   "breaking": true
-  },
-  {
-   "title": "Celebrity parents back Government campaign",
-   "url": "https://www.gov.uk/government/news/celebrity-parents-back-government-campaign",
-   "source": "GOV.UK",
-   "published": "2026-10-07T23:01:02Z",
-   "breaking": true
-  },
-  {
-   "title": "FlyDubai data hacked just DAYS after failed hijack attempt",
-   "url": "https://www.gbnews.com/news/world/flydubai-data-hacked-days-after-failed-hijack-attempt",
-   "source": "GB News",
-   "published": "2026-10-07T22:04:42Z",
    "breaking": true
   }
  ],
