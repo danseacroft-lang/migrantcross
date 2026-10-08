@@ -407,7 +407,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .spark.picking span:not(.sel){opacity:.4}   /* the day being read stands out */
 .on .spark span{transform:scaleY(1)}
 .spark-days{display:flex;gap:6px;margin-top:6px}
-/* Last 7 days, Detailed breakdown: every day of the last month as a list, newest first, divided by grey hairlines.
+/* Last 7 days, List view: every day of the last month as a list, newest first, divided by grey hairlines.
    It scrolls inside the box, so the box keeps the graph's height */
 .wk-note{font-size:.765rem;color:var(--label2)}
 .wk-days{list-style:none;margin:10px 0 0;padding:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
@@ -1052,7 +1052,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="bento">
       <article class="card b-week rv">
         <div class="wk-face" id="wkGraph">
-          <div class="flip-h"><h3>Last 7 days</h3><button type="button" class="flip-go" id="wkMore" aria-controls="wkList" aria-expanded="false">Detailed breakdown<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+          <div class="flip-h"><h3>Last 7 days</h3><button type="button" class="flip-go" id="wkMore" aria-controls="wkList" aria-expanded="false">List view<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
           <div class="val num" id="weekV">–</div>
           <div class="sub" id="weekS">&nbsp;</div>
           <div class="spark" id="spark" role="img" aria-label="Last 7 days"></div>
@@ -2083,7 +2083,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("spark").setAttribute("aria-label", "Last 7 days: " + wk.map(d => dShort.format(parse(d.date)) + " " + fmt(d.migrants)).join(", "));
     $("sparkDays").innerHTML = wk.map(d => "<span>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short",...UTC}) + "</span>").join("");
     glWeek = wk; glWeekS = $("weekS").innerHTML; $("spark").classList.remove("picking");
-    // the Detailed breakdown: each day of the last month, newest first
+    // the List view: each day of the last month, newest first
     const month = all.slice(-30).reverse();
     $("wkDays").innerHTML = month.map(d => "<li><b>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short", day:"numeric", month:"short", ...UTC}) + "</b><span>"
       + (d.migrants ? "<strong>" + fmt(d.migrants) + "</strong> " + (d.migrants === 1 ? "person" : "people") + " · " + plural(d.boats || 0, "boat", "boats") : "No crossings") + "</span></li>").join("");
@@ -3172,7 +3172,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     send.disabled = false;
   });
 
-  /* ---------------------------------------------------- Last 7 days: the graph, or the Detailed breakdown */
+  /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
   function showWk(list){
     const g = $("wkGraph"), l = $("wkList");
     if(list){ $("wkDays").style.height = Math.max(150, g.offsetHeight - 44) + "px"; }   // the list takes the graph's place at the same height
