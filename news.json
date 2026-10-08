@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-08T04:57:43Z",
+ "checkedAt": "2026-10-08T05:44:31Z",
  "items": [
   {
    "title": "Burnham to hold security talks with German chancellor in Berlin",
    "url": "https://www.bbc.co.uk/news/articles/cmwyq34qexdzo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-08T04:45:56Z",
+   "breaking": true
+  },
+  {
+   "title": "Man to face trial for attempted murder of British girl in Alps knife attack",
+   "url": "https://www.gbnews.com/news/annecy-man-face-trial-attempted-murder-british-girl-alps-knife-attack",
+   "source": "GB News",
+   "published": "2026-10-08T04:39:12Z",
    "breaking": true
   },
   {
