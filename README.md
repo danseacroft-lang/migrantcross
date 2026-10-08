@@ -28,6 +28,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `scripts/news.py`, `news.json`, `.github/workflows/news.yml` – hourly breaking news about small boats from UK news feeds (edit `news-override.json` to hide or pin a story)
 - `scripts/build-towns.js`, `towns.json` – the extra town names on the homepage map (GeoNames, CC BY 4.0), shown more as you zoom in; rebuilt by hand, not on a schedule
 - `scripts/facebook.py`, `fb.json` – posts each day's figures to the Facebook Page once they're published (needs the `FB_PAGE_ID` and `FB_PAGE_TOKEN` secrets; `fb.json` remembers the last day posted)
+- `scripts/vessels.py`, `vessels.json` – every 15 minutes, the positions of lifeboats, Border Force, navy ships and rescue aircraft in the Strait from live AIS, drawn on the map (needs the free `AISSTREAM_KEY` secret from [aisstream.io](https://aisstream.io/))
 - `.github/workflows/update.yml` and `scripts/gate.py` – from 12 noon UK time, check for new figures every 15 minutes until they're in, then stop until noon the next day
 
 ## Put it online with GitHub Pages

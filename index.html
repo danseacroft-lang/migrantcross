@@ -160,6 +160,12 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
+/* lifeboats, Border Force, navy and rescue aircraft, from live AIS (vessels.json): a dot, with an arrow for the way it's heading */
+.am-ves{pointer-events:auto;cursor:pointer}
+.am-ves i{position:absolute;inset:4px;border-radius:50%;background:var(--c);border:2.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 5px rgba(0,0,0,.5)}
+.am-ves s{position:absolute;left:50%;top:-6px;margin-left:-5px;border:5px solid transparent;border-bottom:8px solid var(--c);border-top:0;transform-origin:5px 17px;filter:drop-shadow(0 0 1.5px rgba(0,0,0,.6))}
+.am-ves.old{opacity:.5}
+.am-ves.rescue{--c:#FFCC00}.am-ves.border{--c:#0A84FF}.am-ves.navy{--c:#5E5CE6}.am-ves.aircraft{--c:#FF2D55}
 /* with a mouse: the rain, wave height or temperature under the pointer */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
   font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(255,255,255,.94);color:#1A2B4C;box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.18);transition:opacity .15s}
@@ -1442,7 +1448,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const BEACHES = [["Dunkirk beaches", 51.045, 2.30, "Loon-Plage and the beaches east of Dunkirk"], ["Gravelines", 51.003, 2.11, "The beaches and the Aa canal by Gravelines"],
     ["Calais to Sangatte", 50.955, 1.78, "Beaches west of Calais and Blériot-Plage"], ["Wimereux", 50.77, 1.605, "Wimereux and the dunes of the Slack"],
     ["Boulogne to Hardelot", 50.66, 1.575, "Le Portel, Équihen-Plage and Hardelot"], ["Le Touquet area", 50.52, 1.585, "The Canche estuary and Stella-Plage"]];
-  let launchLayer = null;
+  let launchLayer = null, vesselLayer = null, vesselsAt = 0;
   // Town names drawn by the page itself, in the style of Ventusky: dark navy type with a ring for each town, bigger
   // places in bold. Rank 1 shows at every zoom, rank 2 once zoomed in a little, rank 3 closer in; names never overlap.
   const TOWNS = [
@@ -1484,12 +1490,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
       .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
+    vesselLayer = L.layerGroup().addTo(LM);
+    LM.attributionControl.addAttribution('Boats <a href="https://aisstream.io/">aisstream.io</a>');
     // the extra town names, added biggest first after the ones in the page, once the page has settled
     whenIdle(() => getJSON("towns.json").then(a => {
       const extra = a.map(([name, lat, lon, rank]) => ({name, lat, lon, rank}));
       places = places.concat(extra).sort((x, y) => x.rank - y.rank);   // a stable sort: the page's own towns stay ahead within each rank
       placeTowns();
     }).catch(() => {}), 3000);
+    whenIdle(loadVessels, 3000);
     [heat, rainC, flow] = ["heat", "rain", "flow"].map(n => { const c = document.createElement("canvas"); c.className = "wx-canvas wx-" + n; wxPane.append(c); return c; });
     LM.on("zoomstart", () => { wxPane.style.opacity = 0; });
     LM.on("zoomend", () => {
@@ -1503,6 +1512,29 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.on("click", e => showPoint(e.latlng));
     LM.on("mousemove", e => { hoverAt = e; if(!hoverRaf) hoverRaf = requestAnimationFrame(showHover); });
     LM.on("mouseout zoomstart", () => { hoverAt = null; $("amHover").classList.add("off"); });
+  }
+  // Lifeboats, Border Force cutters, navy ships and rescue aircraft in the Strait, from their AIS transponders
+  // (scripts/vessels.py, every 15 minutes). Only ones heard in the last 3 hours; faded after the first hour.
+  const VESSEL_KIND = {rescue:"Lifeboat or rescue vessel", border:"Border Force or law enforcement", navy:"Navy", aircraft:"Rescue aircraft"};
+  async function loadVessels(){
+    vesselsAt = Date.now();
+    if(!vesselLayer) return;
+    let a;
+    try{ a = (await getJSON("vessels.json")).vessels || []; }catch(e){ return; }
+    vesselLayer.clearLayers();
+    const clean = t => String(t).replace(/[&<>"]/g, c => "&#" + c.charCodeAt(0) + ";");
+    for(const v of a){
+      const mins = (Date.now() - new Date(v.seen)) / 6e4;
+      if(!(mins < 180) || !VESSEL_KIND[v.kind] || typeof v.lat !== "number" || typeof v.lon !== "number") continue;
+      const moving = v.sog >= 1, dir = v.hdg ?? v.cog, name = v.name || VESSEL_KIND[v.kind];
+      const ago = mins < 1 ? "just now" : mins < 60 ? Math.round(mins) + " min ago" : Math.floor(mins / 60) + (mins < 120 ? " hour ago" : " hours ago");
+      L.marker([v.lat, v.lon], {pane:"labels", keyboard:false, title:name, icon:L.divIcon({className:"am-ves " + v.kind + (mins > 60 ? " old" : ""), iconSize:[22, 22],
+        html:"<i></i>" + (moving && dir != null ? '<s style="transform:rotate(' + dir + 'deg)"></s>' : "")})})
+        .bindTooltip("<b>" + clean(name) + "</b><br>" + (v.name ? VESSEL_KIND[v.kind] + "<br>" : "") + (moving ? Math.round(v.sog) + " knots" : "Stopped") + " · seen " + ago,
+          {direction:"top", offset:[0, -14], className:"am-launch-tip"})
+        .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }).addTo(vesselLayer);
+    }
+    placeTowns();
   }
   function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
   // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
@@ -1533,7 +1565,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const taken = coverPx.concat(!$("straitLbl").getClientRects().length ? [] : [box6($("straitLbl").getBoundingClientRect())]);
     const hit = q => taken.some(t => q[0] < t[2] && q[2] > t[0] && q[1] < t[3] && q[3] > t[1]);
     // launch rings under the title, buttons or figures fade, and can't be tapped through them
-    if(launchLayer) launchLayer.eachLayer(m => { const el = m.getElement(); if(!el) return; const r = el.getBoundingClientRect(), h = hit([r.left - mr.left, r.top - mr.top, r.right - mr.left, r.bottom - mr.top]); el.style.opacity = h ? .25 : ""; el.style.pointerEvents = h ? "none" : ""; });
+    if(launchLayer) [launchLayer, vesselLayer].forEach(g => g.eachLayer(m => { const el = m.getElement(); if(!el) return; const r = el.getBoundingClientRect(), h = hit([r.left - mr.left, r.top - mr.top, r.right - mr.left, r.bottom - mr.top]); el.style.opacity = h ? .25 : ""; el.style.pointerEvents = h ? "none" : ""; }));
     for(const t of places){
       let show = z >= RANK_ZOOM[t.rank] && view.contains([t.lat, t.lon]), box;
       if(show){
@@ -2086,6 +2118,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(Date.now() - wxAt >= 30 * MIN) loadWeather();
     if(gridAt && Date.now() - gridAt >= 60 * MIN) loadGrid();   // the weather map's forecast: hourly is plenty
     if(Date.now() - newsAt >= 10 * MIN) loadNews();
+    if(Date.now() - vesselsAt >= 5 * MIN) loadVessels();
   }
   setInterval(tick, MIN);
   document.addEventListener("visibilitychange", () => {
