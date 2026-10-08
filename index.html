@@ -33,7 +33,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
-<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-06">
+<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-07">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
@@ -269,7 +269,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(255,159,10,0)}}
 @media (prefers-reduced-motion:reduce){.chip i.rep{animation:none}}
 a.chip{text-decoration:none;color:inherit;white-space:nowrap}
-.chip i.none{background:rgba(255,255,255,.45);box-shadow:none}
+.chip i.none,.chip i.wait{background:rgba(255,255,255,.45);box-shadow:none}   /* no reading, or still loading */
 .chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
 @keyframes pulse{50%{opacity:.3}}
 .chip .up{color:#FFB4AE}.chip .down{color:#9CF0B4}
@@ -965,7 +965,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <body>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill" id="rsPill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1047,8 +1047,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <h2 id="rsH">Report a sighting</h2>
   <p class="rs-intro">Seen a small boat in the Channel or landing on the coast? Tell us when, and what you saw.</p>
   <form id="rsForm" novalidate>
-    <label class="rs-f on" id="rsfName"><span>Name <em>optional</em></span><input type="text" name="name" id="rsName" autocomplete="name" maxlength="80" placeholder="Your name"></label>
-    <label class="rs-f on" id="rsfDate"><span>Date of sighting</span><input type="date" name="date" id="rsDate" required></label>
+    <label class="rs-f on"><span>Name <em>optional</em></span><input type="text" name="name" id="rsName" autocomplete="name" maxlength="80" placeholder="Your name"></label>
+    <label class="rs-f on"><span>Date of sighting</span><input type="date" name="date" id="rsDate" required></label>
     <label class="rs-f" id="rsfTime"><span>Time</span><input type="time" name="time" id="rsTime" required></label>
     <label class="rs-f" id="rsfEmail"><span>Email</span><input type="email" name="email" id="rsEmail" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="you@example.com" required></label>
     <label class="rs-f" id="rsfDetails"><span>Details</span><textarea name="details" id="rsDetails" rows="4" maxlength="2000" placeholder="Where you were, what you saw, how many boats or people" required></textarea></label>
@@ -1093,7 +1093,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
                 <text x="85" y="126" text-anchor="middle" font-size="12" fill="var(--label2)" id="ringTot"></text>
               </svg>
               <div class="ring-legend">
-                <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
+                <div><b class="num" id="ytdV">–</b><span>people this year</span></div>
                 <div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
                 <div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
               </div>
@@ -2190,8 +2190,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // the labels shorten (1.1k, ’25) when the full ones would run into each other
   function fitOtd(){
     const y = $("otdYears"), ls = [...y.querySelectorAll("b,em")];
-    y.classList.remove("tight"); ls.forEach(e => e.textContent = e.dataset.f);
-    if(ls.some(e => e.scrollWidth > e.parentNode.clientWidth + 4)){ y.classList.add("tight"); ls.forEach(e => e.textContent = e.dataset.s); }
+    ls.forEach(e => e.textContent = e.dataset.f);
+    if(ls.some(e => e.scrollWidth > e.parentNode.clientWidth + 4)){ ls.forEach(e => e.textContent = e.dataset.s); }
   }
   if(window.ResizeObserver){ let lw = 0; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; fitOtd(); } }).observe($("otdYears")); }
 
@@ -2259,7 +2259,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(bars) body = body.replace('<rect data-i="' + pk + '"', '<rect class="pk" data-i="' + pk + '"');   // the busiest day stands out
     if(vals[pk] > 0){ const px = xc(pk), py = y(vals[pk]) - 6;
       body += '<text class="peak" x="' + Math.min(W - m.r - 4, Math.max(m.l + 4, px)).toFixed(1) + '" y="' + Math.max(10, py).toFixed(1) + '" text-anchor="' + (px > W - m.r - 30 ? "end" : px < m.l + 30 ? "start" : "middle") + '">' + fmt(Math.round(vals[pk])) + "</text>"; }
-    geo = {x: xc, y, data, vals, avg7, m, iw, ih, W, nice, smooth, bars};
+    geo = {x: xc, y, data, vals, avg7, m, iw, ih, W, smooth, bars};
     const a0 = data[0].date, z0 = data[data.length-1].date;
     box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
@@ -2592,7 +2592,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
+  function renderAll(){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); drawChart(); }
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
@@ -2727,7 +2727,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const ytdBox = $("ytdBox"), flip = $("flip"), faces = [$("yearFace"), $("calFace")], narrow = matchMedia("(max-width:900px)");
   let calShown = false;
   // the box is as tall as the page showing, growing or shrinking as it slides; on desktop the year page also reaches the bottom of the boxes beside it
-  const wkBox = document.querySelector(".b-week"), labBox = document.querySelector(".b-lab");
+  const labBox = document.querySelector(".b-lab");
   function fitFlip(){
     const f = faces[+calShown]; let h = f.offsetHeight;
     if(!calShown && !narrow.matches){
@@ -3063,21 +3063,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     try{ await navigator.clipboard.writeText((sorted.length ? shareText() + " " : "") + "https://channelcrossings.world/"); toast("Copied to clipboard"); }
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
   });
-  $("shMore").addEventListener("click", async ()=>{
-    if(!sorted.length) return;
-    const url = location.href.split("#")[0];
-    const text = shareText();
-    if(navigator.share){
-      try{ await navigator.share({title:"Channel Crossings", text, url}); }
-      catch(e){ /* the viewer closed the share sheet */ }
-      return;
-    }
-    try{
-      await navigator.clipboard.writeText(text + " " + url);
-      toast("Copied to clipboard");
-    }catch(e){
-      toast("Couldn't copy. Try your browser's share menu.");
-    }
+  $("shMore").addEventListener("click", async ()=>{   // only shown where the device has a share sheet
+    try{ await navigator.share({title:"Channel Crossings", text:shareText(), url:location.href.split("#")[0]}); }
+    catch(e){ /* the viewer closed the share sheet */ }
   });
 
   /* =========== Email updates =========== */
@@ -3161,7 +3149,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     rsPop.hidden = rsVeil.hidden = !on; rsBtn.setAttribute("aria-expanded", on);
     document.documentElement.style.overflow = on ? "hidden" : "";
     if(on && rsPop.classList.contains("sent")){ rsPop.classList.remove("sent"); $("rsMsg").textContent = ""; }   // a fresh form each time after sending
-    if(on){ $("rsDate").max = ukToday(); (rsPop.classList.contains("sent") ? $("rsX") : $("rsName")).focus({preventScroll:true}); }
+    if(on){ $("rsDate").max = ukToday(); $("rsName").focus({preventScroll:true}); }
     else rsBtn.focus({preventScroll:true});
   }
   rsBtn.addEventListener("click", e => { e.stopPropagation(); rsOpen(true); });
@@ -3212,7 +3200,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- Show more: tall boxes open in full on request */
   // A box much taller than the rest shows its first part, fading out, with a button to open the rest (and close it again).
   // Checked again whenever what's inside changes, as the figures come in after the page has loaded.
-  const CLAMP_H = 520, CLAMP_FROM = 760;
+  const CLAMP_FROM = 760;
   document.querySelectorAll("main .card").forEach((card, n) => {
     if(card.closest(".bento") || card.querySelector(".flip")) return;   // the flip boxes keep their own height
     const btn = document.createElement("button");
