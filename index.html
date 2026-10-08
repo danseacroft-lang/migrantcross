@@ -12,7 +12,7 @@ try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"da
 <script>/* the figures start downloading straight away, while the rest of the page loads */
 try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw 0;return r.json()});window.__data.catch(function(){})}catch(e){}</script>
 <link rel="preload" href="vendor/leaflet/leaflet.js" as="script">
-<meta name="description" content="164 people crossed the Channel in small boats on Sat 3 October. 2026 so far: 19,451. Daily Home Office figures, a migrant tracker and live Channel weather.">
+<meta name="description" content="164 people crossed the Channel in small boats on Sat 3 October. 2026 so far: 19,451. Daily Home Office figures, a migrant tracker and live Channel .">
 <meta name="robots" content="max-image-preview:large">
 <meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
@@ -65,10 +65,10 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<!-- start talking to the map, tile and weather servers straight away -->
+<!-- start talking to the map, tile and  servers straight away -->
 <link rel="preconnect" href="https://server.arcgisonline.com">
-<link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
-<link rel="preconnect" href="https://marine-api.open-meteo.com" crossorigin>
+<link rel="preconnect" href="https://api..com" crossorigin>
+<link rel="preconnect" href="https://marine-api..com" crossorigin>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">   <!-- Leaflet 1.9.4, kept in the site so the map never waits on another server -->
 <style>
 /* ------------------------------------------------------------ tokens (Apple system colours) */
@@ -119,7 +119,6 @@ button,input,select,textarea{font:inherit}
 .leaflet-container,.leaflet-container *{font-family:var(--font)}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
 
-
 /* ------------------------------------------------------------ hero: the live Channel */
 /* the Channel is a card in the same column as the boxes below it */
 .hero{position:relative;width:min(1148px,calc(100% - 2 * max(16px,env(safe-area-inset-left,0px))));margin:calc(56px + env(safe-area-inset-top,0px)) auto 0;
@@ -127,12 +126,11 @@ button,input,select,textarea{font:inherit}
   border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
 .hero-map{position:absolute;inset:0;will-change:transform}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-/* the live weather map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the weather moving over it in white */
+/* the live  map (Leaflet), in the style of Ventusky: a light grey map, every layer shaded in colour, and the  moving over it in white */
 #lmap{position:absolute;inset:0;background:#D9DCDF;font:inherit}
-.wx-heat{mix-blend-mode:multiply;opacity:.96}   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
-.wx-heat.soft{filter:blur(2px)}   /* wind, gusts and waves: the readings blended smoothly */
-.wx-canvas{position:absolute;left:0;top:0;pointer-events:none}
-.leaflet-wx-pane,.leaflet-labels-pane{pointer-events:none}
+   /* rich colours, multiplied so the map (coast, borders, roads) still shows through, as on Ventusky */
+   /* wind, gusts and waves: the readings blended smoothly */
+
 #map .boat{pointer-events:auto}
 #lmap .leaflet-control-attribution{background:rgba(0,0,0,.35);color:rgba(255,255,255,.7);font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px 0 0 0}
 #lmap .leaflet-control-attribution a{color:inherit}
@@ -142,7 +140,7 @@ button,input,select,textarea{font:inherit}
 #lmap .leaflet-bar a.leaflet-disabled{color:rgba(255,255,255,.35)}
 #lmap .leaflet-bottom.leaflet-right .leaflet-bar{margin:0 16px 12px 0}
 /* Map controls: frosted pills, matching the buttons along the bottom of the map */
-.wx-ctl{position:absolute;z-index:3;top:22px;right:24px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;color:#fff}
+
 .am-top{display:flex;gap:8px;align-items:center}
 .am-btn,.am-pill{background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 .am-btn{position:relative;flex:none;height:36px;min-width:36px;border:0;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#fff;cursor:pointer;touch-action:manipulation;font:600 .882rem/1 var(--font);letter-spacing:-.01em;transition:transform .15s,background-color .2s}
@@ -153,10 +151,10 @@ button,input,select,textarea{font:inherit}
 .am-layer{padding:0 12px 0 13px}
 .am-layer .am-chev{width:13px;height:13px;opacity:.6;transition:transform .2s}
 .am-layer[aria-expanded="true"] .am-chev{transform:rotate(180deg)}
-#wxLayerIc{display:grid;place-items:center}
-#wxLayerIc svg{width:16px;height:16px}
-.wx-full .shut,.hero.full .wx-full .open{display:none}.hero.full .wx-full .shut{display:block}
-.wx-full svg{width:17px;height:17px}
+#Ic{display:grid;place-items:center}
+#Ic svg{width:16px;height:16px}
+.hero.full 
+
 /* the layer picker: a frosted card of tiles, like Apple Maps' map chooser */
 .am-pick{position:absolute;top:44px;right:0;z-index:5;width:min(288px,calc(100vw - 56px));max-height:calc(100svh - 24px);overflow:auto;background:rgba(36,36,40,.55);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);padding:14px 14px 16px;border-radius:20px;transform-origin:top right;animation:amPop .22s cubic-bezier(.2,.9,.3,1.15) both}
 @keyframes amPop{from{opacity:0;transform:scale(.92) translateY(-6px)}}
@@ -164,24 +162,19 @@ button,input,select,textarea{font:inherit}
 .am-pick-h b{font:700 1.06rem/1 var(--font);letter-spacing:-.02em}
 .am-x{width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);display:grid;place-items:center;cursor:pointer}
 .am-x svg{width:9px;height:9px}
-.wx-seg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 10px}
-.wx-seg button{grid-column:span 2}
-.wx-seg button:nth-child(4){grid-column:2 / span 2}   /* five layers: three on top, two centred below */
-.wx-seg button{border:0;background:none;padding:0;color:#fff;cursor:pointer;display:grid;gap:6px;justify-items:center;font:600 .706rem/1.1 var(--font);touch-action:manipulation}
+
+   /* five layers: three on top, two centred below */
+
 .am-tile{width:100%;height:58px;border-radius:14px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);transition:background .2s,color .2s,transform .15s}
 .am-tile svg{width:24px;height:24px}
-@media (hover:hover){.wx-seg button:hover .am-tile{background:rgba(255,255,255,.22)}}
-.wx-seg button:active .am-tile{transform:scale(.95)}
-.wx-seg button[aria-pressed="true"] .am-tile{background:rgba(255,255,255,.92);color:#1C1C1E}
+@media (hover:hover){}
+
 /* the forecast timeline, as a frosted pill */
 .am-pill{border-radius:999px}
-.wx-time{display:flex;align-items:center;gap:8px;padding:3px 14px 3px 3px;font:600 .765rem/1 var(--font);font-variant-numeric:tabular-nums}
-.wx-time span{min-width:74px;text-align:right}
+
 .am-play{width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .am-play svg{width:13px;height:13px}.am-play .pa,.am-play[aria-pressed="true"] .pl{display:none}.am-play[aria-pressed="true"] .pa{display:block}
-.wx-time input{-webkit-appearance:none;appearance:none;width:132px;height:28px;margin:0;border-radius:2px;background:linear-gradient(to right,#fff var(--p,0%),rgba(255,255,255,.4) var(--p,0%)) 0 50%/100% 4px no-repeat;touch-action:manipulation;cursor:pointer}
-.wx-time input::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35),0 0 0 .5px rgba(0,0,0,.08)}
-.wx-time input::-moz-range-thumb{width:20px;height:20px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+
 /* place names in the style of Ventusky: dark navy Helvetica, a ring for each town, bigger places in bold, names centred above */
 .am-town,.am-area{pointer-events:none;white-space:nowrap;font-family:var(--font)}
 .am-town i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;border:1.6px solid #1A2B4C;background:rgba(255,255,255,.55)}
@@ -205,14 +198,12 @@ button,input,select,textarea{font:inherit}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
 .am-launch-tg{margin-top:14px;width:100%;display:flex;align-items:center;gap:10px;border:0;border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25);color:#fff;font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation}
 /* the colour key for the layer on show: its scale as a thin bar, the lowest and highest values at the ends */
-.wx-key{display:flex;align-items:center;gap:7px;font:500 12px/1 var(--font);font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);white-space:nowrap}
-.wx-key i{flex:1;min-width:48px;height:6px;border-radius:3px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.15)}
-.wx-key .wk-t{font-weight:600;margin-right:2px}
+
 #wxKeyPick{margin:14px 2px 0}
-.wx-key-bar{width:220px;padding:7px 12px}
-#wxPick:not([hidden]) ~ .wx-key-bar{display:none}   /* the open picker shows its own */
-.am-sheet .wx-key{color:var(--label2);margin-top:10px}
-@media (max-width:600px){.wx-key-bar{display:none}}   /* phones: in the layer picker and the reading sheet */
+
+#:not([hidden]) ~    /* the open picker shows its own */
+.am-sheet 
+@media (max-width:600px){}   /* phones: in the layer picker and the reading sheet */
 .am-launch-tg i{width:10px;height:10px;border-radius:50%;background:#FF9F0A;box-shadow:0 0 0 3px rgba(255,159,10,.3)}
 .am-launch-tg[aria-pressed="false"]{color:rgba(255,255,255,.6)}
 .am-launch-tg[aria-pressed="false"] i{background:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
@@ -250,21 +241,16 @@ button,input,select,textarea{font:inherit}
 /* full screen: the whole Channel to explore */
 .hero.full{position:fixed;inset:0;z-index:55;width:auto;height:auto;min-height:0;max-height:none;margin:0;border-radius:0}
 .hero.full .hero-in,.hero.full .scroll-cue,.hero.full .large-title,.hero.full::after{display:none}
-.hero.full .wx-ctl{top:calc(14px + env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px))}
+.hero.full 
 .hero.full ~ .boat-tip{z-index:61}
 html.map-full,html.map-full body{overflow:hidden}
 @media (hover:none){#lmap .leaflet-control-zoom{display:none}}
 .hero.full #lmap .leaflet-control-zoom{display:block}
-/* tap the map: the weather at that spot */
-#lmap .wx-pt .leaflet-popup-content-wrapper{border-radius:16px;background:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);color:var(--label);box-shadow:var(--shadow),0 0 0 .5px var(--sep)}
-#lmap .wx-pt .leaflet-popup-tip{background:color-mix(in srgb,var(--card) 80%,transparent)}
-#lmap .wx-pt .leaflet-popup-content{margin:12px 14px;width:236px!important;font:.765rem/1.35 var(--font)}
-.wx-pt b.pt-h{display:block;font-size:1.06rem;letter-spacing:-.02em;margin:0}
-.wx-pt .pt-lv{display:block;font-weight:700;font-size:.824rem;margin-top:6px}
-.wx-pt .pt-sub{display:block;color:var(--label2);font-size:.706rem;margin-top:1px}
-.wx-pt .wp-stats{margin:8px 0 0;gap:5px}
-.wx-pt .wp-stats div{padding:6px 8px}
-.wx-pt .wp-stats b{font-size:1rem}
+/* tap the map: the  at that spot */
+#lmap 
+#lmap 
+#lmap 
+
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.42) 0,rgba(0,0,0,.12) 26%,rgba(0,0,0,0) 40%,rgba(0,0,0,.35) 62%,rgba(0,0,0,.6) 100%)}   /* darker behind the title and the figures, so white text reads over the light map */
 .hero-in{position:absolute;z-index:2;inset:auto 0 0;padding:0 24px 44px;color:#fff;pointer-events:none}
@@ -315,7 +301,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 @keyframes ringArc{0%{stroke-dasharray:4 100;stroke-dashoffset:0}50%{stroke-dasharray:62 100;stroke-dashoffset:-14}100%{stroke-dasharray:4 100;stroke-dashoffset:-96}}
 @media (prefers-reduced-motion:reduce){.fig-ring .arc{stroke-dasharray:30 100}}
 /* with news showing, everything at the top of the map moves down under it */
-.hero.has-news .large-title,.hero.has-news .wx-ctl{transform:translateY(var(--mn-h,0px));transition:transform .45s cubic-bezier(.2,.9,.3,1)}
+.hero.has-news .large-title,.hero.has-news 
 .hero.full .map-news{top:calc(10px + env(safe-area-inset-top,0px))}
 .large-title{position:absolute;z-index:3;top:22px;left:0;right:0;padding:0 24px;color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;pointer-events:none}
 /* under the title: how up to date the figures are, and the Figure Updates link */
@@ -327,7 +313,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .fu-btn:focus-visible{outline:2px solid #64B5FF;outline-offset:2px;border-radius:4px}
 @media (hover:hover){.fu-btn:hover{text-decoration:underline}}
 .large-title > *{pointer-events:auto}
-@media (max-width:600px){.wx-ctl{top:88px;right:20px;left:20px}.wx-time{align-self:stretch}.wx-time input{flex:1;width:auto;min-width:0}}   /* the forecast slider spans the map */
+@media (max-width:600px){}   /* the forecast slider spans the map */
 .large-title .lt-logo{display:block;width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 2px 12px rgba(0,0,0,.35);transition:transform .2s ease}
 .large-title .lt-logo svg{display:block;width:100%;height:100%}
 .large-title .lt-logo:focus-visible{outline:2px solid #fff;outline-offset:3px}
@@ -377,11 +363,9 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
-/* Channel conditions pop-up, in the style of the Weather app */
-.wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
-.wx-pop{--lv:var(--blue);background-color:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(44px) saturate(180%);backdrop-filter:blur(44px) saturate(180%);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 12%,transparent),transparent 90px)}
-.wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
-.wx-pop[data-lv="calm"]{--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv-t:var(--orange-t)}.wx-pop[data-lv="rough"]{--lv-t:var(--red-t)}   /* the level in words, in a readable shade */
+/* Channel conditions pop-up, in the style of the  app */
+
+   /* the level in words, in a readable shade */
 .wp-head{display:flex;align-items:center;gap:12px}
 .wp-ic{flex:none;width:44px;height:44px}
 .wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
@@ -1026,24 +1010,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   <div class="large-title"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><span class="hero-fresh" id="fresh"><i></i><span id="freshText">Figures to 3 Oct</span><span aria-hidden="true">·</span><button type="button" class="fu-btn" id="fuBtn" aria-expanded="false" aria-controls="popFU">Figure Updates</button></span></div>
 
-  <!-- On phones, a tap on the map shows its weather in a sheet from the bottom -->
+  <!-- On phones, a tap on the map shows its  in a sheet from the bottom -->
   <div class="am-hover off" id="amHover" aria-hidden="true"></div>
-  <div class="am-sheet" id="amSheet" role="dialog" aria-label="Weather at this spot" hidden><i class="am-grab" aria-hidden="true"></i><button type="button" class="am-x" id="amSheetX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="am-sheet-in wx-pt"></div></div>
+  </div>
 
   <!-- Map controls, laid out like Apple Maps: a layer button, a full-screen button and a forecast timeline -->
-  <div class="wx-ctl" id="wxCtl">
-    <div class="am-top">
-      <button type="button" class="am-btn am-layer" id="wxLayerBtn" aria-expanded="false" aria-controls="wxPick" aria-label="Choose a weather layer"><span id="wxLayerIc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span id="wxLayerName">Waves</span><svg class="am-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <button type="button" class="am-btn wx-full" id="wxFull" aria-pressed="false" aria-label="Open the full-screen map"><svg class="open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><svg class="shut" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+
+      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn"></span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn"></span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn"></span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn"></span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn"></span></button></div>
+      <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i></button>
+      
     </div>
-    <div class="am-pick" id="wxPick" role="dialog" aria-label="Weather layers" hidden>
-      <div class="am-pick-h"><b>Weather</b><button type="button" class="am-x" id="wxPickX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-      <div class="wx-seg" role="group" aria-label="Map layer"><button type="button" data-l="wind" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 13h15a3 3 0 1 1-3 3M3 17h6"/></svg></span><span class="am-tn">Wind</span></button><button type="button" data-l="gusts" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h9a3 3 0 1 0-3-3M3 12h13M3 16h8"/><path d="M19 5l-2.5 5h4l-2.5 5" stroke-width="1.8"/></svg></span><span class="am-tn">Gusts</span></button><button type="button" data-l="waves" aria-pressed="true"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2M2 15c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></svg></span><span class="am-tn">Waves</span></button><button type="button" data-l="temp" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 4.5a2 2 0 1 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 10v6"/></svg></span><span class="am-tn">Temperature</span></button><button type="button" data-l="rain" aria-pressed="false"><span class="am-tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.5-8A5.5 5.5 0 0 1 17 7.5a3.3 3.3 0 0 1 .5 6.5z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/></svg></span><span class="am-tn">Rain</span></button></div>
-      <button type="button" class="am-launch-tg" id="launchTg" aria-pressed="true"><i aria-hidden="true"></i>Launch beaches</button>
-      <div class="wx-key" id="wxKeyPick" role="img"></div>
-    </div>
-    <div class="wx-time am-pill"><button type="button" class="am-play" id="wxPlay" aria-pressed="false" aria-label="Play the forecast"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button><input type="range" id="wxHour" min="0" max="0" value="0" aria-label="Forecast time"><span id="wxWhen">Now</span></div>
-    <div class="wx-key am-pill wx-key-bar" id="wxKeyBar" role="img"></div>
+    <div class="wx-time am-pill"><span id="wxWhen">Now</span></div>
+    
   </div>
 
   <div class="hero-in">
@@ -1052,7 +1030,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="hero-chips">
       <a class="chip chip-rep" id="chipRep" target="_blank" rel="noopener" hidden><i class="rep"></i><span>Crossings reported today</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
       <span class="chip" id="chipYear" hidden></span>
-      <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label="Weather outlook for the Channel"><i></i><span>Weather outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button type="button" class="chip" id="chipMap" aria-expanded="false" aria-controls="popMap" aria-label=" outlook for the Channel"><i></i><span> outlook</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       <button type="button" class="chip" id="chipLive" aria-expanded="false" aria-controls="popFU" hidden><svg class="fig-ring" viewBox="0 0 24 24" aria-hidden="true"><circle class="tr" cx="12" cy="12" r="9"/><circle class="arc" cx="12" cy="12" r="9" pathLength="100"/></svg><span>New figures incoming</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
@@ -1074,7 +1052,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 </div>
 
 <div class="info-pop wx-pop mp-pop" id="popMap" role="dialog" aria-label="Live conditions" hidden></div>
-
 
 <div class="info-pop boat-tip" id="boatTip" role="tooltip" hidden></div>
 
@@ -1235,7 +1212,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <div class="mb-col">
         <div class="section-h rv"><h2>Longest Quiet Spells</h2></div>
         <div class="card flush tbl-wrap rv"><table class="tbl" id="quietTbl" aria-label="Longest spells without crossings"><tbody><tr><td class="empty">Loading…</td></tr></tbody></table></div>
-        <p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad weather in the Channel.</p>
+        <p class="foot rv">The five longest spells without crossings since 2020, when crossings became a year-round pattern. Long spells are usually down to bad  in the Channel.</p>
       </div>
     </div>
   </section>
@@ -1347,11 +1324,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </div>
 </div>
 
-
 <footer>
   <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
-  <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
+  <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel . Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="#" id="tourAgain">Map tour</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
@@ -1436,7 +1412,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(card && !card.classList.contains("on")) card.addEventListener("reveal", start, {once:true}); else start();
   }
 
-  /* ---------------------------------------------------- the Channel: a live weather map in the style of Ventusky, one dinghy per boat */
+  /* ---------------------------------------------------- the Channel: a live  map in the style of Ventusky, one dinghy per boat */
   const boatsG = $("boats"), map = $("map"), NS = "http://www.w3.org/2000/svg";
   // The boats are drawn in map units (1000 across, 686 down), which cover the Dover Strait (AREA). The map opens wider, as on
   // Ventusky: London to Paris and Brussels on wide screens (VIEW), Kent and the French coast on tall ones (TALL), and can be
@@ -1472,15 +1448,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, zoomDelta:1, wheelPxPerZoomLevel:90, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, touchZoom:false, doubleClickZoom:!touchOnly, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
   let heat, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
-  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
+  let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (load)
   if(LM){
     LM.attributionControl.setPrefix(false);
     wxPane = LM.createPane("wx"); wxPane.style.zIndex = 250;
     LM.createPane("labels").style.zIndex = 350;
-    // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the weather.
+    // A clean light grey map in the style of Ventusky: Esri's Light Gray Canvas, with our own place names above the .
     // Free to use with credit, and needs no key.
     const esri = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({maxZoom:16}, o));
-    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> · Weather <a href="https://open-meteo.com/">Open-Meteo</a>'}).addTo(LM);
+    esri("Canvas/World_Light_Gray_Base", {attribution:'Map © <a href="https://www.esri.com/">Esri</a>, HERE, Garmin · Places <a href="https://www.geonames.org/">GeoNames</a> ·  <a href="https://.com/">Open-Meteo</a>'}).addTo(LM);
     L.control.scale({position:"bottomleft", metric:false, maxWidth:100}).addTo(LM);
     // Where most boats set off: the beaches and dunes of the Côte d'Opale, from Dunkirk down to the Canche
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
@@ -1515,7 +1491,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function setFull(on){
     if(!LM) return;
     hero.classList.toggle("full", on); root.classList.toggle("map-full", on);
-    const fb = $("wxFull"); fb.setAttribute("aria-pressed", on); fb.setAttribute("aria-label", on ? "Close the full-screen map" : "Open the full-screen map");
+    const fb = $(""); fb.setAttribute("aria-pressed", on); fb.setAttribute("aria-label", on ? "Close the full-screen map" : "Open the full-screen map");
     heroMap.style.transform = "";
     ["dragging", "touchZoom", "doubleClickZoom", "scrollWheelZoom", "keyboard"].forEach(h => {
       const want = on || (!touchOnly && (h === "dragging" || h === "doubleClickZoom"));
@@ -1524,7 +1500,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(on) hero.style.minHeight = "";
     LM.closePopup(); fitW = 0; fitMap(); if(!on) fitHero();
   }
-  $("wxFull").addEventListener("click", e => { e.stopPropagation(); setFull(!isFull()); });
+  $("").addEventListener("click", e => { e.stopPropagation(); setFull(!isFull()); });
   document.addEventListener("keydown", e => { if(e.key === "Escape" && isFull() && !cur) setFull(false); });
   // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
   // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
@@ -1539,7 +1515,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // What covers the map: the title, buttons and figures, hugging their text and chips, so names and numbers can keep clear
   function coverRects(){
     const out = [];
-    [$("wxCtl"), $("news"), ...document.querySelectorAll(".large-title > *, .hero-in > div:not(.hero-chips), .hero-chips > *")].forEach(e => {
+    [$(""), $("news"), ...document.querySelectorAll(".large-title > *, .hero-in > div:not(.hero-chips), .hero-chips > *")].forEach(e => {
       if(!e || e.hidden || !e.offsetParent) return;
       if(e.children.length || e.tagName !== "DIV") return out.push(e.getBoundingClientRect());
       const r = document.createRange(); r.selectNodeContents(e); out.push(r.getBoundingClientRect());   // a line of text: just the words, not the full width
@@ -1598,7 +1574,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   // Where the map buttons end, from the top of the map card (where they're heading, if they're sliding down under the news strip)
   function ctlBottom(){
-    const c = $("wxCtl"), mn = hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0;
+    const c = $(""), mn = hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0;
     return c.offsetTop + c.offsetHeight + mn;
   }
   // Phones: the strait sits in the open map between the buttons and the figures
@@ -1641,7 +1617,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       b.g.style.opacity = b.hold ? 1 : Math.min(still ? 1 : Math.min(1, k * 10, u * 10), b.cov ? .35 : 1).toFixed(2);
     });
   }
-  /* Live weather layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
+  /* Live  layer: wind, gusts, waves, temperature, rain and cloud read at a grid of points across the Channel,
      drawn as moving lines, waves or numbers over the sea. Refreshed with the conditions every 30 minutes. */
   const GLAT = [], GLON = [], GDLAT = .3, GDLON = .4;   // about 20 miles apart, over the whole map
   const LAPSE = .0065;   // the air is about 0.65°C cooler for every 100 m up
@@ -1682,8 +1658,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       let w = null, m = null, at = Date.now();
       try{ const c = JSON.parse(sessionStorage.getItem("wxGrid")); if(c && c.q === q && Date.now() - c.at < 30 * 6e4){ w = c.w; m = c.m; at = c.at; } }catch(e){}
       if(!w){
-        [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation,cloud_cover&wind_speed_unit=mph"),
-                                    getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
+        [w, m] = await Promise.all([getJSON("https://api..com/v1/forecast?" + q + "&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation,cloud_cover&wind_speed_unit=mph"),
+                                    getJSON("https://marine-api..com/v1/marine?" + q + "&hourly=wave_height,wave_direction").catch(() => null)]);
         if(m) try{ sessionStorage.setItem("wxGrid", JSON.stringify({at, q, w, m})); }catch(e){}
       }
       gW = [].concat(w); gM = m ? [].concat(m) : null; gEL = gW.map(r => Math.max(0, +r.elevation || 0));   // each reading is for its own spot's height
@@ -1698,13 +1674,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const whenText = () => !hours.length || +$("wxHour").value === hourNow ? "Now" : new Date(grid.t + ":00Z").toLocaleString("en-GB", {weekday:"short", hour:"2-digit", minute:"2-digit", timeZone:"UTC"});
   function showWhen(){
     const hs = $("wxHour");
-    $("wxWhen").textContent = whenText(); hs.closest(".wx-time").hidden = !hours.length;
-    hs.style.setProperty("--p", (hs.max > 0 ? hs.value / hs.max * 100 : 0) + "%");
-  }
-  function toHour(i){ const h = hourAt(i); if(!h) return; $("wxHour").value = i; grid = h; showWhen(); resetWx(true); if(ptAt) showPoint(ptAt); if(hoverAt) showHover(); }
+    $("wxWhen").textContent = whenText(); hs.closest("
   let hourRaf = 0;   // dragging the slider: at most one redraw a frame
   $("wxHour").addEventListener("input", e => { stopPlay(); const v = +e.target.value; $("wxHour").value = v; cancelAnimationFrame(hourRaf); hourRaf = requestAnimationFrame(() => toHour(v)); });
-  // Play: steps through the forecast an hour at a time, like Apple Weather's maps, and loops back to now
+  // Play: steps through the forecast an hour at a time, like Apple 's maps, and loops back to now
   let playT = 0;
   function stopPlay(){ clearInterval(playT); playT = 0; $("wxPlay").setAttribute("aria-pressed", false); $("wxPlay").setAttribute("aria-label", "Play the forecast"); }
   $("wxPlay").addEventListener("click", e => {
@@ -1742,11 +1715,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return st[st.length - 1][1];
   }
   // The layer picker: a frosted card of plain white icon tiles
-  const segBtns = [...document.querySelectorAll("#wxCtl .wx-seg button")], pickEl = $("wxPick"), pickBtn = $("wxLayerBtn");
-  function showPick(on){
-    pickEl.hidden = !on; pickBtn.setAttribute("aria-expanded", on);
-    if(on){
-      const b = segBtns.find(x => x.dataset.l === layer); if(b) b.focus({preventScroll:true});
+  const segBtns = [...document.querySelectorAll("# );
       // small phones: the list scrolls inside the map rather than running off it, and the page brings it into view
       pickEl.style.maxHeight = ""; const top = pickEl.getBoundingClientRect().top, room = Math.min(innerHeight, hero.getBoundingClientRect().bottom) - top - 12;
       if(pickEl.offsetHeight > room) pickEl.style.maxHeight = Math.max(220, room) + "px";
@@ -1754,7 +1723,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
   }
   pickBtn.addEventListener("click", e => { e.stopPropagation(); showPick(pickEl.hidden); });
-  $("wxPickX").addEventListener("click", e => { e.stopPropagation(); showPick(false); pickBtn.focus({preventScroll:true}); });
+  $("X").addEventListener("click", e => { e.stopPropagation(); showPick(false); pickBtn.focus({preventScroll:true}); });
   document.addEventListener("pointerdown", e => { if(!pickEl.hidden && !pickEl.contains(e.target) && !pickBtn.contains(e.target)) showPick(false); });
   addEventListener("keydown", e => { if(e.key === "Escape" && !pickEl.hidden){ e.stopImmediatePropagation(); showPick(false); pickBtn.focus({preventScroll:true}); } }, true);
   $("launchTg").addEventListener("click", e => {
@@ -1765,7 +1734,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
   const TERRAIN = 'Terrain <a href="https://github.com/tilezen/joerd/blob/master/docs/attribution.md">Mapzen</a>';
   let terrainOn = false;
-  function wxKey(l, name){   // "Wind 0 ▬▬▬ 40+ mph"
+  function wxKey(l, name){   // " 0 ▬▬▬ 40+ mph"
     const sc = SCALE[l], st = sc.stops, lo = st[0][0], hi = sc.max != null ? sc.max : st[st.length - 1][0], f = v => String(+v.toFixed(1)).replace("-", "−");
     const grad = st.filter(([v]) => v <= hi).map(([v, c]) => "rgb(" + c.map(Math.round).join(",") + ") " + ((v - lo) / (hi - lo) * 100).toFixed(1) + "%").join(",");
     return (name ? '<span class="wk-t">' + name + "</span>" : "") + "<span>" + f(lo) + (sc.unit === "°C" ? "°" : "") + '</span><i style="background:linear-gradient(to right,' + grad + ')"></i><span>' + f(hi) + (sc.max != null ? "+" : "") + (sc.unit === "°C" ? "°C" : " " + sc.unit) + "</span>";
@@ -1775,8 +1744,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(LM && terrainOn !== (l === "temp")){ terrainOn = l === "temp"; LM.attributionControl[terrainOn ? "addAttribution" : "removeAttribution"](TERRAIN); }
     segBtns.forEach(x => x.setAttribute("aria-pressed", x.dataset.l === l));
     const b = segBtns.find(x => x.dataset.l === l);
-    $("wxLayerIc").innerHTML = b.querySelector("svg").outerHTML;
-    $("wxLayerName").textContent = b.querySelector(".am-tn").textContent;
+    $("Ic").innerHTML = b.querySelector("svg").outerHTML;
+    $("Name").textContent = b.querySelector(".am-tn").textContent;
     const nm = b.querySelector(".am-tn").textContent;
     $("wxKeyPick").innerHTML = wxKey(l); $("wxKeyBar").innerHTML = wxKey(l, nm);
     const noKey = l === "wind" || l === "gusts";   // no colours on the map for these, so nothing to explain
@@ -1788,8 +1757,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   segBtns.forEach(b => b.addEventListener("click", e => { e.stopPropagation(); setLayer(b.dataset.l); showPick(false); }));
   setLayer(layer, true);
   // Rebuilt whenever the map moves or new readings arrive: the sea (or the temperature colours), any numbers, and the motion drawn over it.
-  // Wind: streams of particles. Gusts: faster, longer streaks, warmer for stronger gusts.
-  // Waves: crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
+  // : streams of particles. : faster, longer streaks, warmer for stronger gusts.
+  // : crests drifting the way the wind blows them (the swell's own direction when it's nearly calm).
   const CELL = 8, SPEED = .055;   // grid spacing in pixels; pixels a frame for each mph
   let fld = null, parts = [], dpr = 1, vw = 0, vh = 0, coastPath = null, seaPath = null;
   let maskKey = "", maskVal = null;
@@ -1805,10 +1774,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     maskKey = key; maskVal = sea;
     return sea;
   }
-  /* Hills on the Temperature layer, as on Ventusky: shaded as if lit from the north-west, and a little cooler the higher they are.
+  /* Hills on the  layer, as on Ventusky: shaded as if lit from the north-west, and a little cooler the higher they are.
      Each forecast is for its own spot's height, so it is taken down to sea level, blended across the map and brought back up to
      the height of every hill and valley. Heights come from the free Terrain Tiles on AWS (Mapzen's Terrarium tiles:
-     metres = red × 256 + green + blue ÷ 256 − 32768), fetched only while Temperature is showing. */
+     metres = red × 256 + green + blue ÷ 256 − 32768), fetched only while  is showing. */
   const DEM = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/";
   const demTiles = new Map(), demWait = new Set();
   let demCx = null, demT = 0, relief = null, tLut = null;
@@ -1914,14 +1883,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   let heatPad = 0;
   function resetWx(keep){   // keep: a new hour on the slider, so the canvases and the moving trails stay as they are
     if(!LM) return;
-    // wind, gusts and waves are softened by the browser (.wx-heat.soft), not redrawn blurred each time; their colour
-    // runs half a reading past the edges, so the softening doesn't fade the map's edges
-    const soft = layer !== "temp" && layer !== "rain", pad = soft ? CELL / 2 : 0;
-    const sz = LM.getSize(), d = Math.min(2, devicePixelRatio || 1), same = keep && sz.x === vw && sz.y === vh && d === dpr && pad === heatPad && parts.length;
-    vw = sz.x; vh = sz.y; if(!vw || !vh) return;
-    dpr = d; heatPad = pad;
-    const tl = LM.containerPointToLayerPoint([0, 0]);
-    if(same){ const c = heat.getContext("2d"); c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, heat.width, heat.height); }
+    // wind, gusts and waves are softened by the browser (
     else [heat, flow].forEach(c => { const e = c === heat ? pad : 0; c.width = (vw + 2 * e) * dpr; c.height = (vh + 2 * e) * dpr; c.style.width = vw + 2 * e + "px"; c.style.height = vh + 2 * e + "px"; });
     L.DomUtil.setPosition(heat, tl.subtract([pad, pad])); L.DomUtil.setPosition(flow, tl);
     const cols = Math.ceil(vw / CELL) + 2, rows = Math.ceil(vh / CELL) + 2, n = cols * rows;
@@ -1952,14 +1914,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0, dpr * p.y0); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0); h.filter = "none";
     }
-    if(layer === "wind" || layer === "gusts" || layer === "rain"){   // the same blue sea as Waves, the land left clear grey
+    if(layer === "wind" || layer === "gusts" || layer === "rain"){   // the same blue sea as , the land left clear grey
       seaPath = seaPath || (() => { const q = new Path2D(); q.rect(-1e4, -1e4, 3e4, 3e4); q.addPath(coastPath); return q; })();
       h.fillStyle = "rgb(" + SEA_BLUE + ")"; h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(seaPath, "evenodd");
       h.setTransform(1, 0, 0, 1, 0, 0);
     }
     if(layer === "waves" || layer === "rain"){   // as on Ventusky: the layer in colour, blended smoothly between the readings.
-      // Waves over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
-      // Wind and gusts get only the blue sea, with the moving streaks on top
+      //  over the sea only, the land left clear grey; rain only where it is raining, stronger colour for heavier rain.
+      //  and gusts get only the blue sea, with the moving streaks on top
       const st = SCALE[layer].stops, sm = document.createElement("canvas"); sm.width = cols; sm.height = rows;
       const sx = sm.getContext("2d"), img = sx.createImageData(cols, rows), px = img.data;
       for(let k = 0; k < n; k++){
@@ -1973,13 +1935,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       h.setTransform(dpr, 0, 0, dpr, e, e); h.drawImage(sm, -CELL / 2, -CELL / 2, cols * CELL, rows * CELL);   // each reading centred on its spot
       h.filter = "none";
       if(layer === "waves"){   // no waves on land: the colour stops at the coast
-        h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by .wx-heat.soft
-        h.setTransform(dpr * p.sx, 0, 0, dpr * p.sy, dpr * p.x0 + e, dpr * p.y0 + e); h.fill(coastPath);
-        h.globalCompositeOperation = "source-over"; h.filter = "none";
-      }
-      h.setTransform(1, 0, 0, 1, 0, 0);
-    }
-    const LABEL = {rain:v => v < .05 ? "" : (v < 10 ? v.toFixed(1) : Math.round(v)) + " mm"}[layer];
+        h.globalCompositeOperation = "destination-out";   // a sharp cut, softened with the colour by [layer];
     if(LABEL){   // rain, written across the map every so often (temperature is shown in colour)
       const gap = vw < 600 ? 120 : 170, fs = 13;
       h.save(); h.scale(dpr, dpr);
@@ -2003,7 +1959,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!same || reduced) flow.getContext("2d").clearRect(0, 0, flow.width, flow.height);
     if(reduced) for(let i = 0; i < 40; i++) stepFlow(1);   // one still picture instead of motion
   }
-  // Tap or click the map: the weather at that spot, at the time on the slider
+  // Tap or click the map: the  at that spot, at the time on the slider
   let ptAt = null, probe = null;
   const atSea = ll => {   // checked against the Natural Earth coastline the boats use
     coastPath = coastPath || new Path2D($("coast").getAttribute("d")); probe = probe || document.createElement("canvas").getContext("2d");
@@ -2022,20 +1978,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const html = '<b class="pt-h">' + title + "</b>"
       + '<span class="pt-sub">' + (sea ? "At sea" : "On land") + " · " + whenText() + " · wind from the " + COMPASS[Math.round(from / 45) % 8] + "</span>"
       + (sea && lv ? '<span class="pt-lv ' + lv + '">' + WORD[lv] + ": " + LINE[lv] + "</span>" : "")
-      + '<div class="wp-stats">' + cell("Wind", Math.round(sp), "mph") + cell("Gusts", Math.round(g("gust")), "mph") + cell("Waves", sea ? g("wave").toFixed(1) : "–", "m") + "</div>"
-      + '<div class="wp-stats">' + cell("Temp", Math.round(tempAt(ll.lat, ll.lng)), "°C") + cell("Rain", g("rain").toFixed(1), "mm") + cell("Cloud", Math.round(g("cloud")), "%") + "</div>";
+      + '<div class="wp-stats">' + cell("", Math.round(sp), "mph") + cell("", Math.round(g("gust")), "mph") + cell("", sea ? g("wave").toFixed(1) : "–", "m") + "</div>"
+      + '<div class="wp-stats">' + cell("Temp", Math.round(tempAt(ll.lat, ll.lng)), "°C") + cell("", g("rain").toFixed(1), "mm") + cell("Cloud", Math.round(g("cloud")), "%") + "</div>";
     const moved = !pin || !pin.getLatLng().equals(ll);
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup(); ptAt = ll;
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + (layer === "wind" || layer === "gusts" ? "" : '<div class="wx-key">' + wxKey(layer, "Map colours") + "</div>");
+      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html + (layer === "wind" || layer === "gusts" ? "" : '");
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(!isFull() && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
     }
     // keep the card clear of the controls at the top
-    const top = Math.max(110, $("wxCtl").getBoundingClientRect().bottom - $("lmap").getBoundingClientRect().top + 12);
+    const top = Math.max(110, $("").getBoundingClientRect().bottom - $("lmap").getBoundingClientRect().top + 12);
     L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
   let pin = null;
@@ -2083,9 +2039,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   // Batches: everything drawn in the same style goes into one path, so a frame is a handful of strokes
   const batches = n => Array.from({length:n}, () => new Path2D());
-  // Waves, as on Ventusky: thin white crests seen from above, each bowed the way the waves run, drifting slowly
+  // , as on Ventusky: thin white crests seen from above, each bowed the way the waves run, drifting slowly
   // along their path as it fades in and out; longer, brighter and quicker where the sea is higher
-  function stepWaves(c, dt){
+  function step(c, dt){
     c.clearRect(0, 0, vw, vh); c.lineCap = "round";
     const A = 4, crest = batches(A);
     for(const p of parts){
@@ -2102,10 +2058,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
   }
-  /* Wind and gusts, drawn straight onto the clear map, as on earth.nullschool and Ventusky: thousands of fine streaks flowing with the
+  /*  and gusts, drawn straight onto the clear map, as on earth.nullschool and Ventusky: thousands of fine streaks flowing with the
      wind, each fading in and out over its short life so nothing pops, the trails fading behind them. Faster and darker where the
      wind is stronger; gusts run quicker with longer trails, turning amber from 28 mph and red from 40 mph. */
-  const SEA_BLUE = [60,128,198];   // Waves' sea on a moderate day, multiplied over the map
+  const SEA_BLUE = [60,128,198];   // ' sea on a moderate day, multiplied over the map
   const FLOW_INK = [[255,255,255],[255,255,255],[255,255,255],[255,190,90],[255,96,96]];   // white, as the waves; amber and red for strong gusts
   const FLOW_A = [.45, .65, .85, .95, .95];
   function stepStreaks(c, dt, gust){
@@ -2128,12 +2084,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       c.lineWidth = gust ? 1.4 + (b > 2 ? .3 : 0) : 1.15 + b * .15; c.stroke(paths[b * L + l]);
     }
   }
-  const stepGusts = (c, dt) => stepStreaks(c, dt, true), stepWind = (c, dt) => stepStreaks(c, dt, false);
+  const step = (c, dt) => stepStreaks(c, dt, true), step = (c, dt) => stepStreaks(c, dt, false);
   function stepFlow(dt){
     if(!fld || !flow) return;
     const c = flow.getContext("2d");
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
-    (fld.mode === "waves" ? stepWaves : fld.mode === "gusts" ? stepGusts : stepWind)(c, dt);
+    (fld.mode === "waves" ? step : fld.mode === "gusts" ? step : step)(c, dt);
   }
   // Runs only while the Channel is on screen and the tab is visible; movement is per time, not per frame, so 120 Hz screens match 60 Hz ones
   let raf = 0, heroOn = true, prevT = 0;
@@ -2151,7 +2107,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // on resize, wait for it to settle, and skip when the map's size hasn't changed (phones' toolbars come and go as you scroll)
   let fitT = 0, fitSz = "";
   fitMap(); fitSz = hero.clientWidth + "x" + hero.clientHeight;
-  // Small or busy phones: the map card grows just enough that the big number never runs into the weather buttons
+  // Small or busy phones: the map card grows just enough that the big number never runs into the  buttons
   function fitHero(){
     if(hero.classList.contains("full")) return;
     const was = hero.style.minHeight; hero.style.minHeight = "";
@@ -2362,8 +2318,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
     liveUi();
     if(Date.now() - statusAt >= (pending() ? 2 : 30) * MIN) checkStatus();
-    if(Date.now() - wxAt >= 30 * MIN) loadWeather();
-    if(gridAt && Date.now() - gridAt >= 60 * MIN) loadGrid();   // the weather map's forecast: hourly is plenty
+    if(Date.now() - wxAt >= 30 * MIN) ;
+    if(gridAt && Date.now() - gridAt >= 60 * MIN) loadGrid();   // the  map's forecast: hourly is plenty
     if(Date.now() - newsAt >= 10 * MIN) loadNews();
   }
   setInterval(tick, MIN);
@@ -2779,10 +2735,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const MEANS = {calm:"Light winds and a flat sea. These are the conditions most small boats set out in, so crossings are likely.",
     moderate:"A breeze and some chop. Some boats may still try, usually in the calmer early hours.",
     rough:"Strong winds or big waves make the crossing dangerous, so crossings are unlikely until it settles."};
-  const SKY = {clear:"Clear", partly:"Partly cloudy", cloudy:"Cloudy", fog:"Foggy", drizzle:"Drizzle", rain:"Rain", snow:"Snow", storm:"Thunderstorms"};
+  const SKY = {clear:"Clear", partly:"Partly cloudy", cloudy:"Cloudy", fog:"Foggy", drizzle:"Drizzle", rain:"", snow:"Snow", storm:"Thunderstorms"};
   const kindOf = c => c == null ? null : c <= 1 ? "clear" : c === 2 ? "partly" : c === 3 ? "cloudy" : c === 45 || c === 48 ? "fog"
     : c >= 51 && c <= 57 ? "drizzle" : (c >= 61 && c <= 67) || (c >= 80 && c <= 82) ? "rain" : (c >= 71 && c <= 77) || c === 85 || c === 86 ? "snow" : c >= 95 ? "storm" : "cloudy";
-  // Full-colour weather symbols, in the style of Apple's multicolour SF Symbols
+  // Full-colour  symbols, in the style of Apple's multicolour SF Symbols
   function wxIcon(kind, day){
     const sun = '<circle cx="12" cy="12" r="4.6" fill="#FFCC00"/><path d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6" stroke="#FFCC00" stroke-width="1.9" stroke-linecap="round"/>';
     const moon = '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z" fill="#FFD60A"/>';
@@ -2801,46 +2757,46 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
   const COMPASS = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"];
-  // Live conditions: the weather in the Channel now, the next three mornings, and what the map shows
+  // Live conditions: the  in the Channel now, the next three mornings, and what the map shows
   function renderMapPop(){
     const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
     pm.dataset.lv = lvl || "";
     $("chipMap").querySelector("i").className = lvl || (wxFailed ? "none" : "wait");
-    $("chipMap").querySelector("span").textContent = lvl ? WORD[lvl] + " · " + LIKE[lvl].toLowerCase() : "Weather outlook";   // the level and what it means for crossings, not just a coloured dot
-    $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions in the Channel, " + LINE[lvl] : "Weather outlook in the Channel") + ". Open the outlook");
+    $("chipMap").querySelector("span").textContent = lvl ? WORD[lvl] + " · " + LIKE[lvl].toLowerCase() : " outlook";   // the level and what it means for crossings, not just a coloured dot
+    $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions in the Channel, " + LINE[lvl] : " outlook in the Channel") + ". Open the outlook");
     let h;
     if(wx){
       const arrow = '<svg class="arrow" viewBox="0 0 24 24" style="transform:rotate(' + Math.round(wx.dir + 180) + 'deg)" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       h = '<div class="wp-head"><div class="wp-ic">' + wxIcon(wx.kind, wx.day) + "</div><div><b>" + (lvl ? LIKE[lvl] : "Channel conditions") + "</b><span>" + (wx.kind ? SKY[wx.kind] + " · " : "") + Math.round(wx.temp) + "°C · Dover Strait</span></div></div>"
         + '<div class="mp-live"><i></i>Live · updated ' + ukClock(wx.at) + "</div>"
-        + '<div class="wp-stats"><div><span>Wind</span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span>Gusts</span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span>Waves</span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
+        + '<div class="wp-stats"><div><span></span><b class="num">' + Math.round(wx.wind) + "</b><small> mph</small>" + arrow + '</div><div><span></span><b class="num">' + Math.round(wx.gust) + '</b><small> mph</small></div><div><span></span><b class="num">' + (wx.wave == null ? "–" : wx.wave.toFixed(1)) + "</b><small> m</small></div></div>"
         + '<div class="wp-scale">' + LV.map(l => '<i class="' + l + (l === lvl ? " on" : "") + '"></i>').join("") + LV.map(l => '<em class="' + (l === lvl ? "on" : "") + '">' + WORD[l] + "</em>").join("") + "</div>"
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
         + '<p class="wp-foot wp-days-h">Next three mornings, midnight to noon</p>'
         + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
     }
-    else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
+    else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The  service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
       + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
       + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
       + "Hover over or tap a boat for its day's figures.</p></div>";
   }
-  async function loadWeather(){
+  async function {
     wxAt = Date.now();
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
-      const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
-                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
+      const [w, m] = await Promise.all([getJSON("https://api..com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=_code,temperature_2m_max&wind_speed_unit=mph"),
+                                        getJSON("https://marine-api..com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
+        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily._code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
       const c = w.current;
       wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
-        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
+        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c._code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
     }catch(e){
       wxFailed = true;
@@ -2851,7 +2807,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
 
   function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
-
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
      between two dates, quiet spells, patterns, every person, petitions and the weekly roundup */
@@ -3045,7 +3000,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   ddFlip.addEventListener("pointercancel", () => { ddX = null; });
   if(window.ResizeObserver){ const ro = new ResizeObserver(fitDd); ddFaces.forEach(f => ro.observe(f)); }
   narrow.addEventListener("change", fitDd); fitDd();
-
 
   // ---- Year by year race
   // drawRace builds the chart once per set of figures or width; moveRace only moves the line, the dots and the box of figures
@@ -3401,17 +3355,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
 
-
   /* ---------------------------------------------------- first-visit tour of the map */
   const TOUR = [
-    {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest weather drawn over the sea. Here's a quick look at how it works."},
+    {el:() => $("lmap"), h:"Welcome to the live map", p:"This is the Dover Strait right now, with the latest  drawn over the sea. Here's a quick look at how it works."},
     {el:() => (boats.find(b => !b.cov) || boats[0] || {}).g || null, h:"The boats", p:"Each boat crossing the map stands for one of the latest day's small boats. Tap or hover over one to see its figures."},
-    {el:() => document.querySelector("#lmap .am-launch"), h:"Launch beaches", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
-    {el:() => $("wxLayerBtn"), h:"Choose the weather", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
-    {el:() => document.querySelector(".wx-time"), h:"See what's coming", p:"Press play, or drag the slider, to see the next 48 hours of weather in the Channel."},
-    {el:() => $("lmap"), h: touchOnly ? "Tap anywhere for a reading" : "Point anywhere for a reading", p: touchOnly ? "Tap the sea to see the wind, waves and crossing outlook at that spot." : "Move your mouse over the map to read the weather, or click for the full reading and crossing outlook."},
+    {el:() => document.querySelector("#lmap .am-launch"), h:"", p:"The orange rings mark the main beaches in France where boats set off. Tap one to see which beaches it covers."},
+    {el:() => $("Btn"), h:"Choose the ", p:"Switch between waves, wind, gusts, temperature and rain. You can also turn the launch beaches on or off here."},
+    {el:() => document.querySelector(",
     {el:() => $("fuBtn"), h:"Figure Updates", p:"The Home Office publishes each day's figures the next day. Tap Figure Updates to see when today's figures arrived. New figures appear here by themselves, with no need to reload."},
-    {el:() => $("wxFull"), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
+    {el:() => $(""), h:"Go full screen", p:"Open the map full screen to explore it in more detail. That's the tour. Enjoy the map."}
   ];
   let tourSteps = [], tourI = 0, tourTick = null;
   const tourSeen = () => { try{ return localStorage.getItem("mapTourDone"); }catch(e){ return "1"; } };
@@ -3588,8 +3540,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
 
-  start(); loadWeather(); loadNews();
-  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
+  start(); ; loadNews();
+  whenIdle(loadGrid, 2000);   // the 48-hour  map comes in once the figures are up
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
