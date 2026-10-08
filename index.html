@@ -154,11 +154,11 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-area.sea span{font:italic 500 13px/1 var(--font);letter-spacing:.02em;color:rgba(255,255,255,.82);text-shadow:0 1px 3px rgba(20,30,70,.35)}
 /* main launch beaches: soft pulsing rings on the French coast */
 .am-launch{pointer-events:auto;cursor:pointer}
-.am-launch i,.am-launch b{position:absolute;inset:0;border-radius:50%}
+.am-launch i,.am-launch b{position:absolute;border-radius:50%}
 .am-launch i{inset:8px;background:#FF9F0A;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 1px 4px rgba(0,0,0,.5)}
-.am-launch b{border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
+.am-launch b{inset:0;border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
-@media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
+@media (prefers-reduced-motion:reduce){.am-launch b{opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
 /* with a mouse: the rain, wave height or temperature under the pointer */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
@@ -166,9 +166,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-hover.off{opacity:0}
 .am-hover b{font-size:1rem;font-weight:700;letter-spacing:-.01em}
 .am-hover small{font-weight:600;opacity:.7}
-.am-hover em{font-style:normal;font-weight:500;opacity:.7;font-size:.765rem}
 .am-hover .sw{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
-.am-hover svg{width:14px;height:14px;opacity:.9}
 /* phones: the sheet a tap brings up */
 .am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
   background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
@@ -267,7 +265,6 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .chip i.rough{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.25)}
 .chip i.rep{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25);animation:repPulse 2s ease-in-out infinite}
 @keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(255,159,10,0)}}
-@media (prefers-reduced-motion:reduce){.chip i.rep{animation:none}}
 a.chip{text-decoration:none;color:inherit;white-space:nowrap}
 .chip i.none,.chip i.wait{background:rgba(255,255,255,.45);box-shadow:none}   /* no reading, or still loading */
 .chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
@@ -288,7 +285,6 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 /* the close button on a phone sheet: it floats over the sheet's top right corner, so it stays put while the sheet scrolls */
 .pop-x{position:fixed;z-index:62;width:30px;height:30px;border:0;border-radius:50%;background:var(--fill2);color:var(--label);display:grid;place-items:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .pop-x svg{width:10px;height:10px}
-.pop-x[hidden]{display:none}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
@@ -380,9 +376,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
 .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
 .card h3{margin:0 0 2px;font:600 .824rem/1.2 var(--font);color:var(--label2);display:flex;align-items:center;gap:6px}
-.card h3 svg{width:15px;height:15px}
 .val{font:700 2.2rem/1.1 var(--round);letter-spacing:-.01em;margin-top:4px}
-.val small{font:600 1rem var(--font);color:var(--label2);letter-spacing:-.02em;margin-left:4px}
 .sub{color:var(--label2);font-size:.824rem;margin-top:2px}
 .delta{font-weight:600}.delta.up{color:var(--red-t)}.delta.down{color:var(--green-t)}
 .foot{color:var(--label2);font-size:.765rem;margin:10px 4px 0;line-height:1.4}
@@ -520,6 +514,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .chart .has-sel #chartBars rect:not(.on){opacity:.3}   /* the other days dim while one is picked */
 .chart .trend{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 2px var(--card))}   /* the 7-day average over the bars */
 .chart .avg{stroke:var(--label3);stroke-width:1;stroke-dasharray:3 4}
+.chart text.avg-t,.chart text.peak{paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round}   /* a halo, so the labels read over the bars */
 .chart text.avg-t{fill:var(--label2);font:600 11px var(--font)}
 .chart text.peak{fill:var(--label);font:700 12px var(--round)}
 .chart .bars.grow rect{transform-box:fill-box;transform-origin:bottom;animation:barUp .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 8ms)}
@@ -594,13 +589,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .nat-list .pc{font:700 1.06rem/1 var(--round);font-variant-numeric:tabular-nums;text-align:right}
 .nat-list li.oth{padding-bottom:2px}
 .nat-list li.oth .nm,.nat-list li.oth .pc{color:var(--label2)}
-.list{list-style:none;margin:10px 0 0;padding:0}
-.list li{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:9px 0;border-top:.5px solid var(--sep)}
+.list{list-style:none;padding:0}
+.list li{display:grid;align-items:center;border-top:.5px solid var(--sep)}
 .list li:first-child{border-top:0}
-.list .nm{font-size:.941rem}
-.list .nm small{display:block;height:4px;border-radius:2px;background:var(--fill);margin-top:6px;overflow:hidden}
-.list .nm small b{display:block;height:100%;width:0;background:var(--indigo);border-radius:2px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.list .pc{font-weight:600;font-variant-numeric:tabular-nums;font-size:.882rem}
 /* people per boat: two dinghies seen from above, one dot a person, then the years as a line */
 .pb-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .pb-x{font-size:.706rem;font-weight:700;color:color-mix(in srgb,var(--orange) 75%,var(--label));background:color-mix(in srgb,var(--orange) 16%,transparent);padding:3px 9px;border-radius:999px;white-space:nowrap}
@@ -617,7 +608,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .pb-line .ar{fill:var(--teal);opacity:.14}
 .pb-line .dt{fill:var(--teal);stroke:var(--card);stroke-width:2}
 .pb-line .hit{fill:transparent;cursor:default}
-.pb-line .hit:hover+.dt,.pb-line .hit:focus+.dt{r:5}
+.pb-line .hit:hover+.dt{r:5}
 .pb-line text{font:600 10px var(--font);fill:var(--label2);font-variant-numeric:tabular-nums}
 .pb-line text.v{fill:var(--label);font-size:11px}
 .pb-cap{margin:6px 0 0;font-size:.706rem;color:var(--label2)}
@@ -677,7 +668,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-btn[aria-expanded="true"]{background:var(--fill2)}
 @keyframes rsFlash{0%,45%,100%{background:var(--fill,rgba(118,118,128,.12));color:var(--label);box-shadow:0 0 0 0 rgba(255,59,48,0)}20%,70%{background:#FF3B30;color:#fff;box-shadow:0 0 0 5px rgba(255,59,48,.22)}}
 .rs-pill{color:var(--label)}
-@media (prefers-reduced-motion:reduce){.rs-pill{animation:none}}
 @media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
 /* the form: a frosted card in the middle of the screen, over a soft veil */
 .rs-veil{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:fadeIn .2s ease both}
@@ -697,7 +687,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-f input[type=date],.rs-f input[type=time]{cursor:pointer}
 .rs-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .rs-send{display:block;width:100%;margin-top:4px;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer;animation:rsIn .32s cubic-bezier(.2,.9,.3,1) both}
-.rs-send[hidden]{display:none}
 .rs-send:disabled{opacity:.5;cursor:default}
 .rs-send:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.rs-send:not(:disabled):hover{filter:brightness(1.1)}}
@@ -706,7 +695,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-msg.err{color:var(--red)}
 .rs-pop.sent form > :not(.rs-msg){display:none}
 .rs-pop.sent .rs-msg{font-size:.941rem;color:var(--label)}
-@media (prefers-reduced-motion:reduce){.rs-f.on,.rs-send{animation:none}}
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
@@ -813,7 +801,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .cal-day .dn{font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .mb .cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
 .mb .cal-day.zero .dv{color:var(--label2);font-weight:400}
-.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{--h:88%;color:#fff}.mb .cal-day.l4 .dn{color:rgba(255,255,255,.8)}
+.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{color:#fff}
 .mb .cal-day.l4{background:var(--mbar4)}   /* a deeper blue so white numbers stay readable */
 .mb .cal-day.l2 .dn,.mb .cal-day.l3 .dn{color:var(--label);opacity:.78}
 .mb .cal-day.l4 .dn{color:#fff;opacity:.85}
@@ -850,7 +838,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .race .tip .row.cur{font-weight:600;color:var(--label)}
 /* narrow boxes: the figures for the chosen day sit under the chart, three to a row, instead of covering it */
 .mb .race-read{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 12px;padding:2px 4px;font-size:.824rem;line-height:1.35;font-variant-numeric:tabular-nums;color:var(--label2)}
-.mb .race-read[hidden]{display:none}
 .mb .race-read b{grid-column:1 / -1;color:var(--label);font-weight:600;font-size:.882rem;margin-bottom:2px}
 .mb .race-read .row{display:flex;align-items:center;gap:5px;min-width:0;white-space:nowrap}
 .mb .race-read .row i{flex:none;width:8px;height:8px;border-radius:2px}
@@ -931,7 +918,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* Tall boxes (the boats in Every Person, for one) show their first part, fading out, with Show more underneath to open the rest */
 .card.clamp{max-height:520px;-webkit-mask-image:linear-gradient(#000 calc(100% - 110px),transparent);mask-image:linear-gradient(#000 calc(100% - 110px),transparent)}
 .more-btn{display:flex;align-items:center;gap:6px;margin:12px auto 0;min-height:36px;padding:0 16px;border:0;border-radius:999px;background:var(--fill);color:var(--label);font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation;transition:background-color .2s}
-.more-btn[hidden]{display:none}
 .more-btn svg{width:12px;height:12px;transition:transform .25s ease}
 .more-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
 .more-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -2264,7 +2250,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
     setSel(sel);
-    ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day · line is a " + (smooth > 1 ? smooth : 7) + "-day average";
+    ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day" + (smooth > 1 ? " · line is a " + smooth + "-day average" : "");
     if(ddCur === 0) $("ddNote").textContent = ddNotes[0];
     return box.querySelector("#chartLine") || box.querySelector("#chartBars");
   }
