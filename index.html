@@ -1053,13 +1053,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 #ytdBox .flip{position:relative;z-index:1}
 #ytdBox h3{color:var(--label);opacity:.72;letter-spacing:-.005em}
 
-/* the page switch: a glass capsule */
-#ytdBox .flip-go{border-radius:999px;background:var(--lg-chip);
-  box-shadow:inset 0 1px 0 var(--lg-chip-hl),inset 0 0 0 .5px var(--lg-edge),0 0 0 .5px var(--lg-line),0 3px 10px rgba(0,0,0,.06);
-  -webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);transition:background .25s ease,transform .25s cubic-bezier(.3,1.4,.5,1)}
-#ytdBox .flip-go:active{transform:scale(.96)}
-@media (hover:hover){#ytdBox .flip-go:hover{background:var(--lg-chip-hover)}}
-
 /* the ring: liquid running round a glass tube, with a lens in the middle */
 #ytdBox .ring{overflow:visible}
 #ytdBox .ring .lg-lens{fill:url(#ringLens);stroke:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.06))}
@@ -1127,8 +1120,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   :root:not([data-theme="light"]) #ytdBox .cal-day .mk.busy,:root:not([data-theme="light"]) #ytdBox .cal-day .mk.new{box-shadow:0 0 0 1.5px rgba(28,28,30,.9)}}
 :root[data-theme="dark"] #ytdBox .cal-day .mk.busy,:root[data-theme="dark"] #ytdBox .cal-day .mk.new{box-shadow:0 0 0 1.5px rgba(28,28,30,.9)}
 
-@media (prefers-reduced-motion:reduce){#ytdBox::before{animation:none}#ytdBox .cal-day,#ytdBox .flip-go,#ytdBox .cal-btn{transition:none}#ytdBox .cal-day.on{transform:none}}
-@media (prefers-reduced-transparency:reduce){#ytdBox,#ytdBox .flip-go,#ytdBox .cal-btn,#ytdBox .ring-legend > div{-webkit-backdrop-filter:none;backdrop-filter:none}#ytdBox::before{display:none}#ytdBox{background:var(--card)}}
+@media (prefers-reduced-motion:reduce){#ytdBox::before{animation:none}#ytdBox .cal-day,#ytdBox .cal-btn{transition:none}#ytdBox .cal-day.on{transform:none}}
+@media (prefers-reduced-transparency:reduce){#ytdBox,#ytdBox .cal-btn,#ytdBox .ring-legend > div{-webkit-backdrop-filter:none;backdrop-filter:none}#ytdBox::before{display:none}#ytdBox{background:var(--card)}}
 </style>
 </head>
 <body>
