@@ -408,9 +408,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .on .spark span{transform:scaleY(1)}
 .spark-days{display:flex;gap:6px;margin-top:6px}
 /* Last 7 days, List view: every day of the last month as a list, newest first, divided by grey hairlines.
-   It scrolls inside the box, so the box keeps the graph's height */
+   It scrolls inside the box, so the box keeps the graph's height; Show more makes it taller for easier scrolling */
 .wk-note{font-size:.765rem;color:var(--label2)}
-.wk-days{list-style:none;margin:10px 0 0;padding:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.wk-days{list-style:none;margin:10px 0 0;padding:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:height .35s cubic-bezier(.2,.8,.2,1)}
 .wk-days li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0;border-top:.5px solid var(--sep);font-size:.882rem;font-variant-numeric:tabular-nums}
 .wk-days li:first-child{border-top:0}
 .wk-days b{font-weight:600}
@@ -1061,6 +1061,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <div class="wk-face" id="wkList" hidden>
           <div class="flip-h"><button type="button" class="flip-go back" id="wkBack" aria-controls="wkGraph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Last 7 days</button><span class="wk-note" id="wkNote"></span></div>
           <ul class="wk-days" id="wkDays" aria-label="Every day in the last month"></ul>
+          <button type="button" class="more-btn" id="wkGrow" aria-controls="wkDays" aria-expanded="false"><span>Show more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         </div>
       </article>
       <article class="card b-ring art rv" id="ytdBox">
@@ -1411,9 +1412,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- the Channel: a live weather map in the style of Ventusky, one dinghy per boat */
   const boatsG = $("boats"), map = $("map"), NS = "http://www.w3.org/2000/svg";
   // The boats are drawn in map units (1000 across, 686 down), which cover the Dover Strait (AREA). The map opens wider, as on
-  // Ventusky: London to Paris and Brussels on wide screens (VIEW), Kent and the French coast on tall ones (TALL), and can be
+  // Ventusky, always centred on the Dover Strait (STRAIT): sized to London, Paris and Brussels on wide screens (VIEW), Kent and the French coast on tall ones (TALL), and can be
   // moved and zoomed anywhere within WIDE, which the coastline covers.
-  const AREA = [[50.5796, 0.7000], [51.4002, 2.6004]], VIEW = [[48.75, -1.0], [52.0, 4.7]], TALL = [[49.45, -1.0], [52.35, 4.0]], WIDE = [[48.2, -2.8], [52.8, 5.8]];
+  const AREA = [[50.5796, 0.7000], [51.4002, 2.6004]], VIEW = [[48.75, -1.0], [52.0, 4.7]], TALL = [[49.45, -1.0], [52.35, 4.0]], WIDE = [[48.2, -2.8], [52.8, 5.8]], STRAIT = [51.0, 1.45];
   const BEACHES = [["Dunkirk beaches", 51.045, 2.30, "Loon-Plage and the beaches east of Dunkirk"], ["Gravelines", 51.003, 2.11, "The beaches and the Aa canal by Gravelines"],
     ["Calais to Sangatte", 50.955, 1.78, "Beaches west of Calais and Blériot-Plage"], ["Wimereux", 50.77, 1.605, "Wimereux and the dunes of the Slack"],
     ["Boulogne to Hardelot", 50.66, 1.575, "Le Portel, Équihen-Plage and Hardelot"], ["Le Touquet area", 50.52, 1.585, "The Canche estuary and Stella-Plage"]];
@@ -1542,7 +1543,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     LM.setMinZoom(LM.getBoundsZoom(WIDE, true));
     if(W !== fitW){
       fitW = W; const f = L.latLngBounds(tall ? TALL : VIEW);
-      LM.setView(f.getCenter(), LM.getBoundsZoom(f, true), {animate:false});
+      LM.setView(STRAIT, LM.getBoundsZoom(f, true), {animate:false});   // always opens on the Channel itself
     }
     else if(LM.getZoom() < LM.getMinZoom()) LM.setZoom(LM.getMinZoom(), {animate:false});
     else resetWx();
@@ -1553,10 +1554,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function ctlBottom(){
     return 12 + (hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0);
   }
-  // Phones: the strait sits in the open map between the news strip and the figures
+  // The strait sits in the open map between the news strip and the figures
   function frameStrait(){
-    if(!LM || hero.clientWidth >= 600) return;
-    const bot = hero.querySelector(".hero-in").offsetTop, y = LM.latLngToContainerPoint([51.0, 1.45]).y, d = y - (ctlBottom() + bot) / 2;
+    if(!LM) return;
+    const bot = hero.querySelector(".hero-in").offsetTop, y = LM.latLngToContainerPoint(STRAIT).y, d = y - (ctlBottom() + bot) / 2;
     if(Math.abs(d) > 8) LM.panBy([0, d], {animate:false});
   }
 
@@ -3173,15 +3174,22 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
+  let wkTall = false;
+  function sizeWk(){ $("wkDays").style.height = wkBase + (wkTall ? 260 : 0) + "px"; }
+  let wkBase = 150;
   function showWk(list){
     const g = $("wkGraph"), l = $("wkList");
-    if(list){ $("wkDays").style.height = Math.max(150, g.offsetHeight - 44) + "px"; }   // the list takes the graph's place at the same height
+    if(list){ wkBase = Math.max(150, g.offsetHeight - 92); wkTall = false; $("wkGrow").setAttribute("aria-expanded", false); $("wkGrow").firstChild.textContent = "Show more"; sizeWk(); }   // the list and its button take the graph's place at the same height
     g.hidden = list; l.hidden = !list; $("wkMore").setAttribute("aria-expanded", list);
     (list ? $("wkBack") : $("wkMore")).focus({preventScroll:true});
     if(list) $("wkDays").scrollTop = 0;
   }
   $("wkMore").addEventListener("click", e => { e.stopPropagation(); showWk(true); });
   $("wkBack").addEventListener("click", e => { e.stopPropagation(); showWk(false); });
+  $("wkGrow").addEventListener("click", e => {   // a taller list, easier to scroll through
+    e.stopPropagation(); wkTall = !wkTall; e.currentTarget.setAttribute("aria-expanded", wkTall);
+    e.currentTarget.firstChild.textContent = wkTall ? "Show less" : "Show more"; sizeWk();
+  });
 
   /* ---------------------------------------------------- Show more: tall boxes open in full on request */
   // A box much taller than the rest shows its first part, fading out, with a button to open the rest (and close it again).
