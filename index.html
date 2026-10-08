@@ -160,7 +160,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
-/* with a mouse: the temperature under the pointer */
+/* with a mouse: the rain, wave height or temperature under the pointer */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
   font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(255,255,255,.94);color:#1A2B4C;box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.18);transition:opacity .15s}
 .am-hover.off{opacity:0}
@@ -413,6 +413,15 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .spark.picking span:not(.sel){opacity:.4}   /* the day being read stands out */
 .on .spark span{transform:scaleY(1)}
 .spark-days{display:flex;gap:6px;margin-top:6px}
+/* Last 7 days, Detailed breakdown: every day of the last month as a list, newest first, divided by grey hairlines.
+   It scrolls inside the box, so the box keeps the graph's height */
+.wk-note{font-size:.765rem;color:var(--label2)}
+.wk-days{list-style:none;margin:10px 0 0;padding:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.wk-days li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0;border-top:.5px solid var(--sep);font-size:.882rem;font-variant-numeric:tabular-nums}
+.wk-days li:first-child{border-top:0}
+.wk-days b{font-weight:600}
+.wk-days span{color:var(--label2);text-align:right}
+.wk-days span strong{color:var(--label);font-weight:600}
 .spark-days span{flex:1;text-align:center;font-size:.706rem;color:var(--label2);font-weight:600}
 .ring-wrap{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:14px}
 .ring{width:min(250px,46vw);height:auto;aspect-ratio:1;display:block}
@@ -636,33 +645,58 @@ footer strong{color:var(--label);font-weight:600}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px);left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2);padding-left:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
-/* the logo and name, at the top left above the map, with the Beta tag beside them */
+/* the logo and name, at the top left above the map */
 .top-brand{display:flex;align-items:center;gap:10px;min-width:0;pointer-events:auto}
 .top-brand .lt-logo{display:block;width:34px;height:34px;flex:none;border-radius:50%;transition:transform .2s ease}
 .top-brand .lt-logo svg{display:block;width:100%;height:100%}
 .top-brand .lt-logo:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 @media (hover:hover){.top-brand .lt-logo:hover{transform:scale(1.06)}}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
-.top-brand .beta-pill{min-height:24px;padding:0 9px;font-size:10.5px;position:relative}
-.top-brand .beta-pill::after{content:"";position:absolute;inset:-10px -4px}   /* still a finger-sized tap target */
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
-@media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-brand .beta-pill{padding:0 7px;font-size:10px}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
-/* the Beta pill beside it: plain frosted, like the switch, and a note on hover or tap */
-.beta{position:static;flex:none;pointer-events:auto}
-.beta-pill{appearance:none;border:0;min-height:40px;padding:0 15px;border-radius:999px;display:inline-flex;align-items:center;font:700 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--label);cursor:pointer;touch-action:manipulation;
-  background:var(--fill,rgba(118,118,128,.12));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);transition:transform .2s ease}
-.beta-pill:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.beta-pill:hover{transform:translateY(-1px)}}
-.beta-tip{position:absolute;z-index:2;top:calc(100% + 8px);left:max(16px,env(safe-area-inset-left,0px));width:max-content;max-width:min(300px,calc(100vw - 32px));padding:12px 14px;border-radius:16px;font:400 14.5px/1.45 var(--font);color:var(--label);text-align:left;pointer-events:none;
-  background:color-mix(in srgb,var(--card) 92%,transparent);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);box-shadow:0 10px 30px rgba(0,0,0,.16);
-  opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
-.beta-tip b{display:block;margin-bottom:3px;font-weight:600}
-.beta:hover .beta-tip,.beta.open .beta-tip,.beta-pill:focus-visible + .beta-tip{opacity:1;visibility:visible;transform:none;transition:opacity .2s ease,transform .2s ease}
-@media (prefers-reduced-transparency:reduce){.beta-tip{background:var(--card)}}
+@media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
+/* Report Sightings: a pill beside the theme switch, in the same style, that flashes red twice as the page opens */
+.top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
+.rs-pill{display:inline-flex;padding:3px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12));animation:rsFlash 1.6s ease-in-out .9s 1 both}
+.rs-btn{appearance:none;border:0;background:none;color:inherit;display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 13px;border-radius:999px;font:500 14px/1 var(--font);cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
+.rs-btn svg{width:15px;height:15px;flex:none}
+.rs-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.rs-btn:hover{background:var(--fill2)}}
+.rs-btn[aria-expanded="true"]{background:var(--fill2)}
+@keyframes rsFlash{0%,45%,100%{background:var(--fill,rgba(118,118,128,.12));color:var(--label);box-shadow:0 0 0 0 rgba(255,59,48,0)}20%,70%{background:#FF3B30;color:#fff;box-shadow:0 0 0 5px rgba(255,59,48,.22)}}
+.rs-pill{color:var(--label)}
+@media (prefers-reduced-motion:reduce){.rs-pill{animation:none}}
+@media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
+/* the form: a frosted card in the middle of the screen, over a soft veil */
+.rs-veil{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:fadeIn .2s ease both}
+.info-pop.rs-pop{z-index:71;inset:0;margin:auto;width:min(420px,calc(100vw - 32px));height:fit-content;max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:22px 22px 20px;border-radius:24px;transform-origin:center}
+.rs-pop h2{margin:0 36px 6px 0;font:700 1.24rem/1.2 var(--font);letter-spacing:-.01em;color:var(--label)}
+.rs-pop .rs-intro{margin:0 0 16px}
+.rs-x{position:absolute;top:16px;right:16px;background:var(--fill);color:var(--label2)}
+.rs-f{display:none;margin:0 0 12px}
+.rs-f.on{display:block;animation:rsIn .32s cubic-bezier(.2,.9,.3,1) both}
+@keyframes rsIn{from{opacity:0;transform:translateY(-6px)}}
+.rs-f > span{display:block;margin:0 0 6px 2px;font:600 .765rem/1 var(--font);color:var(--label2)}
+.rs-f em{font-style:normal;font-weight:500;opacity:.8}
+.rs-f input,.rs-f textarea{display:block;width:100%;box-sizing:border-box;appearance:none;-webkit-appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:11px 14px}
+.rs-f textarea{resize:vertical;min-height:96px;line-height:1.4}
+.rs-f input::placeholder,.rs-f textarea::placeholder{color:var(--label2)}
+.rs-f input:focus-visible,.rs-f textarea:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.rs-f input[type=date],.rs-f input[type=time]{cursor:pointer}
+.rs-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.rs-send{display:block;width:100%;margin-top:4px;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer;animation:rsIn .32s cubic-bezier(.2,.9,.3,1) both}
+.rs-send[hidden]{display:none}
+.rs-send:disabled{opacity:.5;cursor:default}
+.rs-send:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.rs-send:not(:disabled):hover{filter:brightness(1.1)}}
+.rs-msg{margin:10px 0 0;font-size:.824rem;color:var(--label2)}
+.rs-msg:empty{display:none}
+.rs-msg.err{color:var(--red)}
+.rs-pop.sent form > :not(.rs-msg){display:none}
+.rs-pop.sent .rs-msg{font-size:.941rem;color:var(--label)}
+@media (prefers-reduced-motion:reduce){.rs-f.on,.rs-send{animation:none}}
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
-@media (min-width:1180px){.beta-tip{left:calc((100% - 1148px) / 2)}}
 /* small buttons keep their look but get a finger-sized tap area */
 .top-brand .lt-logo,.am-x{position:relative}
 .mn-close::after,.top-brand .lt-logo::after,.am-x::after{content:"";position:absolute;inset:-8px}
@@ -916,7 +950,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <body>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1><div class="beta" id="beta"><button type="button" class="beta-pill" id="betaBtn" aria-expanded="false" aria-describedby="betaTip">Beta</button><div class="beta-tip" id="betaTip" role="tooltip" data-nosnippet><b>Beta</b>You're using a beta version of Channel Crossings. Some features may not work as intended, or they may come and go whilst in beta.</div></div></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill" id="rsPill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -990,6 +1024,25 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
+<!-- Report Sightings: a frosted card with a short form. Each box appears once the one before it is filled in; it is sent
+     to the site's inbox through FormSubmit (formsubmit.co), as the site has no server of its own -->
+<div class="rs-veil" id="rsVeil" hidden></div>
+<div class="info-pop rs-pop" id="rsPop" role="dialog" aria-modal="true" aria-labelledby="rsH" data-nosnippet hidden>
+  <button type="button" class="am-x rs-x" id="rsX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  <h2 id="rsH">Report a sighting</h2>
+  <p class="rs-intro">Seen a small boat in the Channel or landing on the coast? Tell us when, and what you saw.</p>
+  <form id="rsForm" novalidate>
+    <label class="rs-f on" id="rsfName"><span>Name <em>optional</em></span><input type="text" name="name" id="rsName" autocomplete="name" maxlength="80" placeholder="Your name"></label>
+    <label class="rs-f on" id="rsfDate"><span>Date of sighting</span><input type="date" name="date" id="rsDate" required></label>
+    <label class="rs-f" id="rsfTime"><span>Time</span><input type="time" name="time" id="rsTime" required></label>
+    <label class="rs-f" id="rsfEmail"><span>Email</span><input type="email" name="email" id="rsEmail" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="you@example.com" required></label>
+    <label class="rs-f" id="rsfDetails"><span>Details</span><textarea name="details" id="rsDetails" rows="4" maxlength="2000" placeholder="Where you were, what you saw, how many boats or people" required></textarea></label>
+    <input class="rs-hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit" class="rs-send" id="rsSend" hidden>Send report</button>
+    <p class="rs-msg" id="rsMsg" aria-live="polite"></p>
+  </form>
+</div>
+
 <main id="main">
 
   <!-- ============================================================ AT A GLANCE -->
@@ -997,11 +1050,17 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <div class="section-h rv"><h2 id="hGlance">At a Glance</h2><p id="glanceNote"></p></div>
     <div class="bento">
       <article class="card b-week rv">
-        <h3>Last 7 days</h3>
-        <div class="val num" id="weekV">–</div>
-        <div class="sub" id="weekS">&nbsp;</div>
-        <div class="spark" id="spark" role="img" aria-label="Last 7 days"></div>
-        <div class="spark-days" id="sparkDays" aria-hidden="true"></div>
+        <div class="wk-face" id="wkGraph">
+          <div class="flip-h"><h3>Last 7 days</h3><button type="button" class="flip-go" id="wkMore" aria-controls="wkList" aria-expanded="false">Detailed breakdown<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
+          <div class="val num" id="weekV">–</div>
+          <div class="sub" id="weekS">&nbsp;</div>
+          <div class="spark" id="spark" role="img" aria-label="Last 7 days"></div>
+          <div class="spark-days" id="sparkDays" aria-hidden="true"></div>
+        </div>
+        <div class="wk-face" id="wkList" hidden>
+          <div class="flip-h"><button type="button" class="flip-go back" id="wkBack" aria-controls="wkGraph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Last 7 days</button><span class="wk-note" id="wkNote"></span></div>
+          <ul class="wk-days" id="wkDays" aria-label="Every day in the last month"></ul>
+        </div>
       </article>
       <article class="card b-ring art rv" id="ytdBox">
         <!-- two pages in one box: this year so far, and the calendar beside it, slid across with the arrows (or a swipe) -->
@@ -1300,12 +1359,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     showTheme();
   }));
   showTheme();
-  // The Beta pill: its note shows on hover, or on a tap (phones); tapping elsewhere or Escape hides it
-  const beta = $("beta"), betaBtn = $("betaBtn");
-  const betaOpen = on => { beta.classList.toggle("open", on); betaBtn.setAttribute("aria-expanded", on); };
-  betaBtn.addEventListener("click", e => { e.stopPropagation(); betaOpen(!beta.classList.contains("open")); });
-  document.addEventListener("click", () => betaOpen(false));
-  document.addEventListener("keydown", e => { if(e.key === "Escape") betaOpen(false); });
 
   // The boxes react to the mouse: a slight lean towards it and a soft light where it points. Mouse only, never with reduced motion.
   if(matchMedia("(hover: hover) and (pointer: fine)").matches && !reduced){
@@ -1710,14 +1763,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
   let pin = null;
-  // With a mouse, the temperature follows the pointer
+  // With a mouse, a reading follows the pointer: the rain where it's raining, the wave height over the rest of the sea,
+  // and the temperature over dry land
   let hoverAt = null, hoverRaf = 0;
   function showHover(){
     hoverRaf = 0;
     const box = $("amHover"), e = hoverAt;
     if(!e || touchOnly || !LM){ box.classList.add("off"); return; }
-    const ll = e.latlng, val = Math.round(sample(ll.lat, ll.lng, "temp")), col = colour(val, SCALE.temp.stops).map(Math.round).join(",");
-    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + String(val).replace("-", "−") + "</b><small>°C</small>";
+    const ll = e.latlng, rain = sample(ll.lat, ll.lng, "rain");
+    let val, unit, st;
+    if(rain >= .05){ val = rain < 10 ? rain.toFixed(1) : String(Math.round(rain)); unit = " mm/h rain"; st = SCALE.rain.stops; }
+    else if(atSea(ll)){ val = sample(ll.lat, ll.lng, "wave").toFixed(1); unit = " m waves"; st = SCALE.waves.stops; }
+    else { val = String(Math.round(sample(ll.lat, ll.lng, "temp"))); unit = "°C"; st = SCALE.temp.stops; }
+    const col = colour(+val, st).map(Math.round).join(",");
+    box.innerHTML = '<i class="sw" style="background:rgb(' + col + ')"></i><b>' + val.replace("-", "−") + "</b><small>" + unit + "</small>";
     box.classList.remove("off");
     const m = $("lmap").getBoundingClientRect(), hr = hero.getBoundingClientRect(), w = box.offsetWidth;
     let x = e.containerPoint.x + m.left - hr.left + 16, y = e.containerPoint.y + m.top - hr.top + 18;
@@ -2020,6 +2079,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("spark").setAttribute("aria-label", "Last 7 days: " + wk.map(d => dShort.format(parse(d.date)) + " " + fmt(d.migrants)).join(", "));
     $("sparkDays").innerHTML = wk.map(d => "<span>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short",...UTC}) + "</span>").join("");
     glWeek = wk; glWeekS = $("weekS").innerHTML; $("spark").classList.remove("picking");
+    // the Detailed breakdown: each day of the last month, newest first
+    const month = all.slice(-30).reverse();
+    $("wkDays").innerHTML = month.map(d => "<li><b>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short", day:"numeric", month:"short", ...UTC}) + "</b><span>"
+      + (d.migrants ? "<strong>" + fmt(d.migrants) + "</strong> " + (d.migrants === 1 ? "person" : "people") + " · " + plural(d.boats || 0, "boat", "boats") : "No crossings") + "</span></li>").join("");
+    $("wkNote").textContent = dShort.format(parse(month[month.length-1].date)) + " – " + dShort.format(parse(month[0].date));
     // ring: this year against the whole of last year
     const ytdDays = all.filter(d => d.date.slice(0,4) === yr), ytd = sum(ytdDays, "migrants");
     const lastYearAll = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1)), "migrants");
@@ -3034,6 +3098,71 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
 
+
+  /* ---------------------------------------------------- Report Sightings */
+  // A short form in a frosted card: name (optional) and date first, then time, email and details, each appearing once the
+  // box before it is filled in. Sent through FormSubmit to the site's inbox; nothing is kept on the site
+  const RS_TO = "https://formsubmit.co/ajax/danseacroft@icloud.com";
+  const rsPop = $("rsPop"), rsVeil = $("rsVeil"), rsBtn = $("rsBtn");
+  const rsSteps = [["rsDate", "rsfTime"], ["rsTime", "rsfEmail"], ["rsEmail", "rsfDetails"], ["rsDetails", "rsSend"]];
+  const rsOk = id => { const el = $(id), v = el.value.trim(); return id === "rsEmail" ? el.checkValidity() && /\S+@\S+\.\S+/.test(v) : id === "rsDetails" ? v.length >= 3 : !!v; };
+  function rsReveal(){
+    for(const [id, next] of rsSteps){
+      if(!rsOk(id)) break;
+      const n = $(next); if(next === "rsSend") n.hidden = false; else n.classList.add("on");
+    }
+  }
+  function rsOpen(on){
+    rsPop.hidden = rsVeil.hidden = !on; rsBtn.setAttribute("aria-expanded", on);
+    document.documentElement.style.overflow = on ? "hidden" : "";
+    if(on && rsPop.classList.contains("sent")){ rsPop.classList.remove("sent"); $("rsMsg").textContent = ""; }   // a fresh form each time after sending
+    if(on){ $("rsDate").max = ukToday(); (rsPop.classList.contains("sent") ? $("rsX") : $("rsName")).focus({preventScroll:true}); }
+    else rsBtn.focus({preventScroll:true});
+  }
+  rsBtn.addEventListener("click", e => { e.stopPropagation(); rsOpen(true); });
+  $("rsX").addEventListener("click", () => rsOpen(false));
+  rsVeil.addEventListener("click", () => rsOpen(false));
+  addEventListener("keydown", e => { if(e.key === "Escape" && !rsPop.hidden){ e.stopImmediatePropagation(); rsOpen(false); } }, true);
+  rsPop.addEventListener("keydown", e => {   // Tab stays inside the card while it's open
+    if(e.key !== "Tab") return;
+    const f = [...rsPop.querySelectorAll("button,input:not(.rs-hp),textarea")].filter(x => x.offsetParent && !x.hidden && !x.disabled);
+    if(!f.length) return;
+    if(e.shiftKey && document.activeElement === f[0]){ e.preventDefault(); f[f.length-1].focus(); }
+    else if(!e.shiftKey && document.activeElement === f[f.length-1]){ e.preventDefault(); f[0].focus(); }
+  });
+  ["rsDate", "rsTime"].forEach(id => $(id).addEventListener("click", e => { try{ e.currentTarget.showPicker(); }catch(err){} }));   // the calendar and clock open on a tap
+  $("rsForm").addEventListener("input", rsReveal);
+  $("rsForm").addEventListener("change", rsReveal);
+  $("rsForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const form = e.currentTarget, msg = $("rsMsg"), send = $("rsSend"), bad = ["rsDate", "rsTime", "rsEmail", "rsDetails"].find(id => !rsOk(id));
+    if(bad){ msg.className = "rs-msg err"; msg.textContent = bad === "rsEmail" ? "Enter a valid email address." : "Fill in each box first."; $(bad).focus(); return; }
+    if($("rsDate").value > ukToday()){ msg.className = "rs-msg err"; msg.textContent = "The date can't be in the future."; $("rsDate").focus(); return; }
+    send.disabled = true; msg.className = "rs-msg"; msg.textContent = "Sending…";
+    const f = new FormData(form), body = Object.fromEntries(f.entries());
+    const when = new Date($("rsDate").value + "T12:00:00Z").toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short", year:"numeric", ...UTC});
+    Object.assign(body, {name: body.name || "Not given", _subject: "Sighting report: " + when + ", " + body.time, _replyto: body.email, _template: "table", _captcha: "false"});
+    try{
+      const r = await fetch(RS_TO, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(body), ...limit()});
+      const j = await r.json().catch(() => ({}));
+      if(!r.ok || String(j.success) === "false") throw 0;
+      rsPop.classList.add("sent"); msg.className = "rs-msg"; msg.textContent = "Thank you. Your sighting has been sent.";
+      form.reset(); ["rsfTime", "rsfEmail", "rsfDetails"].forEach(id => $(id).classList.remove("on")); send.hidden = true;
+      $("rsX").focus({preventScroll:true});
+    }catch(err){ msg.className = "rs-msg err"; msg.textContent = "It couldn't be sent just now. Please try again in a moment."; }
+    send.disabled = false;
+  });
+
+  /* ---------------------------------------------------- Last 7 days: the graph, or the Detailed breakdown */
+  function showWk(list){
+    const g = $("wkGraph"), l = $("wkList");
+    if(list){ $("wkDays").style.height = Math.max(150, g.offsetHeight - 44) + "px"; }   // the list takes the graph's place at the same height
+    g.hidden = list; l.hidden = !list; $("wkMore").setAttribute("aria-expanded", list);
+    (list ? $("wkBack") : $("wkMore")).focus({preventScroll:true});
+    if(list) $("wkDays").scrollTop = 0;
+  }
+  $("wkMore").addEventListener("click", e => { e.stopPropagation(); showWk(true); });
+  $("wkBack").addEventListener("click", e => { e.stopPropagation(); showWk(false); });
 
   /* ---------------------------------------------------- Show more: tall boxes open in full on request */
   // A box much taller than the rest shows its first part, fading out, with a button to open the rest (and close it again).
