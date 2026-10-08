@@ -7,7 +7,8 @@ without it the script does nothing.
 
 How a vessel is recognised:
   - its AIS ship type: 51 search and rescue, 55 law enforcement, 35 military
-  - or its name: RNLI/RNLB lifeboats, HMC (Border Force cutters), HMS, SNSM (French lifeboats), Abeille (French rescue tugs)
+  - or its name: RNLI/RNLB lifeboats, the Gosport lifeboats (GAFIRS: Joan Dora Fuller, Ian Fuller), HMC (Border Force
+    cutters), HMS, SNSM (French lifeboats), Abeille (French rescue tugs)
   - or it is a search and rescue aircraft (AIS message 9), such as the coastguard helicopter
 A ship's type only comes with its static report (every few minutes), so what we learn is kept in vessels.json and
 remembered for 30 days, and a vessel seen once is recognised from its position reports alone afterwards.
@@ -25,11 +26,12 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "vessels.json"
 URL = "wss://stream.aisstream.io/v0/stream"
 BOX = [[50.30, 0.00], [51.60, 2.70]]   # Beachy Head to Dunkirk, Le Touquet to North Foreland
+SOLENT = [[50.70, -1.45], [50.90, -0.95]]   # Portsmouth Harbour and the eastern Solent, for the Gosport lifeboats
 LISTEN = 150                           # seconds; most vessels report their position every few seconds to 3 minutes
 FORGET = timedelta(days=30)            # what we know about a vessel we haven't seen for this long is dropped
 
 TYPES = {51: "rescue", 55: "border", 35: "navy"}
-NAMES = [(re.compile(r"\b(RNLI|RNLB|LIFEBOAT|SNSM|ABEILLE)\b"), "rescue"),
+NAMES = [(re.compile(r"\b(RNLI|RNLB|LIFEBOAT|SNSM|ABEILLE|GAFIRS|GOSPORT ILB|JOAN DORA FULLER|IAN FULLER)\b"), "rescue"),
          (re.compile(r"^(HMC|UKBF|BORDER FORCE)\b"), "border"),
          (re.compile(r"^(HMS|HMNB)\b"), "navy")]
 POSITION = {"PositionReport", "StandardClassBPositionReport", "ExtendedClassBPositionReport", "StandardSearchAndRescueAircraftReport"}
@@ -51,7 +53,7 @@ def num(v, lo, hi):
 async def listen(key, known):
     import websockets
     seen = {}
-    sub = {"APIKey": key, "BoundingBoxes": [BOX], "FilterMessageTypes": sorted(POSITION | STATIC)}
+    sub = {"APIKey": key, "BoundingBoxes": [BOX, SOLENT], "FilterMessageTypes": sorted(POSITION | STATIC)}
     deadline = time.monotonic() + LISTEN
     async with websockets.connect(URL, open_timeout=30, compression="deflate", max_size=2**20) as ws:
         await ws.send(json.dumps(sub))
