@@ -583,7 +583,6 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .list{list-style:none;margin:10px 0 0;padding:0}
 .list li{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:9px 0;border-top:.5px solid var(--sep)}
 .list li:first-child{border-top:0}
-.flag{font:22px/1 "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;text-align:center}
 .list .nm{font-size:.941rem}
 .list .nm small{display:block;height:4px;border-radius:2px;background:var(--fill);margin-top:6px;overflow:hidden}
 .list .nm small b{display:block;height:100%;width:0;background:var(--indigo);border-radius:2px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
@@ -702,6 +701,8 @@ footer strong{color:var(--label);font-weight:600}
 .mn-close::after,.top-brand .lt-logo::after,.am-x::after{content:"";position:absolute;inset:-8px}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
+.rs-btn{position:relative}.rs-btn::after{content:"";position:absolute;inset:-5px -3px}
+@media (pointer:coarse){.ft-theme button::after{inset:-5px -1px}.otd-years .oy{position:relative}.otd-years .oy::after{content:"";position:absolute;inset:0 -2px}}   /* 44pt for fingers, as Apple asks */
 /* phones on their side: the map fills the screen and the number shrinks to fit */
 @media (max-height:500px) and (orientation:landscape){
   .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
@@ -1331,6 +1332,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
 </footer>
 
+<!-- the map never moves or zooms, so its pieces are placed flat: no extra GPU layer for every place name, and lighter frames -->
+<script>window.L_DISABLE_3D = true;</script>
 <script src="vendor/leaflet/leaflet.js"></script>
 <script>
 (function(){
@@ -1826,11 +1829,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
     stepWaves(c, dt);
   }
-  // Runs only while the Channel is on screen and the tab is visible; movement is per time, not per frame, so 120 Hz screens match 60 Hz ones
+  // Runs only while the Channel is on screen and the tab is visible; movement is per time, not per frame, so 120 Hz screens match 60 Hz ones.
+  // The crests and boats drift slowly, so they're drawn 30 times a second: just as smooth to the eye, at half the work for the phone
   let raf = 0, heroOn = true, prevT = 0;
   function frame(t){
     if(!heroOn || document.hidden){ raf = 0; prevT = 0; return; }
-    const dt = prevT ? Math.min(3, (t - prevT) / 16.67) : 1; prevT = t;
+    if(prevT && t - prevT < 30){ raf = requestAnimationFrame(frame); return; }
+    const dt = prevT ? Math.min(6, (t - prevT) / 16.67) : 1; prevT = t;
     placeBoats(t); if(wxPane && wxPane.style.opacity !== "0") stepFlow(dt);
     if(t - lastT > 40){ lastT = t; if(tipBoat) placeTip(); }
     raf = requestAnimationFrame(frame);
@@ -3145,11 +3150,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     try{
       const r = await fetch(RS_TO, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(body), ...limit()});
       const j = await r.json().catch(() => ({}));
-      if(!r.ok || String(j.success) === "false") throw 0;
+      if(!r.ok || String(j.success) === "false") throw /activat/i.test(j.message || "") ? "off" : 0;   // FormSubmit asks the site's inbox to confirm once, before the first report goes through
       rsPop.classList.add("sent"); msg.className = "rs-msg"; msg.textContent = "Thank you. Your sighting has been sent.";
       form.reset(); ["rsfTime", "rsfEmail", "rsfDetails"].forEach(id => $(id).classList.remove("on")); send.hidden = true;
       $("rsX").focus({preventScroll:true});
-    }catch(err){ msg.className = "rs-msg err"; msg.textContent = "It couldn't be sent just now. Please try again in a moment."; }
+    }catch(err){ msg.className = "rs-msg err"; msg.textContent = err === "off" ? "Reports aren't switched on just yet. Please try again later." : "It couldn't be sent just now. Please try again in a moment."; }
     send.disabled = false;
   });
 
