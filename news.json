@@ -1,18 +1,25 @@
 {
- "checkedAt": "2026-10-08T15:13:29Z",
+ "checkedAt": "2026-10-08T15:37:08Z",
  "items": [
+  {
+   "title": "UK and Germany will face threats together, says Burnham in Berlin",
+   "url": "https://www.bbc.co.uk/news/articles/cmwyq34qexdzo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-08T15:25:08Z",
+   "breaking": true
+  },
+  {
+   "title": "Zohran Mamdani dines at Palestinian restaurant named after Gazan on anniversary of October 7 Hamas attack",
+   "url": "https://www.gbnews.com/politics/us/zohran-mamdani-palestianian-restaurant-october-7",
+   "source": "GB News",
+   "published": "2026-10-08T15:15:20Z",
+   "breaking": true
+  },
   {
    "title": "Two Latvian migrants arrested on suspicion of trespassing at US-operated RAF base",
    "url": "https://www.gbnews.com/news/raf-molesworth-latvian-migrants-arrested-trespassing",
    "source": "GB News",
    "published": "2026-10-08T15:06:32Z",
-   "breaking": true
-  },
-  {
-   "title": "UK and Germany will face threats together, says Burnham in Berlin",
-   "url": "https://www.bbc.co.uk/news/articles/cmwyq34qexdzo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-08T14:03:10Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://news.sky.com/story/man-charged-over-police-assault-amid-anti-immigration-protest-in-glasgow-13596458",
    "source": "Sky News",
    "published": "2026-10-08T13:10:00Z",
-   "breaking": true
-  },
-  {
-   "title": "Royal Navy sailor in court accused of preparing to spy for Russia",
-   "url": "https://www.bbc.co.uk/news/articles/cw203n6emde8o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-08T12:44:03Z",
    "breaking": true
   }
  ],
