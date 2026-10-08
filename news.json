@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-08T04:34:56Z",
+ "checkedAt": "2026-10-08T04:57:43Z",
  "items": [
+  {
+   "title": "Burnham to hold security talks with German chancellor in Berlin",
+   "url": "https://www.bbc.co.uk/news/articles/cmwyq34qexdzo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-08T04:45:56Z",
+   "breaking": true
+  },
   {
    "title": "'Come all the way' back to EU, French finance minister tells UK",
    "url": "https://www.bbc.co.uk/news/articles/cqdjvg3xww2go?at_medium=RSS&at_campaign=rss",
@@ -20,13 +27,6 @@
    "url": "https://www.gbnews.com/news/world/russia-ukraine-strikes-vladimir-putin-birthday-present",
    "source": "GB News",
    "published": "2026-10-08T03:22:20Z",
-   "breaking": true
-  },
-  {
-   "title": "Scottish National Party weighs up bid for 'William Wallace Day' in tribute to military leader",
-   "url": "https://www.gbnews.com/news/scottish-national-party-william-wallace-day-tribute",
-   "source": "GB News",
-   "published": "2026-10-08T01:51:18Z",
    "breaking": true
   }
  ],
