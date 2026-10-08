@@ -1026,7 +1026,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
 <!-- Report Sightings: a frosted card with a short form. Each box appears once the one before it is filled in; it is sent
-     to the site's inbox through FormSubmit (formsubmit.co), as the site has no server of its own -->
+     to the site's inbox through Web3Forms (web3forms.com), as the site has no server of its own -->
 <div class="rs-veil" id="rsVeil" hidden></div>
 <div class="info-pop rs-pop" id="rsPop" role="dialog" aria-modal="true" aria-labelledby="rsH" data-nosnippet hidden>
   <button type="button" class="am-x rs-x" id="rsX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -1038,7 +1038,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <label class="rs-f" id="rsfTime"><span>Time</span><input type="time" name="time" id="rsTime" required></label>
     <label class="rs-f" id="rsfEmail"><span>Email</span><input type="email" name="email" id="rsEmail" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="you@example.com" required></label>
     <label class="rs-f" id="rsfDetails"><span>Details</span><textarea name="details" id="rsDetails" rows="4" maxlength="2000" placeholder="Where you were, what you saw, how many boats or people" required></textarea></label>
-    <input class="rs-hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input class="rs-hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
     <button type="submit" class="rs-send" id="rsSend" hidden>Send report</button>
     <p class="rs-msg" id="rsMsg" aria-live="polite"></p>
   </form>
@@ -3106,8 +3106,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   /* ---------------------------------------------------- Report Sightings */
   // A short form in a frosted card: name (optional) and date first, then time, email and details, each appearing once the
-  // box before it is filled in. Sent through FormSubmit to the site's inbox; nothing is kept on the site
-  const RS_TO = "https://formsubmit.co/ajax/danseacroft@icloud.com";
+  // box before it is filled in. Sent through Web3Forms to the site's inbox; nothing is kept on the site
+  const RS_TO = "https://api.web3forms.com/submit", RS_KEY = "WEB3FORMS_KEY";   // the access key only sends to the inbox it was made for; it doesn't reveal the address
   const rsPop = $("rsPop"), rsVeil = $("rsVeil"), rsBtn = $("rsBtn");
   const rsSteps = [["rsDate", "rsfTime"], ["rsTime", "rsfEmail"], ["rsEmail", "rsfDetails"], ["rsDetails", "rsSend"]];
   const rsOk = id => { const el = $(id), v = el.value.trim(); return id === "rsEmail" ? el.checkValidity() && /\S+@\S+\.\S+/.test(v) : id === "rsDetails" ? v.length >= 3 : !!v; };
@@ -3146,15 +3146,15 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     send.disabled = true; msg.className = "rs-msg"; msg.textContent = "Sending…";
     const f = new FormData(form), body = Object.fromEntries(f.entries());
     const when = new Date($("rsDate").value + "T12:00:00Z").toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short", year:"numeric", ...UTC});
-    Object.assign(body, {name: body.name || "Not given", _subject: "Sighting report: " + when + ", " + body.time, _replyto: body.email, _template: "table", _captcha: "false"});
+    Object.assign(body, {access_key: RS_KEY, name: body.name || "Not given", subject: "Sighting report: " + when + ", " + body.time, from_name: "Channel Crossings", replyto: body.email, botcheck: !!body.botcheck});
     try{
       const r = await fetch(RS_TO, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(body), ...limit()});
       const j = await r.json().catch(() => ({}));
-      if(!r.ok || String(j.success) === "false") throw /activat/i.test(j.message || "") ? "off" : 0;   // FormSubmit asks the site's inbox to confirm once, before the first report goes through
+      if(!r.ok || String(j.success) === "false") throw 0;
       rsPop.classList.add("sent"); msg.className = "rs-msg"; msg.textContent = "Thank you. Your sighting has been sent.";
       form.reset(); ["rsfTime", "rsfEmail", "rsfDetails"].forEach(id => $(id).classList.remove("on")); send.hidden = true;
       $("rsX").focus({preventScroll:true});
-    }catch(err){ msg.className = "rs-msg err"; msg.textContent = err === "off" ? "Reports aren't switched on just yet. Please try again later." : "It couldn't be sent just now. Please try again in a moment."; }
+    }catch(err){ msg.className = "rs-msg err"; msg.textContent = "It couldn't be sent just now. Please try again in a moment."; }
     send.disabled = false;
   });
 
