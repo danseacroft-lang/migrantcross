@@ -1597,11 +1597,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   // Lifeboats, Border Force cutters, navy ships and rescue aircraft in the Strait, from their AIS transponders
   // (scripts/vessels.py, every 15 minutes). Only ones heard in the last 3 hours; faded after the first hour.
-  const VESSEL_KIND = {rescue:"Lifeboat or rescue vessel", border:"Border Force or law enforcement", navy:"Navy", aircraft:"Rescue aircraft"};
+  const VESSEL_KIND = {rescue:"Lifeboat or rescue vessel", border:"Border Force or law enforcement", navy:"Navy", aircraft:"Rescue aircraft"};   // French ones: SNSM, gendarmerie, customs and Marine nationale
   // seen from above, bow up: a small ship (with a wake when under way), or a plane for rescue aircraft
   const SHIP = '<path class="hull" d="M8 1C11.5 5 13.5 10 13.5 15V26.5Q13.5 29 11 29H5Q2.5 29 2.5 26.5V15C2.5 10 4.5 5 8 1Z"/><rect class="deck" x="5" y="15" width="6" height="8" rx="1.5"/>';
   const PLANE = '<path class="hull" d="M8 1Q9.5 1 9.5 4V10L15 14V16.5L9.5 14.5L9.2 23L11.5 25V27L8 26L4.5 27V25L6.8 23L6.5 14.5L1 16.5V14L6.5 10V4Q6.5 1 8 1Z"/>';
   const WAKE = '<path class="wake" d="M4 31Q2 35 0 38M12 31Q14 35 16 38"/>';
+  // the flag a vessel sails under, from the first three digits of its MMSI
+  const FLAG = {226:"French", 227:"French", 228:"French", 232:"UK", 233:"UK", 234:"UK", 235:"UK", 205:"Belgian", 244:"Dutch", 245:"Dutch", 246:"Dutch"};
+  const flagOf = m => FLAG[String(m || "").slice(String(m).startsWith("111") ? 3 : 0).slice(0, 3)] || "";
+  // "UK Border Force", "French patrol", "French navy": a few words for the list
+  const shortKind = v => { const f = flagOf(v.mmsi); return v.kind === "border" ? (f === "UK" ? "Border Force" : (f ? f + " patrol" : "Patrol")) : v.kind === "aircraft" ? "Rescue aircraft" : (f ? f + " " + (v.kind === "rescue" ? "lifeboat" : "navy") : (v.kind === "rescue" ? "Lifeboat" : "Navy")); };
   const compass = d => ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(d / 45) % 8];
   async function loadVessels(){
     vesselsAt = Date.now();
@@ -1620,7 +1625,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const m = L.marker([v.lat, v.lon], {pane:"labels", keyboard:false, alt:name, icon:L.divIcon({className:"am-ves " + v.kind + (mins > 60 ? " old" : ""), iconSize:[16, 30],
         html:'<svg viewBox="0 0 16 30" style="transform:rotate(' + (dir ?? 0) + 'deg)" aria-hidden="true">' + (moving && v.kind !== "aircraft" ? WAKE : "") + shape + "</svg>"})})
         .bindTooltip('<div class="vt-h"><span class="vt-ic lv-' + v.kind + '"><svg viewBox="0 0 16 30" aria-hidden="true">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg></span>"
-          + "<div><b>" + clean(name) + "</b><span>" + (v.name ? VESSEL_KIND[v.kind] : "Name not broadcast") + "</span></div></div>"
+          + "<div><b>" + clean(name) + "</b><span>" + (flagOf(v.mmsi) ? flagOf(v.mmsi) + " · " : "") + (v.name ? VESSEL_KIND[v.kind] : "Name not broadcast") + "</span></div></div>"
           + '<div class="vt-stats"><div><span>Speed</span><em>' + (moving ? Math.round(v.sog) + "</em><small> kn" : "0</em><small> stopped") + "</small></div>"
           + "<div><span>Heading</span><em>" + dirTxt + "</em><small> " + (dir == null ? "" : compass(dir)) + "</small></div>"
           + "<div><span>Seen</span><em>" + seenN + "</em><small>" + seenU + "</small></div></div>"
@@ -1637,7 +1642,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const li = document.createElement("li"), b = document.createElement("button");
       b.type = "button"; if(mins > 60) b.className = "old";
       b.innerHTML = '<span class="vl-ic lv-' + v.kind + '" aria-hidden="true"><svg viewBox="0 0 16 30">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg></span>"
-        + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? VESSEL_KIND[v.kind].split(" or ")[0] + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
+        + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? shortKind(v) + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
         + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 60 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
       b.setAttribute("aria-label", name + ", " + VESSEL_KIND[v.kind] + ", " + (moving ? Math.round(v.sog) + " knots" : "stopped") + ", seen " + (mins < 1 ? "just now" : Math.round(mins) + " minutes ago"));
       b.addEventListener("click", e => { e.stopPropagation(); m.openTooltip(); });

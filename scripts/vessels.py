@@ -8,7 +8,7 @@ without it the script does nothing.
 How a vessel is recognised:
   - its AIS ship type: 51 search and rescue, 55 law enforcement, 35 military
   - or its name: RNLI/RNLB lifeboats, the Gosport lifeboats (GAFIRS: Joan Dora Fuller, Ian Fuller), HMC (Border Force
-    cutters), HMS, SNSM (French lifeboats), Abeille (French rescue tugs)
+    cutters), HMS, and the French state vessels named in NAMES below
   - or it is a search and rescue aircraft (AIS message 9), such as the coastguard helicopter
 A ship's type only comes with its static report (every few minutes), so what we learn is kept in vessels.json and
 remembered for 30 days, and a vessel seen once is recognised from its position reports alone afterwards.
@@ -31,9 +31,12 @@ LISTEN = 150                           # seconds; most vessels report their posi
 FORGET = timedelta(days=30)            # what we know about a vessel we haven't seen for this long is dropped
 
 TYPES = {51: "rescue", 55: "border", 35: "navy"}
-NAMES = [(re.compile(r"\b(RNLI|RNLB|LIFEBOAT|SNSM|ABEILLE|GAFIRS|GOSPORT ILB|JOAN DORA FULLER|IAN FULLER)\b"), "rescue"),
-         (re.compile(r"^(HMC|UKBF|BORDER FORCE)\b"), "border"),
-         (re.compile(r"^(HMS|HMNB)\b"), "navy")]
+# French state vessels that patrol the coast and shadow or rescue the small boats are matched too: SNSM lifeboats, the
+# Abeille emergency tugs, the Gendarmerie maritime, the Douanes (customs, "DF" cutters), the Affaires maritimes and the
+# Marine nationale patrol boats based in Cherbourg and Boulogne. Only official vessels: never private or named boats.
+NAMES = [(re.compile(r"\b(RNLI|RNLB|LIFEBOAT|SNSM|SAUVETEUR|ABEILLE|GAFIRS|GOSPORT ILB|JOAN DORA FULLER|IAN FULLER)\b"), "rescue"),
+         (re.compile(r"^(HMC|UKBF|BORDER FORCE)\b|\b(GENDARMERIE|GENDARMES|DOUANES?|AFFAIRES MARITIMES)\b|^DF ?\d"), "border"),
+         (re.compile(r"^(HMS|HMNB|FS)\b|\bMARINE NATIONALE\b|^(FLAMANT|CORMORAN|PLUVIER)$"), "navy")]
 POSITION = {"PositionReport", "StandardClassBPositionReport", "ExtendedClassBPositionReport", "StandardSearchAndRescueAircraftReport"}
 STATIC = {"ShipStaticData", "StaticDataReport"}
 
