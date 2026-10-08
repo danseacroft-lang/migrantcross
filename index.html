@@ -3107,7 +3107,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- Report Sightings */
   // A short form in a frosted card: name (optional) and date first, then time, email and details, each appearing once the
   // box before it is filled in. Sent through Web3Forms to the site's inbox; nothing is kept on the site
-  const RS_TO = "https://api.web3forms.com/submit", RS_KEY = "WEB3FORMS_KEY";   // the access key only sends to the inbox it was made for; it doesn't reveal the address
+  const RS_TO = "https://api.web3forms.com/submit", RS_KEY = "7b53613b-d997-4f9f-bb7b-31e5534bf472";   // the access key only sends to the inbox it was made for; it doesn't reveal the address
   const rsPop = $("rsPop"), rsVeil = $("rsVeil"), rsBtn = $("rsBtn");
   const rsSteps = [["rsDate", "rsfTime"], ["rsTime", "rsfEmail"], ["rsEmail", "rsfDetails"], ["rsDetails", "rsSend"]];
   const rsOk = id => { const el = $(id), v = el.value.trim(); return id === "rsEmail" ? el.checkValidity() && /\S+@\S+\.\S+/.test(v) : id === "rsDetails" ? v.length >= 3 : !!v; };
