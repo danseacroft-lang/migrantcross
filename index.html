@@ -515,7 +515,13 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .chart text{fill:var(--label2);font:500 12px var(--font)}
 .chart .cursor{stroke:var(--label3);stroke-width:1}
 .chart .dot{fill:var(--card);stroke:var(--blue);stroke-width:3}
-.chart .has-sel #chartBars rect:not(.on){opacity:.45}   /* the other days dim while one is picked */
+.chart #chartBars rect{opacity:.5;transition:opacity .2s}
+.chart #chartBars rect.on,.chart #chartBars rect.pk{opacity:1}
+.chart .has-sel #chartBars rect:not(.on){opacity:.3}   /* the other days dim while one is picked */
+.chart .trend{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 2px var(--card))}   /* the 7-day average over the bars */
+.chart .avg{stroke:var(--label3);stroke-width:1;stroke-dasharray:3 4}
+.chart text.avg-t{fill:var(--label2);font:600 11px var(--font)}
+.chart text.peak{fill:var(--label);font:700 12px var(--round)}
 .chart .bars.grow rect{transform-box:fill-box;transform-origin:bottom;animation:barUp .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 8ms)}
 @keyframes barUp{from{transform:scaleY(0)}}
 .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:drawIn 1.4s cubic-bezier(.3,.7,.2,1) forwards}
@@ -560,9 +566,17 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
-.stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
+/* sex: 100 dots in a 20 by 5 grid, filling in one after another */
+.waffle{display:grid;grid-template-columns:repeat(20,1fr);gap:5px;margin:14px 0 10px;max-width:460px}
+.waffle i{aspect-ratio:1;border-radius:50%;opacity:0;transform:scale(.4);transition:opacity .35s,transform .45s cubic-bezier(.3,1.5,.5,1)}
+.waffle.on i{opacity:1;transform:none}
+/* age: a column a group, the share above and the group below */
+.agecols{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px;margin-top:16px;align-items:start}
+.agecols > div{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.agecols b{font:700 1.05rem/1 var(--round)}
+.agecols .ac{display:flex;align-items:flex-end;width:100%;max-width:56px;height:96px;border-radius:10px;background:var(--fill);overflow:hidden}
+.agecols .ac i{width:100%;height:0;border-radius:10px;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.agecols small{font-size:.706rem;color:var(--label2);text-align:center;line-height:1.2}
 .stack-h{margin:16px 0 -6px;font-size:.765rem;font-weight:600;color:var(--label2)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -1237,12 +1251,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           <h3>Sex and age</h3>
           <div class="val num" id="menV">–</div>
           <div class="sub">adult men</div>
-          <div class="stack-h">Sex</div>
-          <div class="stack" id="sexStack"></div>
+          <div class="stack-h">Every 100 people, by sex</div>
+          <div class="waffle" id="sexStack" role="img"></div>
           <div class="legend" id="sexLegend"></div>
-          <div class="stack-h">Age</div>
-          <div class="stack" id="ageStack"></div>
-          <div class="legend" id="ageLegend"></div>
+          <div class="stack-h">By age</div>
+          <div class="agecols" id="ageStack" role="img"></div>
         </article>
         <article class="card rv">
           <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
@@ -1443,7 +1456,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The map stays put: no dragging or zooming, so the page always scrolls and everyone sees the same view
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, scrollWheelZoom:false, keyboard:false, boxZoom:false,
-    dragging:false, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
+    dragging:false, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxZoom:12}) : null;
   let heat, rainC, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
   let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
@@ -1616,7 +1629,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function buildHour(W, M, h){   // the readings for one hour of the forecast
     const t = W[0].hourly.time[h], col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
     const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
-    return {t, s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
+    return {u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
       gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
       wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
       // which way the waves travel, as east and south components (the data says where they come from)
@@ -1646,7 +1659,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function sample(lat, lon, key){
     if(!grid || !grid[key]){
       const w = wx ? wx.wind : 10, d = (wx ? wx.dir : 225) * Math.PI / 180;
-      return {wdu:-Math.sin(d), wdv:Math.cos(d), u:-w * Math.sin(d), v:-w * Math.cos(d), s:w, gust:wx ? wx.gust : w * 1.4, wave:wx && wx.wave != null ? wx.wave : .5, temp:wx ? wx.temp : 12, rain:0, cloud:0}[key];
+      return {wdu:-Math.sin(d), wdv:Math.cos(d), u:-w * Math.sin(d), v:-w * Math.cos(d), gust:wx ? wx.gust : w * 1.4, wave:wx && wx.wave != null ? wx.wave : .5, temp:wx ? wx.temp : 12, rain:0, cloud:0}[key];
     }
     const nO = GLON.length, cl = (x, n) => Math.min(Math.max(x, 0), n - 1.001);
     const fy = cl((lat - GLAT[0]) / GDLAT, GLAT.length), fx = cl((lon - GLON[0]) / GDLON, nO), i = fy | 0, j = fx | 0, ty = fy - i, tx = fx - j, a = grid[key];
@@ -1755,7 +1768,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
-      LM.closePopup(); ptAt = ll;
+      LM.closePopup();
       const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
@@ -2187,9 +2200,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   let range = 90, sel = null, selDate = null, geo = null;
   const dShortWF = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",...UTC});
   const dShortW = iso => dShortWF.format(parse(iso)).replace(",", "");   // Sat 14 Feb 2026
+  // a smooth line through points that never overshoots them (monotone cubic), as Apple's charts draw trends
+  function curve(P){
+    const n = P.length; if(n < 3) return P.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+    const d = P.slice(1).map((p, i) => (p[1] - P[i][1]) / (p[0] - P[i][0])), t = P.map((p, i) => i === 0 ? d[0] : i === n - 1 ? d[n - 2] : d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2);
+    let s = "M" + P[0][0].toFixed(1) + " " + P[0][1].toFixed(1);
+    for(let i = 0; i < n - 1; i++){ const h = (P[i + 1][0] - P[i][0]) / 3;
+      s += "C" + (P[i][0] + h).toFixed(1) + " " + (P[i][1] + t[i] * h).toFixed(1) + " " + (P[i + 1][0] - h).toFixed(1) + " " + (P[i + 1][1] - t[i + 1] * h).toFixed(1) + " " + P[i + 1][0].toFixed(1) + " " + P[i + 1][1].toFixed(1); }
+    return s;
+  }
   // draws the chart for a new range, width or figures; picking a day only moves the cursor (setSel)
   function drawChart(){
-    const all = allDays(), data = range ? all.slice(-range) : all;
+    const all = allDays(), data = range ? all.slice(-range) : all, off = all.length - data.length;
     sel = selDate ? data.findIndex(d => d.date === selDate) : null; if(sel < 0){ sel = null; selDate = null; }
     const box = $("chart"), W = Math.max(240, box.clientWidth || 600), H = Math.round(Math.min(300, Math.max(190, W * .38)));
     const m = {t:14, r:6, b:26, l:38}, iw = W - m.l - m.r, ih = H - m.t - m.b;
@@ -2197,6 +2219,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const per = data.length / iw, smooth = data.length <= 120 ? 1 : per > 3 ? 28 : 7, hw = smooth >> 1;
     const run = [0]; data.forEach((d, i) => run.push(run[i] + d.migrants));   // running sum, so each average is one subtraction
     const vals = data.map((d, i) => { if(smooth === 1) return d.migrants; const lo = Math.max(0, i - hw), hi = Math.min(data.length, i - hw + smooth); return (run[hi] - run[lo]) / (hi - lo); });
+    // the bars get a 7-day average drawn over them (counting the days just before the range), so the trend reads through the spikes
+    const runA = [0]; all.forEach((d, i) => runA.push(runA[i] + d.migrants));
+    const avg7 = smooth === 1 ? data.map((d, i) => { const hi = off + i + 1, lo = Math.max(0, hi - 7); return (runA[hi] - runA[lo]) / (hi - lo); }) : null;
+    const mean = sum(data, "migrants") / data.length;
     const top = Math.max(...vals, 10), st = niceStep(top / 4), nice = Math.ceil(top / st) * st;
     const x = i => m.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw), y = v => m.t + ih - v / nice * ih;
     // no more than about two points a pixel: the rest can't be seen and only slow the drawing
@@ -2224,13 +2250,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const bw = Math.max(2, slot * .66), r = Math.min(bw / 2, 4);
       body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const h = Math.max(dd.migrants ? 3 : 1.5, dd.migrants / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
         return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
+      body += '<path class="trend" d="' + curve(avg7.map((v, i) => [xc(i), y(v)])) + '"/>';
     } else body = '<path d="' + a + '" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
-    geo = {x: xc, y, data, vals, m, iw, ih, W, nice, smooth, bars};
+    // the average day over the range, as a dashed line with its figure; and the busiest day, labelled
+    if(mean > 0){ const ay = y(mean).toFixed(1);
+      body += '<line class="avg" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + ay + '" y2="' + ay + '"/><text class="avg-t" x="' + (W - m.r) + '" y="' + (ay - 5) + '" text-anchor="end">Avg ' + fmt(Math.round(mean)) + "</text>"; }
+    const pk = vals.reduce((b, v, i) => v > vals[b] ? i : b, 0);
+    if(bars) body = body.replace('<rect data-i="' + pk + '"', '<rect class="pk" data-i="' + pk + '"');   // the busiest day stands out
+    if(vals[pk] > 0){ const px = xc(pk), py = y(vals[pk]) - 6;
+      body += '<text class="peak" x="' + Math.min(W - m.r - 4, Math.max(m.l + 4, px)).toFixed(1) + '" y="' + Math.max(10, py).toFixed(1) + '" text-anchor="' + (px > W - m.r - 30 ? "end" : px < m.l + 30 ? "start" : "middle") + '">' + fmt(Math.round(vals[pk])) + "</text>"; }
+    geo = {x: xc, y, data, vals, avg7, m, iw, ih, W, nice, smooth, bars};
     const a0 = data[0].date, z0 = data[data.length-1].date;
     box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
     setSel(sel);
-    ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day" + (smooth > 1 ? " · line is a " + smooth + "-day average" : "");
+    ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day · line is a " + (smooth > 1 ? smooth : 7) + "-day average";
     if(ddCur === 0) $("ddNote").textContent = ddNotes[0];
     return box.querySelector("#chartLine") || box.querySelector("#chartBars");
   }
@@ -2256,7 +2290,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const dd = data[sel];
       r.innerHTML = '<b class="num">' + fmt(dd.migrants) + '</b><span>' + dShortW(dd.date) + " · "
         + (dd.migrants ? plural(dd.boats, "boat", "boats") : geo.smooth > 1 ? "no crossings" : "no crossings detected")
-        + (geo.smooth > 1 ? " · avg " + fmt(Math.round(geo.vals[sel])) + "/day" : "") + "</span>";
+        + (geo.smooth > 1 ? " · avg " + fmt(Math.round(geo.vals[sel])) + "/day" : " · 7-day avg " + fmt(Math.round(geo.avg7[sel]))) + "</span>";
     } else {
       const a = data[0].date, z = data[data.length-1].date;
       const span = dShort.format(parse(a)) + (a.slice(0,4) === z.slice(0,4) ? "" : " " + a.slice(0,4)) + " – " + dShort.format(parse(z)) + " " + z.slice(0,4);
@@ -2389,12 +2423,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         sex:[["Male", t.sex.Male, "var(--blue)"], ["Female", t.sex.Female, "var(--pink)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]],
         age:[["17 and under", a["17 and under"], "var(--age1)"], ["18 to 24", a["18 to 24"], "var(--age2)"], ["25 to 39", a["25 to 39"], "var(--age3)"], ["40 and over", a["40 and over"], "var(--age4)"], ["Not recorded", a.Unknown, "var(--label3)"]]
       };
-      Object.entries(bars).forEach(([k, parts]) => {   // one bar for sex and one for age, each with its key
-        parts = parts.filter(p => p[1] > 0);
-        $(k + "Stack").innerHTML = parts.map(p => '<i data-w="' + pc(p[1]).toFixed(1) + '" style="background:' + p[2] + '"></i>').join("");
-        $(k + "Legend").innerHTML = parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + " <b>" + Math.round(pc(p[1])) + "%</b></span>").join("");
-        onReveal($(k + "Stack"), () => $(k + "Stack").querySelectorAll("i").forEach(i => i.style.width = i.dataset.w + "%"));
-      });
+      // sex: 100 dots, one a person, shared out so they always add up to 100
+      const sx = bars.sex.filter(p => p[1] > 0), exact = sx.map(p => pc(p[1])), n = exact.map(Math.floor);
+      exact.map((v, i) => [v - n[i], i]).sort((a, b) => b[0] - a[0]).slice(0, 100 - n.reduce((a, b) => a + b, 0)).forEach(([, i]) => n[i]++);
+      $("sexStack").innerHTML = sx.flatMap((p, k) => Array(n[k]).fill(p[2])).map((c, i) => '<i style="background:' + c + ";transition-delay:" + i * 6 + 'ms"></i>').join("");
+      $("sexStack").setAttribute("aria-label", sx.map((p, k) => n[k] + " in 100 " + p[0].toLowerCase()).join(", "));
+      $("sexLegend").innerHTML = sx.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + " <b>" + Math.round(pc(p[1])) + "%</b></span>").join("");
+      // age: a column for each group, the tallest group at full height
+      const ag = bars.age.filter(p => p[1] > 0), top = Math.max(...ag.map(p => p[1]));
+      $("ageStack").innerHTML = ag.map(p => '<div><b class="num">' + Math.round(pc(p[1])) + '%</b><span class="ac"><i data-h="' + (p[1] / top * 100).toFixed(1) + '" style="background:' + p[2] + '"></i></span><small>' + p[0].replace(" and ", " &amp; ") + "</small></div>").join("");
+      $("ageStack").setAttribute("aria-label", ag.map(p => p[0] + " " + Math.round(pc(p[1])) + "%").join(", "));
+      onReveal($("sexStack"), () => $("sexStack").classList.add("on"));
+      onReveal($("ageStack"), () => $("ageStack").querySelectorAll("i").forEach((i, k) => setTimeout(() => i.style.height = i.dataset.h + "%", reduced ? 0 : k * 80)));
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
@@ -3311,7 +3351,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
   start(); loadWeather(); loadNews();
-  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
+  whenIdle(loadGrid, 2000);   // the weather map comes in once the figures are up
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
