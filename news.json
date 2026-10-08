@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-08T13:03:54Z",
+ "checkedAt": "2026-10-08T13:35:04Z",
  "items": [
+  {
+   "title": "Man charged over 'police assault' amid anti-immigration protest",
+   "url": "https://news.sky.com/story/man-charged-over-police-assault-amid-anti-immigration-protest-in-glasgow-13596458",
+   "source": "Sky News",
+   "published": "2026-10-08T13:10:00Z",
+   "breaking": true
+  },
   {
    "title": "Royal Navy sailor in court accused of preparing to spy for Russia",
    "url": "https://www.bbc.co.uk/news/articles/cw203n6emde8o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-08T12:44:03Z",
+   "breaking": true
+  },
+  {
+   "title": "Andy Burnham pledges to \u2018bring the UK closer to Europe\u2019 in talks with German Chancellor in Berlin",
+   "url": "https://www.gbnews.com/politics/andy-burnham-europe-pledge-germany-berlin-talks-russia",
+   "source": "GB News",
+   "published": "2026-10-08T12:36:03Z",
    "breaking": true
   },
   {
@@ -20,20 +34,6 @@
    "url": "https://www.gbnews.com/news/early-release-scheme-met-police-rearrest-three-prisoners-london-tag-breaches",
    "source": "GB News",
    "published": "2026-10-08T11:45:45Z",
-   "breaking": true
-  },
-  {
-   "title": "Is Europe's defence in free fall? The nightmare pattern that could leave Britain exposed",
-   "url": "https://www.gbnews.com/news/nato-europe-defence-nightmare-pattern-britain-exposed-raf-fairford",
-   "source": "GB News",
-   "published": "2026-10-08T11:41:05Z",
-   "breaking": true
-  },
-  {
-   "title": "Seventh man released on bail as RAF Fairford investigation continues",
-   "url": "https://www.gbnews.com/news/raf-fairford-man-released-bail-seven-arrested-terror-investigation",
-   "source": "GB News",
-   "published": "2026-10-08T10:08:36Z",
    "breaking": true
   }
  ],
