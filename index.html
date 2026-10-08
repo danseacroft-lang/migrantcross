@@ -33,7 +33,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Channel Crossings: daily small boat arrivals">
 <meta name="twitter:description" content="Daily Home Office figures for small boat arrivals, with records and live Channel conditions.">
-<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-06">
+<meta name="twitter:image" content="https://channelcrossings.world/og-image.png?v=2026-10-07">
 <link rel="canonical" href="https://channelcrossings.world/">
 <!-- Tells Google this page is a daily dataset. The dates are kept current by scripts/update.py -->
 <script type="application/ld+json">
@@ -154,11 +154,11 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-area.sea span{font:italic 500 13px/1 var(--font);letter-spacing:.02em;color:rgba(255,255,255,.82);text-shadow:0 1px 3px rgba(20,30,70,.35)}
 /* main launch beaches: soft pulsing rings on the French coast */
 .am-launch{pointer-events:auto;cursor:pointer}
-.am-launch i,.am-launch b{position:absolute;inset:0;border-radius:50%}
+.am-launch i,.am-launch b{position:absolute;border-radius:50%}
 .am-launch i{inset:8px;background:#FF9F0A;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 1px 4px rgba(0,0,0,.5)}
-.am-launch b{border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
+.am-launch b{inset:0;border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
-@media (prefers-reduced-motion:reduce){.am-launch b{animation:none;opacity:.5}}
+@media (prefers-reduced-motion:reduce){.am-launch b{opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
 /* with a mouse: the rain, wave height or temperature under the pointer */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
@@ -166,9 +166,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-hover.off{opacity:0}
 .am-hover b{font-size:1rem;font-weight:700;letter-spacing:-.01em}
 .am-hover small{font-weight:600;opacity:.7}
-.am-hover em{font-style:normal;font-weight:500;opacity:.7;font-size:.765rem}
 .am-hover .sw{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
-.am-hover svg{width:14px;height:14px;opacity:.9}
 /* phones: the sheet a tap brings up */
 .am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
   background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
@@ -267,9 +265,8 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .chip i.rough{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.25)}
 .chip i.rep{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25);animation:repPulse 2s ease-in-out infinite}
 @keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(255,159,10,0)}}
-@media (prefers-reduced-motion:reduce){.chip i.rep{animation:none}}
 a.chip{text-decoration:none;color:inherit;white-space:nowrap}
-.chip i.none{background:rgba(255,255,255,.45);box-shadow:none}
+.chip i.none,.chip i.wait{background:rgba(255,255,255,.45);box-shadow:none}   /* no reading, or still loading */
 .chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
 @keyframes pulse{50%{opacity:.3}}
 .chip .up{color:#FFB4AE}.chip .down{color:#9CF0B4}
@@ -288,7 +285,6 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 /* the close button on a phone sheet: it floats over the sheet's top right corner, so it stays put while the sheet scrolls */
 .pop-x{position:fixed;z-index:62;width:30px;height:30px;border:0;border-radius:50%;background:var(--fill2);color:var(--label);display:grid;place-items:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .pop-x svg{width:10px;height:10px}
-.pop-x[hidden]{display:none}
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 .fu-pop{overflow:hidden;isolation:isolate}
@@ -380,9 +376,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .section-h p{margin:0;color:var(--label2);font-size:.882rem}
 .card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px;position:relative;overflow:hidden}
 .card h3{margin:0 0 2px;font:600 .824rem/1.2 var(--font);color:var(--label2);display:flex;align-items:center;gap:6px}
-.card h3 svg{width:15px;height:15px}
 .val{font:700 2.2rem/1.1 var(--round);letter-spacing:-.01em;margin-top:4px}
-.val small{font:600 1rem var(--font);color:var(--label2);letter-spacing:-.02em;margin-left:4px}
 .sub{color:var(--label2);font-size:.824rem;margin-top:2px}
 .delta{font-weight:600}.delta.up{color:var(--red-t)}.delta.down{color:var(--green-t)}
 .foot{color:var(--label2);font-size:.765rem;margin:10px 4px 0;line-height:1.4}
@@ -515,7 +509,14 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .chart text{fill:var(--label2);font:500 12px var(--font)}
 .chart .cursor{stroke:var(--label3);stroke-width:1}
 .chart .dot{fill:var(--card);stroke:var(--blue);stroke-width:3}
-.chart .has-sel #chartBars rect:not(.on){opacity:.45}   /* the other days dim while one is picked */
+.chart #chartBars rect{opacity:.5;transition:opacity .2s}
+.chart #chartBars rect.on,.chart #chartBars rect.pk{opacity:1}
+.chart .has-sel #chartBars rect:not(.on){opacity:.3}   /* the other days dim while one is picked */
+.chart .trend{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 2px var(--card))}   /* the 7-day average over the bars */
+.chart .avg{stroke:var(--label3);stroke-width:1;stroke-dasharray:3 4}
+.chart text.avg-t,.chart text.peak{paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round}   /* a halo, so the labels read over the bars */
+.chart text.avg-t{fill:var(--label2);font:600 11px var(--font)}
+.chart text.peak{fill:var(--label);font:700 12px var(--round)}
 .chart .bars.grow rect{transform-box:fill-box;transform-origin:bottom;animation:barUp .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 8ms)}
 @keyframes barUp{from{transform:scaleY(0)}}
 .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:drawIn 1.4s cubic-bezier(.3,.7,.2,1) forwards}
@@ -560,9 +561,17 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--fill);margin:14px 0 10px}
-.stack i{height:100%;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.stack i + i{box-shadow:inset 2px 0 0 var(--card)}   /* a thin gap so neighbouring colours never merge */
+/* sex: 100 dots in a 20 by 5 grid, filling in one after another */
+.waffle{display:grid;grid-template-columns:repeat(20,1fr);gap:5px;margin:14px 0 10px;max-width:460px}
+.waffle i{aspect-ratio:1;border-radius:50%;opacity:0;transform:scale(.4);transition:opacity .35s,transform .45s cubic-bezier(.3,1.5,.5,1)}
+.waffle.on i{opacity:1;transform:none}
+/* age: a column a group, the share above and the group below */
+.agecols{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:10px;margin-top:16px;align-items:start}
+.agecols > div{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.agecols b{font:700 1.05rem/1 var(--round)}
+.agecols .ac{display:flex;align-items:flex-end;width:100%;max-width:56px;height:96px;border-radius:10px;background:var(--fill);overflow:hidden}
+.agecols .ac i{width:100%;height:0;border-radius:10px;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.agecols small{font-size:.706rem;color:var(--label2);text-align:center;line-height:1.2}
 .stack-h{margin:16px 0 -6px;font-size:.765rem;font-weight:600;color:var(--label2)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.824rem}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -580,13 +589,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .nat-list .pc{font:700 1.06rem/1 var(--round);font-variant-numeric:tabular-nums;text-align:right}
 .nat-list li.oth{padding-bottom:2px}
 .nat-list li.oth .nm,.nat-list li.oth .pc{color:var(--label2)}
-.list{list-style:none;margin:10px 0 0;padding:0}
-.list li{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;padding:9px 0;border-top:.5px solid var(--sep)}
+.list{list-style:none;padding:0}
+.list li{display:grid;align-items:center;border-top:.5px solid var(--sep)}
 .list li:first-child{border-top:0}
-.list .nm{font-size:.941rem}
-.list .nm small{display:block;height:4px;border-radius:2px;background:var(--fill);margin-top:6px;overflow:hidden}
-.list .nm small b{display:block;height:100%;width:0;background:var(--indigo);border-radius:2px;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.list .pc{font-weight:600;font-variant-numeric:tabular-nums;font-size:.882rem}
 /* people per boat: two dinghies seen from above, one dot a person, then the years as a line */
 .pb-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .pb-x{font-size:.706rem;font-weight:700;color:color-mix(in srgb,var(--orange) 75%,var(--label));background:color-mix(in srgb,var(--orange) 16%,transparent);padding:3px 9px;border-radius:999px;white-space:nowrap}
@@ -603,7 +608,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .pb-line .ar{fill:var(--teal);opacity:.14}
 .pb-line .dt{fill:var(--teal);stroke:var(--card);stroke-width:2}
 .pb-line .hit{fill:transparent;cursor:default}
-.pb-line .hit:hover+.dt,.pb-line .hit:focus+.dt{r:5}
+.pb-line .hit:hover+.dt{r:5}
 .pb-line text{font:600 10px var(--font);fill:var(--label2);font-variant-numeric:tabular-nums}
 .pb-line text.v{fill:var(--label);font-size:11px}
 .pb-cap{margin:6px 0 0;font-size:.706rem;color:var(--label2)}
@@ -663,7 +668,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-btn[aria-expanded="true"]{background:var(--fill2)}
 @keyframes rsFlash{0%,45%,100%{background:var(--fill,rgba(118,118,128,.12));color:var(--label);box-shadow:0 0 0 0 rgba(255,59,48,0)}20%,70%{background:#FF3B30;color:#fff;box-shadow:0 0 0 5px rgba(255,59,48,.22)}}
 .rs-pill{color:var(--label)}
-@media (prefers-reduced-motion:reduce){.rs-pill{animation:none}}
 @media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
 /* the form: a frosted card in the middle of the screen, over a soft veil */
 .rs-veil{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);animation:fadeIn .2s ease both}
@@ -683,7 +687,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-f input[type=date],.rs-f input[type=time]{cursor:pointer}
 .rs-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .rs-send{display:block;width:100%;margin-top:4px;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer;animation:rsIn .32s cubic-bezier(.2,.9,.3,1) both}
-.rs-send[hidden]{display:none}
 .rs-send:disabled{opacity:.5;cursor:default}
 .rs-send:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.rs-send:not(:disabled):hover{filter:brightness(1.1)}}
@@ -692,7 +695,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-msg.err{color:var(--red)}
 .rs-pop.sent form > :not(.rs-msg){display:none}
 .rs-pop.sent .rs-msg{font-size:.941rem;color:var(--label)}
-@media (prefers-reduced-motion:reduce){.rs-f.on,.rs-send{animation:none}}
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
@@ -799,7 +801,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .cal-day .dn{font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .mb .cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
 .mb .cal-day.zero .dv{color:var(--label2);font-weight:400}
-.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{--h:88%;color:#fff}.mb .cal-day.l4 .dn{color:rgba(255,255,255,.8)}
+.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{color:#fff}
 .mb .cal-day.l4{background:var(--mbar4)}   /* a deeper blue so white numbers stay readable */
 .mb .cal-day.l2 .dn,.mb .cal-day.l3 .dn{color:var(--label);opacity:.78}
 .mb .cal-day.l4 .dn{color:#fff;opacity:.85}
@@ -836,7 +838,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .race .tip .row.cur{font-weight:600;color:var(--label)}
 /* narrow boxes: the figures for the chosen day sit under the chart, three to a row, instead of covering it */
 .mb .race-read{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 12px;padding:2px 4px;font-size:.824rem;line-height:1.35;font-variant-numeric:tabular-nums;color:var(--label2)}
-.mb .race-read[hidden]{display:none}
 .mb .race-read b{grid-column:1 / -1;color:var(--label);font-weight:600;font-size:.882rem;margin-bottom:2px}
 .mb .race-read .row{display:flex;align-items:center;gap:5px;min-width:0;white-space:nowrap}
 .mb .race-read .row i{flex:none;width:8px;height:8px;border-radius:2px}
@@ -917,7 +918,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* Tall boxes (the boats in Every Person, for one) show their first part, fading out, with Show more underneath to open the rest */
 .card.clamp{max-height:520px;-webkit-mask-image:linear-gradient(#000 calc(100% - 110px),transparent);mask-image:linear-gradient(#000 calc(100% - 110px),transparent)}
 .more-btn{display:flex;align-items:center;gap:6px;margin:12px auto 0;min-height:36px;padding:0 16px;border:0;border-radius:999px;background:var(--fill);color:var(--label);font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation;transition:background-color .2s}
-.more-btn[hidden]{display:none}
 .more-btn svg{width:12px;height:12px;transition:transform .25s ease}
 .more-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
 .more-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -951,7 +951,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <body>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill" id="rsPill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1033,8 +1033,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   <h2 id="rsH">Report a sighting</h2>
   <p class="rs-intro">Seen a small boat in the Channel or landing on the coast? Tell us when, and what you saw.</p>
   <form id="rsForm" novalidate>
-    <label class="rs-f on" id="rsfName"><span>Name <em>optional</em></span><input type="text" name="name" id="rsName" autocomplete="name" maxlength="80" placeholder="Your name"></label>
-    <label class="rs-f on" id="rsfDate"><span>Date of sighting</span><input type="date" name="date" id="rsDate" required></label>
+    <label class="rs-f on"><span>Name <em>optional</em></span><input type="text" name="name" id="rsName" autocomplete="name" maxlength="80" placeholder="Your name"></label>
+    <label class="rs-f on"><span>Date of sighting</span><input type="date" name="date" id="rsDate" required></label>
     <label class="rs-f" id="rsfTime"><span>Time</span><input type="time" name="time" id="rsTime" required></label>
     <label class="rs-f" id="rsfEmail"><span>Email</span><input type="email" name="email" id="rsEmail" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="you@example.com" required></label>
     <label class="rs-f" id="rsfDetails"><span>Details</span><textarea name="details" id="rsDetails" rows="4" maxlength="2000" placeholder="Where you were, what you saw, how many boats or people" required></textarea></label>
@@ -1079,7 +1079,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
                 <text x="85" y="126" text-anchor="middle" font-size="12" fill="var(--label2)" id="ringTot"></text>
               </svg>
               <div class="ring-legend">
-                <div><b class="num" id="ytdV">–</b><span id="ytdS">people this year</span></div>
+                <div><b class="num" id="ytdV">–</b><span>people this year</span></div>
                 <div><b class="num" id="ytdPrev">–</b><span id="ytdPrevS">last year by this date</span></div>
                 <div><b class="num" id="ytdAvg">–</b><span>a day on average</span></div>
               </div>
@@ -1237,12 +1237,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           <h3>Sex and age</h3>
           <div class="val num" id="menV">–</div>
           <div class="sub">adult men</div>
-          <div class="stack-h">Sex</div>
-          <div class="stack" id="sexStack"></div>
+          <div class="stack-h">Every 100 people, by sex</div>
+          <div class="waffle" id="sexStack" role="img"></div>
           <div class="legend" id="sexLegend"></div>
-          <div class="stack-h">Age</div>
-          <div class="stack" id="ageStack"></div>
-          <div class="legend" id="ageLegend"></div>
+          <div class="stack-h">By age</div>
+          <div class="agecols" id="ageStack" role="img"></div>
         </article>
         <article class="card rv">
           <div class="pb-top"><h3>People per boat</h3><span class="pb-x" id="pbX" hidden></span></div>
@@ -1443,7 +1442,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The map stays put: no dragging or zooming, so the page always scrolls and everyone sees the same view
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, scrollWheelZoom:false, keyboard:false, boxZoom:false,
-    dragging:false, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxBoundsViscosity:1, maxZoom:12}) : null;
+    dragging:false, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxZoom:12}) : null;
   let heat, rainC, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
   let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
@@ -1616,7 +1615,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function buildHour(W, M, h){   // the readings for one hour of the forecast
     const t = W[0].hourly.time[h], col = k => W.map(r => r.hourly[k][h]), sp = col("wind_speed_10m").map(x => x || 0), dir = col("wind_direction_10m").map(x => (x || 0) * Math.PI / 180);
     const mi = M && M[0] && M[0].hourly ? M[0].hourly.time.indexOf(t) : -1;
-    return {t, s:sp, u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
+    return {u:sp.map((x, k) => -x * Math.sin(dir[k])), v:sp.map((x, k) => -x * Math.cos(dir[k])),
       gust:col("wind_gusts_10m"), temp:col("temperature_2m"), rain:col("precipitation"), cloud:col("cloud_cover"),
       wave: mi >= 0 ? fillGaps(M.map(r => r && r.hourly ? r.hourly.wave_height[mi] : null)) : null,
       // which way the waves travel, as east and south components (the data says where they come from)
@@ -1646,7 +1645,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   function sample(lat, lon, key){
     if(!grid || !grid[key]){
       const w = wx ? wx.wind : 10, d = (wx ? wx.dir : 225) * Math.PI / 180;
-      return {wdu:-Math.sin(d), wdv:Math.cos(d), u:-w * Math.sin(d), v:-w * Math.cos(d), s:w, gust:wx ? wx.gust : w * 1.4, wave:wx && wx.wave != null ? wx.wave : .5, temp:wx ? wx.temp : 12, rain:0, cloud:0}[key];
+      return {wdu:-Math.sin(d), wdv:Math.cos(d), u:-w * Math.sin(d), v:-w * Math.cos(d), gust:wx ? wx.gust : w * 1.4, wave:wx && wx.wave != null ? wx.wave : .5, temp:wx ? wx.temp : 12, rain:0, cloud:0}[key];
     }
     const nO = GLON.length, cl = (x, n) => Math.min(Math.max(x, 0), n - 1.001);
     const fy = cl((lat - GLAT[0]) / GDLAT, GLAT.length), fx = cl((lon - GLON[0]) / GDLON, nO), i = fy | 0, j = fx | 0, ty = fy - i, tx = fx - j, a = grid[key];
@@ -1755,7 +1754,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
-      LM.closePopup(); ptAt = ll;
+      LM.closePopup();
       const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
@@ -2177,8 +2176,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // the labels shorten (1.1k, ’25) when the full ones would run into each other
   function fitOtd(){
     const y = $("otdYears"), ls = [...y.querySelectorAll("b,em")];
-    y.classList.remove("tight"); ls.forEach(e => e.textContent = e.dataset.f);
-    if(ls.some(e => e.scrollWidth > e.parentNode.clientWidth + 4)){ y.classList.add("tight"); ls.forEach(e => e.textContent = e.dataset.s); }
+    ls.forEach(e => e.textContent = e.dataset.f);
+    if(ls.some(e => e.scrollWidth > e.parentNode.clientWidth + 4)){ ls.forEach(e => e.textContent = e.dataset.s); }
   }
   if(window.ResizeObserver){ let lw = 0; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; fitOtd(); } }).observe($("otdYears")); }
 
@@ -2187,9 +2186,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   let range = 90, sel = null, selDate = null, geo = null;
   const dShortWF = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",...UTC});
   const dShortW = iso => dShortWF.format(parse(iso)).replace(",", "");   // Sat 14 Feb 2026
+  // a smooth line through points that never overshoots them (monotone cubic), as Apple's charts draw trends
+  function curve(P){
+    const n = P.length; if(n < 3) return P.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+    const d = P.slice(1).map((p, i) => (p[1] - P[i][1]) / (p[0] - P[i][0])), t = P.map((p, i) => i === 0 ? d[0] : i === n - 1 ? d[n - 2] : d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2);
+    let s = "M" + P[0][0].toFixed(1) + " " + P[0][1].toFixed(1);
+    for(let i = 0; i < n - 1; i++){ const h = (P[i + 1][0] - P[i][0]) / 3;
+      s += "C" + (P[i][0] + h).toFixed(1) + " " + (P[i][1] + t[i] * h).toFixed(1) + " " + (P[i + 1][0] - h).toFixed(1) + " " + (P[i + 1][1] - t[i + 1] * h).toFixed(1) + " " + P[i + 1][0].toFixed(1) + " " + P[i + 1][1].toFixed(1); }
+    return s;
+  }
   // draws the chart for a new range, width or figures; picking a day only moves the cursor (setSel)
   function drawChart(){
-    const all = allDays(), data = range ? all.slice(-range) : all;
+    const all = allDays(), data = range ? all.slice(-range) : all, off = all.length - data.length;
     sel = selDate ? data.findIndex(d => d.date === selDate) : null; if(sel < 0){ sel = null; selDate = null; }
     const box = $("chart"), W = Math.max(240, box.clientWidth || 600), H = Math.round(Math.min(300, Math.max(190, W * .38)));
     const m = {t:14, r:6, b:26, l:38}, iw = W - m.l - m.r, ih = H - m.t - m.b;
@@ -2197,6 +2205,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const per = data.length / iw, smooth = data.length <= 120 ? 1 : per > 3 ? 28 : 7, hw = smooth >> 1;
     const run = [0]; data.forEach((d, i) => run.push(run[i] + d.migrants));   // running sum, so each average is one subtraction
     const vals = data.map((d, i) => { if(smooth === 1) return d.migrants; const lo = Math.max(0, i - hw), hi = Math.min(data.length, i - hw + smooth); return (run[hi] - run[lo]) / (hi - lo); });
+    // the bars get a 7-day average drawn over them (counting the days just before the range), so the trend reads through the spikes
+    const runA = [0]; all.forEach((d, i) => runA.push(runA[i] + d.migrants));
+    const avg7 = smooth === 1 ? data.map((d, i) => { const hi = off + i + 1, lo = Math.max(0, hi - 7); return (runA[hi] - runA[lo]) / (hi - lo); }) : null;
+    const mean = sum(data, "migrants") / data.length;
     const top = Math.max(...vals, 10), st = niceStep(top / 4), nice = Math.ceil(top / st) * st;
     const x = i => m.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw), y = v => m.t + ih - v / nice * ih;
     // no more than about two points a pixel: the rest can't be seen and only slow the drawing
@@ -2224,8 +2236,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const bw = Math.max(2, slot * .66), r = Math.min(bw / 2, 4);
       body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const h = Math.max(dd.migrants ? 3 : 1.5, dd.migrants / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
         return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
+      body += '<path class="trend" d="' + curve(avg7.map((v, i) => [xc(i), y(v)])) + '"/>';
     } else body = '<path d="' + a + '" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
-    geo = {x: xc, y, data, vals, m, iw, ih, W, nice, smooth, bars};
+    // the average day over the range, as a dashed line with its figure; and the busiest day, labelled
+    if(mean > 0){ const ay = y(mean).toFixed(1);
+      body += '<line class="avg" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + ay + '" y2="' + ay + '"/><text class="avg-t" x="' + (W - m.r) + '" y="' + (ay - 5) + '" text-anchor="end">Avg ' + fmt(Math.round(mean)) + "</text>"; }
+    const pk = vals.reduce((b, v, i) => v > vals[b] ? i : b, 0);
+    if(bars) body = body.replace('<rect data-i="' + pk + '"', '<rect class="pk" data-i="' + pk + '"');   // the busiest day stands out
+    if(vals[pk] > 0){ const px = xc(pk), py = y(vals[pk]) - 6;
+      body += '<text class="peak" x="' + Math.min(W - m.r - 4, Math.max(m.l + 4, px)).toFixed(1) + '" y="' + Math.max(10, py).toFixed(1) + '" text-anchor="' + (px > W - m.r - 30 ? "end" : px < m.l + 30 ? "start" : "middle") + '">' + fmt(Math.round(vals[pk])) + "</text>"; }
+    geo = {x: xc, y, data, vals, avg7, m, iw, ih, W, smooth, bars};
     const a0 = data[0].date, z0 = data[data.length-1].date;
     box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
@@ -2256,7 +2276,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const dd = data[sel];
       r.innerHTML = '<b class="num">' + fmt(dd.migrants) + '</b><span>' + dShortW(dd.date) + " · "
         + (dd.migrants ? plural(dd.boats, "boat", "boats") : geo.smooth > 1 ? "no crossings" : "no crossings detected")
-        + (geo.smooth > 1 ? " · avg " + fmt(Math.round(geo.vals[sel])) + "/day" : "") + "</span>";
+        + (geo.smooth > 1 ? " · avg " + fmt(Math.round(geo.vals[sel])) + "/day" : " · 7-day avg " + fmt(Math.round(geo.avg7[sel]))) + "</span>";
     } else {
       const a = data[0].date, z = data[data.length-1].date;
       const span = dShort.format(parse(a)) + (a.slice(0,4) === z.slice(0,4) ? "" : " " + a.slice(0,4)) + " – " + dShort.format(parse(z)) + " " + z.slice(0,4);
@@ -2389,12 +2409,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         sex:[["Male", t.sex.Male, "var(--blue)"], ["Female", t.sex.Female, "var(--pink)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]],
         age:[["17 and under", a["17 and under"], "var(--age1)"], ["18 to 24", a["18 to 24"], "var(--age2)"], ["25 to 39", a["25 to 39"], "var(--age3)"], ["40 and over", a["40 and over"], "var(--age4)"], ["Not recorded", a.Unknown, "var(--label3)"]]
       };
-      Object.entries(bars).forEach(([k, parts]) => {   // one bar for sex and one for age, each with its key
-        parts = parts.filter(p => p[1] > 0);
-        $(k + "Stack").innerHTML = parts.map(p => '<i data-w="' + pc(p[1]).toFixed(1) + '" style="background:' + p[2] + '"></i>').join("");
-        $(k + "Legend").innerHTML = parts.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + " <b>" + Math.round(pc(p[1])) + "%</b></span>").join("");
-        onReveal($(k + "Stack"), () => $(k + "Stack").querySelectorAll("i").forEach(i => i.style.width = i.dataset.w + "%"));
-      });
+      // sex: 100 dots, one a person, shared out so they always add up to 100
+      const sx = bars.sex.filter(p => p[1] > 0), exact = sx.map(p => pc(p[1])), n = exact.map(Math.floor);
+      exact.map((v, i) => [v - n[i], i]).sort((a, b) => b[0] - a[0]).slice(0, 100 - n.reduce((a, b) => a + b, 0)).forEach(([, i]) => n[i]++);
+      $("sexStack").innerHTML = sx.flatMap((p, k) => Array(n[k]).fill(p[2])).map((c, i) => '<i style="background:' + c + ";transition-delay:" + i * 6 + 'ms"></i>').join("");
+      $("sexStack").setAttribute("aria-label", sx.map((p, k) => n[k] + " in 100 " + p[0].toLowerCase()).join(", "));
+      $("sexLegend").innerHTML = sx.map(p => '<span><i style="background:' + p[2] + '"></i>' + p[0] + " <b>" + Math.round(pc(p[1])) + "%</b></span>").join("");
+      // age: a column for each group, the tallest group at full height
+      const ag = bars.age.filter(p => p[1] > 0), top = Math.max(...ag.map(p => p[1]));
+      $("ageStack").innerHTML = ag.map(p => '<div><b class="num">' + Math.round(pc(p[1])) + '%</b><span class="ac"><i data-h="' + (p[1] / top * 100).toFixed(1) + '" style="background:' + p[2] + '"></i></span><small>' + p[0].replace(" and ", " &amp; ") + "</small></div>").join("");
+      $("ageStack").setAttribute("aria-label", ag.map(p => p[0] + " " + Math.round(pc(p[1])) + "%").join(", "));
+      onReveal($("sexStack"), () => $("sexStack").classList.add("on"));
+      onReveal($("ageStack"), () => $("ageStack").querySelectorAll("i").forEach((i, k) => setTimeout(() => i.style.height = i.dataset.h + "%", reduced ? 0 : k * 80)));
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
@@ -2552,7 +2578,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-  function renderAll(first){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); if(!first) drawChart(); }
+  function renderAll(){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); drawChart(); }
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
@@ -2687,7 +2713,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const ytdBox = $("ytdBox"), flip = $("flip"), faces = [$("yearFace"), $("calFace")], narrow = matchMedia("(max-width:900px)");
   let calShown = false;
   // the box is as tall as the page showing, growing or shrinking as it slides; on desktop the year page also reaches the bottom of the boxes beside it
-  const wkBox = document.querySelector(".b-week"), labBox = document.querySelector(".b-lab");
+  const labBox = document.querySelector(".b-lab");
   function fitFlip(){
     const f = faces[+calShown]; let h = f.offsetHeight;
     if(!calShown && !narrow.matches){
@@ -3023,21 +3049,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     try{ await navigator.clipboard.writeText((sorted.length ? shareText() + " " : "") + "https://channelcrossings.world/"); toast("Copied to clipboard"); }
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
   });
-  $("shMore").addEventListener("click", async ()=>{
-    if(!sorted.length) return;
-    const url = location.href.split("#")[0];
-    const text = shareText();
-    if(navigator.share){
-      try{ await navigator.share({title:"Channel Crossings", text, url}); }
-      catch(e){ /* the viewer closed the share sheet */ }
-      return;
-    }
-    try{
-      await navigator.clipboard.writeText(text + " " + url);
-      toast("Copied to clipboard");
-    }catch(e){
-      toast("Couldn't copy. Try your browser's share menu.");
-    }
+  $("shMore").addEventListener("click", async ()=>{   // only shown where the device has a share sheet
+    try{ await navigator.share({title:"Channel Crossings", text:shareText(), url:location.href.split("#")[0]}); }
+    catch(e){ /* the viewer closed the share sheet */ }
   });
 
   /* =========== Email updates =========== */
@@ -3121,7 +3135,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     rsPop.hidden = rsVeil.hidden = !on; rsBtn.setAttribute("aria-expanded", on);
     document.documentElement.style.overflow = on ? "hidden" : "";
     if(on && rsPop.classList.contains("sent")){ rsPop.classList.remove("sent"); $("rsMsg").textContent = ""; }   // a fresh form each time after sending
-    if(on){ $("rsDate").max = ukToday(); (rsPop.classList.contains("sent") ? $("rsX") : $("rsName")).focus({preventScroll:true}); }
+    if(on){ $("rsDate").max = ukToday(); $("rsName").focus({preventScroll:true}); }
     else rsBtn.focus({preventScroll:true});
   }
   rsBtn.addEventListener("click", e => { e.stopPropagation(); rsOpen(true); });
@@ -3172,7 +3186,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- Show more: tall boxes open in full on request */
   // A box much taller than the rest shows its first part, fading out, with a button to open the rest (and close it again).
   // Checked again whenever what's inside changes, as the figures come in after the page has loaded.
-  const CLAMP_H = 520, CLAMP_FROM = 760;
+  const CLAMP_FROM = 760;
   document.querySelectorAll("main .card").forEach((card, n) => {
     if(card.closest(".bento") || card.querySelector(".flip")) return;   // the flip boxes keep their own height
     const btn = document.createElement("button");
@@ -3311,7 +3325,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
   start(); loadWeather(); loadNews();
-  whenIdle(loadGrid, 2000);   // the 48-hour weather map comes in once the figures are up
+  whenIdle(loadGrid, 2000);   // the weather map comes in once the figures are up
 })();
 // Offline mode: keeps a copy of the site on the device so repeat visits open instantly, even with no signal
 if("serviceWorker" in navigator){ addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }
