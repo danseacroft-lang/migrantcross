@@ -165,7 +165,19 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-ves i{position:absolute;inset:4px;border-radius:50%;background:var(--c);border:2.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.35),0 1px 5px rgba(0,0,0,.5)}
 .am-ves s{position:absolute;left:50%;top:-6px;margin-left:-5px;border:5px solid transparent;border-bottom:8px solid var(--c);border-top:0;transform-origin:5px 17px;filter:drop-shadow(0 0 1.5px rgba(0,0,0,.6))}
 .am-ves.old{opacity:.5}
-.am-ves.rescue{--c:#FFCC00}.am-ves.border{--c:#0A84FF}.am-ves.navy{--c:#5E5CE6}.am-ves.aircraft{--c:#FF2D55}
+/* the tip in the middle of the map, once per visitor: live boats appear here, the grey dinghies are the day's crossings */
+.live-tip{position:absolute;z-index:4;left:50%;top:44%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 32px));display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:11px 8px 11px 12px;border-radius:16px;color:#fff;font-size:.794rem;line-height:1.4;
+  background:rgba(20,20,24,.6);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 6px 20px rgba(0,0,0,.25);animation:ltIn .5s cubic-bezier(.2,.9,.3,1.12) both}
+@keyframes ltIn{from{opacity:0;transform:translate(-50%,-40%)}}
+.live-tip p{margin:0}.live-tip b{font-weight:600}
+.live-tip .lt-dots{display:grid;grid-template-columns:repeat(2,9px);gap:3px;padding-top:4px}
+.live-tip .lt-dots i,.mp-key i{width:9px;height:9px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(255,255,255,.9)}
+.live-tip button{appearance:none;border:0;background:rgba(255,255,255,.14);color:#fff;width:26px;height:26px;border-radius:50%;font:600 15px/1 var(--font);cursor:pointer;display:grid;place-items:center}
+.live-tip button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+.mp-key{display:grid;grid-template-columns:repeat(2,9px);gap:4px;padding:4px 0 0 5px}
+
+.am-ves.rescue,.lv-rescue{--c:#FFCC00}.am-ves.border,.lv-border{--c:#0A84FF}.am-ves.navy,.lv-navy{--c:#5E5CE6}.am-ves.aircraft,.lv-aircraft{--c:#FF2D55}
+.lt-dots i,.mp-key i{background:var(--c)}
 /* with a mouse: the rain, wave height or temperature under the pointer */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
   font:600 .824rem/1 var(--font);font-variant-numeric:tabular-nums;background:rgba(255,255,255,.94);color:#1A2B4C;box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 4px 14px rgba(0,0,0,.18);transition:opacity .15s}
@@ -986,6 +998,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     </svg>
   </div>
 
+  <div class="live-tip" id="liveTip" role="note" hidden>
+    <span class="lt-dots" aria-hidden="true"><i class="lv-rescue"></i><i class="lv-border"></i><i class="lv-navy"></i><i class="lv-aircraft"></i></span>
+    <p><b>Live rescue and patrol boats.</b> When lifeboats, Border Force or navy ships are in the Channel, they appear on the map in real time as coloured dots. The grey dinghies show the day's crossings.</p>
+    <button type="button" id="liveTipX" aria-label="Close tip">×</button>
+  </div>
+
   <!-- Across the top of the map: breaking news about small boats from UK news outlets (news.json, updated hourly),
        and from 12:00 UK time until the new figures are in, the daily update. When both are on they take turns. -->
   <aside class="map-news" id="news" aria-label="Breaking news" hidden>
@@ -1536,6 +1554,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     placeTowns();
   }
+  (function(){
+    let closed = false; try{ closed = !!localStorage.getItem("liveTipClosed"); }catch(e){}
+    if(closed) return;
+    $("liveTip").hidden = false;
+    $("liveTipX").addEventListener("click", e => { e.stopPropagation(); $("liveTip").hidden = true; try{ localStorage.setItem("liveTipClosed", "1"); }catch(e){} });
+  })();
   function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
   // Place names, as on Ventusky: countries and seas, then the biggest towns that fit, with smaller ones as you zoom in.
   // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
@@ -2610,7 +2634,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     pm.innerHTML = h
       + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
       + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
-      + "Hover over or tap a boat for its day's figures.</p></div>";
+      + "Hover over or tap a boat for its day's figures.</p></div>"
+      + '<div class="mp-boats"><span class="mp-key" aria-hidden="true"><i class="lv-rescue"></i><i class="lv-border"></i><i class="lv-navy"></i><i class="lv-aircraft"></i></span><p><b>Live boats.</b> Lifeboats (yellow), Border Force (blue), navy ships (purple) and rescue aircraft (pink), from their AIS transponders, updated every 15 minutes.</p></div>';
   }
   async function loadWeather(){
     wxAt = Date.now();
