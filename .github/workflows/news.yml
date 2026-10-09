@@ -1,0 +1,43 @@
+name: Update breaking news
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 minutes, so live sightings from the coast show quickly
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: publish      # never push at the same moment as the daily figures update
+
+jobs:
+  news:
+    runs-on: ubuntu-24.04     # a fixed image, so a new Ubuntu can't change things unannounced
+    timeout-minutes: 15       # a stuck download can't hold up the other job for hours
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install requests==2.34.2 telethon==1.45.0
+      - run: python scripts/news.py
+        env:   # Telegram sign-in for channels with no web preview (see scripts/tg_login.py); without them it reads t.me/s
+          TG_API_ID: ${{ secrets.TG_API_ID }}
+          TG_API_HASH: ${{ secrets.TG_API_HASH }}
+          TG_SESSION: ${{ secrets.TG_SESSION }}
+      - name: Publish news
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add news.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Update breaking news"
+          git pull --rebase && git push
+      - name: Keep the schedules on
+        # GitHub switches off scheduled workflows after 60 days without a commit. The site's own updates normally
+        # commit every day; if they ever stop, this makes one small commit every 40 days so the checks keep running.
+        if: always()
+        run: |
+          [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -lt 3456000 ] && exit 0
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit --allow-empty -m "Keep scheduled workflows on"
+          git pull --rebase && git push

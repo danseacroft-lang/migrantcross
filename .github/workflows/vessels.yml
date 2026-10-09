@@ -1,0 +1,34 @@
+name: Update rescue and patrol boats
+
+on:
+  schedule:
+    - cron: "7-59/15 * * * *"   # every 15 minutes, a few minutes off the hour when GitHub is busiest
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: publish      # never push at the same moment as the other updates
+
+jobs:
+  vessels:
+    runs-on: ubuntu-24.04     # a fixed image, so a new Ubuntu can't change things unannounced
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install websockets==15.0.1
+      - run: python scripts/vessels.py
+        env:   # free key from aisstream.io; without it nothing happens
+          AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }}
+      - name: Publish boat positions
+        run: |
+          [ -f vessels.json ] || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add vessels.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Update rescue and patrol boat positions"
+          git pull --rebase && git push

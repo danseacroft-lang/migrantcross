@@ -1,0 +1,59 @@
+name: Update crossing figures
+
+on:
+  schedule:
+    # Every 15 minutes, 11:00-21:45 UTC (noon to 10:45pm UK in summer, 11am to 9:45pm in winter).
+    # scripts/gate.py stops each run straight away unless it's after noon UK time and yesterday's
+    # figures aren't in yet, so once they're published there are no more checks until noon tomorrow.
+    - cron: "*/15 11-21 * * *"
+  workflow_dispatch:         # lets you run it by hand from the Actions tab (always checks)
+
+permissions:
+  contents: write
+
+concurrency: publish      # one publishing job at a time (shared with the hourly news job)
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04     # a fixed image, so a new Ubuntu can't change things unannounced
+    timeout-minutes: 15       # a stuck download can't hold up the other job for hours
+    steps:
+      - uses: actions/checkout@v5
+      - name: Is a check due?
+        id: gate
+        run: python3 scripts/gate.py
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip                      # keeps the checks quick
+      - if: steps.gate.outputs.run == 'true'
+        run: pip install -r requirements.txt
+      - if: steps.gate.outputs.run == 'true'
+        run: python scripts/update.py
+      - name: Publish new figures
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json recent.json data.csv og-image.png week-card.png index.html sitemap.xml gender.json nationalities.json perboat.json returns.json petitions.json status.json
+          git diff --cached --quiet && exit 0
+          # status.json changes on every check; the message says whether anything else did
+          if git diff --cached --name-only | grep -qv '^status.json$'; then msg="Update crossing figures"; else msg="Checked for new figures"; fi
+          git commit -m "$msg"
+          git pull --rebase && git push
+      - name: Post to Facebook
+        # Posts each new day's figures once (fb.json remembers the last one). Does nothing until the
+        # FB_PAGE_ID and FB_PAGE_TOKEN secrets are set. Runs after publishing, so a failed post never
+        # holds up the figures, and a failure emails you (usually an expired Page token).
+        if: steps.gate.outputs.run == 'true'
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+        run: |
+          python scripts/facebook.py
+          [ -f fb.json ] || exit 0
+          git add fb.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Posted the latest figures to Facebook"
+          git pull --rebase && git push
