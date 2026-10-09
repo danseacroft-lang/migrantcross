@@ -1086,48 +1086,51 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .chart .line{stroke:url(#lineG);stroke-width:2.4}
 .chart #chartBars rect{opacity:.85}
 .chart .has-sel #chartBars rect:not(.on){opacity:.35}
-/* Sighting Comments: a text box and the comments under it, newest first, divided by grey hairlines as in the List view.
-   On phones and most screens it sits under Petitions; on very wide screens it stands down the right edge, beside the page, mirroring the share card */
-.sc[hidden]{display:none}
-.sc .card{display:flex;flex-direction:column}
-.sc-intro{margin:0 0 12px;color:var(--label2);font-size:.824rem;line-height:1.4}
-.sc-form{position:relative}
-.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:84px;resize:vertical;appearance:none;margin:0;border:0;border-radius:12px;background:var(--fill);padding:11px 14px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
-.sc-form textarea::placeholder{color:var(--label2)}
+/* View Sightings: a frosted dropdown under its button, holding a text box and everyone's comments, newest first,
+   divided by grey hairlines as in the List view. It opens with a slight drop and closes on a tap outside or Escape */
+.sc-pop{position:absolute;z-index:65;width:min(380px,calc(100vw - 24px));max-height:min(620px,calc(100dvh - 90px));display:flex;flex-direction:column;box-sizing:border-box;padding:18px 18px 14px;border-radius:24px;
+  background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 0 0 .5px var(--sep),0 24px 60px rgba(0,0,0,.28);transform-origin:top center;animation:scDrop .32s cubic-bezier(.2,.9,.3,1.05) both}
+.sc-pop[hidden]{display:none}
+@keyframes scDrop{from{opacity:0;transform:translateY(-8px) scale(.97)}}
+@media (prefers-reduced-transparency:reduce){.sc-pop{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
+.sc-pop:focus{outline:0}
+.sc-pop h2{margin:0 36px 4px 2px;font:700 1.18rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label)}
+.sc-pop .sc-x{position:absolute;top:12px;right:12px;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:var(--fill);color:var(--label2);cursor:pointer}
+.sc-pop .sc-x svg{width:10px;height:10px}
+.sc-intro{margin:0 2px 12px;color:var(--label2);font-size:.824rem;line-height:1.4}
+.sc-form{position:relative;flex:none}
+.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:76px;resize:vertical;appearance:none;margin:0;border:0;border-radius:14px;background:color-mix(in srgb,var(--card) 80%,transparent);box-shadow:0 0 0 .5px var(--sep);padding:11px 14px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
+.sc-form textarea::placeholder{color:var(--label3)}
 .sc-form textarea:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .sc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
 .sc-count{color:var(--label2);font-size:.706rem;font-variant-numeric:tabular-nums}
-.sc-count.over{color:var(--red-t)}
-.sc-form button{flex:none;appearance:none;border:0;min-height:40px;padding:0 20px;border-radius:12px;background:var(--blue);color:#fff;font:600 .941rem/1 var(--font);cursor:pointer;transition:filter .2s ease,transform .15s ease}
+.sc-form button{flex:none;appearance:none;border:0;min-height:38px;padding:0 20px;border-radius:12px;background:var(--blue);color:#fff;font:600 .941rem/1 var(--font);cursor:pointer;transition:filter .2s ease,transform .15s ease}
 .sc-form button:disabled{opacity:.5;cursor:default}
 .sc-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .sc-form button:not(:disabled):active{transform:scale(.98)}
 @media (hover:hover){.sc-form button:not(:disabled):hover{filter:brightness(1.1)}}
-.sc-msg{margin:8px 0 0;font-size:.765rem;color:var(--label2)}
+.sc-msg{margin:8px 2px 0;font-size:.765rem;color:var(--label2)}
 .sc-msg:empty{display:none}
 .sc-msg.err{color:var(--red-t)}
-.sc-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:18px 0 0}
-.sc-h h3{margin:0;font-size:.882rem;font-weight:600}
-.sc-list{list-style:none;margin:6px 0 0;padding:0;max-height:420px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.sc-h{margin:16px 2px 0;font:500 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2)}
+.sc-list{list-style:none;flex:1;min-height:80px;margin:6px 0 0;padding:0 2px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .sc-list li{padding:9px 0;border-top:.5px solid var(--sep);font-size:.882rem}
 .sc-list li:first-child{border-top:0}
 .sc-list b{display:block;font-weight:600;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
-.sc-list p{margin:2px 0 0;line-height:1.4;overflow-wrap:anywhere;white-space:pre-line}
+.sc-list p{margin:2px 0 0;line-height:1.4;overflow-wrap:anywhere}
 .sc-list li.new{animation:scIn .5s cubic-bezier(.2,.8,.2,1)}
 .sc-list .empty{color:var(--label2)}
 @keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.sc-list li.new{animation:none}}
-@media (min-width:1800px) and (hover:hover) and (pointer:fine){   /* room for a column on each side of the page */
-  body{margin-right:312px}
-  .top-row{right:312px}
-  .sc{position:fixed;z-index:50;right:16px;top:16px;bottom:16px;width:280px;display:flex;flex-direction:column}
-  .sc .section-h{display:none}
-  .sc .card{flex:1;min-height:0;border-radius:24px;padding:28px 18px 18px;box-shadow:0 0 0 .5px var(--sep),0 10px 40px rgba(0,0,0,.12)}
-  .sc .card::before{content:"Sighting Comments";display:block;margin:0 0 8px;font:700 1.35rem/1.18 var(--font);letter-spacing:-.025em;text-align:center}
-  .sc-intro{text-align:center}
-  .sc-list{flex:1;min-height:0;max-height:none}
-}
+@media (prefers-reduced-motion:reduce){.sc-list li.new,.sc-pop{animation:none}}
+.rs-pill{gap:8px}
+.vs-btn{animation:none}
+@media (max-width:440px){   /* phones: the two sighting buttons share one pill and the switch tightens, so the row still fits */
+  .rs-pill{gap:0;border-radius:999px;background:var(--fill)}.rs-pill .rs-btn{padding:0 9px;background:none}.rs-pill .rs-btn[aria-expanded="true"]{background:var(--neo)}
+  .top-row .top-theme button{padding:0 7px}.top-row{gap:6px}.top-act{gap:6px}}
+@media (max-width:360px){.top-brand h1{font-size:.9rem}.top-row .top-theme button{padding:0 5px}}
+@media (max-width:340px){.top-brand h1{font-size:.8rem}.rs-pill .rs-btn{padding:0 7px}.top-row .top-theme button{padding:0 4px}}   /* only Report a Sighting flashes as the page opens */
 </style>
 </head>
 <body>
@@ -1180,7 +1183,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report a Sighting</span></button><button type="button" class="rs-btn vs-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 14h4.5"/></svg><span>View Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1270,6 +1273,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 <!-- Report Sightings: a frosted card with a short form. Each box appears once the one before it is filled in; it is sent
      to the site's inbox through Web3Forms (web3forms.com), as the site has no server of its own -->
+<!-- View Sightings: a frosted dropdown under its button with a comment box and everyone's comments; hidden until the comments database is set up -->
+<div class="sc-pop" id="scPop" tabindex="-1" role="dialog" aria-labelledby="scH" data-nosnippet hidden>
+  <h2 id="scH">Sightings</h2>
+  <button type="button" class="sc-x" id="scX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+  <p class="sc-intro">Seen something on the coast? Say what, where and when. Comments are public, so please don't name or picture anyone.</p>
+  <form class="sc-form" id="scForm" novalidate>
+    <label class="sr" for="scText">Your comment</label>
+    <textarea id="scText" name="body" maxlength="500" placeholder="Write a comment" required></textarea>
+    <input class="hp" type="text" name="website" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" id="scSend">Post</button></div>
+    <p class="sc-msg" id="scMsg" aria-live="polite"></p>
+  </form>
+  <h3 class="sc-h">Latest comments</h3>
+  <ul class="sc-list" id="scList" aria-label="Sighting comments, newest first"><li class="empty">Loading comments…</li></ul>
+</div>
 <div class="rs-veil" id="rsVeil" hidden></div>
 <div class="info-pop rs-pop" id="rsPop" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="rsH" data-nosnippet hidden>
   <button type="button" class="am-x rs-x" id="rsX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -1550,23 +1568,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
         <div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
         <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
-      </section>
-
-      <!-- ============================================================ SIGHTING COMMENTS -->
-      <section class="mb sc" id="sc" aria-labelledby="hSc" hidden>
-        <div class="section-h"><h2 id="hSc">Sighting Comments</h2></div>
-        <div class="card">
-          <p class="sc-intro">Seen something on the coast? Say what, where and when. Comments are public, so please don't name or picture anyone.</p>
-          <form class="sc-form" id="scForm" novalidate>
-            <label class="sr" for="scText">Your comment</label>
-            <textarea id="scText" name="body" maxlength="500" placeholder="Write a comment" required></textarea>
-            <input class="hp" type="text" name="website" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" id="scSend">Post</button></div>
-            <p class="sc-msg" id="scMsg" aria-live="polite"></p>
-          </form>
-          <div class="sc-h"><h3>Latest comments</h3></div>
-          <ul class="sc-list" id="scList" aria-label="Sighting comments, newest first"><li class="empty">Loading comments…</li></ul>
-        </div>
       </section>
 
       <!-- ============================================================ WEEKLY ROUNDUP -->
@@ -3563,10 +3564,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- Sighting Comments */
   // Kept in a free Supabase database (set up with supabase/sighting-comments.sql). The key is the public one:
   // it can only read comments and add new ones, and the database itself checks the length, links and how often one visitor posts.
-  // The box stays hidden until both values are filled in.
+  // The View Sightings button stays hidden until both values are filled in.
   const SC_URL = "", SC_KEY = "";
   if(SC_URL && SC_KEY){
-    const sc = $("sc"), scList = $("scList"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
+    const sc = $("scPop"), scList = $("scList"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
     const scHead = {apikey: SC_KEY, Accept: "application/json"};
     const scWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
     const scItem = (c, isNew) => {
@@ -3586,10 +3587,24 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         scList.replaceChildren(...(rows.length ? rows.map(c => scItem(c)) : [Object.assign(document.createElement("li"), {className: "empty", textContent: "No comments yet. Be the first."})]));
       }catch(e){ if(!scShown) scList.innerHTML = '<li class="empty">Comments couldn\u2019t load just now.</li>'; }
     }
-    sc.hidden = false;
-    scLoad();
-    document.addEventListener("visibilitychange", () => { if(!document.hidden) scLoad(); });
-    setInterval(() => { if(!document.hidden) scLoad(); }, 120000);
+    const scBtn = $("scBtn");
+    scBtn.hidden = false;
+    function scPlace(){   // just under the button, kept on screen
+      const r = scBtn.getBoundingClientRect(), w = sc.offsetWidth;
+      sc.style.top = (r.bottom + scrollY + 10) + "px";
+      sc.style.left = (Math.max(12, Math.min(r.left, innerWidth - w - 12)) + scrollX) + "px";
+    }
+    function scOpen(on){
+      sc.hidden = !on; scBtn.setAttribute("aria-expanded", on);
+      if(on){ scPlace(); scLoad(); (matchMedia("(hover: none)").matches ? sc : scText).focus({preventScroll:true}); }
+    }
+    scBtn.addEventListener("click", e => { e.stopPropagation(); scOpen(sc.hidden); });
+    $("scX").addEventListener("click", () => { scOpen(false); scBtn.focus({preventScroll:true}); });
+    document.addEventListener("click", e => { if(!sc.hidden && !sc.contains(e.target)) scOpen(false); });
+    addEventListener("keydown", e => { if(e.key === "Escape" && !sc.hidden){ scOpen(false); scBtn.focus({preventScroll:true}); } });
+    addEventListener("resize", () => { if(!sc.hidden) scPlace(); });
+    document.addEventListener("visibilitychange", () => { if(!document.hidden && !sc.hidden) scLoad(); });
+    setInterval(() => { if(!document.hidden && !sc.hidden) scLoad(); }, 60000);
     const scCount = () => { const n = scText.value.trim().length; $("scCount").textContent = n + " / 500"; $("scCount").classList.toggle("over", n > 500); };
     scText.addEventListener("input", scCount);
     $("scForm").addEventListener("submit", async e => {
@@ -3634,7 +3649,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Checked again whenever what's inside changes, as the figures come in after the page has loaded.
   const CLAMP_FROM = 760;
   document.querySelectorAll("main .card").forEach((card, n) => {
-    if(card.closest(".bento, .sc") || card.querySelector(".flip")) return;   // the flip boxes keep their own height, and the comments scroll inside theirs
+    if(card.closest(".bento") || card.querySelector(".flip")) return;   // the flip boxes keep their own height
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "more-btn"; btn.hidden = true;
     card.id = card.id || "moreBox" + n; btn.setAttribute("aria-controls", card.id); btn.setAttribute("aria-expanded", "false");
