@@ -3446,7 +3446,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Kept in a free Supabase database (set up with supabase/sighting-comments.sql). The key is the public one:
   // it can only read comments and add new ones, and the database itself checks the length, links and how often one visitor posts.
   // The View Sightings button stays hidden until both values are filled in.
-  const SC_URL = "", SC_KEY = "";
+  const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
   if(SC_URL && SC_KEY){
     const sc = $("scPop"), scList = $("scList"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
     const scHead = {apikey: SC_KEY, Accept: "application/json"};
