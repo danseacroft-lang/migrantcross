@@ -1086,6 +1086,48 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .chart .line{stroke:url(#lineG);stroke-width:2.4}
 .chart #chartBars rect{opacity:.85}
 .chart .has-sel #chartBars rect:not(.on){opacity:.35}
+/* Sighting Comments: a text box and the comments under it, newest first, divided by grey hairlines as in the List view.
+   On phones and most screens it sits under Petitions; on very wide screens it stands down the right edge, beside the page, mirroring the share card */
+.sc[hidden]{display:none}
+.sc .card{display:flex;flex-direction:column}
+.sc-intro{margin:0 0 12px;color:var(--label2);font-size:.824rem;line-height:1.4}
+.sc-form{position:relative}
+.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:84px;resize:vertical;appearance:none;margin:0;border:0;border-radius:12px;background:var(--fill);padding:11px 14px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
+.sc-form textarea::placeholder{color:var(--label2)}
+.sc-form textarea:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.sc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.sc-count{color:var(--label2);font-size:.706rem;font-variant-numeric:tabular-nums}
+.sc-count.over{color:var(--red-t)}
+.sc-form button{flex:none;appearance:none;border:0;min-height:40px;padding:0 20px;border-radius:12px;background:var(--blue);color:#fff;font:600 .941rem/1 var(--font);cursor:pointer;transition:filter .2s ease,transform .15s ease}
+.sc-form button:disabled{opacity:.5;cursor:default}
+.sc-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sc-form button:not(:disabled):active{transform:scale(.98)}
+@media (hover:hover){.sc-form button:not(:disabled):hover{filter:brightness(1.1)}}
+.sc-msg{margin:8px 0 0;font-size:.765rem;color:var(--label2)}
+.sc-msg:empty{display:none}
+.sc-msg.err{color:var(--red-t)}
+.sc-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:18px 0 0}
+.sc-h h3{margin:0;font-size:.882rem;font-weight:600}
+.sc-list{list-style:none;margin:6px 0 0;padding:0;max-height:420px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.sc-list li{padding:9px 0;border-top:.5px solid var(--sep);font-size:.882rem}
+.sc-list li:first-child{border-top:0}
+.sc-list b{display:block;font-weight:600;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
+.sc-list p{margin:2px 0 0;line-height:1.4;overflow-wrap:anywhere;white-space:pre-line}
+.sc-list li.new{animation:scIn .5s cubic-bezier(.2,.8,.2,1)}
+.sc-list .empty{color:var(--label2)}
+@keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.sc-list li.new{animation:none}}
+@media (min-width:1800px) and (hover:hover) and (pointer:fine){   /* room for a column on each side of the page */
+  body{margin-right:312px}
+  .top-row{right:312px}
+  .sc{position:fixed;z-index:50;right:16px;top:16px;bottom:16px;width:280px;display:flex;flex-direction:column}
+  .sc .section-h{display:none}
+  .sc .card{flex:1;min-height:0;border-radius:24px;padding:28px 18px 18px;box-shadow:0 0 0 .5px var(--sep),0 10px 40px rgba(0,0,0,.12)}
+  .sc .card::before{content:"Sighting Comments";display:block;margin:0 0 8px;font:700 1.35rem/1.18 var(--font);letter-spacing:-.025em;text-align:center}
+  .sc-intro{text-align:center}
+  .sc-list{flex:1;min-height:0;max-height:none}
+}
 </style>
 </head>
 <body>
@@ -1508,6 +1550,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <div class="section-h rv"><h2 id="hPet">Petitions</h2></div>
         <div class="card rv"><ul class="list petitions" id="petitions"><li class="empty">Loading petitions…</li></ul></div>
         <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
+      </section>
+
+      <!-- ============================================================ SIGHTING COMMENTS -->
+      <section class="mb sc" id="sc" aria-labelledby="hSc" hidden>
+        <div class="section-h"><h2 id="hSc">Sighting Comments</h2></div>
+        <div class="card">
+          <p class="sc-intro">Seen something on the coast? Say what, where and when. Comments are public, so please don't name or picture anyone.</p>
+          <form class="sc-form" id="scForm" novalidate>
+            <label class="sr" for="scText">Your comment</label>
+            <textarea id="scText" name="body" maxlength="500" placeholder="Write a comment" required></textarea>
+            <input class="hp" type="text" name="website" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" id="scSend">Post</button></div>
+            <p class="sc-msg" id="scMsg" aria-live="polite"></p>
+          </form>
+          <div class="sc-h"><h3>Latest comments</h3></div>
+          <ul class="sc-list" id="scList" aria-label="Sighting comments, newest first"><li class="empty">Loading comments…</li></ul>
+        </div>
       </section>
 
       <!-- ============================================================ WEEKLY ROUNDUP -->
@@ -3501,6 +3560,57 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     send.disabled = false;
   });
 
+  /* ---------------------------------------------------- Sighting Comments */
+  // Kept in a free Supabase database (set up with supabase/sighting-comments.sql). The key is the public one:
+  // it can only read comments and add new ones, and the database itself checks the length, links and how often one visitor posts.
+  // The box stays hidden until both values are filled in.
+  const SC_URL = "", SC_KEY = "";
+  if(SC_URL && SC_KEY){
+    const sc = $("sc"), scList = $("scList"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
+    const scHead = {apikey: SC_KEY, Accept: "application/json"};
+    const scWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
+    const scItem = (c, isNew) => {
+      const li = document.createElement("li"), b = document.createElement("b"), p = document.createElement("p");
+      b.textContent = scWhen.format(new Date(c.created_at)); p.textContent = c.body;   // text only, never HTML
+      if(isNew) li.className = "new";
+      li.append(b, p); return li;
+    };
+    let scShown = "";
+    async function scLoad(){
+      try{
+        const r = await fetch(scApi + "?select=id,created_at,body&order=created_at.desc&limit=100", {headers: scHead, cache: "no-store", ...limit()});
+        if(!r.ok) throw 0;
+        const rows = await r.json(), key = rows.map(c => c.id).join();
+        if(key === scShown) return;
+        scShown = key;
+        scList.replaceChildren(...(rows.length ? rows.map(c => scItem(c)) : [Object.assign(document.createElement("li"), {className: "empty", textContent: "No comments yet. Be the first."})]));
+      }catch(e){ if(!scShown) scList.innerHTML = '<li class="empty">Comments couldn\u2019t load just now.</li>'; }
+    }
+    sc.hidden = false;
+    scLoad();
+    document.addEventListener("visibilitychange", () => { if(!document.hidden) scLoad(); });
+    setInterval(() => { if(!document.hidden) scLoad(); }, 120000);
+    const scCount = () => { const n = scText.value.trim().length; $("scCount").textContent = n + " / 500"; $("scCount").classList.toggle("over", n > 500); };
+    scText.addEventListener("input", scCount);
+    $("scForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const msg = $("scMsg"), send = $("scSend"), body = scText.value.trim().replace(/\s+/g, " ");
+      if($("scHp").value) return;   // a bot filled in the hidden box
+      if(body.length < 3){ msg.className = "sc-msg err"; msg.textContent = "Write a little more first."; scText.focus(); return; }
+      send.disabled = true; msg.className = "sc-msg"; msg.textContent = "Posting…";
+      try{
+        const r = await fetch(scApi, {method:"POST", headers:{...scHead, "Content-Type":"application/json", Prefer:"return=minimal"}, body:JSON.stringify({body}), ...limit()});
+        if(!r.ok){ const j = await r.json().catch(() => ({})); throw j.code === "P0001" && j.message ? j.message : 0; }   // the database's own reason, written for visitors
+        msg.textContent = "Thank you. Your comment is up.";
+        scText.value = ""; scCount();
+        const first = scList.querySelector(".empty"); if(first) first.remove();
+        scList.prepend(scItem({created_at: new Date().toISOString(), body}, true)); scList.scrollTop = 0;
+        scShown = ""; setTimeout(scLoad, 1500);
+      }catch(err){ msg.className = "sc-msg err"; msg.textContent = typeof err === "string" ? err : "It couldn't be posted just now. Please try again in a moment."; }
+      send.disabled = false;
+    });
+  }
+
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
   let wkTall = false;
   function sizeWk(){ $("wkDays").style.height = wkBase + (wkTall ? 260 : 0) + "px"; }
@@ -3524,7 +3634,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Checked again whenever what's inside changes, as the figures come in after the page has loaded.
   const CLAMP_FROM = 760;
   document.querySelectorAll("main .card").forEach((card, n) => {
-    if(card.closest(".bento") || card.querySelector(".flip")) return;   // the flip boxes keep their own height
+    if(card.closest(".bento, .sc") || card.querySelector(".flip")) return;   // the flip boxes keep their own height, and the comments scroll inside theirs
     const btn = document.createElement("button");
     btn.type = "button"; btn.className = "more-btn"; btn.hidden = true;
     card.id = card.id || "moreBox" + n; btn.setAttribute("aria-controls", card.id); btn.setAttribute("aria-expanded", "false");
