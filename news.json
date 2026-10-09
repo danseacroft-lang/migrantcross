@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-09T00:30:59Z",
+ "checkedAt": "2026-10-09T01:05:30Z",
  "items": [
+  {
+   "title": "The Papers: 'Stark warning' over ADHD and 'Andrew wins legal fight'",
+   "url": "https://www.bbc.co.uk/news/articles/cm8ezw2wjkxgo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-09T00:30:18Z",
+   "breaking": true
+  },
   {
    "title": "Polanski failed to show leadership over Zionism motion, ex-Green leader says",
    "url": "https://www.bbc.co.uk/news/articles/cm2d6x11l6pko?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-08T23:56:16Z",
+   "breaking": true
+  },
+  {
+   "title": "ADHD and autism at risk of over-diagnosis, says government review",
+   "url": "https://www.bbc.co.uk/news/articles/crkg7n1ypj24o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-08T23:01:30Z",
    "breaking": true
   }
  ],
