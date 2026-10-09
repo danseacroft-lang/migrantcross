@@ -764,16 +764,19 @@ footer strong{color:var(--label);font-weight:600}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
 @media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
-/* Report Sightings: a pill beside the theme switch, in the same style, that flashes red twice as the page opens */
+/* Report Sightings: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
+   and glows neon orange under the mouse or while the form is open */
 .top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
-.rs-pill{display:inline-flex;padding:3px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12));animation:rsFlash 1.6s ease-in-out .9s 1 both}
-.rs-btn{appearance:none;border:0;background:none;color:inherit;display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 13px;border-radius:999px;font:500 14px/1 var(--font);cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
-.rs-btn svg{width:15px;height:15px;flex:none}
-.rs-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.rs-btn:hover{background:var(--fill2)}}
-.rs-btn[aria-expanded="true"]{background:var(--fill2)}
-@keyframes rsFlash{0%,45%,100%{background:var(--fill,rgba(118,118,128,.12));color:var(--label);box-shadow:0 0 0 0 rgba(255,59,48,0)}20%,70%{background:#FF3B30;color:#fff;box-shadow:0 0 0 5px rgba(255,59,48,.22)}}
-.rs-pill{color:var(--label)}
+.rs-pill{display:inline-flex;border-radius:999px;color:var(--label)}
+.rs-btn{--neo:linear-gradient(135deg,#FFB340,#FF7A00);appearance:none;border:0;color:inherit;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;
+  background:var(--fill,rgba(118,118,128,.12));font:600 14px/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
+  transition:background .2s ease,color .2s ease,box-shadow .25s ease,transform .15s ease;animation:rsFlash 1.6s ease-in-out .9s 1 backwards}
+.rs-btn svg{width:16px;height:16px;flex:none}
+.rs-btn:focus-visible{outline:2px solid #FF9F0A;outline-offset:2px}
+.rs-btn[aria-expanded="true"]{background:var(--neo);color:#fff;box-shadow:0 0 0 .5px rgba(255,200,120,.7) inset,0 0 18px rgba(255,140,0,.55)}
+@media (hover:hover){.rs-btn:hover{background:var(--neo);color:#fff;box-shadow:0 0 0 .5px rgba(255,200,120,.7) inset,0 0 10px rgba(255,159,10,.7),0 0 26px rgba(255,122,0,.45)}}
+.rs-btn:active{transform:scale(.97)}
+@keyframes rsFlash{0%,45%,100%{box-shadow:0 0 0 0 rgba(255,140,0,0)}20%,70%{background:var(--neo);color:#fff;box-shadow:0 0 22px rgba(255,140,0,.6)}}
 @media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
 /* the form: a frosted card in the middle of the screen, over a soft veil */
 .rs-veil{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:fadeIn .2s ease both}
