@@ -1062,94 +1062,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 :root[data-theme="dark"] .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}}
 
-/* ============ "2026 so far" + calendar: liquid glass. Looks only — every id, size and behaviour is as before ============ */
-#ytdBox{
-  --lg-base:rgba(255,255,255,.62); --lg-tint1:rgba(255,149,0,.20); --lg-tint2:rgba(255,45,111,.12); --lg-tint3:rgba(0,122,255,.14);
-  --lg-hl:rgba(255,255,255,.95); --lg-edge:rgba(255,255,255,.7); --lg-line:rgba(60,60,67,.10);
-  --lg-chip:rgba(255,255,255,.55); --lg-chip-hl:rgba(255,255,255,.9); --lg-chip-hover:rgba(255,255,255,.8);
-  --lg-lens1:rgba(255,255,255,.9); --lg-lens2:rgba(255,255,255,.25); --lg-track:rgba(118,118,128,.10); --lg-glow:rgba(255,92,60,.38);
-  --lg-day:rgba(118,118,128,.08); --lg-rim-o:.9;
-  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(246,247,252,.6)),var(--card);
-  -webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);
-  box-shadow:inset 0 1px 0 var(--lg-hl),inset 0 0 0 .5px var(--lg-edge),0 0 0 .5px var(--lg-line),0 2px 4px rgba(0,0,0,.03),0 14px 40px rgba(30,40,80,.09);
-  border-radius:26px;isolation:isolate}
-/* slow-moving light under the glass: warm where the ring is, a cool wash opposite */
-#ytdBox::before{content:"";position:absolute;inset:-25%;z-index:-1;pointer-events:none;
-  background:radial-gradient(38% 34% at 24% 30%,var(--lg-tint1),transparent 70%),radial-gradient(30% 30% at 42% 52%,var(--lg-tint2),transparent 70%),radial-gradient(40% 36% at 82% 78%,var(--lg-tint3),transparent 72%);
-  filter:blur(18px);animation:lgDrift 22s ease-in-out infinite alternate}
-@keyframes lgDrift{0%{transform:translate3d(-3%,-2%,0) scale(1)}50%{transform:translate3d(2%,3%,0) scale(1.06)}100%{transform:translate3d(4%,-1%,0) scale(1.02)}}
-#ytdBox .flip{position:relative;z-index:1}
-#ytdBox h3{color:var(--label);opacity:.72;letter-spacing:-.005em}
-
-/* the ring: liquid running round a glass tube, with a lens in the middle */
+/* "2026 so far": a plain card, the ring in neon orange to pink with a soft glow, the three figures marked with neon bars */
 #ytdBox .ring{overflow:visible}
-#ytdBox .ring .lg-lens{fill:url(#ringLens);stroke:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.06))}
-#ytdBox .ring .track{stroke:var(--lg-track)}
-#ytdBox .ring .arc{filter:drop-shadow(0 2px 6px var(--lg-glow)) drop-shadow(0 0 1px rgba(255,255,255,.4))}
-#ytdBox .ring .lg-sheen{stroke:url(#ringSheen);opacity:.85;pointer-events:none}
-#ytdBox .ring .lg-rim{stroke:url(#ringRim);opacity:var(--lg-rim-o);pointer-events:none}
-#ytdBox .ring-num{letter-spacing:-.035em;font-weight:700}
-
-/* the three figures: small glass tiles */
-#ytdBox .ring-legend{gap:8px}
-#ytdBox .ring-legend > div{position:relative;padding:10px 14px 10px 16px;border-radius:16px;background:var(--lg-chip);
-  box-shadow:inset 0 1px 0 var(--lg-chip-hl),inset 0 0 0 .5px var(--lg-edge),0 0 0 .5px var(--lg-line),0 4px 14px rgba(0,0,0,.04);
-  -webkit-backdrop-filter:blur(16px) saturate(170%);backdrop-filter:blur(16px) saturate(170%)}
-#ytdBox .ring-legend > div::before{content:"";position:absolute;left:7px;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--lg-bar,linear-gradient(#FFB340,#FF2D6F))}
-#ytdBox .ring-legend > div:nth-child(2){--lg-bar:linear-gradient(var(--label3),var(--label3))}
-#ytdBox .ring-legend > div:nth-child(3){--lg-bar:linear-gradient(#5AC8FA,#007AFF)}
-@media (min-width:901px){#ytdBox .ring-legend{gap:10px}#ytdBox .ring-legend > div{padding:12px 16px 12px 18px}}
-
-/* calendar: month buttons, days and the detail line as glass */
-#ytdBox .cal-nav h3{opacity:1}
-#ytdBox .cal-btn{border-radius:50%;background:var(--lg-chip);
-  box-shadow:inset 0 1px 0 var(--lg-chip-hl),inset 0 0 0 .5px var(--lg-edge),0 0 0 .5px var(--lg-line),0 3px 10px rgba(0,0,0,.06);
-  -webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);transition:background .25s ease,transform .25s cubic-bezier(.3,1.4,.5,1)}
-#ytdBox .cal-btn:not(:disabled):active{transform:scale(.92)}
-#ytdBox .cal-btn:disabled{opacity:.55}
-@media (hover:hover){#ytdBox .cal-btn:not(:disabled):hover{background:var(--lg-chip-hover)}}
-#ytdBox .cal-day{--lg-ring:0 0 transparent;border-radius:12px;
-  background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0) 60%),color-mix(in srgb, var(--mbar) var(--h), var(--lg-day));
-  box-shadow:var(--lg-ring),inset 0 1px 0 rgba(255,255,255,.55),inset 0 0 0 .5px rgba(255,255,255,.35),0 0 0 .5px var(--lg-line);
-  transition:transform .3s cubic-bezier(.3,1.4,.5,1),filter .2s ease,box-shadow .2s ease}
-#ytdBox .cal-day.l4{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 55%),var(--mbar4);box-shadow:var(--lg-ring),inset 0 1px 0 rgba(255,255,255,.45),0 4px 12px color-mix(in srgb,var(--mbar4) 35%,transparent)}
-#ytdBox .cal-day.future,#ytdBox .cal-day.nodata{background:none;box-shadow:inset 0 0 0 .5px var(--lg-line)}
-#ytdBox .cal-day.latest{--lg-ring:inset 0 0 0 2px var(--blue)}
-#ytdBox .cal-day.on{--lg-ring:inset 0 0 0 2px var(--label);transform:scale(1.04)}
-#ytdBox .cal-day .mk.busy,#ytdBox .cal-day .mk.new{box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 1px 3px rgba(0,0,0,.15)}
-#ytdBox .cal-day:not(.future):not(.nodata):active{transform:scale(.95)}
-#ytdBox .cal-detail{padding:10px 14px;border-radius:16px;background:var(--lg-chip);
-  box-shadow:inset 0 1px 0 var(--lg-chip-hl),inset 0 0 0 .5px var(--lg-edge),0 0 0 .5px var(--lg-line)}
-#ytdBox .cal-key i{border-radius:5px;background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,0) 60%),color-mix(in srgb, var(--mbar) var(--h), var(--lg-day));box-shadow:inset 0 0 0 .5px rgba(255,255,255,.4),0 0 0 .5px var(--lg-line)}
-#ytdBox .cal-key i.k4{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 55%),var(--mbar4)}
-@media (max-width:420px){#ytdBox .cal-day{border-radius:10px}#ytdBox .ring-legend > div{padding:8px 10px 8px 14px;border-radius:14px}#ytdBox .ring-legend > div::before{left:6px;top:10px;bottom:10px}}
-
-/* night */
-:root[data-theme="dark"] #ytdBox{
-  --lg-tint1:rgba(255,149,0,.16); --lg-tint2:rgba(255,45,111,.12); --lg-tint3:rgba(10,132,255,.16);
-  --lg-hl:rgba(255,255,255,.16); --lg-edge:rgba(255,255,255,.10); --lg-line:rgba(0,0,0,.35);
-  --lg-chip:rgba(255,255,255,.07); --lg-chip-hl:rgba(255,255,255,.14); --lg-chip-hover:rgba(255,255,255,.12);
-  --lg-lens1:rgba(255,255,255,.10); --lg-lens2:rgba(255,255,255,.02); --lg-track:rgba(255,255,255,.08); --lg-glow:rgba(255,92,60,.5);
-  --lg-day:rgba(255,255,255,.06); --lg-rim-o:.35;
-  background:linear-gradient(160deg,rgba(58,58,64,.62),rgba(30,30,34,.55));box-shadow:inset 0 1px 0 var(--lg-hl),inset 0 0 0 .5px var(--lg-edge),0 1px 2px rgba(0,0,0,.4),0 14px 40px rgba(0,0,0,.5)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #ytdBox{
-  --lg-tint1:rgba(255,149,0,.16); --lg-tint2:rgba(255,45,111,.12); --lg-tint3:rgba(10,132,255,.16);
-  --lg-hl:rgba(255,255,255,.16); --lg-edge:rgba(255,255,255,.10); --lg-line:rgba(0,0,0,.35);
-  --lg-chip:rgba(255,255,255,.07); --lg-chip-hl:rgba(255,255,255,.14); --lg-chip-hover:rgba(255,255,255,.12);
-  --lg-lens1:rgba(255,255,255,.10); --lg-lens2:rgba(255,255,255,.02); --lg-track:rgba(255,255,255,.08); --lg-glow:rgba(255,92,60,.5);
-  --lg-day:rgba(255,255,255,.06); --lg-rim-o:.35;
-  background:linear-gradient(160deg,rgba(58,58,64,.62),rgba(30,30,34,.55));box-shadow:inset 0 1px 0 var(--lg-hl),inset 0 0 0 .5px var(--lg-edge),0 1px 2px rgba(0,0,0,.4),0 14px 40px rgba(0,0,0,.5)}}
-:root[data-theme="dark"] #ytdBox .cal-day{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 60%),color-mix(in srgb, var(--mbar) var(--h), var(--lg-day));box-shadow:var(--lg-ring),inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 .5px rgba(255,255,255,.06)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #ytdBox .cal-day{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 60%),color-mix(in srgb, var(--mbar) var(--h), var(--lg-day));box-shadow:var(--lg-ring),inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 .5px rgba(255,255,255,.06)}}
-:root[data-theme="dark"] #ytdBox .cal-day.l4{background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 55%),var(--mbar4)}
-:root[data-theme="dark"] #ytdBox .cal-day.future,:root[data-theme="dark"] #ytdBox .cal-day.nodata{background:none;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.06)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #ytdBox .cal-day.l4{background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 55%),var(--mbar4)}
-  :root:not([data-theme="light"]) #ytdBox .cal-day.future,:root:not([data-theme="light"]) #ytdBox .cal-day.nodata{background:none;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.06)}
-  :root:not([data-theme="light"]) #ytdBox .cal-day .mk.busy,:root:not([data-theme="light"]) #ytdBox .cal-day .mk.new{box-shadow:0 0 0 1.5px rgba(28,28,30,.9)}}
-:root[data-theme="dark"] #ytdBox .cal-day .mk.busy,:root[data-theme="dark"] #ytdBox .cal-day .mk.new{box-shadow:0 0 0 1.5px rgba(28,28,30,.9)}
-
-@media (prefers-reduced-motion:reduce){#ytdBox::before{animation:none}#ytdBox .cal-day,#ytdBox .cal-btn{transition:none}#ytdBox .cal-day.on{transform:none}}
-@media (prefers-reduced-transparency:reduce){#ytdBox,#ytdBox .cal-btn,#ytdBox .ring-legend > div{-webkit-backdrop-filter:none;backdrop-filter:none}#ytdBox::before{display:none}#ytdBox{background:var(--card)}}
+#ytdBox .ring .arc{filter:drop-shadow(0 0 8px rgba(255,64,110,.55))}
+#ytdBox .ring-num{letter-spacing:-.035em}
+#ytdBox .ring-legend > div{position:relative;padding-left:14px}
+#ytdBox .ring-legend > div::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:3px;border-radius:3px;background:linear-gradient(#FF9F0A,#FF2D92);box-shadow:0 0 6px rgba(255,45,146,.55)}
+#ytdBox .ring-legend > div:nth-child(2)::before{background:var(--label3);box-shadow:none}
+#ytdBox .ring-legend > div:nth-child(3)::before{background:linear-gradient(#5AC8FA,#0A84FF);box-shadow:0 0 6px rgba(10,132,255,.6)}
 /* the graphs in bright iOS colours: blues, pinks and oranges with a soft neon glow */
 .mb .key-row i.k-cur{background:linear-gradient(90deg,#5AC8FA,#0A84FF);height:4px;box-shadow:0 0 6px rgba(10,132,255,.7)}
 .mb .key-row i.k-last{background:linear-gradient(90deg,#FF9F0A,#FF2D92);height:4px;box-shadow:0 0 6px rgba(255,45,146,.6)}
@@ -1356,16 +1276,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
             <div class="flip-h"><h3 id="ringYear">This year so far</h3><button type="button" class="flip-go" id="flipCal" aria-controls="calFace">Calendar<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>
             <div class="ring-wrap">
               <svg class="ring" viewBox="0 0 170 170" role="img" id="ringSvg" aria-label="This year against last year">
-                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB340"/><stop offset=".55" stop-color="#FF6B3D"/><stop offset="1" stop-color="#FF2D6F"/></linearGradient>
-                  <radialGradient id="ringLens" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="var(--lg-lens1)"/><stop offset="1" stop-color="var(--lg-lens2)"/></radialGradient>
-                  <linearGradient id="ringRim" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset=".8" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".35"/></linearGradient>
-                  <linearGradient id="ringSheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
-                <circle class="lg-lens" cx="85" cy="85" r="61"/>
+                <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F0A"/><stop offset=".55" stop-color="#FF5A5F"/><stop offset="1" stop-color="#FF2D92"/></linearGradient></defs>
                 <circle class="track" cx="85" cy="85" r="72" stroke-width="18"/>
                 <circle class="arc" id="ringArc" cx="85" cy="85" r="72" stroke-width="18" transform="rotate(-90 85 85)"/>
-                <circle class="lg-sheen" cx="85" cy="85" r="76.5" stroke-width="3.2"/>
-                <circle class="lg-rim" cx="85" cy="85" r="81" stroke-width=".9"/>
-                <circle class="lg-rim" cx="85" cy="85" r="63" stroke-width=".9"/>
                 <text x="85" y="84" text-anchor="middle" class="ring-num" fill="var(--label)" id="ringPct">–</text>
                 <text x="85" y="108" text-anchor="middle" font-size="13" font-weight="600" fill="var(--label2)" id="ringOf">of last year</text>
                 <text x="85" y="126" text-anchor="middle" font-size="12" fill="var(--label2)" id="ringTot"></text>
