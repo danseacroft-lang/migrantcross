@@ -2024,9 +2024,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
   // Colour scales: waves and rain on the map, temperature for the reading under the pointer.
-  // Waves run from blue for a calm sea to red for a rough one, with the change around 1 to 1.5 m, where crossings become dangerous
+  // Waves stay blue for calm and moderate seas, up to about 2 m; only big seas turn orange, and red from about 3 m
   const SCALE = {
-    waves:{stops:[[0,[28,74,178]],[.5,[46,118,214]],[1,[118,168,226]],[1.5,[240,152,92]],[2,[232,82,58]],[3,[206,30,40]],[4,[150,16,36]]]},
+    waves:{stops:[[0,[28,74,178]],[.8,[46,118,214]],[1.6,[110,165,230]],[2.2,[240,170,92]],[2.8,[232,82,58]],[3.5,[206,30,40]],[4.5,[150,16,36]]]},
     rain:{stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
     temp:{stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]}
   };
