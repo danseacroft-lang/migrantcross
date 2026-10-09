@@ -77,13 +77,13 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   color-scheme:light;
   --bg:#F2F2F7; --card:#FFFFFF; --card2:#F7F7FA; --fill:rgba(118,118,128,.12); --fill2:rgba(118,118,128,.2);
   --label:#000; --label2:rgba(60,60,67,.72); --label3:rgba(60,60,67,.36); --sep:rgba(60,60,67,.18);
-  --blue:#2F4B6E; --green:#4E7A5C; --green-t:#3B6148; --orange:#A8763C; --red:#A0403A; --red-t:#8F332D; --indigo:#5A6180; --teal:#4D7A82; --pink:#8F4F5E;   /* a sober palette: slate navy, ochre, brick, sage */
-  --viz1:#2F4B6E; --viz1b:#7590B1; --viz2:#A8763C; --viz2b:#C9A06A;   /* the charts: this year in navy, last year in ochre */
+  --blue:#007AFF; --green:#34C759; --green-t:#248A3D; --orange:#FF9500; --red:#FF3B30; --red-t:#D70015; --indigo:#5856D6; --teal:#30B0C7; --pink:#FF2D55;
   --glass:rgba(255,255,255,.72);
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(47,75,110,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
-  --seg-on:#FFFFFF; --orange-t:#87581F; --heat1:#D3DBE5; --heat2:#9FB1C6; --heat3:#6681A2; --heat4:#2F4B6E;   /* pressed button, orange text, the four shades of the year in squares */
-  --age1:#CDD1DB; --age2:#A9AFBF; --age3:#868DA2; --age4:#636A84;   /* the age bands in Who Is Crossing, youngest lightest */
+  --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#D3DBE5; --heat2:#9FB1C6; --heat3:#6681A2; --heat4:#2F4B6E;   /* pressed button, orange text, the four shades of the year in squares */
+  --age1:#CDD1DB; --age2:#A9AFBF; --age3:#868DA2; --age4:#636A84;
+  --viz1:#2F4B6E; --viz1b:#7590B1; --viz2:#A8763C; --viz2b:#C9A06A; --viz3:#4D7A82; --viz4:#8F4F5E;   /* the graphs: a sober palette of slate navy, ochre, teal and rose */   /* the age bands in Who Is Crossing, youngest lightest */
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
   --round:var(--font);   /* one font across the site: Helvetica Neue, as on Ventusky (Arial where it is missing) */
 }
@@ -91,25 +91,25 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   color-scheme:dark;
   --bg:#000; --card:#1C1C1E; --card2:#232326; --fill:rgba(118,118,128,.24); --fill2:rgba(118,118,128,.32);
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
-  --blue:#8BA6C7; --green:#86AE92; --green-t:#93BA9F; --orange:#CFA46E; --red:#D07A70; --red-t:#DA8A80; --indigo:#A1A7C2; --teal:#86B2B8; --pink:#C4909C;
-  --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E;
+  --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
-  --seg-on:#636366; --orange-t:#D6AD78; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
+  --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
   --age1:#4C546B; --age2:#6B738B; --age3:#9097AE; --age4:#B7BCCB;
+  --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E; --viz3:#86B2B8; --viz4:#C4909C;
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#000; --card:#1C1C1E; --card2:#232326; --fill:rgba(118,118,128,.24); --fill2:rgba(118,118,128,.32);
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
-  --blue:#8BA6C7; --green:#86AE92; --green-t:#93BA9F; --orange:#CFA46E; --red:#D07A70; --red-t:#DA8A80; --indigo:#A1A7C2; --teal:#86B2B8; --pink:#C4909C;
-  --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E;
+  --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
   --glass:rgba(30,30,32,.66);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
-  --seg-on:#636366; --orange-t:#D6AD78; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
+  --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
   --age1:#4C546B; --age2:#6B738B; --age3:#9097AE; --age4:#B7BCCB;
+  --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E; --viz3:#86B2B8; --viz4:#C4909C;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -152,15 +152,15 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-town.r2 span{font-weight:600}
 .am-town.r4 span,.am-town.r5 span{font-size:11px;bottom:6px}
 .am-town.r4 i,.am-town.r5 i{width:6px;height:6px;left:-3px;top:-3px;border-width:1.4px}
-.am-town.cape i{border-color:#C9A06A}
+.am-town.cape i{border-color:#FF9F0A}
 .am-area span{position:absolute;left:0;top:0;transform:translate(-50%,-50%)}
 .am-area.land span{font:600 11px/1 var(--font);letter-spacing:.24em;color:rgba(26,43,76,.42)}
 .am-area.sea span{font:italic 500 13px/1 var(--font);letter-spacing:.02em;color:rgba(255,255,255,.82);text-shadow:0 1px 3px rgba(20,30,70,.35)}
 /* main launch beaches: soft pulsing rings on the French coast */
 .am-launch{pointer-events:auto;cursor:pointer}
 .am-launch i,.am-launch b{position:absolute;border-radius:50%}
-.am-launch i{inset:8px;background:#B5823F;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 1px 4px rgba(0,0,0,.5)}
-.am-launch b{inset:0;border:2px solid rgba(168,118,60,.9);animation:launchPing 2.4s ease-out infinite}
+.am-launch i{inset:8px;background:#FF9F0A;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 1px 4px rgba(0,0,0,.5)}
+.am-launch b{inset:0;border:2px solid rgba(255,159,10,.9);animation:launchPing 2.4s ease-out infinite}
 @keyframes launchPing{from{transform:scale(.4);opacity:1}to{transform:scale(1.5);opacity:0}}
 @media (prefers-reduced-motion:reduce){.am-launch b{opacity:.5}}
 .am-launch-tip{font:500 12px/1.35 var(--font);border-radius:10px;padding:7px 10px;width:200px;white-space:normal}
@@ -185,7 +185,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .ves-list .vl-none{padding:2px 14px 13px;color:var(--label2);font-size:.765rem}
 .ves-list.none .vl-h i{background:var(--label3);box-shadow:none;animation:none}   /* nothing out there: the live dot rests grey */
 .ves-list.none .vl-h span{display:none}
-.ves-list .vl-h i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent);animation:pulse 1.6s ease-in-out infinite}
+.ves-list .vl-h i{width:7px;height:7px;border-radius:50%;background:#30D158;box-shadow:0 0 0 3px rgba(48,209,88,.25);animation:pulse 1.6s ease-in-out infinite}
 .ves-list .vl-h b{font-size:.824rem;font-weight:600;letter-spacing:-.02em}
 .ves-list .vl-h span{margin-left:auto;margin-right:2px;min-width:20px;padding:1px 7px;border-radius:99px;background:var(--fill);color:var(--label2);font-weight:600;font-size:.706rem;text-align:center;font-variant-numeric:tabular-nums}
 .ves-list ul{list-style:none;margin:0;padding:0 6px 6px;overflow-y:auto;overscroll-behavior:contain}
@@ -226,7 +226,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .live-tip.out{animation:ltOut .22s ease-in both}
 @keyframes ltOut{to{opacity:0;transform:translate(-50%,-50%) scale(.95)}}
 @media (prefers-reduced-motion:reduce){.live-tip,.live-tip.out{animation-duration:.01s}}
-.live-tip .lt-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(180deg,#C9A06A,#A8763C);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.15)}
+.live-tip .lt-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(180deg,#FFD60A,#FF9F0A);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.15)}
 .live-tip .lt-ic svg{width:24px;height:24px}
 .live-tip h3{margin:1px 0 2px;font-size:.882rem;font-weight:600;letter-spacing:-.02em}
 .live-tip p{margin:0;color:var(--label2)}
@@ -239,7 +239,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .live-tip button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .mp-key{display:grid;grid-template-columns:repeat(2,9px);gap:4px;padding:4px 0 0 5px}
 
-.am-ves.rescue,.lv-rescue{--c:#D4A84A}.am-ves.border,.lv-border{--c:#6F93BD}.am-ves.navy,.lv-navy{--c:#8D93AE}.am-ves.aircraft,.lv-aircraft{--c:#B8606A}
+.am-ves.rescue,.lv-rescue{--c:#FFCC00}.am-ves.border,.lv-border{--c:#0A84FF}.am-ves.navy,.lv-navy{--c:#5E5CE6}.am-ves.aircraft,.lv-aircraft{--c:#FF2D55}
 .mp-key i{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1.5px rgba(255,255,255,.9)}
 /* with a mouse: the rain, wave height or temperature under the pointer */
 .am-hover{position:absolute;z-index:4;left:0;top:0;pointer-events:none;display:flex;align-items:center;gap:7px;padding:6px 11px 6px 8px;border-radius:999px;white-space:nowrap;
@@ -259,7 +259,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-sheet .am-sheet-in .wp-stats{margin-right:-30px}
 /* the dropped pin where you tap */
 .am-pin{pointer-events:none}
-.am-pin i{position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50%;background:#A0403A;box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4);animation:pinDrop .35s cubic-bezier(.3,1.5,.5,1) both}
+.am-pin i{position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50%;background:#FF3B30;box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4);animation:pinDrop .35s cubic-bezier(.3,1.5,.5,1) both}
 .am-pin i::after{content:"";position:absolute;left:5px;top:5px;width:6px;height:6px;border-radius:50%;background:#fff}
 .am-pin b{position:absolute;left:10px;top:15px;width:2px;height:13px;border-radius:1px;background:linear-gradient(#8E8E93,#C7C7CC)}
 .am-pin s{position:absolute;left:7px;top:26px;width:8px;height:4px;border-radius:50%;background:rgba(0,0,0,.4);filter:blur(1px)}
@@ -283,7 +283,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .map-news{position:absolute;z-index:4;top:12px;left:12px;right:12px;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 10px;border-radius:16px;color:#fff;overflow:hidden;isolation:isolate;
   background:rgba(20,20,24,.55);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 6px 20px rgba(0,0,0,.25);animation:mnDrop .5s cubic-bezier(.2,.9,.3,1.12) both}
 @keyframes mnDrop{from{transform:translateY(-130%);opacity:0}}
-.map-news::after{content:"";position:absolute;inset:0;z-index:-1;background:#A0403A;opacity:0;pointer-events:none}
+.map-news::after{content:"";position:absolute;inset:0;z-index:-1;background:#FF3B30;opacity:0;pointer-events:none}
 .map-news.flash::after{animation:mnBlink 1s ease-in-out .4s 4}
 @keyframes mnBlink{0%,100%{opacity:0}45%{opacity:.55}}
 /* the two slides sit on top of each other, so the strip stays the same height as they swap */
@@ -293,11 +293,11 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .mn-slide.off.leave{animation:mnOut .35s ease-in both}
 .mn-slide.in{animation:mnIn .5s cubic-bezier(.2,.9,.3,1) .12s both}
 @keyframes mnOut{from{visibility:visible}to{transform:translateY(-80%);opacity:0;visibility:hidden}}
-.mn-tag{flex:none;display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:#A0403A;font:700 .647rem/1 var(--font);letter-spacing:.06em;text-transform:uppercase}
+.mn-tag{flex:none;display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:#FF3B30;font:700 .647rem/1 var(--font);letter-spacing:.06em;text-transform:uppercase}
 .mn-tag i{position:relative;width:7px;height:7px;border-radius:50%;background:#fff}
 .mn-tag i::after{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;animation:nbPing 1.6s ease-out infinite}
 @keyframes nbPing{from{transform:scale(1);opacity:.8}to{transform:scale(2.8);opacity:0}}
-.mn-fig .mn-tag{background:#3E5D84;padding-left:6px}
+.mn-fig .mn-tag{background:#0A84FF;padding-left:6px}
 .mn-stage{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px}
 .mn-stage.in{animation:mnIn .45s cubic-bezier(.2,.9,.3,1) both}
 @keyframes mnIn{from{transform:translateY(70%);opacity:0}}
@@ -327,7 +327,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
    "Downloading new figures" instead */
 .chip-fu .fig-ring,.chip-fu.dl > i{display:none}
 .chip-fu.dl .fig-ring{display:block}
-.chip-fu.stale > i{background:var(--orange);box-shadow:0 0 0 3px rgba(168,118,60,.25)}
+.chip-fu.stale > i{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25)}
 .kicker{font:600 .824rem/1.2 var(--font);letter-spacing:.02em;text-transform:uppercase;opacity:.85;text-shadow:0 1px 8px rgba(0,0,0,.4)}
 /* the latest day as a calendar tile, as in On This Day */
 .hero-quiet{display:flex;align-items:center;gap:18px;margin:6px 0 2px}
@@ -342,10 +342,10 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(28,28,30,.34);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
   font-size:.882rem;font-weight:600;color:#fff;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25)}
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(48,209,88,.25)}
-.chip i.moderate{background:var(--orange);box-shadow:0 0 0 3px rgba(168,118,60,.25)}
+.chip i.moderate{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25)}
 .chip i.rough{background:var(--red);box-shadow:0 0 0 3px rgba(255,69,58,.25)}
-.chip i.rep{background:var(--orange);box-shadow:0 0 0 3px rgba(168,118,60,.25);animation:repPulse 2s ease-in-out infinite}
-@keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(168,118,60,0)}}
+.chip i.rep{background:var(--orange);box-shadow:0 0 0 3px rgba(255,159,10,.25);animation:repPulse 2s ease-in-out infinite}
+@keyframes repPulse{50%{box-shadow:0 0 0 6px rgba(255,159,10,0)}}
 a.chip{text-decoration:none;color:inherit;white-space:nowrap}
 .chip i.none,.chip i.wait{background:rgba(255,255,255,.45);box-shadow:none}   /* no reading, or still loading */
 .chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
@@ -411,13 +411,13 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .lx-strip i{position:relative;flex:1;min-height:3px;border-radius:3px 3px 0 0;background:var(--fill2)}
 .lx-strip i.z{min-height:2px}   /* no crossings: a flat line, lower than any real day */
 .lx-strip i b{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:3px;font:600 .706rem/1 var(--font);color:var(--label2);white-space:nowrap}
-.lx-strip i.x{background:var(--blue)}.lx-strip i.lx{background:var(--orange)}
+.lx-strip i.x{background:var(--viz1)}.lx-strip i.lx{background:var(--viz2)}
 .lx-axis{display:flex;justify-content:space-between;font-size:.706rem;color:var(--label2);font-weight:600;margin-bottom:12px}
 .lx-pop .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
 .mp-pop{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
 .mp-pop .wp-days{margin-bottom:10px}
 .mp-live{display:flex;align-items:center;gap:7px;font-weight:600;font-size:.824rem;color:var(--label);margin-top:10px}
-.mp-live i{width:8px;height:8px;border-radius:50%;background:#B04A42;box-shadow:0 0 0 3px rgba(160,64,58,.25);animation:pulse 1.6s ease-in-out infinite}
+.mp-live i{width:8px;height:8px;border-radius:50%;background:#FF3B30;box-shadow:0 0 0 3px rgba(255,59,48,.25);animation:pulse 1.6s ease-in-out infinite}
 .mp-boats{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:10px 0 2px;border-top:.5px solid var(--sep)}
 .mp-boats svg{width:30px;height:30px}
 .info-pop .mp-boats p{margin:0}
@@ -482,9 +482,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
 .b-week{grid-column:span 2}.b-ring{grid-column:span 2;grid-row:span 2}
 .spark{display:flex;align-items:flex-end;gap:6px;height:64px;margin-top:24px;position:relative;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-.spark span{flex:1;border-radius:6px;background:var(--blue);min-height:3px;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .2s ease}
+.spark span{flex:1;border-radius:6px;background:var(--viz1);min-height:3px;transform-origin:bottom;transform:scaleY(0);transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .2s ease}
 .spark span.zero{background:var(--fill2)}
-.spark span.last:not(.zero){background:var(--orange)}   /* a quiet latest day stays a grey stub */
+.spark span.last:not(.zero){background:var(--viz2)}   /* a quiet latest day stays a grey stub */
 .spark b{position:absolute;transform:translateX(-50%);font:600 .765rem/1 var(--font);color:var(--label);pointer-events:none}   /* the peak value */
 .spark.picking span:not(.sel){opacity:.4}   /* the day being read stands out */
 .on .spark span{transform:scaleY(1)}
@@ -567,9 +567,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .otd-years .oy{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}   /* each year is a button: tap to read it above */
 .otd-years .oy[aria-pressed=true] em{color:var(--label)}
 .otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
-.otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--blue);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--viz1);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .otd-years i.zero{background:var(--fill2)}
-.otd-years i.last:not(.zero){background:var(--orange)}   /* a quiet latest year stays a grey stub */
+.otd-years i.last:not(.zero){background:var(--viz2)}   /* a quiet latest year stays a grey stub */
 .on .otd-years i{transform:scaleY(1)}
 .otd-years b{font:600 .706rem/1 var(--round);white-space:nowrap}
 .otd-years em{font-style:normal;font-size:.706rem;color:var(--label2);font-weight:600}
@@ -585,15 +585,15 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .seg button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .chart{position:relative;margin-top:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .chart svg{display:block;width:100%;height:auto;overflow:visible}
-.chart .line{fill:none;stroke:var(--blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .line{fill:none;stroke:var(--viz1);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
 .chart .grid{stroke:var(--sep);stroke-width:.6}
 .chart text{fill:var(--label2);font:500 12px var(--font)}
 .chart .cursor{stroke:var(--label3);stroke-width:1}
-.chart .dot{fill:var(--card);stroke:var(--blue);stroke-width:3}
+.chart .dot{fill:var(--card);stroke:var(--viz1);stroke-width:3}
 .chart #chartBars rect{opacity:.5;transition:opacity .2s}
 .chart #chartBars rect.on,.chart #chartBars rect.pk{opacity:1}
 .chart .has-sel #chartBars rect:not(.on){opacity:.3}   /* the other days dim while one is picked */
-.chart .trend{fill:none;stroke:var(--blue);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 2px var(--card))}   /* the 7-day average over the bars */
+.chart .trend{fill:none;stroke:var(--viz2);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 2px var(--card))}   /* the 7-day average over the bars */
 .chart .avg{stroke:var(--label3);stroke-width:1;stroke-dasharray:3 4}
 .chart text.avg-t,.chart text.peak{paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round}   /* a halo, so the labels read over the bars */
 .chart text.avg-t{fill:var(--label2);font:600 11px var(--font)}
@@ -617,7 +617,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .heat i.l2,.heat-scale i.l2{background:var(--heat2)}
 .heat i.l3,.heat-scale i.l3{background:var(--heat3)}
 .heat i.l4,.heat-scale i.l4{background:var(--heat4)}
-.heat i.pk{box-shadow:0 0 0 2px var(--orange)}
+.heat i.pk{box-shadow:0 0 0 2px var(--viz2)}
 .heat i.fut{background:none;box-shadow:inset 0 0 0 1px var(--sep)}
 @media (hover:hover){.heat i:hover{outline:2px solid var(--label);outline-offset:1px}}
 .heat i.sel{outline:2px solid var(--label);outline-offset:1px}
@@ -636,8 +636,8 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .yr b{font-weight:600}
 .yr .n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
 .yr .track{position:relative;height:22px;border-radius:7px;background:var(--fill);overflow:hidden}
-.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--blue);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
-.yr.cur .fill{background:var(--orange)}
+.yr .fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:7px;background:var(--viz1);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.yr.cur .fill{background:var(--viz2)}
 .yr .mark{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--label);opacity:.55}
 
 /* ------------------------------------------------------------ who, per boat, returns, records */
@@ -681,13 +681,13 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .pb-boats em b{display:block;font-size:.882rem;color:var(--label);font-variant-numeric:tabular-nums}
 .pb-boats svg{display:block;height:auto;overflow:visible}
 .pb-hull{fill:var(--fill);stroke:var(--fill2);stroke-width:1.5}
-.pb-p{fill:var(--orange);opacity:0;transition:opacity .25s ease}
+.pb-p{fill:var(--viz2);opacity:0;transition:opacity .25s ease}
 .on .pb-p{opacity:1}
 .pb-line{margin-top:16px;padding-top:12px;border-top:.5px solid var(--sep)}
 .pb-line svg{display:block;width:100%;height:auto;overflow:visible}
-.pb-line .ln{fill:none;stroke:var(--teal);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.pb-line .ar{fill:var(--teal);opacity:.14}
-.pb-line .dt{fill:var(--teal);stroke:var(--card);stroke-width:2}
+.pb-line .ln{fill:none;stroke:var(--viz3);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pb-line .ar{fill:var(--viz3);opacity:.14}
+.pb-line .dt{fill:var(--viz3);stroke:var(--card);stroke-width:2}
 .pb-line .hit{fill:transparent;cursor:default}
 .pb-line .hit:hover+.dt{r:5}
 .pb-line text{font:600 10px var(--font);fill:var(--label2);font-variant-numeric:tabular-nums}
@@ -741,7 +741,7 @@ footer strong{color:var(--label);font-weight:600}
 .side-share .ss-b svg{position:absolute;left:18px;top:50%;width:19px;height:19px;transform:translateY(-50%)}
 @media (hover:hover){.side-share .ss-b:hover{background:#ECECF0}}
 .side-share .ss-b:active{transform:scale(.98)}
-.side-share .ss-b:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.side-share .ss-b:focus-visible{outline:2px solid #0A84FF;outline-offset:3px}
 .side-share p{margin:16px 22px 0;color:rgba(235,235,245,.6);font-size:.765rem;line-height:1.45;text-align:center}
 .side-share .ss-art{position:relative;flex:1;min-height:0;margin-top:12px}
 .side-share .ss-art svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;max-height:100%;display:block}
@@ -767,19 +767,19 @@ footer strong{color:var(--label);font-weight:600}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
 @media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
-/* Report Sightings: one clean pill beside the theme switch, the same height. It turns navy once as the page opens,
-   and under the mouse or while the form is open */
+/* Report Sightings: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
+   and glows neon orange under the mouse or while the form is open */
 .top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
 .rs-pill{display:inline-flex;border-radius:999px;color:var(--label)}
-.rs-btn{--neo:#2F4B6E;appearance:none;border:0;color:inherit;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;
+.rs-btn{--neo:linear-gradient(135deg,#FFB340,#FF7A00);appearance:none;border:0;color:inherit;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;
   background:var(--fill,rgba(118,118,128,.12));font:600 14px/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
   transition:background .2s ease,color .2s ease,box-shadow .25s ease,transform .15s ease;animation:rsFlash 1.6s ease-in-out .9s 1 backwards}
 .rs-btn svg{width:16px;height:16px;flex:none}
-.rs-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.rs-btn[aria-expanded="true"]{background:var(--neo);color:#fff}
-@media (hover:hover){.rs-btn:hover{background:var(--neo);color:#fff}}
+.rs-btn:focus-visible{outline:2px solid #FF9F0A;outline-offset:2px}
+.rs-btn[aria-expanded="true"]{background:var(--neo);color:#fff;box-shadow:0 0 0 .5px rgba(255,200,120,.7) inset,0 0 18px rgba(255,140,0,.55)}
+@media (hover:hover){.rs-btn:hover{background:var(--neo);color:#fff;box-shadow:0 0 0 .5px rgba(255,200,120,.7) inset,0 0 10px rgba(255,159,10,.7),0 0 26px rgba(255,122,0,.45)}}
 .rs-btn:active{transform:scale(.97)}
-@keyframes rsFlash{0%,100%{}35%,65%{background:var(--neo);color:#fff}}
+@keyframes rsFlash{0%,45%,100%{box-shadow:0 0 0 0 rgba(255,140,0,0)}20%,70%{background:var(--neo);color:#fff;box-shadow:0 0 22px rgba(255,140,0,.6)}}
 @media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
 /* the form: a frosted card in the middle of the screen, over a soft veil */
 .rs-veil{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:fadeIn .2s ease both}
@@ -789,7 +789,7 @@ footer strong{color:var(--label);font-weight:600}
   box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 0 0 .5px var(--sep),0 30px 70px rgba(0,0,0,.3);animation:rsPop .38s cubic-bezier(.2,.9,.3,1.08) both}
 @keyframes rsPop{from{opacity:0;transform:scale(.94)}}
 .rs-head{text-align:center;margin:0 8px 6px}
-.rs-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 12px;border-radius:15px;background:#2F4B6E;color:#fff;box-shadow:0 8px 20px rgba(20,35,55,.22)}
+.rs-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 12px;border-radius:15px;background:linear-gradient(180deg,#47A1FF,#007AFF);color:#fff;box-shadow:0 8px 20px rgba(0,122,255,.32)}
 .rs-icon svg{width:30px;height:30px}
 .rs-pop h2{margin:0 0 6px;font:700 1.35rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label)}
 .info-pop .rs-intro{margin:0 auto;max-width:34ch;font-size:.882rem;line-height:1.4}
@@ -875,9 +875,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.info-pop.rs-pop{background:var(--bg)}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
 /* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, roundup) */
-.mb{--mbar4:#24405F;--mbar:var(--blue);--bar-peak:var(--orange);--boat:#8C6230;--green-bg:rgba(78,122,92,.14)}
-:root[data-theme="dark"] .mb{--mbar4:#6683A8;--boat:#B98A52;--green-bg:rgba(134,174,146,.18)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--mbar4:#6683A8;--boat:#B98A52;--green-bg:rgba(134,174,146,.18)}}
+.mb{--mbar4:#24405F;--mbar:var(--viz1);--bar-peak:var(--viz2);--boat:#8C6230;--green-bg:rgba(52,199,89,.14)}
+:root[data-theme="dark"] .mb{--mbar4:#6683A8;--boat:#B98A52;--green-bg:rgba(48,209,88,.18)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--mbar4:#6683A8;--boat:#B98A52;--green-bg:rgba(48,209,88,.18)}}
 .mb .card.flush{padding:0}
 .mb .card.race-card,.mb .card.pat-card{padding:14px}
 .mb .section-h .seg{flex:none}
@@ -1012,7 +1012,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .rep-boats{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
 .mb .rep-boats svg{display:block;height:auto;overflow:visible}
 .mb .rep-boats .hl{fill:var(--fill);stroke:var(--fill2);stroke-width:1.2}
-.mb .rep-boats .pp{fill:var(--orange)}
+.mb .rep-boats .pp{fill:var(--viz2)}
 .mb .rep-none{font-size:.882rem;color:var(--label2)}
 .mb .dots{animation:fadeIn .35s ease-out}
 .mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
@@ -1122,14 +1122,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <g class="ss-swell" fill="none" stroke="#fff" stroke-linecap="round" opacity=".35" stroke-width="1.6"><path d="M150 214 q8 -5 16 0"/><path d="M200 222 q8 -5 16 0"/><path d="M20 236 q8 -5 16 0"/><path d="M240 252 q8 -5 16 0"/><path d="M90 270 q8 -5 16 0"/></g>
       <!-- a small grey dinghy, each orange dot a life jacket, as on the map -->
       <g class="ss-bob2" style="transform-origin:200px 236px"><path d="M176 236 C176 228 182 226 192 226 L216 226 C224 226 228 230 228 236 C228 242 224 244 216 244 L192 244 C182 244 176 242 176 236 Z" fill="#7C8594"/><path d="M182 236 C182 231 186 230 193 230 L215 230 C220 230 222 233 222 236 C222 240 220 240 215 240 L193 240 C186 240 182 240 182 236 Z" fill="#4A5160"/>
-        <g fill="#D08A3E"><circle cx="190" cy="233.5" r="2.6"/><circle cx="197" cy="236.5" r="2.6"/><circle cx="204" cy="233.5" r="2.6"/><circle cx="211" cy="236.5" r="2.6"/><circle cx="217" cy="234" r="2.4"/></g></g>
+        <g fill="#FF9F0A"><circle cx="190" cy="233.5" r="2.6"/><circle cx="197" cy="236.5" r="2.6"/><circle cx="204" cy="233.5" r="2.6"/><circle cx="211" cy="236.5" r="2.6"/><circle cx="217" cy="234" r="2.4"/></g></g>
       <!-- the lifeboat coming alongside -->
       <g class="ss-bob" style="transform-origin:110px 262px">
         <path d="M58 258 L150 258 L142 276 Q138 280 130 280 L74 280 Q64 280 60 270 Z" fill="#163E8C"/>
         <path d="M60 268 L148 268" stroke="#F5F5F7" stroke-width="2"/>
-        <path d="M84 258 L84 240 Q84 236 88 236 L124 236 Q130 236 132 242 L136 258 Z" fill="#C8692E"/>
+        <path d="M84 258 L84 240 Q84 236 88 236 L124 236 Q130 236 132 242 L136 258 Z" fill="#FF7A1A"/>
         <rect x="90" y="241" width="9" height="7" rx="1.5" fill="#0B1630"/><rect x="103" y="241" width="9" height="7" rx="1.5" fill="#0B1630"/><rect x="116" y="241" width="9" height="7" rx="1.5" fill="#0B1630"/>
-        <path d="M104 236 L104 222 M100 226 L108 226" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round"/><circle cx="104" cy="221" r="2.2" fill="#C9D6E4"/>
+        <path d="M104 236 L104 222 M100 226 L108 226" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round"/><circle cx="104" cy="221" r="2.2" fill="#4FC3FF"/>
       </g>
       <g class="ss-swell2" fill="none" stroke="#fff" stroke-linecap="round" opacity=".5" stroke-width="2"><path d="M40 286 q10 -6 20 0 q10 6 20 0"/><path d="M150 284 q10 -6 20 0 q10 6 20 0"/><path d="M226 292 q10 -6 20 0"/></g>
     </svg></div>
@@ -1138,7 +1138,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#2F4B6E"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#C9A06A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#2F4B6E" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#C9A06A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1382,7 +1382,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
               <div class="heat-scroll" id="heatScroll" tabindex="0" role="group" aria-label="The year in squares. Arrow keys move between days."><div class="heat" id="heat"></div></div>
               <div class="heat-foot">
                 <span class="heat-key heat-scale" role="img" aria-label="People a day: none, 1 to 99, 100 to 299, 300 to 599, 600 or more"><span><i></i>0</span><span><i class="l1"></i>1</span><span><i class="l2"></i>100</span><span><i class="l3"></i>300</span><span><i class="l4"></i>600+</span></span>
-                <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--orange)"></i>&nbsp;Busiest 10 days</span>
+                <span class="heat-key"><i style="box-shadow:0 0 0 2px var(--viz2)"></i>&nbsp;Busiest 10 days</span>
               </div>
             </div>
             <div class="dd-face" id="ddYr" role="group" aria-label="Year by year" inert>
@@ -1876,7 +1876,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       g.innerHTML = '<circle class="hit" r="24"/><circle class="ring" r="20"/><path d="M0 0 L-6 30 L6 30 Z" fill="#fff" opacity=".35" filter="url(#soft)"/>'
         + '<rect class="hull" x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472" stroke="#E5E7EB" stroke-width="1.2"/>'
         + '<rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/>'
-        + [-7, -2.5, 2, 6.5].map(y => '<circle cx="' + (y % 2 ? -1.8 : 1.8) + '" cy="' + y + '" r="2.1" fill="#D08A3E"/>').join("");
+        + [-7, -2.5, 2, 6.5].map(y => '<circle cx="' + (y % 2 ? -1.8 : 1.8) + '" cy="' + y + '" r="2.1" fill="#FF9500"/>').join("");
       boatsG.append(g);
       const a = LAUNCH[Math.floor(Math.random() * LAUNCH.length)];
       const near = LANDING.slice().sort((p, q) => Math.hypot(p[0] - a[0], p[1] - a[1]) - Math.hypot(q[0] - a[0], q[1] - a[1]));
@@ -1962,8 +1962,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Colour scales: waves and rain on the map, temperature for the reading under the pointer.
   // Waves stay blue for calm and moderate seas, up to about 2 m; only big seas turn orange, and red from about 3 m
   const SCALE = {
-    waves:{stops:[[0,[36,62,104]],[.8,[52,86,136]],[1.6,[104,134,172]],[2.2,[200,162,104]],[2.8,[184,108,74]],[3.5,[156,62,54]],[4.5,[112,38,38]]]},
-    rain:{stops:[[0,[130,158,196]],[1,[92,122,172]],[2,[110,104,156]],[5,[148,84,118]]]},
+    waves:{stops:[[0,[28,74,178]],[.8,[46,118,214]],[1.6,[110,165,230]],[2.2,[240,170,92]],[2.8,[232,82,58]],[3.5,[206,30,40]],[4.5,[150,16,36]]]},
+    rain:{stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
     temp:{stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]}
   };
   function colour(v, st){
@@ -2729,7 +2729,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const t = g.lastYear, pc = n => n / t.total * 100;
       countUp($("menV"), Math.round(pc(t.adultMen)), "%");
       const a = t.age || {}, bars = {
-        sex:[["Male", t.sex.Male, "var(--blue)"], ["Female", t.sex.Female, "var(--pink)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]],
+        sex:[["Male", t.sex.Male, "var(--viz1)"], ["Female", t.sex.Female, "var(--viz4)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]],
         age:[["17 and under", a["17 and under"], "var(--age1)"], ["18 to 24", a["18 to 24"], "var(--age2)"], ["25 to 39", a["25 to 39"], "var(--age3)"], ["40 and over", a["40 and over"], "var(--age4)"], ["Not recorded", a.Unknown, "var(--label3)"]]
       };
       // sex: 100 dots, one a person, shared out so they always add up to 100
@@ -2835,19 +2835,19 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     : c >= 51 && c <= 57 ? "drizzle" : (c >= 61 && c <= 67) || (c >= 80 && c <= 82) ? "rain" : (c >= 71 && c <= 77) || c === 85 || c === 86 ? "snow" : c >= 95 ? "storm" : "cloudy";
   // Full-colour weather symbols, in the style of Apple's multicolour SF Symbols
   function wxIcon(kind, day){
-    const sun = '<circle cx="12" cy="12" r="4.6" fill="#D4A84A"/><path d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6" stroke="#D4A84A" stroke-width="1.9" stroke-linecap="round"/>';
-    const moon = '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z" fill="#D9C68E"/>';
+    const sun = '<circle cx="12" cy="12" r="4.6" fill="#FFCC00"/><path d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M5.2 18.8l1.6-1.6M17.2 6.8l1.6-1.6" stroke="#FFCC00" stroke-width="1.9" stroke-linecap="round"/>';
+    const moon = '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.6 6.6 0 0 0 10.1 10.1Z" fill="#FFD60A"/>';
     const cloud = (t, o) => '<path' + (t ? ' transform="' + t + '"' : "") + (o ? ' opacity="' + o + '"' : "") + ' d="M7 18.5h10.2a3.8 3.8 0 0 0 .3-7.6 5.4 5.4 0 0 0-10.3-1.4A4.5 4.5 0 0 0 7 18.5z" fill="var(--cloud)" stroke="var(--cloud-edge)" stroke-width=".9"/>';
-    const up = "translate(0 -3.5)", drops = n => [0,1,2].slice(0, n).map(i => '<path d="M' + (9 + i * 3.5) + ' 18.4l-1 2.8" stroke="#6F93BD" stroke-width="1.9" stroke-linecap="round"/>').join("");
+    const up = "translate(0 -3.5)", drops = n => [0,1,2].slice(0, n).map(i => '<path d="M' + (9 + i * 3.5) + ' 18.4l-1 2.8" stroke="#0A84FF" stroke-width="1.9" stroke-linecap="round"/>').join("");
     const g = kind === "clear" ? (day ? sun : moon)
       : kind === "partly" ? '<g transform="translate(6.5 -4.5) scale(.62)">' + (day ? sun : moon) + "</g>" + cloud("translate(-1 1)")
       : kind === "cloudy" ? cloud("translate(5.5 -4.5) scale(.72)", ".65") + cloud("translate(-1 1)")
       : kind === "fog" ? cloud(up) + '<path d="M4.5 18h15M7 21.2h10" stroke="var(--cloud-edge)" stroke-width="1.9" stroke-linecap="round"/>'
       : kind === "drizzle" ? cloud(up) + drops(2)
       : kind === "rain" ? cloud(up) + drops(3)
-      : kind === "snow" ? cloud(up) + [0,1,2].map(i => '<circle cx="' + (8.5 + i * 3.5) + '" cy="' + (19.5 + (i % 2) * 1.6) + '" r="1.1" fill="#9DB6D3"/>').join("")
-      : kind === "storm" ? cloud(up) + '<path d="M12.6 14.6l-2.6 4h2.6l-1.4 4 4-5.2h-2.6l1.2-2.8z" fill="#D4A84A"/>'
-      : '<path d="M2 9c2 0 2-1.5 4-1.5S8 9 10 9s2-1.5 4-1.5S16 9 18 9s2-1.5 4-1.5M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5" fill="none" stroke="#6F93BD" stroke-width="2" stroke-linecap="round"/>';
+      : kind === "snow" ? cloud(up) + [0,1,2].map(i => '<circle cx="' + (8.5 + i * 3.5) + '" cy="' + (19.5 + (i % 2) * 1.6) + '" r="1.1" fill="#5AC8FA"/>').join("")
+      : kind === "storm" ? cloud(up) + '<path d="M12.6 14.6l-2.6 4h2.6l-1.4 4 4-5.2h-2.6l1.2-2.8z" fill="#FFCC00"/>'
+      : '<path d="M2 9c2 0 2-1.5 4-1.5S8 9 10 9s2-1.5 4-1.5S16 9 18 9s2-1.5 4-1.5M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5" fill="none" stroke="#0A84FF" stroke-width="2" stroke-linecap="round"/>';
     return '<svg viewBox="0 0 24 24" aria-hidden="true">' + g + "</svg>";
   }
   const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
@@ -2873,7 +2873,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
-      + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#D08A3E"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#D08A3E"/><circle cx="1.8" cy="2" r="2.1" fill="#D08A3E"/></g></svg><p>'
+      + '<div class="mp-boats"><svg viewBox="0 0 30 30" aria-hidden="true"><g transform="translate(15 15) rotate(-35) scale(.8)"><rect x="-7.5" y="-15" width="15" height="28" rx="7.5" fill="#5B6472"/><rect x="-4.5" y="-11" width="9" height="20" rx="4.5" fill="#3A414C"/><circle cx="1.8" cy="-7" r="2.1" fill="#FF9500"/><circle cx="-1.8" cy="-2.5" r="2.1" fill="#FF9500"/><circle cx="1.8" cy="2" r="2.1" fill="#FF9500"/></g></svg><p>'
       + (d && d.boats ? "<b>" + plural(d.boats, "boat", "boats") + ".</b> One dinghy for each small boat the Home Office recorded on " + dLong.format(parse(d.date)) + ". " : d ? "<b>No boats.</b> The Home Office recorded no crossings on " + dLong.format(parse(d.date)) + ". " : "")
       + "Hover over or tap a boat for its day's figures.</p></div>"
       + '<div class="mp-boats"><span class="mp-key" aria-hidden="true"><i class="lv-rescue"></i><i class="lv-border"></i><i class="lv-navy"></i><i class="lv-aircraft"></i></span><p><b>Live boats.</b> Lifeboats (yellow), Border Force (blue), navy ships (purple) and rescue aircraft (pink), from their AIS transponders, updated every 15 minutes.</p></div>';
