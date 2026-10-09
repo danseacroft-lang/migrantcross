@@ -111,7 +111,7 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;font-size:17px;scroll-behavior:smooth;scroll-padding-top:calc(12px + env(safe-area-inset-top,0px))}
 @supports (font: -apple-system-body) and (-webkit-touch-callout: none){html{font:-apple-system-body}}
-body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--label);font:1rem/1.35 var(--font);letter-spacing:-.022em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-kerning:normal;font-optical-sizing:auto;-webkit-tap-highlight-color:transparent}
 a{color:var(--blue);text-decoration:none}
 .num{font-variant-numeric:tabular-nums}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -142,7 +142,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 /* place names in the style of Ventusky: dark navy Helvetica, a ring for each town, bigger places in bold, names centred above */
 .am-town,.am-area{pointer-events:none;white-space:nowrap;font-family:var(--font)}
 .am-town i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;border:1.6px solid #1A2B4C;background:rgba(255,255,255,.55)}
-.am-town span{position:absolute;left:0;bottom:7px;transform:translateX(-50%);color:#1A2B4C;font:500 12px/1 var(--font);letter-spacing:0;text-shadow:0 0 2px rgba(255,255,255,.9),0 0 6px rgba(255,255,255,.6)}
+.am-town span{position:absolute;left:0;bottom:7px;transform:translateX(-50%);color:#1A2B4C;font:500 12px/1 var(--font);letter-spacing:0;text-shadow:1px 0 0 rgba(255,255,255,.6),-1px 0 0 rgba(255,255,255,.6),0 1px 0 rgba(255,255,255,.6),0 -1px 0 rgba(255,255,255,.6)}   /* a thin sharp halo rather than a soft glow, so names stay crisp over the coloured sea */
 .am-town.r1 span{font-weight:700;font-size:13px}
 .am-town.r1 i{width:10px;height:10px;left:-5px;top:-5px;border-width:2px}
 .am-town.r2 span{font-weight:600}
@@ -1601,7 +1601,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const hero = $("hero"), heroMap = $("heroMap");
   function onScroll(){
     const y = scrollY, h = hero.offsetHeight;
-    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + (y * .35).toFixed(1) + "px)"; }
+    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + Math.round(y * .35) + "px)";   /* whole pixels, so the map's text never lands between pixels and blurs */ }
   }
   addEventListener("scroll", onScroll, {passive:true}); onScroll();
 
@@ -1940,9 +1940,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const at = (r, c) => a[r * nO + c] || 0;
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
-  // Colour scales, close to Ventusky's: waves and rain on the map, temperature for the reading under the pointer
+  // Colour scales: waves and rain on the map, temperature for the reading under the pointer.
+  // Waves run from blue for a calm sea to red for a rough one, with the change around 1 to 1.5 m, where crossings become dangerous
   const SCALE = {
-    waves:{stops:[[0,[52,84,160]],[.5,[60,136,200]],[1,[70,178,170]],[1.5,[135,196,90]],[2,[228,190,60]],[3,[224,110,50]],[4,[186,46,82]]]},
+    waves:{stops:[[0,[28,74,178]],[.5,[46,118,214]],[1,[118,168,226]],[1.5,[240,152,92]],[2,[232,82,58]],[3,[206,30,40]],[4,[150,16,36]]]},
     rain:{stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
     temp:{stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]}
   };
