@@ -257,6 +257,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-sheet .am-x{position:absolute;top:12px;right:12px;background:var(--fill);color:var(--label2)}
 .am-sheet-in{font:.824rem/1.35 var(--font);padding-right:30px}
 .am-sheet .am-sheet-in .wp-stats{margin-right:-30px}
+.am-sheet .am-ves-tip .vt-stats{margin-right:-30px}
 /* the dropped pin where you tap */
 .am-pin{pointer-events:none}
 .am-pin i{position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50%;background:#FF3B30;box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4);animation:pinDrop .35s cubic-bezier(.3,1.5,.5,1) both}
@@ -1726,6 +1727,27 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     vesselLayer.clearLayers();
     const shown = [];
     const clean = t => String(t).replace(/[&<>"]/g, c => "&#" + c.charCodeAt(0) + ";");
+    // A boat's card opens on whichever side has room: clear of the map's edges and of the title, buttons, figures and this list.
+    // With no room on any side, the map moves the boat into the open middle first
+    const OFF = {top:[0, -16], bottom:[0, 16], right:[14, 0], left:[-14, 0]};
+    function fitTip(m, moved){
+      const t = m.getTooltip(), el = t && t.getElement(); if(!el) return;
+      // phones and tablets: the details slide up as a sheet from the bottom, as a weather reading does
+      if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
+        m.closeTooltip(); ptAt = null; if(pin) pin.remove();
+        return showSheet('<div class="am-ves-tip">' + t.getContent() + "</div>", "Boat details");
+      }
+      const sz = LM.getSize(), p = LM.latLngToContainerPoint(m.getLatLng()), w = el.offsetWidth, h = el.offsetHeight, g = 18, pad = 10;
+      const at = {top:[p.x - w / 2, p.y - g - h], bottom:[p.x - w / 2, p.y + g], right:[p.x + g, p.y - h / 2], left:[p.x - g - w, p.y - h / 2]};
+      const clear = ([x, y]) => x > pad && y > pad && x + w < sz.x - pad && y + h < sz.y - pad && !coverPx.some(c => x < c[2] && x + w > c[0] && y < c[3] && y + h > c[1]);
+      const dir = ["top", "bottom", "right", "left"].find(d => clear(at[d]));
+      if(dir){ if(dir !== t.options.direction){ t.options.direction = dir; t.options.offset = OFF[dir]; t.update(); } return; }
+      if(moved) return;
+      // the open middle of the map: below the title and buttons, above the figures
+      const top = Math.max(0, ...coverPx.filter(c => c[1] < sz.y / 3).map(c => c[3])), bot = Math.min(sz.y, ...coverPx.filter(c => c[1] > sz.y / 2).map(c => c[1]));
+      LM.once("moveend", () => { placeTowns(); fitTip(m, true); });
+      LM.panBy([p.x - sz.x / 2, p.y - (top + bot + h) / 2], {animate:!reduced});
+    }
     for(const v of a){
       const mins = (Date.now() - new Date(v.seen)) / 6e4;
       if(!(mins < 180) || !VESSEL_KIND[v.kind] || !official(v) || typeof v.lat !== "number" || typeof v.lon !== "number") continue;
@@ -1741,7 +1763,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           + "<div><span>Seen</span><em>" + seenN + "</em><small>" + seenU + "</small></div></div>"
           + "<p>Live from its AIS transponder" + (v.mmsi ? " · MMSI " + clean(v.mmsi) : "") + "</p>",
           {direction:"top", offset:[0, -16], className:"am-ves-tip"})
-        .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }).addTo(vesselLayer);
+        .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); })
+        .on("tooltipopen", e => fitTip(e.target)).addTo(vesselLayer);
       if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
     }
     // the list down the left, always there: only vessels out in the Channel itself (not moored in a harbour or away in the Solent),
@@ -2062,10 +2085,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
-      LM.closePopup();
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
-      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
-      if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
+      LM.closePopup(); showSheet(html, "Weather at this spot");
       return;
     }
     // keep the card clear of the title at the top
@@ -2096,6 +2116,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     box.style.transform = "translate(" + Math.round(x) + "px," + Math.round(y) + "px)";
   }
   if(LM) LM.on("popupclose", () => { if(!$("amSheet").hidden) return; ptAt = null; if(pin) pin.remove(); });
+  function showSheet(html, label){
+    const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html; sh.setAttribute("aria-label", label);
+    if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+    if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
+  }
   function closeSheet(){ $("amSheet").hidden = true; ptAt = null; if(pin) pin.remove(); }
   $("amSheetX").addEventListener("click", e => { e.stopPropagation(); closeSheet(); });
   addEventListener("keydown", e => { if(e.key === "Escape" && !$("amSheet").hidden){ e.stopImmediatePropagation(); closeSheet(); } }, true);
