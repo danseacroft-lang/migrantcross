@@ -1708,6 +1708,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // "UK Border Force", "French patrol", "French navy": a few words for the list
   const shortKind = v => { const f = flagOf(v.mmsi); return v.kind === "border" ? (f === "UK" ? "Border Force" : (f ? f + " patrol" : "Patrol")) : v.kind === "aircraft" ? "Rescue aircraft" : (f ? f + " " + (v.kind === "rescue" ? "lifeboat" : "navy") : (v.kind === "rescue" ? "Lifeboat" : "Navy")); };
   const compass = d => ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(d / 45) % 8];
+  // out at sea in the eastern Channel and the Dover Strait, from Beachy Head to Dunkirk
+  const inChannel = v => v.lat >= 50.3 && v.lat <= 51.6 && v.lon >= 0 && v.lon <= 2.7 && atSea(L.latLng(v.lat, v.lon));
   async function loadVessels(){
     vesselsAt = Date.now();
     if(!vesselLayer) return;
@@ -1732,9 +1734,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
           + "<p>Live from its AIS transponder" + (v.mmsi ? " · MMSI " + clean(v.mmsi) : "") + "</p>",
           {direction:"top", offset:[0, -16], className:"am-ves-tip"})
         .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }).addTo(vesselLayer);
-      shown.push({v, name, mins, moving, shape, m});
+      if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
     }
-    // the list down the left: newest first, only while there are vessels to show
+    // the list down the left: only vessels out in the Channel itself (not moored in a harbour or away in the Solent), newest first,
+    // and only while there are any
     const box = $("vesList"), ul = $("vesItems");
     box.hidden = !shown.length; ul.textContent = "";
     $("vesCount").textContent = shown.length || "";
