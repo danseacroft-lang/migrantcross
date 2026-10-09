@@ -767,8 +767,8 @@ footer strong{color:var(--label);font-weight:600}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
 @media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
-/* Report Sightings: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
-   and glows neon orange under the mouse or while the form is open */
+/* View Sightings: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
+   and glows neon orange under the mouse or while the comments are open */
 .top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
 .rs-pill{display:inline-flex;border-radius:999px;color:var(--label)}
 .rs-btn{--neo:linear-gradient(135deg,#FFB340,#FF7A00);appearance:none;border:0;color:inherit;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;
@@ -781,44 +781,6 @@ footer strong{color:var(--label);font-weight:600}
 .rs-btn:active{transform:scale(.97)}
 @keyframes rsFlash{0%,45%,100%{box-shadow:0 0 0 0 rgba(255,140,0,0)}20%,70%{background:var(--neo);color:#fff;box-shadow:0 0 22px rgba(255,140,0,.6)}}
 @media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
-/* the form: a frosted card in the middle of the screen, over a soft veil */
-.rs-veil{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:fadeIn .2s ease both}
-/* The sighting form: a frosted sheet in the style of iOS, with every box showing in grouped rows */
-.info-pop.rs-pop{z-index:71;inset:0;margin:auto;width:min(440px,calc(100vw - 24px));height:fit-content;max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain;padding:26px 20px 20px;border-radius:28px;transform-origin:center;
-  background:color-mix(in srgb,var(--bg) 70%,transparent);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 0 0 .5px var(--sep),0 30px 70px rgba(0,0,0,.3);animation:rsPop .38s cubic-bezier(.2,.9,.3,1.08) both}
-@keyframes rsPop{from{opacity:0;transform:scale(.94)}}
-.rs-head{text-align:center;margin:0 8px 6px}
-.rs-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 12px;border-radius:15px;background:linear-gradient(180deg,#47A1FF,#007AFF);color:#fff;box-shadow:0 8px 20px rgba(0,122,255,.32)}
-.rs-icon svg{width:30px;height:30px}
-.rs-pop h2{margin:0 0 6px;font:700 1.35rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label)}
-.info-pop .rs-intro{margin:0 auto;max-width:34ch;font-size:.882rem;line-height:1.4}
-.rs-pop:focus{outline:0}
-.rs-pop .rs-x{position:absolute;top:14px;right:14px;background:var(--fill);color:var(--label2)}
-.info-pop .rs-sec{margin:18px 0 7px 16px;font:500 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2)}
-.rs-group{border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--card) 80%,transparent);box-shadow:0 0 0 .5px var(--sep)}
-.rs-f{position:relative;display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;min-height:46px;padding:0 16px;margin:0;transition:background-color .2s ease}
-.rs-f + .rs-f::before{content:"";position:absolute;top:0;left:16px;right:0;border-top:.5px solid var(--sep)}
-.rs-f:focus-within{background:color-mix(in srgb,var(--blue) 9%,transparent)}
-.rs-f > span{font-size:1rem;color:var(--label)}
-.rs-f input,.rs-f textarea{display:block;width:100%;min-width:0;box-sizing:border-box;appearance:none;-webkit-appearance:none;margin:0;border:0;border-radius:0;background:none;outline:0;font:inherit;font-size:1rem;color:var(--label)}
-.rs-f input{min-height:46px;padding:0}
-.rs-f input::-webkit-date-and-time-value{text-align:left}
-.rs-f input[type=date],.rs-f input[type=time]{cursor:pointer}
-.rs-f.rs-area{display:block;padding:0}
-.rs-f textarea{resize:vertical;min-height:112px;padding:12px 16px;line-height:1.4}
-.rs-f input::placeholder,.rs-f textarea::placeholder{color:var(--label3)}
-.rs-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.rs-send{display:block;width:100%;margin-top:22px;appearance:none;border:0;min-height:50px;padding:0 18px;border-radius:14px;background:var(--blue);color:#fff;font:600 1.06rem/1 var(--font);letter-spacing:-.01em;cursor:pointer;transition:filter .2s ease,transform .15s ease}
-.rs-send:active:not(:disabled){transform:scale(.98)}
-.rs-send:disabled{opacity:.5;cursor:default}
-.rs-send:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.rs-send:not(:disabled):hover{filter:brightness(1.1)}}
-.rs-msg{margin:12px 0 0;text-align:center;font-size:.824rem;color:var(--label2)}
-.rs-msg:empty{display:none}
-.rs-msg.err{color:var(--red)}
-.rs-pop.sent form > :not(.rs-msg){display:none}
-.rs-pop.sent .rs-msg{margin-top:18px;font-size:.941rem;color:var(--label)}
 .top-theme button{min-height:34px;padding:0 13px}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
@@ -872,7 +834,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .spark span,.pb-p,.heat,.otd-years i{transform:none;opacity:1}
   .draw{stroke-dasharray:none;stroke-dashoffset:0}
 }
-@media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.info-pop.rs-pop{background:var(--bg)}.chip{background:rgba(0,0,0,.45)}}
+@media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
 /* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, roundup) */
 .mb{--mbar4:#24405F;--mbar:var(--viz1);--bar-peak:var(--viz2);--boat:#8C6230;--green-bg:rgba(52,199,89,.14)}
@@ -1124,13 +1086,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-list .empty{color:var(--label2)}
 @keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.sc-list li.new,.sc-pop{animation:none}}
-.rs-pill{gap:8px}
-.vs-btn{animation:none}
-@media (max-width:440px){   /* phones: the two sighting buttons share one pill and the switch tightens, so the row still fits */
-  .rs-pill{gap:0;border-radius:999px;background:var(--fill)}.rs-pill .rs-btn{padding:0 9px;background:none}.rs-pill .rs-btn[aria-expanded="true"]{background:var(--neo)}
-  .top-row .top-theme button{padding:0 7px}.top-row{gap:6px}.top-act{gap:6px}}
-@media (max-width:360px){.top-brand h1{font-size:.9rem}.top-row .top-theme button{padding:0 5px}}
-@media (max-width:340px){.top-brand h1{font-size:.8rem}.rs-pill .rs-btn{padding:0 7px}.top-row .top-theme button{padding:0 4px}}   /* only Report a Sighting flashes as the page opens */
 </style>
 </head>
 <body>
@@ -1183,7 +1138,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="rsBtn" aria-haspopup="dialog" aria-controls="rsPop" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report a Sighting</span></button><button type="button" class="rs-btn vs-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 14h4.5"/></svg><span>View Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 14h4.5"/></svg><span>View Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1271,8 +1226,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop lx-pop" id="popLast" role="dialog" aria-label="Last crossings" hidden></div>
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
-<!-- Report Sightings: a frosted card with a short form. Each box appears once the one before it is filled in; it is sent
-     to the site's inbox through Web3Forms (web3forms.com), as the site has no server of its own -->
+
 <!-- View Sightings: a frosted dropdown under its button with a comment box and everyone's comments; hidden until the comments database is set up -->
 <div class="sc-pop" id="scPop" tabindex="-1" role="dialog" aria-labelledby="scH" data-nosnippet hidden>
   <h2 id="scH">Sightings</h2>
@@ -1287,34 +1241,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </form>
   <h3 class="sc-h">Latest comments</h3>
   <ul class="sc-list" id="scList" aria-label="Sighting comments, newest first"><li class="empty">Loading comments…</li></ul>
-</div>
-<div class="rs-veil" id="rsVeil" hidden></div>
-<div class="info-pop rs-pop" id="rsPop" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="rsH" data-nosnippet hidden>
-  <button type="button" class="am-x rs-x" id="rsX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-  <div class="rs-head">
-    <span class="rs-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
-    <h2 id="rsH">Report a sighting</h2>
-    <p class="rs-intro">Seen a small boat in the Channel or landing on the coast? Tell us when, and what you saw.</p>
-  </div>
-  <form id="rsForm" novalidate>
-    <p class="rs-sec" aria-hidden="true">When</p>
-    <div class="rs-group">
-      <label class="rs-f"><span>Date</span><input type="date" name="date" id="rsDate" required></label>
-      <label class="rs-f"><span>Time</span><input type="time" name="time" id="rsTime" required></label>
-    </div>
-    <p class="rs-sec" aria-hidden="true">What you saw</p>
-    <div class="rs-group">
-      <label class="rs-f rs-area"><textarea name="details" id="rsDetails" rows="4" maxlength="2000" aria-label="Details" placeholder="Where you were, what you saw, how many boats or people" required></textarea></label>
-    </div>
-    <p class="rs-sec" aria-hidden="true">Your details</p>
-    <div class="rs-group">
-      <label class="rs-f"><span>Name</span><input type="text" name="name" id="rsName" autocomplete="name" maxlength="80" placeholder="Optional"></label>
-      <label class="rs-f"><span>Email</span><input type="email" name="email" id="rsEmail" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="you@example.com" required></label>
-    </div>
-    <input class="rs-hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button type="submit" class="rs-send" id="rsSend">Send Report</button>
-    <p class="rs-msg" id="rsMsg" aria-live="polite"></p>
-  </form>
 </div>
 
 <main id="main">
@@ -3515,51 +3441,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
 
-
-  /* ---------------------------------------------------- Report Sightings */
-  // A short form in a frosted sheet, every box showing from the start: when, what was seen, then name (optional) and email.
-  // Sent through Web3Forms to the site's inbox; nothing is kept on the site
-  const RS_TO = "https://api.web3forms.com/submit", RS_KEY = "7b53613b-d997-4f9f-bb7b-31e5534bf472";   // the access key only sends to the inbox it was made for; it doesn't reveal the address
-  const rsPop = $("rsPop"), rsVeil = $("rsVeil"), rsBtn = $("rsBtn");
-  const rsOk = id => { const el = $(id), v = el.value.trim(); return id === "rsEmail" ? el.checkValidity() && /\S+@\S+\.\S+/.test(v) : id === "rsDetails" ? v.length >= 3 : !!v; };
-  function rsOpen(on){
-    rsPop.hidden = rsVeil.hidden = !on; rsBtn.setAttribute("aria-expanded", on);
-    document.documentElement.style.overflow = on ? "hidden" : "";
-    if(on && rsPop.classList.contains("sent")){ rsPop.classList.remove("sent"); $("rsMsg").textContent = ""; }   // a fresh form each time after sending
-    if(on){ $("rsDate").max = ukToday(); (matchMedia("(hover: none)").matches ? rsPop : $("rsDate")).focus({preventScroll:true}); }   // phones: no keyboard or picker until a box is tapped
-    else rsBtn.focus({preventScroll:true});
-  }
-  rsBtn.addEventListener("click", e => { e.stopPropagation(); rsOpen(true); });
-  $("rsX").addEventListener("click", () => rsOpen(false));
-  rsVeil.addEventListener("click", () => rsOpen(false));
-  addEventListener("keydown", e => { if(e.key === "Escape" && !rsPop.hidden){ e.stopImmediatePropagation(); rsOpen(false); } }, true);
-  rsPop.addEventListener("keydown", e => {   // Tab stays inside the card while it's open
-    if(e.key !== "Tab") return;
-    const f = [...rsPop.querySelectorAll("button,input:not(.rs-hp),textarea")].filter(x => x.offsetParent && !x.hidden && !x.disabled);
-    if(!f.length) return;
-    if(e.shiftKey && document.activeElement === f[0]){ e.preventDefault(); f[f.length-1].focus(); }
-    else if(!e.shiftKey && document.activeElement === f[f.length-1]){ e.preventDefault(); f[0].focus(); }
-  });
-  ["rsDate", "rsTime"].forEach(id => $(id).addEventListener("click", e => { try{ e.currentTarget.showPicker(); }catch(err){} }));   // the calendar and clock open on a tap
-  $("rsForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    const form = e.currentTarget, msg = $("rsMsg"), send = $("rsSend"), bad = ["rsDate", "rsTime", "rsEmail", "rsDetails"].find(id => !rsOk(id));
-    if(bad){ msg.className = "rs-msg err"; msg.textContent = bad === "rsEmail" ? "Enter a valid email address." : "Fill in each box first."; $(bad).focus(); return; }
-    if($("rsDate").value > ukToday()){ msg.className = "rs-msg err"; msg.textContent = "The date can't be in the future."; $("rsDate").focus(); return; }
-    send.disabled = true; msg.className = "rs-msg"; msg.textContent = "Sending…";
-    const f = new FormData(form), body = Object.fromEntries(f.entries());
-    const when = new Date($("rsDate").value + "T12:00:00Z").toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short", year:"numeric", ...UTC});
-    Object.assign(body, {access_key: RS_KEY, name: body.name || "Not given", subject: "Sighting report: " + when + ", " + body.time, from_name: "Channel Crossings", replyto: body.email, botcheck: !!body.botcheck});
-    try{
-      const r = await fetch(RS_TO, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(body), ...limit()});
-      const j = await r.json().catch(() => ({}));
-      if(!r.ok || String(j.success) === "false") throw 0;
-      rsPop.classList.add("sent"); msg.className = "rs-msg"; msg.textContent = "Thank you. Your sighting has been sent.";
-      form.reset();
-      $("rsX").focus({preventScroll:true});
-    }catch(err){ msg.className = "rs-msg err"; msg.textContent = "It couldn't be sent just now. Please try again in a moment."; }
-    send.disabled = false;
-  });
 
   /* ---------------------------------------------------- Sighting Comments */
   // Kept in a free Supabase database (set up with supabase/sighting-comments.sql). The key is the public one:
