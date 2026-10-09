@@ -721,9 +721,37 @@ footer strong{color:var(--label);font-weight:600}
 :root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
+/* share card down the left edge on wide screens: a dark card, the share buttons as white pills, a night scene of the Channel below */
+.side-share{display:none}
+@media (min-width:1360px) and (hover:hover) and (pointer:fine){   /* desktop only */
+  body{margin-left:312px}
+  .side-share{display:flex;flex-direction:column;position:fixed;z-index:50;left:16px;top:16px;bottom:16px;width:280px;border-radius:24px;overflow:hidden;background:#000;color:#fff;
+    box-shadow:0 0 0 .5px rgba(255,255,255,.08),0 10px 40px rgba(0,0,0,.25)}
+}
+.side-share h2{margin:0;padding:34px 22px 22px;font:700 1.35rem/1.18 var(--font);letter-spacing:-.025em;text-align:center;text-wrap:balance}
+.side-share .ss-btns{display:flex;flex-direction:column;gap:10px;padding:0 16px}
+.side-share .ss-b{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;padding:0 44px;border:0;border-radius:999px;background:#fff;color:#000;
+  font:500 .912rem/1 var(--font);letter-spacing:-.01em;text-decoration:none;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .15s ease,background-color .2s}
+.side-share .ss-b svg{position:absolute;left:18px;top:50%;width:19px;height:19px;transform:translateY(-50%)}
+@media (hover:hover){.side-share .ss-b:hover{background:#ECECF0}}
+.side-share .ss-b:active{transform:scale(.98)}
+.side-share .ss-b:focus-visible{outline:2px solid #0A84FF;outline-offset:3px}
+.side-share p{margin:16px 22px 0;color:rgba(235,235,245,.6);font-size:.765rem;line-height:1.45;text-align:center}
+.side-share .ss-art{position:relative;flex:1;min-height:0;margin-top:12px}
+.side-share .ss-art svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;max-height:100%;display:block}
+.ss-star{animation:ssTw 3.2s ease-in-out infinite alternate}.ss-star:nth-child(2n){animation-delay:-1.4s}.ss-star:nth-child(3n){animation-delay:-2.3s}
+.ss-beam{transform-origin:62px 151px;animation:ssBeam 6s ease-in-out infinite alternate}
+.ss-bob{animation:ssBob 3.6s ease-in-out infinite alternate}.ss-bob2{animation:ssBob 4.4s ease-in-out -1.8s infinite alternate}
+.ss-swell{animation:ssSwell 7s ease-in-out infinite alternate}.ss-swell2{animation:ssSwell 5.5s ease-in-out -2s infinite alternate-reverse}
+@keyframes ssTw{from{opacity:.25}to{opacity:1}}
+@keyframes ssBeam{from{transform:rotate(-8deg)}to{transform:rotate(14deg)}}
+@keyframes ssBob{from{transform:translateY(0) rotate(-1.5deg)}to{transform:translateY(3px) rotate(1.5deg)}}
+@keyframes ssSwell{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.ss-star,.ss-beam,.ss-bob,.ss-bob2,.ss-swell,.ss-swell2{animation:none}}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px + var(--busy-h,0px));left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
 .top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2);padding-left:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
+@media (min-width:1360px) and (hover:hover) and (pointer:fine){.top-row{left:312px;padding-left:max(16px,calc((100% - 312px - 1148px) / 2));padding-right:max(16px,calc((100% - 312px - 1148px) / 2))}}   /* beside the share card */
 /* the logo and name, at the top left above the map */
 .top-brand{display:flex;align-items:center;gap:10px;min-width:0;pointer-events:auto}
 .top-brand .lt-logo{display:block;width:34px;height:34px;flex:none;border-radius:50%;transition:transform .2s ease}
@@ -1126,6 +1154,50 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 </head>
 <body>
 <p class="busy-note" id="busyNote" role="status">We are experiencing higher traffic than usual. We are working to optimise the site for everyone.</p>
+<aside class="side-share" aria-labelledby="ssTitle">
+  <h2 id="ssTitle">Share Channel Crossings with people who might find the figures useful</h2>
+  <div class="ss-btns">
+    <a class="ss-b" data-net="x" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#000" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.17h1.7L7.4 4.74H5.58l11.09 14.43Z"/></svg>Post on X</a>
+    <a class="ss-b" data-net="fb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0866FF"/><path fill="#fff" d="M13.4 23v-8.1h2.7l.42-3.2H13.4V9.7c0-.92.26-1.55 1.58-1.55h1.68V5.3a22 22 0 0 0-2.45-.13c-2.43 0-4.09 1.48-4.09 4.2v2.35H7.37v3.2h2.75V23z"/></svg>Share on Facebook</a>
+    <a class="ss-b" data-net="wa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#25D366" d="M12 1.5A10.4 10.4 0 0 0 3.05 17.2L1.6 22.5l5.45-1.43A10.4 10.4 0 1 0 12 1.5Z"/><path fill="#fff" d="M17.6 14.5c-.3-.15-1.8-.88-2.07-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.96 1.18-.18.2-.35.22-.65.07a8.5 8.5 0 0 1-4.2-3.67c-.32-.55.32-.5.9-1.68.1-.2.05-.37-.02-.52-.08-.15-.68-1.64-.93-2.24-.25-.59-.5-.5-.68-.51h-.58c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.9 1.22 3.1.15.2 2.1 3.2 5.08 4.49 1.89.81 2.62.88 3.56.74.57-.09 1.8-.74 2.04-1.45.25-.71.25-1.32.18-1.45-.07-.13-.27-.2-.57-.35Z"/></svg>Send on WhatsApp</a>
+    <a class="ss-b" data-net="tg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#29A9EB"/><path fill="#fff" d="M5.3 11.7 16.9 7.2c.54-.2 1.01.13.83.95l-1.97 9.3c-.15.66-.54.82-1.09.51l-3-2.22-1.45 1.4c-.16.16-.3.3-.6.3l.21-3.05 5.55-5.01c.24-.21-.05-.33-.38-.12l-6.86 4.32-2.96-.92c-.64-.2-.65-.64.14-.95Z"/></svg>Send on Telegram</a>
+    <button type="button" class="ss-b" id="ssCopy"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2"/><path d="M14 10a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg>Copy link</button>
+  </div>
+  <p>Each post carries the latest daily figures and a link back here. Nothing loads from these sites until you tap.</p>
+  <div class="ss-art"><svg viewBox="0 0 280 300" aria-hidden="true">
+      <defs>
+        <linearGradient id="ssSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000"/><stop offset=".55" stop-color="#0B1630"/><stop offset="1" stop-color="#1C3566"/></linearGradient>
+        <linearGradient id="ssSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F4C8F"/><stop offset="1" stop-color="#0B2350"/></linearGradient>
+        <linearGradient id="ssCliff" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F1E8"/><stop offset="1" stop-color="#B9B4A6"/></linearGradient>
+        <linearGradient id="ssLight" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFE8A3" stop-opacity=".55"/><stop offset="1" stop-color="#FFE8A3" stop-opacity="0"/></linearGradient>
+        <radialGradient id="ssMoon" cx=".4" cy=".4" r=".6"><stop offset="0" stop-color="#FFFBEA"/><stop offset="1" stop-color="#E9DFC0"/></radialGradient>
+      </defs>
+      <rect width="280" height="300" fill="url(#ssSky)"/>
+      <g fill="#fff"><circle class="ss-star" cx="30" cy="30" r="1.2"/><circle class="ss-star" cx="92" cy="58" r="1.6"/><circle class="ss-star" cx="150" cy="22" r="1"/><circle class="ss-star" cx="178" cy="74" r="1.3"/><circle class="ss-star" cx="236" cy="40" r="1.5"/><circle class="ss-star" cx="122" cy="96" r=".9"/><circle class="ss-star" cx="58" cy="104" r="1"/><circle class="ss-star" cx="262" cy="98" r="1"/></g>
+      <circle cx="214" cy="92" r="17" fill="url(#ssMoon)"/><circle cx="214" cy="92" r="30" fill="#FFF6D6" opacity=".07"/>
+      <path class="ss-beam" d="M62 151 L282 118 L282 172 Z" fill="url(#ssLight)"/>
+      <!-- the white cliffs, a lighthouse on top -->
+      <path d="M-4 168 C20 160 40 158 58 160 C78 162 96 170 112 182 L118 214 L-4 214 Z" fill="url(#ssCliff)"/>
+      <path d="M30 172 L36 214 M70 168 L74 206 M94 176 L100 212" stroke="#CFC9BA" stroke-width="2" opacity=".7"/>
+      <path d="M-4 168 C20 160 40 158 58 160 C78 162 96 170 112 182 C96 176 78 168 58 166 C40 164 20 165 -4 172 Z" fill="#5E8C4E"/>
+      <g transform="translate(55 128)"><path d="M3 32 L5 8 L11 8 L13 32 Z" fill="#F5F5F7"/><rect x="4.5" y="15" width="7" height="4" fill="#E0453A"/><rect x="4" y="24" width="8" height="4" fill="#E0453A"/><rect x="3.5" y="3" width="9" height="6" rx="1" fill="#FFE27A"/><path d="M2.5 3 L8 -2 L13.5 3 Z" fill="#2B3240"/></g>
+      <!-- the sea -->
+      <rect y="200" width="280" height="100" fill="url(#ssSea)"/>
+      <g class="ss-swell" fill="none" stroke="#fff" stroke-linecap="round" opacity=".35" stroke-width="1.6"><path d="M150 214 q8 -5 16 0"/><path d="M200 222 q8 -5 16 0"/><path d="M20 236 q8 -5 16 0"/><path d="M240 252 q8 -5 16 0"/><path d="M90 270 q8 -5 16 0"/></g>
+      <!-- a small grey dinghy, each orange dot a life jacket, as on the map -->
+      <g class="ss-bob2" style="transform-origin:200px 236px"><path d="M176 236 C176 228 182 226 192 226 L216 226 C224 226 228 230 228 236 C228 242 224 244 216 244 L192 244 C182 244 176 242 176 236 Z" fill="#7C8594"/><path d="M182 236 C182 231 186 230 193 230 L215 230 C220 230 222 233 222 236 C222 240 220 240 215 240 L193 240 C186 240 182 240 182 236 Z" fill="#4A5160"/>
+        <g fill="#FF9F0A"><circle cx="190" cy="233.5" r="2.6"/><circle cx="197" cy="236.5" r="2.6"/><circle cx="204" cy="233.5" r="2.6"/><circle cx="211" cy="236.5" r="2.6"/><circle cx="217" cy="234" r="2.4"/></g></g>
+      <!-- the lifeboat coming alongside -->
+      <g class="ss-bob" style="transform-origin:110px 262px">
+        <path d="M58 258 L150 258 L142 276 Q138 280 130 280 L74 280 Q64 280 60 270 Z" fill="#163E8C"/>
+        <path d="M60 268 L148 268" stroke="#F5F5F7" stroke-width="2"/>
+        <path d="M84 258 L84 240 Q84 236 88 236 L124 236 Q130 236 132 242 L136 258 Z" fill="#FF7A1A"/>
+        <rect x="90" y="241" width="9" height="7" rx="1.5" fill="#0B1630"/><rect x="103" y="241" width="9" height="7" rx="1.5" fill="#0B1630"/><rect x="116" y="241" width="9" height="7" rx="1.5" fill="#0B1630"/>
+        <path d="M104 236 L104 222 M100 226 L108 226" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round"/><circle cx="104" cy="221" r="2.2" fill="#4FC3FF"/>
+      </g>
+      <g class="ss-swell2" fill="none" stroke="#fff" stroke-linecap="round" opacity=".5" stroke-width="2"><path d="M40 286 q10 -6 20 0 q10 6 20 0"/><path d="M150 284 q10 -6 20 0 q10 6 20 0"/><path d="M226 292 q10 -6 20 0"/></g>
+    </svg></div>
+</aside>
 <script>/* the name and switches sit below the notice, however many lines it wraps to */
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
@@ -3338,11 +3410,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("shWa").href = "https://wa.me/?text=" + e(text + " " + url);
     $("shTg").href = "https://t.me/share/url?url=" + e(url) + "&text=" + e(text);
     $("shMore").hidden = !navigator.share;
+    // the share card on the left gets the same posts
+    document.querySelectorAll(".side-share [data-net]").forEach(a => { a.href = $("sh" + {x:"X", fb:"Fb", wa:"Wa", tg:"Tg"}[a.dataset.net]).href; });
   }
-  $("shCopy").addEventListener("click", async ()=>{
+  ["shCopy", "ssCopy"].forEach(id => $(id).addEventListener("click", async ()=>{
     try{ await navigator.clipboard.writeText((sorted.length ? shareText() + " " : "") + "https://channelcrossings.world/"); toast("Copied to clipboard"); }
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
-  });
+  }));
   $("shMore").addEventListener("click", async ()=>{   // only shown where the device has a share sheet
     try{ await navigator.share({title:"Channel Crossings", text:shareText(), url:location.href.split("#")[0]}); }
     catch(e){ /* the viewer closed the share sheet */ }
