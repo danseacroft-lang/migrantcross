@@ -774,7 +774,7 @@ footer strong{color:var(--label);font-weight:600}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
 @media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
-/* View Sightings: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
+/* Report Channel Crossing: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
    and glows neon orange under the mouse or while the comments are open */
 .top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
 .rs-pill{display:inline-flex;border-radius:999px;color:var(--label)}
@@ -1055,42 +1055,54 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .chart .line{stroke:url(#lineG);stroke-width:2.4}
 .chart #chartBars rect{opacity:.85}
 .chart .has-sel #chartBars rect:not(.on){opacity:.35}
-/* View Sightings: a frosted dropdown under its button, holding a text box and everyone's comments, newest first,
-   divided by grey hairlines as in the List view. It opens with a slight drop and closes on a tap outside or Escape */
-.sc-pop{position:absolute;z-index:65;width:min(380px,calc(100vw - 24px));max-height:min(620px,calc(100dvh - 90px));display:flex;flex-direction:column;box-sizing:border-box;padding:18px 18px 14px;border-radius:24px;
+/* Report Channel Crossing: a frosted dropdown under its button. A short thank-you, a box to write in with its Post button
+   (styled like the 1M / 3M / 1Y buttons on the graphs), then everyone's reports, newest first, divided by grey hairlines as in the List view */
+.sc-pop{position:absolute;z-index:65;width:min(400px,calc(100vw - 24px));max-height:min(640px,calc(100dvh - 90px));display:flex;flex-direction:column;box-sizing:border-box;padding:20px 20px 8px;border-radius:26px;
   background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 0 0 .5px var(--sep),0 24px 60px rgba(0,0,0,.28);transform-origin:top center;animation:scDrop .32s cubic-bezier(.2,.9,.3,1.05) both}
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 0 0 .5px var(--sep),0 24px 60px rgba(0,0,0,.28);transform-origin:top center;animation:scDrop .34s cubic-bezier(.2,.9,.3,1.05) both}
 .sc-pop[hidden]{display:none}
-@keyframes scDrop{from{opacity:0;transform:translateY(-8px) scale(.97)}}
+@keyframes scDrop{from{opacity:0;transform:translateY(-10px) scale(.97)}}
 @media (prefers-reduced-transparency:reduce){.sc-pop{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
 .sc-pop:focus{outline:0}
-.sc-pop h2{margin:0 36px 4px 2px;font:700 1.18rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label)}
-.sc-pop .sc-x{position:absolute;top:12px;right:12px;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:var(--fill);color:var(--label2);cursor:pointer}
+.sc-top{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding-right:34px}
+.sc-badge{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#FFB340,#FF7A00);color:#fff;box-shadow:0 6px 16px rgba(255,122,0,.32)}
+.sc-badge svg{width:22px;height:22px}
+.sc-pop h2{margin:0;font:700 1.12rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label)}
+.sc-pop .sc-x{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:var(--fill);color:var(--label2);cursor:pointer}
 .sc-pop .sc-x svg{width:10px;height:10px}
-.sc-intro{margin:0 2px 12px;color:var(--label2);font-size:.824rem;line-height:1.4}
+@media (hover:hover){.sc-pop .sc-x:hover{background:var(--fill2)}}
+.sc-intro{margin:0 0 14px;color:var(--label);font-size:.882rem;line-height:1.45}
 .sc-form{position:relative;flex:none}
-.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:76px;resize:vertical;appearance:none;margin:0;border:0;border-radius:14px;background:color-mix(in srgb,var(--card) 80%,transparent);box-shadow:0 0 0 .5px var(--sep);padding:11px 14px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
+.sc-box{border-radius:16px;background:color-mix(in srgb,var(--card) 82%,transparent);box-shadow:0 0 0 .5px var(--sep),0 1px 2px rgba(0,0,0,.04);transition:box-shadow .2s ease}
+.sc-box:focus-within{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent)}
+.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:88px;resize:none;appearance:none;margin:0;border:0;border-radius:16px 16px 0 0;background:none;outline:0;padding:13px 14px 4px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
 .sc-form textarea::placeholder{color:var(--label3)}
-.sc-form textarea:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .sc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
-.sc-count{color:var(--label2);font-size:.706rem;font-variant-numeric:tabular-nums}
-.sc-form button{flex:none;appearance:none;border:0;min-height:38px;padding:0 20px;border-radius:12px;background:var(--blue);color:#fff;font:600 .941rem/1 var(--font);cursor:pointer;transition:filter .2s ease,transform .15s ease}
-.sc-form button:disabled{opacity:.5;cursor:default}
-.sc-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.sc-form button:not(:disabled):active{transform:scale(.98)}
-@media (hover:hover){.sc-form button:not(:disabled):hover{filter:brightness(1.1)}}
-.sc-msg{margin:8px 2px 0;font-size:.765rem;color:var(--label2)}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 9px 9px 14px}
+.sc-count{color:var(--label3);font-size:.706rem;font-variant-numeric:tabular-nums}
+.sc-count.near{color:var(--orange-t)}
+.sc-send{appearance:none;border:0;position:relative;flex:none;height:34px;padding:0 14px;border-radius:9px;display:inline-flex;align-items:center;gap:5px;
+  font:600 .765rem/1 var(--font);color:var(--label);background:var(--fill);cursor:pointer;touch-action:manipulation;transition:background .2s ease,opacity .2s ease}   /* the same as the 1M / 3M / 1Y buttons */
+.sc-send svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.sc-send::after{content:"";position:absolute;inset:-6px -4px}
+.sc-send:disabled{opacity:.45;cursor:default}
+.sc-send:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (hover:hover){.sc-send:not(:disabled):hover{background:var(--fill2)}}
+.sc-note{margin:8px 4px 0;color:var(--label2);font-size:.706rem}
+.sc-msg{margin:6px 4px 0;font-size:.765rem;color:var(--green-t)}
 .sc-msg:empty{display:none}
 .sc-msg.err{color:var(--red-t)}
-.sc-h{margin:16px 2px 0;font:500 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2)}
-.sc-list{list-style:none;flex:1;min-height:80px;margin:6px 0 0;padding:0 2px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-.sc-list li{padding:9px 0;border-top:.5px solid var(--sep);font-size:.882rem}
+.sc-msg.wait{color:var(--label2)}
+.sc-h{display:flex;align-items:baseline;justify-content:space-between;margin:20px 2px 2px;font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2)}
+.sc-h span:last-child{font-weight:500;letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums}
+.sc-list{list-style:none;flex:1;min-height:80px;margin:0 -20px;padding:0 20px 8px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent)}
+.sc-list li{padding:11px 0;border-top:.5px solid var(--sep);font-size:.882rem}
 .sc-list li:first-child{border-top:0}
-.sc-list b{display:block;font-weight:600;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
-.sc-list p{margin:2px 0 0;line-height:1.4;overflow-wrap:anywhere}
+.sc-list b{display:block;font-weight:600;font-size:.706rem;color:var(--label2);font-variant-numeric:tabular-nums}
+.sc-list p{margin:3px 0 0;line-height:1.42;color:var(--label);overflow-wrap:anywhere}
 .sc-list li.new{animation:scIn .5s cubic-bezier(.2,.8,.2,1)}
-.sc-list .empty{color:var(--label2)}
+.sc-list .empty{color:var(--label2);padding:14px 0}
 @keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.sc-list li.new,.sc-pop{animation:none}}
 </style>
@@ -1145,7 +1157,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 14h4.5"/></svg><span>View Sightings</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Channel Crossing</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1234,20 +1246,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
 
-<!-- View Sightings: a frosted dropdown under its button with a comment box and everyone's comments; hidden until the comments database is set up -->
+<!-- Report Channel Crossing: a frosted dropdown under its button with a box to write in and everyone's comments; hidden until the comments database is set up -->
 <div class="sc-pop" id="scPop" tabindex="-1" role="dialog" aria-labelledby="scH" data-nosnippet hidden>
-  <h2 id="scH">Sightings</h2>
+  <div class="sc-top"><span class="sc-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span><h2 id="scH">Report Channel Crossing</h2></div>
   <button type="button" class="sc-x" id="scX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-  <p class="sc-intro">Seen something on the coast? Say what, where and when. Comments are public, so please don't name or picture anyone.</p>
+  <p class="sc-intro">Report a suspected crossing or sighting here. Thank you very much for doing so.</p>
   <form class="sc-form" id="scForm" novalidate>
-    <label class="sr" for="scText">Your comment</label>
-    <textarea id="scText" name="body" maxlength="500" placeholder="Write a comment" required></textarea>
+    <div class="sc-box">
+      <label class="sr" for="scText">Your report</label>
+      <textarea id="scText" name="body" maxlength="500" placeholder="What did you see, where and when?" required></textarea>
+      <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" class="sc-send" id="scSend">Post<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    </div>
     <input class="hp" type="text" name="website" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" id="scSend">Post</button></div>
+    <p class="sc-note">Posts are not moderated.</p>
     <p class="sc-msg" id="scMsg" aria-live="polite"></p>
   </form>
-  <h3 class="sc-h">Latest comments</h3>
-  <ul class="sc-list" id="scList" aria-label="Sighting comments, newest first"><li class="empty">Loading comments…</li></ul>
+  <h3 class="sc-h"><span>Latest reports</span><span id="scN"></span></h3>
+  <ul class="sc-list" id="scList" aria-label="Reports, newest first"><li class="empty">Loading reports…</li></ul>
 </div>
 
 <main id="main">
@@ -3452,7 +3467,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- Sighting Comments */
   // Kept in a free Supabase database (set up with supabase/sighting-comments.sql). The key is the public one:
   // it can only read comments and add new ones, and the database itself checks the length, links and how often one visitor posts.
-  // The View Sightings button stays hidden until both values are filled in.
+  // The Report Channel Crossing button stays hidden until both values are filled in.
   const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
   if(SC_URL && SC_KEY){
     const sc = $("scPop"), scList = $("scList"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
@@ -3472,8 +3487,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         const rows = await r.json(), key = rows.map(c => c.id).join();
         if(key === scShown) return;
         scShown = key;
-        scList.replaceChildren(...(rows.length ? rows.map(c => scItem(c)) : [Object.assign(document.createElement("li"), {className: "empty", textContent: "No comments yet. Be the first."})]));
-      }catch(e){ if(!scShown) scList.innerHTML = '<li class="empty">Comments couldn\u2019t load just now.</li>'; }
+        scList.replaceChildren(...(rows.length ? rows.map(c => scItem(c)) : [Object.assign(document.createElement("li"), {className: "empty", textContent: "No reports yet. Be the first."})]));
+        $("scN").textContent = rows.length ? rows.length + (rows.length === 100 ? "+" : "") : "";
+      }catch(e){ if(!scShown) scList.innerHTML = '<li class="empty">Reports couldn\u2019t load just now.</li>'; }
     }
     const scBtn = $("scBtn");
     scBtn.hidden = false;
@@ -3493,18 +3509,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     addEventListener("resize", () => { if(!sc.hidden) scPlace(); });
     document.addEventListener("visibilitychange", () => { if(!document.hidden && !sc.hidden) scLoad(); });
     setInterval(() => { if(!document.hidden && !sc.hidden) scLoad(); }, 60000);
-    const scCount = () => { const n = scText.value.trim().length; $("scCount").textContent = n + " / 500"; $("scCount").classList.toggle("over", n > 500); };
+    const scCount = () => { const n = scText.value.trim().length; $("scCount").textContent = n + " / 500"; $("scCount").classList.toggle("near", n > 450); };
     scText.addEventListener("input", scCount);
     $("scForm").addEventListener("submit", async e => {
       e.preventDefault();
       const msg = $("scMsg"), send = $("scSend"), body = scText.value.trim().replace(/\s+/g, " ");
       if($("scHp").value) return;   // a bot filled in the hidden box
       if(body.length < 3){ msg.className = "sc-msg err"; msg.textContent = "Write a little more first."; scText.focus(); return; }
-      send.disabled = true; msg.className = "sc-msg"; msg.textContent = "Posting…";
+      send.disabled = true; msg.className = "sc-msg wait"; msg.textContent = "Posting…";
       try{
         const r = await fetch(scApi, {method:"POST", headers:{...scHead, "Content-Type":"application/json", Prefer:"return=minimal"}, body:JSON.stringify({body}), ...limit()});
         if(!r.ok){ const j = await r.json().catch(() => ({})); throw j.code === "P0001" && j.message ? j.message : 0; }   // the database's own reason, written for visitors
-        msg.textContent = "Thank you. Your comment is up.";
+        msg.className = "sc-msg"; msg.textContent = "Thank you. Your report is up.";
         scText.value = ""; scCount();
         const first = scList.querySelector(".empty"); if(first) first.remove();
         scList.prepend(scItem({created_at: new Date().toISOString(), body}, true)); scList.scrollTop = 0;
