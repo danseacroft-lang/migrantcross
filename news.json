@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-09T11:12:36Z",
+ "checkedAt": "2026-10-09T11:31:44Z",
  "items": [
   {
    "title": "Polanski vows to stay on as Green leader as criticism mounts",
    "url": "https://www.bbc.co.uk/news/articles/cmewe5lvl2rqo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-09T11:05:55Z",
+   "published": "2026-10-09T11:15:38Z",
+   "breaking": true
+  },
+  {
+   "title": "'Deeply personal moment': Watch Sagal Abdi-Wali's by-election victory speech",
+   "url": "https://www.bbc.co.uk/news/videos/c95yn70e678po?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-09T11:15:09Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/news/us/us-news-ice-agent-shoots-man-new-york-city-five-year-old-in-car",
    "source": "GB News",
    "published": "2026-10-09T10:08:24Z",
-   "breaking": true
-  },
-  {
-   "title": "Net Zero drive leaves hole in Britain's defences as wind turbines could BLOCK Russian jet-tracking radars",
-   "url": "https://www.gbnews.com/news/net-zero-wind-turbines-block-russian-jet-tracking-radars",
-   "source": "GB News",
-   "published": "2026-10-09T09:14:36Z",
    "breaking": true
   }
  ],
