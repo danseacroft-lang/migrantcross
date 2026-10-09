@@ -841,7 +841,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 }
 @media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
-/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions, roundup) */
+/* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions) */
 .mb{--mbar4:#24405F;--mbar:var(--viz1);--bar-peak:var(--viz2);--boat:#8C6230;--green-bg:rgba(52,199,89,.14)}
 :root[data-theme="dark"] .mb{--mbar4:#6683A8;--boat:#B98A52;--green-bg:rgba(48,209,88,.18)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mb{--mbar4:#6683A8;--boat:#B98A52;--green-bg:rgba(48,209,88,.18)}}
@@ -856,10 +856,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
 .toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.mb .b-close{position:absolute;z-index:2;top:6px;right:6px;width:44px;height:44px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;border-radius:50%}
-.mb .b-close span{width:26px;height:26px;border-radius:50%;background:var(--fill);display:grid;place-items:center;color:var(--label2)}
-.mb .b-close svg{width:10px;height:10px}
-.mb .b-close:focus-visible span{outline:2px solid var(--blue);outline-offset:2px}
 .mb .petitions li{grid-template-columns:1fr auto;gap:2px 12px;padding:12px 0}
 .mb .petitions a.pt{color:var(--label);text-decoration:none;font-size:.882rem;font-weight:600;line-height:1.3}
 .mb .petitions a.pt:hover{color:var(--blue)}
@@ -982,27 +978,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .rep-boats .pp{fill:var(--viz2)}
 .mb .rep-none{font-size:.882rem;color:var(--label2)}
 .mb .dots{animation:fadeIn .35s ease-out}
-.mb .subscribe{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px 16px;padding:16px;border-radius:22px;background:var(--card);box-shadow:var(--shadow)}
-.mb .subscribe.leaving{animation:lift .25s ease-in both}
-.mb .sub-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff}
-.mb .sub-icon svg{width:24px;height:24px}
-.mb .sub-copy{display:grid;gap:2px;min-width:0;padding-right:32px}
-.mb .sub-copy h2{font:600 1rem/1.25 var(--font);letter-spacing:-.024em}
-.mb .sub-copy p{margin:0;font-size:.824rem;color:var(--label2)}
-.mb .sub-form{grid-column:1 / -1;display:flex;gap:8px;min-width:0}
-.mb .sub-form input[type=email]{flex:1;min-width:0;appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 14px}
-.mb .sub-form input[type=email]::placeholder{color:var(--label2)}
-.mb .sub-form input[type=email]:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
-.mb .sub-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.mb .sub-form button{flex:none;appearance:none;border:0;min-height:44px;padding:0 18px;border-radius:12px;background:var(--blue);color:#fff;font:600 1rem/1 var(--font);cursor:pointer}
-.mb .sub-form button:disabled{opacity:.5;cursor:default}
-.mb .sub-form button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.mb .sub-form button:not(:disabled):hover{filter:brightness(1.1)}}
-.mb .sub-msg{grid-column:2 / -1;margin:0;font-size:.765rem;color:var(--label2)}
-.mb .sub-msg.ok{color:var(--green-t);font-weight:600}.mb .sub-msg.err{color:var(--red-t)}
-.mb .subscribe.done .sub-form{display:none}
-@media (max-width:760px){.mb .sub-msg{grid-column:1 / -1}}
-@media (hover:hover){.mb .b-close:hover span{background:var(--label3);color:var(--label)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
@@ -1056,11 +1031,26 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* The cards that drop from those buttons, as on Facebook: a solid card with a big bold title, pill tabs and roomy rows */
 .tb-pop{position:absolute;z-index:65;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;max-height:calc(100dvh - 90px);
   padding:16px 16px 10px;border-radius:16px;background:var(--card);color:var(--label);
-  box-shadow:0 0 0 .5px var(--sep),0 12px 28px rgba(0,0,0,.2),0 2px 4px rgba(0,0,0,.08);transform-origin:top right;animation:tbDrop .26s cubic-bezier(.2,.9,.3,1.05) both}
+  box-shadow:0 0 0 .5px var(--sep),0 12px 28px rgba(0,0,0,.2),0 2px 4px rgba(0,0,0,.08);transform-origin:var(--tb-o,top right);animation:tbDrop .5s cubic-bezier(.34,1.45,.5,1) both}
 .tb-pop[hidden]{display:none}
 .tb-pop:focus{outline:0}
-@keyframes tbDrop{from{opacity:0;transform:translateY(-6px) scale(.97)}}
-@media (prefers-reduced-motion:reduce){.tb-pop,.tb-badge,.sc-list li.new{animation:none}}
+/* opening: the card springs out of its button, then its rows float up one after another; closing: a quick shrink back */
+@keyframes tbDrop{0%{opacity:0;transform:translateY(-10px) scale(.6);filter:blur(4px)}55%{opacity:1;filter:blur(0)}100%{transform:none}}
+.tb-pop > *,.tb-pop .tb-rise{animation:tbRise .45s cubic-bezier(.2,.85,.25,1) both;animation-delay:calc(70ms + var(--i,0) * 40ms)}
+@keyframes tbRise{from{opacity:0;transform:translateY(10px)}}
+.tb-pop.out{animation:tbOut .18s cubic-bezier(.4,0,1,1) both;pointer-events:none}
+.tb-pop.out > *{animation:none}
+@keyframes tbOut{to{opacity:0;transform:translateY(-6px) scale(.92)}}
+/* each button's icon does a little something as its card opens: the eye blinks, the bell rings, the sun turns, the moon rocks */
+.tb-btn[aria-expanded="true"] .ic-eye{animation:tbBlink .5s ease both}
+@keyframes tbBlink{30%{transform:scaleY(.1)}60%{transform:scaleY(1.1)}}
+.tb-btn[aria-expanded="true"] .ic-bell,.tb-btn.ring .ic-bell{transform-origin:50% 8%;animation:tbRing .8s cubic-bezier(.3,.6,.4,1) both}
+@keyframes tbRing{15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+.tb-btn[aria-expanded="true"] .ic-sun{animation:tbSpin .7s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes tbSpin{from{transform:rotate(-90deg) scale(.7)}}
+.tb-btn[aria-expanded="true"] .ic-moon{transform-origin:60% 60%;animation:tbRock .7s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes tbRock{30%{transform:rotate(-24deg)}65%{transform:rotate(10deg)}}
+@media (prefers-reduced-motion:reduce){.tb-pop,.tb-pop > *,.tb-pop .tb-rise,.tb-pop.out,.tb-badge,.sc-list li.new,.tb-btn svg{animation:none!important}}
 .tb-pop h2{margin:0;font:700 1.5rem/1.15 var(--font);letter-spacing:-.02em}
 @media (max-width:440px){.tb-pop h2{font-size:1.3rem}}
 .tb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
@@ -1123,6 +1113,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-list li.new{animation:scIn .5s cubic-bezier(.2,.8,.2,1)}
 .sc-list .empty{display:block;padding:14px 8px;color:var(--label2);font-size:.882rem}
 @keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+/* Notifications */
+.nt-pop{width:min(360px,calc(100vw - 24px))}
+.nt-av{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#47A1FF,#007AFF);color:#fff}
+.nt-av svg{width:26px;height:26px}
+.sc-list b.nt-t{display:block;font-weight:600;font-size:.941rem;line-height:1.3;color:var(--label)}
+.sc-list a.nt-link{display:inline-block;margin-top:4px;color:var(--blue);font-size:.824rem;font-weight:600;text-decoration:none}
+.sc-list a.nt-link:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -1175,7 +1172,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="tb-badge" id="scBadge" hidden></span></button><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing" hidden><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="tb-badge" id="scBadge" hidden></span></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1281,9 +1278,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   </form>
   <div id="scList" aria-live="polite"><ul class="sc-list"><li class="empty">Loading reports…</li></ul></div>
 </div>
+<div class="tb-pop nt-pop" id="ntPop" tabindex="-1" role="dialog" aria-labelledby="ntH" data-nosnippet hidden>
+  <div class="tb-head"><h2 id="ntH">Notifications</h2><button type="button" class="tb-x" id="ntX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+  <div class="sc-tabs" role="group" aria-label="Show"><button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="unread" aria-pressed="false">Unread</button></div>
+  <div id="ntList" aria-live="polite"><ul class="sc-list"><li class="empty">Loading…</li></ul></div>
+</div>
 <div class="tb-pop th-pop" id="thPop" role="menu" aria-labelledby="thH" hidden>
   <div class="tb-head"><h2 id="thH">Appearance</h2></div>
-  <div class="th-list"><button type="button" role="menuitemradio" data-mode="auto" aria-checked="false"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></i><span><b>Auto</b><small>Follows your device</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="light" aria-checked="false"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg></i><span><b>Day</b><small>Light all the time</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="dark" aria-checked="false"><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg></i><span><b>Night</b><small>Dark all the time</small></span><em aria-hidden="true"></em></button></div>
+  <div class="th-list"><button type="button" role="menuitemradio" data-mode="auto" aria-checked="false"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></i><span><b>Auto</b><small>Follows your device</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="light" aria-checked="false"><i><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg></i><span><b>Day</b><small>Light all the time</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="dark" aria-checked="false"><i><svg class="ic-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg></i><span><b>Night</b><small>Dark all the time</small></span><em aria-hidden="true"></em></button></div>
 </div>
 
 <main id="main">
@@ -1539,26 +1541,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         <p class="foot rv">From the <a href="https://petition.parliament.uk/" target="_blank" rel="noopener">UK Parliament petitions</a> site. At 10,000 signatures the government responds; at 100,000 Parliament considers a debate.</p>
       </section>
 
-      <!-- ============================================================ WEEKLY ROUNDUP -->
-      <section class="mb" aria-labelledby="subTitle">
-        <div class="subscribe rv" id="subscribe" aria-labelledby="subTitle">
-          <div class="sub-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7.5l8.5 6 8.5-6"/></svg></div>
-          <div class="sub-copy">
-            <h2 id="subTitle">Weekly roundup of the figures</h2>
-            <p>A weekly summary of the Home Office figures, straight to your inbox. Free, and you can unsubscribe at any time.</p>
-          </div>
-          <form class="sub-form" id="subForm" action="https://eocampaign1.com/form/4544ce06-bbe3-11f1-87fc-e5b0eab0e662" method="post" target="_blank" novalidate>
-            <label class="sr" for="subEmail">Email address</label>
-            <input type="email" id="subEmail" name="field_0" placeholder="Email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
-            <input class="hp" type="text" name="hpc4b27b6e-eb38-11e9-be00-06b4694bee2a" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <button type="submit" id="subBtn">Subscribe</button>
-          </form>
-          <button type="button" class="b-close" id="subClose" aria-label="Close the weekly roundup sign-up">
-            <span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          </button>
-          <p class="sub-msg" id="subMsg" aria-live="polite">We'll only use your email to send you the weekly roundup. <a href="privacy.html#email">Privacy</a></p>
-        </div>
-      </section>
     </div>
   </div>
 
@@ -1606,20 +1588,29 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const tbMenus = [];
   function tbMenu(btn, pop, onOpen){
     const place = () => {
-      const r = btn.getBoundingClientRect(), w = pop.offsetWidth;
+      const r = btn.getBoundingClientRect(), w = pop.offsetWidth, left = Math.max(12, Math.min(r.right - w, innerWidth - w - 12));
       pop.style.top = (r.bottom + scrollY + 8) + "px";
-      pop.style.left = (Math.max(12, Math.min(r.right - w, innerWidth - w - 12)) + scrollX) + "px";
+      pop.style.left = (left + scrollX) + "px";
+      pop.style.setProperty("--tb-o", (r.left + r.width / 2 - left) + "px -14px");   // it grows out of its own button
     };
     const set = on => {
-      pop.hidden = !on; btn.setAttribute("aria-expanded", on);
-      if(on){ tbMenus.forEach(m => m.pop !== pop && m.set(false)); place(); if(onOpen) onOpen(); }
+      if(on === !pop.hidden && !pop.classList.contains("out")) return;
+      btn.setAttribute("aria-expanded", on);
+      if(on){
+        tbMenus.forEach(m => m.pop !== pop && m.set(false));
+        pop.classList.remove("out"); pop.hidden = false;
+        [...pop.children].forEach((c, i) => c.style.setProperty("--i", i));
+        place(); if(onOpen) onOpen();
+      }else if(reduced) pop.hidden = true;
+      else{ pop.classList.add("out"); setTimeout(() => { if(pop.classList.contains("out")){ pop.hidden = true; pop.classList.remove("out"); } }, 190); }
     };
-    btn.addEventListener("click", e => { e.stopPropagation(); set(pop.hidden); });
-    document.addEventListener("click", e => { if(!pop.hidden && !pop.contains(e.target)) set(false); });
+    btn.addEventListener("click", e => { e.stopPropagation(); set(pop.hidden || pop.classList.contains("out")); });
+    document.addEventListener("click", e => { if(!pop.hidden && !pop.contains(e.target) && e.target.isConnected) set(false); });
     addEventListener("keydown", e => { if(e.key === "Escape" && !pop.hidden){ set(false); btn.focus({preventScroll:true}); } });
     addEventListener("resize", () => { if(!pop.hidden) place(); });
     const m = {pop, set}; tbMenus.push(m); return m;
   }
+
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", showTheme);   // Auto: the icon follows the device
   tbMenu($("thBtn"), $("thPop"), () => $("thPop").querySelector('[aria-checked="true"]').focus({preventScroll:true}));
   modeBtns.forEach(b => b.addEventListener("click", () => {
@@ -2960,7 +2951,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
-     between two dates, quiet spells, patterns, every person, petitions and the weekly roundup */
+     between two dates, quiet spells, patterns, every person and petitions */
   let sorted = [];   // the same figures as days, under the name these boxes were written with
   const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
   const niceStep = raw => { const p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; };
@@ -3446,30 +3437,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     catch(e){ /* the viewer closed the share sheet */ }
   });
 
-  /* =========== Email updates =========== */
-  $("subForm").addEventListener("submit", async e=>{
-    const f = e.currentTarget, email = $("subEmail"), msg = $("subMsg");
-    e.preventDefault();
-    if(!email.checkValidity()){ msg.className = "sub-msg err"; msg.textContent = "Enter a valid email address."; email.focus(); return; }
-    $("subBtn").disabled = true;
-    try{
-      await fetch(f.action, {method:"POST", mode:"no-cors", body:new URLSearchParams(new FormData(f)), ...limit()});
-      $("subscribe").classList.add("done");
-      msg.className = "sub-msg ok";
-      msg.textContent = "Nearly done. Check your inbox and tap the link to confirm.";
-    }catch(err){
-      $("subBtn").disabled = false;
-      f.submit();   // couldn't send from here: open EmailOctopus's own page instead
-    }
-  });
-
-  $("subClose").addEventListener("click", () => {
-    store.set("subClosed", "1");
-    const box = $("subscribe"), sec = box.parentElement; if(reduced){ sec.hidden = true; return; }
-    box.classList.add("leaving"); box.addEventListener("animationend", () => sec.hidden = true, {once:true});
-  });
-  if(store.get("subClosed")) $("subscribe").parentElement.hidden = true;   // its section, so no empty gap is left above the footer
-
   function renderPetitions(){
     const list = extras.petitions && extras.petitions.petitions || [];
     const ul = $("petitions"); ul.textContent = "";
@@ -3565,14 +3532,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         if(n && scBtn.getAttribute("aria-expanded") !== "true"){ badge.textContent = n > 9 ? "9+" : n; badge.hidden = false; scBtn.setAttribute("aria-label", "Report Channel Crossing, " + n + (n > 9 ? "+" : "") + " new"); }
       }catch(e){}
     })();
-    tbMenu(scBtn, sc, async () => {
+    const scMenu = tbMenu(scBtn, sc, async () => {
       scSeen = getSeen() || new Date(Date.now() - 864e5).toISOString();
       badge.hidden = true; scBtn.setAttribute("aria-label", "Report Channel Crossing");
       (matchMedia("(hover: none)").matches ? sc : scText).focus({preventScroll:true});
       await scLoad();
       try{ localStorage.setItem(SEEN, scRows.length ? scRows[0].created_at : new Date().toISOString()); }catch(e){}
     });
-    $("scX").addEventListener("click", () => { sc.hidden = true; scBtn.setAttribute("aria-expanded", false); scBtn.focus({preventScroll:true}); });
+    $("scX").addEventListener("click", () => { scMenu.set(false); scBtn.focus({preventScroll:true}); });
     sc.querySelectorAll(".sc-tabs button").forEach(b => b.addEventListener("click", () => {
       scF = b.dataset.f; sc.querySelectorAll(".sc-tabs button").forEach(x => x.setAttribute("aria-pressed", x === b)); scDraw();
     }));
@@ -3597,6 +3564,65 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       }catch(err){ msg.className = "sc-msg err"; msg.textContent = typeof err === "string" ? err : "It couldn't be posted just now. Please try again in a moment."; }
       send.disabled = false;
     });
+  }
+
+  /* ---------------------------------------------------- Notifications */
+  // Messages from the site's staff, added as rows in the Supabase table site_notices (set up with supabase/site-notices.sql).
+  // Visitors can only read them. The bell shows a red count of the ones a visitor hasn't seen; it stays hidden until the table exists.
+  if(SC_URL && SC_KEY){
+    const ntBtn = $("ntBtn"), ntPop = $("ntPop"), ntBadge = $("ntBadge"), NSEEN = "cc-notices-seen";
+    const ntApi = SC_URL.replace(/\/$/, "") + "/rest/v1/site_notices?select=id,created_at,title,body,link&order=created_at.desc&limit=30";
+    const ntWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
+    const ntAgo = t => { const m = Math.max(0, Math.round((Date.now() - t) / 60000)); return m < 1 ? "Just now" : m < 60 ? m + "m" : m < 1440 ? Math.round(m / 60) + "h" : m < 10080 ? Math.round(m / 1440) + "d" : ntWhen.format(new Date(t)).split(",").slice(0, 2).join(""); };
+    const getN = () => { try{ return localStorage.getItem(NSEEN) || ""; }catch(e){ return ""; } };
+    let ntRows = [], ntSeen = "", ntF = "all";
+    const ntIcon = '<svg viewBox="0 0 400 400" aria-hidden="true"><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/></svg>';
+    function ntDraw(){
+      const rows = ntF === "unread" ? ntRows.filter(n => n.created_at > ntSeen) : ntRows, ul = document.createElement("ul");
+      ul.className = "sc-list";
+      if(!rows.length){ ul.innerHTML = '<li class="empty">' + (ntF === "unread" ? "You're all caught up." : "No notifications yet.") + "</li>"; $("ntList").replaceChildren(ul); return; }
+      rows.forEach((n, i) => {
+        const li = document.createElement("li"), av = document.createElement("span"), d = document.createElement("div"), b = document.createElement("b"), t = document.createElement("time");
+        av.className = "nt-av"; av.innerHTML = ntIcon;
+        b.className = "nt-t"; b.textContent = n.title; d.append(b);   // text only, never HTML
+        if(n.body){ const p = document.createElement("p"); p.textContent = n.body; d.append(p); }
+        if(n.link && /^https?:\/\//.test(n.link)){ const a = document.createElement("a"); a.className = "nt-link"; a.href = n.link; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Read more"; d.append(a); }
+        t.dateTime = n.created_at; t.textContent = ntAgo(Date.parse(n.created_at)); t.title = ntWhen.format(new Date(n.created_at)); d.append(t);
+        li.className = "tb-rise" + (n.created_at > ntSeen ? " unseen" : ""); li.style.setProperty("--i", i + 2);
+        li.append(av, d); ul.append(li);
+      });
+      $("ntList").replaceChildren(ul);
+    }
+    function ntCount(){
+      const n = ntRows.filter(x => x.created_at > (getN() || "")).length;
+      ntBadge.hidden = !n || ntBtn.getAttribute("aria-expanded") === "true";
+      if(n){ ntBadge.textContent = n > 9 ? "9+" : n; ntBtn.setAttribute("aria-label", "Notifications, " + n + " new"); }
+      else ntBtn.setAttribute("aria-label", "Notifications");
+      return n;
+    }
+    async function ntLoad(first){
+      try{
+        const r = await fetch(ntApi, {headers:{apikey: SC_KEY, Accept: "application/json"}, cache: "no-store", ...limit()});
+        if(!r.ok) return;   // no table yet: the bell stays hidden
+        const rows = await r.json(), had = ntRows.length && ntRows[0].id;
+        ntRows = rows; ntBtn.hidden = false;
+        if(!ntPop.hidden) ntDraw();
+        if(ntCount() && (first || (rows.length && rows[0].id !== had)) && !reduced){ ntBtn.classList.remove("ring"); void ntBtn.offsetWidth; ntBtn.classList.add("ring"); }   // a new one: the bell rings
+      }catch(e){}
+    }
+    const ntMenu = tbMenu(ntBtn, ntPop, () => {
+      ntSeen = getN(); ntBadge.hidden = true; ntBtn.setAttribute("aria-label", "Notifications");
+      ntDraw();
+      try{ if(ntRows.length) localStorage.setItem(NSEEN, ntRows[0].created_at); }catch(e){}
+      ntPop.focus({preventScroll:true});
+    });
+    $("ntX").addEventListener("click", () => { ntMenu.set(false); ntBtn.focus({preventScroll:true}); });
+    ntPop.querySelectorAll(".sc-tabs button").forEach(b => b.addEventListener("click", () => {
+      ntF = b.dataset.f; ntPop.querySelectorAll(".sc-tabs button").forEach(x => x.setAttribute("aria-pressed", x === b)); ntDraw();
+    }));
+    ntLoad(true);
+    setInterval(() => { if(!document.hidden) ntLoad(); }, 120000);
+    document.addEventListener("visibilitychange", () => { if(!document.hidden) ntLoad(); });
   }
 
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
