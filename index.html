@@ -178,6 +178,9 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .ves-list.folded .vl-chev{transform:rotate(-90deg)}
 .ves-list.folded .vl-h{padding-bottom:12px}
 .ves-list.folded ul{display:none}
+.ves-list .vl-none{padding:2px 14px 13px;color:var(--label2);font-size:.765rem}
+.ves-list.none .vl-h i{background:var(--label3);box-shadow:none;animation:none}   /* nothing out there: the live dot rests grey */
+.ves-list.none .vl-h span{display:none}
 .ves-list .vl-h i{width:7px;height:7px;border-radius:50%;background:#30D158;box-shadow:0 0 0 3px rgba(48,209,88,.25);animation:pulse 1.6s ease-in-out infinite}
 .ves-list .vl-h b{font-size:.824rem;font-weight:600;letter-spacing:-.02em}
 .ves-list .vl-h span{margin-left:auto;margin-right:2px;min-width:20px;padding:1px 7px;border-radius:99px;background:var(--fill);color:var(--label2);font-weight:600;font-size:.706rem;text-align:center;font-variant-numeric:tabular-nums}
@@ -1702,6 +1705,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const shortKind = v => { const f = flagOf(v.mmsi); return v.kind === "border" ? (f === "UK" ? "Border Force" : (f ? f + " patrol" : "Patrol")) : v.kind === "aircraft" ? "Rescue aircraft" : (f ? f + " " + (v.kind === "rescue" ? "lifeboat" : "navy") : (v.kind === "rescue" ? "Lifeboat" : "Navy")); };
   const compass = d => ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(d / 45) % 8];
   // out at sea in the eastern Channel and the Dover Strait, from Beachy Head to Dunkirk
+  // Only official vessels: lifeboats named as such (RNLI, SNSM, the Gosport lifeboats), Border Force, police and customs, navies,
+  // and rescue aircraft. A ship that only calls itself "search and rescue" in its AIS type, such as a wind farm crew boat, is left out
+  const RESCUE_NAME = /\b(RNLI|RNLB|LIFEBOAT|SNSM|SAUVETEUR|ABEILLE|GAFIRS|GOSPORT ILB|JOAN DORA FULLER|IAN FULLER|COASTGUARD)\b/i;
+  const official = v => v.kind !== "rescue" || RESCUE_NAME.test(v.name || "");
   const inChannel = v => v.lat >= 50.3 && v.lat <= 51.6 && v.lon >= 0 && v.lon <= 2.7 && atSea(L.latLng(v.lat, v.lon));
   async function loadVessels(){
     vesselsAt = Date.now();
@@ -1713,7 +1720,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const clean = t => String(t).replace(/[&<>"]/g, c => "&#" + c.charCodeAt(0) + ";");
     for(const v of a){
       const mins = (Date.now() - new Date(v.seen)) / 6e4;
-      if(!(mins < 180) || !VESSEL_KIND[v.kind] || typeof v.lat !== "number" || typeof v.lon !== "number") continue;
+      if(!(mins < 180) || !VESSEL_KIND[v.kind] || !official(v) || typeof v.lat !== "number" || typeof v.lon !== "number") continue;
       const moving = v.sog >= 1, dir = v.hdg ?? v.cog, name = v.name || VESSEL_KIND[v.kind];
       const shape = v.kind === "aircraft" ? PLANE : SHIP, dirTxt = dir == null ? "–" : Math.round(dir) + "°";
       const [seenN, seenU] = mins < 1 ? ["Now", ""] : mins < 60 ? [Math.round(mins), " min"] : [Math.floor(mins / 60), " hr"];
@@ -1729,11 +1736,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }).addTo(vesselLayer);
       if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
     }
-    // the list down the left: only vessels out in the Channel itself (not moored in a harbour or away in the Solent), newest first,
-    // and only while there are any
+    // the list down the left, always there: only vessels out in the Channel itself (not moored in a harbour or away in the Solent),
+    // newest first, or a line saying there are none
     const box = $("vesList"), ul = $("vesItems");
-    box.hidden = !shown.length; ul.textContent = "";
+    box.hidden = false; ul.textContent = ""; box.classList.toggle("none", !shown.length);
     $("vesCount").textContent = shown.length || "";
+    if(!shown.length){ const li = document.createElement("li"); li.className = "vl-none"; li.textContent = "No boats in the Channel right now"; ul.append(li); }
     shown.sort((x, y) => x.mins - y.mins).forEach(({v, name, mins, moving, shape, m}) => {
       const li = document.createElement("li"), b = document.createElement("button");
       b.type = "button"; if(mins > 60) b.className = "old";
