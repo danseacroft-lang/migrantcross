@@ -1,0 +1,22 @@
+-- Site notifications: the messages behind the bell at the top right of the homepage.
+-- Paste this whole file into Supabase → SQL Editor → New query, and press Run. It is safe to run again.
+--
+-- Visitors can only read notifications. To send one: Supabase → Table Editor → site_notices → Insert row,
+-- fill in title (and body, and link if you want one), and save. It shows on the site within a minute,
+-- with a red count on the bell for everyone who hasn't seen it yet. Delete the row to take it down.
+
+create table if not exists public.site_notices (
+  id         bigint generated always as identity primary key,
+  created_at timestamptz not null default now(),
+  title      text not null check (char_length(title) between 1 and 120),
+  body       text check (char_length(body) <= 600),
+  link       text check (link ~ '^https?://')
+);
+
+alter table public.site_notices enable row level security;
+
+revoke all on public.site_notices from anon, authenticated;
+grant select (id, created_at, title, body, link) on public.site_notices to anon, authenticated;
+
+drop policy if exists "anyone can read notices" on public.site_notices;
+create policy "anyone can read notices" on public.site_notices for select to anon, authenticated using (true);
