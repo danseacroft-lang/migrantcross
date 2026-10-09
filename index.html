@@ -701,7 +701,7 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 @media (max-width:380px){.records li{grid-template-columns:28px 1fr auto;gap:10px}.records .ic{width:28px;height:28px;border-radius:8px}.records .ic svg{width:16px;height:16px}}
 
 /* ------------------------------------------------------------ footer */
-footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));border-top:.5px solid var(--sep);color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
+footer{max-width:1180px;margin:0 auto;padding:20px 20px calc(40px + env(safe-area-inset-bottom,0px));color:var(--label2);font-size:.765rem;text-align:center;display:grid;gap:8px;justify-items:center}
 footer p{margin:0;max-width:52ch;line-height:1.45}
 footer strong{color:var(--label);font-weight:600}
 .ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
@@ -1150,6 +1150,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
 @media (prefers-reduced-motion:reduce){#ytdBox::before{animation:none}#ytdBox .cal-day,#ytdBox .cal-btn{transition:none}#ytdBox .cal-day.on{transform:none}}
 @media (prefers-reduced-transparency:reduce){#ytdBox,#ytdBox .cal-btn,#ytdBox .ring-legend > div{-webkit-backdrop-filter:none;backdrop-filter:none}#ytdBox::before{display:none}#ytdBox{background:var(--card)}}
+/* the graphs in bright iOS colours: blues, pinks and oranges with a soft neon glow */
+.mb .key-row i.k-cur{background:linear-gradient(90deg,#5AC8FA,#0A84FF);height:4px;box-shadow:0 0 6px rgba(10,132,255,.7)}
+.mb .key-row i.k-last{background:linear-gradient(90deg,#FF9F0A,#FF2D92);height:4px;box-shadow:0 0 6px rgba(255,45,146,.6)}
+.chart .trend{stroke:#FF9F0A;filter:drop-shadow(0 0 4px rgba(255,159,10,.55))}
+.chart .line{stroke:url(#lineG);stroke-width:2.4;filter:drop-shadow(0 0 4px rgba(255,45,146,.45))}
+.chart #chartBars rect{opacity:.85}
+.chart .has-sel #chartBars rect:not(.on){opacity:.35}
 </style>
 </head>
 <body>
@@ -1724,10 +1731,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Every name the map can show, biggest first: countries and seas, the towns above, then some 2,500 more from towns.json
   // (GeoNames; scripts/build-towns.js), which come in as you zoom: rank 1 always, rank 5 only close in
   let places = AREAS.map(([name, lat, lon, kind]) => ({name, lat, lon, rank:0, kind:"area " + kind})).concat(TOWNS.map(([name, lat, lon, rank, kind]) => ({name, lat, lon, rank, kind})));
-  // The map stays put: no dragging or zooming, so the page always scrolls and everyone sees the same view
+  // With a mouse the map can be dragged around, within the wide view; it doesn't zoom, so the page always scrolls.
+  // On touch screens it stays put, so a finger on the map still scrolls the page
   const touchOnly = matchMedia("(hover: none)").matches;
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, scrollWheelZoom:false, keyboard:false, boxZoom:false,
-    dragging:false, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxZoom:12}) : null;
+    dragging:!touchOnly, inertia:true, maxBoundsViscosity:.85, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxZoom:12}) : null;
   let heat, rainC, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
   let wx = null, wxFailed = false;   // the latest conditions in the Dover Strait (loadWeather)
   if(LM){
@@ -2016,9 +2024,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     return (at(i, j) * (1 - tx) + at(i, j + 1) * tx) * (1 - ty) + (at(i + 1, j) * (1 - tx) + at(i + 1, j + 1) * tx) * ty;
   }
   // Colour scales: waves and rain on the map, temperature for the reading under the pointer.
-  // Waves run from blue for a calm sea to red for a rough one, with the change around 1 to 1.5 m, where crossings become dangerous
+  // Waves stay blue for calm and moderate seas, up to about 2 m; only big seas turn orange, and red from about 3 m
   const SCALE = {
-    waves:{stops:[[0,[28,74,178]],[.5,[46,118,214]],[1,[118,168,226]],[1.5,[240,152,92]],[2,[232,82,58]],[3,[206,30,40]],[4,[150,16,36]]]},
+    waves:{stops:[[0,[28,74,178]],[.8,[46,118,214]],[1.6,[110,165,230]],[2.2,[240,170,92]],[2.8,[232,82,58]],[3.5,[206,30,40]],[4.5,[150,16,36]]]},
     rain:{stops:[[0,[90,160,240]],[1,[60,110,230]],[2,[120,80,220]],[5,[220,60,160]]]},
     temp:{stops:[[-10,[134,120,224]],[-5,[108,156,236]],[0,[118,190,234]],[5,[140,212,178]],[10,[192,212,118]],[13,[222,204,126]],[16,[216,178,122]],[19,[222,160,106]],[22,[222,138,102]],[25,[212,114,114]],[28,[200,102,150]],[32,[184,92,186]],[36,[216,136,224]]]}
   };
@@ -2171,20 +2179,27 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // along their path as it fades in and out; longer, brighter and quicker where the sea is higher
   function stepWaves(c, dt){
     c.clearRect(0, 0, vw, vh); c.lineCap = "round";
-    const A = 4, crest = batches(A);
+    // three sizes of crest, each in four strengths of fading: small and fine on a calm sea, big, bold and quick on a rough one
+    const A = 4, Z = 3, crest = batches(A * Z), WIDTH = [1, 1.7, 2.6];
     for(const p of parts){
       p.age += dt;
       if(p.age > p.max || !fld.sea[cellAt(p.x, p.y)] || p.x < -30 || p.y < -30 || p.x > vw + 30 || p.y > vh + 30){ spawn(p); continue; }
       let du = vel(p.x, p.y, fld.u), dv = vel(p.x, p.y, fld.v); const n = Math.hypot(du, dv) || 1; du /= n; dv /= n;
-      const hgt = Math.min(vel(p.x, p.y, fld.m), 4), fade = Math.sin(Math.PI * p.age / p.max), sp = (.1 + .14 * Math.sqrt(hgt)) * dt;
+      const hgt = Math.min(vel(p.x, p.y, fld.m), 4), fade = Math.sin(Math.PI * p.age / p.max), sp = (.08 + .26 * Math.sqrt(hgt)) * dt;
       p.x += du * sp; p.y += dv * sp;
       if(fade < .08) continue;
       // an arc whose middle sits on the crest, curving back on both sides like a wave front
-      const half = 4 + hgt * 3 + p.cap * 2, R = half * 2.4, ang = Math.atan2(dv, du), sw = Math.asin(half / R), cx = p.x - du * R, cy = p.y - dv * R;
-      const P = crest[Math.min(A - 1, fade * A | 0)];
+      // big seas swell: the crest grows and shrinks as it rolls along
+      const swell = 1 + Math.min(.3, hgt * .08) * Math.sin(p.age * .09 + p.cap * 6.3);
+      const half = (2.2 + hgt * 5.5 + p.cap * 2) * swell, R = half * 2.4, ang = Math.atan2(dv, du), sw = Math.asin(half / R), cx = p.x - du * R, cy = p.y - dv * R;
+      const z = hgt < 1 ? 0 : hgt < 2.2 ? 1 : 2, P = crest[z * A + Math.min(A - 1, fade * A | 0)];
       P.moveTo(cx + R * Math.cos(ang - sw), cy + R * Math.sin(ang - sw)); P.arc(cx, cy, R, ang - sw, ang + sw);
+      if(z){   // a second, smaller crest of foam behind a big wave
+        const r2 = R * .7, s2 = Math.asin(Math.min(1, half * .6 / r2)), bx = cx - du * half * .9, by = cy - dv * half * .9;
+        P.moveTo(bx + r2 * Math.cos(ang - s2), by + r2 * Math.sin(ang - s2)); P.arc(bx, by, r2, ang - s2, ang + s2);
+      }
     }
-    for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + (.15 + .75 * (a + .5) / A).toFixed(2) + ")"; c.lineWidth = 1.5; c.stroke(crest[a]); }
+    for(let z = 0; z < Z; z++) for(let a = 0; a < A; a++){ c.strokeStyle = "rgba(255,255,255," + ((.15 + .75 * (a + .5) / A) * (z ? 1 : .8)).toFixed(2) + ")"; c.lineWidth = WIDTH[z]; c.stroke(crest[z * A + a]); }
   }
   function stepFlow(dt){
     if(!fld || !flow) return;
@@ -2600,7 +2615,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(bars){
       const bw = Math.max(2, slot * .66), r = Math.min(bw / 2, 4);
       body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const h = Math.max(dd.migrants ? 3 : 1.5, dd.migrants / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
-        return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "var(--blue)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
+        return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "url(#barG)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
       body += '<path class="trend" d="' + curve(avg7.map((v, i) => [xc(i), y(v)])) + '"/>';
     } else body = '<path d="' + a + '" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
     // the average day over the range, as a dashed line with its figure; and the busiest day, labelled
@@ -2612,7 +2627,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       body += '<text class="peak" x="' + Math.min(W - m.r - 4, Math.max(m.l + 4, px)).toFixed(1) + '" y="' + Math.max(10, py).toFixed(1) + '" text-anchor="' + (px > W - m.r - 30 ? "end" : px < m.l + 30 ? "start" : "middle") + '">' + fmt(Math.round(vals[pk])) + "</text>"; }
     geo = {x: xc, y, data, vals, avg7, m, iw, ih, W, smooth, bars};
     const a0 = data[0].date, z0 = data[data.length-1].date;
-    box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".18"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient></defs>'
+    box.innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Daily arrivals, ' + dShort.format(parse(a0)) + " " + a0.slice(0,4) + " to " + dShort.format(parse(z0)) + " " + z0.slice(0,4) + ", " + fmt(sum(data, "migrants")) + ' people"><defs><linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF2D92" stop-opacity=".32"/><stop offset=".55" stop-color="#0A84FF" stop-opacity=".14"/><stop offset="1" stop-color="#0A84FF" stop-opacity="0"/></linearGradient>'
+      + '<linearGradient id="barG" gradientUnits="userSpaceOnUse" x1="0" y1="' + (m.t + ih) + '" x2="0" y2="' + m.t + '"><stop offset="0" stop-color="#0A84FF"/><stop offset=".35" stop-color="#2E9BFF"/><stop offset=".7" stop-color="#C54BFF"/><stop offset="1" stop-color="#FF2D92"/></linearGradient>'
+      + '<linearGradient id="lineG" gradientUnits="userSpaceOnUse" x1="0" y1="' + (m.t + ih) + '" x2="0" y2="' + m.t + '"><stop offset="0" stop-color="#0A84FF"/><stop offset=".6" stop-color="#C54BFF"/><stop offset="1" stop-color="#FF2D92"/></linearGradient></defs>'
       + g + body + '<g id="chartSel" visibility="hidden"><line class="cursor"/><circle class="dot" r="5.5"/></g></svg>';
     setSel(sel);
     ddNotes[0] = (touchOnly ? "Drag across" : "Move across") + " to read any day" + (smooth > 1 ? " · line is a " + smooth + "-day average" : "");
@@ -3171,7 +3188,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const x = doy => m.l + doy/365*iw, y = v => m.t + ih - v/top*ih;
     const colour = yr => yr===curYr ? "var(--mbar)" : yr===curYr-1 ? "var(--boat)" : "var(--label3)";
     let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Running total of arrivals each year from 1 January, '+list[0].y+' to '+curYr+'. '
-      + list.map(v=>v.y+(v.y===curYr?" so far":"")+": "+fmt(v.tot)).join(", ")+'.">';
+      + list.map(v=>v.y+(v.y===curYr?" so far":"")+": "+fmt(v.tot)).join(", ")+'.">'
+      // this year in neon blue, last year orange to pink, each with a soft glow
+      + '<defs><linearGradient id="raceCur" gradientUnits="userSpaceOnUse" x1="'+m.l+'" x2="'+(W-m.r)+'" y1="0" y2="0"><stop offset="0" stop-color="#5AC8FA"/><stop offset="1" stop-color="#0A84FF"/></linearGradient>'
+      + '<linearGradient id="raceLast" gradientUnits="userSpaceOnUse" x1="'+m.l+'" x2="'+(W-m.r)+'" y1="0" y2="0"><stop offset="0" stop-color="#FF9F0A"/><stop offset="1" stop-color="#FF2D92"/></linearGradient>'
+      + '</defs>';
     for(let v=0; v<=top; v+=step){
       s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--sep)" stroke-width=".5"'+(v?' stroke-dasharray="2 3"':'')+'/>';
       s += '<text x="'+(m.l-6)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="12">'+(v>=1000?(v/1000)+'k':v)+'</text>';
@@ -3185,8 +3206,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     order.forEach(v=>{
       let d = "";
       v.cum.forEach((c,i)=>{ if(c!=null) d += (d?"L":"M") + x(i).toFixed(1) + " " + y(c).toFixed(1); });
-      const main = v.y>=curYr-1;
-      s += '<path d="'+d+'" fill="none" stroke="'+colour(v.y)+'" stroke-width="'+(v.y===curYr?2.6:main?2:1.3)+'" stroke-linejoin="round" stroke-linecap="round"'+(main?'':' opacity=".9"')+'/>';
+      const main = v.y>=curYr-1, cur = v.y===curYr;
+      s += '<path d="'+d+'" fill="none" stroke="'+(cur?'url(#raceCur)':main?'url(#raceLast)':colour(v.y))+'" stroke-width="'+(cur?3.2:main?2.4:1.3)+'" stroke-linejoin="round" stroke-linecap="round"'
+        + (cur?' style="filter:drop-shadow(0 0 5px rgba(10,132,255,.6))"':main?' style="filter:drop-shadow(0 0 4px rgba(255,45,146,.5))"':' opacity=".8"')+'/>';
     });
     // year labels at the line ends; the ones at the right edge are nudged apart so every year is named
     const labs = list.map(v=>({v, end:v.cum.length-1, ly:y(v.tot)+4})), edge = labs.filter(l=>l.end>300).sort((a,b)=>a.ly-b.ly);
@@ -3209,7 +3231,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     read.innerHTML = narrow ? rowsH : ""; read.hidden = true;
     const g = $("raceHover"), out = narrow ? read : $("raceTip");
     race = {m, iw, W, x, y, list, curYr, narrow, out, line:g.firstChild, dots:[...g.querySelectorAll("circle")], rows:[...out.querySelectorAll(".row")]};
-    $("raceKey").innerHTML = '<span><i style="background:var(--mbar)"></i>'+curYr+' so far</span><span><i style="background:var(--boat)"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+String(curYr-2).slice(2)+'</span>';
+    $("raceKey").innerHTML = '<span><i class="k-cur"></i>'+curYr+' so far</span><span><i class="k-last"></i>'+(curYr-1)+'</span><span><i style="background:var(--label3)"></i>'+list[0].y+'–'+String(curYr-2).slice(2)+'</span>';
     // one line on where this year stands
     const cur = list.find(v=>v.y===curYr);
     if(cur){
@@ -3350,11 +3372,18 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const W = Math.round(box.clientWidth || 320), H = Math.round(Math.min(220, Math.max(170, W*0.3)));
     const m = {t:22, r:4, b:24, l:4}, iw = W-m.l-m.r, ih = H-m.t-m.b, slot = iw/labels.length, bw = Math.min(slot*.62, 56);
     const peak = avg.indexOf(Math.max(...avg));
-    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since '+STEADY.slice(0,4)+': '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'.">';
+    // each bar coloured by its value: blue for the quietest, through pink, to orange for the busiest
+    const lo = Math.min(...avg), RAMP = [[10,132,255],[94,92,230],[255,45,146],[255,100,80],[255,159,10]];
+    const hue = t => { const f = Math.max(0, Math.min(1, t)) * (RAMP.length-1), k = Math.min(RAMP.length-2, Math.floor(f)), u = f-k;
+      return "rgb(" + RAMP[k].map((c,n)=>Math.round(c+(RAMP[k+1][n]-c)*u)).join(",") + ")"; };
+    let s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Average people arriving a day, by '+(patMode==="dow"?"day of the week":"month")+', since '+STEADY.slice(0,4)+': '+labels.map((l,i)=>l+" "+Math.round(avg[i])).join(", ")+'."><defs>'
+      + labels.map((l,i)=>{ const c = hue(mx > lo ? (avg[i]-lo)/(mx-lo) : 1);
+        return '<linearGradient id="patG'+i+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c+'"/><stop offset="1" stop-color="'+c+'" stop-opacity=".7"/></linearGradient>'; }).join("") + '</defs>';
     s += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+(m.t+ih)+'" y2="'+(m.t+ih)+'" stroke="var(--sep)" stroke-width=".5"/>';
     labels.forEach((l,i)=>{
       const h = Math.max(avg[i]/mx*ih, 2), x0 = m.l + i*slot + (slot-bw)/2;
-      s += '<rect x="'+x0.toFixed(1)+'" y="'+(m.t+ih-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+Math.min(4,bw/2)+'" fill="var(--mbar)"'+(i===peak?'':' opacity=".55"')+'><title>'+l+': '+Math.round(avg[i])+' a day on average</title></rect>';
+      const rx = Math.min(6, bw/2, h/2).toFixed(1), c = hue(mx > lo ? (avg[i]-lo)/(mx-lo) : 1);
+      s += '<rect x="'+x0.toFixed(1)+'" y="'+(m.t+ih-h).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="'+rx+'" fill="url(#patG'+i+')"'+(i===peak?' style="filter:drop-shadow(0 0 10px '+c+')"':'')+'><title>'+l+': '+Math.round(avg[i])+' a day on average</title></rect>';
       s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(m.t+ih-h-5).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="'+(i===peak?600:400)+'"'+(i===peak?' style="fill:var(--label)"':'')+'>'+Math.round(avg[i])+'</text>';
       s += '<text x="'+(x0+bw/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="12">'+(slot >= 25 ? l : l[0])+'</text>';
     });
