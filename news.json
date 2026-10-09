@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-09T05:45:21Z",
+ "checkedAt": "2026-10-09T06:16:51Z",
  "items": [
   {
    "title": "Labour sees off Green challenge to win Holborn by-election",
    "url": "https://www.bbc.co.uk/news/articles/cqly3xjy1g11o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-09T05:43:50Z",
+   "published": "2026-10-09T06:10:27Z",
+   "breaking": true
+  },
+  {
+   "title": "Historic Staffordshire brewery to shut after almost 200 years of operation with 310 jobs at risk",
+   "url": "https://www.gbnews.com/news/marstons-brewery-shut-burton-upon-trent",
+   "source": "GB News",
+   "published": "2026-10-09T05:31:13Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cm2d6x11l6pko?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-09T04:38:19Z",
-   "breaking": true
-  },
-  {
-   "title": "The Papers: 'Stark warning' over ADHD and 'Andrew wins legal fight'",
-   "url": "https://www.bbc.co.uk/news/articles/cm8ezw2wjkxgo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-09T04:28:34Z",
    "breaking": true
   }
  ],
