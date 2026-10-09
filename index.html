@@ -1088,6 +1088,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-box:focus-within{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent)}
 .sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:76px;resize:none;appearance:none;margin:0;border:0;border-radius:14px 14px 0 0;background:none;outline:0;padding:12px 14px 4px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
 .sc-form textarea::placeholder{color:var(--label2)}
+.sc-name{display:flex;align-items:center;gap:8px;margin-top:8px;height:44px;padding:0 14px;border-radius:12px;background:var(--fill);transition:box-shadow .2s ease}
+.sc-name:focus-within{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent)}
+.sc-name label{flex:none;color:var(--label2);font-size:.824rem;font-weight:500}
+.sc-name .sc-at{flex:none;margin-left:auto;color:var(--label2);font-size:1rem}
+.sc-name input{flex:0 1 11em;min-width:0;width:100%;appearance:none;margin:0 0 0 -6px;padding:0;border:0;background:none;outline:0;color:var(--label);font:inherit;font-size:1rem}
+.sc-name input::placeholder{color:var(--label3)}
 .sc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px 8px 14px}
 .sc-count{color:var(--label2);font-size:.706rem;font-variant-numeric:tabular-nums}
@@ -1111,6 +1117,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (hover:hover){.sc-list li:not(.empty):hover{background:var(--fill)}}
 .sc-av{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFB340,#FF7A00);color:#fff}
 .sc-av svg{width:24px;height:24px}
+.sc-list .sc-who{display:inline-block;font-weight:600;font-size:.941rem;line-height:1.3;color:var(--label);text-decoration:none}
+.sc-list a.sc-who:hover{text-decoration:underline}
+/* the reports scroll inside the card, so the box to write in stays put */
+#scList{max-height:min(48vh,440px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:0 -8px;padding:0 8px;
+  -webkit-mask-image:linear-gradient(#000 calc(100% - 22px),transparent);mask-image:linear-gradient(#000 calc(100% - 22px),transparent);scrollbar-width:thin}
+#scList.at-end{-webkit-mask-image:none;mask-image:none}
 .sc-list p{margin:2px 0 0;font-size:.941rem;line-height:1.35;color:var(--label);overflow-wrap:anywhere}
 .sc-list time{display:block;margin-top:3px;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .sc-list li.unseen time{color:var(--blue);font-weight:600}
@@ -1277,6 +1289,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       <textarea id="scText" name="body" maxlength="500" placeholder="What did you see, where and when?" required></textarea>
       <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" class="sc-send" id="scSend">Post<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     </div>
+    <div class="sc-name"><label for="scName">X username</label><span class="sc-at" aria-hidden="true">@</span><input id="scName" name="x_user" type="text" maxlength="16" placeholder="optional" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text" pattern="@?[A-Za-z0-9_]{1,15}"></div>
     <input class="hp" type="text" name="website" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
     <p class="sc-note">Posts are not moderated.</p>
     <p class="sc-msg" id="scMsg" aria-live="polite"></p>
@@ -3496,11 +3509,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       return m < 1 ? "Just now" : m < 60 ? m + "m" : m < 1440 ? Math.round(m / 60) + "h" : m < 10080 ? Math.round(m / 1440) + "d" : scWhen.format(new Date(t)).split(",").slice(0, 2).join("");
     };
     const SEEN = "cc-reports-seen", getSeen = () => { try{ return localStorage.getItem(SEEN) || ""; }catch(e){ return ""; } };
-    let scRows = [], scSeen = "", scF = "all", scLoaded = false;
+    let scRows = [], scSeen = "", scF = "all", scLoaded = false, scNoX = false;   // scNoX: the table has no x_user column yet
+    const XNAME = /^[A-Za-z0-9_]{1,15}$/, XKEY = "cc-x-user", scName = $("scName"), scList = $("scList");
+    try{ scName.value = localStorage.getItem(XKEY) || ""; }catch(e){}
+    const scEnd = () => scList.classList.toggle("at-end", scList.scrollTop + scList.clientHeight >= scList.scrollHeight - 2);   // no fade once the last report shows
+    scList.addEventListener("scroll", scEnd, {passive: true});
     const scItem = (c, isNew) => {
       const li = document.createElement("li"), av = document.createElement("span"), d = document.createElement("div"), p = document.createElement("p"), t = document.createElement("time");
       av.className = "sc-av"; av.innerHTML = $("scBtn").querySelector("svg").outerHTML;
       p.textContent = c.body;   // text only, never HTML
+      if(c.x_user && XNAME.test(c.x_user)){   // the poster's X username, as they typed it: a link to that profile
+        const a = document.createElement("a");
+        a.className = "sc-who"; a.href = "https://x.com/" + c.x_user; a.target = "_blank"; a.rel = "noopener nofollow ugc"; a.textContent = "@" + c.x_user;
+        d.append(a);
+      }
       t.dateTime = c.created_at; t.textContent = scAgo(Date.parse(c.created_at)); t.title = scWhen.format(new Date(c.created_at));
       li.className = (c.created_at > scSeen ? "unseen" : "") + (isNew ? " new" : "");
       d.append(p, t); li.append(av, d); return li;
@@ -3517,10 +3539,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const fresh = rows.filter(c => c.created_at > scSeen), older = rows.filter(c => c.created_at <= scSeen);
       $("scList").replaceChildren(...(fresh.length ? scSection("New", fresh, fresh.length + (fresh.length === 1 ? " report" : " reports")) : []),
         ...(older.length ? scSection(fresh.length ? "Earlier" : "Latest", older) : []));
+      scEnd();
     }
     async function scLoad(){
       try{
-        const r = await fetch(scApi + "?select=id,created_at,body&order=created_at.desc&limit=100", {headers: scHead, cache: "no-store", ...limit()});
+        const q = cols => fetch(scApi + "?select=" + cols + "&order=created_at.desc&limit=100", {headers: scHead, cache: "no-store", ...limit()});
+        let r = scNoX ? null : await q("id,created_at,body,x_user");
+        if(!r || r.status === 400){ r = await q("id,created_at,body"); if(r.ok && !scNoX){ scNoX = true; scName.parentNode.hidden = true; } }   // before supabase/sighting-comments.sql adds the column
         if(!r.ok) throw 0;
         scRows = await r.json(); scLoaded = true; scDraw();
       }catch(e){ if(!scLoaded) $("scList").innerHTML = '<ul class="sc-list"><li class="empty">Reports couldn’t load just now.</li></ul>'; }
@@ -3557,13 +3582,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const msg = $("scMsg"), send = $("scSend"), body = scText.value.trim().replace(/\s+/g, " ");
       if($("scHp").value) return;   // a bot filled in the hidden box
       if(body.length < 3){ msg.className = "sc-msg err"; msg.textContent = "Write a little more first."; scText.focus(); return; }
+      const x_user = scNoX ? "" : scName.value.trim().replace(/^@/, "");
+      if(x_user && !XNAME.test(x_user)){ msg.className = "sc-msg err"; msg.textContent = "X usernames are letters, numbers and _ only, up to 15 characters."; scName.focus(); return; }
+      try{ x_user ? localStorage.setItem(XKEY, x_user) : localStorage.removeItem(XKEY); }catch(e){}
       send.disabled = true; msg.className = "sc-msg wait"; msg.textContent = "Posting…";
       try{
-        const r = await fetch(scApi, {method:"POST", headers:{...scHead, "Content-Type":"application/json", Prefer:"return=minimal"}, body:JSON.stringify({body}), ...limit()});
+        const r = await fetch(scApi, {method:"POST", headers:{...scHead, "Content-Type":"application/json", Prefer:"return=minimal"}, body:JSON.stringify(x_user ? {body, x_user} : {body}), ...limit()});
         if(!r.ok){ const j = await r.json().catch(() => ({})); throw j.code === "P0001" && j.message ? j.message : 0; }   // the database's own reason, written for visitors
         msg.className = "sc-msg"; msg.textContent = "Thank you. Your report is up.";
         scText.value = ""; scCount();
-        scRows.unshift({id: 0, created_at: new Date().toISOString(), body}); scDraw();
+        scRows.unshift({id: 0, created_at: new Date().toISOString(), body, x_user}); scDraw(); scList.scrollTop = 0;
         const mine = $("scList").querySelector(".sc-list li"); if(mine){ mine.classList.add("new"); mine.classList.remove("unseen"); }
         setTimeout(scLoad, 1500);
       }catch(err){ msg.className = "sc-msg err"; msg.textContent = typeof err === "string" ? err : "It couldn't be posted just now. Please try again in a moment."; }
