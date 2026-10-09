@@ -762,7 +762,6 @@ footer strong{color:var(--label);font-weight:600}
 @keyframes ssSwell{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){.ss-star,.ss-beam,.ss-bob,.ss-bob2,.ss-swell,.ss-swell2{animation:none}}
 .top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px + var(--busy-h,0px));left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
-.top-row .top-theme{display:flex;width:max-content;margin:0;pointer-events:auto}
 @media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2);padding-left:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
 @media (min-width:1360px) and (hover:hover) and (pointer:fine){.top-row{left:312px;padding-left:max(16px,calc((100% - 312px - 1148px) / 2));padding-right:max(16px,calc((100% - 312px - 1148px) / 2))}}   /* beside the share card */
 /* the logo and name, at the top left above the map */
@@ -773,22 +772,22 @@ footer strong{color:var(--label);font-weight:600}
 @media (hover:hover){.top-brand .lt-logo:hover{transform:scale(1.06)}}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
-@media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}.top-row .top-theme button{font-size:0;gap:0;padding:0 10px}.top-row .top-theme svg{width:16px;height:16px}}   /* phones: the switch as icons, so the name fits */
-/* Report Channel Crossing: one clean pill beside the theme switch, the same height. It flashes neon orange twice as the page opens,
-   and glows neon orange under the mouse or while the comments are open */
+@media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}}
+/* The buttons at the top right, as on Facebook: round grey buttons that turn blue while their card is open,
+   with a red count on Report Channel Crossing for reports posted since the visitor last looked */
 .top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
-.rs-pill{display:inline-flex;border-radius:999px;color:var(--label)}
-.rs-btn{--neo:linear-gradient(135deg,#FFB340,#FF7A00);appearance:none;border:0;color:inherit;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 16px;border-radius:999px;
-  background:var(--fill,rgba(118,118,128,.12));font:600 14px/1 var(--font);letter-spacing:-.01em;cursor:pointer;touch-action:manipulation;
-  transition:background .2s ease,color .2s ease,box-shadow .25s ease,transform .15s ease;animation:rsFlash 1.6s ease-in-out .9s 1 backwards}
-.rs-btn svg{width:16px;height:16px;flex:none}
-.rs-btn:focus-visible{outline:2px solid #FF9F0A;outline-offset:2px}
-.rs-btn[aria-expanded="true"]{background:var(--neo);color:#fff;box-shadow:0 0 0 .5px rgba(255,200,120,.7) inset,0 0 18px rgba(255,140,0,.55)}
-@media (hover:hover){.rs-btn:hover{background:var(--neo);color:#fff;box-shadow:0 0 0 .5px rgba(255,200,120,.7) inset,0 0 10px rgba(255,159,10,.7),0 0 26px rgba(255,122,0,.45)}}
-.rs-btn:active{transform:scale(.97)}
-@keyframes rsFlash{0%,45%,100%{box-shadow:0 0 0 0 rgba(255,140,0,0)}20%,70%{background:var(--neo);color:#fff;box-shadow:0 0 22px rgba(255,140,0,.6)}}
-@media (max-width:440px){.rs-btn{padding:0 10px}.rs-btn span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.rs-btn svg{width:17px;height:17px}}   /* phones: the eye alone, so the row fits */
-.top-theme button{min-height:34px;padding:0 13px}
+.tb-btn{position:relative;flex:none;display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;appearance:none;cursor:pointer;touch-action:manipulation;
+  background:var(--fill2);color:var(--label);transition:background .2s ease,color .2s ease,transform .15s ease}
+.tb-btn svg{width:20px;height:20px}
+.tb-btn::after{content:"";position:absolute;inset:-3px}
+.tb-btn:active{transform:scale(.94)}
+.tb-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tb-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+@media (hover:hover){.tb-btn:not([aria-expanded="true"]):hover{background:color-mix(in srgb,var(--label) 22%,transparent)}}
+.tb-badge{position:absolute;top:-5px;right:-6px;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;border:2px solid var(--bg);background:#E41E3F;color:#fff;
+  font:700 11px/16px var(--font);text-align:center;font-variant-numeric:tabular-nums;letter-spacing:0;animation:tbPop .4s cubic-bezier(.2,.9,.3,1.4) both}
+.tb-badge[hidden]{display:none}
+@keyframes tbPop{from{transform:scale(0)}}
 
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
 /* small buttons keep their look but get a finger-sized tap area */
@@ -796,7 +795,6 @@ footer strong{color:var(--label);font-weight:600}
 .mn-close::after,.top-brand .lt-logo::after,.am-x::after{content:"";position:absolute;inset:-8px}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
-.rs-btn{position:relative}.rs-btn::after{content:"";position:absolute;inset:-5px -3px}
 @media (pointer:coarse){.ft-theme button::after{inset:-5px -1px}.otd-years .oy{position:relative}.otd-years .oy::after{content:"";position:absolute;inset:0 -2px}}   /* 44pt for fingers, as Apple asks */
 /* phones on their side: the map fills the screen and the number shrinks to fit */
 @media (max-height:500px) and (orientation:landscape){
@@ -1055,56 +1053,76 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .chart .line{stroke:url(#lineG);stroke-width:2.4}
 .chart #chartBars rect{opacity:.85}
 .chart .has-sel #chartBars rect:not(.on){opacity:.35}
-/* Report Channel Crossing: a frosted dropdown under its button. A short thank-you, a box to write in with its Post button
-   (styled like the 1M / 3M / 1Y buttons on the graphs), then everyone's reports, newest first, divided by grey hairlines as in the List view */
-.sc-pop{position:absolute;z-index:65;width:min(400px,calc(100vw - 24px));max-height:min(640px,calc(100dvh - 90px));display:flex;flex-direction:column;box-sizing:border-box;padding:20px 20px 8px;border-radius:26px;
-  background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22),0 0 0 .5px var(--sep),0 24px 60px rgba(0,0,0,.28);transform-origin:top center;animation:scDrop .34s cubic-bezier(.2,.9,.3,1.05) both}
-.sc-pop[hidden]{display:none}
-@keyframes scDrop{from{opacity:0;transform:translateY(-10px) scale(.97)}}
-@media (prefers-reduced-transparency:reduce){.sc-pop{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
-.sc-pop:focus{outline:0}
-.sc-top{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding-right:34px}
-.sc-badge{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#FFB340,#FF7A00);color:#fff;box-shadow:0 6px 16px rgba(255,122,0,.32)}
-.sc-badge svg{width:22px;height:22px}
-.sc-pop h2{margin:0;font:700 1.12rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label)}
-.sc-pop .sc-x{position:absolute;top:16px;right:16px;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:var(--fill);color:var(--label2);cursor:pointer}
-.sc-pop .sc-x svg{width:10px;height:10px}
-@media (hover:hover){.sc-pop .sc-x:hover{background:var(--fill2)}}
-.sc-intro{margin:0 0 14px;color:var(--label);font-size:.882rem;line-height:1.45}
-.sc-form{position:relative;flex:none}
-.sc-box{border-radius:16px;background:color-mix(in srgb,var(--card) 82%,transparent);box-shadow:0 0 0 .5px var(--sep),0 1px 2px rgba(0,0,0,.04);transition:box-shadow .2s ease}
+/* The cards that drop from those buttons, as on Facebook: a solid card with a big bold title, pill tabs and roomy rows */
+.tb-pop{position:absolute;z-index:65;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;max-height:calc(100dvh - 90px);
+  padding:16px 16px 10px;border-radius:16px;background:var(--card);color:var(--label);
+  box-shadow:0 0 0 .5px var(--sep),0 12px 28px rgba(0,0,0,.2),0 2px 4px rgba(0,0,0,.08);transform-origin:top right;animation:tbDrop .26s cubic-bezier(.2,.9,.3,1.05) both}
+.tb-pop[hidden]{display:none}
+.tb-pop:focus{outline:0}
+@keyframes tbDrop{from{opacity:0;transform:translateY(-6px) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.tb-pop,.tb-badge,.sc-list li.new{animation:none}}
+.tb-pop h2{margin:0;font:700 1.5rem/1.15 var(--font);letter-spacing:-.02em}
+@media (max-width:440px){.tb-pop h2{font-size:1.3rem}}
+.tb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+.tb-x{flex:none;display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:none;color:var(--label2);cursor:pointer}
+.tb-x svg{width:11px;height:11px}
+@media (hover:hover){.tb-x:hover{background:var(--fill)}}
+/* Appearance */
+.th-pop{width:min(300px,calc(100vw - 24px))}
+.th-list{display:grid;gap:2px;margin:0 -8px}
+.th-list button{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border:0;border-radius:10px;background:none;color:var(--label);text-align:left;font:inherit;cursor:pointer}
+@media (hover:hover){.th-list button:hover{background:var(--fill)}}
+.th-list button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.th-list i{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--fill2)}
+.th-list i svg{width:18px;height:18px}
+.th-list span{flex:1;display:grid;gap:2px}
+.th-list b{font-weight:600;font-size:.941rem}
+.th-list small{color:var(--label2);font-size:.765rem}
+.th-list em{flex:none;width:20px;height:20px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--label3)}
+.th-list [aria-checked="true"] em{box-shadow:inset 0 0 0 6px var(--blue)}
+/* Report Channel Crossing */
+.sc-pop{width:min(380px,calc(100vw - 24px))}
+.sc-tabs{display:flex;gap:6px;margin:0 0 12px}
+.sc-tabs button{height:36px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--label);font:600 .941rem/1 var(--font);cursor:pointer}
+.sc-tabs button[aria-pressed="true"]{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
+@media (hover:hover){.sc-tabs button[aria-pressed="false"]:hover{background:var(--fill)}}
+.sc-tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sc-intro{margin:0 0 12px;color:var(--label2);font-size:.882rem;line-height:1.45}
+.sc-form{position:relative}
+.sc-box{border-radius:14px;background:var(--fill);transition:box-shadow .2s ease}
 .sc-box:focus-within{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent)}
-.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:88px;resize:none;appearance:none;margin:0;border:0;border-radius:16px 16px 0 0;background:none;outline:0;padding:13px 14px 4px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
-.sc-form textarea::placeholder{color:var(--label3)}
+.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:76px;resize:none;appearance:none;margin:0;border:0;border-radius:14px 14px 0 0;background:none;outline:0;padding:12px 14px 4px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
+.sc-form textarea::placeholder{color:var(--label2)}
 .sc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 9px 9px 14px}
-.sc-count{color:var(--label3);font-size:.706rem;font-variant-numeric:tabular-nums}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px 8px 14px}
+.sc-count{color:var(--label2);font-size:.706rem;font-variant-numeric:tabular-nums}
 .sc-count.near{color:var(--orange-t)}
 .sc-send{appearance:none;border:0;position:relative;flex:none;height:34px;padding:0 14px;border-radius:9px;display:inline-flex;align-items:center;gap:5px;
-  font:600 .765rem/1 var(--font);color:var(--label);background:var(--fill);cursor:pointer;touch-action:manipulation;transition:background .2s ease,opacity .2s ease}   /* the same as the 1M / 3M / 1Y buttons */
+  font:600 .765rem/1 var(--font);color:var(--label);background:var(--card);box-shadow:0 0 0 .5px var(--sep);cursor:pointer;touch-action:manipulation;transition:background .2s ease,opacity .2s ease}   /* the graphs' 1M / 3M / 1Y buttons */
 .sc-send svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .sc-send::after{content:"";position:absolute;inset:-6px -4px}
 .sc-send:disabled{opacity:.45;cursor:default}
 .sc-send:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.sc-send:not(:disabled):hover{background:var(--fill2)}}
-.sc-note{margin:8px 4px 0;color:var(--label2);font-size:.706rem}
+.sc-note{margin:7px 4px 0;color:var(--label2);font-size:.706rem}
 .sc-msg{margin:6px 4px 0;font-size:.765rem;color:var(--green-t)}
 .sc-msg:empty{display:none}
 .sc-msg.err{color:var(--red-t)}
 .sc-msg.wait{color:var(--label2)}
-.sc-h{display:flex;align-items:baseline;justify-content:space-between;margin:20px 2px 2px;font:600 .706rem/1 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2)}
-.sc-h span:last-child{font-weight:500;letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums}
-.sc-list{list-style:none;flex:1;min-height:80px;margin:0 -20px;padding:0 20px 8px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
-  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent)}
-.sc-list li{padding:11px 0;border-top:.5px solid var(--sep);font-size:.882rem}
-.sc-list li:first-child{border-top:0}
-.sc-list b{display:block;font-weight:600;font-size:.706rem;color:var(--label2);font-variant-numeric:tabular-nums}
-.sc-list p{margin:3px 0 0;line-height:1.42;color:var(--label);overflow-wrap:anywhere}
+.sc-sec{display:flex;align-items:baseline;justify-content:space-between;margin:18px 0 4px;font:700 1.06rem/1.2 var(--font);letter-spacing:-.01em}
+.sc-sec small{font-weight:500;font-size:.765rem;color:var(--label2);letter-spacing:0}
+.sc-list{list-style:none;margin:0 -8px;padding:0}
+.sc-list li{position:relative;display:flex;align-items:flex-start;gap:12px;padding:8px 30px 8px 8px;border-radius:10px}
+@media (hover:hover){.sc-list li:not(.empty):hover{background:var(--fill)}}
+.sc-av{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFB340,#FF7A00);color:#fff}
+.sc-av svg{width:24px;height:24px}
+.sc-list p{margin:2px 0 0;font-size:.941rem;line-height:1.35;color:var(--label);overflow-wrap:anywhere}
+.sc-list time{display:block;margin-top:3px;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
+.sc-list li.unseen time{color:var(--blue);font-weight:600}
+.sc-list li.unseen::after{content:"";position:absolute;right:10px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--blue)}
 .sc-list li.new{animation:scIn .5s cubic-bezier(.2,.8,.2,1)}
-.sc-list .empty{color:var(--label2);padding:14px 0}
+.sc-list .empty{display:block;padding:14px 8px;color:var(--label2);font-size:.882rem}
 @keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.sc-list li.new,.sc-pop{animation:none}}
 </style>
 </head>
 <body>
@@ -1157,7 +1175,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><div class="rs-pill"><button type="button" class="rs-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Report Channel Crossing</span></button></div><div class="ft-theme top-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="tb-badge" id="scBadge" hidden></span></button><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1246,10 +1264,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
 
-<!-- Report Channel Crossing: a frosted dropdown under its button with a box to write in and everyone's comments; hidden until the comments database is set up -->
-<div class="sc-pop" id="scPop" tabindex="-1" role="dialog" aria-labelledby="scH" data-nosnippet hidden>
-  <div class="sc-top"><span class="sc-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span><h2 id="scH">Report Channel Crossing</h2></div>
-  <button type="button" class="sc-x" id="scX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+<!-- The cards under the round buttons at the top right: Report Channel Crossing (a box to write in and everyone's comments; hidden until the comments database is set up -->
+<div class="tb-pop sc-pop" id="scPop" tabindex="-1" role="dialog" aria-labelledby="scH" data-nosnippet hidden>
+  <div class="tb-head"><h2 id="scH">Report Channel Crossing</h2><button type="button" class="tb-x" id="scX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+  <div class="sc-tabs" role="group" aria-label="Show"><button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="today" aria-pressed="false">Today</button></div>
   <p class="sc-intro">Report a suspected crossing or sighting here. Thank you very much for doing so.</p>
   <form class="sc-form" id="scForm" novalidate>
     <div class="sc-box">
@@ -1261,8 +1279,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     <p class="sc-note">Posts are not moderated.</p>
     <p class="sc-msg" id="scMsg" aria-live="polite"></p>
   </form>
-  <h3 class="sc-h"><span>Latest reports</span><span id="scN"></span></h3>
-  <ul class="sc-list" id="scList" aria-label="Reports, newest first"><li class="empty">Loading reports…</li></ul>
+  <div id="scList" aria-live="polite"><ul class="sc-list"><li class="empty">Loading reports…</li></ul></div>
+</div>
+<div class="tb-pop th-pop" id="thPop" role="menu" aria-labelledby="thH" hidden>
+  <div class="tb-head"><h2 id="thH">Appearance</h2></div>
+  <div class="th-list"><button type="button" role="menuitemradio" data-mode="auto" aria-checked="false"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></i><span><b>Auto</b><small>Follows your device</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="light" aria-checked="false"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg></i><span><b>Day</b><small>Light all the time</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="dark" aria-checked="false"><i><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg></i><span><b>Night</b><small>Dark all the time</small></span><em aria-hidden="true"></em></button></div>
 </div>
 
 <main id="main">
@@ -1573,9 +1594,34 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
   /* ---------------------------------------------------- appearance: Auto, Day or Night, from the switch in the footer (shared with the other pages) */
-  const root = document.documentElement, modeBtns = document.querySelectorAll(".ft-theme button");
+  const root = document.documentElement, modeBtns = document.querySelectorAll(".ft-theme button, .th-list button");
   const mode = () => root.getAttribute("data-theme") || "auto";
-  function showTheme(){ const m = mode(); modeBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m)); }
+  function showTheme(){
+    const m = mode();
+    modeBtns.forEach(b => b.setAttribute(b.getAttribute("role") === "menuitemradio" ? "aria-checked" : "aria-pressed", b.dataset.mode === m));
+    const dark = m === "dark" || (m === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+    $("thIc").innerHTML = document.querySelector('.th-list [data-mode="' + (dark ? "dark" : "light") + '"] i').innerHTML;   // the round button: a moon by night, a sun by day
+  }
+  // the round buttons at the top right each open a card just under them, lined up with their right edge; one at a time
+  const tbMenus = [];
+  function tbMenu(btn, pop, onOpen){
+    const place = () => {
+      const r = btn.getBoundingClientRect(), w = pop.offsetWidth;
+      pop.style.top = (r.bottom + scrollY + 8) + "px";
+      pop.style.left = (Math.max(12, Math.min(r.right - w, innerWidth - w - 12)) + scrollX) + "px";
+    };
+    const set = on => {
+      pop.hidden = !on; btn.setAttribute("aria-expanded", on);
+      if(on){ tbMenus.forEach(m => m.pop !== pop && m.set(false)); place(); if(onOpen) onOpen(); }
+    };
+    btn.addEventListener("click", e => { e.stopPropagation(); set(pop.hidden); });
+    document.addEventListener("click", e => { if(!pop.hidden && !pop.contains(e.target)) set(false); });
+    addEventListener("keydown", e => { if(e.key === "Escape" && !pop.hidden){ set(false); btn.focus({preventScroll:true}); } });
+    addEventListener("resize", () => { if(!pop.hidden) place(); });
+    const m = {pop, set}; tbMenus.push(m); return m;
+  }
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", showTheme);   // Auto: the icon follows the device
+  tbMenu($("thBtn"), $("thPop"), () => $("thPop").querySelector('[aria-checked="true"]').focus({preventScroll:true}));
   modeBtns.forEach(b => b.addEventListener("click", () => {
     const n = b.dataset.mode;
     ccTheme(n);
@@ -3470,43 +3516,66 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // The Report Channel Crossing button stays hidden until both values are filled in.
   const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
   if(SC_URL && SC_KEY){
-    const sc = $("scPop"), scList = $("scList"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
+    const sc = $("scPop"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
     const scHead = {apikey: SC_KEY, Accept: "application/json"};
     const scWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
-    const scItem = (c, isNew) => {
-      const li = document.createElement("li"), b = document.createElement("b"), p = document.createElement("p");
-      b.textContent = scWhen.format(new Date(c.created_at)); p.textContent = c.body;   // text only, never HTML
-      if(isNew) li.className = "new";
-      li.append(b, p); return li;
+    const scAgo = t => {   // as on Facebook: 5m, 3h, 2d, then the date
+      const m = Math.max(0, Math.round((Date.now() - t) / 60000));
+      return m < 1 ? "Just now" : m < 60 ? m + "m" : m < 1440 ? Math.round(m / 60) + "h" : m < 10080 ? Math.round(m / 1440) + "d" : scWhen.format(new Date(t)).split(",").slice(0, 2).join("");
     };
-    let scShown = "";
+    const SEEN = "cc-reports-seen", getSeen = () => { try{ return localStorage.getItem(SEEN) || ""; }catch(e){ return ""; } };
+    let scRows = [], scSeen = "", scF = "all", scLoaded = false;
+    const scItem = (c, isNew) => {
+      const li = document.createElement("li"), av = document.createElement("span"), d = document.createElement("div"), p = document.createElement("p"), t = document.createElement("time");
+      av.className = "sc-av"; av.innerHTML = $("scBtn").querySelector("svg").outerHTML;
+      p.textContent = c.body;   // text only, never HTML
+      t.dateTime = c.created_at; t.textContent = scAgo(Date.parse(c.created_at)); t.title = scWhen.format(new Date(c.created_at));
+      li.className = (c.created_at > scSeen ? "unseen" : "") + (isNew ? " new" : "");
+      d.append(p, t); li.append(av, d); return li;
+    };
+    const scSection = (title, rows, note) => {
+      const h = document.createElement("h3"), ul = document.createElement("ul");
+      h.className = "sc-sec"; h.textContent = title;
+      if(note){ const s = document.createElement("small"); s.textContent = note; h.append(s); }
+      ul.className = "sc-list"; ul.append(...rows.map(c => scItem(c))); return [h, ul];
+    };
+    function scDraw(){
+      const today = ukToday(), rows = scF === "today" ? scRows.filter(c => ukDate(new Date(c.created_at)) === today) : scRows;
+      if(!rows.length){ $("scList").innerHTML = '<ul class="sc-list"><li class="empty">' + (scF === "today" ? "No reports yet today." : "No reports yet. Be the first.") + "</li></ul>"; return; }
+      const fresh = rows.filter(c => c.created_at > scSeen), older = rows.filter(c => c.created_at <= scSeen);
+      $("scList").replaceChildren(...(fresh.length ? scSection("New", fresh, fresh.length + (fresh.length === 1 ? " report" : " reports")) : []),
+        ...(older.length ? scSection(fresh.length ? "Earlier" : "Latest", older) : []));
+    }
     async function scLoad(){
       try{
         const r = await fetch(scApi + "?select=id,created_at,body&order=created_at.desc&limit=100", {headers: scHead, cache: "no-store", ...limit()});
         if(!r.ok) throw 0;
-        const rows = await r.json(), key = rows.map(c => c.id).join();
-        if(key === scShown) return;
-        scShown = key;
-        scList.replaceChildren(...(rows.length ? rows.map(c => scItem(c)) : [Object.assign(document.createElement("li"), {className: "empty", textContent: "No reports yet. Be the first."})]));
-        $("scN").textContent = rows.length ? rows.length + (rows.length === 100 ? "+" : "") : "";
-      }catch(e){ if(!scShown) scList.innerHTML = '<li class="empty">Reports couldn\u2019t load just now.</li>'; }
+        scRows = await r.json(); scLoaded = true; scDraw();
+      }catch(e){ if(!scLoaded) $("scList").innerHTML = '<ul class="sc-list"><li class="empty">Reports couldn’t load just now.</li></ul>'; }
     }
-    const scBtn = $("scBtn");
+    const scBtn = $("scBtn"), badge = $("scBadge");
     scBtn.hidden = false;
-    function scPlace(){   // just under the button, kept on screen
-      const r = scBtn.getBoundingClientRect(), w = sc.offsetWidth;
-      sc.style.top = (r.bottom + scrollY + 10) + "px";
-      sc.style.left = (Math.max(12, Math.min(r.left, innerWidth - w - 12)) + scrollX) + "px";
-    }
-    function scOpen(on){
-      sc.hidden = !on; scBtn.setAttribute("aria-expanded", on);
-      if(on){ scPlace(); scLoad(); (matchMedia("(hover: none)").matches ? sc : scText).focus({preventScroll:true}); }
-    }
-    scBtn.addEventListener("click", e => { e.stopPropagation(); scOpen(sc.hidden); });
-    $("scX").addEventListener("click", () => { scOpen(false); scBtn.focus({preventScroll:true}); });
-    document.addEventListener("click", e => { if(!sc.hidden && !sc.contains(e.target)) scOpen(false); });
-    addEventListener("keydown", e => { if(e.key === "Escape" && !sc.hidden){ scOpen(false); scBtn.focus({preventScroll:true}); } });
-    addEventListener("resize", () => { if(!sc.hidden) scPlace(); });
+    // the red count: reports since the visitor last opened the card (or from the last day, on a first visit)
+    (async () => {
+      try{
+        const since = getSeen() || new Date(Date.now() - 864e5).toISOString();
+        const r = await fetch(scApi + "?select=id&created_at=gt." + encodeURIComponent(since) + "&limit=10", {headers: scHead, cache: "no-store", ...limit()});
+        if(!r.ok) return;
+        const n = (await r.json()).length;
+        if(n && scBtn.getAttribute("aria-expanded") !== "true"){ badge.textContent = n > 9 ? "9+" : n; badge.hidden = false; scBtn.setAttribute("aria-label", "Report Channel Crossing, " + n + (n > 9 ? "+" : "") + " new"); }
+      }catch(e){}
+    })();
+    tbMenu(scBtn, sc, async () => {
+      scSeen = getSeen() || new Date(Date.now() - 864e5).toISOString();
+      badge.hidden = true; scBtn.setAttribute("aria-label", "Report Channel Crossing");
+      (matchMedia("(hover: none)").matches ? sc : scText).focus({preventScroll:true});
+      await scLoad();
+      try{ localStorage.setItem(SEEN, scRows.length ? scRows[0].created_at : new Date().toISOString()); }catch(e){}
+    });
+    $("scX").addEventListener("click", () => { sc.hidden = true; scBtn.setAttribute("aria-expanded", false); scBtn.focus({preventScroll:true}); });
+    sc.querySelectorAll(".sc-tabs button").forEach(b => b.addEventListener("click", () => {
+      scF = b.dataset.f; sc.querySelectorAll(".sc-tabs button").forEach(x => x.setAttribute("aria-pressed", x === b)); scDraw();
+    }));
     document.addEventListener("visibilitychange", () => { if(!document.hidden && !sc.hidden) scLoad(); });
     setInterval(() => { if(!document.hidden && !sc.hidden) scLoad(); }, 60000);
     const scCount = () => { const n = scText.value.trim().length; $("scCount").textContent = n + " / 500"; $("scCount").classList.toggle("near", n > 450); };
@@ -3522,9 +3591,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
         if(!r.ok){ const j = await r.json().catch(() => ({})); throw j.code === "P0001" && j.message ? j.message : 0; }   // the database's own reason, written for visitors
         msg.className = "sc-msg"; msg.textContent = "Thank you. Your report is up.";
         scText.value = ""; scCount();
-        const first = scList.querySelector(".empty"); if(first) first.remove();
-        scList.prepend(scItem({created_at: new Date().toISOString(), body}, true)); scList.scrollTop = 0;
-        scShown = ""; setTimeout(scLoad, 1500);
+        scRows.unshift({id: 0, created_at: new Date().toISOString(), body}); scDraw();
+        const mine = $("scList").querySelector(".sc-list li"); if(mine){ mine.classList.add("new"); mine.classList.remove("unseen"); }
+        setTimeout(scLoad, 1500);
       }catch(err){ msg.className = "sc-msg err"; msg.textContent = typeof err === "string" ? err : "It couldn't be posted just now. Please try again in a moment."; }
       send.disabled = false;
     });
