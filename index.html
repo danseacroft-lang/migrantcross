@@ -242,6 +242,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .live-tip li i{width:8px;height:8px;border-radius:50%;background:var(--c)}
 .live-tip button{position:absolute;top:10px;right:10px;appearance:none;border:0;background:var(--fill);color:var(--label2);width:24px;height:24px;border-radius:50%;padding:0;cursor:pointer;display:grid;place-items:center}
 .live-tip button svg{width:10px;height:10px}
+.live-tip button::after{content:"";position:absolute;inset:-10px}   /* a finger-sized target */
 .live-tip button:hover{background:var(--fill2)}
 .live-tip button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .mp-key{display:grid;grid-template-columns:repeat(2,9px);gap:4px;padding:4px 0 0 5px}
@@ -773,6 +774,7 @@ footer strong{color:var(--label);font-weight:600}
 .top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);letter-spacing:-.01em;color:var(--label);white-space:nowrap}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
 @media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}}
+.top-brand h1{min-width:0;overflow:hidden;text-overflow:ellipsis}
 /* The buttons at the top right, as on Facebook: round grey buttons that turn blue while their card is open,
    with a red count on Report Channel Crossing for reports posted since the visitor last looked */
 .top-act{display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
@@ -789,6 +791,7 @@ footer strong{color:var(--label);font-weight:600}
 .tb-badge[hidden]{display:none}
 @keyframes tbPop{from{transform:scale(0)}}
 
+@media (max-width:374px){.top-row{gap:8px}.top-brand{gap:6px}.top-brand .lt-logo{width:26px;height:26px}.top-brand h1{font-size:.86rem;letter-spacing:-.02em}.top-act{gap:6px}.tb-btn{width:34px;height:34px}.tb-btn svg{width:18px;height:18px}.tb-btn::after{inset:-5px}}   /* small phones: three buttons and the name still fit on one line */
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
 /* small buttons keep their look but get a finger-sized tap area */
 .top-brand .lt-logo,.am-x{position:relative}
@@ -807,6 +810,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
   .b-ring{grid-row:auto}
   .duo{grid-template-columns:minmax(0,1fr)}
+  .duo > .mb-col + .mb-col{margin-top:26px}   /* stacked, the second heading gets the same room as a new section */
 }
 @media (max-width:600px){
   .hero{border-radius:24px;min-height:480px}
@@ -831,6 +835,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
+  main{padding-bottom:28px}   /* the petitions note sits closer to the share buttons */
 }
 /* ------------------------------------------------------------ accessibility settings */
 @media (prefers-reduced-motion:reduce){
