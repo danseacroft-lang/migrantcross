@@ -1553,7 +1553,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   const dMid = new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"long",...UTC});
   const dLong = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",...UTC});
   const dDMY = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",...UTC});   // 5 July 2024
-  const ukToday = () => new Date().toLocaleDateString("en-CA",{timeZone:"Europe/London"});
+  const ukDate = d => d.toLocaleString("sv-SE",{timeZone:"Europe/London"}).slice(0,10), ukToday = () => ukDate(new Date());   // YYYY-MM-DD in UK time
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
@@ -1593,9 +1593,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   /* ---------------------------------------------------- hero parallax */
   const hero = $("hero"), heroMap = $("heroMap");
+  let heroH = hero.offsetHeight;
+  addEventListener("resize", () => heroH = hero.offsetHeight, {passive:true});
   function onScroll(){
-    const y = scrollY, h = hero.offsetHeight;
-    if(!reduced && y < h){ heroMap.style.transform = "translateY(" + Math.round(y * .35) + "px)";   /* whole pixels, so the map's text never lands between pixels and blurs */ }
+    const y = scrollY;
+    if(!reduced && y < heroH){ heroMap.style.transform = "translateY(" + Math.round(y * .35) + "px)";   /* whole pixels, so the map's text never lands between pixels and blurs */ }
   }
   addEventListener("scroll", onScroll, {passive:true}); onScroll();
 
@@ -1775,9 +1777,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   // Never on top of each other or under the title, buttons and figures. Only the names on show are on the map.
   const RANK_ZOOM = [0, 0, 0, 7.6, 8.7, 9.7];   // the zoom each rank of town appears from
   const measure = document.createElement("canvas").getContext("2d");
+  let ff = "";
   function labelWidth(t){
     if(t.w) return t.w;
-    const ff = getComputedStyle(document.body).fontFamily;
+    ff = ff || getComputedStyle(document.body).fontFamily;
     measure.font = t.rank === 0 ? (t.kind === "area land" ? "600 11px " : "italic 500 13px ") + ff : (t.rank === 1 ? "700 13px " : t.rank === 2 ? "600 12px " : t.rank === 3 ? "500 12px " : "500 11px ") + ff;
     return t.w = measure.measureText(t.name).width + (t.kind === "area land" ? t.name.length * 2.6 : 0);   // land names are letter-spaced
   }
@@ -1799,7 +1802,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const taken = coverPx.concat(!$("straitLbl").getClientRects().length ? [] : [box6($("straitLbl").getBoundingClientRect())]);
     const hit = q => taken.some(t => q[0] < t[2] && q[2] > t[0] && q[1] < t[3] && q[3] > t[1]);
     // launch rings under the title, buttons or figures fade, and can't be tapped through them
-    if(launchLayer) [launchLayer, vesselLayer].forEach(g => g.eachLayer(m => { const el = m.getElement(); if(!el) return; const r = el.getBoundingClientRect(), h = hit([r.left - mr.left, r.top - mr.top, r.right - mr.left, r.bottom - mr.top]); el.style.opacity = h ? .25 : ""; el.style.pointerEvents = h ? "none" : ""; }));
+    if(launchLayer){   // all the reads first, then all the writes, so the page lays out once
+      const els = []; [launchLayer, vesselLayer].forEach(g => g.eachLayer(m => { const el = m.getElement(); if(el) els.push(el); }));
+      els.map(el => { const r = el.getBoundingClientRect(); return hit([r.left - mr.left, r.top - mr.top, r.right - mr.left, r.bottom - mr.top]); })
+         .forEach((h, i) => { els[i].style.opacity = h ? .25 : ""; els[i].style.pointerEvents = h ? "none" : ""; });
+    }
     for(const t of places){
       let show = z >= RANK_ZOOM[t.rank] && view.contains([t.lat, t.lon]), box;
       if(show){
@@ -1929,9 +1936,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const W = [].concat(w), M = m ? [].concat(m) : null, now = ukHour();
       grid = buildHour(W, M, Math.max(0, W[0].hourly.time.findIndex(x => x >= now))); gridAt = at;
       clearTimeout(gridRetry);
-    }catch(e){ grid = null; gridAt = 0; clearTimeout(gridRetry); gridRetry = setTimeout(loadGrid, 2 * 6e4); }   // try again soon if it didn't come in
+    }catch(e){ grid = null; gridAt = 0; clearTimeout(gridRetry); gridRetry = setTimeout(retryGrid, 2 * 6e4); }   // try again soon if it didn't come in
     resetWx(); if(hoverAt) showHover(); if(ptAt) showPoint(ptAt);
   }
+  // a background tab waits until it is looked at again before asking once more
+  function retryGrid(){ if(document.hidden) document.addEventListener("visibilitychange", retryGrid, {once:true}); else loadGrid(); }
   // A reading anywhere: blended from the four grid points around it, or the Dover Strait reading if the grid isn't in
   function sample(lat, lon, key){
     if(!grid || !grid[key]){
@@ -2054,6 +2063,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     }
     // keep the card clear of the title at the top
     const top = Math.max(24, ctlBottom() + 12);
+    // a reading already open moves and updates in place: opening a new one would close it, and its pin with it
+    if(LM._popup && LM._popup.options.className === "wx-pt" && LM.hasLayer(LM._popup)) return void LM._popup.setLatLng(ll).setContent(html);
     L.popup({className:"wx-pt", closeButton:false, offset:[0, -26], autoPanPaddingTopLeft:[16, top], autoPanPaddingBottomRight:[16, 60], maxWidth:260}).setLatLng(ll).setContent(html).openOn(LM);
   }
   let pin = null;
@@ -2183,7 +2194,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   }
   function release(b){
     b.hold = false; b.g.classList.remove("sel");
-    b.off = (((b.k - performance.now() / 1000 / b.dur) % 1) + 1) % 1;   // carry on from where it stopped
+    if(!reduced) b.off = (((b.k - performance.now() / 1000 / b.dur) % 1) + 1) % 1;   // carry on from where it stopped
   }
   function hideTip(now){
     clearTimeout(tipT);
@@ -2259,7 +2270,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("figTag").textContent = wk ? "Weekend" : "Updating";
     $("figMeta").innerHTML = wk ? 'Can take several hours at weekends<span class="mn-more"> · Sometimes not until Monday</span>' : "Since 12:00 · Can take up to an hour";   // phones: the first part only, on one line
     $("fuToday").textContent = haveYesterday()
-      ? (at && at.toLocaleDateString("en-CA",{timeZone:"Europe/London"}) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
+      ? (at && ukDate(at) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? (wk ? "New figures incoming. At weekends they can be hours late, or wait until Monday." : "New figures incoming. Please wait.") : "Today's figures aren't in yet. Checks start at 12:00.";
     // an orange dot when the latest figures are more than three days old
     if(days.length){ const last = days[days.length-1].date; fu.classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3);
@@ -2348,7 +2359,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
-      if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){ useData(await getJSON("data.json")); renderAll(); loadExtras(); }
+      if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){
+        const was = meta.checkedAt; useData(await getJSON("data.json"));
+        if(meta.checkedAt !== was){ renderAll(); loadExtras(); }   // a saved or lagging copy: nothing new to draw
+      }
     }catch(e){ /* try again next time */ }
     liveUi();
   }
@@ -2862,16 +2876,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
     try{
       const [w, m] = await Promise.all([getJSON("https://api.open-meteo.com/v1/forecast?" + q + "&current=wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day,temperature_2m&hourly=wind_speed_10m&daily=weather_code,temperature_2m_max&wind_speed_unit=mph"),
-                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height")]);
+                                        getJSON("https://marine-api.open-meteo.com/v1/marine?" + q + "&current=wave_height&hourly=wave_height").catch(() => null)]);   // no waves: still the wind
       // Outlook: typical overnight-to-midday conditions, when most departures happen
       const by = {};
-      w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m.hourly.time.indexOf(t); by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
+      w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[]}); by[d].w.push(w.hourly.wind_speed_10m[i]); const mi = m ? m.hourly.time.indexOf(t) : -1; by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
       const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
         return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
       const c = w.current;
-      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m.current.wave_height,
-        lvl:rate(c.wind_speed_10m, m.current.wave_height), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
+      wx = {wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m ? m.current.wave_height : null,
+        lvl:rate(c.wind_speed_10m, m ? m.current.wave_height : null), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
     }catch(e){
       wxFailed = true;
@@ -3064,7 +3078,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     if(!ddSeen[i]){ ddSeen[i] = true; ddWait[i].splice(0).forEach(fn => fn()); }
     if(had) ddFaces[i].querySelector(".flip-go").focus({preventScroll:true});
   }
-  function whenDd(i, fn){ onReveal(ddBox, () => { if(ddSeen[i]) fn(); else ddWait[i].push(fn); }); }   // once page i has been seen
+  function whenDd(i, fn){ onReveal(ddBox, () => { if(ddSeen[i]) fn(); else ddWait[i] = [fn]; }); }   // once page i has been seen
   ddFlip.addEventListener("click", e => { const b = e.target.closest(".flip-go[data-go]"); if(b) showDd(+b.dataset.go); });
   let ddX = null, ddY = 0;
   ddFlip.addEventListener("pointerdown", e => { ddX = e.pointerType === "touch" && !e.target.closest("#chart,#heatScroll") ? e.clientX : null; ddY = e.clientY; }, true);   // before the chart redraws under the finger
@@ -3511,7 +3525,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     card.after(btn);
     let open = false, raf = 0;
     const fit = () => { raf = 0; const tall = card.scrollHeight > CLAMP_FROM; btn.hidden = !tall; card.classList.toggle("clamp", tall && !open); };
-    const later = () => { if(!raf) raf = requestAnimationFrame(fit); };
+    const later = () => { clearTimeout(raf); raf = setTimeout(fit, 200); };   // once the numbers stop counting, not every frame
     btn.addEventListener("click", () => {
       open = !open; btn.setAttribute("aria-expanded", open); btn.querySelector("span").textContent = open ? "Show less" : "Show more"; fit();
       if(!open && card.getBoundingClientRect().top < 0) card.scrollIntoView({block:"start", behavior:reduced ? "auto" : "smooth"});   // closing from far down: back to the top of the box
@@ -3594,7 +3608,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     $("newsSrc").textContent = it.source; $("newsAge").textContent = agoShort(it.published);
     $("newsCount").textContent = (i + 1) + "/" + newsItems.length;
     if(animate && !reduced){ const st = $("newsStage"); st.classList.remove("in"); st.offsetWidth; st.classList.add("in"); }
-    newsRoom();
+    if($("news").hidden || $("news").offsetHeight + 10 !== roomH) newsRoom();   // only when the strip changed height
   }
   async function loadNews(){
     newsAt = Date.now();
@@ -3620,10 +3634,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       newsShown = items[0].url;
     }catch(e){ /* no news if the file can't be read */ }
   }
+  const focusIn = el => { try{ return !!el.querySelector(":focus-visible"); }catch(e){ return el.contains(document.activeElement); } };   // older Safari has no :focus-visible
   // Takes turns while both are on, and moves through the stories; holds still while pointed at or in use
   setInterval(() => {
     const now = performance.now(), dt = Math.min(1000, now - (lastTick || now)), box = $("news"); lastTick = now;
-    if(box.hidden || document.hidden || box.matches(":hover") || box.querySelector(":focus-visible") || $("figHead").getAttribute("aria-expanded") === "true") return;
+    if(box.hidden || document.hidden || box.matches(":hover") || focusIn(box) || $("figHead").getAttribute("aria-expanded") === "true") return;
     turnMs += dt;
     if(newsOn && figOn && turnMs >= (slide === "news" ? NEWS_TURN : FIG_TURN)){
       setSlide(slide === "news" ? "fig" : "news", true);
