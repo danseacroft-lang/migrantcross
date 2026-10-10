@@ -24,7 +24,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `robots.txt`, `sitemap.xml` – help search engines find and index the site
 - `week-card.png` – the "Week in numbers" picture, redrawn daily for the last full week
 - `manifest.webmanifest`, `icon-192.png`, `icon-512.png` – let visitors add the site to their home screen as an app
-- `supabase/sighting-comments.sql` – sets up the free Supabase database behind the Sighting Comments box: paste it into Supabase → SQL Editor and run it, then put the project URL and publishable key in `SC_URL` and `SC_KEY` in `index.html`. The View Sightings button stays hidden until both are set. To remove a comment, delete its row in Supabase → Table Editor → `sighting_comments`
+- Report Channel Crossing (the eye button) is a private form sent through Web3Forms; the access key `RS_KEY` in `index.html` decides which inbox reports go to
 - `vendor/inter/` – the Inter font (SIL Open Font License), used on Windows and Android in place of Apple's San Francisco, which Apple devices use themselves
 - `scripts/update.py` – fetches the latest figures from GOV.UK and updates `data.json`
 - `scripts/news.py`, `news.json`, `.github/workflows/news.yml` – hourly breaking news about small boats from UK news feeds (edit `news-override.json` to hide or pin a story)

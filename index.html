@@ -1104,17 +1104,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-msg:empty{display:none}
 .sc-msg.err{color:var(--red-t)}
 .sc-msg.wait{color:var(--label2)}
-.sc-sec{display:flex;align-items:baseline;justify-content:space-between;margin:18px 0 4px;font:700 1.06rem/1.2 var(--font);letter-spacing:-.01em}
-.sc-sec small{font-weight:500;font-size:.765rem;color:var(--label2);letter-spacing:0}
 .sc-list{list-style:none;margin:0 -8px;padding:0}
 .sc-list li{position:relative;display:flex;align-items:flex-start;gap:12px;padding:8px 30px 8px 8px;border-radius:10px}
 @media (hover:hover){.sc-list li:not(.empty):hover{background:var(--fill)}}
-.sc-av{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFB340,#FF7A00);color:#fff}
-.sc-av svg{width:24px;height:24px}
-/* the reports scroll inside the card, so the box to write in stays put */
-#scList{max-height:min(48vh,440px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;margin:0 -8px;padding:0 8px;
-  -webkit-mask-image:linear-gradient(#000 calc(100% - 22px),transparent);mask-image:linear-gradient(#000 calc(100% - 22px),transparent);scrollbar-width:thin}
-#scList.at-end{-webkit-mask-image:none;mask-image:none}
 .sc-list p{margin:2px 0 0;font-size:.941rem;line-height:1.35;color:var(--label);overflow-wrap:anywhere}
 .sc-list time{display:block;margin-top:3px;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .sc-list li.unseen time{color:var(--blue);font-weight:600}
@@ -1181,7 +1173,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing" hidden><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="tb-badge" id="scBadge" hidden></span></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button></div></div></div>
 
 <!-- ============================================================ HERO: the live Channel -->
 <header class="hero" id="hero">
@@ -1270,22 +1262,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 <div class="info-pop" id="popCost" role="dialog" aria-label="How the support cost is worked out" hidden></div>
 
 
-<!-- The cards under the round buttons at the top right: Report Channel Crossing (a box to write in and everyone's comments; hidden until the comments database is set up -->
+<!-- The cards under the round buttons at the top right. Report Channel Crossing: a short private form, emailed to the site's team
+     through Web3Forms (web3forms.com), as the site has no server of its own; nothing is kept or shown on the site -->
 <div class="tb-pop sc-pop" id="scPop" tabindex="-1" role="dialog" aria-labelledby="scH" data-nosnippet hidden>
   <div class="tb-head"><h2 id="scH">Report Channel Crossing</h2><button type="button" class="tb-x" id="scX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-  <div class="sc-tabs" role="group" aria-label="Show"><button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="today" aria-pressed="false">Today</button></div>
   <p class="sc-intro">Report a suspected crossing or sighting here. Thank you very much for doing so.</p>
   <form class="sc-form" id="scForm" novalidate>
     <div class="sc-box">
       <label class="sr" for="scText">Your report</label>
-      <textarea id="scText" name="body" maxlength="500" placeholder="What did you see, where and when?" required></textarea>
+      <textarea id="scText" name="report" maxlength="500" placeholder="What did you see, where and when?" required></textarea>
       <div class="sc-row"><span class="sc-count" id="scCount" aria-hidden="true">0 / 500</span><button type="submit" class="sc-send" id="scSend">Post<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     </div>
-    <input class="hp" type="text" name="website" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <p class="sc-note">Posts are not moderated.</p>
+    <input class="hp" type="checkbox" name="botcheck" id="scHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p class="sc-note">Reports come to us privately.</p>
     <p class="sc-msg" id="scMsg" aria-live="polite"></p>
   </form>
-  <div id="scList" aria-live="polite"><ul class="sc-list"><li class="empty">Loading reports…</li></ul></div>
 </div>
 <div class="tb-pop nt-pop" id="ntPop" tabindex="-1" role="dialog" aria-labelledby="ntH" data-nosnippet hidden>
   <div class="tb-head"><h2 id="ntH">Notifications</h2><button type="button" class="tb-x" id="ntX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
@@ -3486,95 +3477,31 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   });
 
 
-  /* ---------------------------------------------------- Sighting Comments */
-  // Kept in a free Supabase database (set up with supabase/sighting-comments.sql). The key is the public one:
-  // it can only read comments and add new ones, and the database itself checks the length, links and how often one visitor posts.
-  // The Report Channel Crossing button stays hidden until both values are filled in.
-  const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
-  if(SC_URL && SC_KEY){
-    const sc = $("scPop"), scText = $("scText"), scApi = SC_URL.replace(/\/$/, "") + "/rest/v1/sighting_comments";
-    const scHead = {apikey: SC_KEY, Accept: "application/json"};
-    const scWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
-    const scAgo = t => {   // as on Facebook: 5m, 3h, 2d, then the date
-      const m = Math.max(0, Math.round((Date.now() - t) / 60000));
-      return m < 1 ? "Just now" : m < 60 ? m + "m" : m < 1440 ? Math.round(m / 60) + "h" : m < 10080 ? Math.round(m / 1440) + "d" : scWhen.format(new Date(t)).split(",").slice(0, 2).join("");
-    };
-    const SEEN = "cc-reports-seen", getSeen = () => { try{ return localStorage.getItem(SEEN) || ""; }catch(e){ return ""; } };
-    let scRows = [], scSeen = "", scF = "all", scLoaded = false;
-    const scList = $("scList");
-    const scEnd = () => scList.classList.toggle("at-end", scList.scrollTop + scList.clientHeight >= scList.scrollHeight - 2);   // no fade once the last report shows
-    scList.addEventListener("scroll", scEnd, {passive: true});
-    const scItem = (c, isNew) => {
-      const li = document.createElement("li"), av = document.createElement("span"), d = document.createElement("div"), p = document.createElement("p"), t = document.createElement("time");
-      av.className = "sc-av"; av.innerHTML = $("scBtn").querySelector("svg").outerHTML;
-      p.textContent = c.body;   // text only, never HTML
-      t.dateTime = c.created_at; t.textContent = scAgo(Date.parse(c.created_at)); t.title = scWhen.format(new Date(c.created_at));
-      li.className = (c.created_at > scSeen ? "unseen" : "") + (isNew ? " new" : "");
-      d.append(p, t); li.append(av, d); return li;
-    };
-    const scSection = (title, rows, note) => {
-      const h = document.createElement("h3"), ul = document.createElement("ul");
-      h.className = "sc-sec"; h.textContent = title;
-      if(note){ const s = document.createElement("small"); s.textContent = note; h.append(s); }
-      ul.className = "sc-list"; ul.append(...rows.map(c => scItem(c))); return [h, ul];
-    };
-    function scDraw(){
-      const today = ukToday(), rows = scF === "today" ? scRows.filter(c => ukDate(new Date(c.created_at)) === today) : scRows;
-      if(!rows.length){ $("scList").innerHTML = '<ul class="sc-list"><li class="empty">' + (scF === "today" ? "No reports yet today." : "No reports yet. Be the first.") + "</li></ul>"; return; }
-      const fresh = rows.filter(c => c.created_at > scSeen), older = rows.filter(c => c.created_at <= scSeen);
-      $("scList").replaceChildren(...(fresh.length ? scSection("New", fresh, fresh.length + (fresh.length === 1 ? " report" : " reports")) : []),
-        ...(older.length ? scSection(fresh.length ? "Earlier" : "Latest", older) : []));
-      scEnd();
-    }
-    async function scLoad(){
-      try{
-        const r = await fetch(scApi + "?select=id,created_at,body&order=created_at.desc&limit=100", {headers: scHead, cache: "no-store", ...limit()});
-        if(!r.ok) throw 0;
-        scRows = await r.json(); scLoaded = true; scDraw();
-      }catch(e){ if(!scLoaded) $("scList").innerHTML = '<ul class="sc-list"><li class="empty">Reports couldn’t load just now.</li></ul>'; }
-    }
-    const scBtn = $("scBtn"), badge = $("scBadge");
-    scBtn.hidden = false;
-    // the red count: reports since the visitor last opened the card (or from the last day, on a first visit)
-    (async () => {
-      try{
-        const since = getSeen() || new Date(Date.now() - 864e5).toISOString();
-        const r = await fetch(scApi + "?select=id&created_at=gt." + encodeURIComponent(since) + "&limit=10", {headers: scHead, cache: "no-store", ...limit()});
-        if(!r.ok) return;
-        const n = (await r.json()).length;
-        if(n && scBtn.getAttribute("aria-expanded") !== "true"){ badge.textContent = n > 9 ? "9+" : n; badge.hidden = false; scBtn.setAttribute("aria-label", "Report Channel Crossing, " + n + (n > 9 ? "+" : "") + " new"); }
-      }catch(e){}
-    })();
-    const scMenu = tbMenu(scBtn, sc, async () => {
-      scSeen = getSeen() || new Date(Date.now() - 864e5).toISOString();
-      badge.hidden = true; scBtn.setAttribute("aria-label", "Report Channel Crossing");
-      (matchMedia("(hover: none)").matches ? sc : scText).focus({preventScroll:true});
-      await scLoad();
-      try{ localStorage.setItem(SEEN, scRows.length ? scRows[0].created_at : new Date().toISOString()); }catch(e){}
-    });
+  /* ---------------------------------------------------- Report Channel Crossing */
+  // A short private form: one box and a Post button.
+  // Sent through Web3Forms to the inbox its access key was made for; nothing is kept on the site.
+  const RS_TO = "https://api.web3forms.com/submit", RS_KEY = "7b53613b-d997-4f9f-bb7b-31e5534bf472";   // the access key only sends to its own inbox and doesn't reveal the address
+  {
+    const sc = $("scPop"), scBtn = $("scBtn"), scText = $("scText");
+    const scMenu = tbMenu(scBtn, sc, () => (matchMedia("(hover: none)").matches ? sc : scText).focus({preventScroll:true}));   // phones: no keyboard until the box is tapped
     $("scX").addEventListener("click", () => { scMenu.set(false); scBtn.focus({preventScroll:true}); });
-    sc.querySelectorAll(".sc-tabs button").forEach(b => b.addEventListener("click", () => {
-      scF = b.dataset.f; sc.querySelectorAll(".sc-tabs button").forEach(x => x.setAttribute("aria-pressed", x === b)); scDraw();
-    }));
-    document.addEventListener("visibilitychange", () => { if(!document.hidden && !sc.hidden) scLoad(); });
-    setInterval(() => { if(!document.hidden && !sc.hidden) scLoad(); }, 60000);
     const scCount = () => { const n = scText.value.trim().length; $("scCount").textContent = n + " / 500"; $("scCount").classList.toggle("near", n > 450); };
-    scText.addEventListener("input", scCount);
+    scText.addEventListener("input", () => { scCount(); if($("scMsg").classList.contains("err")) $("scMsg").textContent = ""; });
     $("scForm").addEventListener("submit", async e => {
       e.preventDefault();
-      const msg = $("scMsg"), send = $("scSend"), body = scText.value.trim().replace(/\s+/g, " ");
-      if($("scHp").value) return;   // a bot filled in the hidden box
-      if(body.length < 3){ msg.className = "sc-msg err"; msg.textContent = "Write a little more first."; scText.focus(); return; }
-      send.disabled = true; msg.className = "sc-msg wait"; msg.textContent = "Posting…";
+      const msg = $("scMsg"), send = $("scSend"), report = scText.value.trim();
+      if($("scHp").checked) return;   // a bot ticked the hidden box
+      if(report.length < 3){ msg.className = "sc-msg err"; msg.textContent = "Write a little more first."; scText.focus(); return; }
+      send.disabled = true; msg.className = "sc-msg wait"; msg.textContent = "Sending…";
+      const when = new Date().toLocaleString("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
+      const body = {access_key: RS_KEY, subject: "Channel crossing report: " + when, from_name: "Channel Crossings", report, page: location.href};
       try{
-        const r = await fetch(scApi, {method:"POST", headers:{...scHead, "Content-Type":"application/json", Prefer:"return=minimal"}, body:JSON.stringify({body}), ...limit()});
-        if(!r.ok){ const j = await r.json().catch(() => ({})); throw j.code === "P0001" && j.message ? j.message : 0; }   // the database's own reason, written for visitors
-        msg.className = "sc-msg"; msg.textContent = "Thank you. Your report is up.";
+        const r = await fetch(RS_TO, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(body), ...limit()});
+        const j = await r.json().catch(() => ({}));
+        if(!r.ok || String(j.success) === "false") throw 0;
+        msg.className = "sc-msg"; msg.textContent = "Thank you. Your report has been sent.";
         scText.value = ""; scCount();
-        scRows.unshift({id: 0, created_at: new Date().toISOString(), body}); scDraw(); scList.scrollTop = 0;
-        const mine = $("scList").querySelector(".sc-list li"); if(mine){ mine.classList.add("new"); mine.classList.remove("unseen"); }
-        setTimeout(scLoad, 1500);
-      }catch(err){ msg.className = "sc-msg err"; msg.textContent = typeof err === "string" ? err : "It couldn't be posted just now. Please try again in a moment."; }
+      }catch(err){ msg.className = "sc-msg err"; msg.textContent = "It couldn't be sent just now. Please try again in a moment."; }
       send.disabled = false;
     });
   }
@@ -3582,6 +3509,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   /* ---------------------------------------------------- Notifications */
   // Messages from the site's staff, added as rows in the Supabase table site_notices (set up with supabase/site-notices.sql).
   // Visitors can only read them. The bell shows a red count of the ones a visitor hasn't seen; it stays hidden until the table exists.
+  // The key is Supabase's public one: with this table's rules it can only read the notices.
+  const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
   if(SC_URL && SC_KEY){
     const ntBtn = $("ntBtn"), ntPop = $("ntPop"), ntBadge = $("ntBadge"), NSEEN = "cc-notices-seen";
     const ntApi = SC_URL.replace(/\/$/, "") + "/rest/v1/site_notices?select=id,created_at,title,body,link&order=created_at.desc&limit=30";
