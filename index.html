@@ -2413,7 +2413,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       const st = await getJSON("status.json");
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){
         const was = meta.checkedAt; useData(await getJSON("data.json"));
-        if(meta.checkedAt !== was){ renderAll(); loadExtras(); }   // a saved or lagging copy: nothing new to draw
+        if(meta.checkedAt !== was){ renderAll(); loadExtras(); ntFigures(); }   // a saved or lagging copy: nothing new to draw
       }
     }catch(e){ /* try again next time */ }
     liveUi();
@@ -3508,8 +3508,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 
   /* ---------------------------------------------------- Notifications */
   // Messages from the site's staff, added as rows in the Supabase table site_notices (set up with supabase/site-notices.sql).
-  // Visitors can only read them. The bell shows a red count of the ones a visitor hasn't seen; it stays hidden until the table exists.
+  // Visitors can only read them. The bell shows a red count of the ones a visitor hasn't seen.
   // The key is Supabase's public one: with this table's rules it can only read the notices.
+  // Each time new figures come in, the bell also gets its own "New figures are in" notification, made here from data.json.
+  let ntFigures = () => {};   // called once the figures are drawn, and again when newer ones arrive
   const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
   if(SC_URL && SC_KEY){
     const ntBtn = $("ntBtn"), ntPop = $("ntPop"), ntBadge = $("ntBadge"), NSEEN = "cc-notices-seen";
@@ -3517,7 +3519,21 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     const ntWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
     const ntAgo = t => { const m = Math.max(0, Math.round((Date.now() - t) / 60000)); return m < 1 ? "Just now" : m < 60 ? m + "m" : m < 1440 ? Math.round(m / 60) + "h" : m < 10080 ? Math.round(m / 1440) + "d" : ntWhen.format(new Date(t)).split(",").slice(0, 2).join(""); };
     const getN = () => { try{ return localStorage.getItem(NSEEN) || ""; }catch(e){ return ""; } };
-    let ntRows = [], ntSeen = "", ntF = "all";
+    let ntRows = [], ntStaff = [], ntFig = null, ntSeen = "", ntF = "all";
+    const ntDay = new Intl.DateTimeFormat("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"UTC"});
+    const ntMerge = () => { ntRows = [...ntStaff, ...(ntFig ? [ntFig] : [])].sort((a, b) => a.created_at < b.created_at ? 1 : -1); ntBtn.hidden = false; if(!ntPop.hidden) ntDraw(); };
+    const ntRing = () => { if(ntCount() && !reduced){ ntBtn.classList.remove("ring"); void ntBtn.offsetWidth; ntBtn.classList.add("ring"); } };   // a new one: the bell rings
+    ntFigures = () => {
+      const last = days[days.length - 1]; if(!last || !meta || !meta.checkedAt) return;
+      const when = ntDay.format(parse(last.date)), id = "fig-" + meta.checkedAt;
+      if(ntFig && ntFig.id === id) return;
+      const first = !ntFig;
+      ntFig = {id, created_at: new Date(meta.checkedAt).toISOString(), title: "New figures are in", fig: true,
+        body: last.migrants ? fmt(last.migrants) + (last.migrants === 1 ? " person was" : " people were") + " detected crossing the Channel on " + when + (last.boats ? ", in " + plural(last.boats, "boat", "boats") : "") + "."
+                            : "No crossings were detected on " + when + "."};
+      ntMerge();
+      if(first) ntCount(); else ntRing();   // fresh figures while the page is open: the bell rings
+    };
     const ntIcon = '<svg viewBox="0 0 400 400" aria-hidden="true"><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/></svg>';
     function ntDraw(){
       const rows = ntF === "unread" ? ntRows.filter(n => n.created_at > ntSeen) : ntRows, ul = document.createElement("ul");
@@ -3545,11 +3561,10 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
     async function ntLoad(first){
       try{
         const r = await fetch(ntApi, {headers:{apikey: SC_KEY, Accept: "application/json"}, cache: "no-store", ...limit()});
-        if(!r.ok) return;   // no table yet: the bell stays hidden
-        const rows = await r.json(), had = ntRows.length && ntRows[0].id;
-        ntRows = rows; ntBtn.hidden = false;
-        if(!ntPop.hidden) ntDraw();
-        if(ntCount() && (first || (rows.length && rows[0].id !== had)) && !reduced){ ntBtn.classList.remove("ring"); void ntBtn.offsetWidth; ntBtn.classList.add("ring"); }   // a new one: the bell rings
+        if(!r.ok) return;   // no table yet: only the figures notification shows
+        const rows = await r.json(), had = ntStaff.length && ntStaff[0].id;
+        ntStaff = rows; ntMerge();
+        if(first || (rows.length && rows[0].id !== had)) ntRing(); else ntCount();
       }catch(e){}
     }
     const ntMenu = tbMenu(ntBtn, ntPop, () => {
@@ -3626,7 +3641,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
       if(meta.checkedAt && Date.now() - new Date(meta.checkedAt) > 120 * MIN) statusAt = 0;
       // drawn in short steps, so a tap straight after loading isn't kept waiting (same order as renderAll)
       const y = () => new Promise(r => window.scheduler && scheduler.yield ? scheduler.yield().then(r) : setTimeout(r, 0));
-      renderHero(); renderGlance(); await y();
+      renderHero(); renderGlance(); ntFigures(); await y();
       renderOtd(); await y();
       drawHeat(); await y();
       drawYears(); await y();
