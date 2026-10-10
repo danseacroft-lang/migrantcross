@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-10T04:33:00Z",
+ "checkedAt": "2026-10-10T04:57:12Z",
  "items": [
   {
    "title": "Labour minister bans controversial Orange Order parade after nationalist pressure",
    "url": "https://www.gbnews.com/news/drumcree-labour-minister-bans-controversial-orange-order-parade",
    "source": "GB News",
    "published": "2026-10-10T04:29:18Z",
+   "breaking": true
+  },
+  {
+   "title": "Hurricane Isaias makes landfall in US causing thousands to lose power",
+   "url": "https://www.gbnews.com/news/us/hurricane-isaias-landfall-florida-power-cuts",
+   "source": "GB News",
+   "published": "2026-10-10T04:17:35Z",
    "breaking": true
   },
   {
