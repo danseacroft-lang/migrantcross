@@ -1,9 +1,9 @@
--- Sighting comments: the table behind the Report Channel Crossing card (the eye button) on the homepage.
+-- Sighting comments: the table behind the "Sighting Comments" box on the homepage.
 -- Paste this whole file into Supabase → SQL Editor → New query, and press Run. It is safe to run again.
 --
 -- What visitors can do with the public key (it is meant to be public, like the Web3Forms key):
---   * read every comment's id, time, text and X username
---   * add a comment (text, and an X username if they want one); nothing else
+--   * read every comment's id, time and text
+--   * add a comment (text only); nothing else
 -- They can't edit or delete anything, and can't see the hashed address used for the limits below.
 --
 -- Spam and abuse limits, checked by the database itself so they can't be skipped:
@@ -20,10 +20,6 @@ create table if not exists public.sighting_comments (
   body       text not null,
   sender     text
 );
--- the optional "X username" box: stored without the @, letters, numbers and _ only, up to 15 characters (X's own rules)
-alter table public.sighting_comments add column if not exists x_user text;
-alter table public.sighting_comments drop constraint if exists sighting_comments_x_user;
-alter table public.sighting_comments add constraint sighting_comments_x_user check (x_user ~ '^[A-Za-z0-9_]{1,15}$');
 create index if not exists sighting_comments_created on public.sighting_comments (created_at desc);
 create index if not exists sighting_comments_sender on public.sighting_comments (sender, created_at);
 
@@ -31,8 +27,8 @@ alter table public.sighting_comments enable row level security;
 
 -- column by column: the public can read id, time and text, and write the text only
 revoke all on public.sighting_comments from anon, authenticated;
-grant select (id, created_at, body, x_user) on public.sighting_comments to anon, authenticated;
-grant insert (body, x_user) on public.sighting_comments to anon, authenticated;
+grant select (id, created_at, body) on public.sighting_comments to anon, authenticated;
+grant insert (body) on public.sighting_comments to anon, authenticated;
 
 drop policy if exists "anyone can read comments" on public.sighting_comments;
 create policy "anyone can read comments" on public.sighting_comments for select to anon, authenticated using (true);
@@ -46,14 +42,10 @@ declare
 begin
   new.body := btrim(regexp_replace(new.body, '\s+', ' ', 'g'));   -- one line, no runs of spaces
   new.created_at := now();                                        -- the time is always the server's
-  new.x_user := nullif(ltrim(btrim(coalesce(new.x_user, '')), '@'), '');   -- "@name" and "name" are the same; blank means none
   new.sender := encode(sha256(convert_to(btrim(ip) || '|' || current_date::text, 'UTF8')), 'hex');
 
   if char_length(new.body) < 3 then raise exception 'Write a little more first.'; end if;
   if char_length(new.body) > 500 then raise exception 'Keep it under 500 characters.'; end if;
-  if new.x_user is not null and new.x_user !~ '^[A-Za-z0-9_]{1,15}$' then
-    raise exception 'X usernames are letters, numbers and _ only, up to 15 characters.';
-  end if;
   if new.body ~* '(https?://|www\.|\m[a-z0-9-]+\.(com|net|org|ru|io|co|xyz|info|top|uk)\M)' then
     raise exception 'Links can''t be posted.';
   end if;
