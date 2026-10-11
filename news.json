@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-11T13:56:03Z",
+ "checkedAt": "2026-10-11T14:12:39Z",
  "items": [
+  {
+   "title": "You can log in to a UK Government account WITHOUT a password, and doing so saves taxpayers \u00a34,000 a week",
+   "url": "https://www.gbnews.com/tech/govuk-login-passkey",
+   "source": "GB News",
+   "published": "2026-10-11T14:00:31Z",
+   "breaking": true
+  },
   {
    "title": "Volodymyr Zelensky vows to stop Russia strikes and hold election in Ukraine on one condition",
    "url": "https://www.gbnews.com/news/world/ukraine-volodymyr-zelensky-elections-ceasefire-russian-strikes-donald-trump",
@@ -20,13 +27,6 @@
    "url": "https://www.gbnews.com/lifestyle/salmonella-outbreak-eggs-do-not-eat-warning-ukraine",
    "source": "GB News",
    "published": "2026-10-11T11:40:29Z",
-   "breaking": true
-  },
-  {
-   "title": "UK does not support Trump's Russia diesel deal, says Streeting",
-   "url": "https://www.bbc.co.uk/news/articles/c65yn92nj423o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-11T11:00:49Z",
    "breaking": true
   }
  ],
