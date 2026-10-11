@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-11T15:12:29Z",
+ "checkedAt": "2026-10-11T15:31:41Z",
  "items": [
   {
    "title": "Hundreds of migrants dead after boat collapses in 'devastating loss of life'",
    "url": "https://www.gbnews.com/news/world/migrant-crisis-djibouti-yemen-death-boat",
    "source": "GB News",
    "published": "2026-10-11T14:46:17Z",
+   "breaking": true
+  },
+  {
+   "title": "Donald Trump announces 'immediate' ceasefire between Russia and Ukraine but Volodymyr Zelensky responds: 'That's news to me!'",
+   "url": "https://www.gbnews.com/news/world/donald-trump-announces-immediate-ceasefire-russia-ukraine",
+   "source": "GB News",
+   "published": "2026-10-11T14:32:49Z",
    "breaking": true
   },
   {
