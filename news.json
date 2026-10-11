@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-11T11:42:43Z",
+ "checkedAt": "2026-10-11T11:57:11Z",
  "items": [
+  {
+   "title": "Urgent 'do not eat' alert issued to Britons over Ukrainian eggs linked to UK salmonella outbreak",
+   "url": "https://www.gbnews.com/lifestyle/salmonella-outbreak-eggs-do-not-eat-warning-ukraine",
+   "source": "GB News",
+   "published": "2026-10-11T11:40:29Z",
+   "breaking": true
+  },
   {
    "title": "UK does not support Trump's Russia diesel deal, says Streeting",
    "url": "https://www.bbc.co.uk/news/articles/c65yn92nj423o?at_medium=RSS&at_campaign=rss",
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cm79pd2zzl59o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-11T10:43:17Z",
-   "breaking": true
-  },
-  {
-   "title": "Could Alberta's vote on independence be Canada's Brexit moment?",
-   "url": "https://www.bbc.co.uk/news/videos/cm2d63e90zepo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-11T10:34:41Z",
    "breaking": true
   }
  ],
