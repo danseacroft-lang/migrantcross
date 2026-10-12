@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-12T18:51:04Z",
+ "checkedAt": "2026-10-12T19:13:10Z",
  "items": [
   {
    "title": "Motion of no-confidence in Sinn F\u00e9in ministers 'pointless' - O'Neill",
    "url": "https://www.bbc.co.uk/news/articles/c68jz0282re9o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-12T18:23:38Z",
+   "breaking": true
+  },
+  {
+   "title": "Public inquiry over Manchester synagogue attack deaths",
+   "url": "https://www.bbc.co.uk/news/articles/cqgm01mmd49po?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-12T18:07:14Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.theguardian.com/politics/live/2026/oct/12/uk-politics-live-tories-andy-burnham-russian-interference-brexit-eu-latest",
    "source": "The Guardian",
    "published": "2026-10-12T17:34:40Z",
-   "breaking": true
-  },
-  {
-   "title": "It is inconceivable to think Russia did not try to interfere in Brexit vote, says PM",
-   "url": "https://www.bbc.co.uk/news/articles/cq5ynr4kn3nmo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-12T17:33:50Z",
    "breaking": true
   }
  ],
