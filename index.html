@@ -362,6 +362,7 @@ a.chip{text-decoration:none;color:inherit;white-space:nowrap}
 .chip .fig-ring{width:14px;height:14px;margin:0 0 0 -2px;opacity:1}
 @keyframes pulse{50%{opacity:.3}}
 .chip .up{color:#FFB4AE}.chip .down{color:#9CF0B4}
+.chip small{font:inherit}.chip small s{text-decoration:none}
 button.chip,a.chip{border:0;font-family:inherit;cursor:pointer;touch-action:manipulation;transition:background-color .2s}
 button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 @media (hover:hover){button.chip:hover,a.chip:hover{background:rgba(28,28,30,.48)}}
@@ -1316,10 +1317,17 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
   .hero-quiet .cal{width:64px;height:68px;border-radius:17px;grid-template-rows:23px 1fr}
   .hero-quiet .cal span{font-size:.647rem;line-height:23px}
   .hero-quiet .cal b{font-size:2.2rem}
-  /* the chips run in one line that scrolls sideways, as in the App Store, so the panel stays low */
-  .hero-chips{margin:12px -14px 0;padding:0 14px 2px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-padding:0 14px}
-  .hero-chips::-webkit-scrollbar{display:none}
-  .hero-chips > *{flex:none}
+  /* the chips sit still and all fit: the year across the top, the rest sharing the rows below as rounded buttons,
+     as in Control Centre. Long labels wrap onto a second line rather than running off the screen */
+  .hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;padding:0;overflow:visible}
+  .hero-chips > *{flex:1 1 140px;min-width:0;max-width:none;white-space:normal}
+  .hero-chips > #chipYear,.hero-chips > #chipRep{flex-basis:100%}
+  .hero-chips .chip{min-height:40px;padding:7px 12px;border-radius:14px;font-size:.824rem;line-height:1.25;text-align:left}
+  .hero-chips .chip > span{flex:1;min-width:0}
+  .hero-chips #chipYear{justify-content:flex-start;flex-wrap:wrap;column-gap:6px}
+  .hero-chips button.chip > svg:last-child,.hero-chips a.chip > svg:last-child{display:none}   /* the whole tile is the button, as in Control Centre */
+  .hero-chips .chip small{display:block;font-size:.765rem;font-weight:500;opacity:.78}
+  .hero-chips .chip small s{display:none}
   .map-news{top:8px;left:8px;right:8px;border-radius:20px}
   .ves-list{left:8px;top:8px}
   .hero.has-news .ves-list{top:calc(8px + var(--mn-h))}
@@ -3314,7 +3322,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     const pm = $("popMap"), d = boatDay, LV = ["calm", "moderate", "rough"], lvl = wx && wx.lvl;
     pm.dataset.lv = lvl || "";
     $("chipMap").querySelector("i").className = lvl || (wxFailed ? "none" : "wait");
-    $("chipMap").querySelector("span").textContent = lvl ? WORD[lvl] + " · " + LIKE[lvl].toLowerCase() : "Weather outlook";   // the level and what it means for crossings, not just a coloured dot
+    $("chipMap").querySelector("span").innerHTML = lvl ? WORD[lvl] + "<small><s> · </s>" + LIKE[lvl].toLowerCase() + "</small>" : "Weather outlook";   // the level and what it means for crossings, not just a coloured dot
     $("chipMap").setAttribute("aria-label", (lvl ? WORD[lvl] + " conditions in the Channel, " + LINE[lvl] : "Weather outlook in the Channel") + ". Open the outlook");
     let h;
     if(wx){
