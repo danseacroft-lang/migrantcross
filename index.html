@@ -260,13 +260,14 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-hover .sw{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
 /* phones: the sheet a tap brings up */
 .am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
-  background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
+  background:color-mix(in srgb,var(--card) 94%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
 .am-sheet.in{animation:sheetUp .38s cubic-bezier(.2,.9,.25,1) both}
 @keyframes sheetUp{from{transform:translateY(110%)}}
 .am-grab{position:absolute;top:6px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--label3)}
 .am-sheet .am-x{position:absolute;top:12px;right:12px;background:var(--fill);color:var(--label2)}
 .am-sheet-in{font:.824rem/1.35 var(--font);padding-right:30px}
 .am-sheet .am-sheet-in .wp-stats{margin-right:-30px}
+.am-sheet .in-sheet{font:inherit}.am-sheet .in-sheet .vt-stats{margin-right:-30px}
 /* the dropped pin where you tap */
 .am-pin{pointer-events:none}
 .am-pin i{position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50%;background:#FF3B30;box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4);animation:pinDrop .35s cubic-bezier(.3,1.5,.5,1) both}
@@ -2045,7 +2046,7 @@ main .hero{border-radius:32px}
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
-      .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
+      .on("click", e => { L.DomEvent.stopPropagation(e); openMapCard(e.target); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     vesselLayer = L.layerGroup().addTo(LM);
     LM.attributionControl.addAttribution('Boats <a href="https://aisstream.io/">aisstream.io</a>');
@@ -2112,7 +2113,7 @@ main .hero{border-radius:32px}
           + "<div><span>Seen</span><em>" + seenN + "</em><small>" + seenU + "</small></div></div>"
           + "<p>Live from its AIS transponder" + (v.mmsi ? " · MMSI " + clean(v.mmsi) : "") + "</p>",
           {direction:"top", offset:[0, -16], className:"am-ves-tip"})
-        .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }).addTo(vesselLayer);
+        .on("click", e => { L.DomEvent.stopPropagation(e); openMapCard(e.target); }).addTo(vesselLayer);
       if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
     }
     // the list down the left, always there: only vessels out in the Channel itself (not moored in a harbour or away in the Solent),
@@ -2128,7 +2129,7 @@ main .hero{border-radius:32px}
         + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? shortKind(v) + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
         + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 60 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
       b.setAttribute("aria-label", name + ", " + VESSEL_KIND[v.kind] + ", " + (moving ? Math.round(v.sog) + " knots" : "stopped") + ", seen " + (mins < 1 ? "just now" : Math.round(mins) + " minutes ago"));
-      b.addEventListener("click", e => { e.stopPropagation(); m.openTooltip(); });
+      b.addEventListener("click", e => { e.stopPropagation(); openMapCard(m); });
       b.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") m.openTooltip(); });
       b.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") m.closeTooltip(); });
       li.append(b); ul.append(li);
@@ -2226,6 +2227,35 @@ main .hero{border-radius:32px}
     requestAnimationFrame(placeTowns);   // the names go on once the map has laid out its markers
   }
   // Where the open map starts, from the top of the map card: below the news strip when it's showing
+  // A tapped boat or beach opens its card where it can be read in full: on phones and tablets it slides up from the bottom
+  // of the map like a place card in Apple Maps; on a computer the map moves so the card sits in the open water, never off the top
+  let stuck = null;
+  function openMapCard(layer){
+    const tip = layer.getTooltip(); if(!tip) return;
+    if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
+      layer.closeTooltip(); LM.closePopup();
+      const sh = $("amSheet"), cls = tip.options.className || "";
+      sh.querySelector(".am-sheet-in").innerHTML = '<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>";
+      sh.setAttribute("aria-label", cls.includes("ves") ? "Boat details" : "Launch area");
+      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      return;
+    }
+    // a clicked card stays open while the map moves beneath the pointer, until the map or another boat is clicked
+    if(stuck && stuck !== layer) stuck.closeTooltip();
+    stuck = layer; layer.off("mouseout", layer.closeTooltip, layer);
+    layer.once("tooltipclose", () => { layer.on("mouseout", layer.closeTooltip, layer); if(stuck === layer) stuck = null; });
+    LM.once("click", () => layer.closeTooltip());
+    layer.openTooltip();
+    requestAnimationFrame(() => {
+      const el = tip.getElement(); if(!el) return;
+      const h = hero.getBoundingClientRect(), r = el.getBoundingClientRect(), pan = hero.querySelector(".hero-in").getBoundingClientRect();
+      const top = h.top + ctlBottom() + 8, bot = (r.left < pan.right && r.right > pan.left ? pan.top : h.bottom) - 12;
+      let dy = 0, dx = 0;
+      if(r.top < top || r.bottom > bot) dy = bot - top < r.height ? r.top - top : (r.top + r.bottom) / 2 - (top + bot) / 2;
+      if(r.left < h.left + 12) dx = r.left - h.left - 12; else if(r.right > h.right - 12) dx = r.right - h.right + 12;
+      if(dx || dy) LM.panBy([dx, dy], {animate:!reduced, duration:.35});
+    });
+  }
   function ctlBottom(){
     return 12 + (hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0);
   }
