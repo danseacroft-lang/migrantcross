@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-12T09:36:23Z",
+ "checkedAt": "2026-10-12T10:01:31Z",
  "items": [
   {
    "title": "UK politics live: Tories accuse Burnham of being \u2018dangerous and divisive\u2019 after he confirms Russian interference in Brexit campaign",
    "url": "https://www.theguardian.com/politics/live/2026/oct/12/uk-politics-live-tories-andy-burnham-russian-interference-brexit-eu-latest",
    "source": "The Guardian",
-   "published": "2026-10-12T09:33:21Z",
+   "published": "2026-10-12T09:59:21Z",
+   "breaking": true
+  },
+  {
+   "title": "Oxford University guide ditches traditional British phrases in favour of 'inclusive' language for foreign students",
+   "url": "https://www.gbnews.com/news/oxford-university-ditches-traditional-british-phrases-inclusive-language-foreign-students",
+   "source": "GB News",
+   "published": "2026-10-12T09:56:20Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cm78pwdp3n5qo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-12T08:50:22Z",
-   "breaking": true
-  },
-  {
-   "title": "Burnham says it is 'clear' Russia interfered with Brexit vote",
-   "url": "https://www.bbc.co.uk/news/articles/c6jdm3zggl0ko?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-12T08:38:43Z",
    "breaking": true
   }
  ],
