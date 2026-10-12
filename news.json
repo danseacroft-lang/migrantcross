@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-12T14:06:49Z",
+ "checkedAt": "2026-10-12T14:39:07Z",
  "items": [
   {
    "title": "Burnham accepts Brexit result \u2018legitimate\u2019 despite Russian interference, says No 10 \u2013 UK politics live",
    "url": "https://www.theguardian.com/politics/live/2026/oct/12/uk-politics-live-tories-andy-burnham-russian-interference-brexit-eu-latest",
    "source": "The Guardian",
-   "published": "2026-10-12T13:55:19Z",
+   "published": "2026-10-12T14:37:29Z",
+   "breaking": true
+  },
+  {
+   "title": "Children and mothers included in Reform plan to immediately deport 90,000 asylum seekers",
+   "url": "https://www.theguardian.com/politics/2026/oct/12/children-mothers-included-reform-immediately-deport-asylum-seekers",
+   "source": "The Guardian",
+   "published": "2026-10-12T14:24:31Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/c68jz0282re9o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-12T13:06:59Z",
-   "breaking": true
-  },
-  {
-   "title": "AI minister warns 'likely' UK's cyber defences will be breached",
-   "url": "https://www.bbc.co.uk/news/articles/cr78pe09y05xo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-12T13:06:18Z",
    "breaking": true
   }
  ],
