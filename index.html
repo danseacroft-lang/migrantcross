@@ -439,15 +439,32 @@ button.chip[aria-expanded="true"]{background:rgba(28,28,30,.55)}
 .boat-tip .bt-day{display:block;color:var(--label2);font-size:.765rem;margin:-2px 0 0}
 .boat-tip .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin:10px 0 8px}
 .boat-tip p{font-size:.765rem;margin:0}
-.fu-pop > :not(.fu-clock){position:relative;z-index:1}
-.fu-clock{position:absolute;right:-22px;bottom:-26px;width:124px;height:124px;z-index:0;color:var(--label2);opacity:.28}
-.fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
-.fu-clock .fu-hour{transform-origin:60px 60px;animation:spin 144s linear infinite}
+/* Figure updates, as an iOS Live Activity: an app-style icon, the state in one line, and the afternoon's window as a progress bar */
+.fu-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:22px}
+.fu-hd{display:flex;align-items:center;gap:12px}
+.fu-ic{flex:none;width:40px;height:40px;border-radius:10px;background:linear-gradient(160deg,#3D9BFF,#0062E0);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 2px 6px rgba(0,98,224,.3);display:grid;place-items:center}
+.fu-ic svg{width:34px;height:34px}
+.fu-ic .fu-min{transform-origin:20px 20px;animation:spin 6s linear infinite}
+.fu-ic .fu-hour{transform-origin:20px 20px;animation:spin 72s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.fu-pop p{padding-right:18px}
-.fu-pop .fu-today{margin:4px 0 0;padding-top:8px;border-top:.5px solid var(--sep);color:var(--label);font-weight:600}
-.fu-pop .fu-today:empty{display:none}
+.fu-hd b{margin:0;font:600 1rem/1.2 var(--font);letter-spacing:-.02em}
+.fu-sub{display:block;color:var(--label2);font-size:.765rem;margin-top:1px}
+.fu-now{display:flex;align-items:flex-start;gap:9px;margin:14px 0 0;padding:11px 12px;border-radius:14px;background:var(--fill);font-weight:600;line-height:1.35;color:var(--label)}
+.fu-now:has(> span:empty){display:none}
+.fu-now i{flex:none;width:8px;height:8px;margin-top:.42em;border-radius:50%;background:var(--label3)}
+.fu-now[data-st="in"] i{background:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)}
+.fu-now[data-st="dl"] i{background:var(--blue);animation:fuPulse 1.6s ease-in-out infinite}
+@keyframes fuPulse{50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 0%,transparent)}0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--blue) 45%,transparent)}}
+.fu-tl{margin:14px 2px 2px}
+.wkend .fu-tl{display:none}
+.fu-track{position:relative;height:6px;border-radius:3px;background:var(--fill2)}
+.fu-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:var(--blue);transition:width .6s var(--ease-out,ease)}
+.fu-dot{position:absolute;top:50%;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3),0 0 0 .5px rgba(0,0,0,.08);transition:left .6s var(--ease-out,ease)}
+.fu-tl[data-st="wait"] .fu-dot{display:none}
+.fu-tl[data-st="in"] .fu-fill{background:var(--green)}
+.fu-lbl{display:flex;justify-content:space-between;margin-top:7px;font-size:.706rem;color:var(--label2);font-variant-numeric:tabular-nums}
+.fu-pop p{margin:12px 2px 0;font-size:.765rem;line-height:1.45}
+@media (prefers-reduced-motion:reduce){.fu-ic .fu-min,.fu-ic .fu-hour,.fu-now[data-st="dl"] i{animation:none}}
 .scroll-cue{position:absolute;z-index:2;pointer-events:none;left:50%;bottom:14px;translate:-50% 0;width:26px;height:26px;color:#fff;opacity:.7;animation:cue 2.2s ease-in-out infinite}
 @keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(6px);opacity:.35}}
 .strait path{stroke:#fff;stroke-width:1.8;stroke-dasharray:5 6;opacity:.85;fill:none;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
@@ -506,6 +523,12 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .wk-days{list-style:none;margin:10px 0 0;padding:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:height .35s cubic-bezier(.2,.8,.2,1)}
 .wk-days li{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0;border-top:.5px solid var(--sep);font-size:.882rem;font-variant-numeric:tabular-nums}
 .wk-days li:first-child{border-top:0}
+/* the months as sticky headers, as in the Photos and Mail lists, and a line at the very end */
+.wk-days li.wk-m{position:sticky;top:0;z-index:1;display:block;padding:12px 0 6px;border-top:0;background:var(--card);font:700 .765rem/1.2 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2)}
+.wk-days li.wk-m + li{border-top:0}
+:root[data-theme="dark"] .wk-days li.wk-m{background:color-mix(in srgb,var(--card) 82%,var(--bg))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wk-days li.wk-m{background:color-mix(in srgb,var(--card) 82%,var(--bg))}}
+.wk-days li.wk-end{display:block;justify-content:center;text-align:center;color:var(--label3);font-size:.765rem;padding:14px 0 6px}
 .wk-days b{font-weight:600}
 .wk-days span{color:var(--label2);text-align:right}
 .wk-days span strong{color:var(--label);font-weight:600}
@@ -1507,16 +1530,13 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><span class="inline-title" id="inlineTitle" aria-hidden="true">Channel Crossings</span></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="thick" d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="12" width="4" height="8.5" rx="1.3"/><rect x="10" y="7.5" width="4" height="13" rx="1.3"/><rect x="16.5" y="3.5" width="4" height="17" rx="1.3"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="3" y="11.5" width="5" height="9.5" rx="1.6"/><rect class="solid" x="9.5" y="7" width="5" height="14" rx="1.6"/><rect class="solid" x="16" y="3" width="5" height="18" rx="1.6"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4z"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="9" cy="8" r="3.8"/><path class="solid" d="M2.4 20c.5-3.9 3.2-6.3 6.6-6.3s6.1 2.4 6.6 6.3a.8.8 0 0 1-.8.9H3.2a.8.8 0 0 1-.8-.9z"/><circle class="solid" cx="16.3" cy="8.3" r="3"/><path class="solid" d="M16.9 13.3c2.6.3 4.4 2.3 4.8 5.6a.8.8 0 0 1-.8.9h-3.7c-.2-2.6-1.4-4.8-3.3-6.1.9-.3 1.9-.5 3-.4z"/></svg><span>People</span></button></div></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button><button type="button" class="tb-btn tb-share" id="shareBtn" aria-label="Share Channel Crossings" title="Share" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></div></div></div>
 
 <div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" data-nosnippet hidden>
-  <svg class="fu-clock" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="fuFace" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--fill)"/></radialGradient></defs>
-    <circle cx="60" cy="60" r="54" fill="url(#fuFace)" stroke="currentColor" stroke-width="5"/>
-    <g stroke="currentColor" stroke-linecap="round"><path d="M60 13v10M60 97v10M13 60h10M97 60h10" stroke-width="5"/><path d="M83.5 19.3l-3 5.2M100.7 36.5l-5.2 3M100.7 83.5l-5.2-3M83.5 100.7l-3-5.2M36.5 100.7l3-5.2M19.3 83.5l5.2-3M19.3 36.5l5.2 3M36.5 19.3l3 5.2" stroke-width="3"/></g>
-    <path class="fu-hour" d="M60 60V34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-    <path class="fu-min" d="M60 60h30" stroke="var(--blue)" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="60" cy="60" r="5" fill="var(--blue)"/></svg>
-  <b>Figure updates</b>
+  <div class="fu-hd"><span class="fu-ic" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="none" stroke="#fff" stroke-width="2.6"/><path class="fu-hour" d="M20 20v-7" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/><path class="fu-min" d="M20 20h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="20" cy="20" r="1.9" fill="#fff"/></svg></span>
+    <div><b>Figure updates</b><span class="fu-sub">Home Office small boat figures, daily</span></div></div>
+  <div class="fu-now" id="fuNow" data-st="wait"><i aria-hidden="true"></i><span id="fuToday"></span></div>
+  <div class="fu-tl" id="fuTl" aria-hidden="true"><div class="fu-track"><i class="fu-fill" id="fuFill"></i><i class="fu-dot" id="fuDot"></i></div>
+    <div class="fu-lbl"><span>12:00</span><span>Usual window</span><span>15:30</span></div></div>
   <p class="fu-wkend">At weekends it can take several hours for the Home Office to release the figures, and it's not unusual for them to come out on the Monday instead.</p>
   <p class="fu-wkday">Between 12:00 and 15:30 some parts of the Channel Crossings site may become unavailable whilst our servers download the updated figures from the Home Office. This can take several hours.</p>
-  <p class="fu-today" id="fuToday"></p>
 </div>
 
 <div class="info-pop wx-pop mp-pop" id="popMap" role="dialog" aria-label="Live conditions" hidden></div>
@@ -1642,7 +1662,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
           </div>
           <div class="wk-face" id="wkList" hidden>
             <div class="flip-h"><button type="button" class="flip-go back" id="wkBack" aria-controls="wkGraph"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Last 7 days</button><span class="wk-note" id="wkNote"></span></div>
-            <ul class="wk-days" id="wkDays" aria-label="Every day in the last month"></ul>
+            <ul class="wk-days" id="wkDays" aria-label="Every day back to 2018, newest first"></ul>
             <button type="button" class="more-btn" id="wkGrow" aria-controls="wkDays" aria-expanded="false"><span>Show more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
           </div>
         </article>
@@ -2696,6 +2716,12 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     root.classList.toggle("wkend", wk);
     $("figTag").textContent = wk ? "Weekend" : "Updating";
     $("figMeta").innerHTML = wk ? 'Can take several hours at weekends<span class="mn-more"> · Sometimes not until Monday</span>' : "Since 12:00 · Can take up to an hour";   // phones: the first part only, on one line
+    // the state, and how far through the usual 12:00 to 15:30 window the day is (or when the figures arrived)
+    const mins = t => +t.slice(0,2) * 60 + +t.slice(3,5), frac = t => Math.min(1, Math.max(0, (mins(t) - 720) / 210));
+    const arr = at && ukDate(at) === ukToday() ? at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) : null;
+    const st = haveYesterday() ? "in" : on ? "dl" : "wait", f = st === "in" ? (arr ? frac(arr) : 1) : frac(ukHM());
+    $("fuNow").dataset.st = $("fuTl").dataset.st = st;
+    $("fuFill").style.width = $("fuDot").style.left = (f * 100).toFixed(1) + "%";
     $("fuToday").textContent = haveYesterday()
       ? (at && ukDate(at) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
       : on ? (wk ? "New figures incoming. At weekends they can be hours late, or wait until Monday." : "New figures incoming. Please wait.") : "Today's figures aren't in yet. Checks start at 12:00.";
@@ -2828,11 +2854,8 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     $("spark").setAttribute("aria-label", "Last 7 days: " + wk.map(d => dShort.format(parse(d.date)) + " " + fmt(d.migrants)).join(", "));
     $("sparkDays").innerHTML = wk.map(d => "<span>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short",...UTC}) + "</span>").join("");
     glWeek = wk; glWeekS = $("weekS").innerHTML; $("spark").classList.remove("picking");
-    // the List view: each day of the last month, newest first
-    const month = all.slice(-30).reverse();
-    $("wkDays").innerHTML = month.map(d => "<li><b>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short", day:"numeric", month:"short", ...UTC}) + "</b><span>"
-      + (d.migrants ? "<strong>" + fmt(d.migrants) + "</strong> " + (d.migrants === 1 ? "person" : "people") + " · " + plural(d.boats || 0, "boat", "boats") : "No crossings") + "</span></li>").join("");
-    $("wkNote").textContent = dShort.format(parse(month[month.length-1].date)) + " – " + dShort.format(parse(month[0].date));
+    // the List view: every day back to 2018, newest first, in months; more load as it scrolls
+    wkAll = all.filter(d => d.date >= "2018").reverse(); wkShown = 0; wkMon = ""; $("wkDays").innerHTML = ""; wkAdd(45);
     // ring: this year against the whole of last year
     const ytdDays = all.filter(d => d.date.slice(0,4) === yr), ytd = sum(ytdDays, "migrants");
     const lastYearAll = sum(all.filter(d => d.date.slice(0,4) === String(yr - 1)), "migrants");
@@ -3971,6 +3994,22 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }
 
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
+  var wkAll = [], wkShown = 0, wkMon = "";   // var: the figures can arrive before this line has run
+  function wkAdd(n){
+    const ul = $("wkDays"), part = wkAll.slice(wkShown, wkShown + n); if(!part.length) return;
+    let h = "";
+    part.forEach(d => {
+      const m = d.date.slice(0,7);
+      if(m !== wkMon){ wkMon = m; h += '<li class="wk-m">' + parse(d.date).toLocaleDateString("en-GB",{month:"long", year:"numeric", ...UTC}) + "</li>"; }
+      h += "<li><b>" + parse(d.date).toLocaleDateString("en-GB",{weekday:"short", day:"numeric", month:"short", ...UTC}) + "</b><span>"
+        + (d.migrants ? "<strong>" + fmt(d.migrants) + "</strong> " + (d.migrants === 1 ? "person" : "people") + " · " + plural(d.boats || 0, "boat", "boats") : "No crossings") + "</span></li>";
+    });
+    ul.insertAdjacentHTML("beforeend", h); wkShown += part.length;
+    if(wkShown >= wkAll.length) ul.insertAdjacentHTML("beforeend", '<li class="wk-end">That\'s every day back to ' + dShort.format(parse(wkAll[wkAll.length-1].date)) + " " + wkAll[wkAll.length-1].date.slice(0,4) + "</li>");
+    $("wkNote").textContent = "Back to " + wkAll[wkAll.length-1].date.slice(0,4);
+  }
+  // near the bottom of the list: the next two months
+  $("wkDays").addEventListener("scroll", e => { const u = e.currentTarget; if(u.scrollTop + u.clientHeight > u.scrollHeight - 400) wkAdd(60); }, {passive:true});
   let wkTall = false;
   function sizeWk(){ $("wkDays").style.height = wkBase + (wkTall ? 260 : 0) + "px"; }
   let wkBase = 150;
