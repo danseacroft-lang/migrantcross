@@ -1317,17 +1317,10 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
   .hero-quiet .cal{width:64px;height:68px;border-radius:17px;grid-template-rows:23px 1fr}
   .hero-quiet .cal span{font-size:.647rem;line-height:23px}
   .hero-quiet .cal b{font-size:2.2rem}
-  /* the chips sit still and all fit: the year across the top, the rest sharing the rows below as rounded buttons,
-     as in Control Centre. Long labels wrap onto a second line rather than running off the screen */
+  /* the chips sit still: the same pills as before, wrapping onto a second row rather than sliding sideways off the screen */
   .hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0;padding:0;overflow:visible}
-  .hero-chips > *{flex:1 1 140px;min-width:0;max-width:none;white-space:normal}
-  .hero-chips > #chipYear,.hero-chips > #chipRep{flex-basis:100%}
-  .hero-chips .chip{min-height:40px;padding:7px 12px;border-radius:14px;font-size:.824rem;line-height:1.25;text-align:left}
-  .hero-chips .chip > span{flex:1;min-width:0}
-  .hero-chips #chipYear{justify-content:flex-start;flex-wrap:wrap;column-gap:6px}
-  .hero-chips button.chip > svg:last-child,.hero-chips a.chip > svg:last-child{display:none}   /* the whole tile is the button, as in Control Centre */
-  .hero-chips .chip small{display:block;font-size:.765rem;font-weight:500;opacity:.78}
-  .hero-chips .chip small s{display:none}
+  .hero-chips > *{flex:none;max-width:100%;white-space:nowrap}
+  .hero-chips .chip > span{min-width:0;overflow:hidden;text-overflow:ellipsis}
   .map-news{top:8px;left:8px;right:8px;border-radius:20px}
   .ves-list{left:8px;top:8px}
   .hero.has-news .ves-list{top:calc(8px + var(--mn-h))}
