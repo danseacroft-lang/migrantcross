@@ -1539,7 +1539,13 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   /* the dimmed page behind: drawn on the page itself, so a tap on it is a tap outside, which closes the card */
   body:has(.tb-pop:not([hidden]),.info-pop:not([hidden]),.am-sheet:not([hidden]))::after{content:"";position:fixed;inset:0;z-index:89;background:rgba(0,0,0,.4);animation:fadeScrim .25s ease both}
   .share-scrim{z-index:89!important}
+  /* every card is frosted glass on phones: the page shows through, blurred */
+  body .tb-pop,body .info-pop,body .am-sheet{background-color:color-mix(in srgb,var(--card) 74%,transparent)!important;-webkit-backdrop-filter:blur(40px) saturate(180%)!important;backdrop-filter:blur(40px) saturate(180%)!important}
+  body .side-share{background:rgba(0,0,0,.62)!important;-webkit-backdrop-filter:blur(40px) saturate(180%)!important;backdrop-filter:blur(40px) saturate(180%)!important}
+  :root[data-theme="dark"] body :is(.tb-pop,.info-pop,.am-sheet){background-color:rgba(44,44,46,.66)!important}
 }
+@media (max-width:719px) and (prefers-color-scheme:dark){:root:not([data-theme="light"]) body :is(.tb-pop,.info-pop,.am-sheet){background-color:rgba(44,44,46,.66)!important}}
+@media (max-width:719px) and (prefers-reduced-transparency:reduce){body :is(.tb-pop,.info-pop,.am-sheet){background-color:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}body .side-share{background:#000!important}}
 @keyframes mCardIn{from{opacity:0;transform:scale(.92)}}
 @keyframes mCardOut{to{opacity:0;transform:scale(.95)}}
 </style>
@@ -2571,8 +2577,11 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup();
       const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
+      // phones: the reading is the same centred card as every other pop-up, so it lives on the page itself, clear of the map's sliding page
+      if(innerWidth < 720){ if(sh.parentNode !== document.body){ sh._home = sh.parentNode; document.body.appendChild(sh); } }
+      else if(sh._home && sh.parentNode !== sh._home) sh._home.appendChild(sh);
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
-      if(hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
+      if(innerWidth >= 720 && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
     }
     // keep the card clear of the title at the top
