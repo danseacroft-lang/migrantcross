@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-12T19:13:10Z",
+ "checkedAt": "2026-10-12T19:34:23Z",
  "items": [
+  {
+   "title": "Government expands police support to political figures who are not MPs",
+   "url": "https://www.bbc.co.uk/news/articles/c3gr82rk70l8o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-12T19:29:45Z",
+   "breaking": true
+  },
+  {
+   "title": "Andy Burnham promises \u2018serious dialogue\u2019 over UK\u2019s relationship with EU",
+   "url": "https://www.theguardian.com/politics/2026/oct/12/andy-burnham-britain-eu-brexit-reset",
+   "source": "The Guardian",
+   "published": "2026-10-12T19:15:11Z",
+   "breaking": true
+  },
   {
    "title": "Motion of no-confidence in Sinn F\u00e9in ministers 'pointless' - O'Neill",
    "url": "https://www.bbc.co.uk/news/articles/c68jz0282re9o?at_medium=RSS&at_campaign=rss",
@@ -20,20 +34,6 @@
    "url": "https://www.gbnews.com/news/henry-rice-dead-britain-last-surviving-d-day-heroes-survived-torpedo-attack-100",
    "source": "GB News",
    "published": "2026-10-12T17:38:25Z",
-   "breaking": true
-  },
-  {
-   "title": "Burnham to push for new post-Brexit deals at EU summit",
-   "url": "https://www.bbc.co.uk/news/articles/cqev3xvejyvjo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-12T17:38:15Z",
-   "breaking": true
-  },
-  {
-   "title": "Burnham says \u2018public will be the boss\u2019 in any future decision about closer relationship with the EU \u2013 as it happened",
-   "url": "https://www.theguardian.com/politics/live/2026/oct/12/uk-politics-live-tories-andy-burnham-russian-interference-brexit-eu-latest",
-   "source": "The Guardian",
-   "published": "2026-10-12T17:34:40Z",
    "breaking": true
   }
  ],
