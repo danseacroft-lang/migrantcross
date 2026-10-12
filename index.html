@@ -88,8 +88,6 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --glass:rgba(255,255,255,.72);
   --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
   --ta-o:.9; --ta-sea1:#5AA9E6; --ta-sea2:#1F6FB2; --ta-tube1:#9AA3AF; --ta-tube3:#3A414C; --ta-skin:#8D5A3B; --ta-stone1:#D9C9A3; --ta-stone2:#B39C6E; --ta-stone3:#8C7650; --ta-clock:#FFF7E0; --ta-brick1:#3B3B40; --ta-mortar:#56565C; --ta-frame:#E9E4DA; --ta-fan:#F6E7B4; --ta-step:#C9C4BA;
-  /* the Labour and Burnham pictures: simple flat drawings of the Elizabeth Tower and the door of Number 10 */
-  --pa-stone:#D9BE86; --pa-stone2:#BC9A5E; --pa-face:#FFF7E2; --pa-hand:#5A4628; --pa-door:#1B1C20; --pa-frame:#E9E4D8; --pa-frame2:#CFC8B8; --pa-glass:#F3E6C2; --pa-brass:#C9A24A;
   --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#D3DBE5; --heat2:#9FB1C6; --heat3:#6681A2; --heat4:#2F4B6E;   /* pressed button, orange text, the four shades of the year in squares */
   --age1:#CDD1DB; --age2:#A9AFBF; --age3:#868DA2; --age4:#636A84;
   --viz1:#2F4B6E; --viz1b:#7590B1; --viz2:#A8763C; --viz2b:#C9A06A; --viz3:#4D7A82; --viz4:#8F4F5E;   /* the graphs: a sober palette of slate navy, ochre, teal and rose */   /* the age bands in Who Is Crossing, youngest lightest */
@@ -104,7 +102,6 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --glass:rgba(30,30,32,.66);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
-  --pa-stone:#6E5C3E; --pa-stone2:#56472F; --pa-face:#FFE3A0; --pa-hand:#3A2D18; --pa-door:#0C0C0F; --pa-frame:#6A665E; --pa-frame2:#55524B; --pa-glass:#FFD27A; --pa-brass:#D9B45A;
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
   --age1:#4C546B; --age2:#6B738B; --age3:#9097AE; --age4:#B7BCCB;
   --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E; --viz3:#86B2B8; --viz4:#C4909C;
@@ -117,7 +114,6 @@ try{window.__data=fetch("data.json",{cache:"no-cache"}).then(function(r){if(!r.o
   --glass:rgba(30,30,32,.66);
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --ta-o:.8; --ta-sea1:#1E4F7A; --ta-sea2:#0B2A45; --ta-tube1:#7C8591; --ta-tube3:#252A33; --ta-skin:#6E4630; --ta-stone1:#8F8163; --ta-stone2:#665A42; --ta-stone3:#4A4130; --ta-clock:#F3E3A6; --ta-brick1:#1E1E22; --ta-mortar:#2E2E33; --ta-frame:#9B968C; --ta-fan:#E8C860; --ta-step:#6E6A62;
-  --pa-stone:#6E5C3E; --pa-stone2:#56472F; --pa-face:#FFE3A0; --pa-hand:#3A2D18; --pa-door:#0C0C0F; --pa-frame:#6A665E; --pa-frame2:#55524B; --pa-glass:#FFD27A; --pa-brass:#D9B45A;
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
   --age1:#4C546B; --age2:#6B738B; --age3:#9097AE; --age4:#B7BCCB;
   --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E; --viz3:#86B2B8; --viz4:#C4909C;
@@ -590,10 +586,9 @@ main{max-width:1180px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-ri
 .tile-art .ta-boat{animation:taBob 5s ease-in-out infinite}
 .tile-art .ta-wave{animation:taSwell 7s ease-in-out infinite alternate}
 .tile-art .ta-wave2{animation:taSwell 5.5s ease-in-out infinite alternate-reverse}
-/* Labour and Burnham: simple flat pictures in the corner, fading up and to the left into the card */
-.b-lab .tile-art,.b-bur .tile-art{width:min(52%,260px);height:170px;opacity:1;
-  -webkit-mask-image:linear-gradient(to left,#000 45%,transparent 98%),linear-gradient(to top,#000 50%,transparent 100%);-webkit-mask-composite:source-in;
-          mask-image:linear-gradient(to left,#000 45%,transparent 98%),linear-gradient(to top,#000 50%,transparent 100%);mask-composite:intersect}
+/* Labour and Burnham: the Elizabeth Tower and the door of Number 10, large and grey, tucked into the corner and faded into the card like the Figure updates clock */
+.b-lab .tile-art,.b-bur .tile-art{right:-26px;bottom:-30px;width:230px;height:276px;color:var(--label2);opacity:.2;
+  -webkit-mask-image:radial-gradient(circle at 62% 66%,#000 40%,transparent 72%);mask-image:radial-gradient(circle at 62% 66%,#000 40%,transparent 72%);-webkit-mask-composite:source-over;mask-composite:add}
 .tile-art .lb-boat{animation:lbBoat 6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
 .tile-art .lb-ripple{animation:taGlint 3.2s ease-in-out infinite alternate}
 .tile-art .lb-swell{animation:taSwell 8s ease-in-out infinite alternate}
@@ -891,7 +886,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .b-week,.b-ring,.b-lab,.b-bur{grid-column:1 / -1}   /* one box to a row, so Labour and Burnham are not squeezed into two narrow columns */
   .card.b-lab,.card.b-bur{min-height:190px;padding-bottom:16px}
   .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:62%}
-  .b-bur .tile-art{width:44%}
   /* the hero chips wrap onto a second line rather than running off the edge */
   .hero-chips{gap:6px}
   .hero-chips > *{max-width:100%;white-space:nowrap}
@@ -900,8 +894,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .flip > .fc{padding:14px 12px}
   .fc .cal-nav h3{flex-direction:column;gap:0}   /* the month, with its totals underneath */
   .tile-art{height:120px}
-  .b-lab .tile-art,.b-bur .tile-art{width:46%;height:130px}
-  .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:54%}
+  .b-lab .tile-art,.b-bur .tile-art{width:156px;height:187px;right:-20px;bottom:-24px}
+  .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:68%}
   .ring-wrap{gap:18px}
   .card{padding:16px;border-radius:20px}
   .val{font-size:1.8rem}
@@ -1810,14 +1804,14 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
           </div>
         </article>
         <article class="card b-lab art rv">
-          <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 220 150" preserveAspectRatio="xMaxYMax meet"><g fill="var(--pa-stone)"><path d="M0 150V108h6v-6h6v6h10v-6h6v6h10v-6h6v6h10v-6h6v6h10v-6h6v6h10v-6h6v6h10v-6h6v6h12V150Z"/><path d="M40 108V88l6-10 6 10v20ZM86 108V92l5-8 5 8v16Z"/><rect x="128" y="62" width="30" height="88"/><rect x="124" y="34" width="38" height="30" rx="1"/><path d="M124 34l5-14h28l5 14Z"/><path d="M129 20l14-20 14 20Z"/><path d="M158 150V112h8v-6h6v6h10v-6h6v6h10v-6h6v6h16V150Z"/></g><g fill="var(--pa-stone2)"><rect x="128" y="64" width="30" height="3"/><path d="M134 72h3v76h-3ZM149 72h3v76h-3Z"/><path d="M12 118h3v24h-3ZM30 118h3v24h-3ZM48 118h3v24h-3ZM66 118h3v24h-3ZM84 118h3v24h-3ZM102 118h3v24h-3ZM176 120h3v22h-3ZM194 120h3v22h-3Z"/></g><circle cx="143" cy="49" r="11" fill="var(--pa-face)"/><circle cx="143" cy="49" r="11" fill="none" stroke="var(--pa-stone2)" stroke-width="1.6"/><path d="M143 49V41M143 49l5 3" stroke="var(--pa-hand)" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 200 240" preserveAspectRatio="xMaxYMax meet"><defs><mask id="pmLab"><g fill="#fff"><path d="M100 0l12 40H88z"/><path d="M80 40h40l6 22H74z"/><rect x="72" y="46" width="5" height="16"/><rect x="123" y="46" width="5" height="16"/><rect x="74" y="62" width="52" height="22"/><rect x="70" y="84" width="60" height="56" rx="2"/><rect x="76" y="140" width="48" height="100"/><path d="M0 240V176h8v-7h7v7h12v-7h7v7h12v-7h7v7h12v-7h7v7h4V240z"/><path d="M20 176v-22l7-12 7 12v22z"/><path d="M124 240V184h10v-7h7v7h12v-7h7v7h12v-7h7v7h11V240z"/></g><g fill="#000"><rect x="80" y="66" width="8" height="15" rx="4"/><rect x="96" y="66" width="8" height="15" rx="4"/><rect x="112" y="66" width="8" height="15" rx="4"/><circle cx="100" cy="112" r="21"/><rect x="85" y="150" width="4" height="84" rx="2"/><rect x="98" y="150" width="4" height="84" rx="2"/><rect x="111" y="150" width="4" height="84" rx="2"/><rect x="6" y="190" width="4" height="40" rx="2"/><rect x="22" y="190" width="4" height="40" rx="2"/><rect x="38" y="190" width="4" height="40" rx="2"/><rect x="54" y="190" width="4" height="40" rx="2"/><rect x="138" y="196" width="4" height="36" rx="2"/><rect x="154" y="196" width="4" height="36" rx="2"/><rect x="170" y="196" width="4" height="36" rx="2"/></g><circle cx="100" cy="112" r="17" fill="#fff"/><path d="M100 112V99M100 112l9 5" stroke="#000" stroke-width="3" stroke-linecap="round"/></mask></defs><rect width="200" height="240" fill="currentColor" mask="url(#pmLab)"/></svg></div>
           <h3>Since Labour took office</h3>
           <div class="val num" id="labV">–</div>
           <div class="sub" id="labS">&nbsp;</div>
           <div class="cost" id="labC"><span id="labCT"></span><button type="button" class="cost-i" id="labCI" aria-expanded="false" aria-controls="popCost" aria-label="How the support cost is worked out" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.35" fill="currentColor"/></svg></button></div>
         </article>
         <article class="card b-bur art rv">
-          <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 220 150" preserveAspectRatio="xMaxYMax meet"><rect x="94" y="20" width="102" height="10" fill="var(--pa-frame)"/><rect x="100" y="30" width="10" height="114" fill="var(--pa-frame)"/><rect x="180" y="30" width="10" height="114" fill="var(--pa-frame)"/><rect x="110" y="30" width="70" height="114" fill="var(--pa-frame2)"/><path d="M116 72a29 29 0 0 1 58 0Z" fill="var(--pa-glass)"/><path d="M145 72V44M145 72l-20-15M145 72l20-15" stroke="var(--pa-frame2)" stroke-width="2"/><rect x="116" y="74" width="58" height="70" fill="var(--pa-door)"/><text x="145" y="94" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="13" font-weight="700" fill="#F2EEE4">10</text><circle cx="145" cy="106" r="3.4" fill="none" stroke="var(--pa-brass)" stroke-width="1.8"/><rect x="134" y="122" width="22" height="4" rx="1" fill="var(--pa-brass)"/><rect x="88" y="144" width="114" height="6" fill="var(--pa-frame2)"/></svg></div>
+          <div class="tile-art" aria-hidden="true"><svg viewBox="0 0 200 240" preserveAspectRatio="xMaxYMax meet"><defs><mask id="pmBur"><g fill="#fff"><rect x="22" y="22" width="156" height="9" rx="1"/><rect x="30" y="31" width="140" height="15"/><rect x="38" y="46" width="16" height="188"/><rect x="146" y="46" width="16" height="188"/><path d="M58 96a42 42 0 0 1 84 0z"/><rect x="62" y="98" width="76" height="136"/><rect x="14" y="234" width="172" height="6"/></g><g fill="#000"><rect x="62" y="96" width="76" height="3"/><path d="M100 96V58M100 96L71 70M100 96l29-26M100 96L63 86M100 96l37-10" stroke="#000" stroke-width="2.4"/><path d="M88 96a12 12 0 0 1 24 0z"/><rect x="70" y="108" width="26" height="54" rx="2"/><rect x="104" y="108" width="26" height="54" rx="2"/><rect x="70" y="170" width="26" height="56" rx="2"/><rect x="104" y="170" width="26" height="56" rx="2"/><rect x="42" y="56" width="3" height="170" rx="1.5"/><rect x="155" y="56" width="3" height="170" rx="1.5"/></g><g fill="#fff"><rect x="74" y="112" width="18" height="46" rx="1"/><rect x="108" y="112" width="18" height="46" rx="1"/><rect x="74" y="174" width="18" height="48" rx="1"/><rect x="108" y="174" width="18" height="48" rx="1"/></g><text x="100" y="140" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="17" font-weight="700" fill="#000">10</text><circle cx="100" cy="158" r="6" fill="none" stroke="#000" stroke-width="2.6"/><rect x="88" y="196" width="24" height="6" rx="1.5" fill="#000"/></mask></defs><rect width="200" height="240" fill="currentColor" mask="url(#pmBur)"/></svg></div>
           <h3>Since Burnham became PM</h3>
           <div class="val num" id="burV">–</div>
           <div class="sub" id="burS">&nbsp;</div>
