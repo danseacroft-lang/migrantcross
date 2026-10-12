@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
 
-concurrency: publish      # never push at the same moment as the other updates
+concurrency: ${{ github.workflow }}   # one run of this job at a time; the jobs commit different files, and each retries its push if another got in first
 
 jobs:
   vessels:
@@ -25,10 +25,9 @@ jobs:
           AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }}
       - name: Publish boat positions
         run: |
-          [ -f vessels.json ] || exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add vessels.json
           git diff --cached --quiet && exit 0
           git commit -m "Update rescue and patrol boat positions"
-          git pull --rebase && git push
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done

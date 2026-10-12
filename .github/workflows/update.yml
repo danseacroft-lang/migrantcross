@@ -11,7 +11,7 @@ on:
 permissions:
   contents: write
 
-concurrency: publish      # one publishing job at a time (shared with the hourly news job)
+concurrency: ${{ github.workflow }}   # one run of this job at a time; the jobs commit different files, and each retries its push if another got in first
 
 jobs:
   update:
@@ -41,7 +41,7 @@ jobs:
           # status.json changes on every check; the message says whether anything else did
           if git diff --cached --name-only | grep -qv '^status.json$'; then msg="Update crossing figures"; else msg="Checked for new figures"; fi
           git commit -m "$msg"
-          git pull --rebase && git push
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
       - name: Post to Facebook
         # Posts each new day's figures once (fb.json remembers the last one). Does nothing until the
         # FB_PAGE_ID and FB_PAGE_TOKEN secrets are set. Runs after publishing, so a failed post never
@@ -56,4 +56,4 @@ jobs:
           git add fb.json
           git diff --cached --quiet && exit 0
           git commit -m "Posted the latest figures to Facebook"
-          git pull --rebase && git push
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done

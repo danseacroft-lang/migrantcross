@@ -12,6 +12,7 @@ To change what's shown, edit FEEDS, POLITICS_FEEDS, STRONG, BLOCK or MAX_AGE_HOU
 To pin or hide a story by hand, edit news-override.json (see the bottom of this file).
 """
 import json
+import os
 import re
 import sys
 from datetime import datetime, timedelta, timezone
@@ -24,7 +25,6 @@ OUT = ROOT / "news.json"
 OVERRIDE = ROOT / "news-override.json"
 HEADERS = {"User-Agent": "channel-crossings-news (GitHub Action; channelcrossings.world)"}
 MAX_AGE_HOURS = 3          # breaking news only: older stories are dropped
-BREAKING_HOURS = 3         # everything kept is breaking
 
 FEEDS = [
     ("BBC News", "https://feeds.bbci.co.uk/news/uk/rss.xml"),
@@ -87,7 +87,7 @@ BLOCK = re.compile(r"channel 4|channel 5|tv channel|youtube channel|channel swim
 
 def text(el, tag, ns=None):
     x = el.find(tag, ns or {})
-    return (x.text or "").strip() if x is not None and x.text else ""
+    return x.text.strip() if x is not None and x.text else ""
 
 
 def parse_date(s):
@@ -148,7 +148,6 @@ def read_telegram_api(source, channel):
     """The latest posts of a Telegram channel through Telegram's own API (for channels with the web preview off).
     Needs TG_API_ID, TG_API_HASH and TG_SESSION (made once with scripts/tg_login.py) as GitHub secrets."""
     import asyncio
-    import os
     from telethon import TelegramClient
     from telethon.sessions import StringSession
 
@@ -236,7 +235,6 @@ def main():
     items = pick(stories, now)
     for source, channel in GROUND:   # live sightings: only for "reported today", never the news strip
         try:
-            import os
             api = all(os.environ.get(k) for k in ("TG_API_ID", "TG_API_HASH", "TG_SESSION"))
             got = read_telegram_api(source, channel) if api else read_telegram(source, channel)
             stories += got
@@ -247,6 +245,12 @@ def main():
 
     # Manual control: news-override.json can hide stories (by URL) or pin one to the top
     # {"hide": ["https://..."], "pin": {"title": "...", "url": "https://...", "source": "...", "until": "2026-09-30T18:00:00Z"}}
+    try:
+        old = json.loads(OUT.read_text())
+    except (OSError, ValueError):
+        old = {}
+    # a pinned story keeps the time it was first pinned, so the file only changes when the stories do
+    pinned_at = lambda url: parse_date(next((i.get("published", "") for i in old.get("items", []) if i.get("url") == url), ""))
     if OVERRIDE.exists():
         try:
             o = json.loads(OVERRIDE.read_text())
@@ -255,23 +259,19 @@ def main():
             pin = o.get("pin")
             if pin and pin.get("url") and parse_date(pin.get("until", "")) and parse_date(pin["until"]) > now:
                 items = [{"source": pin.get("source", "Channel Crossings"), "title": pin["title"], "url": pin["url"],
-                          "summary": "", "published": now, "pinned": True}] + [s for s in items if s["url"] != pin["url"]]
+                          "summary": "", "published": pinned_at(pin["url"]) or now, "pinned": True}] + [s for s in items if s["url"] != pin["url"]]
         except Exception as e:  # noqa: BLE001
             print("Override skipped:", e)
 
     out = {"checkedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "items": [
         {"title": s["title"], "url": s["url"], "source": s["source"],
          "published": s["published"].astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-         "breaking": s.get("pinned", False) or (now - s["published"]) <= timedelta(hours=BREAKING_HOURS)}
+         "breaking": True}   # older stories were dropped by pick(), so everything kept is breaking
         for s in items], "reported": reported}
-    # Only rewrite the file when the stories change, so the site isn't republished every hour for nothing
-    try:
-        old = json.loads(OUT.read_text())
-        if old.get("items") == out["items"] and old.get("reported") == out["reported"]:
-            print("No change")
-            return
-    except (OSError, ValueError):
-        pass
+    # Only rewrite the file when the stories change, so the site isn't republished every 15 minutes for nothing
+    if old.get("items") == out["items"] and old.get("reported") == out["reported"]:
+        print("No change")
+        return
     OUT.write_text(json.dumps(out, indent=1) + "\n")
     print(f"{len(items)} story(ies) kept")
 

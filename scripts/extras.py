@@ -110,12 +110,10 @@ def update_gender():
         return {"sex": sex, "age": age, "adultMen": adult_men, "total": sum(sex.values())}
 
     last_q = quarters[-1]                              # e.g. "2026 Q2"
-    y, qn = int(last_q[:4]), int(last_q[-1])
-    month = {1: "March", 2: "June", 3: "September", 4: "December"}[qn]
     save("gender.json", {
         "source": url,
         "latestQuarter": last_q,
-        "period": f"year ending {month} {y}",
+        "period": year_ending(last_q),
         "lastYear": tally(lambda q: q in last4),
         "since2018": tally(lambda q: True),
         "updatedAt": now_iso(),
