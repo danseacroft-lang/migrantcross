@@ -807,8 +807,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
 @media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}}
 .top-brand h1{min-width:0;overflow:hidden;text-overflow:ellipsis}
-/* The buttons at the top right, as on Facebook: round grey buttons that turn blue while their card is open,
-   with a red count on Report Channel Crossing for reports posted since the visitor last looked */
+/* The buttons at the top right: round grey buttons that turn blue while their card is open */
 .top-act{display:flex;align-items:center;pointer-events:auto;min-width:0}
 .tb-btn{position:relative;flex:none;display:grid;place-items:center;padding:0;border:0;border-radius:50%;appearance:none;cursor:pointer;touch-action:manipulation;color:var(--label);transition:background .2s ease,color .2s ease,transform .15s ease}
 .tb-btn::after{content:"";position:absolute;inset:-3px}
@@ -1619,7 +1618,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       <button type="button" id="liveTipX" aria-label="Close tip"><svg viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7"/></svg></button>
     </div>
 
-    <!-- Across the top of the map: breaking news about small boats from UK news outlets (news.json, updated hourly),
+    <!-- Across the top of the map: breaking news about small boats from UK news outlets (news.json, updated every 15 minutes),
          and from 12:00 UK time until the new figures are in, the daily update. When both are on they take turns. -->
     <aside class="map-news" id="news" aria-label="Breaking news" hidden>
       <div class="mn-slides">
@@ -1929,6 +1928,11 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   const dLong = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric",...UTC});
   const dDMY = new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",...UTC});   // 5 July 2024
   const ukDate = d => d.toLocaleString("sv-SE",{timeZone:"Europe/London"}).slice(0,10), ukToday = () => ukDate(new Date());   // YYYY-MM-DD in UK time
+  const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});   // 14:05, UK time
+  const store = {   // localStorage, which can be missing or blocked
+    get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+    set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  };
   const plural = (n, one, many) => fmt(n) + " " + (n === 1 ? one : many);
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.json(); });
 
@@ -1974,7 +1978,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   modeBtns.forEach(b => b.addEventListener("click", () => {
     const n = b.dataset.mode;
     ccTheme(n);
-    try{ localStorage.setItem("cc-theme", n); }catch(e){}
+    store.set("cc-theme", n);
     showTheme();
   }));
   showTheme();
@@ -2174,12 +2178,11 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     t.addEventListener("click", e => { e.stopPropagation(); fold(!box.classList.contains("folded")); placeTowns(); });
   })();
   (function(){
-    let closed = false; try{ closed = !!localStorage.getItem("liveTipClosed"); }catch(e){}
-    if(closed) return;
+    if(store.get("liveTipClosed")) return;
     $("liveTip").hidden = false;
     $("liveTipX").addEventListener("click", e => {
       e.stopPropagation(); const t = $("liveTip"); t.classList.add("out"); setTimeout(() => { t.hidden = true; }, 220);
-      try{ localStorage.setItem("liveTipClosed", "1"); }catch(e){}
+      store.set("liveTipClosed", "1");
     });
   })();
   function whenIdle(fn, wait){ "requestIdleCallback" in window ? requestIdleCallback(() => fn(), {timeout:wait}) : setTimeout(fn, 300); }
@@ -2257,17 +2260,23 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     frameStrait();
     requestAnimationFrame(placeTowns);   // the names go on once the map has laid out its markers
   }
-  // Where the open map starts, from the top of the map card: below the news strip when it's showing
   // A tapped boat or beach opens its card where it can be read in full: on phones and tablets it slides up from the bottom
   // of the map like a place card in Apple Maps; on a computer the map moves so the card sits in the open water, never off the top
   let stuck = null;
+  // phones: a map card is the same centred card as every other pop-up, so it lives on the page itself, clear of the map's sliding page
+  function dockSheet(sh){
+    if(innerWidth < 720){ if(sh.parentNode !== document.body){ sh._home = sh.parentNode; document.body.appendChild(sh); } }
+    else if(sh._home && sh.parentNode !== sh._home) sh._home.appendChild(sh);
+  }
   function openMapCard(layer){
     const tip = layer.getTooltip(); if(!tip) return;
     if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
       layer.closeTooltip(); LM.closePopup();
+      ptAt = null; if(pin) pin.remove();   // a boat replaces the weather reading, so the reading's pin goes, and it isn't refreshed over the boat later
       const sh = $("amSheet"), cls = tip.options.className || "";
       sh.querySelector(".am-sheet-in").innerHTML = '<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>";
       sh.setAttribute("aria-label", cls.includes("ves") ? "Boat details" : "Launch area");
+      dockSheet(sh);
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       return;
     }
@@ -2496,9 +2505,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup();
       const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
-      // phones: the reading is the same centred card as every other pop-up, so it lives on the page itself, clear of the map's sliding page
-      if(innerWidth < 720){ if(sh.parentNode !== document.body){ sh._home = sh.parentNode; document.body.appendChild(sh); } }
-      else if(sh._home && sh.parentNode !== sh._home) sh._home.appendChild(sh);
+      sh.setAttribute("aria-label", "Weather at this spot"); dockSheet(sh);
       if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
       if(innerWidth >= 720 && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
@@ -2541,10 +2548,15 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     for(let i = 0; i < 8; i++){ p.x = Math.random() * vw; p.y = Math.random() * vh; if(!fld || fld.sea[cellAt(p.x, p.y)]) break; }
     p.age = 0; p.max = 140 + Math.random() * 120; p.cap = Math.random(); return p;
   }
-  function vel(x, y, a){
-    const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001);
-    const i = fy | 0, j = fx | 0, tx = fx - j, ty = fy - i, k = i * fld.cols + j, C = fld.cols;
-    return (a[k] * (1 - tx) + a[k + 1] * tx) * (1 - ty) + (a[k + C] * (1 - tx) + a[k + C + 1] * tx) * ty;
+  // a field's value at a point, blended from the four cells around it: velAt finds the cells once, vel reads each field
+  let vk = 0, vtx = 0, vty = 0;
+  function velAt(x, y){
+    const fx = Math.min(Math.max(x / CELL, 0), fld.cols - 1.001), fy = Math.min(Math.max(y / CELL, 0), fld.rows - 1.001), j = fx | 0, i = fy | 0;
+    vk = i * fld.cols + j; vtx = fx - j; vty = fy - i;
+  }
+  function vel(a){
+    const k = vk, C = fld.cols;
+    return (a[k] * (1 - vtx) + a[k + 1] * vtx) * (1 - vty) + (a[k + C] * (1 - vtx) + a[k + C + 1] * vtx) * vty;
   }
   // Batches: everything drawn in the same style goes into one path, so a frame is a handful of strokes
   const batches = n => Array.from({length:n}, () => new Path2D());
@@ -2557,8 +2569,9 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     for(const p of parts){
       p.age += dt;
       if(p.age > p.max || !fld.sea[cellAt(p.x, p.y)] || p.x < -30 || p.y < -30 || p.x > vw + 30 || p.y > vh + 30){ spawn(p); continue; }
-      let du = vel(p.x, p.y, fld.u), dv = vel(p.x, p.y, fld.v); const n = Math.hypot(du, dv) || 1; du /= n; dv /= n;
-      const hgt = Math.min(vel(p.x, p.y, fld.m), 4), fade = Math.sin(Math.PI * p.age / p.max), sp = (.08 + .26 * Math.sqrt(hgt)) * dt;
+      velAt(p.x, p.y);
+      let du = vel(fld.u), dv = vel(fld.v); const n = Math.hypot(du, dv) || 1; du /= n; dv /= n;
+      const hgt = Math.min(vel(fld.m), 4), fade = Math.sin(Math.PI * p.age / p.max), sp = (.08 + .26 * Math.sqrt(hgt)) * dt;
       p.x += du * sp; p.y += dv * sp;
       if(fade < .08) continue;
       // an arc whose middle sits on the crest, curving back on both sides like a wave front
@@ -2610,7 +2623,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }
   // the figures change size as the number counts up or the chips change: fit again, once a frame at most
   if("ResizeObserver" in window){ let q = 0; new ResizeObserver(() => { if(!q) q = requestAnimationFrame(() => { q = 0; fitHero(); }); }).observe(hero.querySelector(".hero-in")); }
-  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { $("news").hidden ? fitHero() : newsRoom(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
+  addEventListener("resize", () => { clearTimeout(fitT); fitT = setTimeout(() => { newsRoom(); const sz = hero.clientWidth + "x" + hero.clientHeight; if(sz !== fitSz){ fitSz = sz; fitMap(); } }, 120); });
   play();
 
   // Boat details: hover (mouse) or tap. The boat pauses while you look at it.
@@ -2704,14 +2717,14 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }
 
   /* ---------------------------------------------------- "New figures incoming": from noon until yesterday's figures are in */
-  const ukHM = () => new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
+  const ukHM = () => ukClock(new Date());
   const yesterday = () => new Date(Date.parse(ukToday() + "T12:00:00Z") - DAY).toISOString().slice(0,10);
   const haveYesterday = () => days.length && days[days.length-1].date >= yesterday();
   const pending = () => ukHM() >= "12:00" && !haveYesterday();
   function liveUi(){
     const on = pending(), fu = $("chipFU");
     // the daily update in the strip across the top of the map: shows while new figures are awaited, unless it was closed today
-    let closed = ""; try{ closed = localStorage.getItem("syncClosed"); }catch(e){}
+    const closed = store.get("syncClosed");
     showFigures(on && closed !== ukToday());
     // the figures chip: "Updates to figures", or from 12:00 a download ring and "Downloading new figures" until they're in
     fu.classList.toggle("dl", on); fu.querySelector("span").textContent = on ? "Downloading new figures" : "Updates to figures";
@@ -2722,12 +2735,12 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     $("figMeta").innerHTML = wk ? 'Can take several hours at weekends<span class="mn-more"> · Sometimes not until Monday</span>' : "Since 12:00 · Can take up to an hour";   // phones: the first part only, on one line
     // the state, and how far through the usual 12:00 to 15:30 window the day is (or when the figures arrived)
     const mins = t => +t.slice(0,2) * 60 + +t.slice(3,5), frac = t => Math.min(1, Math.max(0, (mins(t) - 720) / 210));
-    const arr = at && ukDate(at) === ukToday() ? at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) : null;
+    const arr = at && ukDate(at) === ukToday() ? ukClock(at) : null;
     const st = haveYesterday() ? "in" : on ? "dl" : "wait", f = st === "in" ? (arr ? frac(arr) : 1) : frac(ukHM());
     $("fuNow").dataset.st = $("fuTl").dataset.st = st;
     $("fuFill").style.width = $("fuDot").style.left = (f * 100).toFixed(1) + "%";
     $("fuToday").textContent = haveYesterday()
-      ? (at && ukDate(at) === ukToday() ? "Today's figures arrived at " + at.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"}) + "." : "Today's figures are in.")
+      ? (arr ? "Today's figures arrived at " + arr + "." : "Today's figures are in.")
       : on ? (wk ? "New figures incoming. At weekends they can be hours late, or wait until Monday." : "New figures incoming. Please wait.") : "Today's figures aren't in yet. Checks start at 12:00.";
     // an orange dot when the latest figures are more than three days old
     if(days.length){ const last = days[days.length-1].date; fu.classList.toggle("stale", (Date.now() - parse(last)) / DAY > 3);
@@ -2747,17 +2760,17 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(!cur) return;
     const {chip, pop} = cur, r = chip.getBoundingClientRect();
     pop.style.maxHeight = pop.style.bottom = pop.style.width = ""; pop.classList.remove("sheet");
-    const w = pop.offsetWidth, left = Math.min(Math.max(12, r.left), vpW() - w - 12);
-    let h = pop.offsetHeight;
-    // above the chip, unless there's no room; a long pop-up goes on the roomier side and scrolls, never over its chip
-    const above = r.top - barBottom() - 10, under = dockBottom() - r.bottom - 22;
-    if(vpW() < 720){   // phones: the same centred card as every other pop-up (the CSS places it), with a close button   // small phones: too long for either side, so it docks as a sheet along the bottom
+    if(vpW() < 720){   // phones: the same centred card as every other pop-up (the CSS places it), with a close button
       pop.classList.add("sheet");
       Object.assign(pop.style, {left:"10px", top:"auto", width:(vpW() - 20) + "px", bottom:"calc(10px + env(safe-area-inset-bottom,0px))", maxHeight:(innerHeight - 76) + "px"});
       pop.style.setProperty("--from", "bottom center");
       placeX();
       return;
     }
+    const w = pop.offsetWidth, left = Math.min(Math.max(12, r.left), vpW() - w - 12);
+    let h = pop.offsetHeight;
+    // above the chip, unless there's no room; a long pop-up goes on the roomier side and scrolls, never over its chip
+    const above = r.top - barBottom() - 10, under = dockBottom() - r.bottom - 22;
     const below = h > above && (h <= under || under > above), room = below ? under : above;
     if(h > room){ h = Math.max(120, room); pop.style.maxHeight = h + "px"; }
     let top = below ? Math.min(r.bottom + 10, dockBottom() - h - 12) : r.top - h - 10;
@@ -2993,13 +3006,12 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     const top = Math.max(...vals, 10), st = niceStep(top / 4), nice = Math.ceil(top / st) * st;
     const x = i => m.l + (data.length < 2 ? iw / 2 : i / (data.length - 1) * iw), y = v => m.t + ih - v / nice * ih;
     // no more than about two points a pixel: the rest can't be seen and only slow the drawing
-    const every = Math.max(1, Math.floor(per / 2));
-    let d = "", a = "";
-    vals.forEach((v, i) => { if(i % every && i !== vals.length - 1) return; d += (d ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); });
-    a = d + "L" + x(vals.length - 1).toFixed(1) + " " + (m.t + ih) + "L" + x(0).toFixed(1) + " " + (m.t + ih) + "Z";
+    const every = Math.max(1, Math.floor(per / 2)), bars = smooth === 1;
+    let d = "";
+    if(!bars) vals.forEach((v, i) => { if(i % every && i !== vals.length - 1) return; d += (d ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); });   // the line, when it isn't bars
     let g = "";
     for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (W - m.r + 6) + '" y="' + (y(v) + 4) + '" text-anchor="start">' + (v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : v) + "</text>"; }
-    const bars = smooth === 1, slot = iw / data.length, xc = bars ? i => m.l + (i + .5) * slot : x;
+    const slot = iw / data.length, xc = bars ? i => m.l + (i + .5) * slot : x;
     if(range && range <= 90){
       const ticks = 5; for(let k = 0; k < ticks; k++){ const i = Math.round(k / (ticks - 1) * (data.length - 1));
         g += '<text x="' + x(i) + '" y="' + (H - 4) + '" text-anchor="' + (k === 0 ? "start" : k === ticks - 1 ? "end" : "middle") + '">' + dShort.format(parse(data[i].date)) + "</text>"; }
@@ -3018,7 +3030,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       body = '<g class="bars" id="chartBars">' + data.map((dd, i) => { const h = Math.max(dd.migrants ? 3 : 1.5, dd.migrants / nice * ih), cx = m.l + i * slot + (slot - bw) / 2;
         return '<rect data-i="' + i + '" x="' + cx.toFixed(1) + '" y="' + (m.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="' + r.toFixed(1) + '" fill="' + (dd.migrants ? "url(#barG)" : "var(--fill2)") + '" style="--i:' + i + '"/>'; }).join("") + "</g>";
       body += '<path class="trend" d="' + curve(avg7.map((v, i) => [xc(i), y(v)])) + '"/>';
-    } else body = '<path d="' + a + '" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
+    } else body = '<path d="' + d + "L" + x(vals.length - 1).toFixed(1) + " " + (m.t + ih) + "L" + x(0).toFixed(1) + " " + (m.t + ih) + 'Z" fill="url(#areaG)"/><path class="line" id="chartLine" d="' + d + '"/>';
     // the average day over the range, as a dashed line with its figure; and the busiest day, labelled
     if(mean > 0){ const ay = y(mean).toFixed(1);
       body += '<line class="avg" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + ay + '" y2="' + ay + '"/><text class="avg-t" x="' + (W - m.r) + '" y="' + (ay - 5) + '" text-anchor="end">Avg ' + fmt(Math.round(mean)) + "</text>"; }
@@ -3196,8 +3208,8 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(g && g.lastYear){
       const t = g.lastYear, pc = n => n / t.total * 100;
       countUp($("menV"), Math.round(pc(t.adultMen)), "%");
-      const a = t.age || {}, bars = {
-        sex:[["Male", t.sex.Male, "var(--viz1)"], ["Female", t.sex.Female, "var(--viz4)"], ["Not recorded", t.sex.Unknown, "var(--label3)"]],
+      const a = t.age || {}, sex = t.sex || {}, bars = {
+        sex:[["Male", sex.Male, "var(--viz1)"], ["Female", sex.Female, "var(--viz4)"], ["Not recorded", sex.Unknown, "var(--label3)"]],
         age:[["17 and under", a["17 and under"], "var(--age1)"], ["18 to 24", a["18 to 24"], "var(--age2)"], ["25 to 39", a["25 to 39"], "var(--age3)"], ["40 and over", a["40 and over"], "var(--age4)"], ["Not recorded", a.Unknown, "var(--label3)"]]
       };
       // sex: 100 dots, one a person, shared out so they always add up to 100
@@ -3231,14 +3243,14 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     countUp($("pbV"), now);
     $("pbS").textContent = "people a boat on average, last 90 days";
     const x = Math.round(now / first.avg);
-    if(x >= 2){ $("pbX").textContent = x + "× more than " + first.y; $("pbX").hidden = false; }
+    $("pbX").hidden = !(x >= 2); if(x >= 2) $("pbX").textContent = x + "× more than " + first.y;
     // two dinghies from above: one dot a person, four abreast, so the boat grows with its load
     const ROWS = 4, GAP = 9, maxCols = Math.ceil(now / ROWS);
     const boat = (n, delay) => {
       const cols = Math.ceil(n / ROWS), len = cols * GAP + 14, W = maxCols * GAP + 30, H = ROWS * GAP + 10;
       let dots = "";
       for(let i = 0; i < n; i++){ const c = Math.floor(i / ROWS), rr = i % ROWS; dots += '<circle class="pb-p" cx="' + (8 + c * GAP + GAP / 2) + '" cy="' + (5 + rr * GAP + GAP / 2) + '" r="3.2" style="transition-delay:' + (delay + c * 30) + 'ms"/>'; }
-      return '<svg viewBox="0 0 ' + W + " " + H + '" style="width:' + (W / (maxCols * GAP + 30) * 100) + '%" aria-hidden="true"><path class="pb-hull" d="M4 ' + (H / 2 - 10) + "Q4 1 14 1H" + len + "Q" + (len + 14) + " 1 " + (len + 16) + " " + H / 2 + "Q" + (len + 14) + " " + (H - 1) + " " + len + " " + (H - 1) + "H14Q4 " + (H - 1) + " 4 " + (H / 2 + 10) + 'Z"/>' + dots + "</svg>";
+      return '<svg viewBox="0 0 ' + W + " " + H + '" style="width:100%" aria-hidden="true"><path class="pb-hull" d="M4 ' + (H / 2 - 10) + "Q4 1 14 1H" + len + "Q" + (len + 14) + " 1 " + (len + 16) + " " + H / 2 + "Q" + (len + 14) + " " + (H - 1) + " " + len + " " + (H - 1) + "H14Q4 " + (H - 1) + " 4 " + (H / 2 + 10) + 'Z"/>' + dots + "</svg>";
     };
     $("pbBoats").innerHTML = '<em>' + first.y + '<b>' + first.avg + '</b></em>' + boat(first.avg, 0)
       + '<em>Now<b>' + now + '</b></em>' + boat(now, 200);
@@ -3318,7 +3330,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       : '<path d="M2 9c2 0 2-1.5 4-1.5S8 9 10 9s2-1.5 4-1.5S16 9 18 9s2-1.5 4-1.5M2 15c2 0 2-1.5 4-1.5S8 15 10 15s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5" fill="none" stroke="#0A84FF" stroke-width="2" stroke-linecap="round"/>';
     return '<svg viewBox="0 0 24 24" aria-hidden="true">' + g + "</svg>";
   }
-  const ukClock = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
   const COMPASS = ["north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"];
   // Live conditions: the weather in the Channel now, the next three mornings, and what the map shows
   function renderMapPop(){
@@ -3422,10 +3433,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   let sorted = [];   // the same figures as days, under the name these boxes were written with
   const dList = new Intl.DateTimeFormat("en-GB",{weekday:"long",day:"numeric",month:"long",...UTC});
   const niceStep = raw => { const p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p; };
-  const store = {
-    get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
-    set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-  };
   const limit = () => "timeout" in AbortSignal ? {signal: AbortSignal.timeout(10000)} : {};
   const PERIODS = {labour:"2024-07-05", burnham:"2026-07-20"};   // Labour took office; Andy Burnham became PM
   // the cost line in the Labour box: the NAO's asylum support spend for 2024-25, shared across the people on asylum support at the end of March 2025
@@ -3731,7 +3738,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   // a mouse reads as it moves; a finger reads on a tap or a sideways drag, so scrolling the page past the chart opens nothing
   let raceDrag = false, rx0 = null, ry0 = null;
   $("race").addEventListener("pointerdown", e=>{
-    if(e.pointerType==="mouse"){ raceDrag = true; racePick(e.clientX); return; }
+    if(e.pointerType==="mouse"){ racePick(e.clientX); return; }
     rx0 = e.clientX; ry0 = e.clientY; raceDrag = false;
   });
   $("race").addEventListener("pointermove", e=>{
@@ -4045,7 +4052,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }
   async function loadExtras(){
     const [g, n, pb, r] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json")]);
-    renderWho(g.value, n.value); renderPerBoat(pb.value); renderReturns(r.value);
+    [() => renderWho(g.value, n.value), () => renderPerBoat(pb.value), () => renderReturns(r.value)].forEach(f => { try{ f(); }catch(e){} });   // one odd file doesn't stop the other boxes
   }
   async function start(){
     statusAt = Date.now();
@@ -4076,7 +4083,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   // When both are on they take turns: the news for 15 seconds, then the daily update, then back. Pointing at the strip holds it.
   const NEWS_MAX_H = 3, NEWS_EACH = 7500, NEWS_TURN = 15000, FIG_TURN = 15000;
   let newsAt = 0, newsShown = null, newsItems = [], newsIdx = 0, newsOn = false, figOn = false, slide = "", turnMs = 0, storyMs = 0, lastTick = 0, roomH = -1;
-  const seenGet = () => { try{ return localStorage.getItem("newsSeen"); }catch(e){ return null; } };
   const agoShort = iso => { const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4)); return m < 1 ? "Just now" : m < 60 ? m + " min ago" : Math.round(m / 60) + (Math.round(m / 60) === 1 ? " hour ago" : " hours ago"); };
   function newsRoom(){
     const box = $("news"), on = !box.hidden, h = on ? box.offsetHeight + 10 : 0;
@@ -4127,7 +4133,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
         rc.setAttribute("aria-label", (r.ground ? "Boats reported at the coast today by " + r.source : "Crossings reported in the news today. " + r.source) + ": " + r.title + " (opens " + (r.ground ? "Telegram" : r.source) + ")");
       }
       const items = (n.items || []).filter(x => x.breaking && x.url && /^https?:/.test(x.url) && Date.now() - new Date(x.published) < NEWS_MAX_H * 36e5);
-      if(!items.length || seenGet() === items[0].url){ newsOn = false; stripUpdate(); return; }
+      if(!items.length || store.get("newsSeen") === items[0].url){ newsOn = false; stripUpdate(); return; }
       const fresh = newsShown !== items[0].url;
       newsItems = items.slice(0, 3); newsOn = true;
       showStory(fresh ? 0 : Math.min(newsIdx, newsItems.length - 1), false);
@@ -4153,8 +4159,8 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }, 250);
   $("newsClose").addEventListener("click", e => {
     e.stopPropagation();
-    if(slide === "news"){ try{ if(newsShown) localStorage.setItem("newsSeen", newsShown); }catch(err){} newsOn = false; }
-    else { try{ localStorage.setItem("syncClosed", ukToday()); }catch(err){} figOn = false; closePop($("figHead")); }
+    if(slide === "news"){ if(newsShown) store.set("newsSeen", newsShown); newsOn = false; }
+    else { store.set("syncClosed", ukToday()); figOn = false; closePop($("figHead")); }
     stripUpdate(); liveUi();   // the daily update closed: its chip takes over
   });
 
@@ -4228,7 +4234,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   let sx = 0, sy = 0, st = 0, ok = false;
   main.addEventListener("touchstart", e => {
     const t = e.touches[0]; sx = t.clientX; sy = t.clientY; st = Date.now();
-    ok = e.touches.length === 1 && !e.target.closest(".hero,.chart,.race,.heat-scroll,.flip,.spark,.otd-years,.pat,.dots,input,button,a,.seg,.presets,.wk-days,.tbl-wrap");
+    ok = e.touches.length === 1 && !e.target.closest(".hero,.chart,.race,.heat-scroll,.flip,.spark,.pat,.dots,input,button,a,.seg,.presets,.wk-days,.tbl-wrap");
   }, {passive:true});
   main.addEventListener("touchend", e => {
     if(!ok) return; const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;

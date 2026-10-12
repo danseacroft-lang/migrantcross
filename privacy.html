@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <script>/* Night is the default; Day or Auto only when chosen */
 function ccTheme(t){var r=document.documentElement;if(t==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",t);
-  var c=t==="auto"?null:(t==="light"?"#F2F2F7":"#000000");document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){if(!m.dataset.c)m.dataset.c=m.content;m.content=c||m.dataset.c;});}
+  var c=t==="auto"?null:(t==="light"?"#FFFFFF":"#000000");document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){if(!m.dataset.c)m.dataset.c=m.content;m.content=c||m.dataset.c;});}
 try{var t=localStorage.getItem("cc-theme");ccTheme(t==="light"||t==="auto"?t:"dark")}catch(e){ccTheme("dark")}</script>
 <title>Privacy Policy &amp; Terms of Use · Channel Crossings</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -118,8 +118,8 @@ footer.cc-foot strong{color:var(--label); font-weight:600}
 button,input,select,textarea{font:inherit}
 
 /* Night: frosted boxes */
-:root[data-theme="dark"] .policy-box{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .policy-box{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),var(--shadow)}}
+:root[data-theme="dark"] .policy-box{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .policy-box{background:rgba(44,44,48,.62);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12)}}
 </style>
 </head>
 <body>

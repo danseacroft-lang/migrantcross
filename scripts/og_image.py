@@ -3,7 +3,7 @@
 Called at the end of update.py, so the image always carries the latest figure.
 Uses Pillow and the DejaVu fonts that come with GitHub's Ubuntu runners.
 """
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -88,7 +88,6 @@ def draw(data, out=ROOT / "og-image.png"):
 
 def draw_week(data, out=ROOT / "week-card.png"):
     """week-card.png: 'Week in numbers' for the last complete Monday-to-Sunday week."""
-    from datetime import timedelta
 
     days = sorted(data.get("days", []), key=lambda d: d["date"])
     if len(days) < 14:

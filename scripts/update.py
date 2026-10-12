@@ -238,17 +238,10 @@ def write_csv(days):
     (ROOT / "data.csv").write_text("\n".join(lines) + "\n")
 
 
+
 def nice_date(iso):
     d = date.fromisoformat(iso)
     return f"{d.strftime('%a')} {d.day} {d.strftime('%B')}"
-
-
-SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]   # as the page's en-GB dates write them
-
-
-def short_date(iso):
-    d = date.fromisoformat(iso)
-    return f"{d.day} {SHORT_MONTHS[d.month - 1]}"
 
 
 def update_page(data, recent):
@@ -270,7 +263,6 @@ def update_page(data, recent):
     d = date.fromisoformat(latest)
     long = f"{d.strftime('%A')}, {d.day} {d.strftime('%B')} {d.year}"
     boats = last["boats"]
-    html = re.sub(r'(<b id="stHead">)[^<]*', lambda m: m.group(1) + "Figures to " + short_date(latest), html, count=1)
     # the day as a calendar tile, with "N people crossed" or "No crossings detected" beside it
     html = re.sub(r'(id="hqMon">)[^<]*', lambda m: m.group(1) + d.strftime("%b"), html, count=1)
     html = re.sub(r'(id="hqDay">)[^<]*', lambda m: m.group(1) + str(d.day), html, count=1)

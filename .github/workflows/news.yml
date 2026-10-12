@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
 
-concurrency: publish      # never push at the same moment as the daily figures update
+concurrency: ${{ github.workflow }}   # one run of this job at a time; the jobs commit different files, and each retries its push if another got in first
 
 jobs:
   news:
@@ -32,7 +32,7 @@ jobs:
           git add news.json
           git diff --cached --quiet && exit 0
           git commit -m "Update breaking news"
-          git pull --rebase && git push
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
       - name: Keep the schedules on
         # GitHub switches off scheduled workflows after 60 days without a commit. The site's own updates normally
         # commit every day; if they ever stop, this makes one small commit every 40 days so the checks keep running.
@@ -40,4 +40,4 @@ jobs:
         run: |
           [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -lt 3456000 ] && exit 0
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit --allow-empty -m "Keep scheduled workflows on"
-          git pull --rebase && git push
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
