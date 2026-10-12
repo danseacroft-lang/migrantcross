@@ -260,13 +260,14 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .am-hover .sw{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
 /* phones: the sheet a tap brings up */
 .am-sheet{position:absolute;z-index:6;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:16px 16px 14px;border-radius:24px;color:var(--label);
-  background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
+  background:color-mix(in srgb,var(--card) 94%,transparent);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);box-shadow:0 -2px 30px rgba(0,0,0,.3),0 0 0 .5px var(--sep)}
 .am-sheet.in{animation:sheetUp .38s cubic-bezier(.2,.9,.25,1) both}
 @keyframes sheetUp{from{transform:translateY(110%)}}
 .am-grab{position:absolute;top:6px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:var(--label3)}
 .am-sheet .am-x{position:absolute;top:12px;right:12px;background:var(--fill);color:var(--label2)}
 .am-sheet-in{font:.824rem/1.35 var(--font);padding-right:30px}
 .am-sheet .am-sheet-in .wp-stats{margin-right:-30px}
+.am-sheet .in-sheet{font:inherit}.am-sheet .in-sheet .vt-stats{margin-right:-30px}
 /* the dropped pin where you tap */
 .am-pin{pointer-events:none}
 .am-pin i{position:absolute;left:3px;top:0;width:16px;height:16px;border-radius:50%;background:#FF3B30;box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4);animation:pinDrop .35s cubic-bezier(.3,1.5,.5,1) both}
@@ -1328,12 +1329,124 @@ body .side-share .ss-art svg{top:0;height:100%}
 /* ------------------------------------------------------------ reveal: a touch more lift, and a spring at the end */
 .rv{transform:translateY(28px) scale(.97);transition:opacity .8s var(--ease-out),transform .9s cubic-bezier(.2,.9,.25,1.04)}
 footer{max-width:1148px}
+
+/* ============================================================ Apple's Human Interface Guidelines, applied (October 2026)
+   Two layers, as Apple asks: Liquid Glass only for the controls that float above (the tab bar and the toolbar buttons),
+   and the content (the map, the figures, the cards) in plain materials beneath. The name and colour of the site live in
+   the content; the bars stay quiet and native. */
+
+/* the toolbar: no bar behind it any more, just the controls floating on glass, and a soft scroll edge where content passes beneath */
+.top-row::before{display:none}
+.edge{position:fixed;left:0;right:0;z-index:48;pointer-events:none;opacity:0;transition:opacity .3s ease;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.edge-t{top:0;height:calc(env(safe-area-inset-top,0px) + 86px);background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 78%,transparent),color-mix(in srgb,var(--bg) 0%,transparent));
+  -webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent);mask-image:linear-gradient(to bottom,#000 45%,transparent)}
+.edge-b{bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 104px);display:none;background:linear-gradient(to top,color-mix(in srgb,var(--bg) 70%,transparent),color-mix(in srgb,var(--bg) 0%,transparent));
+  -webkit-mask-image:linear-gradient(to top,#000 40%,transparent);mask-image:linear-gradient(to top,#000 40%,transparent)}
+.scrolled .edge-t{opacity:1}
+@media (max-width:719px){.edge-b{display:block;opacity:1}}
+/* the toolbar's buttons share one capsule of glass, as related bar items do in iOS and macOS; symbols, no borders */
+.top-act{gap:2px;padding:3px;border-radius:999px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(190%);backdrop-filter:blur(24px) saturate(190%);
+  box-shadow:inset 0 0 0 .5px var(--glass-hi),var(--glass-shadow)}
+.tb-btn{width:40px;height:40px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
+.tb-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--blue) 16%,transparent)}
+@media (hover:hover){.tb-btn:not([aria-expanded="true"]):hover{background:var(--pill)}}
+.tb-btn svg{width:21px;height:21px}
+.tb-share svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:-2px}
+.tb-badge{border-color:transparent;box-shadow:0 0 0 2px var(--bg)}
+/* the logo alone at the leading edge, like an account picture; the page's name appears beside it once its large title scrolls away */
+.top-brand{gap:10px}
+.top-brand .lt-logo{width:36px;height:36px;box-shadow:0 2px 8px rgba(0,60,160,.25)}
+.inline-title{font:600 1.06rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .3s var(--ease-out)}
+.title-in .inline-title{opacity:1;transform:none}
+/* Liquid Glass answers a touch by swelling slightly and lighting up, rather than shrinking */
+.tabs button:active,.tb-btn:active{transform:scale(1.08);filter:brightness(1.12)}
+.tabs button,.tb-btn{transition:transform .35s var(--ease-spring),filter .2s ease,color .3s ease,background-color .2s ease}
+
+/* tabs: outline symbols at rest, filled for the chosen tab */
+.tabs .i-f{display:none}
+.tabs [aria-selected="true"] .i-o{display:none}
+.tabs [aria-selected="true"] .i-f{display:block}
+.tabs .i-f .solid{fill:currentColor;stroke:none}
+.tabs .i-f .thick{stroke-width:2.7}
+
+/* switching tabs is frequent, so it's a quick fade, not a slide, as in iOS */
+.page.on,main[data-dir="back"] .page.on{animation:pgFade .22s ease-out both}
+@keyframes pgFade{from{opacity:0}}
+.page.first{animation:pgUp .6s var(--ease-out) both}
+
+/* large titles: Apple's Large Title (34pt bold) on phones, a little larger on wide screens */
+.lt-title{font-weight:700;font-size:2rem;letter-spacing:-.025em}
+@media (min-width:720px){.lt-title{font-size:2.6rem}}
+.lt-today{margin:6px 6px -30px}
+@media (min-width:720px){.lt-today{margin-top:14px}}
+/* section headings: Title 2 (22pt bold); notes beside them: Subheadline (15pt) */
+.section-h h2{font-size:1.294rem;line-height:1.25;letter-spacing:-.02em}
+.section-h p{font-size:.882rem}
+
+/* the map: content, so the figure panel is a standard material (frosted, no glass highlights), with radii concentric with the map's */
+main .hero{border-radius:32px}
+.hero-in{inset:auto auto 12px 12px;max-width:min(640px,calc(100% - 24px));border-radius:20px;padding:16px 18px;
+  background:rgba(12,14,20,.42);-webkit-backdrop-filter:blur(30px) saturate(160%);backdrop-filter:blur(30px) saturate(160%);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.chip{background:rgba(255,255,255,.16);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (hover:hover){button.chip:hover,a.chip:hover{background:rgba(255,255,255,.26)}}
+.map-news{top:12px;left:12px;right:12px;border-radius:20px;box-shadow:0 8px 26px rgba(0,0,0,.25)}
+.ves-list{left:12px;top:12px;border-radius:20px}
+.hero.has-news .ves-list{top:calc(12px + var(--mn-h))}
+/* the Calendar icon, in Regular weight (Apple avoids light weights) */
+.hero-quiet .cal b{font-weight:400}
+@media (max-width:719px){
+  main .hero{border-radius:28px;height:calc(100svh - 236px - var(--busy-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:420px}
+  .hero-in{left:8px;right:8px;bottom:8px;max-width:none;border-radius:20px;padding:14px}
+  .map-news{top:8px;left:8px;right:8px;border-radius:20px}
+  .ves-list{left:8px;top:8px}
+  .hero.has-news .ves-list{top:calc(8px + var(--mn-h))}
+  /* the map's credits get their own line beneath the panel, rather than running across it */
+  .hero-in{bottom:24px}
+  #lmap .leaflet-bottom.leaflet-right{left:0}
+  #lmap .leaflet-control-attribution{float:none;margin:0 14px 4px;background:none;padding:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px}
+}
+
+/* controls in the cards: capsules, as iOS draws buttons and segmented controls now */
+.flip-go,.flip-go.back,.sc-send,.more-btn{border-radius:999px}
+.flip-go{padding:0 10px 0 14px}.flip-go.back{padding:0 14px 0 10px}
+.seg{border-radius:999px;padding:3px}
+.seg button{border-radius:999px;height:30px}
+.mb .presets button,.presets button{border-radius:999px}
+.mb .calc-dates input{border-radius:12px}
+
+/* pop-ups and cards that open over the page: Dark Mode's elevated colours, so they come forward */
+:root[data-theme="dark"] .tb-pop,:root[data-theme="dark"] .info-pop,:root[data-theme="dark"] .info-pop.wx-pop{background-color:rgba(44,44,46,.94)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tb-pop,:root:not([data-theme="light"]) .info-pop,:root:not([data-theme="light"]) .info-pop.wx-pop{background-color:rgba(44,44,46,.94)}}
+
+/* the share sheet: dimmed behind, a grabber on phones to drag it down, Close on the leading side */
+.share-scrim{background:rgba(0,0,0,.4)}
+.ss-x{left:14px;right:auto}
+.ss-grab{display:none;position:absolute;z-index:2;top:7px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:rgba(255,255,255,.35)}
+@media (max-width:719px){.ss-grab{display:block}.ss-x{top:18px}body .side-share{touch-action:none}}
+.side-share.dragging{animation:none;transition:none}
+
+/* graphs: the scale sits on the trailing side, so the bars line up with the card's leading edge */
+.chart text{font-variant-numeric:tabular-nums}
+
+/* accessibility settings: Reduce Transparency makes the glass solid; Increase Contrast gives it a clear edge */
+@media (prefers-reduced-transparency:reduce){
+  .tabs,.top-act,.tb-pop,.hero-in,.map-news,.ves-list{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .hero-in{color:var(--label)}
+  .edge{-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  .tabs,.top-act{box-shadow:inset 0 0 0 1.5px var(--label)}
+  .tabs button[aria-selected="true"]{color:var(--label)}
+  .tab-ind{background:color-mix(in srgb,var(--blue) 30%,transparent)}
+}
 </style>
 </head>
 <body>
 <p class="busy-note" id="busyNote" role="status">We are experiencing higher traffic than usual. We are working to optimise the site for everyone.</p>
 <div class="share-scrim" id="shareScrim" hidden></div>
 <aside class="side-share" id="shareSheet" role="dialog" aria-modal="true" aria-labelledby="ssTitle" hidden>
+  <i class="ss-grab" aria-hidden="true"></i>
   <button type="button" class="ss-x" id="shareX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   <h2 id="ssTitle">Share Channel Crossings with people who might find the figures useful</h2>
   <div class="ss-btns">
@@ -1382,7 +1495,7 @@ footer{max-width:1148px}
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><h1>Channel Crossings</h1></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 3.5v17h17"/><path d="M7 15.5l4-4.5 3 2.5 5.5-6.5"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><span>People</span></button></div><button type="button" class="tab-share" id="shareBtn" aria-label="Share Channel Crossings" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><span class="inline-title" id="inlineTitle" aria-hidden="true">Channel Crossings</span></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="thick" d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="12" width="4" height="8.5" rx="1.3"/><rect x="10" y="7.5" width="4" height="13" rx="1.3"/><rect x="16.5" y="3.5" width="4" height="17" rx="1.3"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="3" y="11.5" width="5" height="9.5" rx="1.6"/><rect class="solid" x="9.5" y="7" width="5" height="14" rx="1.6"/><rect class="solid" x="16" y="3" width="5" height="18" rx="1.6"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4z"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="9" cy="8" r="3.8"/><path class="solid" d="M2.4 20c.5-3.9 3.2-6.3 6.6-6.3s6.1 2.4 6.6 6.3a.8.8 0 0 1-.8.9H3.2a.8.8 0 0 1-.8-.9z"/><circle class="solid" cx="16.3" cy="8.3" r="3"/><path class="solid" d="M16.9 13.3c2.6.3 4.4 2.3 4.8 5.6a.8.8 0 0 1-.8.9h-3.7c-.2-2.6-1.4-4.8-3.3-6.1.9-.3 1.9-.5 3-.4z"/></svg><span>People</span></button></div></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button><button type="button" class="tb-btn tb-share" id="shareBtn" aria-label="Share Channel Crossings" title="Share" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></div></div></div>
 
 <div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" data-nosnippet hidden>
   <svg class="fu-clock" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="fuFace" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--fill)"/></radialGradient></defs>
@@ -1432,10 +1545,15 @@ footer{max-width:1148px}
   <div class="th-list"><button type="button" role="menuitemradio" data-mode="auto" aria-checked="false"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></i><span><b>Auto</b><small>Follows your device</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="light" aria-checked="false"><i><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg></i><span><b>Day</b><small>Light all the time</small></span><em aria-hidden="true"></em></button><button type="button" role="menuitemradio" data-mode="dark" aria-checked="false"><i><svg class="ic-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg></i><span><b>Night</b><small>Dark all the time</small></span><em aria-hidden="true"></em></button></div>
 </div>
 
+<div class="edge edge-t" aria-hidden="true"></div><div class="edge edge-b" aria-hidden="true"></div>
 <main id="main">
 <!-- The site is three pages in one, like the tabs of an app: Today (the live Channel and the latest figures), Trends and People.
      All three are in the page from the start, so nothing waits to load when you switch; the tab bar shows one at a time. -->
 <div class="page on" id="pg-today" data-page="today" role="tabpanel" aria-labelledby="tab-today">
+  <div class="lt-head lt-today">
+    <p class="lt-eyebrow" id="tdEye">Small boat crossings, every day</p>
+    <h1 class="lt-title" data-title="Channel Crossings">Channel Crossings</h1>
+  </div>
   <!-- ============================================================ HERO: the live Channel -->
   <header class="hero" id="hero">
     <div class="hero-map" id="heroMap">
@@ -1928,7 +2046,7 @@ footer{max-width:1148px}
     launchLayer = L.layerGroup(BEACHES.map(([name, lat, lon, note]) => L.marker([lat, lon], {pane:"labels", keyboard:false, title:name + ": launch area",
       icon:L.divIcon({className:"am-launch", html:"<i></i><b></b>", iconSize:[26, 26]})})
       .bindTooltip("<b>" + name + "</b><br>" + note, {direction:"top", offset:[0, -12], className:"am-launch-tip"})
-      .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }))).addTo(LM);
+      .on("click", e => { L.DomEvent.stopPropagation(e); openMapCard(e.target); }))).addTo(LM);
     L.svgOverlay(map, AREA, {interactive:false}).addTo(LM);
     vesselLayer = L.layerGroup().addTo(LM);
     LM.attributionControl.addAttribution('Boats <a href="https://aisstream.io/">aisstream.io</a>');
@@ -1995,7 +2113,7 @@ footer{max-width:1148px}
           + "<div><span>Seen</span><em>" + seenN + "</em><small>" + seenU + "</small></div></div>"
           + "<p>Live from its AIS transponder" + (v.mmsi ? " · MMSI " + clean(v.mmsi) : "") + "</p>",
           {direction:"top", offset:[0, -16], className:"am-ves-tip"})
-        .on("click", e => { L.DomEvent.stopPropagation(e); e.target.openTooltip(); }).addTo(vesselLayer);
+        .on("click", e => { L.DomEvent.stopPropagation(e); openMapCard(e.target); }).addTo(vesselLayer);
       if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
     }
     // the list down the left, always there: only vessels out in the Channel itself (not moored in a harbour or away in the Solent),
@@ -2011,7 +2129,7 @@ footer{max-width:1148px}
         + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? shortKind(v) + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
         + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 60 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
       b.setAttribute("aria-label", name + ", " + VESSEL_KIND[v.kind] + ", " + (moving ? Math.round(v.sog) + " knots" : "stopped") + ", seen " + (mins < 1 ? "just now" : Math.round(mins) + " minutes ago"));
-      b.addEventListener("click", e => { e.stopPropagation(); m.openTooltip(); });
+      b.addEventListener("click", e => { e.stopPropagation(); openMapCard(m); });
       b.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") m.openTooltip(); });
       b.addEventListener("pointerleave", e => { if(e.pointerType === "mouse") m.closeTooltip(); });
       li.append(b); ul.append(li);
@@ -2109,6 +2227,35 @@ footer{max-width:1148px}
     requestAnimationFrame(placeTowns);   // the names go on once the map has laid out its markers
   }
   // Where the open map starts, from the top of the map card: below the news strip when it's showing
+  // A tapped boat or beach opens its card where it can be read in full: on phones and tablets it slides up from the bottom
+  // of the map like a place card in Apple Maps; on a computer the map moves so the card sits in the open water, never off the top
+  let stuck = null;
+  function openMapCard(layer){
+    const tip = layer.getTooltip(); if(!tip) return;
+    if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
+      layer.closeTooltip(); LM.closePopup();
+      const sh = $("amSheet"), cls = tip.options.className || "";
+      sh.querySelector(".am-sheet-in").innerHTML = '<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>";
+      sh.setAttribute("aria-label", cls.includes("ves") ? "Boat details" : "Launch area");
+      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      return;
+    }
+    // a clicked card stays open while the map moves beneath the pointer, until the map or another boat is clicked
+    if(stuck && stuck !== layer) stuck.closeTooltip();
+    stuck = layer; layer.off("mouseout", layer.closeTooltip, layer);
+    layer.once("tooltipclose", () => { layer.on("mouseout", layer.closeTooltip, layer); if(stuck === layer) stuck = null; });
+    LM.once("click", () => layer.closeTooltip());
+    layer.openTooltip();
+    requestAnimationFrame(() => {
+      const el = tip.getElement(); if(!el) return;
+      const h = hero.getBoundingClientRect(), r = el.getBoundingClientRect(), pan = hero.querySelector(".hero-in").getBoundingClientRect();
+      const top = h.top + ctlBottom() + 8, bot = (r.left < pan.right && r.right > pan.left ? pan.top : h.bottom) - 12;
+      let dy = 0, dx = 0;
+      if(r.top < top || r.bottom > bot) dy = bot - top < r.height ? r.top - top : (r.top + r.bottom) / 2 - (top + bot) / 2;
+      if(r.left < h.left + 12) dx = r.left - h.left - 12; else if(r.right > h.right - 12) dx = r.right - h.right + 12;
+      if(dx || dy) LM.panBy([dx, dy], {animate:!reduced, duration:.35});
+    });
+  }
   function ctlBottom(){
     return 12 + (hero.classList.contains("has-news") ? parseFloat(hero.style.getPropertyValue("--mn-h")) || 0 : 0);
   }
@@ -2775,7 +2922,7 @@ footer{max-width:1148px}
     const all = allDays(), data = range ? all.slice(-range) : all, off = all.length - data.length;
     sel = selDate ? data.findIndex(d => d.date === selDate) : null; if(sel < 0){ sel = null; selDate = null; }
     const box = $("chart"), W = Math.max(240, box.clientWidth || 600), H = Math.round(Math.min(300, Math.max(190, W * .38)));
-    const m = {t:14, r:6, b:26, l:38}, iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const m = {t:14, r:36, b:26, l:4}, iw = W - m.l - m.r, ih = H - m.t - m.b;   // the scale on the trailing side, as in Health
     // long ranges are smoothed to a centred average (a week for a year, four weeks for All) so the shape reads clearly
     const per = data.length / iw, smooth = data.length <= 120 ? 1 : per > 3 ? 28 : 7, hw = smooth >> 1;
     const run = [0]; data.forEach((d, i) => run.push(run[i] + d.migrants));   // running sum, so each average is one subtraction
@@ -2792,7 +2939,7 @@ footer{max-width:1148px}
     vals.forEach((v, i) => { if(i % every && i !== vals.length - 1) return; d += (d ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); });
     a = d + "L" + x(vals.length - 1).toFixed(1) + " " + (m.t + ih) + "L" + x(0).toFixed(1) + " " + (m.t + ih) + "Z";
     let g = "";
-    for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (m.l - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + (v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : v) + "</text>"; }
+    for(let v = 0; v <= nice + 1e-9; v += st){ g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (W - m.r + 6) + '" y="' + (y(v) + 4) + '" text-anchor="start">' + (v >= 1000 ? (+(v / 1000).toFixed(1)) + "k" : v) + "</text>"; }
     const bars = smooth === 1, slot = iw / data.length, xc = bars ? i => m.l + (i + .5) * slot : x;
     if(range && range <= 90){
       const ticks = 5; for(let k = 0; k < ticks; k++){ const i = Math.round(k / (ticks - 1) * (data.length - 1));
@@ -4062,6 +4209,33 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
     const chk = () => root.classList.toggle("sheet-open", !sheet.hidden || pops.some(p => !p.hidden && (p.classList.contains("sheet") || p.classList.contains("tb-pop")) && innerWidth < 720));
     const mo = new MutationObserver(chk); pops.forEach(p => mo.observe(p, {attributes:true, attributeFilter:["hidden", "class"]}));
   }
+})();
+</script>
+<script>/* Apple's guidelines, applied: the inline title, the date over Today, and dragging the share sheet down to close it */
+(function(){
+  const $ = id => document.getElementById(id), root = document.documentElement;
+  // Today's date above its large title, as in Apple News
+  try{ $("tdEye").textContent = new Date().toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"Europe/London"}); }catch(e){}
+  // the page's name moves into the bar once its large title has scrolled under it
+  const it = $("inlineTitle");
+  function titleCheck(){
+    const pg = document.querySelector(".page.on"), lt = pg && pg.querySelector(".lt-title");
+    if(!lt) return;
+    it.textContent = lt.dataset.title || lt.textContent;
+    root.classList.toggle("title-in", lt.getBoundingClientRect().bottom < 56);
+  }
+  addEventListener("scroll", titleCheck, {passive:true}); addEventListener("resize", titleCheck); titleCheck();
+  document.querySelectorAll("#tabs [role=tab]").forEach(t => t.addEventListener("click", () => requestAnimationFrame(titleCheck)));
+  // phones: drag the share sheet down to dismiss it
+  const sh = $("shareSheet"); let y0 = null, dy = 0;
+  sh.addEventListener("touchstart", e => { if(innerWidth >= 720 || e.target.closest("a,button")) return; y0 = e.touches[0].clientY; dy = 0; sh.classList.add("dragging"); }, {passive:true});
+  sh.addEventListener("touchmove", e => { if(y0 == null) return; dy = Math.max(0, e.touches[0].clientY - y0); sh.style.transform = "translateY(" + dy + "px)"; }, {passive:true});
+  sh.addEventListener("touchend", () => {
+    if(y0 == null) return; y0 = null; sh.classList.remove("dragging");
+    sh.style.transition = "transform .3s cubic-bezier(.2,.8,.2,1)";
+    if(dy > 110){ sh.style.transform = "translateY(100%)"; setTimeout(() => { sh.style.transition = sh.style.transform = ""; $("shareX").click(); sh.hidden = true; $("shareScrim").hidden = true; }, 280); }
+    else{ sh.style.transform = ""; setTimeout(() => sh.style.transition = "", 300); }
+  });
 })();
 </script>
 </body>
