@@ -1344,7 +1344,7 @@ footer{max-width:1148px}
 .edge-b{bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 104px);display:none;background:linear-gradient(to top,color-mix(in srgb,var(--bg) 70%,transparent),color-mix(in srgb,var(--bg) 0%,transparent));
   -webkit-mask-image:linear-gradient(to top,#000 40%,transparent);mask-image:linear-gradient(to top,#000 40%,transparent)}
 .scrolled .edge-t{opacity:1}
-@media (max-width:719px){.edge-b{display:block;opacity:1}}
+@media (max-width:719px){.edge-b{display:block;opacity:1;-webkit-backdrop-filter:none;backdrop-filter:none}}   /* a fade alone at the bottom: one less blur to redraw on every frame of a scroll */
 /* the toolbar's buttons share one capsule of glass, as related bar items do in iOS and macOS; symbols, no borders */
 .top-act{gap:2px;padding:3px;border-radius:999px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(190%);backdrop-filter:blur(24px) saturate(190%);
   box-shadow:inset 0 0 0 .5px var(--glass-hi),var(--glass-shadow)}
@@ -1425,6 +1425,14 @@ main .hero{border-radius:32px}
 .ss-grab{display:none;position:absolute;z-index:2;top:7px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:rgba(255,255,255,.35)}
 @media (max-width:719px){.ss-grab{display:block}.ss-x{top:18px}body .side-share{touch-action:none}}
 .side-share.dragging{animation:none;transition:none}
+body .side-share .ss-art{height:clamp(72px,calc(100dvh - 540px),230px)}
+/* scroll edges strong enough that the bars stay legible over busy content, as iOS does with its hard-style edge on phones */
+.edge-t{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 94%,transparent) 0,color-mix(in srgb,var(--bg) 80%,transparent) 55%,color-mix(in srgb,var(--bg) 0%,transparent));
+  -webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent);mask-image:linear-gradient(to bottom,#000 72%,transparent);height:calc(env(safe-area-inset-top,0px) + 92px)}
+@media (max-width:719px){
+  .edge-b{height:calc(env(safe-area-inset-bottom,0px) + 116px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 92%,transparent) 0,color-mix(in srgb,var(--bg) 78%,transparent) 55%,color-mix(in srgb,var(--bg) 0%,transparent));-webkit-mask-image:linear-gradient(to top,#000 70%,transparent);mask-image:linear-gradient(to top,#000 70%,transparent)}
+  .tabs{background:color-mix(in srgb,var(--glass) 100%,var(--bg) 25%)}
+}   /* short phones: the picture gives way so the buttons all fit */
 
 /* graphs: the scale sits on the trailing side, so the bars line up with the card's leading edge */
 .chart text{font-variant-numeric:tabular-nums}
@@ -1917,6 +1925,7 @@ main .hero{border-radius:32px}
     const place = () => {
       const r = btn.getBoundingClientRect(), w = pop.offsetWidth, left = Math.max(12, Math.min(r.right - w, innerWidth - w - 12));
       pop.style.top = (r.bottom + 8) + "px";   // fixed, under the bar that stays at the top
+      pop.style.maxHeight = Math.max(200, innerHeight - r.bottom - 20) + "px";   // and it scrolls rather than running off the bottom
       pop.style.left = left + "px";
       pop.style.setProperty("--tb-o", (r.left + r.width / 2 - left) + "px -14px");   // it grows out of its own button
     };
@@ -2595,8 +2604,17 @@ main .hero{border-radius:32px}
   }
   function placeTip(){
     if(!tipBoat || tip.hidden) return;
-    const r = tipBoat.g.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, cx = r.left + r.width / 2;
-    let top = r.top - h - 8; const below = top < 70; if(below) top = Math.max(70, Math.min(r.bottom + 8, innerHeight - h - 8));
+    const r = tipBoat.g.getBoundingClientRect(), hr = hero.getBoundingClientRect(), hi = dockBottom() - 8;
+    if(innerWidth < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: a card along the bottom of the map, like the other cards, never off the top
+      tip.style.width = Math.round(hr.width - 16) + "px";
+      const h = tip.offsetHeight, top = Math.max(barBottom() + 8, Math.min(hr.bottom, hi) - h - 8);
+      tip.style.left = Math.round(hr.left + 8) + "px"; tip.style.top = top + "px"; tip.style.setProperty("--from", "bottom center");
+      return;
+    }
+    tip.style.width = "";
+    // a computer: above the boat, or below it when that would leave the map, so the card always sits on the map
+    const w = tip.offsetWidth, h = tip.offsetHeight, cx = r.left + r.width / 2, lo = Math.max(barBottom(), hr.top + ctlBottom()) + 8;
+    let top = r.top - h - 8; const below = top < lo; if(below) top = Math.max(lo, Math.min(r.bottom + 8, hi - h));
     tip.style.left = Math.min(Math.max(12, cx - w / 2), vpW() - w - 12) + "px"; tip.style.top = top + "px";
     tip.style.setProperty("--from", (below ? "top " : "bottom ") + "center");
   }
@@ -2690,6 +2708,10 @@ main .hero{border-radius:32px}
   let cur = null, hideT;
   // the width fixed pop-ups are placed in: the page's own width, which on iPhones can differ from innerWidth (zoomed or wider content)
   function vpW(){ return document.documentElement.clientWidth || innerWidth; }
+  // the screen left for pop-ups: below the bar at the top, and above the tab bar where it floats at the bottom (phones)
+  const topBar = document.querySelector(".top-row"), tabBar = document.querySelector(".tabbar");
+  function barBottom(){ return topBar ? Math.max(0, topBar.getBoundingClientRect().bottom) : 70; }
+  function dockBottom(){ const t = tabBar && tabBar.getBoundingClientRect(); return t && t.height && t.top > innerHeight / 2 ? t.top : innerHeight; }
   function placePop(){
     if(!cur) return;
     const {chip, pop} = cur, r = chip.getBoundingClientRect();
@@ -2697,7 +2719,7 @@ main .hero{border-radius:32px}
     const w = pop.offsetWidth, left = Math.min(Math.max(12, r.left), vpW() - w - 12);
     let h = pop.offsetHeight;
     // above the chip, unless there's no room; a long pop-up goes on the roomier side and scrolls, never over its chip
-    const above = r.top - 74, under = innerHeight - r.bottom - 22;
+    const above = r.top - barBottom() - 10, under = dockBottom() - r.bottom - 22;
     if(vpW() < 600 && pop.scrollHeight > Math.max(above, under)){   // small phones: too long for either side, so it docks as a sheet along the bottom
       pop.classList.add("sheet");
       Object.assign(pop.style, {left:"10px", top:"auto", width:(vpW() - 20) + "px", bottom:"calc(10px + env(safe-area-inset-bottom,0px))", maxHeight:(innerHeight - 76) + "px"});
@@ -2707,8 +2729,8 @@ main .hero{border-radius:32px}
     }
     const below = h > above && (h <= under || under > above), room = below ? under : above;
     if(h > room){ h = Math.max(120, room); pop.style.maxHeight = h + "px"; }
-    let top = below ? Math.min(r.bottom + 10, innerHeight - h - 12) : r.top - h - 10;
-    pop.style.left = left + "px"; pop.style.top = Math.max(12, top) + "px";
+    let top = below ? Math.min(r.bottom + 10, dockBottom() - h - 12) : r.top - h - 10;
+    pop.style.left = left + "px"; pop.style.top = Math.max(barBottom() + 8, top) + "px";
     pop.style.setProperty("--from", (below ? "top " : "bottom ") + Math.round(Math.min(Math.max(r.left + 24 - left, 0), w)) + "px");
   }
   // a close button for the phone sheet, kept on the sheet's top right as its content changes
@@ -3073,10 +3095,18 @@ main .hero{border-radius:32px}
     if(kept){ kept.classList.add("sel"); heatSay(kept); } else heatIdle();
     ddNotes[1] = yr + " · " + plural(inYear.filter(d => d.migrants > 0).length, "day", "days") + " with crossings"; if(ddCur === 1) $("ddNote").textContent = ddNotes[1];
     if(!again) whenDd(1, () => $("heat").classList.add("show"));
-    const now = $("heat").querySelector("i.fut");   // today at the right edge, not the empty weeks to come
-    sc.scrollLeft = again ? sc.scrollWidth - fromRight : now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
+    if(again && sc.clientWidth) sc.scrollLeft = sc.scrollWidth - fromRight; else heatToNow();
     sc.classList.toggle("more-l", sc.scrollLeft > 4);
   }
+  // today at the right edge, not the empty weeks to come; drawn while its tab is hidden, it waits until it can be measured
+  let heatWait = false;
+  function heatToNow(){
+    const sc = $("heatScroll"); heatWait = !sc.clientWidth; if(heatWait) return;
+    const now = $("heat").querySelector("i.fut");
+    sc.scrollLeft = now ? now.offsetLeft + now.offsetWidth + 8 - sc.clientWidth : sc.scrollWidth;
+    sc.classList.toggle("more-l", sc.scrollLeft > 4);
+  }
+  if(window.ResizeObserver) new ResizeObserver(() => { if(heatWait) heatToNow(); }).observe($("heatScroll"));
   // squares stay at least 14px; the grid scrolls sideways when the card is narrower than the year
   let heatCols = 53, heatYr = "";
   const sizeHeat = () => $("heat").style.setProperty("--c", Math.max(14, Math.min(22, Math.floor(($("heatScroll").clientWidth - 8) / heatCols) - 4)) + "px");
@@ -3742,6 +3772,7 @@ main .hero{border-radius:32px}
 
   // Show a day on the Every day chart (from the calendar)
   function showOnChart(date){
+    if(window.ccTab && !$("pg-trends").classList.contains("on")) window.ccTab("trends");   // the chart is on the Trends tab
     showDd(0);
     const all = allDays(), i = all.findIndex(d => d.date === date); if(i < 0) return;
     const back = all.length - i;
@@ -4158,6 +4189,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
     });
   });
   addEventListener("hashchange", () => show(location.hash.slice(1) || "today"));
+  window.ccTab = show;   // for links between the tabs, such as Show on chart in the calendar
   const start = location.hash.slice(1);
   show(names.includes(start) ? start : "today", {first:true});
   addEventListener("resize", () => placeInd(false));
@@ -4217,15 +4249,24 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   // Today's date above its large title, as in Apple News
   try{ $("tdEye").textContent = new Date().toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"Europe/London"}); }catch(e){}
   // the page's name moves into the bar once its large title has scrolled under it
-  const it = $("inlineTitle");
+  // (watched, not measured on every scroll, so scrolling never waits on a layout)
+  const it = $("inlineTitle"), bar = document.querySelector(".top-row"), titles = [...document.querySelectorAll(".lt-title")], under = new Map();
+  let io = null, barH = -1;
   function titleCheck(){
-    const pg = document.querySelector(".page.on"), lt = pg && pg.querySelector(".lt-title");
-    if(!lt) return;
+    const pg = document.querySelector(".page.on"), lt = pg && pg.querySelector(".lt-title"); if(!lt) return;
     it.textContent = lt.dataset.title || lt.textContent;
-    root.classList.toggle("title-in", lt.getBoundingClientRect().bottom < 56);
+    root.classList.toggle("title-in", !!under.get(lt));
   }
-  addEventListener("scroll", titleCheck, {passive:true}); addEventListener("resize", titleCheck); titleCheck();
+  function watchTitles(){
+    const h = Math.round(bar.offsetHeight); if(h === barH || !("IntersectionObserver" in window)) return; barH = h;
+    if(io) io.disconnect();
+    io = new IntersectionObserver(en => { en.forEach(e => under.set(e.target, !e.isIntersecting && e.boundingClientRect.height > 0 && e.boundingClientRect.top < h)); titleCheck(); }, {rootMargin:"-" + h + "px 0px 0px 0px"});
+    titles.forEach(t => io.observe(t));
+  }
+  watchTitles(); addEventListener("resize", watchTitles);
   document.querySelectorAll("#tabs [role=tab]").forEach(t => t.addEventListener("click", () => requestAnimationFrame(titleCheck)));
+  // the date moves on at midnight while the page is open
+  setInterval(() => { try{ const d = new Date().toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"Europe/London"}); if($("tdEye").textContent !== d) $("tdEye").textContent = d; }catch(e){} }, 60000);
   // phones: drag the share sheet down to dismiss it
   const sh = $("shareSheet"); let y0 = null, dy = 0;
   sh.addEventListener("touchstart", e => { if(innerWidth >= 720 || e.target.closest("a,button")) return; y0 = e.touches[0].clientY; dy = 0; sh.classList.add("dragging"); }, {passive:true});
