@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-12T11:34:24Z",
+ "checkedAt": "2026-10-12T12:01:04Z",
  "items": [
   {
    "title": "Burnham a \u2018liar\u2019 over Russian interference in Brexit campaign, says Farage \u2013 UK politics live",
    "url": "https://www.theguardian.com/politics/live/2026/oct/12/uk-politics-live-tories-andy-burnham-russian-interference-brexit-eu-latest",
    "source": "The Guardian",
-   "published": "2026-10-12T11:34:00Z",
+   "published": "2026-10-12T11:51:39Z",
+   "breaking": true
+  },
+  {
+   "title": "Andy Burnham launches investigation after GB News exposed campaign of harassment by Argentinians in Falkland Islands",
+   "url": "https://www.gbnews.com/politics/falkland-islands-andy-burnham-launches-investigation-harassment-argentinians",
+   "source": "GB News",
+   "published": "2026-10-12T11:51:22Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/c68jz0282re9o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-12T10:59:44Z",
-   "breaking": true
-  },
-  {
-   "title": "Oxford University guide ditches traditional British phrases in favour of 'inclusive' language for foreign students",
-   "url": "https://www.gbnews.com/news/oxford-university-ditches-traditional-british-phrases-inclusive-language-foreign-students",
-   "source": "GB News",
-   "published": "2026-10-12T09:56:20Z",
    "breaking": true
   }
  ],
