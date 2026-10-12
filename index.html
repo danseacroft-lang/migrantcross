@@ -1241,6 +1241,24 @@ body .top-row > *{position:relative;z-index:1}
   footer{padding-bottom:calc(112px + env(safe-area-inset-bottom,0px))}
   .toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
 }
+/* Liquid Glass, refined: an even specular rim all the way round (bright along the top edge, fading evenly down both
+   sides, so neither end looks heavier), a soft shadow straight below rather than offset, and the chosen tab under a
+   pill of lighter glass with its own rim, inset the same distance on every side so the two shapes stay concentric */
+.tabs{isolation:isolate;box-shadow:0 10px 30px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.08)}
+.tabs::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:2;
+  background:linear-gradient(to bottom,rgba(255,255,255,.75),rgba(255,255,255,.18) 45%,rgba(255,255,255,.1) 70%,rgba(255,255,255,.32));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.tab-ind{background:color-mix(in srgb,var(--pill) 100%,rgba(255,255,255,.1));box-shadow:inset 0 .5px 0 rgba(255,255,255,.45),inset 0 0 0 .5px rgba(255,255,255,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tabs{box-shadow:0 12px 34px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.3)}
+  :root:not([data-theme="light"]) .tabs::before{background:linear-gradient(to bottom,rgba(255,255,255,.34),rgba(255,255,255,.08) 45%,rgba(255,255,255,.05) 70%,rgba(255,255,255,.14))}
+  :root:not([data-theme="light"]) .tab-ind{background:rgba(255,255,255,.12);box-shadow:inset 0 .5px 0 rgba(255,255,255,.22)}}
+:root[data-theme="dark"] .tabs{box-shadow:0 12px 34px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.3)}
+:root[data-theme="dark"] .tabs::before{background:linear-gradient(to bottom,rgba(255,255,255,.34),rgba(255,255,255,.08) 45%,rgba(255,255,255,.05) 70%,rgba(255,255,255,.14))}
+:root[data-theme="dark"] .tab-ind{background:rgba(255,255,255,.12);box-shadow:inset 0 .5px 0 rgba(255,255,255,.22)}
+@media (max-width:719px){.tabs{padding:5px}.tab-ind{top:5px;bottom:5px}}
+/* the icons share one optical size and sit on one line with their labels */
+.tabs button svg{display:block}
+@media (max-width:719px){.tabs button{gap:4px;padding-top:2px}.tabs button svg{width:25px;height:25px}}
 /* the tab bar steps aside while a sheet is open over it */
 @media (max-width:719px){.sheet-open .tabbar{opacity:0;pointer-events:none;transform:translateY(16px);transition:opacity .2s ease,transform .3s ease}}
 .tabbar{transition:opacity .25s ease,transform .35s var(--ease-out)}
@@ -4210,7 +4228,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
     if(indX === null || !animate || reduced || !ind.animate){ ind.style.width = w + "px"; ind.style.transform = "translateX(" + x + "px)"; indX = x; return; }
     const from = ind.style.transform, fw = ind.style.width, mid = (indX + x) / 2, mw = Math.max(parseFloat(fw), w) * 1.18;
     ind.style.width = w + "px"; ind.style.transform = "translateX(" + x + "px)";
-    ind.animate([{transform:from, width:fw}, {transform:"translateX(" + (mid - (mw - w) / 2 + (x > indX ? 6 : -6)) + "px) scaleY(.86)", width:mw + "px", offset:.45}, {transform:"translateX(" + x + "px)", width:w + "px"}],
+    ind.animate([{transform:from, width:fw}, {transform:"translateX(" + (mid - (mw - w) / 2) + "px)", width:mw + "px", offset:.45}, {transform:"translateX(" + x + "px)", width:w + "px"}],
       {duration:520, easing:"cubic-bezier(.3,1.15,.4,1)"});
     indX = x;
   }
