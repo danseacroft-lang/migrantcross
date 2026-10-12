@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-12T19:34:23Z",
+ "checkedAt": "2026-10-12T19:58:02Z",
  "items": [
+  {
+   "title": "Votes of no confidence in Sinn F\u00e9in ministers fails",
+   "url": "https://www.bbc.co.uk/news/articles/c68jz0282re9o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-12T19:53:16Z",
+   "breaking": true
+  },
   {
    "title": "Government expands police support to political figures who are not MPs",
    "url": "https://www.bbc.co.uk/news/articles/c3gr82rk70l8o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-12T19:29:45Z",
+   "published": "2026-10-12T19:51:34Z",
+   "breaking": true
+  },
+  {
+   "title": "Britain won't tolerate threats on our soil, Miliband says as he summons Iran ambassador",
+   "url": "https://www.bbc.co.uk/news/articles/c6gr82ekqewyo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-12T19:39:15Z",
    "breaking": true
   },
   {
@@ -16,24 +30,10 @@
    "breaking": true
   },
   {
-   "title": "Motion of no-confidence in Sinn F\u00e9in ministers 'pointless' - O'Neill",
-   "url": "https://www.bbc.co.uk/news/articles/c68jz0282re9o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-12T18:23:38Z",
-   "breaking": true
-  },
-  {
    "title": "Public inquiry over Manchester synagogue attack deaths",
    "url": "https://www.bbc.co.uk/news/articles/cqgm01mmd49po?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-12T18:07:14Z",
-   "breaking": true
-  },
-  {
-   "title": "One of Britain's last surviving D-Day heroes who survived torpedo attack dies aged 100",
-   "url": "https://www.gbnews.com/news/henry-rice-dead-britain-last-surviving-d-day-heroes-survived-torpedo-attack-100",
-   "source": "GB News",
-   "published": "2026-10-12T17:38:25Z",
    "breaking": true
   }
  ],
