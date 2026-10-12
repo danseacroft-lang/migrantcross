@@ -1,5 +1,27 @@
 {
- "checkedAt": "2026-10-12T04:14:35Z",
- "items": [],
+ "checkedAt": "2026-10-12T04:39:39Z",
+ "items": [
+  {
+   "title": "Migrant predator who claimed he could not commit rape because of 'micropenis' locked up",
+   "url": "https://www.gbnews.com/news/migrant-predator-rape-locked-up-london",
+   "source": "GB News",
+   "published": "2026-10-12T04:26:23Z",
+   "breaking": true
+  },
+  {
+   "title": "PM says it is 'clear' Russia interfered with Brexit vote",
+   "url": "https://www.bbc.co.uk/news/articles/c6jdm3zggl0ko?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-12T04:15:03Z",
+   "breaking": true
+  },
+  {
+   "title": "Plans to livestream execution of Fort Hood terrorist slammed as 'abhorrent' by Andy Burnham",
+   "url": "https://www.gbnews.com/news/fort-hood-execution-livestream-plans-slammed-andy-burnham",
+   "source": "GB News",
+   "published": "2026-10-12T02:15:51Z",
+   "breaking": true
+  }
+ ],
  "reported": null
 }
