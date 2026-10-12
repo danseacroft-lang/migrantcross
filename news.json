@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-12T10:34:48Z",
+ "checkedAt": "2026-10-12T11:03:02Z",
  "items": [
   {
-   "title": "UK politics live: Tories accuse Burnham of being \u2018dangerous and divisive\u2019 after he confirms Russian interference in Brexit campaign",
+   "title": "Burnham a \u2018liar\u2019 over Russian interference in Brexit campaign, says Farage \u2013 UK politics live",
    "url": "https://www.theguardian.com/politics/live/2026/oct/12/uk-politics-live-tories-andy-burnham-russian-interference-brexit-eu-latest",
    "source": "The Guardian",
-   "published": "2026-10-12T10:31:15Z",
+   "published": "2026-10-12T11:00:59Z",
+   "breaking": true
+  },
+  {
+   "title": "AI road cameras that can see inside vehicles detect 19,000 offences in just two weeks",
+   "url": "https://www.gbnews.com/lifestyle/cars/ai-road-cameras-offences-birmingham",
+   "source": "GB News",
+   "published": "2026-10-12T11:00:43Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cwnv0zmjld51o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-12T08:57:53Z",
-   "breaking": true
-  },
-  {
-   "title": "Healey faces \u00a335bn Budget challenge to meet spending pledges, says think tank",
-   "url": "https://www.bbc.co.uk/news/articles/cm78pwdp3n5qo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-12T08:50:22Z",
    "breaking": true
   }
  ],
