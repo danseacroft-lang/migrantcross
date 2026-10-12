@@ -853,10 +853,6 @@ footer strong{color:var(--label);font-weight:600}
 .tb-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .tb-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
 @media (hover:hover){.tb-btn:not([aria-expanded="true"]):hover{background:color-mix(in srgb,var(--label) 22%,transparent)}}
-.tb-badge{position:absolute;top:-5px;right:-6px;min-width:20px;height:20px;box-sizing:border-box;padding:0 5px;border-radius:10px;border:2px solid var(--bg);background:#E41E3F;color:#fff;
-  font:700 11px/16px var(--font);text-align:center;font-variant-numeric:tabular-nums;letter-spacing:0;animation:tbPop .4s cubic-bezier(.2,.9,.3,1.4) both}
-.tb-badge[hidden]{display:none}
-@keyframes tbPop{from{transform:scale(0)}}
 
 @media (max-width:374px){.top-row{gap:8px}.top-brand{gap:6px}.top-brand .lt-logo{width:26px;height:26px}.top-brand h1{font-size:.86rem;letter-spacing:-.02em}.top-act{gap:6px}.tb-btn{width:34px;height:34px}.tb-btn svg{width:18px;height:18px}.tb-btn::after{inset:-5px}}   /* small phones: three buttons and the name still fit on one line */
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
@@ -1114,16 +1110,16 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .tb-pop.out{animation:tbOut .18s cubic-bezier(.4,0,1,1) both;pointer-events:none}
 .tb-pop.out > *{animation:none}
 @keyframes tbOut{to{opacity:0;transform:translateY(-6px) scale(.92)}}
-/* each button's icon does a little something as its card opens: the eye blinks, the bell rings, the sun turns, the moon rocks */
+/* each button's icon does a little something as its card opens: the eye blinks, the calendar hops, the sun turns, the moon rocks */
 .tb-btn[aria-expanded="true"] .ic-eye{animation:tbBlink .5s ease both}
 @keyframes tbBlink{30%{transform:scaleY(.1)}60%{transform:scaleY(1.1)}}
-.tb-btn[aria-expanded="true"] .ic-bell,.tb-btn.ring .ic-bell{transform-origin:50% 8%;animation:tbRing .8s cubic-bezier(.3,.6,.4,1) both}
-@keyframes tbRing{15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+.tb-btn[aria-expanded="true"] .ic-cal{transform-origin:50% 100%;animation:tbHop .55s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes tbHop{35%{transform:translateY(-3px) scale(1.08)}}
 .tb-btn[aria-expanded="true"] .ic-sun{animation:tbSpin .7s cubic-bezier(.3,1.4,.5,1) both}
 @keyframes tbSpin{from{transform:rotate(-90deg) scale(.7)}}
 .tb-btn[aria-expanded="true"] .ic-moon{transform-origin:60% 60%;animation:tbRock .7s cubic-bezier(.3,1.4,.5,1) both}
 @keyframes tbRock{30%{transform:rotate(-24deg)}65%{transform:rotate(10deg)}}
-@media (prefers-reduced-motion:reduce){.tb-pop,.tb-pop > *,.tb-pop .tb-rise,.tb-pop.out,.tb-badge,.sc-list li.new,.tb-btn svg{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.tb-pop,.tb-pop > *,.tb-pop .tb-rise,.tb-pop.out,.tb-btn svg{animation:none!important}}
 .tb-pop h2{margin:0;font:700 1.5rem/1.15 var(--font);letter-spacing:-.02em}
 @media (max-width:440px){.tb-pop h2{font-size:1.3rem}}
 .tb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
@@ -1145,11 +1141,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .th-list [aria-checked="true"] em{box-shadow:inset 0 0 0 6px var(--blue)}
 /* Report Channel Crossing */
 .sc-pop{width:min(380px,calc(100vw - 24px))}
-.sc-tabs{display:flex;gap:6px;margin:0 0 12px}
-.sc-tabs button{height:36px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--label);font:600 .941rem/1 var(--font);cursor:pointer}
-.sc-tabs button[aria-pressed="true"]{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
-@media (hover:hover){.sc-tabs button[aria-pressed="false"]:hover{background:var(--fill)}}
-.sc-tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .sc-intro{margin:0 0 12px;color:var(--label2);font-size:.882rem;line-height:1.45}
 .sc-form{position:relative}
 .sc-box{border-radius:14px;background:var(--fill);transition:box-shadow .2s ease}
@@ -1172,23 +1163,13 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-msg:empty{display:none}
 .sc-msg.err{color:var(--red-t)}
 .sc-msg.wait{color:var(--label2)}
-.sc-list{list-style:none;margin:0 -8px;padding:0}
-.sc-list li{position:relative;display:flex;align-items:flex-start;gap:12px;padding:8px 30px 8px 8px;border-radius:10px}
-@media (hover:hover){.sc-list li:not(.empty):hover{background:var(--fill)}}
-.sc-list p{margin:2px 0 0;font-size:.941rem;line-height:1.35;color:var(--label);overflow-wrap:anywhere}
-.sc-list time{display:block;margin-top:3px;font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
-.sc-list li.unseen time{color:var(--blue);font-weight:600}
-.sc-list li.unseen::after{content:"";position:absolute;right:10px;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--blue)}
-.sc-list li.new{animation:scIn .5s cubic-bezier(.2,.8,.2,1)}
-.sc-list .empty{display:block;padding:14px 8px;color:var(--label2);font-size:.882rem}
-@keyframes scIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-/* Notifications */
-.nt-pop{width:min(360px,calc(100vw - 24px))}
-.nt-av{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#47A1FF,#007AFF);color:#fff}
-.nt-av svg{width:26px;height:26px}
-.sc-list b.nt-t{display:block;font-weight:600;font-size:.941rem;line-height:1.3;color:var(--label)}
-.sc-list a.nt-link{display:inline-block;margin-top:4px;color:var(--blue);font-size:.824rem;font-weight:600;text-decoration:none}
-.sc-list a.nt-link:hover{text-decoration:underline}
+/* On This Day, under the calendar button */
+.ot-pop{width:min(400px,calc(100vw - 24px))}
+.ot-note{margin:3px 0 0;font-size:.882rem;color:var(--label2)}
+.ot-pop .otd-top h3{margin:0 0 2px;font-size:.882rem;font-weight:600;color:var(--label2)}
+.ot-pop .val.otd-v{font-size:1.5rem;line-height:1.15;min-height:0;margin:0 0 4px}
+.ot-pop .otd-years{margin-top:16px;height:128px}
+.ot-pop.grow .otd-years i{transform:scaleY(1)}
 
 /* ============================================================ 2026 redesign: the site as an app, in Liquid Glass
    Three pages in tabs (Today, Trends, People), a bar of frosted glass that stays at the top, a floating tab bar on phones,
@@ -1330,7 +1311,6 @@ main[data-dir="back"] .page.on{animation-name:pgBack}
 #ytdBox{--tint:var(--orange-t);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M12 3.5a8.5 8.5 0 1 1-8.1 5.9'/%3E%3C/svg%3E")}
 .b-lab{--tint:var(--pink);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9.5L12 4l9 5.5M5 20.5h14M6 10.5v7M10 10.5v7M14 10.5v7M18 10.5v7'/%3E%3C/svg%3E")}
 .b-bur{--tint:var(--indigo);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='3.5' width='12' height='17' rx='1.5'/%3E%3Ccircle cx='15' cy='12.5' r='1' fill='%23000'/%3E%3Cpath d='M9.5 7h5'/%3E%3C/svg%3E")}
-#otd .card{--tint:var(--red-t);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='8.5'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")}
 #ddBox{--tint:var(--blue);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M5 20v-6M10 20V8M15 20v-9M20 20V4'/%3E%3C/svg%3E")}
 .pat-card{--tint:var(--teal);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M3 15c3-8 6-8 9 0s6 8 9 0'/%3E%3C/svg%3E")}
 section[aria-labelledby="hWho"] .card{--tint:var(--indigo);--ic-d:block;--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='8' r='3.6'/%3E%3Cpath d='M5 20c.7-3.8 3.4-6 7-6s6.3 2.2 7 6'/%3E%3C/svg%3E")}
@@ -1436,7 +1416,6 @@ footer{max-width:1148px}
 @media (hover:hover){.tb-btn:not([aria-expanded="true"]):hover{background:var(--pill)}}
 .tb-btn svg{width:21px;height:21px}
 .tb-share svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:-2px}
-.tb-badge{border-color:transparent;box-shadow:0 0 0 2px var(--bg)}
 /* the logo alone at the leading edge, like an account picture; the page's name appears beside it once its large title scrolls away */
 .top-brand{gap:10px}
 .top-brand .lt-logo{width:36px;height:36px;box-shadow:0 2px 8px rgba(0,60,160,.25)}
@@ -1621,7 +1600,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
 <!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><span class="inline-title" id="inlineTitle" aria-hidden="true">Channel Crossings</span></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="thick" d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="12" width="4" height="8.5" rx="1.3"/><rect x="10" y="7.5" width="4" height="13" rx="1.3"/><rect x="16.5" y="3.5" width="4" height="17" rx="1.3"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="3" y="11.5" width="5" height="9.5" rx="1.6"/><rect class="solid" x="9.5" y="7" width="5" height="14" rx="1.6"/><rect class="solid" x="16" y="3" width="5" height="18" rx="1.6"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4z"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="9" cy="8" r="3.8"/><path class="solid" d="M2.4 20c.5-3.9 3.2-6.3 6.6-6.3s6.1 2.4 6.6 6.3a.8.8 0 0 1-.8.9H3.2a.8.8 0 0 1-.8-.9z"/><circle class="solid" cx="16.3" cy="8.3" r="3"/><path class="solid" d="M16.9 13.3c2.6.3 4.4 2.3 4.8 5.6a.8.8 0 0 1-.8.9h-3.7c-.2-2.6-1.4-4.8-3.3-6.1.9-.3 1.9-.5 3-.4z"/></svg><span>People</span></button></div></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="ntBtn" aria-haspopup="dialog" aria-controls="ntPop" aria-expanded="false" aria-label="Notifications" title="Notifications" hidden><svg class="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 5.5 2.2 7.4 2.2 7.4H3.8S6 14.5 6 9"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg><span class="tb-badge" id="ntBadge" hidden></span></button><button type="button" class="tb-btn tb-share" id="shareBtn" aria-label="Share Channel Crossings" title="Share" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></div></div></div>
+  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><span class="inline-title" id="inlineTitle" aria-hidden="true">Channel Crossings</span></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="thick" d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="12" width="4" height="8.5" rx="1.3"/><rect x="10" y="7.5" width="4" height="13" rx="1.3"/><rect x="16.5" y="3.5" width="4" height="17" rx="1.3"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="3" y="11.5" width="5" height="9.5" rx="1.6"/><rect class="solid" x="9.5" y="7" width="5" height="14" rx="1.6"/><rect class="solid" x="16" y="3" width="5" height="18" rx="1.6"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4z"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="9" cy="8" r="3.8"/><path class="solid" d="M2.4 20c.5-3.9 3.2-6.3 6.6-6.3s6.1 2.4 6.6 6.3a.8.8 0 0 1-.8.9H3.2a.8.8 0 0 1-.8-.9z"/><circle class="solid" cx="16.3" cy="8.3" r="3"/><path class="solid" d="M16.9 13.3c2.6.3 4.4 2.3 4.8 5.6a.8.8 0 0 1-.8.9h-3.7c-.2-2.6-1.4-4.8-3.3-6.1.9-.3 1.9-.5 3-.4z"/></svg><span>People</span></button></div></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="otBtn" aria-haspopup="dialog" aria-controls="otPop" aria-expanded="false" aria-label="On This Day" title="On This Day" hidden><svg class="ic-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15.2" r="1.1" fill="currentColor" stroke="none"/></svg></button><button type="button" class="tb-btn tb-share" id="shareBtn" aria-label="Share Channel Crossings" title="Share" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></div></div></div>
 
 <div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" data-nosnippet hidden>
   <svg class="fu-clock" viewBox="4 4 112 112" aria-hidden="true"><defs><radialGradient id="fuFace" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--fill)"/></radialGradient></defs>
@@ -1664,10 +1643,13 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     <p class="sc-msg" id="scMsg" aria-live="polite"></p>
   </form>
 </div>
-<div class="tb-pop nt-pop" id="ntPop" tabindex="-1" role="dialog" aria-labelledby="ntH" data-nosnippet hidden>
-  <div class="tb-head"><h2 id="ntH">Notifications</h2><button type="button" class="tb-x" id="ntX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
-  <div class="sc-tabs" role="group" aria-label="Show"><button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="unread" aria-pressed="false">Unread</button></div>
-  <div id="ntList" aria-live="polite"><ul class="sc-list"><li class="empty">Loading…</li></ul></div>
+<div class="tb-pop ot-pop" id="otPop" tabindex="-1" role="dialog" aria-labelledby="otH" data-nosnippet hidden>
+  <div class="tb-head"><div><h2 id="otH">On This Day</h2><p class="ot-note" id="otdNote"></p></div><button type="button" class="tb-x" id="otX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
+  <div class="otd-top">
+    <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
+    <div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS">&nbsp;</div></div>
+  </div>
+  <div class="otd-years" id="otdYears" role="group" aria-label="The same date in earlier years"></div>
 </div>
 <div class="tb-pop th-pop" id="thPop" role="menu" aria-labelledby="thH" hidden>
   <div class="tb-head"><h2 id="thH">Appearance</h2></div>
@@ -1819,17 +1801,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       </div>
     </section>
 
-    <!-- ============================================================ ON THIS DAY -->
-    <section aria-labelledby="hOtd" id="otd">
-      <div class="section-h rv"><h2 id="hOtd">On This Day</h2><p id="otdNote"></p></div>
-      <article class="card rv">
-        <div class="otd-top">
-          <div class="cal" aria-hidden="true"><span id="otdMon"></span><b id="otdDay"></b></div>
-          <div><h3 id="otdK">A year ago</h3><div class="val num otd-v" id="otdV">–</div><div class="sub" id="otdS">&nbsp;</div></div>
-        </div>
-        <div class="otd-years" id="otdYears" role="group" aria-label="The same date in earlier years"></div>
-      </article>
-    </section>
     <!-- ============================================================ ARRIVAL OUTLOOK: today and tomorrow, from the forecast and past crossings -->
     <section class="wide" aria-labelledby="hPred">
       <div class="section-h rv"><h2 id="hPred">Arrival Outlook</h2><p>From the forecast and past crossings</p></div>
@@ -2926,7 +2897,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       const st = await getJSON("status.json");
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){
         const was = meta.checkedAt; useData(await getJSON("data.json"));
-        if(meta.checkedAt !== was){ renderAll(); loadExtras(); ntFigures(); }   // a saved or lagging copy: nothing new to draw
+        if(meta.checkedAt !== was){ renderAll(); loadExtras(); }   // a saved or lagging copy: nothing new to draw
       }
     }catch(e){ /* try again next time */ }
     liveUi();
@@ -3023,7 +2994,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       if(iso < first || iso > lastD || parse(iso).toISOString().slice(0,10) !== iso) continue;   // 29 February in other years
       yrs.push(by.get(iso) || {date:iso, migrants:0, boats:0});
     }
-    const sec = $("otd"); sec.hidden = !yrs.length; if(!yrs.length) return;
+    $("otBtn").hidden = !yrs.length; if(!yrs.length) return;
     const main = yrs[0], mx = Math.max(...yrs.map(d => d.migrants), 1), top = yrs.reduce((m, d) => d.migrants > m.migrants ? d : m, yrs[0]);
     const td = parse(t), ty = +t.slice(0,4);
     $("otdMon").textContent = td.toLocaleDateString("en-GB",{month:"short",...UTC}).slice(0,3);
@@ -3055,7 +3026,16 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     ls.forEach(e => e.textContent = e.dataset.f);
     if(ls.some(e => e.scrollWidth > e.parentNode.clientWidth + 4)){ ls.forEach(e => e.textContent = e.dataset.s); }
   }
-  if(window.ResizeObserver){ let lw = 0; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; fitOtd(); } }).observe($("otdYears")); }
+  // the calendar button at the top opens it; the bars grow up each time
+  {
+    const pop = $("otPop"), btn = $("otBtn");
+    const m = tbMenu(btn, pop, () => {
+      fitOtd(); pop.classList.remove("grow");
+      requestAnimationFrame(() => requestAnimationFrame(() => pop.classList.add("grow")));
+      pop.focus({preventScroll:true});
+    });
+    $("otX").addEventListener("click", () => { m.set(false); btn.focus({preventScroll:true}); });
+  }
 
   /* ---------------------------------------------------- Stocks-style chart */
   // the day picked is kept by its date, so it stays put when the figures refresh or the range changes
@@ -4069,82 +4049,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     });
   }
 
-  /* ---------------------------------------------------- Notifications */
-  // Messages from the site's staff, added as rows in the Supabase table site_notices (set up with supabase/site-notices.sql).
-  // Visitors can only read them. The bell shows a red count of the ones a visitor hasn't seen.
-  // The key is Supabase's public one: with this table's rules it can only read the notices.
-  // Each time new figures come in, the bell also gets its own "New figures are in" notification, made here from data.json.
-  let ntFigures = () => {};   // called once the figures are drawn, and again when newer ones arrive
-  const SC_URL = "https://ixavtarpnuknsrbxmaep.supabase.co", SC_KEY = "sb_publishable_2j2A0TyYGLBEk8RFvXeOkQ_OVAN0oVz";
-  if(SC_URL && SC_KEY){
-    const ntBtn = $("ntBtn"), ntPop = $("ntPop"), ntBadge = $("ntBadge"), NSEEN = "cc-notices-seen";
-    const ntApi = SC_URL.replace(/\/$/, "") + "/rest/v1/site_notices?select=id,created_at,title,body,link&order=created_at.desc&limit=30";
-    const ntWhen = new Intl.DateTimeFormat("en-GB", {weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", timeZone:"Europe/London"});
-    const ntAgo = t => { const m = Math.max(0, Math.round((Date.now() - t) / 60000)); return m < 1 ? "Just now" : m < 60 ? m + "m" : m < 1440 ? Math.round(m / 60) + "h" : m < 10080 ? Math.round(m / 1440) + "d" : ntWhen.format(new Date(t)).split(",").slice(0, 2).join(""); };
-    const getN = () => { try{ return localStorage.getItem(NSEEN) || ""; }catch(e){ return ""; } };
-    let ntRows = [], ntStaff = [], ntFig = null, ntSeen = "", ntF = "all";
-    const ntDay = new Intl.DateTimeFormat("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"UTC"});
-    const ntMerge = () => { ntRows = [...ntStaff, ...(ntFig ? [ntFig] : [])].sort((a, b) => a.created_at < b.created_at ? 1 : -1); ntBtn.hidden = false; if(!ntPop.hidden) ntDraw(); };
-    const ntRing = () => { if(ntCount() && !reduced){ ntBtn.classList.remove("ring"); void ntBtn.offsetWidth; ntBtn.classList.add("ring"); } };   // a new one: the bell rings
-    ntFigures = () => {
-      const last = days[days.length - 1]; if(!last || !meta || !meta.checkedAt) return;
-      const when = ntDay.format(parse(last.date)), id = "fig-" + meta.checkedAt;
-      if(ntFig && ntFig.id === id) return;
-      const first = !ntFig;
-      ntFig = {id, created_at: new Date(meta.checkedAt).toISOString(), title: "New figures are in", fig: true,
-        body: last.migrants ? fmt(last.migrants) + (last.migrants === 1 ? " person was" : " people were") + " detected crossing the Channel on " + when + (last.boats ? ", in " + plural(last.boats, "boat", "boats") : "") + "."
-                            : "No crossings were detected on " + when + "."};
-      ntMerge();
-      if(first) ntCount(); else ntRing();   // fresh figures while the page is open: the bell rings
-    };
-    const ntIcon = '<svg viewBox="0 0 400 400" aria-hidden="true"><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/></svg>';
-    function ntDraw(){
-      const rows = ntF === "unread" ? ntRows.filter(n => n.created_at > ntSeen) : ntRows, ul = document.createElement("ul");
-      ul.className = "sc-list";
-      if(!rows.length){ ul.innerHTML = '<li class="empty">' + (ntF === "unread" ? "You're all caught up." : "No notifications yet.") + "</li>"; $("ntList").replaceChildren(ul); return; }
-      rows.forEach((n, i) => {
-        const li = document.createElement("li"), av = document.createElement("span"), d = document.createElement("div"), b = document.createElement("b"), t = document.createElement("time");
-        av.className = "nt-av"; av.innerHTML = ntIcon;
-        b.className = "nt-t"; b.textContent = n.title; d.append(b);   // text only, never HTML
-        if(n.body){ const p = document.createElement("p"); p.textContent = n.body; d.append(p); }
-        if(n.link && /^https?:\/\//.test(n.link)){ const a = document.createElement("a"); a.className = "nt-link"; a.href = n.link; a.target = "_blank"; a.rel = "noopener"; a.textContent = "Read more"; d.append(a); }
-        t.dateTime = n.created_at; t.textContent = ntAgo(Date.parse(n.created_at)); t.title = ntWhen.format(new Date(n.created_at)); d.append(t);
-        li.className = "tb-rise" + (n.created_at > ntSeen ? " unseen" : ""); li.style.setProperty("--i", i + 2);
-        li.append(av, d); ul.append(li);
-      });
-      $("ntList").replaceChildren(ul);
-    }
-    function ntCount(){
-      const n = ntRows.filter(x => x.created_at > (getN() || "")).length;
-      ntBadge.hidden = !n || ntBtn.getAttribute("aria-expanded") === "true";
-      if(n){ ntBadge.textContent = n > 9 ? "9+" : n; ntBtn.setAttribute("aria-label", "Notifications, " + n + " new"); }
-      else ntBtn.setAttribute("aria-label", "Notifications");
-      return n;
-    }
-    async function ntLoad(first){
-      try{
-        const r = await fetch(ntApi, {headers:{apikey: SC_KEY, Accept: "application/json"}, cache: "no-store", ...limit()});
-        if(!r.ok) return;   // no table yet: only the figures notification shows
-        const rows = await r.json(), had = ntStaff.length && ntStaff[0].id;
-        ntStaff = rows; ntMerge();
-        if(first || (rows.length && rows[0].id !== had)) ntRing(); else ntCount();
-      }catch(e){}
-    }
-    const ntMenu = tbMenu(ntBtn, ntPop, () => {
-      ntSeen = getN(); ntBadge.hidden = true; ntBtn.setAttribute("aria-label", "Notifications");
-      ntDraw();
-      try{ if(ntRows.length) localStorage.setItem(NSEEN, ntRows[0].created_at); }catch(e){}
-      ntPop.focus({preventScroll:true});
-    });
-    $("ntX").addEventListener("click", () => { ntMenu.set(false); ntBtn.focus({preventScroll:true}); });
-    ntPop.querySelectorAll(".sc-tabs button").forEach(b => b.addEventListener("click", () => {
-      ntF = b.dataset.f; ntPop.querySelectorAll(".sc-tabs button").forEach(x => x.setAttribute("aria-pressed", x === b)); ntDraw();
-    }));
-    ntLoad(true);
-    setInterval(() => { if(!document.hidden) ntLoad(); }, 120000);
-    document.addEventListener("visibilitychange", () => { if(!document.hidden) ntLoad(); });
-  }
-
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
   var wkAll = [], wkShown = 0;   // var: the figures can arrive before this line has run
   function wkMonth(d){ return parse(d.date).toLocaleDateString("en-GB",{month:"long", year:"numeric", ...UTC}); }
@@ -4228,7 +4132,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       if(meta.checkedAt && Date.now() - new Date(meta.checkedAt) > 120 * MIN) statusAt = 0;
       // drawn in short steps, so a tap straight after loading isn't kept waiting (same order as renderAll)
       const y = () => new Promise(r => window.scheduler && scheduler.yield ? scheduler.yield().then(r) : setTimeout(r, 0));
-      renderHero(); renderGlance(); ntFigures(); await y();
+      renderHero(); renderGlance(); await y();
       renderOtd(); await y();
       drawHeat(); await y();
       drawYears(); await y();
