@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-13T07:00:12Z",
+ "checkedAt": "2026-10-13T07:37:28Z",
  "items": [
+  {
+   "title": "UK growth forecast upgraded but energy prices and rates to hit in 2027",
+   "url": "https://www.bbc.co.uk/news/articles/cmglw0r21zexo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-13T07:33:57Z",
+   "breaking": true
+  },
+  {
+   "title": "Troubles bill to be discussed in Parliament",
+   "url": "https://www.bbc.co.uk/news/articles/c8wy97794e7zo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-13T07:32:29Z",
+   "breaking": true
+  },
   {
    "title": "Israel flight receives 'bomb threat' just weeks after 'jihadist' hijack attempt",
    "url": "https://www.gbnews.com/news/world/israel-delta-flight-bomb-threat-weeks-after-flydubai-hijack-attempt",
@@ -16,24 +30,10 @@
    "breaking": true
   },
   {
-   "title": "UK growth forecast upgraded but energy prices and rates to hit in 2027",
-   "url": "https://www.bbc.co.uk/news/articles/cmglw0r21zexo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-13T05:55:12Z",
-   "breaking": true
-  },
-  {
    "title": "Chronic UTIs made MP 'feel like a drug user'",
    "url": "https://www.bbc.co.uk/news/articles/c6m2r5gyprmvo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-13T05:38:00Z",
-   "breaking": true
-  },
-  {
-   "title": "Hundreds of French fridges hacked in nationwide cyber attack sparking fires and spoiling food",
-   "url": "https://www.gbnews.com/news/world/french-fridge-attack-hundreds-units-hacked-nationwide-cyber-attack",
-   "source": "GB News",
-   "published": "2026-10-13T05:07:53Z",
    "breaking": true
   }
  ],
