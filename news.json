@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-13T18:26:32Z",
+ "checkedAt": "2026-10-13T18:58:47Z",
  "items": [
+  {
+   "title": "Civil servant 'fraudulently juggled five government jobs using remote work and sick notes'",
+   "url": "https://news.sky.com/story/civil-servant-fraudulently-juggled-five-government-jobs-using-remote-work-and-sick-notes-13598956",
+   "source": "Sky News",
+   "published": "2026-10-13T17:50:00Z",
+   "breaking": true
+  },
   {
    "title": "Argentina lodges legal claim against UK's Falklands oil exploration",
    "url": "https://www.bbc.co.uk/news/articles/cmp3g14p3z2ko?at_medium=RSS&at_campaign=rss",
@@ -20,13 +27,6 @@
    "url": "https://www.bbc.co.uk/sport/football/articles/cjkge245n0gzo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-13T16:00:18Z",
-   "breaking": true
-  },
-  {
-   "title": "More than 200 firms fined \u00a39million for illegal working STILL allowed to sponsor foreign workers",
-   "url": "https://www.gbnews.com/news/migrant-crisis-illegal-working-foreign-workers-fine",
-   "source": "GB News",
-   "published": "2026-10-13T15:35:02Z",
    "breaking": true
   }
  ],
