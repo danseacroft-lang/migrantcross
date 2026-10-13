@@ -25,7 +25,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `week-card.png` – the "Week in numbers" picture, redrawn daily for the last full week
 - `manifest.webmanifest`, `icon-192.png`, `icon-512.png` – let visitors add the site to their home screen as an app
 - Report Channel Crossing (the eye button) is a private form sent through Web3Forms; the access key `RS_KEY` in `index.html` decides which inbox reports go to
-- `vendor/inter/` – the Inter font (SIL Open Font License), used on Windows and Android in place of Apple's San Francisco, which Apple devices use themselves
+- `vendor/inter/`, `vendor/inter-tight/` – the Inter and Inter Tight fonts (SIL Open Font License), used on every device: Inter for text, Inter Tight for headings and big figures
 - `scripts/update.py` – fetches the latest figures from GOV.UK and updates `data.json`
 - `scripts/news.py`, `news.json`, `.github/workflows/news.yml` – breaking news about small boats from UK news feeds, every 15 minutes (create `news-override.json` to hide or pin a story)
 - `scripts/build-towns.js`, `towns.json` – the extra town names on the homepage map (GeoNames, CC BY 4.0), shown more as you zoom in; rebuilt by hand, not on a schedule
