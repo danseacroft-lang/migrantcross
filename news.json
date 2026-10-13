@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-13T05:33:29Z",
+ "checkedAt": "2026-10-13T05:59:10Z",
  "items": [
+  {
+   "title": "UK growth upgraded but energy prices and rates to bite in 2027",
+   "url": "https://www.bbc.co.uk/news/articles/cmglw0r21zexo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-13T05:55:12Z",
+   "breaking": true
+  },
   {
    "title": "Hundreds of French fridges hacked in nationwide cyber attack sparking fires and spoiling food",
    "url": "https://www.gbnews.com/news/world/french-fridge-attack-hundreds-units-hacked-nationwide-cyber-attack",
@@ -13,13 +20,6 @@
    "url": "https://www.gbnews.com/politics/us/ilhan-omar-home-raided-immigration-enforcement-officers",
    "source": "GB News",
    "published": "2026-10-13T03:51:05Z",
-   "breaking": true
-  },
-  {
-   "title": "UK growth upgraded but energy prices and rates to bite in 2027",
-   "url": "https://www.bbc.co.uk/news/articles/cmglw0r21zexo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-13T03:14:13Z",
    "breaking": true
   }
  ],
