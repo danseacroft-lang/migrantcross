@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-13T14:05:02Z",
+ "checkedAt": "2026-10-13T14:37:27Z",
  "items": [
+  {
+   "title": "The Brexit debate is back - why now?",
+   "url": "https://www.bbc.co.uk/news/videos/cvy0rxy3jexwo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-13T14:31:45Z",
+   "breaking": true
+  },
   {
    "title": "Village GP surgeries could be shut under Labour's NHS reforms as cities prioritised",
    "url": "https://www.gbnews.com/politics/village-gp-surgeries-labour-nhs-reforms",
@@ -27,13 +34,6 @@
    "url": "https://www.theguardian.com/uk-news/2026/oct/13/rightwing-extremists-increasingly-likely-to-consider-terrorist-attacks-mi5-chief-says",
    "source": "The Guardian",
    "published": "2026-10-13T12:00:14Z",
-   "breaking": true
-  },
-  {
-   "title": "Rejecting North Sea drillings could cost UK thousands of jobs and see \u00a311BILLION lost in ten years",
-   "url": "https://www.gbnews.com/news/north-sea-drilling-rejections-impact",
-   "source": "GB News",
-   "published": "2026-10-13T11:29:43Z",
    "breaking": true
   }
  ],
