@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-13T09:47:46Z",
+ "checkedAt": "2026-10-13T10:15:11Z",
  "items": [
+  {
+   "title": "Government sets out next steps on Standard Essential Patents",
+   "url": "https://www.gov.uk/government/news/government-sets-out-next-steps-on-standard-essential-patents",
+   "source": "GOV.UK",
+   "published": "2026-10-13T10:04:10Z",
+   "breaking": true
+  },
   {
    "title": "UK growth forecast upgraded but higher energy prices to hit economy next year",
    "url": "https://www.bbc.co.uk/news/articles/cmglw0r21zexo?at_medium=RSS&at_campaign=rss",
@@ -9,7 +16,7 @@
    "breaking": true
   },
   {
-   "title": "Welsh government and Labour strike deal on mini-budget",
+   "title": "Welsh government and Labour strike budget deal with \u00a360m for additional learning needs",
    "url": "https://www.bbc.co.uk/news/articles/c6pqg7n9l312o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-13T09:29:03Z",
@@ -27,13 +34,6 @@
    "url": "https://www.theguardian.com/politics/2026/oct/13/nigel-farage-reform-robert-jenrick-small-boats-royal-marines-lethal-force",
    "source": "The Guardian",
    "published": "2026-10-13T08:56:16Z",
-   "breaking": true
-  },
-  {
-   "title": "European Union to limit imports of Chinese hybrid vehicles as UK urged to follow",
-   "url": "https://www.gbnews.com/lifestyle/cars/european-union-limit-imports-chinese-hybrids-uk",
-   "source": "GB News",
-   "published": "2026-10-13T08:38:28Z",
    "breaking": true
   }
  ],
