@@ -2023,8 +2023,9 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 
   /* ---------------------------------------------------- hero parallax */
   const hero = $("hero"), heroMap = $("heroMap");
-  let heroH = hero.offsetHeight;
-  addEventListener("resize", () => heroH = hero.offsetHeight, {passive:true});
+  let heroH = hero.offsetHeight;   // kept up to date when the map card changes size (fitHero grows it too), never read while scrolling
+  if("ResizeObserver" in window) new ResizeObserver(() => { heroH = hero.offsetHeight; }).observe(hero);
+  else addEventListener("resize", () => { heroH = hero.offsetHeight; });
   function onScroll(){
     const y = scrollY;
     if(!reduced && y < heroH){ heroMap.style.transform = "translateY(" + Math.round(y * .35) + "px)";   /* whole pixels, so the map's text never lands between pixels and blurs */ }
@@ -2153,19 +2154,20 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       const mins = (Date.now() - new Date(v.seen)) / 6e4;
       if(!(mins < 180) || !VESSEL_KIND[v.kind] || !official(v) || typeof v.lat !== "number" || typeof v.lon !== "number") continue;
       const moving = v.sog >= 1, dir = v.hdg ?? v.cog, name = v.name || VESSEL_KIND[v.kind];
-      const shape = v.kind === "aircraft" ? PLANE : SHIP, dirTxt = dir == null ? "–" : Math.round(dir) + "°";
+      const shape = v.kind === "aircraft" ? PLANE : SHIP, dirTxt = dir == null ? "–" : Math.round(dir) + "°", flag = flagOf(v.mmsi);
+      const icon = '<svg viewBox="0 0 16 30" aria-hidden="true">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg>";   // for the card and the list
       const [seenN, seenU] = mins < 1 ? ["Now", ""] : mins < 60 ? [Math.round(mins), " min"] : [Math.floor(mins / 60), " hr"];
       const m = L.marker([v.lat, v.lon], {pane:"labels", keyboard:false, alt:name, icon:L.divIcon({className:"am-ves " + v.kind + (mins > 60 ? " old" : ""), iconSize:[16, 30],
         html:'<svg viewBox="0 0 16 30" style="transform:rotate(' + (dir ?? 0) + 'deg)" aria-hidden="true">' + (moving && v.kind !== "aircraft" ? WAKE : "") + shape + "</svg>"})})
-        .bindTooltip('<div class="vt-h"><span class="vt-ic lv-' + v.kind + '"><svg viewBox="0 0 16 30" aria-hidden="true">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg></span>"
-          + "<div><b>" + clean(name) + "</b><span>" + (flagOf(v.mmsi) ? flagOf(v.mmsi) + " · " : "") + (v.name ? VESSEL_KIND[v.kind] : "Name not broadcast") + "</span></div></div>"
+        .bindTooltip('<div class="vt-h"><span class="vt-ic lv-' + v.kind + '">' + icon + "</span>"
+          + "<div><b>" + clean(name) + "</b><span>" + (flag ? flag + " · " : "") + (v.name ? VESSEL_KIND[v.kind] : "Name not broadcast") + "</span></div></div>"
           + '<div class="vt-stats"><div><span>Speed</span><em>' + (moving ? Math.round(v.sog) + "</em><small> kn" : "0</em><small> stopped") + "</small></div>"
           + "<div><span>Heading</span><em>" + dirTxt + "</em><small> " + (dir == null ? "" : compass(dir)) + "</small></div>"
           + "<div><span>Seen</span><em>" + seenN + "</em><small>" + seenU + "</small></div></div>"
           + "<p>Live from its AIS transponder" + (v.mmsi ? " · MMSI " + clean(v.mmsi) : "") + "</p>",
           {direction:"top", offset:[0, -16], className:"am-ves-tip"})
         .on("click", e => { L.DomEvent.stopPropagation(e); openMapCard(e.target); }).addTo(vesselLayer);
-      if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
+      if(inChannel(v)) shown.push({v, name, mins, moving, icon, m});
     }
     // the list down the left, always there: only vessels out in the Channel itself (not moored in a harbour or away in the Solent),
     // newest first, or a line saying there are none
@@ -2173,10 +2175,10 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     box.hidden = false; ul.textContent = ""; box.classList.toggle("none", !shown.length);
     $("vesCount").textContent = shown.length || "";
     if(!shown.length){ const li = document.createElement("li"); li.className = "vl-none"; li.textContent = "No boats in the Channel right now"; ul.append(li); }
-    shown.sort((x, y) => x.mins - y.mins).forEach(({v, name, mins, moving, shape, m}) => {
+    shown.sort((x, y) => x.mins - y.mins).forEach(({v, name, mins, moving, icon, m}) => {
       const li = document.createElement("li"), b = document.createElement("button");
       b.type = "button"; if(mins > 60) b.className = "old";
-      b.innerHTML = '<span class="vl-ic lv-' + v.kind + '" aria-hidden="true"><svg viewBox="0 0 16 30">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg></span>"
+      b.innerHTML = '<span class="vl-ic lv-' + v.kind + '" aria-hidden="true">' + icon + "</span>"
         + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? shortKind(v) + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
         + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 60 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
       b.setAttribute("aria-label", name + ", " + VESSEL_KIND[v.kind] + ", " + (moving ? Math.round(v.sog) + " knots" : "stopped") + ", seen " + (mins < 1 ? "just now" : Math.round(mins) + " minutes ago"));
@@ -2284,16 +2286,20 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(innerWidth < 720){ if(sh.parentNode !== document.body){ sh._home = sh.parentNode; document.body.appendChild(sh); } }
     else if(sh._home && sh.parentNode !== sh._home) sh._home.appendChild(sh);
   }
+  function openSheet(html, label){
+    const sh = $("amSheet");
+    sh.querySelector(".am-sheet-in").innerHTML = html; sh.setAttribute("aria-label", label);
+    dockSheet(sh);
+    if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+    return sh;
+  }
   function openMapCard(layer){
     const tip = layer.getTooltip(); if(!tip) return;
     if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
       layer.closeTooltip(); LM.closePopup();
       ptAt = null; if(pin) pin.remove();   // a boat replaces the weather reading, so the reading's pin goes, and it isn't refreshed over the boat later
-      const sh = $("amSheet"), cls = tip.options.className || "";
-      sh.querySelector(".am-sheet-in").innerHTML = '<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>";
-      sh.setAttribute("aria-label", cls.includes("ves") ? "Boat details" : "Launch area");
-      dockSheet(sh);
-      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      const cls = tip.options.className || "";
+      openSheet('<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>", cls.includes("ves") ? "Boat details" : "Launch area");
       return;
     }
     // a clicked card stays open while the map moves beneath the pointer, until the map or another boat is clicked
@@ -2520,9 +2526,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup();
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
-      sh.setAttribute("aria-label", "Weather at this spot"); dockSheet(sh);
-      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      const sh = openSheet(html, "Weather at this spot");
       if(innerWidth >= 720 && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
     }
@@ -2722,7 +2726,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     cl.hidden = !lx;
     if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
     else closePop(cl);
-    boatDay = last; makeBoats(Math.min(last.boats, 16)); renderMapPop();
+    boatDay = last; makeBoats(Math.min(last.boats, 16)); renderMapPop(); repChip();
     // Year so far chip
     const yr = last.date.slice(0,4), ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
@@ -3243,7 +3247,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
-
       const other = nat.other != null && nat.total ? nat.other / nat.total * 100 : null;
       $("natS").textContent = (nat.total ? fmt(nat.total) + " people, " : "") + nat.period;
       const chg = c => c == null ? "" : (c > 0 ? "▲ " : c < 0 ? "▼ " : "") + Math.abs(c) + "% on a year earlier";
@@ -3399,7 +3402,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-
   /* ---------------------------------------------------- arrival outlook: today and tomorrow, from the forecast and past crossings.
      The base is the average day within a week either side of the date over the last three full years. Calm mornings get the
      average of the days boats did cross then, moderate ones half the base, rough ones almost none */
@@ -3442,7 +3444,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     }).join("");
   }
   function renderAll(){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); drawChart(); renderPred(); }
-
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
      between two dates, quiet spells, patterns, every person and petitions */
@@ -3633,7 +3634,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   if(window.ResizeObserver){ const ro = new ResizeObserver(fitDd); ddFaces.forEach(f => ro.observe(f)); }
   narrow.addEventListener("change", fitDd); fitDd();
 
-
   // ---- Year by year race
   // drawRace builds the chart once per set of figures or width; moveRace only moves the line, the dots and the box of figures
   let race = null, raceDay = null, raceSayT = 0, raceKeep = null, raceYrs = null;
@@ -3781,7 +3781,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   function calc(){
     if(!sorted.length) return;
     const a = $("calcFrom").value, b = $("calcTo").value;
-    if(!a || !b){ return; }
+    if(!a || !b) return;
     const [from, to] = a <= b ? [a, b] : [b, a];
     const first = sorted[0].date, last = sorted[sorted.length-1].date;
     const span = sorted.filter(d=>d.date>=from && d.date<=to);
@@ -3967,7 +3967,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
 
-
   /* ---------------------------------------------------- Report Channel Crossing */
   // A short private form: one box and a Post button.
   // Sent through Web3Forms to the inbox its access key was made for; nothing is kept on the site.
@@ -3998,7 +3997,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }
 
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
-  var wkAll = [], wkShown = 0;   // var: the figures can arrive before this line has run
+  let wkAll = [], wkShown = 0;
   function wkMonth(d){ return parse(d.date).toLocaleDateString("en-GB",{month:"long", year:"numeric", ...UTC}); }
   function wkAdd(n){
     const ul = $("wkDays"), part = wkAll.slice(wkShown, wkShown + n); if(!part.length) return;
@@ -4010,7 +4009,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     wkMonSet();
   }
   // the month bar: the month of the first row showing at the top of the list (found by halving, so it stays quick over 3,000 rows)
-  var wkMonRaf = 0;
+  let wkMonRaf = 0;
   function wkMonSet(){
     wkMonRaf = 0;
     const ul = $("wkDays"), rows = ul.children, top = ul.scrollTop; let lo = 0, hi = rows.length - 1;
@@ -4050,9 +4049,9 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     card.id = card.id || "moreBox" + n; btn.setAttribute("aria-controls", card.id); btn.setAttribute("aria-expanded", "false");
     btn.innerHTML = '<span>Show more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
     card.after(btn);
-    let open = false, raf = 0;
-    const fit = () => { raf = 0; const tall = card.scrollHeight > CLAMP_FROM; btn.hidden = !tall; card.classList.toggle("clamp", tall && !open); };
-    const later = () => { clearTimeout(raf); raf = setTimeout(fit, 200); };   // once the numbers stop counting, not every frame
+    let open = false, fitT = 0;
+    const fit = () => { fitT = 0; const tall = card.scrollHeight > CLAMP_FROM; btn.hidden = !tall; card.classList.toggle("clamp", tall && !open); };
+    const later = () => { clearTimeout(fitT); fitT = setTimeout(fit, 200); };   // once the numbers stop counting, not every frame
     btn.addEventListener("click", () => {
       open = !open; btn.setAttribute("aria-expanded", open); btn.querySelector("span").textContent = open ? "Show less" : "Show more"; fit();
       if(!open && card.getBoundingClientRect().top < 0) card.scrollIntoView({block:"start", behavior:reduced ? "auto" : "smooth"});   // closing from far down: back to the top of the box
@@ -4136,18 +4135,22 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(animate && !reduced){ const st = $("newsStage"); st.classList.remove("in"); st.offsetWidth; st.classList.add("in"); }
     if($("news").hidden || $("news").offsetHeight + 10 !== roomH) newsRoom();   // only when the strip changed height
   }
+  // "Crossings reported today": a news story from today saying boats are crossing, shown until the day's own figures are out
+  // (checked again when the figures arrive, as either can come in first)
+  let newsRep = null;
+  function repChip(){
+    const r = newsRep, rc = $("chipRep"), on = !!(r && r.url && /^https?:/.test(r.url) && r.date === ukToday() && !(boatDay && boatDay.date >= r.date));
+    rc.hidden = !on;
+    if(!on) return;
+    rc.href = r.url; rc.title = r.source + ": " + r.title;
+    rc.querySelector("span").textContent = r.ground ? "Boats reported today" : "Crossings reported today";   // ground: a live sighting from someone at the coast
+    rc.setAttribute("aria-label", (r.ground ? "Boats reported at the coast today by " + r.source : "Crossings reported in the news today. " + r.source) + ": " + r.title + " (opens " + (r.ground ? "Telegram" : r.source) + ")");
+  }
   async function loadNews(){
     newsAt = Date.now();
     try{
       const n = await getJSON("news.json"), box = $("news");
-      // "Crossings reported today": a news story from today saying boats are crossing, shown until the day's own figures are out
-      const r = n.reported, rc = $("chipRep"), rOn = !!(r && r.url && /^https?:/.test(r.url) && r.date === ukToday() && !(boatDay && boatDay.date >= r.date));
-      rc.hidden = !rOn;
-      if(rOn){
-        rc.href = r.url; rc.title = r.source + ": " + r.title;
-        rc.querySelector("span").textContent = r.ground ? "Boats reported today" : "Crossings reported today";   // ground: a live sighting from someone at the coast
-        rc.setAttribute("aria-label", (r.ground ? "Boats reported at the coast today by " + r.source : "Crossings reported in the news today. " + r.source) + ": " + r.title + " (opens " + (r.ground ? "Telegram" : r.source) + ")");
-      }
+      newsRep = n.reported; repChip();
       const items = (n.items || []).filter(x => x.breaking && x.url && /^https?:/.test(x.url) && Date.now() - new Date(x.published) < NEWS_MAX_H * 36e5);
       if(!items.length || store.get("newsSeen") === items[0].url){ newsOn = false; stripUpdate(); return; }
       const fresh = newsShown !== items[0].url;
