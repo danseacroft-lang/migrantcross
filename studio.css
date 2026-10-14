@@ -1,9 +1,8 @@
 /* Studio: every graph on the site, drawn the way the visitor chooses. Loaded the first time the Studio tab opens.
    The page uses the site's own cards, segmented controls and large titles; only the marks inside the charts change with the style. */
 .st-wrap{display:grid;gap:34px;min-width:0}
-.st-wrap[hidden]{display:none}
 
-/* the controls along the top: style, measure and range, on a strip of glass that stays under the bar while you scroll */
+/* the controls along the top: style and measure, on a strip of glass that stays under the bar while you scroll */
 .st-bar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:5;margin:0 -6px;padding:10px 6px;display:grid;gap:10px;
   background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border-radius:22px}
 @media (max-width:719px){.st-bar{top:calc(env(safe-area-inset-top,0px) + 58px)}}
@@ -18,12 +17,12 @@
 .st-sw i b{width:7px;height:18px;border-radius:3px;display:block}
 .st-sw[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 0 0 1.5px var(--blue),0 3px 8px rgba(0,0,0,.1)}
 .st-sw:focus-visible,.st-forms button:focus-visible,.st-act:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (max-width:719px){.st-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -6px;padding:0 6px}.st-row::-webkit-scrollbar{display:none}}
+@media (max-width:719px){.st-bar{gap:8px;padding:8px 6px}.st-sw{height:34px}.st-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -6px;padding:0 6px}.st-row::-webkit-scrollbar{display:none}}
 
 /* the charts */
 .st-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
 @media (min-width:900px){.st-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.st-grid .st-full{grid-column:1 / -1}}
-.st-card{display:grid;gap:12px;align-content:start;min-width:0;padding:18px 18px 16px}
+.st-card{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start;min-width:0;padding:18px 18px 16px}
 .st-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .st-card h3{margin:0;font:600 .882rem/1.2 var(--font);color:var(--label2)}
 .st-read{margin-top:4px}
@@ -33,7 +32,8 @@
 .st-act{appearance:none;border:0;width:32px;height:32px;border-radius:50%;background:var(--fill);color:var(--label);display:grid;place-items:center;cursor:pointer}
 .st-act svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .st-opts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.st-opts .seg button{height:28px;font-size:.735rem}
+.st-opts .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}.st-opts .seg::-webkit-scrollbar{display:none}
+.st-opts .seg button{height:28px;font-size:.735rem;white-space:nowrap}
 /* the chart forms: small labelled pills, so a visitor can see every way a chart can be drawn */
 .st-forms{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:0 18px}
 .st-forms::-webkit-scrollbar{display:none}
@@ -41,9 +41,10 @@
   color:var(--label2);font:600 .735rem/1 var(--font);cursor:pointer;display:flex;align-items:center;gap:6px}
 .st-forms button svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .st-forms button[aria-pressed="true"]{background:var(--label);color:var(--card);box-shadow:none}
+/* fingers: bigger targets for the small controls */
+@media (pointer:coarse){.st-forms button{height:34px;padding:0 14px}.st-act{width:38px;height:38px}.st-opts .seg button{height:30px}}
 .st-chart{position:relative;min-height:120px;touch-action:pan-y}
 .st-chart svg{display:block;width:100%;height:auto;overflow:visible}
-.st-chart .t{font:500 11px/1 var(--font)}
 .st-note{margin:0;font-size:.765rem;line-height:1.4;color:var(--label2)}
 .st-tbl{width:100%;border-collapse:collapse;font-size:.824rem;font-variant-numeric:tabular-nums}
 .st-tbl-wrap{max-height:320px;overflow:auto;border-radius:12px}
@@ -88,7 +89,7 @@
 .st-buy[disabled]{opacity:.5;cursor:default}
 .st-link{appearance:none;border:0;background:none;color:var(--blue);font:600 .824rem/1 var(--font);cursor:pointer;padding:12px 4px 2px}
 .st-offer > p.st-fine,.st-fine{margin:12px 0 0;font-size:.706rem;line-height:1.45;color:var(--label2)}
-.st-offer > p.st-msg,.st-msg{margin:10px 0 0;font-size:.824rem;line-height:1.4;color:var(--label2);}
+.st-offer > p.st-msg,.st-msg{margin:10px 0 0;font-size:.824rem;line-height:1.4;color:var(--label2)}
 .st-msg:empty{display:none}
 .st-msg.err{color:var(--red-t,#D70015)}
 

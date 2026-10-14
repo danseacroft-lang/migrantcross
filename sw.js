@@ -1,10 +1,10 @@
 /* Channel Crossings offline mode.
-   Pages and figures: fetched fresh from the network first, with the saved copy
-   used when there is no connection or the network is very slow (the page then
-   looks for newer figures by itself a minute later). Icons and other fixed files: served
-   from the saved copy straight away and refreshed in the background.
-   Weather requests go straight to Open-Meteo and are never saved. */
-const CACHE = "cc-v32";
+   Pages, figures and the site's own scripts and styles (studio.js, studio.css): fetched fresh from the
+   network first, with the saved copy used when there is no connection or the network is very slow (the
+   page then looks for newer figures by itself a minute later). Fetching them fresh keeps a new page from
+   running with last week's script. Icons, fonts and vendor/ files: served from the saved copy straight
+   away and refreshed in the background. Other sites (weather, map, Studio's worker) are never touched. */
+const CACHE = "cc-v33";
 const CORE = [
   "./", "index.html", "how-it-works.html", "privacy.html",
   "favicon.svg", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png",
@@ -12,8 +12,11 @@ const CORE = [
 ];
 
 self.addEventListener("install", event => {
-  // One missing file must not stop the rest being saved
-  event.waitUntil(caches.open(CACHE).then(c => Promise.allSettled(CORE.map(url => c.add(url)))).then(() => self.skipWaiting()));
+  // Straight from the server, not the browser's own cache, so a new worker never saves an old page.
+  // One missing file must not stop the rest being saved.
+  event.waitUntil(caches.open(CACHE)
+    .then(c => Promise.allSettled(CORE.map(url => c.add(new Request(url, {cache: "reload"})))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", event => {
@@ -24,27 +27,30 @@ self.addEventListener("activate", event => {
   );
 });
 
+// Only whole, successful answers are worth keeping
+const keep = response => response.status === 200 && response.type === "basic";
+const save = (request, response) => caches.open(CACHE).then(c => c.put(request, response)).catch(() => {});
+
 function networkFirst(event) {
   const request = event.request, nav = request.mode === "navigate";
   const saved = () => caches.match(request, {ignoreSearch: true}).then(hit => hit || (nav ? caches.match("index.html") : undefined));
-  const got = fetch(request, {cache: "no-cache"}).then(response => ({response, copy: response.ok ? response.clone() : null}));
-  event.waitUntil(got.then(g => g.copy && caches.open(CACHE).then(c => c.put(request, g.copy))).catch(() => {}));   // saved even if the old copy was shown first
+  const got = fetch(request, {cache: "no-cache"}).then(response => ({response, copy: keep(response) ? response.clone() : null}));
+  event.waitUntil(got.then(g => g.copy && save(request, g.copy)).catch(() => {}));   // saved even if the old copy was shown first
   const net = got.then(g => g.response);
   // a slow network: after a few seconds the saved copy is shown instead, if there is one
   const slow = new Promise(resolve => setTimeout(() => saved().then(hit => hit && resolve(hit)), nav ? 3500 : 4000));
   return Promise.race([net, slow]).catch(() => saved().then(hit => hit || Response.error()));
 }
 
-function staleWhileRevalidate(request) {
+function staleWhileRevalidate(event) {
+  const request = event.request;
   return caches.match(request).then(hit => {
     const fresh = fetch(request).then(response => {
-      if (response.ok) {
-        const copy = response.clone();
-        caches.open(CACHE).then(c => c.put(request, copy));
-      }
+      if (keep(response)) event.waitUntil(save(request, response.clone()));
       return response;
-    }).catch(() => hit);
-    return hit || fresh;
+    });
+    if (hit) { event.waitUntil(fresh.catch(() => {})); return hit; }
+    return fresh.catch(() => Response.error());
   });
 }
 
@@ -52,7 +58,9 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   if (request.method !== "GET") return;
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;           // weather and other sites: not handled
-  const fresh = request.mode === "navigate" || /\.(html|json|csv)$/.test(url.pathname) || url.pathname.endsWith("/");
-  event.respondWith(fresh ? networkFirst(event) : staleWhileRevalidate(request));
+  if (url.origin !== self.location.origin) return;           // weather, map tiles and other sites: not handled
+  const path = url.pathname;
+  const fresh = request.mode === "navigate" || path.endsWith("/") ||
+    /\.(html|json|csv)$/.test(path) || (/\.(js|css)$/.test(path) && !path.includes("/vendor/"));
+  event.respondWith(fresh ? networkFirst(event) : staleWhileRevalidate(event));
 });

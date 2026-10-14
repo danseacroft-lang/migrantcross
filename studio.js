@@ -186,15 +186,16 @@
   /* ------------------------------------------------------------ the cards */
   const CARDS = [];
   function card(o){ CARDS.push(o); return o; }
-  const width = el => Math.max(260, Math.round(el.clientWidth || 600));
+  const width = el => Math.max(240, Math.round(el.clientWidth || 600));
   const hFor = (w, base) => Math.round(Math.min(base, Math.max(190, w * .55)));
 
   // 1. Over time: every day, week, month or year, in six forms
   card({id:"ot", full:true, title:"Crossings over time", forms:[["bars","Bars"],["line","Line"],["area","Area"],["steps","Steps"],["dots","Dots"],["lolly","Lollipop"],["table","Table"]], key:"ot",
-    opts(){ return seg("group", [["day","Day"],["week","Week"],["month","Month"],["year","Year"]]) + seg("avg", [[true,"Average"],[false,"No average"]]); },
+    opts(){ return (prefs.group === "year" ? "" : seg("range", [["30","1M"],["90","3M"],["365","1Y"],["ytd","This year"],["all","All"]], "Range"))
+      + seg("group", [["day","Day"],["week","Week"],["month","Month"],["year","Year"]], "Group by") + (prefs.group === "year" ? "" : seg("avg", [[true,"Average"],[false,"No average"]], "Average")); },
     draw(el, T){
       const rows = prefs.group === "year" ? D : inRange(), B = bucket(rows, prefs.group);
-      this.read = [prefs.measure === "perboat" ? fmt(measureOf(rows)) : fmt(measureOf(rows)), mName() + " · " + (rows.length ? bLabel(rows[0].date, "day", true) + " – " + bLabel(rows[rows.length - 1].date, "day", true) : "")];
+      this.read = [fmt(measureOf(rows)), mName() + " · " + (rows.length ? bLabel(rows[0].date, "day", true) + " – " + bLabel(rows[rows.length - 1].date, "day", true) : "")];
       if(prefs.ot === "table") return table([prefs.group === "day" ? "Day" : prefs.group[0].toUpperCase() + prefs.group.slice(1), mName()[0].toUpperCase() + mName().slice(1)], B.slice().reverse().map(b => [bLabel(b.k, prefs.group, true), fmt(b.v)]));
       const W = width(el), H = hFor(W, 300), s = new Svg(W, H, T), max = Math.max(1, ...B.map(b => b.v || 0)), f = frame(s, max);
       const n = B.length, bw = (f.x1 - f.x0) / Math.max(n, 1), xc = i => f.x0 + bw * (i + .5), c = T.c[0];
@@ -297,6 +298,18 @@
         MON.forEach((m, i) => { const a = (doy(y + "-" + String(i + 1).padStart(2, "0") + "-15") - 1) * da; s.text(cx + (r1 + 12) * Math.sin(a), cy - (r1 + 12) * Math.cos(a) + 4, m, {a:"middle", size:10}); });
         s.text(cx, cy - 2, kfmt(measureOf(rows)), {a:"middle", c:T.ink, w:700, size:Math.round(S / 16)}); s.text(cx, cy + 16, y, {a:"middle"});
         this.mode = "xy"; return s.out(y + ", the year as a clock");
+      }
+      if(W < 560){
+        const cols = W < 280 ? 2 : 3, mw = W / cols, pitch = Math.min(18, (mw - 10) / 7), cell = pitch - (pitch > 10 ? 2 : 1.5), mh = 18 + 6 * pitch + 10, rr = Math.min(T.r, cell * .3);
+        const s = new Svg(W, Math.ceil(12 / cols) * mh, T), byDate = {}; rows.forEach(r => byDate[r.date] = r);
+        MON.forEach((m, i) => {
+          const ox = (i % cols) * mw, oy = Math.floor(i / cols) * mh, mm = String(i + 1).padStart(2, "0"), f = parse(y + "-" + mm + "-01"), o = (f.getUTCDay() + 6) % 7, days = new Date(Date.UTC(+y, i + 1, 0)).getUTCDate();
+          s.text(ox, oy + 11, m, {c:T.ink, w:600, size:11});
+          for(let d = 1; d <= days; d++){ const n = d - 1 + o, x = ox + (n % 7) * pitch, yy = oy + 18 + Math.floor(n / 7) * pitch, r = byDate[y + "-" + mm + "-" + String(d).padStart(2, "0")];
+            s.add('<rect x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) + '" rx="' + rr.toFixed(1) + '" fill="' + (r ? col(val(r)) : T.grid) + '"' + (r ? "" : ' fill-opacity=".35"') + "/>");
+            if(r) this.pts.push({x:x + cell / 2, y:yy + cell / 2, tip:tip(r)}); }
+        });
+        this.mode = "xy"; return s.out(y + ", month by month");
       }
       const first = parse(y + "-01-01"), off = (first.getUTCDay() + 6) % 7, wk = Math.ceil((366 + off) / 7), L = 30, cell = Math.max(6, Math.min(16, (W - L) / wk - 2)), gap = cell > 9 ? 2.5 : 1.5;
       const H = 7 * (cell + gap) + 22, s = new Svg(W, H, T), rr = Math.min(T.r, cell * .3);
@@ -452,8 +465,8 @@
     return s.out("Shares as squares");
   }
 
-  function seg(key, opts){
-    return '<div class="seg" role="group">' + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
+  function seg(key, opts, label){
+    return '<div class="seg" role="group"' + (label ? ' aria-label="' + label + '"' : "") + ">" + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
   }
 
   /* ------------------------------------------------------------ the page */
@@ -461,17 +474,18 @@
   function controls(){
     return '<div class="st-bar" id="stBar"><div class="st-styles" role="group" aria-label="Style">' + STYLES.map(s => { const c = isDark() ? s.dark : s.light;
       return '<button type="button" class="st-sw" data-style="' + s.id + '" aria-pressed="' + (prefs.style === s.id) + '"><i aria-hidden="true">' + c.slice(0, 3).map(x => '<b style="background:' + x + '"></b>').join("") + "</i>" + s.name + "</button>"; }).join("") + "</div>"
-      + '<div class="st-row"><span class="st-lab">Show</span>' + seg("measure", [["people","People"],["boats","Boats"],["perboat","People a boat"]])
-      + '<span class="st-lab" style="margin-left:6px">Range</span>' + seg("range", [["30","1M"],["90","3M"],["365","1Y"],["ytd","This year"],["all","All"]]) + "</div></div>";
+      + '<div class="st-row"><span class="st-lab">Show</span>' + seg("measure", [["people","People"],["boats","Boats"],["perboat","People a boat"]], "Show")
+      + "</div></div>";
   }
+  const FORM_ICON = {calendar:"grid", waffle:"grid", vs:"area", rank:"hbars", lines:"line"};
   function shell(){
-    let h = controls() + '<div class="st-grid">';
+    let h = controls() + '<div class="st-grid">', head = false;
     CARDS.forEach(c => {
-      if(c.people && !CARDS.find(x => x.people && x.peopleHead) && (c.peopleHead = true)) h += '</div><div class="section-h" style="margin-bottom:-10px"><h2>Who is crossing</h2></div><div class="st-grid">';
+      if(c.people && !head){ head = true; h += '</div><div class="section-h" style="margin-bottom:-10px"><h2>Who is crossing</h2></div><div class="st-grid">'; }
       h += '<article class="card st-card' + (c.full ? " st-full" : "") + '" data-card="' + c.id + '"><div class="st-top"><div><h3>' + esc(c.title) + '</h3><div class="st-read"><b>–</b><span>&nbsp;</span></div></div>'
         + '<div class="st-acts"><button type="button" class="st-act" data-save="' + c.id + '" aria-label="Save ' + esc(c.title) + ' as a picture" title="Save as a picture">' + svgI("save") + "</button></div></div>"
         + (c.opts ? '<div class="st-opts" data-opts></div>' : "")
-        + '<div class="st-forms" role="group" aria-label="Chart form">' + c.forms.map(([v, l]) => '<button type="button" data-k="' + c.key + '" data-v="' + v + '" aria-pressed="' + (prefs[c.key] === v) + '">' + svgI(v === "calendar" ? "grid" : v === "multi" ? "multi" : v === "vs" ? "area" : v === "rank" ? "hbars" : v === "lines" ? "line" : v === "radial" ? "radial" : v === "waffle" ? "grid" : v === "mirror" ? "mirror" : ic[v] ? v : "bars") + l + "</button>").join("") + "</div>"
+        + '<div class="st-forms" role="group" aria-label="Chart form">' + c.forms.map(([v, l]) => '<button type="button" data-k="' + c.key + '" data-v="' + v + '" aria-pressed="' + (prefs[c.key] === v) + '">' + svgI(FORM_ICON[v] || (ic[v] ? v : "bars")) + l + "</button>").join("") + "</div>"
         + '<div class="st-chart" data-chart></div><div data-legend></div></article>';
     });
     return h + "</div>" + '<p class="foot">Home Office figures, provisional and sometimes revised. Who is crossing and the returns deal come from the Home Office’s quarterly statistics, so they don’t change with Show and Range. Contains public sector information licensed under the Open Government Licence v3.0.</p>';
@@ -519,7 +533,10 @@
   }
   function hideTip(){ tip.classList.remove("on"); wrap.querySelectorAll(".st-mk").forEach(m => m.setAttribute("opacity", 0)); }
   wrap.addEventListener("pointermove", hover); wrap.addEventListener("pointerdown", hover);
-  wrap.addEventListener("pointerleave", hideTip); addEventListener("scroll", hideTip, {passive:true});
+  // a finger lifting counts as leaving, so on phones the tip stays until the next tap elsewhere or a scroll
+  wrap.addEventListener("pointerleave", e => { if(e.pointerType !== "touch") hideTip(); });
+  document.addEventListener("pointerdown", e => { if(!(e.target.closest && e.target.closest("[data-chart]"))) hideTip(); }, {passive:true});
+  addEventListener("scroll", hideTip, {passive:true});
 
   /* save a chart as a picture: the chart on the card's colour, with its title and where the figures come from */
   function savePicture(c){
@@ -560,6 +577,7 @@
     if(mode === "sent") body = '<h3>Check your email</h3><p>We’ve sent a sign-in link to <b>' + esc(msg) + '</b>. Open it on this device to unlock Studio here. If it isn’t in your inbox within a minute, check your junk folder.</p><button type="button" class="st-link" data-act="back">Use a different email</button>';
     else if(mode === "signin") body = '<h3>Sign in</h3><p>Already unlocked Studio? Enter the email you paid with and we’ll send you a link to sign in on this device.</p>'
       + '<form data-form="signin"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address"><button class="st-buy" type="submit">Email me a sign-in link</button></form>'
+      + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : "") + "</p>"
       + '<button type="button" class="st-link" data-act="back">Back</button>';
     else body = '<div class="st-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5h16M6.5 16V11M11 16V6M15.5 16v-7M20 16V4" stroke-width="2.4"/></svg></div>'
       + "<h3>Studio</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
@@ -577,8 +595,9 @@
   offer.addEventListener("submit", e => {
     e.preventDefault(); const f = e.target, email = f.email.value.trim(), btn = f.querySelector("button");
     btn.disabled = true;
-    if(f.dataset.form === "signin") api("/login", {email}).then(() => renderOffer("sent", email)).catch(x => { btn.disabled = false; renderOffer("signin"); offer.insertAdjacentHTML("beforeend", '<p class="st-msg err">' + esc(x.message) + "</p>"); });
-    else checkout({email}).catch(x => { btn.disabled = false; renderOffer("offer", x.message, true); });
+    const fail = mode => x => { renderOffer(mode, x.message, true); const i = offer.querySelector("input"); if(i) i.value = email; };   // keep what they typed
+    if(f.dataset.form === "signin") api("/login", {email}).then(() => renderOffer("sent", email)).catch(fail("signin"));
+    else checkout({email}).catch(fail("offer"));
   });
   offer.addEventListener("click", e => {
     const a = e.target.closest("[data-act]"); if(!a) return;
