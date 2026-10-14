@@ -23,16 +23,16 @@ const unb64u = s => atob(s.replace(/-/g, "+").replace(/_/g, "/"));
 const validEmail = e => typeof e === "string" && e.length < 200 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 const norm = e => e.trim().toLowerCase();
 
-async function hmac(env, data){
-  const key = await crypto.subtle.importKey("raw", enc.encode(env.SECRET), {name:"HMAC", hash:"SHA-256"}, false, ["sign"]);
-  return b64u(await crypto.subtle.sign("HMAC", key, enc.encode(data)));
-}
-async function sign(env, payload){ const body = b64u(enc.encode(JSON.stringify(payload))); return body + "." + await hmac(env, body); }
-async function verify(env, token, type){
-  if(typeof token !== "string" || !token.includes(".")) return null;
-  const [body, sig] = token.split(".");
-  if(sig !== await hmac(env, body)) return null;
-  let p; try{ p = JSON.parse(unb64u(body)); }catch(e){ return null; }
+const hmacKey = env => crypto.subtle.importKey("raw", enc.encode(env.SECRET), {name:"HMAC", hash:"SHA-256"}, false, ["sign", "verify"]);
+async function sign(env, payload){ const body = b64u(enc.encode(JSON.stringify(payload))); return body + "." + b64u(await crypto.subtle.sign("HMAC", await hmacKey(env), enc.encode(body))); }
+async function verify(env, token, type){   // crypto.subtle.verify compares in constant time
+  if(typeof token !== "string" || token.length > 2000) return null;
+  const [body, sig, extra] = token.split(".");
+  if(!body || !sig || extra !== undefined) return null;
+  let p; try{
+    if(!await crypto.subtle.verify("HMAC", await hmacKey(env), Uint8Array.from(unb64u(sig), c => c.charCodeAt(0)), enc.encode(body))) return null;
+    p = JSON.parse(new TextDecoder().decode(Uint8Array.from(unb64u(body), c => c.charCodeAt(0))));
+  }catch(e){ return null; }
   return p.t === type && p.x > Date.now() / 1000 ? p : null;
 }
 

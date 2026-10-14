@@ -4247,7 +4247,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   function loadStudio(){
     if(studioOn) return; studioOn = true;
     const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "studio.css"; document.head.appendChild(l);
-    const sc = document.createElement("script"); sc.src = "studio.js"; sc.defer = true; l.onload = l.onerror = () => document.head.appendChild(sc);
+    const sc = document.createElement("script"); sc.src = "studio.js"; l.onload = l.onerror = () => document.head.appendChild(sc);
   }
   tabs.forEach((t, i) => {
     t.addEventListener("click", () => show(t.dataset.tab));
@@ -4332,7 +4332,8 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
     titles.forEach(t => io.observe(t));
   }
   watchTitles(); addEventListener("resize", watchTitles);
-  document.querySelectorAll("#tabs [role=tab]").forEach(t => t.addEventListener("click", () => requestAnimationFrame(titleCheck)));
+  // every change of tab (a tap, a swipe, a link between tabs) ends with a resize, so the bar's name follows it
+  addEventListener("resize", () => requestAnimationFrame(titleCheck));
   // the date moves on at midnight while the page is open
   setInterval(() => { try{ const d = new Date().toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"Europe/London"}); if($("tdEye").textContent !== d) $("tdEye").textContent = d; }catch(e){} }, 60000);
   // phones: a tap on the dimmed page around a pop-up closes it, whichever pop-up it is
