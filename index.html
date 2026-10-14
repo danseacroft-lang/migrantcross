@@ -134,9 +134,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 
 /* ------------------------------------------------------------ hero: the live Channel */
 /* the Channel is a card in the same column as the boxes below it */
-.hero{position:relative;width:min(1148px,calc(100% - 2 * max(16px,env(safe-area-inset-left,0px))));margin:calc(56px + env(safe-area-inset-top,0px)) auto 0;
-  height:calc(100vh - 150px);height:calc(100svh - 150px - env(safe-area-inset-top,0px));min-height:500px;max-height:760px;
-  border-radius:28px;overflow:hidden;background:var(--sea3);isolation:isolate;box-shadow:var(--shadow)}
+.hero{position:relative;overflow:hidden;background:var(--sea3);isolation:isolate}   /* its size, radius and shadow: main .hero, below */
 .hero-map{position:absolute;inset:0;will-change:transform}
 .hero-map > svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* the live weather map (Leaflet), in the style of Ventusky: a light grey map, the sea shaded by wave height, the rain over it, and the waves moving in white */
@@ -285,7 +283,7 @@ button,input,select,textarea{font:inherit;font-family:var(--font)}
 .wx-pt .wp-stats{margin:8px 0 0;gap:5px}
 .wx-pt .wp-stats div{padding:6px 8px}
 .wx-pt .wp-stats b{font-size:1rem}
-.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none}   /* darker behind the title and the figures, so white text reads over the light map */
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.16) 0,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 58%,rgba(0,0,0,.28) 100%)}   /* darker at the top and bottom, so white text reads over the light map */
 .hero-in{position:absolute;z-index:2;color:#fff}
 .hero-chips > *{pointer-events:auto}
 /* across the top of the map: breaking news, which flashes when a story comes in, and from 12:00 UK time
@@ -318,7 +316,7 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .mn-count{flex:none;font-size:.706rem;font-weight:600;color:rgba(255,255,255,.7);font-variant-numeric:tabular-nums}
 .mn-close{position:relative;flex:none;width:32px;height:32px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;cursor:pointer;touch-action:manipulation}
 .mn-close svg{width:9px;height:9px}
-@media (max-width:600px){.map-news{padding:8px 8px 10px 10px}.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
+@media (max-width:600px){.mn-slide{flex-wrap:wrap;row-gap:6px}.mn-tag{margin:3px 0}.mn-count{margin:0 36px 0 auto}
   .mn-close{position:absolute;top:8px;right:8px;width:28px;height:28px}.mn-stage{order:3;flex-basis:100%;flex-direction:column;gap:2px;padding:0 2px}
   .mn-head{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.882rem;min-height:2.6em}.mn-meta{white-space:nowrap}.mn-more{display:none}}   /* one line or two, the strip stays the same height */
 /* "new figures incoming": a ring that sweeps round, its arc stretching and shrinking like a download in progress */
@@ -342,9 +340,8 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 .hero-quiet{display:flex;align-items:center;gap:18px}
 .hero-quiet .cal{width:88px;height:92px;background:rgba(28,28,30,.4);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 6px 24px rgba(0,0,0,.25)}
 .hq-t{font:700 clamp(1.7rem,5.6vw,3rem)/1.05 var(--font)}
-@media (max-width:360px){.hq-t{font-size:1.45rem}}   /* small phones: the headline fits two lines */
 .hq-s{margin-top:6px;font-size:1.06rem;font-weight:500}
-@media (max-width:600px){.hero-quiet{gap:14px}.hero-quiet .cal{width:68px;height:72px;border-radius:16px;grid-template-rows:22px 1fr}.hero-quiet .cal span{font-size:.706rem;line-height:22px}.hero-quiet .cal b{font-size:2.2rem}.hq-s{font-size:.941rem}}
+@media (max-width:600px){.hero-quiet{gap:14px}.hq-s{font-size:.941rem}}   /* the tile's phone size: further down, with the panel */
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;
   font-size:.882rem;font-weight:600;color:#fff}
@@ -373,13 +370,13 @@ button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 /* the close button on a phone sheet: it floats over the sheet's top right corner, so it stays put while the sheet scrolls */
 .pop-x{position:fixed;z-index:62;width:30px;height:30px;border:0;border-radius:50%;background:var(--fill2);color:var(--label);display:grid;place-items:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .pop-x svg{width:10px;height:10px}
+.pop-x::after{content:"";position:absolute;inset:-7px}   /* a 44pt tap target */
 .info-pop:not([hidden]){animation:popIn .26s cubic-bezier(.2,.9,.3,1.15) both;transform-origin:var(--from,bottom left)}
 @keyframes popIn{from{opacity:0;transform:scale(.92)}}
 /* Channel conditions pop-up, in the style of the Weather app */
 .wx-pop,.lx-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:18px}
-.wx-pop{--lv:var(--blue);background-color:color-mix(in srgb,var(--card) 80%,transparent);-webkit-backdrop-filter:blur(44px) saturate(180%);backdrop-filter:blur(44px) saturate(180%);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 12%,transparent),transparent 90px)}
-.wx-pop[data-lv="calm"]{--lv:var(--green)}.wx-pop[data-lv="moderate"]{--lv:var(--orange)}.wx-pop[data-lv="rough"]{--lv:var(--red)}
-.wx-pop[data-lv="calm"]{--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv-t:var(--orange-t)}.wx-pop[data-lv="rough"]{--lv-t:var(--red-t)}   /* the level in words, in a readable shade */
+.wx-pop{--lv:var(--blue);-webkit-backdrop-filter:blur(44px) saturate(180%);backdrop-filter:blur(44px) saturate(180%);background-image:linear-gradient(to bottom,color-mix(in srgb,var(--lv) 12%,transparent),transparent 90px)}
+.wx-pop[data-lv="calm"]{--lv:var(--green);--lv-t:var(--green-t)}.wx-pop[data-lv="moderate"]{--lv:var(--orange);--lv-t:var(--orange-t)}.wx-pop[data-lv="rough"]{--lv:var(--red);--lv-t:var(--red-t)}   /* --lv-t: the level in words, in a readable shade */
 .wp-head{display:flex;align-items:center;gap:12px}
 .wp-ic{flex:none;width:44px;height:44px}
 .wp-ic svg,.wp-days svg{display:block;width:100%;height:100%;overflow:visible}
@@ -434,9 +431,8 @@ button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 .boat-tip .wp-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin:10px 0 8px}
 .boat-tip p{font-size:.765rem;margin:0}
 /* Figure updates, as an iOS Live Activity: an app-style icon, the state in one line, and the afternoon's window as a progress bar */
-.fu-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:22px}
 /* the big clock, back in the corner behind the words, its hands turning; cut off by its own frame, so the card never scrolls for it */
-.fu-pop{overflow:hidden;isolation:isolate}
+.fu-pop{width:min(340px,calc(100vw - 32px));padding:16px;border-radius:22px;overflow:hidden;isolation:isolate}
 .fu-pop > :not(.fu-clock){position:relative;z-index:1}
 .fu-clock{position:absolute;right:-30px;bottom:-30px;width:132px;height:132px;z-index:0;color:var(--label2);opacity:.24;pointer-events:none;-webkit-mask:radial-gradient(circle at 62% 62%,#000 45%,transparent 72%);mask:radial-gradient(circle at 62% 62%,#000 45%,transparent 72%)}
 .fu-clock .fu-min{transform-origin:60px 60px;animation:spin 12s linear infinite}
@@ -466,8 +462,6 @@ button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 .fu-lbl{display:flex;justify-content:space-between;margin-top:7px;font-size:.706rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .fu-pop p{margin:12px 2px 0;font-size:.765rem;line-height:1.45}
 @media (prefers-reduced-motion:reduce){.fu-ic .fu-min,.fu-ic .fu-hour,.fu-now[data-st="dl"] i{animation:none}}
-.scroll-cue{position:absolute;z-index:2;pointer-events:none;left:50%;bottom:14px;translate:-50% 0;width:26px;height:26px;color:#fff;opacity:.7;animation:cue 2.2s ease-in-out infinite}
-@keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(6px);opacity:.35}}
 .strait path{stroke:#fff;stroke-width:1.8;stroke-dasharray:5 6;opacity:.85;fill:none;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 2px rgba(0,0,0,.6))}
 .strait circle{fill:#fff;stroke:rgba(0,0,0,.35);stroke-width:1;vector-effect:non-scaling-stroke}
 .strait rect{fill:rgba(0,0,0,.5);stroke:rgba(255,255,255,.25);stroke-width:.5}
@@ -528,7 +522,7 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 /* the month of the rows at the top of the list, in one bar above it that changes as the list scrolls (as in Photos) */
 .wk-mon{margin:10px 0 0;padding:0 0 6px;border-bottom:.5px solid var(--sep);font:700 .765rem/1.2 var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--label2);font-variant-numeric:tabular-nums}
 .wk-mon + .wk-days{margin-top:0;position:relative}
-.wk-days li.wk-end{display:block;justify-content:center;text-align:center;color:var(--label3);font-size:.765rem;padding:14px 0 6px}
+.wk-days li.wk-end{display:block;text-align:center;color:var(--label3);font-size:.765rem;padding:14px 0 6px}
 .wk-days b{font-weight:600}
 .wk-days span{color:var(--label2);text-align:right}
 .wk-days span strong{color:var(--label);font-weight:600}
@@ -545,7 +539,7 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 .ring-legend span{color:var(--label2);font-size:.765rem}
 /* arrival outlook: today and tomorrow */
 .pred-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.pred{display:flex;flex-direction:column;gap:0}
+.pred{display:flex;flex-direction:column}
 .pred-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
 .pred-h h3{margin:0}
 .pred-h span{font-size:.765rem;color:var(--label2)}
@@ -580,9 +574,9 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 .fy > *{position:relative;z-index:1}
 .flip-h{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:18px}
 .flip-h h3{margin:0}
-.flip-go{appearance:none;border:0;position:relative;flex:none;margin:-7px -2px -7px 0;height:34px;border-radius:9px;display:inline-flex;align-items:center;gap:3px;
+.flip-go{appearance:none;border:0;position:relative;flex:none;margin:-7px -2px -7px 0;height:34px;padding:0 10px 0 14px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;
   font:600 .765rem/1 var(--font);color:var(--label);background:var(--fill);cursor:pointer;touch-action:manipulation;transition:background .2s ease}   /* the same as the 1M / 3M / 1Y buttons */
-.flip-go.back{margin:-7px 0 -7px -2px}
+.flip-go.back{margin:-7px 0 -7px -2px;padding:0 14px 0 10px}
 .flip-go svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .flip-go::after{content:"";position:absolute;inset:-6px -4px}   /* a bigger target for fingers */
 .flip-go:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -612,8 +606,8 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 .cal b{display:grid;place-items:center;font:500 2rem/1 var(--font);letter-spacing:-.03em}
 .otd-v{font-size:1.7rem}
 .otd-years{display:flex;align-items:flex-end;gap:8px;height:136px;margin-top:18px}
-.otd-years .oy{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
-.otd-years .oy{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}   /* each year is a button: tap to read it above */
+.otd-years .oy{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;
+  appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}   /* each year is a button: tap to read it above */
 .otd-years .oy[aria-pressed=true] em{color:var(--label)}
 .otd-years .oy:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
 .otd-years i{flex:none;height:calc((100% - 1.412rem - 10px) * var(--k));width:100%;max-width:46px;min-height:3px;border-radius:7px;background:var(--viz1);transform-origin:bottom;transform:scaleY(0);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
@@ -628,8 +622,8 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;min-height:58px}
 .chart-read b{display:block;font:700 1.9rem/1.1 var(--round)}
 .chart-read span{color:var(--label2);font-size:.824rem}
-.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--fill)}
-.seg button{border:0;background:none;color:var(--label);font:600 .765rem/1 var(--font);padding:0 12px;cursor:pointer;position:relative}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;padding:3px;border-radius:999px;background:var(--fill)}
+.seg button{border:0;border-radius:999px;background:none;color:var(--label);font:600 .765rem/1 var(--font);height:30px;padding:0 12px;cursor:pointer;position:relative}
 .seg button::after{content:"";position:absolute;inset:-7px 0}
 .seg button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
 .chart{position:relative;margin-top:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:crosshair}
@@ -761,12 +755,8 @@ footer strong{color:var(--label);font-weight:600}
 .ft-nav{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0 18px;font-size:.882rem}
 .ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
 @media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
-/* share buttons: ready-made posts of the latest figures for each network (links only; nothing loads from them until clicked) */
-.ft-share{flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:6px}
-.sh{appearance:none;border:0;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:999px;font:600 .882rem/1 var(--font);text-decoration:none;cursor:pointer;background:var(--fill);color:var(--label);touch-action:manipulation;transition:background-color .2s}   /* plain buttons, not brand colours */
-.sh-copy,.sh-more{color:var(--blue)}
-.sh:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-@media (hover:hover){.sh:hover{background:var(--fill2)}}
+/* the old row of share buttons: hidden, as the share sheet took its place (the script still fills in its links) */
+.ft-share{display:none}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -775,12 +765,7 @@ footer strong{color:var(--label);font-weight:600}
 :root[data-theme="dark"] .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
-/* share card down the left edge on wide screens: a dark card, the share buttons as white pills, a night scene of the Channel below */
-.side-share{display:none}
-@media (min-width:1360px) and (hover:hover) and (pointer:fine){   /* desktop only */
-  .side-share{display:flex;flex-direction:column;position:fixed;z-index:50;left:16px;top:16px;bottom:16px;width:280px;border-radius:24px;overflow:hidden;background:#000;color:#fff;
-    box-shadow:0 0 0 .5px rgba(255,255,255,.08),0 10px 40px rgba(0,0,0,.25)}
-}
+/* the share sheet's contents: a dark card, the share buttons as white pills, a night scene of the Channel below (the sheet itself: body .side-share, further down) */
 .side-share h2{margin:0;padding:34px 22px 22px;font:700 1.35rem/1.18 var(--font);letter-spacing:-.025em;text-align:center;text-wrap:balance}
 .side-share .ss-btns{display:flex;flex-direction:column;gap:10px;padding:0 16px}
 .side-share .ss-b{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;padding:0 44px;border:0;border-radius:999px;background:#fff;color:#000;
@@ -790,8 +775,10 @@ footer strong{color:var(--label);font-weight:600}
 .side-share .ss-b:active{transform:scale(.98)}
 .side-share .ss-b:focus-visible{outline:2px solid #0A84FF;outline-offset:3px}
 .side-share p{margin:16px 22px 0;color:rgba(235,235,245,.6);font-size:.765rem;line-height:1.45;text-align:center}
-.side-share .ss-art{position:relative;flex:1;min-height:0;margin-top:12px}
-.side-share .ss-art svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto;max-height:100%;display:block}
+/* the night scene grows out of the black sheet: always whole (the lighthouse never cut), the sky and sea running on to the edges, the top fading in */
+.side-share .ss-art{position:relative;flex:none;min-height:0;height:clamp(72px,calc(100dvh - 540px),230px);margin-top:6px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 46%);mask-image:linear-gradient(to bottom,transparent,#000 46%)}   /* short screens: the picture gives way so the buttons all fit */
+.side-share .ss-art svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .ss-star{animation:ssTw 3.2s ease-in-out infinite alternate}.ss-star:nth-child(2n){animation-delay:-1.4s}.ss-star:nth-child(3n){animation-delay:-2.3s}
 .ss-beam{transform-origin:62px 151px;animation:ssBeam 6s ease-in-out infinite alternate}
 .ss-bob{animation:ssBob 3.6s ease-in-out infinite alternate}.ss-bob2{animation:ssBob 4.4s ease-in-out -1.8s infinite alternate}
@@ -801,28 +788,19 @@ footer strong{color:var(--label);font-weight:600}
 @keyframes ssBob{from{transform:translateY(0) rotate(-1.5deg)}to{transform:translateY(3px) rotate(1.5deg)}}
 @keyframes ssSwell{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){.ss-star,.ss-beam,.ss-bob,.ss-bob2,.ss-swell,.ss-swell2{animation:none}}
-.top-row{position:absolute;z-index:49;top:calc(env(safe-area-inset-top,0px) + 8px + var(--busy-h,0px));left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));pointer-events:none}
-@media (min-width:1180px){.top-row{padding-right:calc((100% - 1148px) / 2);padding-left:calc((100% - 1148px) / 2)}}   /* lined up with the map card */
-@media (min-width:1360px) and (hover:hover) and (pointer:fine){.top-row{left:312px;padding-left:max(16px,calc((100% - 312px - 1148px) / 2));padding-right:max(16px,calc((100% - 312px - 1148px) / 2))}}   /* beside the share card */
-/* the logo and name, at the top left above the map */
+/* the logo, at the top left (the bar itself: body .top-row, further down) */
 .top-brand{display:flex;align-items:center;min-width:0;pointer-events:auto}
 .top-brand .lt-logo{display:block;flex:none;border-radius:50%;transition:transform .2s ease}
 .top-brand .lt-logo svg{display:block;width:100%;height:100%}
 .top-brand .lt-logo:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 @media (hover:hover){.top-brand .lt-logo:hover{transform:scale(1.06)}}
-.top-brand h1{margin:0;font:700 1.35rem/1.1 var(--font);color:var(--label);white-space:nowrap}
-@media (max-width:600px){.top-brand{gap:8px}.top-brand .lt-logo{width:28px;height:28px}.top-brand h1{font-size:1.06rem}}
-@media (max-width:440px){.top-row{gap:8px}.top-brand{gap:7px}.top-brand h1{font-size:1rem}}
-.top-brand h1{min-width:0;overflow:hidden;text-overflow:ellipsis}
 /* The buttons at the top right: round grey buttons that turn blue while their card is open */
 .top-act{display:flex;align-items:center;pointer-events:auto;min-width:0}
-.tb-btn{position:relative;flex:none;display:grid;place-items:center;padding:0;border:0;border-radius:50%;appearance:none;cursor:pointer;touch-action:manipulation;color:var(--label);transition:background .2s ease,color .2s ease,transform .15s ease}
+.tb-btn{position:relative;flex:none;display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;appearance:none;background:none;cursor:pointer;touch-action:manipulation;color:var(--label)}
 .tb-btn::after{content:"";position:absolute;inset:-3px}
-.tb-btn:active{transform:scale(.94)}
 .tb-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .tb-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
 
-@media (max-width:374px){.top-row{gap:8px}.top-brand{gap:6px}.top-brand .lt-logo{width:26px;height:26px}.top-brand h1{font-size:.86rem;letter-spacing:-.02em}.top-act{gap:6px}.tb-btn{width:34px;height:34px}.tb-btn svg{width:18px;height:18px}.tb-btn::after{inset:-5px}}   /* small phones: three buttons and the name still fit on one line */
 /* ------------------------------------------------------------ phones: room, safe areas and sideways */
 /* small buttons keep their look but get a finger-sized tap area */
 .top-brand .lt-logo,.am-x{position:relative}
@@ -830,11 +808,6 @@ footer strong{color:var(--label);font-weight:600}
 button.chip{position:relative}button.chip::after{content:"";position:absolute;inset:-4px 0}
 .ft-theme button{position:relative}.ft-theme button::after{content:"";position:absolute;inset:-3px 0}
 @media (pointer:coarse){.ft-theme button::after{inset:-5px -1px}.otd-years .oy{position:relative}.otd-years .oy::after{content:"";position:absolute;inset:0 -2px}}   /* 44pt for fingers, as Apple asks */
-/* phones on their side: the map fills the screen and the number shrinks to fit */
-@media (max-height:500px) and (orientation:landscape){
-  .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
-  .hero-chips{margin-top:10px}
-}
 
 /* ------------------------------------------------------------ smaller screens */
 @media (max-width:900px){
@@ -844,36 +817,28 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .duo > .mb-col + .mb-col{margin-top:26px}   /* stacked, the second heading gets the same room as a new section */
 }
 @media (max-width:600px){
-  .hero{border-radius:24px;min-height:480px}
-  .hero-in{padding-left:20px;padding-right:20px}
   .bento{gap:12px}
   .b-week,.b-ring,.b-lab,.b-bur{grid-column:1 / -1}   /* one box to a row, so Labour and Burnham are not squeezed into two narrow columns */
   .card.b-lab,.card.b-bur{min-height:190px;padding-bottom:16px}
-  /* the hero chips wrap onto a second line rather than running off the edge */
-  .hero-chips{gap:6px}
-  .hero-chips > *{max-width:100%;white-space:nowrap}
-  .flip > div{padding:16px}
   .flip > .fy{padding-bottom:100px}
   .flip > .fc{padding:14px 12px}
   .fc .cal-nav h3{flex-direction:column;gap:0}   /* the month, with its totals underneath */
   .tile-art{width:156px;height:187px;right:-20px;bottom:-24px}
   .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:68%}
   .ring-wrap{gap:18px}
-  .card{padding:16px;border-radius:20px}
   .val.otd-v{font-size:1.45rem;min-height:2.2em}
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
-  main{padding-bottom:28px}   /* the petitions note sits closer to the share buttons */
 }
 /* ------------------------------------------------------------ accessibility settings */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .rv{opacity:1;transform:none}
+  .rv{opacity:1}
   .spark span,.pb-p,.heat,.otd-years i{transform:none;opacity:1}
   .draw{stroke-dasharray:none;stroke-dashoffset:0}
 }
-@media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}.chip{background:rgba(0,0,0,.45)}}
+@media (prefers-reduced-transparency:reduce){.info-pop{background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none}}
 @media (prefers-contrast:more){:root{--label2:rgba(60,60,67,.9);--sep:rgba(60,60,67,.5)}}
 /* ---------- The boxes (calendar, running totals, tables, calculator, patterns, dots, petitions) */
 .mb{--mbar4:#24405F;--mbar:var(--viz1);--bar-peak:var(--viz2);--boat:#8C6230;--green-bg:rgba(52,199,89,.14)}
@@ -920,8 +885,8 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .cal-day .dn{font-size:.765rem;color:var(--label2);font-variant-numeric:tabular-nums}
 .mb .cal-day .dv{font-size:.882rem;font-weight:600;font-variant-numeric:tabular-nums}
 .mb .cal-day.zero .dv{color:var(--label2);font-weight:400}
-.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}.mb .cal-day.l4{color:#fff}
-.mb .cal-day.l4{background:var(--mbar4)}   /* a deeper blue so white numbers stay readable */
+.mb .cal-day.l1{--h:18%}.mb .cal-day.l2{--h:38%}.mb .cal-day.l3{--h:62%}
+.mb .cal-day.l4{color:#fff;background:var(--mbar4)}   /* a deeper blue so white numbers stay readable */
 .mb .cal-day.l2 .dn,.mb .cal-day.l3 .dn{color:var(--label);opacity:.78}
 .mb .cal-day.l4 .dn{color:#fff;opacity:.85}
 .mb .cal-day.future,.mb .cal-day.nodata{background:none;cursor:default}
@@ -977,11 +942,11 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .calc-card{padding:14px 16px;display:grid;gap:12px}
 .mb .calc-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
-.mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;min-height:44px;padding:0 10px;width:100%;min-width:0}
+.mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 10px;width:100%;min-width:0}
 .mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 @media (hover:none) and (pointer:coarse){.mb .calc-dates input::-webkit-calendar-picker-indicator{display:none}}   /* phones open the picker on tap; the icon only crowds out the year */
 .mb .presets{display:flex;flex-wrap:wrap;gap:6px}
-.mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--label);font:600 .765rem/1 var(--font);border-radius:9px;padding:0 12px;height:34px;cursor:pointer}
+.mb .presets button{position:relative;appearance:none;border:0;background:var(--fill);color:var(--label);font:600 .765rem/1 var(--font);border-radius:999px;padding:0 12px;height:34px;cursor:pointer}
 .mb .presets button::after{content:"";position:absolute;inset:-5px 0}
 .mb .presets button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 .mb .presets button[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 0 0 .5px var(--sep),0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)}
@@ -1017,6 +982,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .card.clamp{max-height:520px;-webkit-mask-image:linear-gradient(#000 calc(100% - 110px),transparent);mask-image:linear-gradient(#000 calc(100% - 110px),transparent)}
 .more-btn{display:flex;align-items:center;gap:6px;margin:12px auto 0;min-height:36px;padding:0 16px;border:0;border-radius:999px;background:var(--fill);color:var(--label);font:600 .824rem/1 var(--font);cursor:pointer;touch-action:manipulation;transition:background-color .2s}
 .more-btn svg{width:12px;height:12px;transition:transform .25s ease}
+.more-btn{position:relative}.more-btn::after{content:"";position:absolute;inset:-4px 0}   /* a 44pt tap target */
 .more-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
 .more-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (hover:hover){.more-btn:hover{background:var(--fill2)}}
@@ -1024,27 +990,20 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 /* Wider screens: the boxes sit in two columns, each column stacked on its own so no box is stretched, leaves a gap beside it
    or runs into its neighbour; the big ones keep the full width. Every two-column part shares the same 24px gutter, so the
    edges line up all the way down the page. Phones: the columns fall away and everything runs in one line */
-.cols,.cols > .col,.duo-cols > .col{display:contents}
+.duo-cols > .col{display:contents}
 @media (min-width:900px){
-  .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;align-items:start}
-  .cols > .col{display:flex;flex-direction:column;gap:40px;min-width:0}
   .duo-cols{align-items:start}
   .duo-cols > .col{display:flex;flex-direction:column;gap:14px;min-width:0}
   .duo,.bento{column-gap:24px}
-  .cols > .col > section,.duo-cols > .col > .card{max-width:100%}
+  .duo-cols > .col > .card{max-width:100%}
 }
-/* touch screens hide Every Person, so its column would stand empty: the other boxes share both columns instead */
-
-/* Night: every box is frosted glass */
-
 /* "2026 so far": a plain card, the ring in navy, the three figures marked with plain bars */
 #ytdBox .ring{overflow:visible}
-#ytdBox .ring .arc{filter:none}
 #ytdBox .ring-num{letter-spacing:-.035em}
 #ytdBox .ring-legend > div{position:relative;padding-left:14px}
-#ytdBox .ring-legend > div::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:3px;border-radius:3px;background:var(--viz1);box-shadow:none}
-#ytdBox .ring-legend > div:nth-child(2)::before{background:var(--label3);box-shadow:none}
-#ytdBox .ring-legend > div:nth-child(3)::before{background:var(--viz2);box-shadow:none}
+#ytdBox .ring-legend > div::before{content:"";position:absolute;left:0;top:3px;bottom:3px;width:3px;border-radius:3px;background:var(--viz1)}
+#ytdBox .ring-legend > div:nth-child(2)::before{background:var(--label3)}
+#ytdBox .ring-legend > div:nth-child(3)::before{background:var(--viz2)}
 /* the graphs in quiet, flat colours: this year in navy, last year in ochre */
 .mb .key-row i.k-cur{background:var(--viz1);height:4px}
 .mb .key-row i.k-last{background:var(--viz2);height:4px}
@@ -1053,8 +1012,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .chart #chartBars rect{opacity:.85}
 .chart .has-sel #chartBars rect:not(.on){opacity:.35}
 /* The cards that drop from those buttons, as on Facebook: a solid card with a big bold title, pill tabs and roomy rows */
-.tb-pop{z-index:65;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;max-height:calc(100dvh - 90px);background:var(--card);color:var(--label);transform-origin:var(--tb-o,top right);animation:tbDrop .5s cubic-bezier(.34,1.45,.5,1) both}
-.tb-pop[hidden]{display:none}
+.tb-pop{z-index:65;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;max-height:calc(100dvh - 90px);color:var(--label);transform-origin:var(--tb-o,top right);animation:tbDrop .5s cubic-bezier(.34,1.45,.5,1) both}
 .tb-pop:focus{outline:0}
 /* opening: the card springs out of its button, then its rows float up one after another; closing: a quick shrink back */
 @keyframes tbDrop{0%{opacity:0;transform:translateY(-10px) scale(.6);filter:blur(4px)}55%{opacity:1;filter:blur(0)}100%{transform:none}}
@@ -1078,6 +1036,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .tb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
 .tb-x{flex:none;display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:none;color:var(--label2);cursor:pointer}
 .tb-x svg{width:11px;height:11px}
+.tb-x{position:relative}.tb-x::after{content:"";position:absolute;inset:-5px}   /* a 44pt tap target */
 @media (hover:hover){.tb-x:hover{background:var(--fill)}}
 /* Appearance */
 .th-pop{width:min(300px,calc(100vw - 24px))}
@@ -1104,7 +1063,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px 8px 14px}
 .sc-count{color:var(--label2);font-size:.706rem;font-variant-numeric:tabular-nums}
 .sc-count.near{color:var(--orange-t)}
-.sc-send{appearance:none;border:0;position:relative;flex:none;height:34px;padding:0 14px;border-radius:9px;display:inline-flex;align-items:center;gap:5px;
+.sc-send{appearance:none;border:0;position:relative;flex:none;height:34px;padding:0 14px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;
   font:600 .765rem/1 var(--font);color:var(--label);background:var(--card);box-shadow:0 0 0 .5px var(--sep);cursor:pointer;touch-action:manipulation;transition:background .2s ease,opacity .2s ease}   /* the graphs' 1M / 3M / 1Y buttons */
 .sc-send svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .sc-send::after{content:"";position:absolute;inset:-6px -4px}
@@ -1153,18 +1112,13 @@ html{scroll-padding-top:84px}
 /* a soft wash of the logo's blue and orange behind everything, fixed, so the page feels lit from above */
 body::before{content:"";position:fixed;z-index:-1;left:-10vw;right:-10vw;top:-20vh;height:95vh;pointer-events:none;
   background:radial-gradient(55% 55% at 18% 18%,var(--amb1),transparent 70%),radial-gradient(40% 45% at 92% 6%,var(--amb2),transparent 72%),radial-gradient(60% 50% at 62% 48%,var(--amb3),transparent 75%)}
-@media (min-width:1360px) and (hover:hover) and (pointer:fine){body{margin-left:0}}
 
 /* ------------------------------------------------------------ the bar at the top: logo, the tabs, the round buttons */
-body .top-row{position:sticky;top:0;left:auto;right:auto;z-index:49;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;
-  padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,env(safe-area-inset-right,0px)) 10px var(--gut);margin:0 auto;max-width:none}
+body .top-row{position:sticky;top:0;z-index:49;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,env(safe-area-inset-right,0px)) 10px var(--gut);margin:0 auto;pointer-events:none}
 body .top-row > *{position:relative;z-index:1}
-.top-row::before{content:"";position:absolute;inset:0;z-index:0;background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);
-  box-shadow:0 .5px 0 var(--glass-line);opacity:0;transition:opacity .35s ease}
-.scrolled .top-row::before{opacity:1}
 @media (min-width:1212px){body .top-row{padding-left:calc((100% - 1148px) / 2);padding-right:calc((100% - 1148px) / 2)}}
 .top-act{justify-self:end}
-.top-brand h1{font-size:1.18rem;letter-spacing:-.02em}
 .tb-pop{position:fixed;border-radius:24px;background:color-mix(in srgb,var(--card) 86%,transparent);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);
   box-shadow:inset 0 0 0 .5px var(--glass-hi),0 0 0 .5px var(--glass-line),0 24px 60px rgba(0,0,0,.22);padding:18px 18px 12px}
 
@@ -1172,12 +1126,11 @@ body .top-row > *{position:relative;z-index:1}
 .tabbar{display:flex;align-items:center;gap:10px;pointer-events:auto}
 .tabs{position:relative;display:flex;padding:4px;border-radius:999px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(190%);backdrop-filter:blur(24px) saturate(190%)}
 .tabs button{position:relative;z-index:1;appearance:none;border:0;background:none;display:flex;align-items:center;gap:7px;height:36px;padding:0 16px;border-radius:999px;
-  font:600 .882rem/1 var(--font);letter-spacing:-.01em;color:var(--label);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:color .3s ease}
+  font:600 .882rem/1 var(--font);letter-spacing:-.01em;color:var(--label);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .tabs button svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .tabs button[aria-selected="true"]{color:var(--blue)}
 .tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
-.tab-ind{position:absolute;z-index:0;left:0;top:4px;bottom:4px;width:0;border-radius:999px;background:var(--pill);transform-origin:center;pointer-events:none}
-.tabs button:active{transform:scale(.94)}
+.tab-ind{position:absolute;z-index:0;left:0;top:4px;bottom:4px;width:0;border-radius:999px;transform-origin:center;pointer-events:none}
 @media (hover:hover){.tabs button[aria-selected="false"]:hover{color:var(--blue)}}
 
 /* phones: the tab bar floats at the bottom of the screen, as in iOS, with Share in its own circle beside it */
@@ -1217,12 +1170,7 @@ body .top-row > *{position:relative;z-index:1}
 main{display:block;padding:6px max(16px,env(safe-area-inset-right,0px)) 40px var(--gut)}
 .page{display:grid;grid-template-columns:minmax(0,1fr);gap:46px}
 .page:not(.on){display:none}
-.page.on{animation:pgIn .55s var(--ease-out) both}
-main[data-dir="back"] .page.on{animation-name:pgBack}
-@keyframes pgIn{from{opacity:0;transform:translateX(28px)}}
-@keyframes pgBack{from{opacity:0;transform:translateX(-28px)}}
 @keyframes pgUp{from{opacity:0;transform:translateY(16px)}}
-@media (prefers-reduced-motion:reduce){.page.on{animation:none}}
 /* large titles, as in Apple News: the date above in small capitals, the page name big and bold */
 .lt-head{margin:10px 6px -16px}
 .lt-eyebrow{margin:0 0 2px;font:600 .765rem/1.2 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--label2)}
@@ -1268,10 +1216,8 @@ section[aria-labelledby="hWho"] .card{--tint:var(--indigo);--ic-d:block;--ic:url
 @media (max-width:600px){.val{font-size:2.1rem}}
 
 /* ------------------------------------------------------------ Today: the map as a window, the day's figure on a panel of glass */
-main .hero{width:auto;margin:0;height:min(76vh,760px);height:min(76svh,760px);min-height:500px;max-height:none;
+main .hero{margin:0;height:min(76vh,760px);height:min(76svh,760px);min-height:500px;
   box-shadow:0 0 0 .5px var(--card-line),0 30px 70px -30px rgba(0,30,80,.45),0 4px 14px rgba(0,0,0,.08)}
-.hero::after{background:linear-gradient(to bottom,rgba(0,0,0,.16) 0,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 58%,rgba(0,0,0,.28) 100%)}
-.scroll-cue{display:none}
 .hero-in{width:auto;pointer-events:auto;animation:panelIn .9s var(--ease-spring) .15s both}
 @keyframes panelIn{from{opacity:0;transform:translateY(24px) scale(.96)}}
 .hero-quiet{margin:0}
@@ -1285,7 +1231,6 @@ main .hero{width:auto;margin:0;height:min(76vh,760px);height:min(76svh,760px);mi
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .map-news{padding:9px 9px 9px 12px;background:rgba(16,20,28,.42);-webkit-backdrop-filter:blur(28px) saturate(190%);backdrop-filter:blur(28px) saturate(190%)}
 @media (max-width:719px){
-  main .hero{height:calc(100svh - 186px - var(--busy-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
   .hero-quiet .cal{width:64px;height:68px;border-radius:17px;grid-template-rows:23px 1fr}
   .hero-quiet .cal span{font-size:.647rem;line-height:23px}
   .hero-quiet .cal b{font-size:2.2rem}
@@ -1298,7 +1243,6 @@ button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 /* ------------------------------------------------------------ the share sheet (the old side card): a card in the middle on computers, a sheet from the bottom on phones */
 body .side-share{display:flex;flex-direction:column;position:fixed;z-index:80;left:50%;top:50%;bottom:auto;width:min(360px,calc(100vw - 32px));
   transform:translate(-50%,-50%);border-radius:30px;overflow:hidden;background:#000;color:#fff;box-shadow:0 0 0 .5px rgba(255,255,255,.1),0 40px 100px rgba(0,0,0,.5);animation:ssIn .5s var(--ease-spring) both}
-body .side-share[hidden]{display:none}
 @keyframes ssIn{from{opacity:0;transform:translate(-50%,-46%) scale(.94)}}
 .side-share.out{animation:ssOut .2s ease-in both}
 @keyframes ssOut{to{opacity:0;transform:translate(-50%,-48%) scale(.96)}}
@@ -1307,22 +1251,15 @@ body .side-share[hidden]{display:none}
 @keyframes fadeScrim{from{opacity:0}}
 .ss-x{position:absolute;z-index:2;top:14px;width:32px;height:32px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer}
 .ss-x svg{width:11px;height:11px}
+.ss-x::after{content:"";position:absolute;inset:-6px}   /* a 44pt tap target */
 .ss-x:focus-visible{outline:2px solid #0A84FF;outline-offset:2px}
-@media (max-width:719px){
-  body .side-share{left:0;right:0;top:auto;bottom:0;width:auto;height:min(620px,calc(100dvh - 40px));transform:none;border-radius:30px 30px 0 0;animation-name:ssUp}
-  @keyframes ssUp{from{transform:translateY(100%)}}
-  .side-share.out{animation-name:ssDown;animation-duration:.25s}
-  @keyframes ssDown{to{transform:translateY(100%)}}
-}
-.ft-share{display:none}
 body .side-share{height:auto;max-height:calc(100dvh - 48px)}
-body .side-share .ss-art{flex:none;height:230px}
-body .side-share .ss-art svg{top:0}
 /* the pop-ups over the map: nearly solid, so the glass panel underneath doesn't show through the words */
 .info-pop,.info-pop.wx-pop{background-color:color-mix(in srgb,var(--card) 94%,transparent)}
 
 /* ------------------------------------------------------------ reveal: a touch more lift, and a spring at the end */
 .rv{transform:translateY(28px) scale(.97);transition:opacity .8s var(--ease-out),transform .9s cubic-bezier(.2,.9,.25,1.04)}
+@media (prefers-reduced-motion:reduce){.rv{transform:none}}
 footer{max-width:1148px}
 
 /* ============================================================ Apple's Human Interface Guidelines, applied (October 2026)
@@ -1331,10 +1268,9 @@ footer{max-width:1148px}
    the content; the bars stay quiet and native. */
 
 /* the toolbar: no bar behind it any more, just the controls floating on glass, and a soft scroll edge where content passes beneath */
-.top-row::before{display:none}
 .edge{position:fixed;left:0;right:0;z-index:48;pointer-events:none;opacity:0;transition:opacity .3s ease;
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.edge-t{top:0;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 78%,transparent),color-mix(in srgb,var(--bg) 0%,transparent))}
+.edge-t{top:0}
 .edge-b{bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 104px);display:none;background:linear-gradient(to top,color-mix(in srgb,var(--bg) 70%,transparent),color-mix(in srgb,var(--bg) 0%,transparent));
   -webkit-mask-image:linear-gradient(to top,#000 40%,transparent);mask-image:linear-gradient(to top,#000 40%,transparent)}
 .scrolled .edge-t{opacity:1}
@@ -1342,8 +1278,6 @@ footer{max-width:1148px}
 /* the toolbar's buttons share one capsule of glass, as related bar items do in iOS and macOS; symbols, no borders */
 .top-act{gap:2px;padding:3px;border-radius:999px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(190%);backdrop-filter:blur(24px) saturate(190%);
   box-shadow:inset 0 0 0 .5px var(--glass-hi),var(--glass-shadow)}
-.tb-btn{width:40px;height:40px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
-.tb-btn[aria-expanded="true"]{background:color-mix(in srgb,var(--blue) 16%,transparent)}
 @media (hover:hover){.tb-btn:not([aria-expanded="true"]):hover{background:var(--pill)}}
 .tb-btn svg{width:21px;height:21px}
 .tb-share svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:-2px}
@@ -1364,7 +1298,7 @@ footer{max-width:1148px}
 .tabs .i-f .thick{stroke-width:2.7}
 
 /* switching tabs is frequent, so it's a quick fade, not a slide, as in iOS */
-.page.on,main[data-dir="back"] .page.on{animation:pgFade .22s ease-out both}
+.page.on{animation:pgFade .22s ease-out both}
 @keyframes pgFade{from{opacity:0}}
 .page.first{animation:pgUp .6s var(--ease-out) both}
 
@@ -1397,14 +1331,11 @@ main .hero{border-radius:32px}
   #lmap .leaflet-bottom.leaflet-right{left:0}
   #lmap .leaflet-control-attribution{float:none;margin:0 14px 4px;background:none;padding:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px}
 }
-
-/* controls in the cards: capsules, as iOS draws buttons and segmented controls now */
-.flip-go,.flip-go.back,.sc-send,.more-btn{border-radius:999px}
-.flip-go{padding:0 10px 0 14px}.flip-go.back{padding:0 14px 0 10px}
-.seg{border-radius:999px;padding:3px}
-.seg button{border-radius:999px;height:30px}
-.mb .presets button,.presets button{border-radius:999px}
-.mb .calc-dates input{border-radius:12px}
+/* phones on their side: the map fills the screen below the bar, rather than running past the bottom of it */
+@media (max-height:500px) and (orientation:landscape){
+  main .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
+  .hero-chips{margin-top:10px}
+}
 
 /* pop-ups and cards that open over the page: Dark Mode's elevated colours, so they come forward */
 :root[data-theme="dark"] .tb-pop,:root[data-theme="dark"] .info-pop,:root[data-theme="dark"] .info-pop.wx-pop{background-color:rgba(44,44,46,.7)}
@@ -1413,20 +1344,15 @@ main .hero{border-radius:32px}
 /* the share sheet: dimmed behind, a grabber on phones to drag it down, Close on the leading side */
 .share-scrim{background:rgba(0,0,0,.4)}
 .ss-x{left:14px;right:auto}
-.ss-grab{display:none;position:absolute;z-index:2;top:7px;left:50%;width:36px;height:5px;margin-left:-18px;border-radius:3px;background:rgba(255,255,255,.35)}
-@media (max-width:719px){.ss-grab{display:block}.ss-x{top:18px}}
+@media (max-width:719px){.ss-x{top:18px}}
 .side-share.dragging{animation:none;transition:none}
-body .side-share .ss-art{height:clamp(72px,calc(100dvh - 540px),230px)}
-/* the night scene grows out of the black sheet: always whole (the lighthouse never cut), the sky and sea running on to the edges, the top fading in */
-body .side-share .ss-art{margin-top:6px;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 46%);mask-image:linear-gradient(to bottom,transparent,#000 46%)}
-body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 /* scroll edges strong enough that the bars stay legible over busy content, as iOS does with its hard-style edge on phones */
 .edge-t{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 94%,transparent) 0,color-mix(in srgb,var(--bg) 80%,transparent) 55%,color-mix(in srgb,var(--bg) 0%,transparent));
   -webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent);mask-image:linear-gradient(to bottom,#000 72%,transparent);height:calc(env(safe-area-inset-top,0px) + 92px)}
 @media (max-width:719px){
   .edge-b{height:calc(env(safe-area-inset-bottom,0px) + 116px);background:linear-gradient(to top,color-mix(in srgb,var(--bg) 92%,transparent) 0,color-mix(in srgb,var(--bg) 78%,transparent) 55%,color-mix(in srgb,var(--bg) 0%,transparent));-webkit-mask-image:linear-gradient(to top,#000 70%,transparent);mask-image:linear-gradient(to top,#000 70%,transparent)}
   .tabs{background:color-mix(in srgb,var(--glass) 100%,var(--bg) 25%)}
-}   /* short phones: the picture gives way so the buttons all fit */
+}
 
 /* graphs: the scale sits on the trailing side, so the bars line up with the card's leading edge */
 .chart text{font-variant-numeric:tabular-nums}
@@ -1435,6 +1361,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 @media (prefers-reduced-transparency:reduce){
   .tabs,.top-act,.tb-pop,.hero-in,.map-news,.ves-list{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   .hero-in{color:var(--label)}
+  .chip{background:rgba(0,0,0,.45)}
   .edge{-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 @media (prefers-contrast:more){
@@ -1461,7 +1388,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   body .info-pop{padding:18px}
   body .info-pop.fu-pop{overflow:hidden!important}   /* the clock tucks into the corner; this card is short enough not to scroll */
   body .am-sheet{padding:20px 18px 16px}
-  .ss-grab,.am-grab{display:none!important}
+  .am-grab{display:none!important}
   body .side-share{touch-action:auto}
   .pop-x{z-index:95!important}
   /* the dimmed page behind: drawn on the page itself, so a tap on it is a tap outside, which closes the card */
@@ -1482,7 +1409,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 <p class="busy-note" id="busyNote" role="status">We are experiencing higher traffic than usual. We are working to optimise the site for everyone.</p>
 <div class="share-scrim" id="shareScrim" hidden></div>
 <aside class="side-share" id="shareSheet" role="dialog" aria-modal="true" aria-labelledby="ssTitle" hidden>
-  <i class="ss-grab" aria-hidden="true"></i>
   <button type="button" class="ss-x" id="shareX" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
   <h2 id="ssTitle">Share Channel Crossings with people who might find the figures useful</h2>
   <div class="ss-btns">
@@ -1530,8 +1456,8 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 <script>/* the name and switches sit below the notice, however many lines it wraps to */
 (function(){var n=document.getElementById("busyNote");function f(){document.documentElement.style.setProperty("--busy-h",n.offsetHeight+"px")}f();addEventListener("resize",f)})();</script>
 
-<!-- the appearance switch again at the top, in line with the map's right edge -->
-  <div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><span class="inline-title" id="inlineTitle" aria-hidden="true">Channel Crossings</span></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="thick" d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="12" width="4" height="8.5" rx="1.3"/><rect x="10" y="7.5" width="4" height="13" rx="1.3"/><rect x="16.5" y="3.5" width="4" height="17" rx="1.3"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="3" y="11.5" width="5" height="9.5" rx="1.6"/><rect class="solid" x="9.5" y="7" width="5" height="14" rx="1.6"/><rect class="solid" x="16" y="3" width="5" height="18" rx="1.6"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4z"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="9" cy="8" r="3.8"/><path class="solid" d="M2.4 20c.5-3.9 3.2-6.3 6.6-6.3s6.1 2.4 6.6 6.3a.8.8 0 0 1-.8.9H3.2a.8.8 0 0 1-.8-.9z"/><circle class="solid" cx="16.3" cy="8.3" r="3"/><path class="solid" d="M16.9 13.3c2.6.3 4.4 2.3 4.8 5.6a.8.8 0 0 1-.8.9h-3.7c-.2-2.6-1.4-4.8-3.3-6.1.9-.3 1.9-.5 3-.4z"/></svg><span>People</span></button><button type="button" role="tab" id="tab-studio" data-tab="studio" aria-selected="false" aria-controls="pg-studio" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v8.5h8.5A8.5 8.5 0 1 1 12 3.5z"/><path d="M15 2.6a7 7 0 0 1 6.4 6.4H15z"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="solid" d="M11 3.1v9.9h9.9A9.3 9.3 0 1 1 11 3.1z"/><path class="solid" d="M14.2 1.8a8.2 8.2 0 0 1 8 8h-8z"/></svg><span>Studio</span></button></div></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="otBtn" aria-haspopup="dialog" aria-controls="otPop" aria-expanded="false" aria-label="On This Day" title="On This Day" hidden><svg class="ic-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15.2" r="1.1" fill="currentColor" stroke="none"/></svg></button><button type="button" class="tb-btn tb-share" id="shareBtn" aria-label="Share Channel Crossings" title="Share" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></div></div></div>
+<!-- the bar at the top: the logo, the tabs (a floating bar at the bottom on phones) and the round buttons -->
+<div class="top-row"><div class="top-brand"><a class="lt-logo" href="./" aria-label="Channel Crossings, back to the top"><svg viewBox="0 0 400 400" aria-hidden="true"><circle cx="200" cy="200" r="200" fill="#007AFF"></circle><path d="M302.9 149.1 A72 72 0 1 0 302.9 250.9" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="round"></path><path d="M218.9 149.1 A72 72 0 1 0 209.3 259.0" fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"></path><path d="M239.5 270.9 A72 72 0 0 1 184.3 224.6" fill="none" stroke="#007AFF" stroke-width="44" stroke-linecap="butt"></path><path d="M243.2 271.5 A72 72 0 0 1 183.1 221.1" fill="none" stroke="#FF9F0A" stroke-width="30" stroke-linecap="butt"></path></svg></a><span class="inline-title" id="inlineTitle" aria-hidden="true">Channel Crossings</span></div><nav class="tabbar" aria-label="Pages"><div class="tabs" role="tablist" id="tabs"><span class="tab-ind" id="tabInd" aria-hidden="true"></span><button type="button" role="tab" id="tab-today" data-tab="today" aria-selected="true" aria-controls="pg-today"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="thick" d="M2.5 8.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 13c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 17.5c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/></svg><span>Today</span></button><button type="button" role="tab" id="tab-trends" data-tab="trends" aria-selected="false" aria-controls="pg-trends" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="12" width="4" height="8.5" rx="1.3"/><rect x="10" y="7.5" width="4" height="13" rx="1.3"/><rect x="16.5" y="3.5" width="4" height="17" rx="1.3"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><rect class="solid" x="3" y="11.5" width="5" height="9.5" rx="1.6"/><rect class="solid" x="9.5" y="7" width="5" height="14" rx="1.6"/><rect class="solid" x="16" y="3" width="5" height="18" rx="1.6"/></svg><span>Trends</span></button><button type="button" role="tab" id="tab-people" data-tab="people" aria-selected="false" aria-controls="pg-people" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 19.5c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4z"/><path d="M15.6 4.9a3.3 3.3 0 0 1 0 6.3M17.6 14.4c2 .7 3.3 2.4 3.6 5.1"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><circle class="solid" cx="9" cy="8" r="3.8"/><path class="solid" d="M2.4 20c.5-3.9 3.2-6.3 6.6-6.3s6.1 2.4 6.6 6.3a.8.8 0 0 1-.8.9H3.2a.8.8 0 0 1-.8-.9z"/><circle class="solid" cx="16.3" cy="8.3" r="3"/><path class="solid" d="M16.9 13.3c2.6.3 4.4 2.3 4.8 5.6a.8.8 0 0 1-.8.9h-3.7c-.2-2.6-1.4-4.8-3.3-6.1.9-.3 1.9-.5 3-.4z"/></svg><span>People</span></button><button type="button" role="tab" id="tab-studio" data-tab="studio" aria-selected="false" aria-controls="pg-studio" tabindex="-1"><svg class="i-o" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v8.5h8.5A8.5 8.5 0 1 1 12 3.5z"/><path d="M15 2.6a7 7 0 0 1 6.4 6.4H15z"/></svg><svg class="i-f" viewBox="0 0 24 24" aria-hidden="true"><path class="solid" d="M11 3.1v9.9h9.9A9.3 9.3 0 1 1 11 3.1z"/><path class="solid" d="M14.2 1.8a8.2 8.2 0 0 1 8 8h-8z"/></svg><span>Studio</span></button></div></nav><div class="top-act"><button type="button" class="tb-btn" id="thBtn" aria-haspopup="menu" aria-controls="thPop" aria-expanded="false" aria-label="Appearance" title="Appearance"><span id="thIc" style="display:contents"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg></span></button><button type="button" class="tb-btn" id="scBtn" aria-haspopup="dialog" aria-controls="scPop" aria-expanded="false" aria-label="Report Channel Crossing" title="Report Channel Crossing"><svg class="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button type="button" class="tb-btn" id="otBtn" aria-haspopup="dialog" aria-controls="otPop" aria-expanded="false" aria-label="On This Day" title="On This Day" hidden><svg class="ic-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15.2" r="1.1" fill="currentColor" stroke="none"/></svg></button><button type="button" class="tb-btn tb-share" id="shareBtn" aria-label="Share Channel Crossings" title="Share" aria-haspopup="dialog" aria-controls="shareSheet" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14.5V3M8 6.6L12 2.7l4 3.9"/><path d="M8.5 9.5H6.8a1.8 1.8 0 0 0-1.8 1.8v8.4a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8v-8.4a1.8 1.8 0 0 0-1.8-1.8h-1.7"/></svg></button></div></div>
 
 <div class="info-pop fu-pop" id="popFU" role="dialog" aria-label="Figure updates" data-nosnippet hidden>
   <svg class="fu-clock" viewBox="4 4 112 112" aria-hidden="true"><defs><radialGradient id="fuFace" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="var(--card)"/><stop offset="1" stop-color="var(--fill)"/></radialGradient></defs>
@@ -1622,7 +1548,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
         <p>Lifeboats, Border Force and navy ships in the Channel appear here in real time. Grey dinghies show the day's crossings.</p>
         <ul aria-label="Colours on the map"><li class="lv-rescue"><i></i>Lifeboats</li><li class="lv-border"><i></i>Border Force</li><li class="lv-navy"><i></i>Navy</li><li class="lv-aircraft"><i></i>Aircraft</li></ul>
       </div>
-      <button type="button" id="liveTipX" aria-label="Close tip"><svg viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7"/></svg></button>
+      <button type="button" id="liveTipX" aria-label="Close tip"><svg viewBox="0 0 10 10" aria-hidden="true" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7"/></svg></button>
     </div>
 
     <!-- Across the top of the map: breaking news about small boats from UK news outlets (news.json, updated every 15 minutes),
@@ -1658,7 +1584,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
         <button type="button" class="chip" id="chipLast" aria-expanded="false" aria-controls="popLast" hidden><span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
       </div>
     </div>
-    <svg class="scroll-cue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
   </header>
 
     <!-- ============================================================ AT A GLANCE -->
@@ -1703,9 +1628,9 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
             <div class="fc mb" id="calFace" role="group" aria-label="Calendar" inert>
               <div class="flip-h"><button type="button" class="flip-go back" id="flipYear" aria-controls="yearFace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span id="flipYearT">This year so far</span></button></div>
               <div class="cal-nav">
-                <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+                <button type="button" class="cal-btn" id="calPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
                 <h3 id="calTitle" aria-live="polite">–</h3>
-                <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+                <button type="button" class="cal-btn" id="calNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
               </div>
               <div class="cal-grid" id="calGrid"></div>
               <div class="cal-detail" id="calDetail" aria-live="polite"></div>
@@ -2023,8 +1948,9 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
 
   /* ---------------------------------------------------- hero parallax */
   const hero = $("hero"), heroMap = $("heroMap");
-  let heroH = hero.offsetHeight;
-  addEventListener("resize", () => heroH = hero.offsetHeight, {passive:true});
+  let heroH = hero.offsetHeight;   // kept up to date when the map card changes size (fitHero grows it too), never read while scrolling
+  if("ResizeObserver" in window) new ResizeObserver(() => { heroH = hero.offsetHeight; }).observe(hero);
+  else addEventListener("resize", () => { heroH = hero.offsetHeight; });
   function onScroll(){
     const y = scrollY;
     if(!reduced && y < heroH){ heroMap.style.transform = "translateY(" + Math.round(y * .35) + "px)";   /* whole pixels, so the map's text never lands between pixels and blurs */ }
@@ -2153,19 +2079,20 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       const mins = (Date.now() - new Date(v.seen)) / 6e4;
       if(!(mins < 180) || !VESSEL_KIND[v.kind] || !official(v) || typeof v.lat !== "number" || typeof v.lon !== "number") continue;
       const moving = v.sog >= 1, dir = v.hdg ?? v.cog, name = v.name || VESSEL_KIND[v.kind];
-      const shape = v.kind === "aircraft" ? PLANE : SHIP, dirTxt = dir == null ? "–" : Math.round(dir) + "°";
+      const shape = v.kind === "aircraft" ? PLANE : SHIP, dirTxt = dir == null ? "–" : Math.round(dir) + "°", flag = flagOf(v.mmsi);
+      const icon = '<svg viewBox="0 0 16 30" aria-hidden="true">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg>";   // for the card and the list
       const [seenN, seenU] = mins < 1 ? ["Now", ""] : mins < 60 ? [Math.round(mins), " min"] : [Math.floor(mins / 60), " hr"];
       const m = L.marker([v.lat, v.lon], {pane:"labels", keyboard:false, alt:name, icon:L.divIcon({className:"am-ves " + v.kind + (mins > 60 ? " old" : ""), iconSize:[16, 30],
         html:'<svg viewBox="0 0 16 30" style="transform:rotate(' + (dir ?? 0) + 'deg)" aria-hidden="true">' + (moving && v.kind !== "aircraft" ? WAKE : "") + shape + "</svg>"})})
-        .bindTooltip('<div class="vt-h"><span class="vt-ic lv-' + v.kind + '"><svg viewBox="0 0 16 30" aria-hidden="true">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg></span>"
-          + "<div><b>" + clean(name) + "</b><span>" + (flagOf(v.mmsi) ? flagOf(v.mmsi) + " · " : "") + (v.name ? VESSEL_KIND[v.kind] : "Name not broadcast") + "</span></div></div>"
+        .bindTooltip('<div class="vt-h"><span class="vt-ic lv-' + v.kind + '">' + icon + "</span>"
+          + "<div><b>" + clean(name) + "</b><span>" + (flag ? flag + " · " : "") + (v.name ? VESSEL_KIND[v.kind] : "Name not broadcast") + "</span></div></div>"
           + '<div class="vt-stats"><div><span>Speed</span><em>' + (moving ? Math.round(v.sog) + "</em><small> kn" : "0</em><small> stopped") + "</small></div>"
           + "<div><span>Heading</span><em>" + dirTxt + "</em><small> " + (dir == null ? "" : compass(dir)) + "</small></div>"
           + "<div><span>Seen</span><em>" + seenN + "</em><small>" + seenU + "</small></div></div>"
           + "<p>Live from its AIS transponder" + (v.mmsi ? " · MMSI " + clean(v.mmsi) : "") + "</p>",
           {direction:"top", offset:[0, -16], className:"am-ves-tip"})
         .on("click", e => { L.DomEvent.stopPropagation(e); openMapCard(e.target); }).addTo(vesselLayer);
-      if(inChannel(v)) shown.push({v, name, mins, moving, shape, m});
+      if(inChannel(v)) shown.push({v, name, mins, moving, icon, m});
     }
     // the list down the left, always there: only vessels out in the Channel itself (not moored in a harbour or away in the Solent),
     // newest first, or a line saying there are none
@@ -2173,10 +2100,10 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     box.hidden = false; ul.textContent = ""; box.classList.toggle("none", !shown.length);
     $("vesCount").textContent = shown.length || "";
     if(!shown.length){ const li = document.createElement("li"); li.className = "vl-none"; li.textContent = "No boats in the Channel right now"; ul.append(li); }
-    shown.sort((x, y) => x.mins - y.mins).forEach(({v, name, mins, moving, shape, m}) => {
+    shown.sort((x, y) => x.mins - y.mins).forEach(({v, name, mins, moving, icon, m}) => {
       const li = document.createElement("li"), b = document.createElement("button");
       b.type = "button"; if(mins > 60) b.className = "old";
-      b.innerHTML = '<span class="vl-ic lv-' + v.kind + '" aria-hidden="true"><svg viewBox="0 0 16 30">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg></span>"
+      b.innerHTML = '<span class="vl-ic lv-' + v.kind + '" aria-hidden="true">' + icon + "</span>"
         + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? shortKind(v) + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
         + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 60 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
       b.setAttribute("aria-label", name + ", " + VESSEL_KIND[v.kind] + ", " + (moving ? Math.round(v.sog) + " knots" : "stopped") + ", seen " + (mins < 1 ? "just now" : Math.round(mins) + " minutes ago"));
@@ -2284,16 +2211,20 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(innerWidth < 720){ if(sh.parentNode !== document.body){ sh._home = sh.parentNode; document.body.appendChild(sh); } }
     else if(sh._home && sh.parentNode !== sh._home) sh._home.appendChild(sh);
   }
+  function openSheet(html, label){
+    const sh = $("amSheet");
+    sh.querySelector(".am-sheet-in").innerHTML = html; sh.setAttribute("aria-label", label);
+    dockSheet(sh);
+    if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+    return sh;
+  }
   function openMapCard(layer){
     const tip = layer.getTooltip(); if(!tip) return;
     if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
       layer.closeTooltip(); LM.closePopup();
       ptAt = null; if(pin) pin.remove();   // a boat replaces the weather reading, so the reading's pin goes, and it isn't refreshed over the boat later
-      const sh = $("amSheet"), cls = tip.options.className || "";
-      sh.querySelector(".am-sheet-in").innerHTML = '<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>";
-      sh.setAttribute("aria-label", cls.includes("ves") ? "Boat details" : "Launch area");
-      dockSheet(sh);
-      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      const cls = tip.options.className || "";
+      openSheet('<div class="' + cls + ' in-sheet">' + tip.getContent() + "</div>", cls.includes("ves") ? "Boat details" : "Launch area");
       return;
     }
     // a clicked card stays open while the map moves beneath the pointer, until the map or another boat is clicked
@@ -2520,9 +2451,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
     if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup();
-      const sh = $("amSheet"); sh.querySelector(".am-sheet-in").innerHTML = html;
-      sh.setAttribute("aria-label", "Weather at this spot"); dockSheet(sh);
-      if(sh.hidden){ sh.hidden = false; sh.classList.remove("in"); sh.offsetWidth; sh.classList.add("in"); }
+      const sh = openSheet(html, "Weather at this spot");
       if(innerWidth >= 720 && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
       return;
     }
@@ -2722,7 +2651,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     cl.hidden = !lx;
     if(lx){ cl.querySelector("span").innerHTML = "Last crossings " + dShort.format(parse(lx.date)) + " · <b class='num'>" + fmt(lx.migrants) + "</b>"; renderLastPop(lx, last); }
     else closePop(cl);
-    boatDay = last; makeBoats(Math.min(last.boats, 16)); renderMapPop();
+    boatDay = last; makeBoats(Math.min(last.boats, 16)); renderMapPop(); repChip();
     // Year so far chip
     const yr = last.date.slice(0,4), ytd = sum(days.filter(d => d.date.slice(0,4) === yr), "migrants");
     const prev = sum(days.filter(d => d.date.slice(0,4) === String(yr - 1) && d.date.slice(5) <= last.date.slice(5)), "migrants");
@@ -3243,7 +3172,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
       $("whoNote").textContent = "Home Office, " + g.period;
     }
     if(nat && nat.top){
-
       const other = nat.other != null && nat.total ? nat.other / nat.total * 100 : null;
       $("natS").textContent = (nat.total ? fmt(nat.total) + " people, " : "") + nat.period;
       const chg = c => c == null ? "" : (c > 0 ? "▲ " : c < 0 ? "▼ " : "") + Math.abs(c) + "% on a year earlier";
@@ -3404,7 +3332,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(!grid) resetWx();   // the map falls back to this reading until the grid is in
   }
 
-
   /* ---------------------------------------------------- arrival outlook: today and tomorrow, from the forecast and past crossings.
      The base is the average day within a week either side of the date over the last three full years. Calm mornings get the
      average of the days boats did cross then, moderate ones half the base, rough ones almost none */
@@ -3447,7 +3374,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     }).join("");
   }
   function renderAll(){ renderHero(); renderGlance(); renderOtd(); drawHeat(); drawYears(); renderRecords(); renderMain(); drawChart(); renderPred(); }
-
 
   /* ---------------------------------------------------- the boxes: calendar, running totals,
      between two dates, quiet spells, patterns, every person and petitions */
@@ -3638,7 +3564,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   if(window.ResizeObserver){ const ro = new ResizeObserver(fitDd); ddFaces.forEach(f => ro.observe(f)); }
   narrow.addEventListener("change", fitDd); fitDd();
 
-
   // ---- Year by year race
   // drawRace builds the chart once per set of figures or width; moveRace only moves the line, the dots and the box of figures
   let race = null, raceDay = null, raceSayT = 0, raceKeep = null, raceYrs = null;
@@ -3786,7 +3711,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   function calc(){
     if(!sorted.length) return;
     const a = $("calcFrom").value, b = $("calcTo").value;
-    if(!a || !b){ return; }
+    if(!a || !b) return;
     const [from, to] = a <= b ? [a, b] : [b, a];
     const first = sorted[0].date, last = sorted[sorted.length-1].date;
     const span = sorted.filter(d=>d.date>=from && d.date<=to);
@@ -3972,7 +3897,6 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     let lw = 0, t; new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw && sorted.length){ lw = w; clearTimeout(t); t = setTimeout(fn, 60); } }).observe($(id));
   });
 
-
   /* ---------------------------------------------------- Report Channel Crossing */
   // A short private form: one box and a Post button.
   // Sent through Web3Forms to the inbox its access key was made for; nothing is kept on the site.
@@ -4003,7 +3927,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
   }
 
   /* ---------------------------------------------------- Last 7 days: the graph, or the List view */
-  var wkAll = [], wkShown = 0;   // var: the figures can arrive before this line has run
+  let wkAll = [], wkShown = 0;
   function wkMonth(d){ return parse(d.date).toLocaleDateString("en-GB",{month:"long", year:"numeric", ...UTC}); }
   function wkAdd(n){
     const ul = $("wkDays"), part = wkAll.slice(wkShown, wkShown + n); if(!part.length) return;
@@ -4015,7 +3939,7 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     wkMonSet();
   }
   // the month bar: the month of the first row showing at the top of the list (found by halving, so it stays quick over 3,000 rows)
-  var wkMonRaf = 0;
+  let wkMonRaf = 0;
   function wkMonSet(){
     wkMonRaf = 0;
     const ul = $("wkDays"), rows = ul.children, top = ul.scrollTop; let lo = 0, hi = rows.length - 1;
@@ -4055,9 +3979,9 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     card.id = card.id || "moreBox" + n; btn.setAttribute("aria-controls", card.id); btn.setAttribute("aria-expanded", "false");
     btn.innerHTML = '<span>Show more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
     card.after(btn);
-    let open = false, raf = 0;
-    const fit = () => { raf = 0; const tall = card.scrollHeight > CLAMP_FROM; btn.hidden = !tall; card.classList.toggle("clamp", tall && !open); };
-    const later = () => { clearTimeout(raf); raf = setTimeout(fit, 200); };   // once the numbers stop counting, not every frame
+    let open = false, fitT = 0;
+    const fit = () => { fitT = 0; const tall = card.scrollHeight > CLAMP_FROM; btn.hidden = !tall; card.classList.toggle("clamp", tall && !open); };
+    const later = () => { clearTimeout(fitT); fitT = setTimeout(fit, 200); };   // once the numbers stop counting, not every frame
     btn.addEventListener("click", () => {
       open = !open; btn.setAttribute("aria-expanded", open); btn.querySelector("span").textContent = open ? "Show less" : "Show more"; fit();
       if(!open && card.getBoundingClientRect().top < 0) card.scrollIntoView({block:"start", behavior:reduced ? "auto" : "smooth"});   // closing from far down: back to the top of the box
@@ -4141,18 +4065,22 @@ body .side-share .ss-art svg{inset:0;width:100%;height:100%;max-height:none}
     if(animate && !reduced){ const st = $("newsStage"); st.classList.remove("in"); st.offsetWidth; st.classList.add("in"); }
     if($("news").hidden || $("news").offsetHeight + 10 !== roomH) newsRoom();   // only when the strip changed height
   }
+  // "Crossings reported today": a news story from today saying boats are crossing, shown until the day's own figures are out
+  // (checked again when the figures arrive, as either can come in first)
+  let newsRep = null;
+  function repChip(){
+    const r = newsRep, rc = $("chipRep"), on = !!(r && r.url && /^https?:/.test(r.url) && r.date === ukToday() && !(boatDay && boatDay.date >= r.date));
+    rc.hidden = !on;
+    if(!on) return;
+    rc.href = r.url; rc.title = r.source + ": " + r.title;
+    rc.querySelector("span").textContent = r.ground ? "Boats reported today" : "Crossings reported today";   // ground: a live sighting from someone at the coast
+    rc.setAttribute("aria-label", (r.ground ? "Boats reported at the coast today by " + r.source : "Crossings reported in the news today. " + r.source) + ": " + r.title + " (opens " + (r.ground ? "Telegram" : r.source) + ")");
+  }
   async function loadNews(){
     newsAt = Date.now();
     try{
       const n = await getJSON("news.json"), box = $("news");
-      // "Crossings reported today": a news story from today saying boats are crossing, shown until the day's own figures are out
-      const r = n.reported, rc = $("chipRep"), rOn = !!(r && r.url && /^https?:/.test(r.url) && r.date === ukToday() && !(boatDay && boatDay.date >= r.date));
-      rc.hidden = !rOn;
-      if(rOn){
-        rc.href = r.url; rc.title = r.source + ": " + r.title;
-        rc.querySelector("span").textContent = r.ground ? "Boats reported today" : "Crossings reported today";   // ground: a live sighting from someone at the coast
-        rc.setAttribute("aria-label", (r.ground ? "Boats reported at the coast today by " + r.source : "Crossings reported in the news today. " + r.source) + ": " + r.title + " (opens " + (r.ground ? "Telegram" : r.source) + ")");
-      }
+      newsRep = n.reported; repChip();
       const items = (n.items || []).filter(x => x.breaking && x.url && /^https?:/.test(x.url) && Date.now() - new Date(x.published) < NEWS_MAX_H * 36e5);
       if(!items.length || store.get("newsSeen") === items[0].url){ newsOn = false; stripUpdate(); return; }
       const fresh = newsShown !== items[0].url;
