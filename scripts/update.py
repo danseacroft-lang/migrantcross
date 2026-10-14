@@ -238,7 +238,6 @@ def write_csv(days):
     (ROOT / "data.csv").write_text("\n".join(lines) + "\n")
 
 
-
 def nice_date(iso):
     d = date.fromisoformat(iso)
     return f"{d.strftime('%a')} {d.day} {d.strftime('%B')}"
@@ -247,7 +246,7 @@ def nice_date(iso):
 def update_page(data, recent):
     """Keep index.html's description, latest figures, dataset dates and link-preview picture up to date."""
     page = ROOT / "index.html"
-    html = page.read_text()
+    html = page.read_text(encoding="utf-8")       # the page holds "·" and other non-ASCII text: don't rely on the locale
     last = data["days"][-1]
     latest = last["date"]
 
@@ -276,7 +275,7 @@ def update_page(data, recent):
     html = re.sub(r'"dateModified":\s*"[^"]*"', f'"dateModified": "{latest}"', html, count=1)
     html = re.sub(r'"temporalCoverage":\s*"[^"]*"', f'"temporalCoverage": "{data["days"][0]["date"]}/{latest}"', html, count=1)
     html = re.sub(r"og-image\.png(\?v=[0-9-]*)?", "og-image.png?v=" + latest, html)
-    page.write_text(html)
+    page.write_text(html, encoding="utf-8")
 
 
 SITE = "https://channelcrossings.world/"

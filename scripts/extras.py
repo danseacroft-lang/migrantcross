@@ -11,6 +11,7 @@ page keeps showing the last good file.
 """
 import io
 import json
+import os
 import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -22,7 +23,10 @@ H = {"User-Agent": "channel-crossings-tracker (GitHub Action)"}
 
 
 def save(name, obj):
-    (ROOT / name).write_text(json.dumps(obj, indent=1, ensure_ascii=False) + "\n")
+    """Write via a temporary file: update_all() carries on after a failure, so a half-written file would be published."""
+    tmp = ROOT / (name + ".tmp")
+    tmp.write_text(json.dumps(obj, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    os.replace(tmp, ROOT / name)
 
 
 def now_iso():
