@@ -3,6 +3,7 @@
 Called at the end of update.py, so the image always carries the latest figure.
 Uses Pillow and the DejaVu fonts that come with GitHub's Ubuntu runners.
 """
+import os
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -28,6 +29,13 @@ def font(bold, size):
         if p.exists():
             return ImageFont.truetype(str(p), size)
     return ImageFont.load_default(size)
+
+
+def save(img, out):
+    """Write via a temporary file: update.py carries on if a picture fails, so a half-written one would be published."""
+    tmp = Path(str(out) + ".tmp")
+    img.save(tmp, format="PNG", optimize=True)
+    os.replace(tmp, out)
 
 
 def fmt(n):
@@ -83,7 +91,7 @@ def draw(data, out=ROOT / "og-image.png"):
 
     g.rectangle((0, H - 10, W, H), fill=ORANGE)
     g.text((x, 548), "Provisional Home Office figures · Updated daily", font=font(False, 24), fill=SOFT)
-    img.save(out, optimize=True)
+    save(img, out)
 
 
 def draw_week(data, out=ROOT / "week-card.png"):
@@ -142,7 +150,7 @@ def draw_week(data, out=ROOT / "week-card.png"):
 
     g.rectangle((0, H2 - 10, W2, H2), fill=ORANGE)
     g.text((x, H2 - 60), "channelcrossings.world · Provisional Home Office figures", font=font(False, 24), fill=SOFT)
-    img.save(out, optimize=True)
+    save(img, out)
 
 
 if __name__ == "__main__":

@@ -63,9 +63,14 @@ async def listen(key, known):
         while (left := deadline - time.monotonic()) > 0:
             try:
                 raw = await asyncio.wait_for(ws.recv(), timeout=left)
-            except asyncio.TimeoutError:
-                break
-            m = json.loads(raw)
+            except (asyncio.TimeoutError, websockets.ConnectionClosed):
+                break                          # time's up, or the feed hung up: keep what was heard so far
+            try:
+                m = json.loads(raw)
+            except ValueError:
+                continue                       # one garbled message shouldn't throw away the whole run
+            if not isinstance(m, dict):
+                continue
             if "error" in m:
                 sys.exit("aisstream: " + str(m["error"]))
             t, meta = m.get("MessageType"), m.get("MetaData") or {}

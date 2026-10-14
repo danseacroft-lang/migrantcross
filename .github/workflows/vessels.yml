@@ -30,4 +30,5 @@ jobs:
           git add vessels.json
           git diff --cached --quiet && exit 0
           git commit -m "Update rescue and patrol boat positions"
-          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
+          for i in 1 2 3; do git pull --rebase && git push && exit 0; git rebase --abort 2>/dev/null || true; sleep 5; done
+          exit 1   # three failed pushes fail the step instead of passing silently
