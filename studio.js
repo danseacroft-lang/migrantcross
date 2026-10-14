@@ -6,9 +6,9 @@
 (function(){
   "use strict";
 
-  // The address of the Studio worker (see scripts/studio-worker.js). Until it is set, the page shows the offer
-  // but says payments aren't open yet.
-  const API = "";
+  // The address of the Studio worker (scripts/studio-worker.js), set in index.html. Until it is set, the tab only
+  // appears on devices that opened the preview link, where Studio is unlocked so it can be looked over.
+  const API = window.CC_STUDIO_API || "";
   const PRICE = "£1.99";
 
   const $ = id => document.getElementById(id), host = $("studioApp");
@@ -602,7 +602,8 @@
   function setLocked(on){
     locked = on;
     if(on){ renderOffer("offer"); peek.appendChild(wrap); lockBox.append(peek, offer); host.replaceChildren(lockBox); }
-    else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = acct && acct.email ? "Studio is unlocked for " + esc(acct.email) + ' · <button type="button">Sign out</button>' : "Studio is unlocked on this device."; }
+    else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = acct && acct.email ? "Studio is unlocked for " + esc(acct.email) + ' · <button type="button">Sign out</button>'
+      : window.CC_STUDIO_PREVIEW ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : "Studio is unlocked on this device."; }
     requestAnimationFrame(drawAll);
   }
   acctLine.addEventListener("click", e => { if(e.target.closest("button")){ store.del("acct"); acct = null; setLocked(true); } });
@@ -610,7 +611,7 @@
   // coming back from Stripe, or from the sign-in link in an email
   function arrivals(){
     const q = new URLSearchParams(location.search), cs = q.get("cs"), link = q.get("signin");
-    const demo = q.get("studio") === "demo" && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);   // for trying the page out locally only
+    const demo = window.CC_STUDIO_PREVIEW || (q.get("studio") === "demo" && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname));   // the preview, or trying the page out locally
     if(cs || link || q.has("studio")){ ["cs", "signin", "studio"].forEach(k => q.delete(k)); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + "#studio"); }
     if(demo){ acct = {token:"", email:"", studio:true}; return Promise.resolve(); }
     if(!API) return Promise.resolve();

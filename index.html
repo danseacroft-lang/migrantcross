@@ -4190,6 +4190,13 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
 (function(){
   const $ = id => document.getElementById(id), root = document.documentElement, main = $("main");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Studio, the paid tab: the address of its worker (scripts/studio-worker.js; see the README). Until it is set, the tab is
+  // hidden, except on a device that has opened the preview link (?studio=preview#studio)
+  window.CC_STUDIO_API = "";
+  let studioPreview = false;
+  try{ if(/[?&]studio=preview\b/.test(location.search)) localStorage.setItem("cc-studio-preview", "1"); studioPreview = localStorage.getItem("cc-studio-preview") === "1"; }catch(e){}
+  window.CC_STUDIO_PREVIEW = studioPreview && !window.CC_STUDIO_API;
+  if(!window.CC_STUDIO_API && !studioPreview){ $("tab-studio").remove(); $("pg-studio").remove(); }
   const tabs = [...document.querySelectorAll("#tabs [role=tab]")], ind = $("tabInd"), names = tabs.map(t => t.dataset.tab);
   const pages = {}; names.forEach(n => pages[n] = $("pg-" + n));
   const saved = {};   // each tab keeps its own place on the page, as in an app
