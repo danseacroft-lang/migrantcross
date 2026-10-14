@@ -1,0 +1,99 @@
+/* Studio: every graph on the site, drawn the way the visitor chooses. Loaded the first time the Studio tab opens.
+   The page uses the site's own cards, segmented controls and large titles; only the marks inside the charts change with the style. */
+.st-wrap{display:grid;gap:34px;min-width:0}
+.st-wrap[hidden]{display:none}
+
+/* the controls along the top: style, measure and range, on a strip of glass that stays under the bar while you scroll */
+.st-bar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:5;margin:0 -6px;padding:10px 6px;display:grid;gap:10px;
+  background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border-radius:22px}
+@media (max-width:719px){.st-bar{top:calc(env(safe-area-inset-top,0px) + 58px)}}
+.st-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.st-row .seg{flex:none}
+.st-lab{font:600 .706rem/1 var(--font);letter-spacing:.05em;text-transform:uppercase;color:var(--label2);margin-right:2px}
+.st-styles{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px;margin:-2px;-webkit-overflow-scrolling:touch}
+.st-styles::-webkit-scrollbar{display:none}
+.st-sw{flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 8px;border:0;border-radius:999px;background:var(--fill);color:var(--label);
+  font:600 .824rem/1 var(--font);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .2s ease,box-shadow .2s ease}
+.st-sw i{display:flex;gap:2px}
+.st-sw i b{width:7px;height:18px;border-radius:3px;display:block}
+.st-sw[aria-pressed="true"]{background:var(--seg-on);box-shadow:0 0 0 1.5px var(--blue),0 3px 8px rgba(0,0,0,.1)}
+.st-sw:focus-visible,.st-forms button:focus-visible,.st-act:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (max-width:719px){.st-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -6px;padding:0 6px}.st-row::-webkit-scrollbar{display:none}}
+
+/* the charts */
+.st-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+@media (min-width:900px){.st-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.st-grid .st-full{grid-column:1 / -1}}
+.st-card{display:grid;gap:12px;align-content:start;min-width:0;padding:18px 18px 16px}
+.st-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.st-card h3{margin:0;font:600 .882rem/1.2 var(--font);color:var(--label2)}
+.st-read{margin-top:4px}
+.st-read b{display:block;font:700 1.65rem/1.1 var(--display,var(--font));letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.st-read span{font-size:.824rem;color:var(--label2)}
+.st-acts{display:flex;gap:6px;flex:none}
+.st-act{appearance:none;border:0;width:32px;height:32px;border-radius:50%;background:var(--fill);color:var(--label);display:grid;place-items:center;cursor:pointer}
+.st-act svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.st-opts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.st-opts .seg button{height:28px;font-size:.735rem}
+/* the chart forms: small labelled pills, so a visitor can see every way a chart can be drawn */
+.st-forms{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:0 18px}
+.st-forms::-webkit-scrollbar{display:none}
+.st-forms button{flex:none;appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;background:none;box-shadow:inset 0 0 0 1px var(--sep);
+  color:var(--label2);font:600 .735rem/1 var(--font);cursor:pointer;display:flex;align-items:center;gap:6px}
+.st-forms button svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.st-forms button[aria-pressed="true"]{background:var(--label);color:var(--card);box-shadow:none}
+.st-chart{position:relative;min-height:120px;touch-action:pan-y}
+.st-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.st-chart .t{font:500 11px/1 var(--font)}
+.st-note{margin:0;font-size:.765rem;line-height:1.4;color:var(--label2)}
+.st-tbl{width:100%;border-collapse:collapse;font-size:.824rem;font-variant-numeric:tabular-nums}
+.st-tbl-wrap{max-height:320px;overflow:auto;border-radius:12px}
+.st-tbl th{position:sticky;top:0;background:var(--card);text-align:left;font-weight:600;color:var(--label2);padding:8px 10px;border-bottom:1px solid var(--sep)}
+.st-tbl td{padding:7px 10px;border-bottom:.5px solid var(--sep)}
+.st-tbl td:not(:first-child),.st-tbl th:not(:first-child){text-align:right}
+.st-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.765rem;color:var(--label2)}
+.st-legend span{display:flex;align-items:center;gap:6px}
+.st-legend i{width:10px;height:10px;border-radius:3px;display:block}
+
+/* the tooltip that follows the finger or the pointer */
+.st-tip{position:fixed;z-index:60;pointer-events:none;padding:8px 11px;border-radius:12px;font:500 .765rem/1.35 var(--font);color:var(--label);max-width:220px;
+  background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 10px 30px rgba(0,0,0,.18);opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
+.st-tip.on{opacity:1;transform:none}
+.st-tip b{display:block;font-weight:700;font-size:.882rem;font-variant-numeric:tabular-nums}
+
+/* Glass: the cards themselves take a faint tint of colour, as behind frosted glass */
+.st-wrap[data-style="glass"] .st-card{background:linear-gradient(140deg,color-mix(in srgb,var(--blue) 9%,var(--card)),var(--card) 45%,color-mix(in srgb,var(--pink) 7%,var(--card)))}
+
+/* ------------------------------------------------------------ locked: a look at the charts behind frosted glass, and the offer */
+.st-lock{position:relative;display:grid;min-width:0}
+.st-lock > *{grid-area:1 / 1}
+.st-peek{filter:blur(7px) saturate(1.1);opacity:.75;pointer-events:none;user-select:none;max-height:1100px;overflow:hidden;
+  -webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent)}
+.st-offer{align-self:start;justify-self:center;position:sticky;top:120px;z-index:2;width:min(440px,100%);margin-top:30px;padding:26px 24px 22px;text-align:center;
+  border-radius:30px;background:color-mix(in srgb,var(--card) 84%,transparent);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);
+  box-shadow:inset 0 0 0 .5px var(--glass-hi,rgba(255,255,255,.6)),0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 30px 70px -20px rgba(0,0,0,.35)}
+.st-badge{width:58px;height:58px;margin:0 auto 14px;border-radius:16px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(160deg,#5AC8FA,#007AFF 55%,#5856D6);box-shadow:0 8px 20px -6px rgba(0,122,255,.6)}
+.st-badge svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.st-offer h3{margin:0 0 6px;font:700 1.41rem/1.15 var(--font);letter-spacing:-.02em;color:var(--label)}
+.st-offer > p{margin:0 0 16px;color:var(--label2);font-size:.882rem;line-height:1.45}
+.st-list{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:9px;text-align:left;font-size:.882rem}
+.st-list li{display:flex;gap:10px;align-items:flex-start}
+.st-list svg{flex:none;width:18px;height:18px;margin-top:1px;fill:none;stroke:var(--blue);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.st-field{display:block;width:100%;height:46px;padding:0 14px;margin:0 0 10px;border:0;border-radius:12px;background:var(--fill);color:var(--label);font:500 1rem/1 var(--font)}
+.st-field:focus{outline:2px solid var(--blue);outline-offset:0}
+.st-buy{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border:0;border-radius:14px;background:var(--blue);color:#fff;
+  font:600 1rem/1 var(--font);cursor:pointer;transition:transform .15s ease,opacity .2s ease}
+.st-buy:active{transform:scale(.98)}
+.st-buy[disabled]{opacity:.5;cursor:default}
+.st-link{appearance:none;border:0;background:none;color:var(--blue);font:600 .824rem/1 var(--font);cursor:pointer;padding:12px 4px 2px}
+.st-offer > p.st-fine,.st-fine{margin:12px 0 0;font-size:.706rem;line-height:1.45;color:var(--label2)}
+.st-offer > p.st-msg,.st-msg{margin:10px 0 0;font-size:.824rem;line-height:1.4;color:var(--label2);}
+.st-msg:empty{display:none}
+.st-msg.err{color:var(--red-t,#D70015)}
+
+/* signed in: a quiet line under the title */
+.st-acct{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin:0 6px;font-size:.824rem;color:var(--label2)}
+.st-acct button{appearance:none;border:0;background:none;padding:0;color:var(--blue);font:inherit;font-weight:600;cursor:pointer}
+.st-offer > p.st-free{margin:-4px 0 18px;padding:12px 14px;border-radius:14px;background:var(--fill);text-align:left;font-size:.824rem;line-height:1.45;color:var(--label2)}
+.st-free b{color:var(--label);font-weight:600}
