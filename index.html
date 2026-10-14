@@ -4194,7 +4194,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   // to everyone. Until STUDIO_LIVE is true the tab only shows on devices that opened the preview link (?studio=preview#studio),
   // which test the real payment flow (Stripe in test mode); with no worker address, the preview simply unlocks Studio.
   window.CC_STUDIO_API = "https://studio.danseacroft.workers.dev";
-  const STUDIO_LIVE = false;
+  const STUDIO_LIVE = true;
   let studioPreview = false;
   try{ if(/[?&]studio=preview\b/.test(location.search)) localStorage.setItem("cc-studio-preview", "1"); studioPreview = localStorage.getItem("cc-studio-preview") === "1"; }catch(e){}
   window.CC_STUDIO_PREVIEW = studioPreview && !window.CC_STUDIO_API;
