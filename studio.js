@@ -557,7 +557,7 @@
   function renderOffer(mode, msg, err){
     const signedIn = acct && acct.token;
     let body;
-    if(mode === "sent") body = '<h3>Check your email</h3><p>We’ve sent a sign-in link to <b>' + esc(msg) + '</b>. Open it on this device to unlock Studio here.</p><button type="button" class="st-link" data-act="back">Use a different email</button>';
+    if(mode === "sent") body = '<h3>Check your email</h3><p>We’ve sent a sign-in link to <b>' + esc(msg) + '</b>. Open it on this device to unlock Studio here. If it isn’t in your inbox within a minute, check your junk folder.</p><button type="button" class="st-link" data-act="back">Use a different email</button>';
     else if(mode === "signin") body = '<h3>Sign in</h3><p>Already unlocked Studio? Enter the email you paid with and we’ll send you a link to sign in on this device.</p>'
       + '<form data-form="signin"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address"><button class="st-buy" type="submit">Email me a sign-in link</button></form>'
       + '<button type="button" class="st-link" data-act="back">Back</button>';
