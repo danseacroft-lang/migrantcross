@@ -1,6 +1,27 @@
 {
- "checkedAt": "2026-10-14T04:24:19Z",
+ "checkedAt": "2026-10-14T06:09:20Z",
  "items": [
+  {
+   "title": "Author and broadcaster Maajid Nawaz joins GB News",
+   "url": "https://www.gbnews.com/newsfromus/maajid-nawaz-join-gb-news",
+   "source": "GB News",
+   "published": "2026-10-14T06:00:05Z",
+   "breaking": true
+  },
+  {
+   "title": "Wednesday briefing: \u200bWhy small boat crossings are here to stay \u200b",
+   "url": "https://www.theguardian.com/world/2026/oct/14/wednesday-briefing-why-small-boat-crossings-are-here-to-stay",
+   "source": "The Guardian",
+   "published": "2026-10-14T05:44:34Z",
+   "breaking": true
+  },
+  {
+   "title": "Donald Trump says 'massive' oil, gas and mineral exploration is about to begin in Greenland",
+   "url": "https://www.gbnews.com/news/us/donald-trump-massive-gas-mineral-exploration-greenland",
+   "source": "GB News",
+   "published": "2026-10-14T05:38:17Z",
+   "breaking": true
+  },
   {
    "title": "Civil servant \u2018used remote working to fraudulently juggle' multiple Whitehall jobs",
    "url": "https://www.gbnews.com/news/london-news-civil-servant-remote-working-fraudulently-juggle-multiple-whitehall-jobs",
@@ -14,21 +35,14 @@
    "source": "GB News",
    "published": "2026-10-14T04:00:02Z",
    "breaking": true
-  },
-  {
-   "title": "New species of dinosaur discovered from fossil 'overlooked' in Natural History Museum drawer for over 100 years",
-   "url": "https://www.gbnews.com/science/archaeology-breakthrough-new-dinosaur-species-discovered",
-   "source": "GB News",
-   "published": "2026-10-14T03:16:59Z",
-   "breaking": true
   }
  ],
  "reported": {
   "date": "2026-10-14",
-  "title": "France doubles riot police presence on northern beaches in latest bid to stop small boat crossings",
-  "url": "https://www.gbnews.com/news/world/migrant-crisis-france-doubles-riot-police-presence-northern-beaches",
-  "source": "GB News",
-  "published": "2026-10-14T00:28:59Z",
+  "title": "Wednesday briefing: \u200bWhy small boat crossings are here to stay \u200b",
+  "url": "https://www.theguardian.com/world/2026/oct/14/wednesday-briefing-why-small-boat-crossings-are-here-to-stay",
+  "source": "The Guardian",
+  "published": "2026-10-14T05:44:34Z",
   "ground": false
  }
 }
