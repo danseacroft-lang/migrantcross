@@ -724,7 +724,11 @@
   function renderOffer(mode, msg, err){
     const signedIn = acct && acct.token;
     let body;
-    if(mode === "sent") body = '<h3>Check your email</h3><p>We’ve sent a sign-in link to <b>' + esc(msg) + '</b>. Open it on this device to unlock Studio here. If it isn’t in your inbox within a minute, check your junk folder.</p><button type="button" class="st-link" data-act="back">Use a different email</button>';
+    if(mode === "key") body = '<h3>Enter your password</h3><p>This account signs in with its password.</p>'
+      + '<form data-form="key"><input class="st-field" type="password" name="key" required autocomplete="current-password" placeholder="Password" aria-label="Password"><button class="st-buy" type="submit">Sign in</button></form>'
+      + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : "") + "</p>"
+      + '<button type="button" class="st-link" data-act="back">Back</button>';
+    else if(mode === "sent") body = '<h3>Check your email</h3><p>We’ve sent a sign-in link to <b>' + esc(msg) + '</b>. Open it on this device to unlock Studio here. If it isn’t in your inbox within a minute, check your junk folder.</p><button type="button" class="st-link" data-act="back">Use a different email</button>';
     else if(mode === "signin") body = '<h3>Sign in</h3><p>Already unlocked Studio? Enter the email you paid with and we’ll send you a link to sign in on this device.</p>'
       + '<form data-form="signin"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address"><button class="st-buy" type="submit">Email me a sign-in link</button></form>'
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : "") + "</p>"
@@ -742,11 +746,14 @@
       + '<p class="st-fine">One payment, no subscription. Your email is your account: it unlocks Studio on any device you sign in on. Payment is handled securely by Stripe. Figures: Home Office, Open Government Licence v3.0.</p>';
     offer.innerHTML = body;
   }
+  let keyFor = "";   // the email of an account that signs in with a password
   offer.addEventListener("submit", e => {
-    e.preventDefault(); const f = e.target, email = f.email.value.trim(), btn = f.querySelector("button");
+    e.preventDefault(); const f = e.target, btn = f.querySelector("button");
     btn.disabled = true;
+    if(f.dataset.form === "key"){ api("/login", {email:keyFor, key:f.key.value}).then(signIn).catch(x => renderOffer("key", x.message, true)); return; }
+    const email = f.email.value.trim();
     const fail = mode => x => { renderOffer(mode, x.message, true); const i = offer.querySelector("input"); if(i) i.value = email; };   // keep what they typed
-    if(f.dataset.form === "signin") api("/login", {email}).then(() => renderOffer("sent", email)).catch(fail("signin"));
+    if(f.dataset.form === "signin") api("/login", {email}).then(j => { if(j.key){ keyFor = email; renderOffer("key"); } else renderOffer("sent", email); }).catch(fail("signin"));
     else checkout({email}).catch(fail("offer"));
   });
   offer.addEventListener("click", e => {
