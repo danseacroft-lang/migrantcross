@@ -101,3 +101,54 @@
 .st-acct button{appearance:none;border:0;background:none;padding:0;color:var(--blue);font:inherit;font-weight:600;cursor:pointer}
 .st-offer > p.st-free{margin:-4px 0 18px;padding:12px 14px;border-radius:14px;background:var(--fill);text-align:left;font-size:.824rem;line-height:1.45;color:var(--label2)}
 .st-free b{color:var(--label);font-weight:600}
+
+/* ------------------------------------------------------------ the welcome: an illustration of the Channel, with the figures that matter most on frosted glass */
+.st-hero{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:flex-end;min-height:340px;border-radius:30px;color:#fff;
+  box-shadow:0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 24px 60px -28px rgba(0,30,80,.55)}
+.st-hero:empty{display:none}
+.st-hero-art{position:absolute;inset:0;z-index:-2}
+.st-hero-art svg{display:block;width:100%;height:100%}
+.st-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 38%,rgba(2,10,30,.42))}
+.st-hero-in{width:100%;padding:140px 24px 22px}
+.st-hero-eye{margin:0 0 6px;font:600 .706rem/1 var(--font);letter-spacing:.07em;text-transform:uppercase;opacity:.88}
+.st-hero-big{margin:0;max-width:34em}
+.st-hero-big b{display:block;font:700 clamp(2.6rem,7vw,3.9rem)/1 "Inter Tight",var(--font);letter-spacing:-.035em;font-variant-numeric:tabular-nums;text-shadow:0 2px 24px rgba(0,20,60,.3)}
+.st-hero-big span{display:block;margin-top:6px;font:500 .941rem/1.35 var(--font);opacity:.92}
+.st-hero-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:20px}
+.st-tile{min-width:0;padding:12px 14px 13px;border-radius:18px;background:rgba(255,255,255,.13);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);
+  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.3),0 8px 24px -14px rgba(0,0,0,.4)}
+.st-tile span{display:block;font:600 .706rem/1.25 var(--font);opacity:.82}
+.st-tile b{display:block;margin-top:4px;font:700 1.41rem/1.1 "Inter Tight",var(--font);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.st-tile small{display:block;margin-top:3px;font-size:.706rem;line-height:1.3;opacity:.8}
+@media (max-width:719px){.st-hero{border-radius:26px}.st-hero-in{padding:146px 16px 16px}.st-hero-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.st-tile{padding:11px 12px 12px}}
+@media (prefers-reduced-motion:no-preference){
+  .st-boat{animation:stBob 4.5s ease-in-out infinite alternate}
+  .st-swell{animation:stSwell 14s ease-in-out infinite alternate}
+}
+@keyframes stBob{to{transform:translateY(1.6px)}}
+@keyframes stSwell{to{transform:translateX(-18px)}}
+
+/* charts draw themselves in: bars grow from the baseline, lines trace across, squares and slices appear in a sweep */
+@media (prefers-reduced-motion:no-preference){
+  .st-anim .st-b{transform-box:fill-box;transform-origin:50% 100%;animation:stGrowY .75s cubic-bezier(.2,.9,.25,1) both}
+  .st-anim .st-b.h{transform-origin:0 50%;animation-name:stGrowX}
+  .st-anim .st-b.d{transform-origin:50% 0}
+  .st-anim .st-l{stroke-dasharray:1;animation:stDraw 1.15s cubic-bezier(.45,0,.2,1) both}
+  .st-anim .st-a{animation:stFade .9s ease .3s both}
+  .st-anim .st-d{transform-box:fill-box;transform-origin:50% 50%;animation:stPop .55s cubic-bezier(.2,.9,.3,1.25) both}
+  .st-anim .st-t{animation:stFade .5s ease .75s both}
+}
+@keyframes stGrowY{from{transform:scaleY(0)}}
+@keyframes stGrowX{from{transform:scaleX(0)}}
+@keyframes stDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes stFade{from{opacity:0}}
+@keyframes stPop{from{opacity:0;transform:scale(.3)}}
+
+/* rows of buttons that run off the edge fade out where there's more to swipe to (studio.js marks them) */
+.st-more-r{-webkit-mask:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+.st-more-l{-webkit-mask:linear-gradient(90deg,transparent,#000 34px);mask:linear-gradient(90deg,transparent,#000 34px)}
+.st-more-l.st-more-r{-webkit-mask:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent);mask:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent)}
+
+/* cards in a pair share a height, so the chart sits in the middle of the space rather than leaving a gap at the bottom */
+.st-card{display:flex;flex-direction:column}
+.st-card .st-chart{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center}
