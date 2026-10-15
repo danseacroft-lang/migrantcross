@@ -491,7 +491,7 @@
     return h + "</div>" + '<p class="foot">Home Office figures, provisional and sometimes revised. Who is crossing and the returns deal come from the Home Office’s quarterly statistics, so they don’t change with Show and Range. Contains public sector information licensed under the Open Government Licence v3.0.</p>';
   }
   function drawAll(){
-    if(!D.length) return;
+    if(!D.length || locked) return;
     const T = theme(); wrap.dataset.style = T.id;
     CARDS.forEach(c => drawCard(c, T));
   }
@@ -564,7 +564,7 @@
      device in straight away; on another device the visitor asks for a sign-in link, which the worker emails them. The
      worker signs a token saying who they are; this page keeps it, and asks the worker whether that email has paid. */
   let acct = store.get("acct");   // {token, email, studio}
-  let locked = !(acct && acct.studio);
+  let locked = true;   // only the worker's answer unlocks Studio, never what this device remembers
   const offer = document.createElement("div"); offer.className = "st-offer";
   const tick = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   function api(path, body, token){
@@ -616,11 +616,13 @@
   function signIn(j){ acct = {token:j.token, email:j.email, studio:!!j.studio}; store.set("acct", acct); setLocked(!acct.studio); }
 
   const lockBox = document.createElement("div"); lockBox.className = "st-lock";
-  const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("inert", ""); peek.setAttribute("aria-hidden", "true");
+  // behind the offer, a blurred picture of Studio: never the charts themselves, which only an unlocked account gets
+  const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("aria-hidden", "true");
+  const peekPic = () => '<img src="studio-peek-' + (isDark() ? "dark" : "light") + '.webp" alt="" width="464" height="550" decoding="async">';
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
   function setLocked(on){
     locked = on;
-    if(on){ renderOffer("offer"); peek.appendChild(wrap); lockBox.append(peek, offer); host.replaceChildren(lockBox); }
+    if(on){ renderOffer("offer"); peek.innerHTML = peekPic(); lockBox.append(peek, offer); host.replaceChildren(lockBox); return; }
     else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = acct && acct.email ? "Studio is unlocked for " + esc(acct.email) + ' · <button type="button">Sign out</button>'
       : window.CC_STUDIO_PREVIEW ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : "Studio is unlocked on this device."; }
     requestAnimationFrame(drawAll);
@@ -636,14 +638,16 @@
     if(!API) return Promise.resolve();
     if(cs){ renderOffer("offer", "Confirming your payment…"); return api("/claim", {session_id:cs}).then(signIn).catch(x => renderOffer("offer", x.message, true)); }
     if(link){ renderOffer("offer", "Signing you in…"); return api("/session", {link}).then(signIn).catch(x => renderOffer("offer", x.message, true)); }
-    if(acct && acct.token) return api("/me", null, acct.token).then(j => { acct.studio = !!j.studio; store.set("acct", acct); if(locked === !!j.studio) setLocked(!j.studio); }).catch(() => {});   // offline: keep what we knew
+    if(acct && acct.token){ renderOffer("offer", "Checking your account…"); return api("/me", null, acct.token).then(j => { acct.studio = !!j.studio; store.set("acct", acct); if(j.studio) setLocked(false); else renderOffer("offer"); })
+      .catch(x => { acct.studio = false; renderOffer("offer", x instanceof TypeError ? "Studio couldn’t check your account. Check your connection and reload." : x.message, true); }); }
+    acct = null;
     return Promise.resolve();
   }
 
   /* ------------------------------------------------------------ start */
   wrap.innerHTML = shell();
   setLocked(locked);
-  arrivals().then(() => { if(acct && acct.studio && locked) setLocked(false); });
+  arrivals().then(() => { if(acct && acct.studio && locked) setLocked(false); });   // the demo, on this computer only
   Promise.resolve(window.__data || getJSON("data.json")).catch(() => getJSON("data.json")).then(j => {
     D = j.days || [];
     last = D.length ? D[D.length - 1].date : null; drawAll();
@@ -655,6 +659,6 @@
   // redraw when the page changes width, or the visitor switches between day and night
   let rw = 0, rt = 0;
   addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const w = host.clientWidth; if(w && w !== rw){ rw = w; drawAll(); } }, 120); });
-  new MutationObserver(() => { wrap.querySelectorAll(".st-sw").forEach(b => { const s = STYLES.find(x => x.id === b.dataset.style); b.querySelectorAll("b").forEach((x, i) => x.style.background = (isDark() ? s.dark : s.light)[i]); }); drawAll(); }).observe(docEl, {attributes:true, attributeFilter:["data-theme"]});
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
+  new MutationObserver(() => { if(locked) peek.innerHTML = peekPic(); wrap.querySelectorAll(".st-sw").forEach(b => { const s = STYLES.find(x => x.id === b.dataset.style); b.querySelectorAll("b").forEach((x, i) => x.style.background = (isDark() ? s.dark : s.light)[i]); }); drawAll(); }).observe(docEl, {attributes:true, attributeFilter:["data-theme"]});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if(locked) peek.innerHTML = peekPic(); drawAll(); });
 })();
