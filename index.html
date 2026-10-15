@@ -1060,13 +1060,23 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .out-pop h2{font-size:1.12rem!important;letter-spacing:-.015em}
 .out-who{margin:6px 4px 16px;color:var(--label2);font-size:.8rem;line-height:1.4;overflow-wrap:anywhere}
 .out-who:empty{display:none}
-.out-go,.out-no{display:block;width:100%;min-height:44px;margin:0;padding:0 16px;border:0;border-radius:999px;appearance:none;font:600 .94rem/1 var(--font);cursor:pointer;
-  transition:transform .2s cubic-bezier(.3,1.4,.5,1),filter .2s}
-.out-go{color:#fff;background:linear-gradient(180deg,#FF5147,#FF3B30);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 16px -8px rgba(255,59,48,.8)}
-.out-no{margin-top:8px;color:var(--label);background:var(--fill)}
-@media (hover:hover){.out-go:hover,.out-no:hover{filter:brightness(1.06)}}
-.out-go:active,.out-no:active{transform:scale(.97)}
-.out-go:focus-visible,.out-no:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.out-no{display:block;width:100%;min-height:44px;margin:8px 0 0;padding:0 16px;border:0;border-radius:999px;appearance:none;font:600 .94rem/1 var(--font);cursor:pointer;
+  color:var(--label);background:var(--fill);transition:transform .2s cubic-bezier(.3,1.4,.5,1),filter .2s}
+@media (hover:hover){.out-no:hover{filter:brightness(1.06)}}
+.out-no:active{transform:scale(.97)}
+.out-no:focus-visible,.out-knob:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+/* slide to sign out, as on the iPhone's lock screen: drag the knob to the end of the track (a tap only nudges it; the keyboard presses it) */
+.out-slide{--x:0px;position:relative;height:56px;padding:4px;border-radius:999px;background:var(--fill);overflow:hidden;user-select:none;-webkit-user-select:none}
+.out-fill{position:absolute;left:4px;top:4px;bottom:4px;width:calc(48px + var(--x));border-radius:999px;background:linear-gradient(180deg,#FF5147,#FF3B30);opacity:.22}
+.out-txt{position:absolute;inset:0 0 0 52px;display:grid;place-items:center;font:500 .94rem/1 var(--font);letter-spacing:-.01em;opacity:calc(1 - var(--p, 0) * 1.6);
+  color:transparent;background:linear-gradient(100deg,var(--label2) 0 40%,var(--label) 50%,var(--label2) 60% 100%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;animation:outShine 2.6s linear infinite}
+@keyframes outShine{from{background-position:100% 0}to{background-position:-150% 0}}
+.out-knob{position:relative;display:grid;place-items:center;width:48px;height:48px;padding:0;border:0;border-radius:50%;appearance:none;cursor:grab;touch-action:none;color:#fff;
+  background:linear-gradient(180deg,#FF5147,#FF3B30);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 12px -4px rgba(255,59,48,.8);transform:translateX(var(--x))}
+.out-knob svg{width:22px;height:22px}
+.out-slide:not(.drag) .out-knob,.out-slide:not(.drag) .out-fill{transition:transform .45s cubic-bezier(.3,1.35,.5,1),width .45s cubic-bezier(.3,1.35,.5,1)}
+.out-slide.drag .out-knob{cursor:grabbing}
+@media (prefers-reduced-motion:reduce){.out-txt{animation:none;color:var(--label2)}}
 .th-list{display:grid;gap:2px;margin:0 -8px}
 .th-list button{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border:0;border-radius:10px;background:none;color:var(--label);text-align:left;font:inherit;cursor:pointer}
 @media (hover:hover){.th-list button:hover{background:var(--fill)}}
@@ -1539,7 +1549,7 @@ main .hero{border-radius:32px}
   <div class="out-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3.5H7.2a1.8 1.8 0 0 0-1.8 1.8v13.4a1.8 1.8 0 0 0 1.8 1.8h6.3"/><path class="ar" d="M11 12h9.5M17.2 8.6l3.4 3.4-3.4 3.4"/></svg></div>
   <h2 id="outH">Sign out of Studio?</h2>
   <p class="out-who" id="outWho"></p>
-  <button type="button" class="out-go" id="outGo">Sign Out</button>
+  <div class="out-slide" id="outSlide"><span class="out-fill" aria-hidden="true"></span><span class="out-txt" aria-hidden="true">slide to sign out</span><button type="button" class="out-knob" id="outGo" aria-label="Sign out. Slide to the right, or press to confirm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"/></svg></button></div>
   <button type="button" class="out-no" id="outNo">Cancel</button>
 </div>
 <div class="tb-pop th-pop" id="thPop" role="menu" aria-labelledby="thH" hidden>
@@ -1954,7 +1964,20 @@ main .hero{border-radius:32px}
   // Studio's sign-out: a round door button beside the others while Studio is open and someone is signed in (studio.js shows it and does the signing out)
   const outMenu = tbMenu($("outBtn"), $("outPop"), () => $("outNo").focus({preventScroll:true}));
   $("outNo").addEventListener("click", () => outMenu.set(false));
-  $("outGo").addEventListener("click", () => { outMenu.set(false); if(window.ccSignOut) window.ccSignOut(); });
+  {
+    const track = $("outSlide"), knob = $("outGo");
+    let x0 = null, x = 0, moved = false;
+    const max = () => track.clientWidth - knob.offsetWidth - 8;
+    const put = v => { x = Math.max(0, Math.min(max(), v)); track.style.setProperty("--x", x + "px"); track.style.setProperty("--p", (x / max()).toFixed(3)); };
+    const done = () => { put(max()); setTimeout(() => { outMenu.set(false); if(window.ccSignOut) window.ccSignOut(); setTimeout(() => put(0), 400); }, 220); };
+    knob.addEventListener("pointerdown", e => { if(e.button) return; x0 = e.clientX - x; moved = false; track.classList.add("drag"); knob.setPointerCapture(e.pointerId); });
+    knob.addEventListener("pointermove", e => { if(x0 === null) return; if(Math.abs(e.clientX - x0 - x) > 2) moved = true; put(e.clientX - x0); });
+    const up = () => { if(x0 === null) return; x0 = null; track.classList.remove("drag");
+      if(x >= max() * .88) return done();
+      put(0); if(!moved && !reduced){ put(28); setTimeout(() => put(0), 180); } };   // a tap nudges the knob to show it slides
+    knob.addEventListener("pointerup", up); knob.addEventListener("pointercancel", up);
+    knob.addEventListener("click", e => { if(e.detail === 0) done(); });   // Enter or Space: the keyboard can't slide, so a press signs out
+  }
   modeBtns.forEach(b => b.addEventListener("click", () => {
     const n = b.dataset.mode;
     ccTheme(n);
