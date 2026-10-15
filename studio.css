@@ -11,7 +11,6 @@
 .st-row{display:flex;align-items:center;gap:8px;flex:none;padding-left:8px;border-left:.5px solid var(--sep);margin-left:2px}
 .st-row .seg{flex:none;background:none;padding:0}
 .st-row .seg button{height:36px;padding:0 14px;font-size:.8rem;transition:background .25s,box-shadow .25s}
-.st-lab{display:none}
 .st-styles{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0;-webkit-overflow-scrolling:touch}
 .st-styles::-webkit-scrollbar{display:none}
 .st-sw{flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 13px 0 9px;border:0;border-radius:999px;background:none;color:var(--label);
@@ -36,14 +35,16 @@
 /* the charts */
 .st-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
 @media (min-width:900px){.st-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.st-grid .st-full{grid-column:1 / -1}}
-.st-card{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-content:start;min-width:0;padding:18px 18px 16px}
+/* cards in a pair share a height, so the chart sits in the middle of the space rather than leaving a gap at the bottom */
+.st-card{display:flex;flex-direction:column;gap:12px;min-width:0;padding:18px 18px 16px}
 .st-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .st-card h3{margin:0;font:600 .882rem/1.2 var(--font);color:var(--label2)}
 .st-read{margin-top:4px}
 .st-read b{display:block;font:700 1.65rem/1.1 var(--display,var(--font));letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .st-read span{font-size:.824rem;color:var(--label2)}
 .st-acts{display:flex;gap:6px;flex:none}
-.st-act{appearance:none;border:0;width:32px;height:32px;border-radius:50%;background:var(--fill);color:var(--label);display:grid;place-items:center;cursor:pointer}
+.st-act{appearance:none;border:0;width:32px;height:32px;border-radius:50%;background:var(--fill);color:var(--label);display:grid;place-items:center;cursor:pointer;transition:opacity .2s}
+.st-act:disabled{opacity:.35;cursor:default}
 .st-act svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .st-opts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .st-opts .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}.st-opts .seg::-webkit-scrollbar{display:none}
@@ -198,6 +199,4 @@
 .st-more-l{-webkit-mask:linear-gradient(90deg,transparent,#000 34px);mask:linear-gradient(90deg,transparent,#000 34px)}
 .st-more-l.st-more-r{-webkit-mask:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent);mask:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent)}
 
-/* cards in a pair share a height, so the chart sits in the middle of the space rather than leaving a gap at the bottom */
-.st-card{display:flex;flex-direction:column}
 .st-card .st-chart{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center}
