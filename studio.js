@@ -524,77 +524,73 @@
     return '<div class="seg" role="group"' + (label ? ' aria-label="' + label + '"' : "") + ">" + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
   }
 
-  /* ------------------------------------------------------------ the welcome: the Channel at this time of day, under the figures that matter most */
-  function seeded(n){ return () => (n = n * 16807 % 2147483647) / 2147483647; }
-  // the Strait of Dover from out at sea: the white cliffs on the left, France low on the horizon to the right, a ferry, and one small boat
-  // drawn in the box's own pixels: the sky and coast keep their size, and a taller box just gets more sea
-  function scene(W, H, dk){
-    const hz = 118, R = seeded(11), sx = W / 1200, ex = Math.max(sx, .42), sunX = W * .78, sunY = 50, boatX = W * .6, boatY = hz + 16;
-    const P = dk ? {s0:"#04071A", s1:"#0E1838", s2:"#2B3C72", sun:"#F4F0E2", glow:"#8FA8FF", w0:"#1A2A58", w1:"#0B1534", w2:"#040919", top:"#18252E", ch0:"#A3ACCB", ch1:"#56608A", fr:"#22305A", hull:"#0A1022", ink:"#C9D3F5"}
-      : {s0:"#2F7FD6", s1:"#86BEF2", s2:"#F7DDBA", sun:"#FFF8E4", glow:"#FFCF7A", w0:"#4A92C6", w1:"#1D5C95", w2:"#0A345E", top:"#5B8A45", ch0:"#FBF8F0", ch1:"#D5CCB8", fr:"#7F9DB8", hull:"#1E2A3A", ink:"#FFFFFF"};
-    let g = '<svg viewBox="0 0 ' + W.toFixed(0) + " " + H + '" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true"><defs>'
-      + '<linearGradient id="sxSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.s0 + '"/><stop offset=".62" stop-color="' + P.s1 + '"/><stop offset="1" stop-color="' + P.s2 + '"/></linearGradient>'
-      + '<linearGradient id="sxSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.w0 + '"/><stop offset=".35" stop-color="' + P.w1 + '"/><stop offset="1" stop-color="' + P.w2 + '"/></linearGradient>'
-      + '<radialGradient id="sxGlow"><stop offset="0" stop-color="' + P.glow + '" stop-opacity="' + (dk ? .45 : .75) + '"/><stop offset="1" stop-color="' + P.glow + '" stop-opacity="0"/></radialGradient>'
-      + '<linearGradient id="sxChalk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.ch0 + '"/><stop offset="1" stop-color="' + P.ch1 + '"/></linearGradient>'
-      + '<linearGradient id="sxHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.s2 + '" stop-opacity="0"/><stop offset=".7" stop-color="' + P.s2 + '" stop-opacity="' + (dk ? .35 : .7) + '"/><stop offset="1" stop-color="' + P.s2 + '" stop-opacity="0"/></linearGradient>'
-      + '<filter id="sxSoft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>'
-      + '<rect width="100%" height="' + hz + '" fill="url(#sxSky)"/><g transform="translate(0 ' + (hz - 128) + ')">';
-    if(dk) for(let i = 0; i < 70; i++){ const x = R() * W, y = R() * (hz - 30); g += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (.35 + R() * .95).toFixed(2) + '" fill="#fff" opacity="' + (.25 + R() * .65).toFixed(2) + '"/>'; }
-    else [[.16, 30, 1], [.42, 58, .8], [.66, 24, .7], [.95, 44, .9]].forEach(([fx, y, k]) => { const x = fx * W;
-      g += '<g filter="url(#sxSoft)" fill="#fff" opacity=".75">' + [[0, 0, 34], [26, -8, 26], [52, 2, 30], [-26, 4, 22]].map(q => '<ellipse cx="' + (x + q[0] * k).toFixed(1) + '" cy="' + (y + q[1] * k).toFixed(1) + '" rx="' + (q[2] * k * 1.5).toFixed(1) + '" ry="' + (q[2] * k * .55).toFixed(1) + '"/>').join("") + "</g>"; });
-    g += '<circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="150" fill="url(#sxGlow)"/>';
-    // the sun, or a crescent moon (a disc with a second disc masked out of it)
-    if(dk) g += '<mask id="sxCres"><circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="17" fill="#fff"/><circle cx="' + (sunX + 7).toFixed(1) + '" cy="' + (sunY - 5) + '" r="14.5" fill="#000"/></mask><circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="17" fill="' + P.sun + '" mask="url(#sxCres)"/>';
-    else g += '<circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="22" fill="' + P.sun + '"/>';
-    // France, far off and hazy, with the lighthouse on Cap Gris-Nez
-    const lx = W - 190 * ex;
-    g += '<g transform="translate(' + W.toFixed(1) + ' 0) scale(' + ex.toFixed(3) + ' 1) translate(-1200 0)"><path d="M700 128C760 121 820 115 880 117C950 119 1010 113 1070 110C1120 108 1170 112 1200 111V128Z" fill="' + P.fr + '" opacity=".92"/></g>'
-      + '<rect x="' + (lx - 1.5).toFixed(1) + '" y="105" width="3" height="9" rx="1" fill="' + (dk ? "#AEB8D8" : "#F4F1EA") + '"/>'
-      + (dk ? '<path d="M' + lx.toFixed(1) + ' 106L' + (lx - 140).toFixed(1) + ' 96L' + (lx - 140).toFixed(1) + ' 112Z" fill="#FFE7A8" opacity=".06"/><circle cx="' + lx.toFixed(1) + '" cy="106" r="2.4" fill="#FFE7A8"/>' : "");
-    // a ferry on the horizon
-    const fx = W * .3 + 60;
-    g += '<g fill="' + P.fr + '" opacity=".95"><rect x="' + fx.toFixed(1) + '" y="122" width="34" height="5" rx="1.5"/><rect x="' + (fx + 7).toFixed(1) + '" y="117.5" width="20" height="5" rx="1"/><rect x="' + (fx + 20).toFixed(1) + '" y="114" width="3.2" height="4"/></g>'
-      + (dk ? '<g fill="#FFE7A8" opacity=".8">' + [9, 13, 17, 21, 25].map(d => '<rect x="' + (fx + d).toFixed(1) + '" y="119.4" width="1.6" height="1.2"/>').join("") + "</g>" : "");
-    g += '<rect y="' + (hz - 22) + '" width="100%" height="30" fill="url(#sxHaze)"/>';
-    // England: the white cliffs, catching the light
-    const ew = Math.min(ex, .95);
-    g += '<g transform="scale(' + ew.toFixed(3) + ' 1)"><path d="M0 56C40 53 85 57 130 60C175 63 208 60 240 68C262 74 280 84 292 97L301 128H0Z" fill="url(#sxChalk)"/>'
-      + '<path d="M0 55C40 52 85 56 130 59C175 62 208 59 240 67C256 71 268 77 277 84" fill="none" stroke="' + P.top + '" stroke-width="7" stroke-linecap="round"/>'
-      + [[22, 61, 4], [58, 59, 7], [96, 62, 3], [134, 64, 6], [170, 66, 4], [205, 65, 8], [238, 72, 3], [266, 81, 5]].map(q => '<path d="M' + q[0] + " " + q[1] + "l" + (q[2] * .4) + " 67" + '" stroke="' + P.ch1 + '" stroke-width="' + q[2] + '" stroke-linecap="round" opacity=".32"/>').join("")
-      + '<rect y="124" width="305" height="4" fill="' + P.w2 + '" opacity=".35"/></g>';
-    g += "</g>";
-    // the sea, with the light lying across it
-    g += '<rect y="' + hz + '" width="100%" height="' + (H - hz) + '" fill="url(#sxSea)"/>';
-    for(let i = 0; i < 46; i++){ const t = i / 46, y = hz + 2 + Math.pow(t, 1.5) * (H - hz - 10), w = (5 + 70 * t) * (.4 + R() * .8), x = sunX + (R() - .5) * (18 + 150 * t);
-      g += '<rect x="' + (x - w / 2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + (.8 + 2.2 * t).toFixed(1) + '" rx="1" fill="' + P.sun + '" opacity="' + ((1 - t) * (dk ? .5 : .7)).toFixed(2) + '"/>'; }
-    g += '<g class="st-swell">';
-    for(let k = 0; k < 15; k++){ const t = (k + 1) / 15, y = hz + 3 + (H - hz) * Math.pow(t, 1.65), a = .6 + 5.5 * t, L = 26 + 150 * t; let d = "M" + (-L - R() * L).toFixed(1) + " " + y.toFixed(1);
-      for(let x = 0; x < W + 2 * L; x += L) d += "q" + (L / 4).toFixed(1) + " " + (-a).toFixed(1) + " " + (L / 2).toFixed(1) + " 0q" + (L / 4).toFixed(1) + " " + a.toFixed(1) + " " + (L / 2).toFixed(1) + " 0";
-      g += '<path d="' + d + '" fill="none" stroke="#fff" stroke-width="' + (.5 + 1.3 * t).toFixed(2) + '" opacity="' + ((dk ? .05 : .08) + .1 * t).toFixed(2) + '"/>'; }
-    g += "</g>";
-    // one small boat, heading for England, its wake trailing behind
-    g += '<g transform="translate(' + boatX.toFixed(1) + " " + boatY + ')"><g class="st-boat"><path d="M16 3L70 -2M16 5L74 10" stroke="#fff" stroke-width="1" opacity=".35" fill="none"/>'
-      + '<path d="M-17 0H17Q15 6 9 7H-11Q-17 5 -17 0Z" fill="' + P.hull + '"/><path d="M-15 1H15" stroke="' + (dk ? "#47527A" : "#56657C") + '" stroke-width="1.2"/>'
-      + [-12, -8, -4, 0, 4, 8, 12].map((x, i) => '<circle cx="' + x + '" cy="' + (-2.4 - (i % 2) * .6) + '" r="1.7" fill="' + P.hull + '"/>').join("") + "</g></g>";
+  /* ------------------------------------------------------------ the welcome, in the manner of an iPhone lock screen: a wallpaper of the
+     Channel's water, this year's total in large glass numerals, and four widgets on Liquid Glass */
+  // the wallpaper: soft light behind, then ribbons of water, each with a bright edge along its crest, as Apple's own wallpapers are drawn
+  function wallpaper(W, H, dk){
+    const P = dk ? {top:"#03061A", mid:"#0B1640", low:"#132A6B", glow:[["#5B3DF5", .55], ["#0A84FF", .5], ["#FF7A59", .18]],
+        bands:[["#1A2F86", "#3B2A9C", .9], ["#0C47B8", "#1C6FE0", .85], ["#0B7FD1", "#3DC2E8", .55], ["#2346C7", "#6E4BEF", .75], ["#081A55", "#0E2F86", .95]], rim:.32}
+      : {top:"#2F7BF5", mid:"#5AA9FF", low:"#9ED3FF", glow:[["#F2F8FF", .75], ["#7EE1FF", .6], ["#8C7BFF", .45]],
+        bands:[["#BFE6FF", "#FFFFFF", .7], ["#4FA6FF", "#7FD3FF", .85], ["#1E7BF0", "#33B6F5", .9], ["#1561D8", "#4A8BFF", .9], ["#0B3FA8", "#1A63D6", .95]], rim:.55};
+    const id = "wp" + (++uid), band = (i, y0, amp, ph) => {   // a ribbon across the width, its crest a smooth wave
+      const n = 4, pts = [];
+      for(let k = 0; k <= n; k++){ const x = W * k / n; pts.push([x, y0 + amp * Math.sin(ph + k * 1.7) + amp * .45 * Math.cos(ph * 1.3 + k * 2.9)]); }
+      let d = "M" + (-4) + " " + pts[0][1].toFixed(1);
+      for(let k = 1; k <= n; k++){ const a = pts[k - 1], b = pts[k], cx = (a[0] + b[0]) / 2; d += "C" + cx.toFixed(1) + " " + a[1].toFixed(1) + " " + cx.toFixed(1) + " " + b[1].toFixed(1) + " " + (k === n ? W + 4 : b[0]).toFixed(1) + " " + b[1].toFixed(1); }
+      return d;
+    };
+    let g = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true"><defs>'
+      + '<linearGradient id="' + id + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.top + '"/><stop offset=".55" stop-color="' + P.mid + '"/><stop offset="1" stop-color="' + P.low + '"/></linearGradient>'
+      + '<filter id="' + id + 'b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="' + Math.round(Math.max(W, H) / 14) + '"/></filter>'
+      + '<filter id="' + id + 'r" x="-5%" y="-50%" width="110%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>'
+      + P.bands.map((b, i) => '<linearGradient id="' + id + "g" + i + '" x1="0" y1="0" x2="1" y2=".35"><stop offset="0" stop-color="' + b[0] + '"/><stop offset="1" stop-color="' + b[1] + '"/></linearGradient>').join("")
+      + "</defs>" + '<rect width="100%" height="100%" fill="url(#' + id + 's)"/>'
+      + '<g filter="url(#' + id + 'b)">' + [[.82, .12, .34], [.12, .3, .3], [.55, .7, .38]].map((c, i) => '<circle cx="' + (W * c[0]).toFixed(0) + '" cy="' + (H * c[1]).toFixed(0) + '" r="' + (Math.max(W, H) * c[2]).toFixed(0) + '" fill="' + P.glow[i][0] + '" opacity="' + P.glow[i][1] + '"/>').join("") + "</g>";
+    // five ribbons, from the far water to the near, each a little lower and a little deeper
+    P.bands.forEach((b, i) => {
+      const y0 = H * (.34 + i * .13), amp = H * (.035 + i * .012), d = band(i, y0, amp, i * 2.1 + .6);
+      g += '<path d="' + d + "V" + (H + 4) + "H-4Z" + '" fill="url(#' + id + "g" + i + ')" opacity="' + b[2] + '"/>'
+        + '<path d="' + d + '" fill="none" stroke="#fff" stroke-width="' + (1.2 + i * .3).toFixed(1) + '" opacity="' + (P.rim * (1 - i * .14)).toFixed(2) + '" filter="url(#' + id + 'r)"/>';
+    });
     return g + "</svg>";
   }
+  // small pictures for the widgets
+  function spark(vals, w, h){   // a bar sparkline, newest on the right
+    const mx = Math.max(1, ...vals), bw = w / vals.length;
+    return '<svg class="st-w-spark" viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none" aria-hidden="true">' + vals.map((v, i) => { const bh = Math.max(1.5, h * v / mx);
+      return '<rect x="' + (i * bw + bw * .18).toFixed(1) + '" y="' + (h - bh).toFixed(1) + '" width="' + (bw * .64).toFixed(1) + '" height="' + bh.toFixed(1) + '" rx="' + Math.min(1.6, bw * .3).toFixed(1) + '"' + (i === vals.length - 1 ? ' class="on"' : "") + "/>"; }).join("") + "</svg>";
+  }
+  function line(vals, w, h){   // a smooth line with a dot at the end
+    const mx = Math.max(...vals), mn = Math.min(...vals), p = vals.map((v, i) => [3 + (w - 6) * i / Math.max(1, vals.length - 1), h - 3 - (h - 6) * (v - mn) / Math.max(1e-9, mx - mn)]), e = p[p.length - 1];
+    return '<svg class="st-w-line" viewBox="0 0 ' + w + " " + h + '" aria-hidden="true"><path d="' + smooth(p) + '"/><circle cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="3"/></svg>';
+  }
+  const ICON = {
+    compare:'<path d="M4 7h11M4 12h16M4 17h7"/>', cal:'<rect x="3.5" y="5" width="17" height="15.5" rx="3.2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    wave:'<path d="M2.5 9c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0M2.5 15c1.6-1.4 3.2-1.4 4.8 0s3.2 1.4 4.7 0 3.2-1.4 4.7 0 3.2 1.4 4.8 0"/>',
+    boat:'<path d="M3 14h18l-2.2 4.2a2 2 0 0 1-1.8 1.1H7a2 2 0 0 1-1.8-1.1z"/><circle cx="8" cy="10.5" r="1.6"/><circle cx="12" cy="10" r="1.6"/><circle cx="16" cy="10.5" r="1.6"/>'
+  };
   function drawHero(){
     const el = $("stHero"); if(!el || !D.length) return;
     const cur = last.slice(0, 4), prev = String(+cur - 1), dl = doy(last), m = r => r.migrants || 0;
     const yRows = D.filter(d => d.date.slice(0, 4) === cur), ytd = sum(yRows, m), pYtd = sum(D.filter(d => d.date.slice(0, 4) === prev && doy(d.date) <= dl), m);
-    const top = yRows.reduce((a, b) => m(b) > m(a) ? b : a, yRows[0] || D[D.length - 1]);
+    const top = yRows.reduce((a, b) => m(b) > m(a) ? b : a, yRows[0] || D[D.length - 1]), td = parse(top.date);
     const from = iso(new Date(parse(last).getTime() - 29 * 864e5)), l30 = D.filter(d => d.date >= from), ch = pYtd ? Math.round((ytd / pYtd - 1) * 100) : null;
-    const tile = (l, v, sub) => '<div class="st-tile"><span>' + esc(l) + "</span><b>" + esc(v) + "</b><small>" + esc(sub) + "</small></div>";
-    el.innerHTML = '<div class="st-hero-art"></div><div class="st-hero-in"><p class="st-hero-eye">Figures to ' + esc(dLong.format(parse(last))) + "</p>"
-      + '<p class="st-hero-big"><b>' + fmt(ytd) + "</b><span>people have crossed the Channel in small boats in " + cur + " so far</span></p>"
+    const fmtDay = o => new Intl.DateTimeFormat("en-GB", Object.assign({timeZone:"UTC"}, o));
+    const widget = (cls, icon, label, body) => '<div class="st-w ' + cls + '"><div class="st-w-h"><span class="st-w-ic"><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[icon] + "</svg></span>" + esc(label) + "</div>" + body + "</div>";
+    const mx = Math.max(ytd, pYtd, 1);
+    el.innerHTML = '<div class="st-hero-art"></div><div class="st-hero-in">'
+      + '<p class="st-hero-date">' + esc(fmtDay({weekday:"long", day:"numeric", month:"long"}).format(parse(last))) + "</p>"
+      + '<p class="st-hero-big" aria-label="' + fmt(ytd) + " people have crossed in " + cur + ' so far"><b>' + fmt(ytd) + "</b></p>"
+      + '<p class="st-hero-sub">people have crossed the Channel in small boats in ' + cur + " so far</p>"
       + '<div class="st-hero-tiles">'
-      + tile("By this date in " + prev, fmt(pYtd), ch == null ? "" : ch === 0 ? cur + " is level with it" : cur + " is " + Math.abs(ch) + "% " + (ch < 0 ? "lower" : "higher"))
-      + tile("Busiest day of " + cur, fmt(m(top)), m(top) ? new Intl.DateTimeFormat("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"UTC"}).format(parse(top.date)) : "")
-      + tile("Last 30 days", fmt(sum(l30, m)), fmt(sum(l30, r => r.boats)) + " boats")
-      + tile("People a boat", perBoat ? fmt(perBoat.last90.avg) : "–", "on average, last 90 days")
+      + widget("w-cmp", "compare", "This year and last", '<div class="st-w-v">' + (ch == null ? "–" : (ch > 0 ? "+" : ch < 0 ? "−" : "") + Math.abs(ch) + "%") + "</div>"
+        + '<div class="st-w-bars"><span><em>' + cur + "</em><b>" + fmt(ytd) + '</b><i style="--w:' + (ytd / mx).toFixed(3) + '"></i></span><span class="p"><em>' + prev + "</em><b>" + fmt(pYtd) + '</b><i style="--w:' + (pYtd / mx).toFixed(3) + '"></i></span></div>')
+      + widget("w-cal", "cal", "Busiest day", '<div class="st-w-calrow"><div class="st-w-date"><small>' + esc(fmtDay({weekday:"short"}).format(td).toUpperCase()) + "</small><b>" + td.getUTCDate() + "</b><small>" + esc(fmtDay({month:"short"}).format(td)) + '</small></div><div><div class="st-w-v">' + fmt(m(top)) + '</div><div class="st-w-f">people in one day</div></div></div>')
+      + widget("w-30", "wave", "Last 30 days", '<div class="st-w-v">' + fmt(sum(l30, m)) + '</div><div class="st-w-f">' + fmt(sum(l30, r => r.boats)) + " boats</div>" + spark(l30.map(m), 120, 30))
+      + widget("w-pb", "boat", "People a boat", '<div class="st-w-v">' + (perBoat ? fmt(perBoat.last90.avg) : "–") + '</div><div class="st-w-f">' + (perBoat ? "last 90 days, up from " + fmt(perBoat.years[0].avg) + " in " + perBoat.years[0].y : "last 90 days") + "</div>"
+        + (perBoat ? line(perBoat.years.map(y => y.avg), 120, 30) : ""))
       + "</div></div>";
-    el.querySelector(".st-hero-art").innerHTML = scene(el.clientWidth || 360, el.clientHeight || 400, isDark());
+    el.querySelector(".st-hero-art").innerHTML = wallpaper(el.clientWidth || 360, el.clientHeight || 520, isDark());
   }
 
   /* ------------------------------------------------------------ the page */
@@ -780,12 +776,19 @@
   function setLocked(on){
     locked = on;
     if(!on && window.ccLive) window.ccLive(true);   // live updates across the site come with Studio
-    if(on){ renderOffer("offer"); peek.innerHTML = peekPic(); lockBox.append(peek, offer); host.replaceChildren(lockBox); return; }
-    else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = acct && acct.email ? "Studio is unlocked for " + esc(acct.email) + ' · <button type="button">Sign out</button>'
-      : window.CC_STUDIO_PREVIEW ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : "Studio is unlocked on this device."; }
+    if(on){ renderOffer("offer"); peek.innerHTML = peekPic(); lockBox.append(peek, offer); host.replaceChildren(lockBox); showOut(); return; }
+    else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = window.CC_STUDIO_PREVIEW && !(acct && acct.email) ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : ""; }
+    showOut();
     requestAnimationFrame(drawAll);
   }
-  acctLine.addEventListener("click", e => { if(e.target.closest("button")){ store.del("acct"); acct = null; setLocked(true); if(window.ccLive) window.ccLive(false); } });
+  // signing out lives in the round door button at the top of the page, beside Appearance and Share (index.html draws it and asks first)
+  function signOut(){ store.del("acct"); acct = null; setLocked(true); if(window.ccLive) window.ccLive(false); }
+  function showOut(){
+    const b = document.getElementById("outBtn"), who = document.getElementById("outWho"), on = !locked && !!(acct && acct.email);
+    if(b) b.hidden = !on; if(who) who.textContent = on ? "You’re signed in as " + acct.email + ". You can sign back in any time with the same email." : "";
+  }
+  window.ccSignOut = signOut;
+  acctLine.addEventListener("click", e => { if(e.target.closest("button")) signOut(); });
 
   // coming back from Stripe, or from the sign-in link in an email
   function arrivals(){
