@@ -539,6 +539,18 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 .ring-legend span{color:var(--label2);font-size:.765rem}
 /* arrival outlook: today and tomorrow */
 .pred-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+/* asylum support: a bar split three ways, with its key underneath */
+.sup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.sup-bar{display:flex;gap:3px;height:14px;margin:16px 0 12px;border-radius:7px;overflow:hidden}
+.sup-bar i{flex:0 0 var(--w);min-width:4px}
+.sup-key{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.88rem}
+.sup-key li{display:flex;align-items:center;gap:8px}
+.sup-key span{width:10px;height:10px;border-radius:3px;flex:none}
+.sup-key b{margin-left:auto;font-weight:600}
+.sup-src{margin:12px 4px 0;font-size:.765rem;line-height:1.45;color:var(--label2)}
+.sup-src a{color:inherit}
+.sup-grid .vs span{display:block;margin-top:4px;line-height:1.35}
+@media (max-width:719px){.sup-grid{grid-template-columns:1fr}}
 .pred{display:flex;flex-direction:column}
 .pred-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
 .pred-h h3{margin:0}
@@ -1705,6 +1717,33 @@ main .hero{border-radius:32px}
     <section class="wide" aria-labelledby="hPred">
       <div class="section-h rv"><h2 id="hPred">Arrival Outlook</h2><p>From the forecast and past crossings</p></div>
       <div class="pred-grid" id="predGrid"><article class="card pred rv"><p class="pred-wait">Loading the forecast…</p></article><article class="card pred rv"><p class="pred-wait">Loading the forecast…</p></article></div>
+    </section>
+
+    <!-- ============================================================ ASYLUM SUPPORT: the Home Office's quarterly figures (Asy_D09). Update by hand when a new quarter is published -->
+    <section class="wide" aria-labelledby="hSup">
+      <div class="section-h rv"><h2 id="hSup">Asylum Support</h2><p>At the end of June 2026 · updated every three months</p></div>
+      <div class="sup-grid">
+        <article class="card rv">
+          <h3>People on asylum support</h3>
+          <div class="val num">93,293</div>
+          <div class="sub">12% fewer than a year before</div>
+          <div class="sup-bar" role="img" aria-label="16,021 in hotels, 73,068 in other housing, 4,204 on cash support only"><i style="--w:17.2%;background:var(--viz2)"></i><i style="--w:78.3%;background:var(--viz1)"></i><i style="--w:4.5%;background:var(--viz3)"></i></div>
+          <ul class="sup-key">
+            <li><span style="background:var(--viz2)"></span>In hotels<b class="num">16,021</b></li>
+            <li><span style="background:var(--viz1)"></span>Other housing<b class="num">73,068</b></li>
+            <li><span style="background:var(--viz3)"></span>Cash support only<b class="num">4,204</b></li>
+          </ul>
+        </article>
+        <article class="card rv">
+          <h3>What support pays</h3>
+          <div class="vs">
+            <div><b class="num">£49.18</b><span>a week each, in housing where people cook for themselves</span></div>
+            <div><b class="num">£9.95</b><span>a week each, in hotels where meals are provided</span></div>
+          </div>
+          <div class="cost"><b>Half as many people are in hotels as a year before.</b> People waiting for an asylum decision can't usually claim benefits such as Universal Credit; asylum support is housing and this allowance instead.</div>
+        </article>
+      </div>
+      <p class="sup-src rv">Everyone receiving asylum support, however they arrived, not only people who crossed by small boat. Source: Home Office, <a href="https://www.gov.uk/government/statistics/immigration-system-statistics-year-ending-june-2026/how-many-people-are-in-the-uk-asylum-system">Immigration system statistics, year ending June 2026</a>, and <a href="https://www.gov.uk/asylum-support/what-youll-get">GOV.UK asylum support rates</a>.</p>
     </section>
 </div>
 
