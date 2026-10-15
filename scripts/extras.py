@@ -23,7 +23,13 @@ H = {"User-Agent": "channel-crossings-tracker (GitHub Action)"}
 
 
 def save(name, obj):
-    """Write via a temporary file: update_all() carries on after a failure, so a half-written file would be published."""
+    """Write via a temporary file: update_all() carries on after a failure, so a half-written file would be published.
+    Nothing is written when only updatedAt would change (the page doesn't use it), so a quiet day adds no noise."""
+    try:
+        if {**json.loads((ROOT / name).read_text()), "updatedAt": obj.get("updatedAt")} == obj:
+            return
+    except (OSError, ValueError, TypeError):
+        pass
     tmp = ROOT / (name + ".tmp")
     tmp.write_text(json.dumps(obj, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     os.replace(tmp, ROOT / name)
@@ -97,7 +103,7 @@ def update_gender():
         except (TypeError, ValueError):
             continue
         recs.append((str(r[col["quarter"]]).strip(), str(r[col["sex"]]).strip(), str(r[col["age group"]]).strip(), n))
-    quarters = sorted({q for q, *_ in recs})
+    quarters = sorted({q for q, *_ in recs if re.fullmatch(r"\d{4} Q[1-4]", q)})   # not totals or notes
     last4 = set(quarters[-4:])
 
     def tally(keep):
@@ -119,7 +125,7 @@ def update_gender():
         "latestQuarter": last_q,
         "period": year_ending(last_q),
         "lastYear": tally(lambda q: q in last4),
-        "since2018": tally(lambda q: True),
+        "since2018": tally(lambda q: q in quarters),
         "updatedAt": now_iso(),
     })
     print(f"Sex and age: saved, latest quarter {last_q}")
@@ -228,6 +234,15 @@ RETURNS_COLLECTION = "https://www.gov.uk/api/content/government/publications/the
 RETURNS_TITLE = re.compile(r"transfers into and returns from the United Kingdom under the UK.France Agreement", re.I)
 
 
+def count(v):
+    """A table cell as a whole number: a column with a blank cell reads as floats (12.0 is 12, not 120), and
+    "12 [note 3]" or "1,204" keep only the leading number."""
+    if isinstance(v, float):
+        return 0 if v != v else int(v)
+    m = re.match(r"\s*(\d[\d,]*)", str(v))
+    return int(m.group(1).replace(",", "")) if m else 0
+
+
 def _period(title):
     """'... between 6 August 2025 and 30 June 2026' -> ('2025-08-06', '2026-06-30')"""
     m = re.search(r"between (\d{1,2} \w+ \d{4}) and (\d{1,2} \w+ \d{4})", title)
@@ -267,7 +282,6 @@ def update_returns(days):
     start, end = _period(title)
     html = requests.get(url, headers=H, timeout=60).text
     months = []
-    num = lambda v: int(re.sub(r"[^\d]", "", str(v)) or 0)
     for t in pd.read_html(io.StringIO(html)):
         cols = [" ".join(map(str, c)) if isinstance(c, tuple) else str(c) for c in t.columns]
         find = lambda pat: next((i for i, c in enumerate(cols) if re.search(pat, c, re.I)), None)
@@ -286,7 +300,7 @@ def update_returns(days):
                 m = datetime.strptime(text, "%B %Y").strftime("%Y-%m")
             except ValueError:
                 continue                                                  # the total row, notes
-            months.append({"month": m, "in": num(row[ci]), "out": num(row[co])})
+            months.append({"month": m, "in": count(row[ci]), "out": count(row[co])})
         if months:
             break
     if not months:

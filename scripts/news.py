@@ -19,6 +19,7 @@ from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from xml.etree import ElementTree as ET
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "news.json"
@@ -196,7 +197,6 @@ def pick(stories, now):
 
 def reported_today(stories, now):
     """The newest story from today (UK time) saying boats are crossing the Channel today, or None."""
-    from zoneinfo import ZoneInfo
     uk = ZoneInfo("Europe/London")
     today = now.astimezone(uk).date()
     hits = []
@@ -222,16 +222,20 @@ def reported_today(stories, now):
 
 def main():
     now = datetime.now(timezone.utc)
-    stories = []
+    stories, read = [], 0
     for source, url in FEEDS:
         try:
             got = read_feed(source, url)
             for g in got:
                 g["politics"] = url in POLITICS_FEEDS
             stories += got
+            read += 1
             print(f"{source}: {len(got)} items")
         except Exception as e:  # noqa: BLE001 - one broken feed shouldn't stop the others
             print(f"{source}: skipped ({e})")
+    if not read:                     # no network, not "no news": keep the stories we have
+        print("No feed could be read, so news.json is left as it is")
+        return
     items = pick(stories, now)
     for source, channel in GROUND:   # live sightings: only for "reported today", never the news strip
         try:
@@ -249,6 +253,9 @@ def main():
         old = json.loads(OUT.read_text())
     except (OSError, ValueError):
         old = {}
+    # once a crossing has been reported today it stays reported, even after the post or story drops out of its feed
+    if not reported and (old.get("reported") or {}).get("date") == now.astimezone(ZoneInfo("Europe/London")).date().isoformat():
+        reported = old["reported"]
     # a pinned story keeps the time it was first pinned, so the file only changes when the stories do
     pinned_at = lambda url: parse_date(next((i.get("published", "") for i in old.get("items", []) if i.get("url") == url), ""))
     if OVERRIDE.exists():
