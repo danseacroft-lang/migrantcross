@@ -23,6 +23,8 @@
   const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
   const fmt = n => n == null || !isFinite(n) ? "–" : (Math.abs(n) < 100 && n % 1 ? n.toFixed(1) : Math.round(n).toLocaleString("en-GB"));
   const kfmt = n => n >= 1e4 ? Math.round(n / 1e3) + "k" : n >= 1e3 ? (n / 1e3).toFixed(1).replace(/\.0$/, "") + "k" : fmt(n);
+  // a colour part-way from one hex colour to another, as a hex colour (so a saved picture keeps it)
+  const mix = (a, b, t) => "#" + [1, 3, 5].map(i => Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t).toString(16).padStart(2, "0")).join("");
   const sum = (a, f) => a.reduce((s, x) => s + (f(x) || 0), 0);
   const parse = s => new Date(s + "T12:00:00Z");
   const iso = d => d.toISOString().slice(0, 10);
@@ -112,7 +114,7 @@
   Svg.prototype.add = function(s){ this.g.push(s); return this; };
   Svg.prototype.text = function(x, y, s, o){ o = o || {};
     return this.add('<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" fill="' + (o.c || this.T.ink2) + '" font-family=\'' + this.T.font + '\' font-size="' + (o.size || 11) + '" font-weight="' + (o.w || 500)
-      + '" text-anchor="' + (o.a || "start") + '"' + (o.base ? ' dominant-baseline="' + o.base + '"' : "") + ">" + esc(s) + "</text>"); };
+      + '" text-anchor="' + (o.a || "start") + '"' + (o.cls ? ' class="' + o.cls + '"' : "") + (o.base ? ' dominant-baseline="' + o.base + '"' : "") + ">" + esc(s) + "</text>"); };
   // a fill for one mark: flat, or for Glass and Vivid a gradient of the colour, Vivid with a soft glow
   Svg.prototype.fill = function(c, vertical){
     const T = this.T; if(!T.glass && !T.glow) return 'fill="' + c + '"';
@@ -124,18 +126,20 @@
     if(!this.glow){ this.glow = this.id + "glow"; this.defs.push('<filter id="' + this.glow + '" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="' + (this.T.dark ? 3.5 : 2.5) + '" result="b"/><feColorMatrix in="b" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 ' + (this.T.dark ? .7 : .45) + ' 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>'); }
     return this.glow;
   };
-  Svg.prototype.stroke = function(c, w){ return 'fill="none" stroke="' + c + '" stroke-width="' + (w || this.T.lw) + '" stroke-linecap="round" stroke-linejoin="round"' + (this.T.glow ? ' filter="url(#' + this.glowId() + ')"' : ""); };
+  Svg.prototype.stroke = function(c, w){ return 'class="st-l" pathLength="1" fill="none" stroke="' + c + '" stroke-width="' + (w || this.T.lw) + '" stroke-linecap="round" stroke-linejoin="round"' + (this.T.glow ? ' filter="url(#' + this.glowId() + ')"' : ""); };
   // a bar with rounded ends away from the baseline (bars that go down are rounded at the bottom)
   Svg.prototype.bar = function(x, y, w, h, c, o){
     o = o || {}; if(h <= 0 || w <= 0) return this;
-    const r = Math.min(this.T.r, w / 2, h), hor = o.hor;
-    if(r < .6) return this.add('<rect x="' + x.toFixed(2) + '" y="' + y.toFixed(2) + '" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '" ' + this.fill(c, !hor) + "/>");
+    const r = Math.min(this.T.r, w / 2, h), hor = o.hor, a = 'class="st-b' + (hor ? " h" : o.down ? " d" : "") + '"' + this.delay(hor ? y / this.H : x / this.W) + " ";
+    if(r < .6) return this.add('<rect ' + a + 'x="' + x.toFixed(2) + '" y="' + y.toFixed(2) + '" width="' + w.toFixed(2) + '" height="' + h.toFixed(2) + '" ' + this.fill(c, !hor) + "/>");
     let d;
     if(hor) d = "M" + x + " " + y + "h" + (w - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r + "v" + (h - 2 * r) + "a" + r + " " + r + " 0 0 1 " + -r + " " + r + "h" + -(w - r) + "z";
     else if(o.down) d = "M" + x + " " + y + "h" + w + "v" + (h - r) + "a" + r + " " + r + " 0 0 1 " + -r + " " + r + "h" + -(w - 2 * r) + "a" + r + " " + r + " 0 0 1 " + -r + " " + -r + "z";
     else d = "M" + x + " " + (y + h) + "v" + -(h - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + -r + "h" + (w - 2 * r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r + "v" + (h - r) + "z";
-    return this.add('<path d="' + d.replace(/(\d\.\d\d)\d+/g, "$1") + '" ' + this.fill(c, !hor) + "/>");
+    return this.add('<path ' + a + 'd="' + d.replace(/(\d\.\d\d)\d+/g, "$1") + '" ' + this.fill(c, !hor) + "/>");
   };
+  // how long a mark waits before it animates in: a sweep across the chart, from where it sits (0 to 1)
+  Svg.prototype.delay = function(f){ return ' style="animation-delay:' + Math.round(Math.max(0, Math.min(1, f || 0)) * 420) + 'ms"'; };
   Svg.prototype.out = function(label){
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + this.W + " " + this.H + '" width="' + this.W + '" height="' + this.H + '" role="img" aria-label="' + esc(label) + '">'
       + (this.defs.length ? "<defs>" + this.defs.join("") + "</defs>" : "") + this.g.join("") + '<circle class="st-mk" r="5" cx="-99" cy="-99" fill="' + this.T.surface + '" stroke="' + this.T.ink + '" stroke-width="2" opacity="0"/></svg>';
@@ -197,7 +201,7 @@
       const rows = prefs.group === "year" ? D : inRange(), B = bucket(rows, prefs.group);
       this.read = [fmt(measureOf(rows)), mName() + " · " + (rows.length ? bLabel(rows[0].date, "day", true) + " – " + bLabel(rows[rows.length - 1].date, "day", true) : "")];
       if(prefs.ot === "table") return table([prefs.group === "day" ? "Day" : prefs.group[0].toUpperCase() + prefs.group.slice(1), mName()[0].toUpperCase() + mName().slice(1)], B.slice().reverse().map(b => [bLabel(b.k, prefs.group, true), fmt(b.v)]));
-      const W = width(el), H = hFor(W, 300), s = new Svg(W, H, T), max = Math.max(1, ...B.map(b => b.v || 0)), f = frame(s, max);
+      const W = width(el), H = hFor(W, 300), s = new Svg(W, H, T), max = Math.max(1, ...B.map(b => b.v || 0)), f = frame(s, max, {top:24});
       const n = B.length, bw = (f.x1 - f.x0) / Math.max(n, 1), xc = i => f.x0 + bw * (i + .5), c = T.c[0];
       const pts = B.map((b, i) => [xc(i), f.y(b.v || 0)]);
       const form = prefs.ot;
@@ -207,9 +211,15 @@
       else {
         const d = form === "steps" ? stepP(pts) : form === "line" && n > 200 ? lin(pts) : smooth(pts);
         if(form === "area" || T.glass){ const id = s.id + "a"; s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c + '" stop-opacity="' + (form === "area" ? .4 : .14) + '"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></linearGradient>');
-          s.add('<path d="' + d + "L" + pts[n - 1][0].toFixed(1) + " " + f.y0 + "L" + pts[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>'); }
+          s.add('<path class="st-a" d="' + d + "L" + pts[n - 1][0].toFixed(1) + " " + f.y0 + "L" + pts[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>'); }
         s.add('<path d="' + d + '" ' + s.stroke(c, n > 400 ? Math.min(T.lw, 1.4) : T.lw) + "/>");
+        // the latest value, with a soft halo, where the eye ends up
+        const e = pts[n - 1]; if(n > 1) s.add('<circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="8" fill="' + c + '" fill-opacity=".18"/><circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="3.8" fill="' + c + '" stroke="' + T.surface + '" stroke-width="1.6"/>');
       }
+      // the peak, labelled
+      if(n > 2){ let pk = 0; B.forEach((b, i) => { if((b.v || 0) > (B[pk].v || 0)) pk = i; });
+        if(B[pk].v){ const px = xc(pk), py = f.y(B[pk].v); if(form !== "bars" && form !== "lolly") s.add('<circle class="st-d" style="animation-delay:.9s" cx="' + px.toFixed(1) + '" cy="' + py.toFixed(1) + '" r="4.2" fill="' + T.surface + '" stroke="' + c + '" stroke-width="2"/>');
+          s.text(Math.max(f.x0 + 34, Math.min(f.x1 - 34, px)), py - 10, "Peak " + fmt(B[pk].v), {a:"middle", c:T.ink, w:700, size:10.5, cls:"st-t"}); } }
       // the average: a rolling mean over a week of days, a month of weeks, a quarter of months
       if(prefs.avg && prefs.group !== "year"){
         const k = {day:7, week:4, month:3}[prefs.group], av = B.map((b, i) => { const w = B.slice(Math.max(0, i - k + 1), i + 1); return measureOf(w.flatMap(x => x.rows)) / (prefs.measure === "perboat" ? 1 : w.length); });
@@ -223,7 +233,7 @@
     }});
 
   // 2. Running total by year
-  card({id:"rt", title:"Running total by year", forms:[["lines","Lines"],["vs","This year vs last"],["multi","Small multiples"],["rank","By this date"],["table","Table"]], key:"rt",
+  card({id:"rt", full:true, title:"Running total by year", forms:[["lines","Lines"],["vs","This year vs last"],["multi","Small multiples"],["rank","By this date"],["table","Table"]], key:"rt",
     draw(el, T){
       const years = [...new Set(D.map(d => d.date.slice(0, 4)))], cur = last.slice(0, 4), prev = String(+cur - 1), doyLast = doy(last);
       const runs = years.map(y => { const rows = D.filter(d => d.date.slice(0, 4) === y); let acc = [], r = []; rows.forEach(d => { acc.push(d); r.push([doy(d.date), measureOf(acc)]); }); return {y, r, rows}; });
@@ -258,13 +268,20 @@
       const max = Math.max(1, ...show.map(r => Math.max(...r.r.map(q => q[1] || 0)))), f = frame(s, max, {right:44});
       const x = d => f.x0 + (f.x1 - f.x0) * (d - 1) / 365;
       MON.forEach((m, i) => { if(W < 420 && i % 2) return; s.text(x(doy("2001-" + String(i + 1).padStart(2, "0") + "-15")), f.y0 + 16, m, {a:"middle"}); });
+      const ends = [];
       show.slice().sort((a, b) => (a.y === cur) - (b.y === cur) || (a.y === prev) - (b.y === prev)).forEach(run => {
         const p = run.r.map(q => [x(q[0]), f.y(q[1] || 0)]); if(!p.length) return; const c = colY(run.y), hi = run.y === cur || run.y === prev;
         if(form === "vs"){ const id = s.id + "v" + run.y; s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c + '" stop-opacity=".3"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></linearGradient>');
-          s.add('<path d="' + stepP(p) + "V" + f.y0 + "H" + p[0][0].toFixed(1) + 'Z" fill="url(#' + id + ')"/>'); }
-        s.add('<path d="' + stepP(p) + '" ' + (hi ? s.stroke(c, T.lw + (run.y === cur ? .6 : 0)) : 'fill="none" stroke="' + c + '" stroke-width="1"') + "/>");
-        const e = p[p.length - 1]; s.text(Math.min(e[0] + 5, f.x1 + 4), e[1] + 4, run.y, {c:hi ? T.ink : T.ink2, w:hi ? 700 : 500, size:10});
+          s.add('<path class="st-a" d="' + stepP(p) + "V" + f.y0 + "H" + p[0][0].toFixed(1) + 'Z" fill="url(#' + id + ')"/>'); }
+        s.add('<path d="' + stepP(p) + '" ' + (hi ? s.stroke(c, T.lw + (run.y === cur ? .6 : 0)) : 'class="st-l" pathLength="1" fill="none" stroke="' + c + '" stroke-width="1"') + "/>");
+        const e = p[p.length - 1]; ends.push({x:e[0], y:e[1], run, hi, c});
       });
+      // the year at the end of each line, nudged apart so none print on top of each other
+      ends.sort((a, b) => a.y - b.y);
+      ends.forEach((e, i) => { e.ly = Math.max(e.y, i ? ends[i - 1].ly + 11 : f.y1); });
+      for(let i = ends.length - 1, lim = f.y0 + 2; i >= 0; i--){ ends[i].ly = Math.min(ends[i].ly, lim); lim = ends[i].ly - 11; }
+      ends.forEach(e => { if(e.run.y === cur) s.add('<circle class="st-d" style="animation-delay:1s" cx="' + e.x.toFixed(1) + '" cy="' + e.y.toFixed(1) + '" r="4" fill="' + e.c + '" stroke="' + T.surface + '" stroke-width="1.6"/>');
+        s.text(Math.min(e.x + 6, f.x1 + 4), e.ly + 3.5, e.run.y, {c:e.hi ? T.ink : T.ink2, w:e.hi ? 700 : 500, size:10, cls:"st-t"}); });
       this.pts = []; for(let d = 1; d <= 366; d += 3){ const vals = show.map(r => { const p = r.r.filter(q => q[0] <= d); return [r.y, p.length ? p[p.length - 1][1] : 0]; });
         const cv = vals.find(v => v[0] === cur); this.pts.push({x:x(d), y:f.y(cv && d <= doyLast ? cv[1] : (vals.find(v => v[0] === prev) || [0, 0])[1]), tip:"<b>" + esc(dShort.format(new Date(Date.UTC(2001, 0, d, 12)))) + "</b>" + vals.filter(v => v[0] === cur || v[0] === prev || form === "vs").slice().reverse().map(v => esc(v[0]) + ": " + fmt(v[0] === cur && d > doyLast ? null : v[1])).join("<br>")}); }
       this.mode = "x"; return s.out("Running total by year");
@@ -272,7 +289,7 @@
   function doy(s){ const d = parse(s); return Math.round((d - Date.UTC(d.getUTCFullYear(), 0, 1, 12)) / 864e5) + 1; }
 
   // 3. A year, day by day
-  card({id:"cal", title:"A year, day by day", forms:[["calendar","Calendar"],["radial","Clock"],["stripes","Stripes"],["table","By month"]], key:"cal",
+  card({id:"cal", full:true, title:"A year, day by day", forms:[["calendar","Calendar"],["radial","Clock"],["stripes","Stripes"],["table","By month"]], key:"cal",
     opts(){ const ys = [...new Set(D.map(d => d.date.slice(0, 4)))].reverse(); return '<div class="seg" role="group" aria-label="Year">' + ys.slice(0, 6).map(y => '<button type="button" data-k="calY" data-v="' + y + '" aria-pressed="' + (String(prefs.calY || ys[0]) === y) + '">' + y + "</button>").join("") + "</div>"; },
     draw(el, T){
       const y = String(prefs.calY || last.slice(0, 4)), rows = D.filter(d => d.date.slice(0, 4) === y), val = r => measureOf([r]);
@@ -306,16 +323,19 @@
           const ox = (i % cols) * mw, oy = Math.floor(i / cols) * mh, mm = String(i + 1).padStart(2, "0"), f = parse(y + "-" + mm + "-01"), o = (f.getUTCDay() + 6) % 7, days = new Date(Date.UTC(+y, i + 1, 0)).getUTCDate();
           s.text(ox, oy + 11, m, {c:T.ink, w:600, size:11});
           for(let d = 1; d <= days; d++){ const n = d - 1 + o, x = ox + (n % 7) * pitch, yy = oy + 18 + Math.floor(n / 7) * pitch, r = byDate[y + "-" + mm + "-" + String(d).padStart(2, "0")];
-            s.add('<rect x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) + '" rx="' + rr.toFixed(1) + '" fill="' + (r ? col(val(r)) : T.grid) + '"' + (r ? "" : ' fill-opacity=".35"') + "/>");
+            s.add('<rect class="st-d"' + s.delay(i / 12) + ' x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) + '" rx="' + rr.toFixed(1) + '" fill="' + (r ? col(val(r)) : T.grid) + '"' + (r ? "" : ' fill-opacity=".35"') + "/>");
             if(r) this.pts.push({x:x + cell / 2, y:yy + cell / 2, tip:tip(r)}); }
         });
         this.mode = "xy"; return s.out(y + ", month by month");
       }
-      const first = parse(y + "-01-01"), off = (first.getUTCDay() + 6) % 7, wk = Math.ceil((366 + off) / 7), L = 30, cell = Math.max(6, Math.min(16, (W - L) / wk - 2)), gap = cell > 9 ? 2.5 : 1.5;
+      const first = parse(y + "-01-01"), off = (first.getUTCDay() + 6) % 7, wk = Math.ceil((366 + off) / 7), L = 30, cell = Math.max(6, Math.min(24, (W - L) / wk - (W > 900 ? 4 : 2))), gap = cell > 18 ? 4 : cell > 9 ? 2.5 : 1.5;
       const H = 7 * (cell + gap) + 22, s = new Svg(W, H, T), rr = Math.min(T.r, cell * .3);
       ["Mon","","Wed","","Fri","","Sun"].forEach((d, i) => d && s.text(0, 18 + i * (cell + gap) + cell / 2 + 3.5, d, {size:9.5}));
+      // the days still to come this year, as faint empty squares, so the year reads as a whole
+      const days = new Date(Date.UTC(+y, 1, 29)).getUTCMonth() === 1 ? 366 : 365;
+      for(let d = rows.length ? doy(rows[rows.length - 1].date) + 1 : 1; d <= days; d++){ const n = d - 1 + off; s.add('<rect x="' + (L + Math.floor(n / 7) * (cell + gap)).toFixed(1) + '" y="' + (18 + (n % 7) * (cell + gap)).toFixed(1) + '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) + '" rx="' + rr.toFixed(1) + '" fill="' + T.grid + '" fill-opacity=".3"/>'); }
       rows.forEach(r => { const n = doy(r.date) - 1 + off, x = L + Math.floor(n / 7) * (cell + gap), yy = 18 + (n % 7) * (cell + gap);
-        s.add('<rect x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) + '" rx="' + rr.toFixed(1) + '" fill="' + col(val(r)) + '"/>'); this.pts.push({x:x + cell / 2, y:yy + cell / 2, tip:tip(r)}); });
+        s.add('<rect class="st-d"' + s.delay(x / W) + ' x="' + x.toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + cell.toFixed(1) + '" height="' + cell.toFixed(1) + '" rx="' + rr.toFixed(1) + '" fill="' + col(val(r)) + '"/>'); this.pts.push({x:x + cell / 2, y:yy + cell / 2, tip:tip(r)}); });
       MON.forEach((m, i) => { const n = doy(y + "-" + String(i + 1).padStart(2, "0") + "-01") - 1 + off; if(W < 420 && i % 2) return; s.text(L + Math.floor(n / 7) * (cell + gap), 10, m, {size:10}); });
       this.mode = "xy"; return s.out(y + ", in squares");
     }});
@@ -335,7 +355,7 @@
         const S = Math.min(W, 340), s = new Svg(W, S, T), cx = W / 2, cy = S / 2, R = S / 2 - 24, mx = Math.max(...vals, 1), da = 2 * Math.PI / names.length;
         [.5, 1].forEach(k => s.add('<circle cx="' + cx + '" cy="' + cy + '" r="' + (R * Math.sqrt(k)).toFixed(1) + '" fill="none" stroke="' + T.grid + '"/>'));
         this.pts = vals.map((v, i) => { const r = R * Math.sqrt(v / mx), a0 = i * da + .02, a1 = (i + 1) * da - .02;
-          s.add('<path d="' + arc(cx, cy, 0, Math.max(r, 1), a0, a1) + '" ' + s.fill(cAt(i)) + "/>");
+          s.add('<path class="st-d"' + s.delay(i / names.length) + ' d="' + arc(cx, cy, 0, Math.max(r, 1), a0, a1) + '" ' + s.fill(cAt(i)) + "/>");
           s.text(cx + (R + 13) * Math.sin(i * da + da / 2), cy - (R + 13) * Math.cos(i * da + da / 2) + 4, names[i], {a:"middle", size:10.5, c:i === mi ? T.ink : T.ink2, w:i === mi ? 700 : 500});
           return {x:cx + r * .7 * Math.sin(i * da + da / 2), y:cy - r * .7 * Math.cos(i * da + da / 2), tip:"<b>" + fmt(v) + "</b>" + esc(names[i]) + ", on average"}; });
         this.mode = "xy"; return s.out("Patterns as a rose");
@@ -401,11 +421,11 @@
       else {
         const p = Y.map((y, i) => [xc(i), f.y(y.avg)]), id = s.id + "pa";
         s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + T.c[0] + '" stop-opacity=".22"/><stop offset="1" stop-color="' + T.c[0] + '" stop-opacity="0"/></linearGradient>');
-        s.add('<path d="' + smooth(p) + "L" + p[p.length - 1][0].toFixed(1) + " " + f.y0 + "L" + p[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>');
+        s.add('<path class="st-a" d="' + smooth(p) + "L" + p[p.length - 1][0].toFixed(1) + " " + f.y0 + "L" + p[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>');
         s.add('<path d="' + smooth(p) + '" ' + s.stroke(T.c[0]) + "/>");
         const y90 = f.y(l90.avg); s.add('<path d="M' + f.x0 + " " + y90.toFixed(1) + "H" + f.x1 + '" stroke="' + T.ink2 + '" stroke-width="1" stroke-dasharray="3 4"/>');
         s.text(f.x0 + 4, y90 - 6, "Last 90 days: " + fmt(l90.avg), {size:10});
-        Y.forEach((y, i) => { s.add('<circle cx="' + p[i][0].toFixed(1) + '" cy="' + p[i][1].toFixed(1) + '" r="' + (y.y === part ? 5 : 3.5) + '" fill="' + col(y) + '" stroke="' + T.surface + '" stroke-width="1.5"/>'); if(W > 380 || i % 2 === 0 || i === Y.length - 1) s.text(p[i][0], p[i][1] - 10, fmt(y.avg), {a:"middle", size:10, c:T.ink, w:600}); });
+        Y.forEach((y, i) => { s.add('<circle class="st-d"' + s.delay(i / Y.length + .5) + ' cx="' + p[i][0].toFixed(1) + '" cy="' + p[i][1].toFixed(1) + '" r="' + (y.y === part ? 5 : 3.5) + '" fill="' + col(y) + '" stroke="' + T.surface + '" stroke-width="1.5"/>'); if(W > 380 || i % 2 === 0 || i === Y.length - 1) s.text(p[i][0], p[i][1] - 10, fmt(y.avg), {a:"middle", size:10, c:T.ink, w:600}); });
       }
       Y.forEach((y, i) => s.text(xc(i), f.y0 + 16, W < 420 ? "’" + y.y.slice(2) : y.y, {a:"middle"}));
       this.pts = Y.map((y, i) => ({x:xc(i), y:f.y(y.avg), tip:tip(y)})); this.mode = "x";
@@ -418,7 +438,7 @@
     draw(el, T){
       if(!gender) return '<p class="st-note">These figures are still loading.</p>';
       const g = gender[prefs.who] || gender.lastYear, sx = [["Men and boys", g.sex.Male, T.c[0]], ["Women and girls", g.sex.Female, T.c[1]], ["Not recorded", g.sex.Unknown, T.muted]];
-      const ages = Object.entries(g.age).map(([k, v], i) => [k, v, k === "Unknown" ? T.muted : T.seq[Math.min(4, i + 1)]]);
+      const ages = Object.entries(g.age).map(([k, v], i) => [k, v, k === "Unknown" ? T.muted : mix(T.surface, T.c[2], [.4, .6, .8, 1][Math.min(3, i)])]);
       this.read = [Math.round(g.adultMen / g.total * 100) + "%", "were adult men, " + (prefs.who === "lastYear" ? gender.period : "since 2018") + " (" + fmt(g.total) + " people)"];
       this.legend = prefs.whoF === "table" ? "" : legend(sx.map(x => [x[0], x[2]])) + legend(ages.map(x => [x[0] === "Unknown" ? "Age not recorded" : x[0], x[2]]));
       if(prefs.whoF === "table") return table(["Group", "People", "Share"], sx.concat(ages).map(x => [x[0], fmt(x[1]), (x[1] / g.total * 100).toFixed(1) + "%"]));
@@ -444,7 +464,7 @@
       this.read = [fmt(rets.out), "returned to France and " + fmt(rets.in) + " transferred to the UK, to " + dLong.format(parse(rets.to))];
       this.legend = prefs.ret === "table" ? "" : legend([["Returned to France", T.c[0]], ["Transferred to the UK", T.c[1]]]);
       if(prefs.ret === "table") return table(["Month", "Returned", "Transferred"], M.slice().reverse().map(m => [lab(m), fmt(m.out), fmt(m.in)]));
-      const W = width(el), H = hFor(W, 240), s = new Svg(W, H, T), max = Math.max(...M.map(m => Math.max(m.in, m.out)), 1), mir = prefs.ret === "mirror";
+      const W = width(el), H = hFor(W, 260), s = new Svg(W, H, T), max = Math.max(...M.map(m => Math.max(m.in, m.out)), 1), mir = prefs.ret === "mirror";
       let f, xc, bw;
       if(mir){ const mid = (H - 22) / 2, t = niceTicks(max, 2); f = {x0:36, x1:W - 6, y0:H - 22}; bw = (f.x1 - f.x0) / M.length; xc = i => f.x0 + bw * (i + .5);
         const ys = v => (mid - 6) * v / t.top;
@@ -466,16 +486,16 @@
   function parts(el, T, groups, total, form, cardO){
     const W = width(el); cardO.pts = []; cardO.mode = "xy";
     if(form === "hbars"){
-      const rowH = 26, L = Math.min(150, W * .36), n = groups.reduce((a, g) => a + g[1].length + (g[0] ? 1 : 0), 0), s = new Svg(W, n * rowH + 4, T); let y = 2;
+      const rowH = W > 520 ? 36 : 26, L = Math.min(150, W * .36), n = groups.reduce((a, g) => a + g[1].length + (g[0] ? 1 : 0), 0), s = new Svg(W, n * rowH + 4, T); let y = 2;
       groups.forEach(([h, items]) => { if(h){ s.text(0, y + 17, h, {c:T.ink, w:600, size:11.5}); y += rowH; } const mx = Math.max(...items.map(x => x[1]));
-        items.forEach(([k, v, c]) => { const w = (W - L - 56) * v / mx; s.text(L - 8, y + rowH / 2 + 4, k, {a:"end"}); s.bar(L, y + 5, w, rowH - 10, c, {hor:true}); s.text(L + w + 6, y + rowH / 2 + 4, (v / total * 100).toFixed(0) + "%", {c:T.ink, w:600});
+        items.forEach(([k, v, c]) => { const w = (W - L - 56) * v / mx; s.text(L - 8, y + rowH / 2 + 4, k, {a:"end"}); const bh = Math.min(rowH - 10, 20); s.bar(L, y + (rowH - bh) / 2, w, bh, c, {hor:true}); s.text(L + w + 6, y + rowH / 2 + 4, (v / total * 100).toFixed(0) + "%", {c:T.ink, w:600});
           cardO.pts.push({x:L + w / 2, y:y + rowH / 2, tip:"<b>" + fmt(v) + "</b>" + esc(k) + ", " + (v / total * 100).toFixed(1) + "%"}); y += rowH; }); });
       cardO.mode = "y"; return s.out("Shares as bars");
     }
     if(form === "donut"){
       const per = Math.min(W / groups.length, 300), S = per, s = new Svg(W, S + (groups[0][0] ? 18 : 0), T);
       groups.forEach(([h, items], gi) => { const cx = (W - per * groups.length) / 2 + per * (gi + .5), cy = S / 2, r1 = S / 2 - 12, r0 = r1 * .62, tot = sum(items, x => x[1]); let a = 0;
-        items.forEach(([k, v, c]) => { const da = 2 * Math.PI * v / tot; if(da > .002){ s.add('<path d="' + arc(cx, cy, r0, r1, a + .012, a + da - .012) + '" ' + s.fill(c) + "/>"); cardO.pts.push({x:cx + (r0 + r1) / 2 * Math.sin(a + da / 2), y:cy - (r0 + r1) / 2 * Math.cos(a + da / 2), tip:"<b>" + fmt(v) + "</b>" + esc(k) + ", " + (v / tot * 100).toFixed(1) + "%"}); } a += da; });
+        items.forEach(([k, v, c]) => { const da = 2 * Math.PI * v / tot; if(da > .002){ s.add('<path class="st-d"' + s.delay(a / 2 / Math.PI) + ' d="' + arc(cx, cy, r0, r1, a + .012, a + da - .012) + '" ' + s.fill(c) + "/>"); cardO.pts.push({x:cx + (r0 + r1) / 2 * Math.sin(a + da / 2), y:cy - (r0 + r1) / 2 * Math.cos(a + da / 2), tip:"<b>" + fmt(v) + "</b>" + esc(k) + ", " + (v / tot * 100).toFixed(1) + "%"}); } a += da; });
         s.text(cx, cy + 2, (items[0][1] / tot * 100).toFixed(0) + "%", {a:"middle", c:T.ink, w:700, size:Math.round(r0 / 2.6)}); s.text(cx, cy + r0 / 2.6, items[0][0], {a:"middle", size:10});
         if(h) s.text(cx, S + 12, h, {a:"middle", c:T.ink, w:600}); });
       return s.out("Shares as rings");
@@ -485,7 +505,7 @@
       let x = 0, y = 0, w = W, h = H, rest = sum(items, i => i[1]);
       items.forEach(([k, v, c], i) => { const fr = v / rest, horiz = w >= h; let rw, rh;   // slice off each piece along the longer side
         if(i === items.length - 1){ rw = w; rh = h; } else if(horiz){ rw = w * fr; rh = h; } else { rw = w; rh = h * fr; }
-        s.add('<rect x="' + (x + 1.5).toFixed(1) + '" y="' + (y + 1.5).toFixed(1) + '" width="' + Math.max(0, rw - 3).toFixed(1) + '" height="' + Math.max(0, rh - 3).toFixed(1) + '" rx="' + Math.min(T.r === 999 ? 14 : T.r * 2, 14) + '" ' + s.fill(c) + "/>");
+        s.add('<rect class="st-d"' + s.delay(i / items.length) + ' x="' + (x + 1.5).toFixed(1) + '" y="' + (y + 1.5).toFixed(1) + '" width="' + Math.max(0, rw - 3).toFixed(1) + '" height="' + Math.max(0, rh - 3).toFixed(1) + '" rx="' + Math.min(T.r === 999 ? 14 : T.r * 2, 14) + '" ' + s.fill(c) + "/>");
         if(rw > 70 && rh > 40){ s.text(x + 12, y + 22, k, {c:"#fff", w:600, size:12}); s.text(x + 12, y + 38, (v / sum(groups[0][1], q => q[1]) * 100).toFixed(1) + "%", {c:"rgba(255,255,255,.85)", size:11}); }
         cardO.pts.push({x:x + rw / 2, y:y + rh / 2, tip:"<b>" + fmt(v) + "</b>" + esc(k)});
         if(horiz){ x += rw; w -= rw; } else { y += rh; h -= rh; } rest -= v; });
@@ -495,13 +515,86 @@
     const cols = 20, gap = 3, size = Math.min(16, (Math.min(W, 520) - gap * (cols - 1)) / cols), gh = 5 * (size + gap), hasH = !!groups[0][0], s = new Svg(W, groups.length * (gh + (hasH ? 22 : 0) + 8), T);
     groups.forEach(([h, items], gi) => { const oy = gi * (gh + (hasH ? 22 : 0) + 8) + (hasH ? 18 : 0), tot = sum(items, x => x[1]); if(h) s.text(0, oy - 6, h + ", every 100 people", {c:T.ink, w:600, size:11.5});
       let cum = 0, j = 0; items.forEach(([k, v, c]) => { cum += v; const upto = Math.round(cum / tot * 100);
-        for(; j < upto; j++){ const x = (j % cols) * (size + gap), y = oy + Math.floor(j / cols) * (size + gap); s.add('<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + size.toFixed(1) + '" height="' + size.toFixed(1) + '" rx="' + Math.min(T.r === 999 ? size / 2 : T.r, size / 2).toFixed(1) + '" ' + s.fill(c) + "/>");
+        for(; j < upto; j++){ const x = (j % cols) * (size + gap), y = oy + Math.floor(j / cols) * (size + gap); s.add('<rect class="st-d"' + s.delay(j / 100) + ' x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + size.toFixed(1) + '" height="' + size.toFixed(1) + '" rx="' + Math.min(T.r === 999 ? size / 2 : T.r, size / 2).toFixed(1) + '" ' + s.fill(c) + "/>");
           cardO.pts.push({x:x + size / 2, y:y + size / 2, tip:"<b>" + Math.round(v / tot * 100) + " in 100</b>" + esc(k) + " (" + fmt(v) + ")"}); } }); });
     return s.out("Shares as squares");
   }
 
   function seg(key, opts, label){
     return '<div class="seg" role="group"' + (label ? ' aria-label="' + label + '"' : "") + ">" + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
+  }
+
+  /* ------------------------------------------------------------ the welcome: the Channel at this time of day, under the figures that matter most */
+  function seeded(n){ return () => (n = n * 16807 % 2147483647) / 2147483647; }
+  // the Strait of Dover from out at sea: the white cliffs on the left, France low on the horizon to the right, a ferry, and one small boat
+  // drawn in the box's own pixels: the sky and coast keep their size, and a taller box just gets more sea
+  function scene(W, H, dk){
+    const hz = 118, R = seeded(11), sx = W / 1200, ex = Math.max(sx, .42), sunX = W * .78, sunY = 50, boatX = W * .6, boatY = hz + 16;
+    const P = dk ? {s0:"#04071A", s1:"#0E1838", s2:"#2B3C72", sun:"#F4F0E2", glow:"#8FA8FF", w0:"#1A2A58", w1:"#0B1534", w2:"#040919", top:"#18252E", ch0:"#A3ACCB", ch1:"#56608A", fr:"#22305A", hull:"#0A1022", ink:"#C9D3F5"}
+      : {s0:"#2F7FD6", s1:"#86BEF2", s2:"#F7DDBA", sun:"#FFF8E4", glow:"#FFCF7A", w0:"#4A92C6", w1:"#1D5C95", w2:"#0A345E", top:"#5B8A45", ch0:"#FBF8F0", ch1:"#D5CCB8", fr:"#7F9DB8", hull:"#1E2A3A", ink:"#FFFFFF"};
+    let g = '<svg viewBox="0 0 ' + W.toFixed(0) + " " + H + '" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true"><defs>'
+      + '<linearGradient id="sxSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.s0 + '"/><stop offset=".62" stop-color="' + P.s1 + '"/><stop offset="1" stop-color="' + P.s2 + '"/></linearGradient>'
+      + '<linearGradient id="sxSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.w0 + '"/><stop offset=".35" stop-color="' + P.w1 + '"/><stop offset="1" stop-color="' + P.w2 + '"/></linearGradient>'
+      + '<radialGradient id="sxGlow"><stop offset="0" stop-color="' + P.glow + '" stop-opacity="' + (dk ? .45 : .75) + '"/><stop offset="1" stop-color="' + P.glow + '" stop-opacity="0"/></radialGradient>'
+      + '<linearGradient id="sxChalk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.ch0 + '"/><stop offset="1" stop-color="' + P.ch1 + '"/></linearGradient>'
+      + '<linearGradient id="sxHaze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.s2 + '" stop-opacity="0"/><stop offset=".7" stop-color="' + P.s2 + '" stop-opacity="' + (dk ? .35 : .7) + '"/><stop offset="1" stop-color="' + P.s2 + '" stop-opacity="0"/></linearGradient>'
+      + '<filter id="sxSoft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3"/></filter></defs>'
+      + '<rect width="100%" height="' + hz + '" fill="url(#sxSky)"/><g transform="translate(0 ' + (hz - 128) + ')">';
+    if(dk) for(let i = 0; i < 70; i++){ const x = R() * W, y = R() * (hz - 30); g += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (.35 + R() * .95).toFixed(2) + '" fill="#fff" opacity="' + (.25 + R() * .65).toFixed(2) + '"/>'; }
+    else [[.16, 30, 1], [.42, 58, .8], [.66, 24, .7], [.95, 44, .9]].forEach(([fx, y, k]) => { const x = fx * W;
+      g += '<g filter="url(#sxSoft)" fill="#fff" opacity=".75">' + [[0, 0, 34], [26, -8, 26], [52, 2, 30], [-26, 4, 22]].map(q => '<ellipse cx="' + (x + q[0] * k).toFixed(1) + '" cy="' + (y + q[1] * k).toFixed(1) + '" rx="' + (q[2] * k * 1.5).toFixed(1) + '" ry="' + (q[2] * k * .55).toFixed(1) + '"/>').join("") + "</g>"; });
+    g += '<circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="150" fill="url(#sxGlow)"/>';
+    // the sun, or a crescent moon (a disc with a second disc masked out of it)
+    if(dk) g += '<mask id="sxCres"><circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="17" fill="#fff"/><circle cx="' + (sunX + 7).toFixed(1) + '" cy="' + (sunY - 5) + '" r="14.5" fill="#000"/></mask><circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="17" fill="' + P.sun + '" mask="url(#sxCres)"/>';
+    else g += '<circle cx="' + sunX.toFixed(1) + '" cy="' + sunY + '" r="22" fill="' + P.sun + '"/>';
+    // France, far off and hazy, with the lighthouse on Cap Gris-Nez
+    const lx = W - 190 * ex;
+    g += '<g transform="translate(' + W.toFixed(1) + ' 0) scale(' + ex.toFixed(3) + ' 1) translate(-1200 0)"><path d="M700 128C760 121 820 115 880 117C950 119 1010 113 1070 110C1120 108 1170 112 1200 111V128Z" fill="' + P.fr + '" opacity=".92"/></g>'
+      + '<rect x="' + (lx - 1.5).toFixed(1) + '" y="105" width="3" height="9" rx="1" fill="' + (dk ? "#AEB8D8" : "#F4F1EA") + '"/>'
+      + (dk ? '<path d="M' + lx.toFixed(1) + ' 106L' + (lx - 140).toFixed(1) + ' 96L' + (lx - 140).toFixed(1) + ' 112Z" fill="#FFE7A8" opacity=".06"/><circle cx="' + lx.toFixed(1) + '" cy="106" r="2.4" fill="#FFE7A8"/>' : "");
+    // a ferry on the horizon
+    const fx = W * .3 + 60;
+    g += '<g fill="' + P.fr + '" opacity=".95"><rect x="' + fx.toFixed(1) + '" y="122" width="34" height="5" rx="1.5"/><rect x="' + (fx + 7).toFixed(1) + '" y="117.5" width="20" height="5" rx="1"/><rect x="' + (fx + 20).toFixed(1) + '" y="114" width="3.2" height="4"/></g>'
+      + (dk ? '<g fill="#FFE7A8" opacity=".8">' + [9, 13, 17, 21, 25].map(d => '<rect x="' + (fx + d).toFixed(1) + '" y="119.4" width="1.6" height="1.2"/>').join("") + "</g>" : "");
+    g += '<rect y="' + (hz - 22) + '" width="100%" height="30" fill="url(#sxHaze)"/>';
+    // England: the white cliffs, catching the light
+    const ew = Math.min(ex, .95);
+    g += '<g transform="scale(' + ew.toFixed(3) + ' 1)"><path d="M0 56C40 53 85 57 130 60C175 63 208 60 240 68C262 74 280 84 292 97L301 128H0Z" fill="url(#sxChalk)"/>'
+      + '<path d="M0 55C40 52 85 56 130 59C175 62 208 59 240 67C256 71 268 77 277 84" fill="none" stroke="' + P.top + '" stroke-width="7" stroke-linecap="round"/>'
+      + [[22, 61, 4], [58, 59, 7], [96, 62, 3], [134, 64, 6], [170, 66, 4], [205, 65, 8], [238, 72, 3], [266, 81, 5]].map(q => '<path d="M' + q[0] + " " + q[1] + "l" + (q[2] * .4) + " 67" + '" stroke="' + P.ch1 + '" stroke-width="' + q[2] + '" stroke-linecap="round" opacity=".32"/>').join("")
+      + '<rect y="124" width="305" height="4" fill="' + P.w2 + '" opacity=".35"/></g>';
+    g += "</g>";
+    // the sea, with the light lying across it
+    g += '<rect y="' + hz + '" width="100%" height="' + (H - hz) + '" fill="url(#sxSea)"/>';
+    for(let i = 0; i < 46; i++){ const t = i / 46, y = hz + 2 + Math.pow(t, 1.5) * (H - hz - 10), w = (5 + 70 * t) * (.4 + R() * .8), x = sunX + (R() - .5) * (18 + 150 * t);
+      g += '<rect x="' + (x - w / 2).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + (.8 + 2.2 * t).toFixed(1) + '" rx="1" fill="' + P.sun + '" opacity="' + ((1 - t) * (dk ? .5 : .7)).toFixed(2) + '"/>'; }
+    g += '<g class="st-swell">';
+    for(let k = 0; k < 15; k++){ const t = (k + 1) / 15, y = hz + 3 + (H - hz) * Math.pow(t, 1.65), a = .6 + 5.5 * t, L = 26 + 150 * t; let d = "M" + (-L - R() * L).toFixed(1) + " " + y.toFixed(1);
+      for(let x = 0; x < W + 2 * L; x += L) d += "q" + (L / 4).toFixed(1) + " " + (-a).toFixed(1) + " " + (L / 2).toFixed(1) + " 0q" + (L / 4).toFixed(1) + " " + a.toFixed(1) + " " + (L / 2).toFixed(1) + " 0";
+      g += '<path d="' + d + '" fill="none" stroke="#fff" stroke-width="' + (.5 + 1.3 * t).toFixed(2) + '" opacity="' + ((dk ? .05 : .08) + .1 * t).toFixed(2) + '"/>'; }
+    g += "</g>";
+    // one small boat, heading for England, its wake trailing behind
+    g += '<g transform="translate(' + boatX.toFixed(1) + " " + boatY + ')"><g class="st-boat"><path d="M16 3L70 -2M16 5L74 10" stroke="#fff" stroke-width="1" opacity=".35" fill="none"/>'
+      + '<path d="M-17 0H17Q15 6 9 7H-11Q-17 5 -17 0Z" fill="' + P.hull + '"/><path d="M-15 1H15" stroke="' + (dk ? "#47527A" : "#56657C") + '" stroke-width="1.2"/>'
+      + [-12, -8, -4, 0, 4, 8, 12].map((x, i) => '<circle cx="' + x + '" cy="' + (-2.4 - (i % 2) * .6) + '" r="1.7" fill="' + P.hull + '"/>').join("") + "</g></g>";
+    return g + "</svg>";
+  }
+  function drawHero(){
+    const el = $("stHero"); if(!el || !D.length) return;
+    const cur = last.slice(0, 4), prev = String(+cur - 1), dl = doy(last), m = r => r.migrants || 0;
+    const yRows = D.filter(d => d.date.slice(0, 4) === cur), ytd = sum(yRows, m), pYtd = sum(D.filter(d => d.date.slice(0, 4) === prev && doy(d.date) <= dl), m);
+    const top = yRows.reduce((a, b) => m(b) > m(a) ? b : a, yRows[0] || D[D.length - 1]);
+    const from = iso(new Date(parse(last).getTime() - 29 * 864e5)), l30 = D.filter(d => d.date >= from), ch = pYtd ? Math.round((ytd / pYtd - 1) * 100) : null;
+    const tile = (l, v, sub) => '<div class="st-tile"><span>' + esc(l) + "</span><b>" + esc(v) + "</b><small>" + esc(sub) + "</small></div>";
+    el.innerHTML = '<div class="st-hero-art"></div><div class="st-hero-in"><p class="st-hero-eye">Figures to ' + esc(dLong.format(parse(last))) + "</p>"
+      + '<p class="st-hero-big"><b>' + fmt(ytd) + "</b><span>people have crossed the Channel in small boats in " + cur + " so far</span></p>"
+      + '<div class="st-hero-tiles">'
+      + tile("By this date in " + prev, fmt(pYtd), ch == null ? "" : ch === 0 ? cur + " is level with it" : cur + " is " + Math.abs(ch) + "% " + (ch < 0 ? "lower" : "higher"))
+      + tile("Busiest day of " + cur, fmt(m(top)), m(top) ? new Intl.DateTimeFormat("en-GB", {weekday:"long", day:"numeric", month:"long", timeZone:"UTC"}).format(parse(top.date)) : "")
+      + tile("Last 30 days", fmt(sum(l30, m)), fmt(sum(l30, r => r.boats)) + " boats")
+      + tile("People a boat", perBoat ? fmt(perBoat.last90.avg) : "–", "on average, last 90 days")
+      + "</div></div>";
+    el.querySelector(".st-hero-art").innerHTML = scene(el.clientWidth || 360, el.clientHeight || 400, isDark());
   }
 
   /* ------------------------------------------------------------ the page */
@@ -513,8 +606,11 @@
       + "</div></div>";
   }
   const FORM_ICON = {calendar:"grid", waffle:"grid", vs:"area", rank:"hbars", lines:"line", seats:"people"};
+  // on a wide screen the cards sit in pairs, so pairs of a similar height go together; the tall ones get a row of their own
+  const ORDER = ["ot", "rt", "pat", "yr", "cal", "pb", "ret", "who", "nat"];
+  CARDS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
   function shell(){
-    let h = controls() + '<div class="st-grid">', head = false;
+    let h = '<section class="st-hero" id="stHero" aria-label="The latest figures"></section>' + controls() + '<div class="st-grid">', head = false;
     CARDS.forEach(c => {
       if(c.people && !head){ head = true; h += '</div><div class="section-h" style="margin-bottom:-10px"><h2>Who is crossing</h2></div><div class="st-grid">'; }
       h += '<article class="card st-card' + (c.full ? " st-full" : "") + '" data-card="' + c.id + '"><div class="st-top"><div><h3>' + esc(c.title) + '</h3><div class="st-read"><b>–</b><span>&nbsp;</span></div></div>'
@@ -528,7 +624,26 @@
   function drawAll(){
     if(!D.length || locked) return;
     const T = theme(); wrap.dataset.style = T.id;
+    drawHero();
     CARDS.forEach(c => drawCard(c, T));
+    watchCards(); fadeRows();
+  }
+  // a chart animates in the first time it scrolls into view, and again whenever the visitor changes it; never on a resize or a live update
+  function play(c){
+    if(reduced) return; const ch = wrap.querySelector('[data-card="' + c.id + '"] [data-chart]'); if(!ch) return;
+    ch.classList.remove("st-anim"); void ch.offsetWidth; ch.classList.add("st-anim");
+    clearTimeout(ch._anim); ch._anim = setTimeout(() => ch.classList.remove("st-anim"), 1800);
+  }
+  // a row of buttons wider than its space fades at whichever end has more to scroll to
+  const ROWS = ".st-forms,.st-styles,.st-row,.st-opts .seg";
+  function fadeRow(el){ const more = el.scrollWidth - el.clientWidth > 2; el.classList.toggle("st-more-l", more && el.scrollLeft > 2); el.classList.toggle("st-more-r", more && el.scrollLeft < el.scrollWidth - el.clientWidth - 2); }
+  const fadeRows = () => wrap.querySelectorAll(ROWS).forEach(fadeRow);
+  wrap.addEventListener("scroll", e => { if(e.target.matches && e.target.matches(ROWS)) fadeRow(e.target); }, {capture:true, passive:true});
+  let io = null;
+  function watchCards(){
+    if(io || !("IntersectionObserver" in window)) return;
+    io = new IntersectionObserver(es => es.forEach(e => { if(!e.isIntersecting) return; io.unobserve(e.target); const c = CARDS.find(x => x.id === e.target.dataset.card); if(c) play(c); }), {threshold:.25});
+    wrap.querySelectorAll("[data-card]").forEach(el => io.observe(el));
   }
   function drawCard(c, T){
     const el = wrap.querySelector('[data-card="' + c.id + '"]'); if(!el) return;
@@ -543,12 +658,12 @@
   const affects = {measure:"*", range:["ot"], style:"*", group:["ot"], avg:["ot"], ot:["ot"], rt:["rt"], cal:["cal"], calY:["cal"], pat:["pat"], patF:["pat"], yr:["yr"], who:["who"], whoF:["who"], nat:["nat"], ret:["ret"], pb:["pb"]};
   wrap.addEventListener("click", e => {
     const sw = e.target.closest(".st-sw");
-    if(sw){ prefs.style = sw.dataset.style; save(); wrap.querySelectorAll(".st-sw").forEach(b => b.setAttribute("aria-pressed", b === sw)); drawAll(); return; }
+    if(sw){ prefs.style = sw.dataset.style; save(); wrap.querySelectorAll(".st-sw").forEach(b => b.setAttribute("aria-pressed", b === sw)); drawAll(); CARDS.forEach(play); return; }
     const sv = e.target.closest("[data-save]"); if(sv){ savePicture(CARDS.find(c => c.id === sv.dataset.save)); return; }
     const b = e.target.closest("button[data-k]"); if(!b) return;
     const k = b.dataset.k, v = b.dataset.v; prefs[k] = v === "true" ? true : v === "false" ? false : v; save();
     b.parentElement.querySelectorAll("button[data-k]").forEach(x => x.setAttribute("aria-pressed", x === b));
-    const which = affects[k] === "*" ? CARDS : CARDS.filter(c => (affects[k] || []).includes(c.id)); const T = theme(); which.forEach(c => drawCard(c, T));
+    const which = affects[k] === "*" ? CARDS : CARDS.filter(c => (affects[k] || []).includes(c.id)); const T = theme(); which.forEach(c => { drawCard(c, T); play(c); }); fadeRows();
   });
 
   /* the tooltip: the nearest point to the pointer, along the chart (or in both directions for squares, rings and bars) */
@@ -689,7 +804,7 @@
     last = D.length ? D[D.length - 1].date : null; drawAll();
   }).catch(() => { wrap.querySelectorAll("[data-chart]").forEach(c => c.innerHTML = '<p class="st-note">The figures couldn’t be loaded. Check your connection and try again.</p>'); });
   Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("returns.json"), getJSON("perboat.json")]).then(([g, n, r, b]) => {
-    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); CARDS.filter(c => c.people).forEach(c => D.length && drawCard(c, T));
+    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); CARDS.filter(c => c.people).forEach(c => D.length && drawCard(c, T)); if(D.length && !locked) drawHero();
   });
 
   // redraw when the page changes width, or the visitor switches between day and night
