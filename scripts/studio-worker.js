@@ -8,6 +8,8 @@
      SITE         text    https://channelcrossings.world
      MAIL_FROM    text    Channel Crossings <studio@channelcrossings.world>  (the domain must be verified in Resend)
      PRICE_PENCE  text    199
+     FREE_EMAILS  secret  optional: email addresses that always have Studio without paying, separated by commas (kept here, not in the
+                          public code). They still sign in with an emailed link, so only whoever reads that inbox gets in.
 
    The page (studio.js) calls:
      POST /checkout {email}   → {url} a Stripe Checkout page for £1.99; or, if that email has already paid, emails a sign-in link → {paid, sent}
@@ -44,6 +46,7 @@ async function stripe(env, path, form){
 }
 // has this email paid for Studio? Every Stripe customer with the email, every completed Checkout of theirs
 async function hasPaid(env, email){
+  if((env.FREE_EMAILS || "").split(",").map(norm).filter(Boolean).includes(norm(email))) return true;
   const cs = await stripe(env, "customers?limit=10&email=" + encodeURIComponent(email));
   for(const c of cs.data){
     const ss = await stripe(env, "checkout/sessions?limit=100&status=complete&customer=" + c.id);
