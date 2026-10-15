@@ -713,9 +713,11 @@
   let locked = true;   // only the worker's answer unlocks Studio, never what this device remembers
   const offer = document.createElement("div"); offer.className = "st-offer";
   const tick = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  // an error carries the worker's status (401: the sign-in has run out); no connection at all reads as plain English, not "Failed to fetch"
   function api(path, body, token){
     return fetch(API + path, {method:body ? "POST" : "GET", headers:Object.assign({"Content-Type":"application/json"}, token ? {Authorization:"Bearer " + token} : {}), body:body ? JSON.stringify(body) : undefined})
-      .then(r => r.json().catch(() => ({})).then(j => { if(!r.ok) throw new Error(j.error || "Something went wrong. Please try again."); return j; }));
+      .catch(() => { throw Object.assign(new Error("Studio couldn’t be reached. Check your connection and try again."), {offline:true}); })
+      .then(r => r.json().catch(() => ({})).then(j => { if(!r.ok) throw Object.assign(new Error(j.error || "Something went wrong. Please try again."), {status:r.status}); return j; }));
   }
   function renderOffer(mode, msg, err){
     const signedIn = acct && acct.token;
@@ -795,20 +797,22 @@
     const q = new URLSearchParams(location.search), cs = q.get("cs"), link = q.get("signin");
     const demo = window.CC_STUDIO_PREVIEW || (q.get("studio") === "demo" && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname));   // the preview, or trying the page out locally
     if(cs || link || q.has("studio")){ ["cs", "signin", "studio"].forEach(k => q.delete(k)); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + "#studio"); }
-    if(demo){ acct = {token:"", email:"", studio:true}; return Promise.resolve(); }
-    if(!API) return Promise.resolve();
-    if(cs){ renderOffer("offer", "Confirming your payment…"); return api("/claim", {session_id:cs}).then(signIn).catch(x => renderOffer("offer", x.message, true)); }
-    if(link){ renderOffer("offer", "Signing you in…"); return api("/session", {link}).then(signIn).catch(x => renderOffer("offer", x.message, true)); }
-    if(acct && acct.token){ renderOffer("offer", "Checking your account…"); return api("/me", null, acct.token).then(j => { acct.studio = !!j.studio; store.set("acct", acct); if(j.studio) setLocked(false); else renderOffer("offer"); })
-      .catch(x => { acct.studio = false; renderOffer("offer", x instanceof TypeError ? "Studio couldn’t check your account. Check your connection and reload." : x.message, true); }); }
+    if(demo){ acct = {token:"", email:"", studio:true}; setLocked(false); return; }
+    if(acct) acct.studio = false;   // what this device remembers never unlocks anything; only the worker's answer below does
+    if(!API) return;
+    if(cs){ renderOffer("offer", "Confirming your payment…"); api("/claim", {session_id:cs}).then(signIn).catch(x => renderOffer("offer", x.message, true)); return; }
+    if(link){ renderOffer("offer", "Signing you in…"); api("/session", {link}).then(signIn).catch(x => renderOffer("offer", x.message, true)); return; }
+    if(acct && acct.token){ renderOffer("offer", "Checking your account…"); api("/me", null, acct.token).then(j => { acct.studio = !!j.studio; store.set("acct", acct); if(j.studio) setLocked(false); else renderOffer("offer"); })
+      .catch(x => {
+        if(x.status === 401){ store.del("acct"); acct = null; }   // a sign-in that has run out: ask for a new one rather than keep a dead token
+        renderOffer("offer", x.offline ? "Studio couldn’t check your account. Check your connection and reload." : x.message, true); }); return; }
     acct = null;
-    return Promise.resolve();
   }
 
   /* ------------------------------------------------------------ start */
   wrap.innerHTML = shell();
   setLocked(locked);
-  arrivals().then(() => { if(acct && acct.studio && locked) setLocked(false); });   // the demo, on this computer only
+  arrivals();
   Promise.resolve(window.__data || getJSON("data.json")).catch(() => getJSON("data.json")).then(j => {
     D = j.days || [];
     last = D.length ? D[D.length - 1].date : null; drawAll();
