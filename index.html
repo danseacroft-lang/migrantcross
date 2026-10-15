@@ -2846,7 +2846,8 @@ main .hero{border-radius:32px}
     statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
-      if(!live){ if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")) $("newFig").hidden = false; return; }
+      // a new day of figures, not the daily re-save that only moves the "last checked" time
+      if(!live){ if(days.length && st.latest && st.latest > days[days.length-1].date) $("newFig").hidden = false; return; }
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){
         const was = meta.checkedAt; useData(await getJSON("data.json"));
         if(meta.checkedAt !== was){ renderAll(); loadExtras(); }   // a saved or lagging copy: nothing new to draw
@@ -3246,7 +3247,7 @@ main .hero{border-radius:32px}
       const other = nat.other != null && nat.total ? nat.other / nat.total * 100 : null;
       $("natS").textContent = (nat.total ? fmt(nat.total) + " people, " : "") + nat.period;
       const chg = c => c == null ? "" : (c > 0 ? "▲ " : c < 0 ? "▼ " : "") + Math.abs(c) + "% on a year earlier";
-      $("nats").innerHTML = nat.top.map((n, i) => '<li><span class="rk">' + (i + 1) + '</span><span class="fl" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + n.name
+      $("nats").innerHTML = nat.top.map((n, i) => '<li><span class="rk">' + (i + 1) + '</span><span class="fl" aria-hidden="true">' + (FLAGS[n.name] || "🏳️") + '</span><span class="nm">' + String(n.name).replace(/[&<>"]/g, c => "&#" + c.charCodeAt(0) + ";")
         + "<small>" + (n.n != null ? fmt(n.n) + " people" : "") + '<span class="ch">' + chg(n.change) + '</span></small></span><span class="pc">' + Number(n.pc).toFixed(1) + "%</span></li>").join("")
         + (other != null ? '<li class="oth"><span class="rk o" style="background:var(--fill2)">·</span><span class="fl" aria-hidden="true">🌍</span><span class="nm">Everyone else<small>' + fmt(nat.other) + " people</small></span><span class=\"pc\">" + other.toFixed(1) + "%</span></li>" : "");
     }
@@ -3937,7 +3938,7 @@ main .hero{border-radius:32px}
     if(!list.length){ ul.innerHTML = '<li class="empty">No current petitions found.</li>'; return; }
     list.slice(0,6).forEach(p=>{
       const li = document.createElement("li");
-      const a = document.createElement("a"); a.className = "pt"; a.href = p.url; a.target = "_blank"; a.rel = "noopener"; a.textContent = p.title;
+      const a = document.createElement("a"); a.className = "pt"; a.href = /^https:\/\//.test(p.url) ? p.url : "https://petition.parliament.uk/"; a.target = "_blank"; a.rel = "noopener"; a.textContent = p.title;
       const n = document.createElement("span"); n.className = "pn"; n.textContent = fmt(p.signatures);
       const m = document.createElement("span"); m.className = "pm";
       const chip = document.createElement("span"); chip.className = "chipst " + (p.state==="open"?"open":"closed"); chip.textContent = p.state==="open" ? "Open" : "Closed";
