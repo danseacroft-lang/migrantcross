@@ -2068,7 +2068,7 @@ main .hero{border-radius:32px}
   let places = AREAS.map(([name, lat, lon, kind]) => ({name, lat, lon, rank:0, kind:"area " + kind})).concat(TOWNS.map(([name, lat, lon, rank, kind]) => ({name, lat, lon, rank, kind})));
   // With a mouse the map can be dragged around, within the wide view; it doesn't zoom, so the page always scrolls.
   // On touch screens it stays put, so a finger on the map still scrolls the page
-  const touchOnly = matchMedia("(hover: none)").matches;
+  const touchOnly = matchMedia("(hover: none)").matches, coarse = matchMedia("(pointer:coarse)");   // coarse: read live, as tablets can gain a mouse
   const LM = window.L ? L.map("lmap", {zoomControl:false, zoomSnap:0, scrollWheelZoom:false, keyboard:false, boxZoom:false,
     dragging:!touchOnly, inertia:true, maxBoundsViscosity:.85, touchZoom:false, doubleClickZoom:false, maxBounds:WIDE, maxZoom:12}) : null;
   let heat, rainC, flow, wxPane, boatK = 1, coverPx = [];   // coverPx: where the title, buttons and figures sit on the map (placeTowns)
@@ -2143,7 +2143,7 @@ main .hero{border-radius:32px}
       const moving = v.sog >= 1, dir = v.hdg ?? v.cog, name = v.name || VESSEL_KIND[v.kind];
       const shape = v.kind === "aircraft" ? PLANE : SHIP, dirTxt = dir == null ? "–" : Math.round(dir) + "°", flag = flagOf(v.mmsi);
       const icon = '<svg viewBox="0 0 16 30" aria-hidden="true">' + shape.replace('class="hull"', 'fill="#fff"').replace('class="deck"', 'fill="var(--c)"') + "</svg>";   // for the card and the list
-      const [seenN, seenU] = mins < 1 ? ["Now", ""] : mins < 60 ? [Math.round(mins), " min"] : [Math.floor(mins / 60), " hr"];
+      const [seenN, seenU] = mins < 1 ? ["Now", ""] : mins < 59.5 ? [Math.round(mins), " min"] : [Math.floor(mins / 60), " hr"];
       const m = L.marker([v.lat, v.lon], {pane:"labels", keyboard:false, alt:name, icon:L.divIcon({className:"am-ves " + v.kind + (mins > 60 ? " old" : ""), iconSize:[16, 30],
         html:'<svg viewBox="0 0 16 30" style="transform:rotate(' + (dir ?? 0) + 'deg)" aria-hidden="true">' + (moving && v.kind !== "aircraft" ? WAKE : "") + shape + "</svg>"})})
         .bindTooltip('<div class="vt-h"><span class="vt-ic lv-' + v.kind + '">' + icon + "</span>"
@@ -2167,7 +2167,7 @@ main .hero{border-radius:32px}
       b.type = "button"; if(mins > 60) b.className = "old";
       b.innerHTML = '<span class="vl-ic lv-' + v.kind + '" aria-hidden="true">' + icon + "</span>"
         + '<span class="vl-t"><b>' + clean(name) + "</b><span>" + (v.name ? shortKind(v) + " · " : "") + (moving ? Math.round(v.sog) + " kn" : "Stopped") + "</span></span>"
-        + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 60 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
+        + '<span class="vl-ago">' + (mins < 1 ? "Now" : mins < 59.5 ? Math.round(mins) + "m" : Math.floor(mins / 60) + "h") + "</span>";
       b.setAttribute("aria-label", name + ", " + VESSEL_KIND[v.kind] + ", " + (moving ? Math.round(v.sog) + " knots" : "stopped") + ", seen " + (mins < 1 ? "just now" : Math.round(mins) + " minutes ago"));
       b.addEventListener("click", e => { e.stopPropagation(); openMapCard(m); });
       b.addEventListener("pointerenter", e => { if(e.pointerType === "mouse") m.openTooltip(); });
@@ -2282,7 +2282,7 @@ main .hero{border-radius:32px}
   }
   function openMapCard(layer){
     const tip = layer.getTooltip(); if(!tip) return;
-    if(innerWidth < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){
+    if(innerWidth < 600 || innerHeight < 600 || coarse.matches){
       layer.closeTooltip(); LM.closePopup();
       ptAt = null; if(pin) pin.remove();   // a boat replaces the weather reading, so the reading's pin goes, and it isn't refreshed over the boat later
       const cls = tip.options.className || "";
@@ -2511,7 +2511,7 @@ main .hero{border-radius:32px}
     const moved = !pin || !pin.getLatLng().equals(ll);
     pin = pin ? pin.setLatLng(ll) : L.marker(ll, {pane:"labels", interactive:false, keyboard:false, icon:L.divIcon({className:"am-pin", html:"<s></s><b></b><i></i>", iconSize:[22, 30], iconAnchor:[11, 29]})});
     if(!LM.hasLayer(pin)){ pin.addTo(LM); } else if(moved){ const i = pin.getElement() && pin.getElement().querySelector("i"); if(i){ i.style.animation = "none"; i.offsetWidth; i.style.animation = ""; } }
-    if(vw < 600 || innerHeight < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
+    if(vw < 600 || innerHeight < 600 || coarse.matches){   // phones and tablets: the reading slides up as a sheet from the bottom, like a place card in Apple Maps
       LM.closePopup();
       const sh = openSheet(html, "Weather at this spot");
       if(innerWidth >= 720 && hero.getBoundingClientRect().bottom > innerHeight) sh.scrollIntoView({block:"nearest", behavior:reduced ? "auto" : "smooth"});   // a tall map on a small phone: bring the reading into view
@@ -2650,7 +2650,7 @@ main .hero{border-radius:32px}
   function placeTip(){
     if(!tipBoat || tip.hidden) return;
     const r = tipBoat.g.getBoundingClientRect(), hr = hero.getBoundingClientRect(), hi = dockBottom() - 8;
-    if(innerWidth < 600 || matchMedia("(pointer:coarse)").matches){   // phones and tablets: a card along the bottom of the map, like the other cards, never off the top
+    if(innerWidth < 600 || coarse.matches){   // phones and tablets: a card along the bottom of the map, like the other cards, never off the top
       tip.style.width = Math.round(hr.width - 16) + "px";
       const h = tip.offsetHeight, top = Math.max(barBottom() + 8, Math.min(hr.bottom, hi) - h - 8);
       tip.style.left = Math.round(hr.left + 8) + "px"; tip.style.top = top + "px"; tip.style.setProperty("--from", "bottom center");
@@ -2812,7 +2812,7 @@ main .hero{border-radius:32px}
   });
   document.addEventListener("click", e => { if(cur && !cur.pop.contains(e.target)) closePop(); });
   document.addEventListener("keydown", e => { if(e.key === "Escape" && cur){ const c = cur.chip; closePop(); c.focus(); } });
-  addEventListener("scroll", placePop, {passive:true});
+  addEventListener("scroll", () => { if(cur && vpW() >= 720) placePop(); }, {passive:true});   // the phone sheet is fixed to the screen: nothing to move
   addEventListener("resize", placePop);
 
   // Last crossings: the day, the fortnight around it, and how it's worked out
@@ -2859,8 +2859,9 @@ main .hero{border-radius:32px}
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
     liveUi();
     if(Date.now() - statusAt >= 15 * MIN) checkStatus();
+    // the weather is refreshed for Studio accounts; for everyone, a load that failed is tried again, as the outlook promises
+    if((live || wxFailed) && Date.now() - wxAt >= 30 * MIN) loadWeather();
     if(!live) return;
-    if(Date.now() - wxAt >= 30 * MIN) loadWeather();
     if(gridAt && Date.now() - gridAt >= 60 * MIN) loadGrid();   // the weather map's forecast: hourly is plenty
     if(Date.now() - newsAt >= 10 * MIN) loadNews();
     if(Date.now() - vesselsAt >= 5 * MIN) loadVessels();
@@ -2906,7 +2907,7 @@ main .hero{border-radius:32px}
     [[PERIODS.labour,"lab"],[PERIODS.burnham,"bur"]].forEach(([from, id])=>{
       const span = all.filter(d => d.date >= from), n = sum(span, "migrants"), b = sum(span, "boats"), since = "since " + dDMY.format(parse(from));
       countUp($(id + "V"), n);
-      $(id + "S").textContent = plural(b, "boat", "boats") + " " + since + " · " + fmt(Math.round(n / span.length)) + "\u00a0a\u00a0day";
+      $(id + "S").textContent = plural(b, "boat", "boats") + " " + since + " · " + fmt(span.length ? Math.round(n / span.length) : 0) + "\u00a0a\u00a0day";   // an old saved copy can end before the date
       if(id === "lab"){   // a year's asylum support for everyone who has arrived since: a rough upper estimate, explained in the pop-up
         const each = Math.round(SUPPORT.bill / SUPPORT.people / 100) * 100;
         $("labC").append($("labCI"));   // out of the way while the line is rewritten (it is kept, with its listeners)
@@ -2944,7 +2945,7 @@ main .hero{border-radius:32px}
     const all = allDays(), by = new Map(all.map(d => [d.date, d])), t = ukToday(), mmdd = t.slice(5), first = all[0].date, lastD = all[all.length-1].date, yrs = [];
     for(let y = +t.slice(0,4) - 1; y >= +first.slice(0,4); y--){
       const iso = y + "-" + mmdd;
-      if(iso < first || iso > lastD || parse(iso).toISOString().slice(0,10) !== iso) continue;   // 29 February in other years
+      if(iso < first || iso > lastD || new Date(Date.UTC(y, +mmdd.slice(0,2) - 1, +mmdd.slice(3))).toISOString().slice(0,10) !== iso) continue;   // 29 February in other years (Safari and Firefox can't parse it at all)
       yrs.push(by.get(iso) || {date:iso, migrants:0, boats:0});
     }
     $("otBtn").hidden = !yrs.length; if(!yrs.length) return;
@@ -3363,7 +3364,7 @@ main .hero{border-radius:32px}
         + '<p class="wp-p">' + (MEANS[lvl] || "") + "</p>"
         + '<p class="wp-note">Calm is wind under 12 mph with waves under 0.5 m. Moderate is under 18 mph and 1 m. Anything stronger is rough.</p>'
         + '<p class="wp-foot wp-days-h">Next three mornings, midnight to noon</p>'
-        + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook + "</ul>";
+        + '<ul class="wp-days" aria-label="The next three mornings">' + wx.outlook.filter(o => o[0] > ukToday()).slice(0,3).map(o => o[1]).join("") + "</ul>";
     }
     else h = "<b>Live conditions</b>" + (wxFailed ? "<p>The weather service didn't respond. It will try again shortly.</p>" : '<div class="mp-live"><i></i>Loading live conditions…</div>');
     pm.innerHTML = h
@@ -3374,7 +3375,7 @@ main .hero{border-radius:32px}
   }
   async function loadWeather(){
     wxAt = Date.now();
-    const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=4";
+    const q = "latitude=51.0&longitude=1.55&timezone=Europe%2FLondon&forecast_days=5";   // a day to spare, so the outlook still has three mornings after midnight
     // each request gets two tries of 12 seconds, so a slow or failed answer can't leave the outlook loading for good
     const wxGet = u => { const once = () => { const c = new AbortController(), t = setTimeout(() => c.abort(), 12000);
       return fetch(u, {cache:"no-cache", signal:c.signal}).then(r => { if(!r.ok) throw 0; return r.json(); }).finally(() => clearTimeout(t)); };
@@ -3386,11 +3387,12 @@ main .hero{border-radius:32px}
       const by = {};
       w.hourly.time.forEach((t, i) => { const d = t.slice(0,10), h = +t.slice(11,13); if(h > 12) return; (by[d] = by[d] || {w:[], v:[], r:0}); by[d].w.push(w.hourly.wind_speed_10m[i]); by[d].r += (w.hourly.precipitation || [])[i] || 0; const mi = m && m.hourly ? m.hourly.time.indexOf(t) : -1; by[d].v.push(mi >= 0 ? m.hourly.wave_height[mi] : null); });
       const med = a => { const s = a.filter(x => x != null).sort((x,y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
-      const outlook = Object.keys(by).sort().slice(1,4).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
-        return '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"; }).join("");
+      // kept with their dates, so after midnight the list moves on a day without a new forecast (renderMapPop)
+      const outlook = Object.keys(by).sort().slice(1).map(d => { const l = rate(med(by[d].w), med(by[d].v)), di = w.daily.time.indexOf(d);
+        return [d, '<li><span>' + new Date(d + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long",...UTC}) + "</span><div>" + wxIcon(di >= 0 ? kindOf(w.daily.weather_code[di]) : null, true) + '</div><b class="' + (l || "") + '">' + (l ? WORD[l] + '<small class="wp-lk">' + LIKE[l] + "</small>" : "–") + "</b><em>" + (di >= 0 ? Math.round(w.daily.temperature_2m_max[di]) + '°<span class="hi"> high</span>' : "") + "</em></li>"]; });
       const c = w.current;
-      // today's and tomorrow's mornings, for the arrival outlook
-      const mornings = Object.keys(by).sort().slice(0,2).map(d => { const di = w.daily.time.indexOf(d); return {date:d, wind:med(by[d].w), wave:med(by[d].v), rain:by[d].r, kind:di >= 0 ? kindOf(w.daily.weather_code[di]) : null}; });
+      // today's and the next mornings, for the arrival outlook (renderPred shows today and tomorrow)
+      const mornings = Object.keys(by).sort().slice(0,3).map(d => { const di = w.daily.time.indexOf(d); return {date:d, wind:med(by[d].w), wave:med(by[d].v), rain:by[d].r, kind:di >= 0 ? kindOf(w.daily.weather_code[di]) : null}; });
       wx = {mornings, wind:c.wind_speed_10m, gust:c.wind_gusts_10m, dir:c.wind_direction_10m == null ? 225 : c.wind_direction_10m, wave:m && m.current ? m.current.wave_height : null,
         lvl:rate(c.wind_speed_10m, m && m.current ? m.current.wave_height : null), kind:kindOf(c.weather_code), day:c.is_day !== 0, temp:c.temperature_2m, outlook, at:new Date()};
       wxFailed = false;
@@ -3414,7 +3416,7 @@ main .hero{border-radius:32px}
   function predBase(date){
     const all = allDays(), y = +date.slice(0,4), md = date.slice(5), vals = [];
     for(let k = 1; k <= 3; k++){
-      const c = parse((y - k) + "-" + md).getTime();
+      const c = Date.UTC(y - k, +md.slice(0,2) - 1, +md.slice(3));   // 29 February: 1 March in other years (parse would fail in Safari and Firefox)
       for(let j = -7; j <= 7; j++){ const iso = new Date(c + j * DAY).toISOString().slice(0,10), i = dayIndex(iso); if(i >= 0) vals.push(all[i].migrants || 0); }
     }
     if(!vals.length) return null;
@@ -3427,11 +3429,12 @@ main .hero{border-radius:32px}
   function renderPred(){
     const g = $("predGrid"); if(!g) return;
     if(!wx || !wx.mornings || !days.length){ if(wxFailed) g.querySelectorAll(".pred-wait").forEach(p => p.textContent = "The forecast didn't load. It will try again shortly."); return; }
-    g.innerHTML = wx.mornings.map((m, k) => {
+    const td = ukToday();   // a forecast from before midnight: its first morning has gone
+    g.innerHTML = wx.mornings.filter(m => m.date >= td).slice(0,2).map(m => {
       const lvl = rate(m.wind, m.wave), b = predBase(m.date), p = PRED[lvl] || ["", "No forecast"];
       const est = b && lvl ? roundTo(lvl === "calm" ? b.onAvg : lvl === "moderate" ? b.avg * .5 : b.avg * .05) : null;
       const when = new Date(m.date + "T12:00:00Z").toLocaleDateString("en-GB",{weekday:"long", day:"numeric", month:"long", ...UTC});
-      return '<article class="card pred"><div class="pred-h"><h3>' + (k ? "Tomorrow" : "Today") + "</h3><span>" + when + "</span></div>"
+      return '<article class="card pred"><div class="pred-h"><h3>' + (m.date === td ? "Today" : "Tomorrow") + "</h3><span>" + when + "</span></div>"
         + '<div class="pred-lv ' + p[0] + '">' + p[1] + "</div>"
         + (est != null ? '<p class="pred-est">' + (est === 0 ? "Few if any arrivals expected" : "Around " + fmt(est) + (est === 1 ? " person" : " people")) + "</p>" : "")
         + (b ? '<p class="pred-base">Typical for this time of year: ' + fmt(Math.round(b.avg)) + " a day <span style=\"white-space:nowrap\">(" + b.from + "–" + b.to + ")</span></p>" : "")
@@ -3924,7 +3927,7 @@ main .hero{border-radius:32px}
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
   }));
   $("shMore").addEventListener("click", async ()=>{   // only shown where the device has a share sheet
-    try{ await navigator.share({title:"Channel Crossings", text:shareText(), url:location.href.split("#")[0]}); }
+    try{ await navigator.share({title:"Channel Crossings", text:shareText(), url:"https://channelcrossings.world/"}); }
     catch(e){ /* the viewer closed the share sheet */ }
   });
 
@@ -4085,6 +4088,7 @@ main .hero{border-radius:32px}
       drawYears(); await y();
       renderRecords(); await y();
       renderMain(); await y();
+      renderPred();   // the forecast may have come in before the figures
       const line = drawChart();
       const cc = $("chart").closest(".rv"); if(cc.classList.contains("on") || reduced) animateLine(line); else cc.addEventListener("reveal", () => animateLine($("chart").querySelector("#chartLine,#chartBars")), {once:true});
       let lw = 0; if("ResizeObserver" in window) new ResizeObserver(e => { const w = Math.round(e[0].contentRect.width); if(w && w !== lw){ lw = w; drawChart(); sizeHeat(); } }).observe($("chart"));
