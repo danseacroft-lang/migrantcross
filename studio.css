@@ -201,3 +201,25 @@
 /* cards in a pair share a height, so the chart sits in the middle of the space rather than leaving a gap at the bottom */
 .st-card{display:flex;flex-direction:column}
 .st-card .st-chart{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center}
+
+/* pull-down menus for phones: each row of buttons folds into a capsule naming the choice, with the up-and-down chevron iOS uses;
+   the system's own menu opens from the <select> laid invisibly over it */
+.st-picks{display:none}
+@media (max-width:719px){
+  .st-picks{display:flex;flex-wrap:wrap;gap:8px}
+  .st-card .st-opts,.st-card .st-forms,.st-bar .st-styles,.st-bar .st-row{display:none!important}
+  .st-bar{flex-direction:row!important;align-items:center;justify-self:start!important;border-radius:999px!important;padding:4px!important}
+  .st-bar .st-picks{gap:2px;flex-wrap:nowrap}
+  .st-bar .st-pick{background:none;box-shadow:none}
+  .st-bar .st-pick + .st-pick{border-left:.5px solid var(--sep);border-radius:0 999px 999px 0}
+  .st-card .st-picks{margin:2px 0 4px}
+}
+.st-pick{position:relative;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 13px;border-radius:999px;background:var(--fill);color:var(--label);
+  font:600 .82rem/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",var(--font);letter-spacing:-.005em;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  box-shadow:inset 0 0 0 .5px var(--glass-line);transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+.st-pick:active{transform:scale(.96)}
+.st-pick:focus-within{outline:2px solid var(--blue);outline-offset:2px}
+.st-pick > svg:not(.st-pick-c){width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.st-pick i{display:flex}.st-pick i b{display:block;width:13px;height:13px;border-radius:50%;box-shadow:0 0 0 1.5px var(--card)}.st-pick i b + b{margin-left:-5px}
+.st-pick-c{width:8px;height:13px;flex:none;fill:none;stroke:var(--label2);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-left:1px}
+.st-pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;margin:0;padding:0;font-size:16px;cursor:pointer;-webkit-appearance:none;appearance:none}

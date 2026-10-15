@@ -622,7 +622,7 @@
     const T = theme(); wrap.dataset.style = T.id;
     drawHero();
     CARDS.forEach(c => drawCard(c, T));
-    watchCards(); fadeRows();
+    watchCards(); fadeRows(); menus();
   }
   // a chart animates in the first time it scrolls into view, and again whenever the visitor changes it; never on a resize or a live update
   function play(c){
@@ -651,6 +651,31 @@
     const r = el.querySelector(".st-read"); if(c.read){ r.firstChild.textContent = c.read[0]; r.lastChild.textContent = c.read[1]; }
     el.querySelectorAll(".st-forms button").forEach(b => b.setAttribute("aria-pressed", prefs[c.key] === b.dataset.v));
   }
+  /* on a phone, each row of buttons folds into a pull-down menu, as iOS does: a small capsule naming the choice, which opens the
+     system's own menu (a <select> laid over it, so it is the real iOS picker and works with VoiceOver). Picking clicks the button it stands for */
+  const CHEV = '<svg class="st-pick-c" viewBox="0 0 10 16" aria-hidden="true"><path d="M2 6l3-3 3 3M2 10l3 3 3-3"/></svg>';
+  function pick(group, label){
+    const bs = [...group.querySelectorAll("button")], on = bs.find(b => b.getAttribute("aria-pressed") === "true") || bs[0]; if(!on) return "";
+    const lead = on.querySelector("i") ? on.querySelector("i").outerHTML : on.querySelector("svg") ? on.querySelector("svg").outerHTML : "";
+    return '<label class="st-pick">' + lead + '<span>' + esc(on.textContent) + "</span>" + CHEV + '<select aria-label="' + esc(label) + '">'
+      + bs.map((b, i) => '<option value="' + i + '"' + (b === on ? " selected" : "") + ">" + esc(b.textContent) + "</option>").join("") + "</select></label>";
+  }
+  function menus(){
+    const fill = (host, groups) => { let box = host.querySelector(":scope > .st-picks"); if(!box){ box = document.createElement("div"); box.className = "st-picks"; host.insertBefore(box, groups.anchor); }
+      box.innerHTML = groups.list.map(([g, l]) => pick(g, l)).join(""); box._groups = groups.list.map(x => x[0]); };
+    const bar = wrap.querySelector(".st-bar");
+    if(bar) fill(bar, {anchor:bar.firstChild, list:[[bar.querySelector(".st-styles"), "Style"], [bar.querySelector(".st-row .seg"), "Show"]]});
+    wrap.querySelectorAll("[data-card]").forEach(el => {
+      const forms = el.querySelector(".st-forms"), list = [[forms, "Chart form"]];
+      el.querySelectorAll(".st-opts .seg").forEach(g => list.push([g, g.getAttribute("aria-label") || "Options"]));
+      fill(el, {anchor:el.querySelector(".st-opts") || forms, list});
+    });
+  }
+  wrap.addEventListener("change", e => {
+    const sel = e.target.closest(".st-pick select"); if(!sel) return;
+    const box = sel.closest(".st-picks"), i = [...box.querySelectorAll("select")].indexOf(sel), g = box._groups && box._groups[i];
+    const b = g && g.querySelectorAll("button")[+sel.value]; if(b) b.click();
+  });
   const affects = {measure:"*", range:["ot"], style:"*", group:["ot"], avg:["ot"], ot:["ot"], rt:["rt"], cal:["cal"], calY:["cal"], pat:["pat"], patF:["pat"], yr:["yr"], who:["who"], whoF:["who"], nat:["nat"], ret:["ret"], pb:["pb"]};
   wrap.addEventListener("click", e => {
     const sw = e.target.closest(".st-sw");
@@ -659,7 +684,7 @@
     const b = e.target.closest("button[data-k]"); if(!b) return;
     const k = b.dataset.k, v = b.dataset.v; prefs[k] = v === "true" ? true : v === "false" ? false : v; save();
     b.parentElement.querySelectorAll("button[data-k]").forEach(x => x.setAttribute("aria-pressed", x === b));
-    const which = affects[k] === "*" ? CARDS : CARDS.filter(c => (affects[k] || []).includes(c.id)); const T = theme(); which.forEach(c => { drawCard(c, T); play(c); }); fadeRows();
+    const which = affects[k] === "*" ? CARDS : CARDS.filter(c => (affects[k] || []).includes(c.id)); const T = theme(); which.forEach(c => { drawCard(c, T); play(c); }); fadeRows(); menus();
   });
 
   /* the tooltip: the nearest point to the pointer, along the chart (or in both directions for squares, rings and bars) */
