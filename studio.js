@@ -618,7 +618,7 @@
       + "<h3>Studio</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
       + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
       + '<ul class="st-list"><li>' + tick + "<span>Every graph in six styles, from Standard to Graphite</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
-      + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li></ul>"
+      + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
       + (signedIn ? '<button type="button" class="st-buy" data-act="buy"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button>"
         : '<form data-form="buy"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address, for your account and receipt"><button class="st-buy" type="submit"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button></form>")
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : API ? "" : "Payments open soon.") + "</p>"
@@ -638,7 +638,7 @@
     const a = e.target.closest("[data-act]"); if(!a) return;
     if(a.dataset.act === "signin") renderOffer("signin");
     if(a.dataset.act === "back") renderOffer("offer");
-    if(a.dataset.act === "out"){ store.del("acct"); acct = null; renderOffer("offer"); }
+    if(a.dataset.act === "out"){ store.del("acct"); acct = null; renderOffer("offer"); if(window.ccLive) window.ccLive(false); }
     if(a.dataset.act === "buy"){ a.disabled = true; checkout({}).catch(x => renderOffer("offer", x.message, true)); }
   });
   function checkout(body){
@@ -657,12 +657,13 @@
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
   function setLocked(on){
     locked = on;
+    if(!on && window.ccLive) window.ccLive(true);   // live updates across the site come with Studio
     if(on){ renderOffer("offer"); peek.innerHTML = peekPic(); lockBox.append(peek, offer); host.replaceChildren(lockBox); return; }
     else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = acct && acct.email ? "Studio is unlocked for " + esc(acct.email) + ' · <button type="button">Sign out</button>'
       : window.CC_STUDIO_PREVIEW ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : "Studio is unlocked on this device."; }
     requestAnimationFrame(drawAll);
   }
-  acctLine.addEventListener("click", e => { if(e.target.closest("button")){ store.del("acct"); acct = null; setLocked(true); } });
+  acctLine.addEventListener("click", e => { if(e.target.closest("button")){ store.del("acct"); acct = null; setLocked(true); if(window.ccLive) window.ccLive(false); } });
 
   // coming back from Stripe, or from the sign-in link in an email
   function arrivals(){

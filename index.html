@@ -853,6 +853,12 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (min-width:760px) and (hover:hover) and (pointer:fine){.mb.area-rep{display:block}}
 .toast{position:fixed;left:50%;bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));transform:translate(-50%,8px);background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12);color:var(--label);font-size:.882rem;font-weight:600;padding:12px 20px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:10}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+/* free visitors: new figures are announced, and a refresh shows them (Studio updates the page live) */
+.new-fig{position:fixed;left:50%;transform:translateX(-50%);bottom:max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));z-index:11;display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:6px 12px;
+  width:max-content;max-width:calc(100vw - 32px);padding:10px 10px 10px 18px;border-radius:24px;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.16),0 0 0 .5px var(--sep);color:var(--label);font-size:.882rem;font-weight:600}
+.new-fig button{border:0;border-radius:999px;background:var(--blue);color:#fff;font:600 .882rem/1 var(--font);padding:0 16px;height:36px;cursor:pointer}
+.new-fig a{color:var(--blue);font-size:.824rem;text-decoration:none;padding:6px 4px}
 .mb .petitions li{grid-template-columns:1fr auto;gap:2px 12px;padding:12px 0}
 .mb .petitions a.pt{color:var(--label);text-decoration:none;font-size:.882rem;font-weight:600;line-height:1.3}
 .mb .petitions a.pt:hover{color:var(--blue)}
@@ -1142,7 +1148,7 @@ body .top-row > *{position:relative;z-index:1}
   .tabs button{flex:1;flex-direction:column;justify-content:center;height:54px;padding:0 6px;font-size:.647rem;font-weight:600;letter-spacing:0}
   .tabs button svg{stroke-width:1.8}
   footer{padding-bottom:calc(112px + env(safe-area-inset-bottom,0px))}
-  .toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+  .toast,.new-fig{bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
 }
 /* Liquid Glass, refined: an even specular rim all the way round (bright along the top edge, fading evenly down both
    sides, so neither end looks heavier), a soft shadow straight below rather than offset, and the chosen tab under a
@@ -1843,6 +1849,7 @@ main .hero{border-radius:32px}
 </div>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="new-fig" id="newFig" role="status" hidden><span>New figures are in.</span><button type="button" id="newFigGo">Refresh</button><a href="#studio" id="newFigLive">Live updates with Studio</a></div>
 
 
 <footer>
@@ -2772,12 +2779,19 @@ main .hero{border-radius:32px}
   /* ---------------------------------------------------- automatic updates */
   // The site's heartbeat (status.json) says when new or revised figures were published: checked every
   // 15 minutes in the background. Conditions refresh every 30 minutes.
+  // Live updates are part of Studio: for an account that has paid (window.ccLive, called from the tab script and
+  // studio.js) the figures, weather, news and boats refresh on the page by themselves. Everyone else gets what was
+  // current when the page opened, and a note when new figures are out, which a refresh brings in.
   const MIN = 6e4, openedAt = Date.now();
-  let statusAt = 0, wxAt = 0, today = ukToday();
+  let statusAt = 0, wxAt = 0, today = ukToday(), live = false;
+  window.ccLive = on => { if(on === live) return; live = on; if(on){ $("newFig").hidden = true; statusAt = wxAt = newsAt = vesselsAt = 0; if(gridAt) gridAt = 1; tick(); } };
+  $("newFigGo").addEventListener("click", () => location.reload());
+  $("newFigLive").addEventListener("click", () => { $("newFig").hidden = true; });
   async function checkStatus(){
     statusAt = Date.now();
     try{
       const st = await getJSON("status.json");
+      if(!live){ if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")) $("newFig").hidden = false; return; }
       if(meta && st.dataAt && st.dataAt > (meta.checkedAt || "")){
         const was = meta.checkedAt; useData(await getJSON("data.json"));
         if(meta.checkedAt !== was){ renderAll(); loadExtras(); }   // a saved or lagging copy: nothing new to draw
@@ -2790,6 +2804,7 @@ main .hero{border-radius:32px}
     if(ukToday() !== today){ today = ukToday(); renderAll(); }   // "Yesterday" and On This Day move on at midnight
     liveUi();
     if(Date.now() - statusAt >= 15 * MIN) checkStatus();
+    if(!live) return;
     if(Date.now() - wxAt >= 30 * MIN) loadWeather();
     if(gridAt && Date.now() - gridAt >= 60 * MIN) loadGrid();   // the weather map's forecast: hourly is plenty
     if(Date.now() - newsAt >= 10 * MIN) loadNews();
@@ -2798,7 +2813,7 @@ main .hero{border-radius:32px}
   setInterval(tick, MIN);
   document.addEventListener("visibilitychange", () => {
     if(document.hidden) return;
-    if(Date.now() - openedAt > 180 * MIN) return location.reload();   // picks up any newer version of the page
+    if(live && Date.now() - openedAt > 180 * MIN) return location.reload();   // picks up any newer version of the page
     tick();
   });
 
@@ -4132,6 +4147,10 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   try{ if(/[?&]studio=preview\b/.test(location.search)) localStorage.setItem("cc-studio-preview", "1"); studioPreview = localStorage.getItem("cc-studio-preview") === "1"; }catch(e){}
   window.CC_STUDIO_PREVIEW = studioPreview && !window.CC_STUDIO_API;
   if(!(STUDIO_LIVE && window.CC_STUDIO_API) && !studioPreview){ $("tab-studio").remove(); $("pg-studio").remove(); }
+  // a Studio account gets the page updating live from the start, whichever tab it opens on (only the worker's answer counts)
+  try{ const a = JSON.parse(localStorage.getItem("cc-studio-acct") || "null");
+    if(a && a.token && window.CC_STUDIO_API && window.ccLive) fetch(window.CC_STUDIO_API + "/me", {headers:{Authorization:"Bearer " + a.token}})
+      .then(r => r.ok ? r.json() : null).then(j => { if(j && j.studio) window.ccLive(true); }).catch(() => {}); }catch(e){}
   const tabs = [...document.querySelectorAll("#tabs [role=tab]")], ind = $("tabInd"), names = tabs.map(t => t.dataset.tab);
   const pages = {}; names.forEach(n => pages[n] = $("pg-" + n));
   const saved = {};   // each tab keeps its own place on the page, as in an app
