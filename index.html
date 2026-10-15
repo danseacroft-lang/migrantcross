@@ -92,7 +92,7 @@ h1,h2,.lt-title,.inline-title,.hq-t{font-family:"Inter Tight",Inter,"Helvetica N
   --bg:#F2F2F7; --card:#FFFFFF; --card2:#F7F7FA; --fill:rgba(118,118,128,.12); --fill2:rgba(118,118,128,.2);
   --label:#000; --label2:rgba(60,60,67,.72); --label3:rgba(60,60,67,.36); --sep:rgba(60,60,67,.18);
   --blue:#007AFF; --green:#34C759; --green-t:#248A3D; --orange:#FF9500; --red:#FF3B30; --red-t:#D70015; --indigo:#5856D6; --teal:#30B0C7; --pink:#FF2D55;
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --shadow-lift:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 28px rgba(0,0,0,.07); --glare:rgba(0,122,255,.05); --sea3:#1B64A8; --cloud:#E3E8EF; --cloud-edge:#AEB7C4;
   --seg-on:#FFFFFF; --orange-t:#C93400; --heat1:#D3DBE5; --heat2:#9FB1C6; --heat3:#6681A2; --heat4:#2F4B6E;   /* pressed button, orange text, the four shades of the year in squares */
   --age1:#CDD1DB; --age2:#A9AFBF; --age3:#868DA2; --age4:#636A84;
   --viz1:#2F4B6E; --viz1b:#7590B1; --viz2:#A8763C; --viz2b:#C9A06A; --viz3:#4D7A82; --viz4:#8F4F5E;   /* the graphs: a sober palette of slate navy, ochre, teal and rose */   /* the age bands in Who Is Crossing, youngest lightest */
@@ -104,7 +104,7 @@ h1,h2,.lt-title,.inline-title,.hq-t{font-family:"Inter Tight",Inter,"Helvetica N
   --bg:#000; --card:#1C1C1E; --card2:#232326; --fill:rgba(118,118,128,.24); --fill2:rgba(118,118,128,.32);
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
   --age1:#4C546B; --age2:#6B738B; --age3:#9097AE; --age4:#B7BCCB;
   --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E; --viz3:#86B2B8; --viz4:#C4909C;
@@ -114,7 +114,7 @@ h1,h2,.lt-title,.inline-title,.hq-t{font-family:"Inter Tight",Inter,"Helvetica N
   --bg:#000; --card:#1C1C1E; --card2:#232326; --fill:rgba(118,118,128,.24); --fill2:rgba(118,118,128,.32);
   --label:#fff; --label2:rgba(235,235,245,.62); --label3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --blue:#0A84FF; --green:#30D158; --green-t:#30D158; --orange:#FF9F0A; --red:#FF453A; --red-t:#FF453A; --indigo:#5E5CE6; --teal:#40C8E0; --pink:#FF375F;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 20px 48px rgba(0,0,0,.6); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.45); --glare:rgba(255,255,255,.075); --sea3:#061A30; --cloud:#C7C7CC; --cloud-edge:rgba(255,255,255,0);
   --seg-on:#636366; --orange-t:#FF9F0A; --heat1:#26364A; --heat2:#3B5472; --heat3:#5E7FA6; --heat4:#9DB6D3;
   --age1:#4C546B; --age2:#6B738B; --age3:#9097AE; --age4:#B7BCCB;
   --viz1:#8BA6C7; --viz1b:#58779C; --viz2:#CFA46E; --viz2b:#9A6F3E; --viz3:#86B2B8; --viz4:#C4909C;
@@ -339,8 +339,8 @@ button.mn-head{border:0;background:none;padding:0;text-align:left;cursor:pointer
 /* the latest day as a calendar tile, as in On This Day */
 .hero-quiet{display:flex;align-items:center;gap:18px}
 .hero-quiet .cal{width:88px;height:92px;background:rgba(28,28,30,.4);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.25),0 6px 24px rgba(0,0,0,.25)}
-.hq-t{font:700 clamp(1.7rem,5.6vw,3rem)/1.05 var(--font)}
-.hq-s{margin-top:6px;font-size:1.06rem;font-weight:500}
+.hq-t{font:700 clamp(1.6rem,4.6vw,2.8rem)/1.05 var(--display)}
+.hq-s{margin-top:6px;font-size:1.06rem;font-weight:500;opacity:.85}
 @media (max-width:600px){.hero-quiet{gap:14px}.hq-s{font-size:.941rem}}   /* the tile's phone size: further down, with the panel */
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:0 14px;border-radius:999px;
@@ -361,7 +361,7 @@ button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 @media (max-width:360px){#chipYear{white-space:nowrap;flex-wrap:wrap;gap:0 5px;padding:0 11px}}   /* small phones: "2026 so far 19,287 ↓44% on 2025" on one line, never broken mid-phrase */
 
 /* ------------------------------------------------------------ Figure Updates pop-up */
-.busy-note{margin:0;padding:10px 16px 0;text-align:center;font-size:.824rem;font-weight:500;line-height:1.35;color:var(--label2);letter-spacing:-.01em}
+.busy-note{margin:0;padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));text-align:center;font-size:.824rem;font-weight:500;line-height:1.35;color:var(--label2);letter-spacing:-.01em}
 .info-pop{position:fixed;z-index:60;width:min(320px,calc(100vw - 32px));padding:16px 18px;border-radius:18px;background:color-mix(in srgb,var(--card) 76%,transparent);-webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);box-shadow:0 2px 6px rgba(0,0,0,.05),0 18px 44px rgba(0,0,0,.12),0 0 0 .5px var(--sep);font-size:.824rem;line-height:1.45;color:var(--label);letter-spacing:-.01em}
 .info-pop b{display:block;font-size:.882rem;margin-bottom:6px}
 .info-pop p{margin:0 0 8px;color:var(--label2)}
@@ -475,9 +475,9 @@ button.chip svg,a.chip svg{width:13px;height:13px;margin-right:-3px;opacity:.8}
 
 /* ------------------------------------------------------------ layout */
 main section,.card,.bento > *{min-width:0}
-main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px}
+main{max-width:1180px;margin:0 auto}
 .section-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
-.section-h h2{margin:0}
+.section-h h2{margin:0;font:700 1.294rem/1.25 var(--font)}   /* Title 2 (22pt bold) */
 .section-h p{margin:0;color:var(--label2)}
 .card{position:relative;overflow:hidden}
 .card h3{margin:0 0 2px;display:flex;align-items:center;gap:6px}
@@ -604,7 +604,6 @@ main{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr);gap:40px
 .cal{flex:none;width:64px;height:68px;border-radius:15px;overflow:hidden;background:var(--card2);box-shadow:0 0 0 .5px var(--sep),0 3px 10px rgba(0,0,0,.08);display:grid;grid-template-rows:21px 1fr;text-align:center}
 .cal span{background:var(--red);color:#fff;font:700 .647rem/21px var(--font);letter-spacing:.08em;text-transform:uppercase}
 .cal b{display:grid;place-items:center;font:500 2rem/1 var(--font);letter-spacing:-.03em}
-.otd-v{font-size:1.7rem}
 .otd-years{display:flex;align-items:flex-end;gap:8px;height:136px;margin-top:18px}
 .otd-years .oy{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;
   appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}   /* each year is a button: tap to read it above */
@@ -766,7 +765,7 @@ footer strong{color:var(--label);font-weight:600}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ft-theme button[aria-pressed="true"]{background:#636366;color:#fff;box-shadow:none}}
 @media (hover:hover){.ft-theme button[aria-pressed="false"]:hover{color:var(--label)}}
 /* the share sheet's contents: a dark card, the share buttons as white pills, a night scene of the Channel below (the sheet itself: body .side-share, further down) */
-.side-share h2{margin:0;padding:34px 22px 22px;font:700 1.35rem/1.18 var(--font);letter-spacing:-.025em;text-align:center;text-wrap:balance}
+.side-share h2{margin:0;padding:34px 22px 22px;font:700 1.35rem/1.18 var(--font);text-align:center;text-wrap:balance}
 .side-share .ss-btns{display:flex;flex-direction:column;gap:10px;padding:0 16px}
 .side-share .ss-b{position:relative;display:flex;align-items:center;justify-content:center;min-height:46px;padding:0 44px;border:0;border-radius:999px;background:#fff;color:#000;
   font:500 .912rem/1 var(--font);letter-spacing:-.01em;text-decoration:none;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);transition:transform .15s ease,background-color .2s}
@@ -826,7 +825,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
   .tile-art{width:156px;height:187px;right:-20px;bottom:-24px}
   .b-lab .sub,.b-lab .cost,.b-bur .sub{max-width:68%}
   .ring-wrap{gap:18px}
-  .val.otd-v{font-size:1.45rem;min-height:2.2em}
   .chart-head{flex-direction:column}
   .yr{grid-template-columns:38px 1fr 56px 46px;gap:8px}
   .otd-years{gap:5px}
@@ -948,7 +946,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .calc-card{padding:14px 16px;display:grid;gap:12px}
 .mb .calc-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .mb .calc-dates label{display:grid;gap:4px;font-size:.765rem;color:var(--label2);font-weight:600}
-.mb .calc-dates input{appearance:none;font:inherit;font-size:1rem;color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 10px;width:100%;min-width:0}
+.mb .calc-dates input{appearance:none;font:inherit;font-size:max(16px,1rem);color:var(--label);background:var(--fill);border:0;border-radius:12px;min-height:44px;padding:0 10px;width:100%;min-width:0}
 .mb .calc-dates input:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
 @media (hover:none) and (pointer:coarse){.mb .calc-dates input::-webkit-calendar-picker-indicator{display:none}}   /* phones open the picker on tap; the icon only crowds out the year */
 .mb .presets{display:flex;flex-wrap:wrap;gap:6px}
@@ -982,7 +980,6 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .mb .rep-none{font-size:.882rem;color:var(--label2)}
 .mb .dots{animation:fadeIn .35s ease-out}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes lift{to{transform:translateY(-10px) scale(.98);opacity:0}}
 
 /* Tall boxes (the boats in Every Person, for one) show their first part, fading out, with Show more underneath to open the rest */
 .card.clamp{max-height:520px;-webkit-mask-image:linear-gradient(#000 calc(100% - 110px),transparent);mask-image:linear-gradient(#000 calc(100% - 110px),transparent)}
@@ -1037,7 +1034,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .tb-btn[aria-expanded="true"] .ic-moon{transform-origin:60% 60%;animation:tbRock .7s cubic-bezier(.3,1.4,.5,1) both}
 @keyframes tbRock{30%{transform:rotate(-24deg)}65%{transform:rotate(10deg)}}
 @media (prefers-reduced-motion:reduce){.tb-pop,.tb-pop > *,.tb-pop.out,.tb-btn svg{animation:none!important}}
-.tb-pop h2{margin:0;font:700 1.5rem/1.15 var(--font);letter-spacing:-.02em}
+.tb-pop h2{margin:0;font:700 1.5rem/1.15 var(--font)}
 @media (max-width:440px){.tb-pop h2{font-size:1.3rem}}
 .tb-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
 .tb-x{flex:none;display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:none;color:var(--label2);cursor:pointer}
@@ -1057,7 +1054,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .out-ic{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 12px;border-radius:50%;color:#fff;
   background:radial-gradient(120% 100% at 30% 0%,#FF7A70,#FF3B30 55%,#D70015);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 2px rgba(0,0,0,.18),0 8px 20px -6px rgba(255,59,48,.55)}
 .out-ic svg{width:24px;height:24px}
-.out-pop h2{font-size:1.12rem!important;letter-spacing:-.015em}
+.out-pop h2{font-size:1.12rem!important}
 .out-who{margin:6px 4px 16px;color:var(--label2);font-size:.8rem;line-height:1.4;overflow-wrap:anywhere}
 .out-who:empty{display:none}
 .out-go,.out-no{display:block;width:100%;min-height:44px;margin:0;padding:0 16px;border:0;border-radius:999px;appearance:none;font:600 .94rem/1 var(--font);cursor:pointer;
@@ -1084,7 +1081,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .sc-form{position:relative}
 .sc-box{border-radius:14px;background:var(--fill);transition:box-shadow .2s ease}
 .sc-box:focus-within{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent)}
-.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:76px;resize:none;appearance:none;margin:0;border:0;border-radius:14px 14px 0 0;background:none;outline:0;padding:12px 14px 4px;color:var(--label);font:inherit;font-size:1rem;line-height:1.4}
+.sc-form textarea{display:block;width:100%;box-sizing:border-box;min-height:76px;resize:none;appearance:none;margin:0;border:0;border-radius:14px 14px 0 0;background:none;outline:0;padding:12px 14px 4px;color:var(--label);font:inherit;font-size:max(16px,1rem);line-height:1.4}   /* never under 16px, or iOS zooms in on it (the page follows the text size set on the phone) */
 .sc-form textarea::placeholder{color:var(--label2)}
 .sc-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .sc-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px 8px 14px}
@@ -1142,7 +1139,8 @@ body::before{content:"";position:fixed;z-index:-1;left:-10vw;right:-10vw;top:-20
 
 /* ------------------------------------------------------------ the bar at the top: logo, the tabs, the round buttons */
 body .top-row{position:sticky;top:0;z-index:49;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;
-  padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,env(safe-area-inset-right,0px)) 10px var(--gut);margin:0 auto;pointer-events:none}
+  padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,env(safe-area-inset-right,0px)) 10px var(--gut);margin:calc(0px - env(safe-area-inset-top,0px)) auto 0;pointer-events:none}
+/* (the notice above already clears the notch, so at rest the bar's own room for it tucks up under the notice; stuck at the top, it has it again) */
 body .top-row > *{position:relative;z-index:1}
 @media (min-width:1212px){body .top-row{padding-left:calc((100% - 1148px) / 2);padding-right:calc((100% - 1148px) / 2)}}
 .top-act{justify-self:end}
@@ -1201,7 +1199,7 @@ main{display:block;padding:6px max(16px,env(safe-area-inset-right,0px)) 40px var
 /* large titles, as in Apple News: the date above in small capitals, the page name big and bold */
 .lt-head{margin:10px 6px -16px}
 .lt-eyebrow{margin:0 0 2px;font:600 .765rem/1.2 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--label2)}
-.lt-title{margin:0;font:800 2.35rem/1.05 var(--font)}
+.lt-title{margin:0;font:700 2rem/1.05 var(--font)}
 @media (min-width:720px){.lt-head{margin-top:26px}}
 .pair{display:grid;grid-template-columns:minmax(0,1fr);gap:46px;align-items:start}
 .pair .stack{display:grid;gap:46px;min-width:0}
@@ -1209,7 +1207,6 @@ main{display:block;padding:6px max(16px,env(safe-area-inset-right,0px)) 40px var
 
 /* section headings */
 .section-h{margin:0 6px 14px;align-items:flex-end}
-.section-h h2{font:700 1.5rem/1.15 var(--font)}
 .foot{margin:12px 6px 0}
 
 /* ------------------------------------------------------------ cards: plain and calm by day, a dark glass tint by night (no blur, so scrolling stays smooth) */
@@ -1252,8 +1249,6 @@ main .hero{margin:0;height:min(76vh,760px);height:min(76svh,760px);min-height:50
 .hero-quiet .cal{border-radius:22px;grid-template-rows:30px 1fr}
 .hero-quiet .cal span{background:#FF3B30;color:#fff;font-weight:700;letter-spacing:.08em;line-height:30px;font-size:.765rem;text-transform:uppercase}
 .hero-quiet .cal b{color:#fff;font-weight:500;font-size:2.9rem;letter-spacing:-.03em}
-.hq-t{font-family:var(--display);font-size:clamp(1.6rem,4.6vw,2.8rem);letter-spacing:-.025em;text-shadow:none}
-.hq-s{text-shadow:none;opacity:.85}
 .hero-chips{margin-top:16px}
 button.chip[aria-expanded="true"]{background:rgba(255,255,255,.3)}
 .map-news{padding:9px 9px 9px 12px;background:rgba(16,20,28,.42);-webkit-backdrop-filter:blur(28px) saturate(190%);backdrop-filter:blur(28px) saturate(190%)}
@@ -1276,11 +1271,11 @@ body .side-share{display:flex;flex-direction:column;position:fixed;z-index:80;le
 .share-scrim{position:fixed;inset:0;z-index:79;animation:fadeScrim .3s ease both}
 .share-scrim.out{animation:fadeScrim .2s ease reverse both}
 @keyframes fadeScrim{from{opacity:0}}
-.ss-x{position:absolute;z-index:2;top:14px;width:32px;height:32px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer}
+.ss-x{position:absolute;z-index:2;top:14px;left:14px;width:32px;height:32px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:rgba(255,255,255,.8);cursor:pointer}
 .ss-x svg{width:11px;height:11px}
 .ss-x::after{content:"";position:absolute;inset:-6px}   /* a 44pt tap target */
 .ss-x:focus-visible{outline:2px solid #0A84FF;outline-offset:2px}
-body .side-share{height:auto;max-height:calc(100dvh - 48px)}
+body .side-share{height:auto;max-height:calc(100dvh - 48px);overflow-y:auto;overscroll-behavior:contain}   /* short windows and phones on their side: it scrolls, so Copy link is never cut off */
 /* the pop-ups over the map: nearly solid, so the glass panel underneath doesn't show through the words */
 .info-pop,.info-pop.wx-pop{background-color:color-mix(in srgb,var(--card) 94%,transparent)}
 
@@ -1311,7 +1306,7 @@ footer{max-width:1148px}
 /* the logo alone at the leading edge, like an account picture; the page's name appears beside it once its large title scrolls away */
 .top-brand{gap:10px}
 .top-brand .lt-logo{width:36px;height:36px;box-shadow:0 2px 8px rgba(0,60,160,.25)}
-.inline-title{font:600 1.06rem/1.2 var(--font);letter-spacing:-.02em;color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .3s var(--ease-out)}
+.inline-title{font:600 1.06rem/1.2 var(--font);color:var(--label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .3s var(--ease-out)}
 .title-in .inline-title{opacity:1;transform:none}
 /* Liquid Glass answers a touch by swelling slightly and lighting up, rather than shrinking */
 .tabs button:active,.tb-btn:active{transform:scale(1.08);filter:brightness(1.12)}
@@ -1330,12 +1325,10 @@ footer{max-width:1148px}
 .page.first{animation:pgUp .6s var(--ease-out) both}
 
 /* large titles: Apple's Large Title (34pt bold) on phones, a little larger on wide screens */
-.lt-title{font-weight:700;font-size:2rem;letter-spacing:-.025em}
 @media (min-width:720px){.lt-title{font-size:2.6rem}}
 .lt-today{margin:6px 6px -30px}
 @media (min-width:720px){.lt-today{margin-top:14px}}
-/* section headings: Title 2 (22pt bold); notes beside them: Subheadline (15pt) */
-.section-h h2{font-size:1.294rem;line-height:1.25;letter-spacing:-.02em}
+/* notes beside the section headings: Subheadline (15pt) */
 .section-h p{font-size:.882rem}
 
 /* the map: content, so the figure panel is a standard material (frosted, no glass highlights), with radii concentric with the map's */
@@ -1348,7 +1341,7 @@ main .hero{border-radius:32px}
 .ves-list{left:12px;top:12px;border-radius:20px}
 .hero.has-news .ves-list{top:calc(12px + var(--mn-h))}
 @media (max-width:719px){
-  main .hero{border-radius:28px;height:calc(100svh - 236px - var(--busy-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:420px}
+  main .hero{border-radius:28px;height:calc(100svh - 236px - var(--busy-h,0px) - env(safe-area-inset-bottom,0px));min-height:420px}   /* --busy-h takes in the notch above the notice */
   .hero-in{left:8px;right:8px;max-width:none;border-radius:20px;padding:14px}
   .map-news{top:8px;left:8px;right:8px;border-radius:20px}
   .ves-list{left:8px;top:8px}
@@ -1362,17 +1355,23 @@ main .hero{border-radius:32px}
 @media (max-height:500px) and (orientation:landscape){
   main .hero{height:calc(100svh - 64px - env(safe-area-inset-top,0px));min-height:340px}
   .hero-chips{margin-top:10px}
+  /* and the figure's panel at its phone size, so it leaves the top of so short a map to the news and the boats */
+  .hero-in{padding:12px 14px}
+  .hero-quiet{gap:14px}
+  .hero-quiet .cal{width:56px;height:60px;border-radius:15px;grid-template-rows:20px 1fr}
+  .hero-quiet .cal span{font-size:.588rem;line-height:20px}
+  .hero-quiet .cal b{font-size:1.9rem}
+  .hq-t{font-size:1.6rem}
+  .hq-s{margin-top:3px;font-size:.941rem}
 }
 
 /* pop-ups and cards that open over the page: Dark Mode's elevated colours, so they come forward */
 :root[data-theme="dark"] .tb-pop,:root[data-theme="dark"] .info-pop,:root[data-theme="dark"] .info-pop.wx-pop{background-color:rgba(44,44,46,.7)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tb-pop,:root:not([data-theme="light"]) .info-pop,:root:not([data-theme="light"]) .info-pop.wx-pop{background-color:rgba(44,44,46,.7)}}
 
-/* the share sheet: dimmed behind, a grabber on phones to drag it down, Close on the leading side */
+/* the share sheet: dimmed behind, Close on the leading side */
 .share-scrim{background:rgba(0,0,0,.4)}
-.ss-x{left:14px;right:auto}
 @media (max-width:719px){.ss-x{top:18px}}
-.side-share.dragging{animation:none;transition:none}
 /* scroll edges strong enough that the bars stay legible over busy content, as iOS does with its hard-style edge on phones */
 .edge-t{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 94%,transparent) 0,color-mix(in srgb,var(--bg) 80%,transparent) 55%,color-mix(in srgb,var(--bg) 0%,transparent));
   -webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent);mask-image:linear-gradient(to bottom,#000 72%,transparent);height:calc(env(safe-area-inset-top,0px) + 92px)}
@@ -1416,7 +1415,6 @@ main .hero{border-radius:32px}
   body .info-pop.fu-pop{overflow:hidden!important}   /* the clock tucks into the corner; this card is short enough not to scroll */
   body .am-sheet{padding:20px 18px 16px}
   .am-grab{display:none!important}
-  body .side-share{touch-action:auto}
   .pop-x{z-index:95!important}
   /* the dimmed page behind: drawn on the page itself, so a tap on it is a tap outside, which closes the card */
   body:has(.tb-pop:not([hidden]),.info-pop:not([hidden]),.am-sheet:not([hidden]))::after{content:"";position:fixed;inset:0;z-index:89;background:rgba(0,0,0,.4);animation:fadeScrim .25s ease both}
@@ -4236,9 +4234,9 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   }
   tabs.forEach((t, i) => {
     t.addEventListener("click", () => show(t.dataset.tab));
-    t.addEventListener("keydown", e => {   // arrow keys move along the tabs
-      const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if(!d) return;
-      e.preventDefault(); const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); show(n.dataset.tab);
+    t.addEventListener("keydown", e => {   // arrow keys move along the tabs, Home and End to the first and last
+      const k = {ArrowRight:i + 1, ArrowLeft:i - 1, Home:0, End:tabs.length - 1}[e.key]; if(k === undefined) return;
+      e.preventDefault(); const n = tabs[(k + tabs.length) % tabs.length]; n.focus(); show(n.dataset.tab);
     });
   });
   addEventListener("hashchange", () => show(location.hash.slice(1) || "today"));
@@ -4273,6 +4271,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
     root.classList.toggle("sheet-open", on);
     if(on){ [sheet, scrim].forEach(e => { e.classList.remove("out"); e.hidden = false; }); $("shareX").focus({preventScroll:true}); }
     else if(!sheet.hidden){
+      if(sheet.contains(document.activeElement)) btn.focus({preventScroll:true});   // however it closes, focus goes back to Share, not lost with the sheet
       if(reduced){ sheet.hidden = scrim.hidden = true; return; }
       [sheet, scrim].forEach(e => e.classList.add("out"));
       setTimeout(() => { if(sheet.classList.contains("out")){ [sheet, scrim].forEach(e => { e.hidden = true; e.classList.remove("out"); }); } }, 240);
@@ -4284,9 +4283,16 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
       navigator.share({title:"Channel Crossings", text:d ? d.content : "", url:"https://channelcrossings.world/"}).catch(() => {});
     } else openSheet(true);
   });
-  $("shareX").addEventListener("click", () => { openSheet(false); btn.focus({preventScroll:true}); });
+  $("shareX").addEventListener("click", () => openSheet(false));
   scrim.addEventListener("click", () => openSheet(false));
-  addEventListener("keydown", e => { if(e.key === "Escape" && !sheet.hidden) openSheet(false); });
+  addEventListener("keydown", e => {
+    if(sheet.hidden || sheet.classList.contains("out")) return;
+    if(e.key === "Escape") openSheet(false);
+    else if(e.key === "Tab"){   // a modal: Tab goes round the sheet's own buttons rather than out to the page behind
+      const f = [...sheet.querySelectorAll("a[href],button")], a = f[0], z = f[f.length - 1];
+      if(e.shiftKey ? document.activeElement === a || !sheet.contains(document.activeElement) : document.activeElement === z){ e.preventDefault(); (e.shiftKey ? z : a).focus(); }
+    }
+  });
 
   // a pop-up sheet from the figures (phones) also moves the tab bar out of its way
   if("MutationObserver" in window){
@@ -4296,7 +4302,7 @@ if("serviceWorker" in navigator){ addEventListener("load", () => navigator.servi
   }
 })();
 </script>
-<script>/* Apple's guidelines, applied: the inline title, the date over Today, and dragging the share sheet down to close it */
+<script>/* Apple's guidelines, applied: the inline title, the date over Today, and a tap outside a pop-up to close it */
 (function(){
   const $ = id => document.getElementById(id), root = document.documentElement;
   // Today's date above its large title, as in Apple News
