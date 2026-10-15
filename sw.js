@@ -4,7 +4,7 @@
    page then looks for newer figures by itself a minute later). Fetching them fresh keeps a new page from
    running with last week's script. Icons, fonts and vendor/ files: served from the saved copy straight
    away and refreshed in the background. Other sites (weather, map, Studio's worker) are never touched. */
-const CACHE = "cc-v34";
+const CACHE = "cc-v35";
 const CORE = [
   "./", "index.html", "how-it-works.html", "privacy.html",
   "favicon.svg", "manifest.webmanifest", "icon-192.png", "apple-touch-icon.png",
@@ -33,9 +33,12 @@ const save = (request, response) => caches.open(CACHE).then(c => c.put(request, 
 
 function networkFirst(event) {
   const request = event.request, nav = request.mode === "navigate";
-  const saved = () => caches.match(request, {ignoreSearch: true}).then(hit => hit || (nav ? caches.match("index.html") : undefined));
+  // a page is saved under its address without the query, so a Stripe return (?cs=) or an emailed sign-in link (?signin=)
+  // is never kept on the device, and each new query doesn't add another copy of the page
+  const key = nav ? request.url.split(/[?#]/)[0] : request;
+  const saved = () => caches.match(key, {ignoreSearch: true}).then(hit => hit || (nav ? caches.match("index.html") : undefined));
   const got = fetch(request, {cache: "no-cache"}).then(response => ({response, copy: keep(response) ? response.clone() : null}));
-  event.waitUntil(got.then(g => g.copy && save(request, g.copy)).catch(() => {}));   // saved even if the old copy was shown first
+  event.waitUntil(got.then(g => g.copy && save(key, g.copy)).catch(() => {}));   // saved even if the old copy was shown first
   const net = got.then(g => g.response);
   // a slow network: after a few seconds the saved copy is shown instead, if there is one
   const slow = new Promise(resolve => setTimeout(() => saved().then(hit => hit && resolve(hit)), nav ? 3500 : 4000));
