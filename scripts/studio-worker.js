@@ -9,12 +9,13 @@
      MAIL_FROM    text    Channel Crossings <studio@channelcrossings.world>  (the domain must be verified in Resend)
      PRICE_PENCE  text    199
      FREE_EMAILS  secret  optional: email addresses that always have Studio without paying, separated by commas (kept here, not in the
-                          public code). They still sign in with an emailed link, so only whoever reads that inbox gets in.
+                          public code). They sign in with an emailed link, or with MASTER_KEY if it's set.
+     MASTER_KEY   secret  optional: a long password. Signing in with one of the FREE_EMAILS then asks for it instead of sending an email.
 
    The page (studio.js) calls:
      POST /checkout {email}   → {url} a Stripe Checkout page for £1.99; or, if that email has already paid, emails a sign-in link → {paid, sent}
      POST /claim {session_id} → {token, email, studio} after paying, signs that device in (sessions under a day old only)
-     POST /login {email}      → emails a sign-in link
+     POST /login {email}      → emails a sign-in link; for FREE_EMAILS when MASTER_KEY is set → {key:true}, and with {email, key} → {token, email, studio}
      POST /session {link}     → {token, email, studio} swaps the emailed link for a token kept on the device
      GET  /me  (Bearer token) → {email, studio}                                                                       */
 
@@ -45,8 +46,16 @@ async function stripe(env, path, form){
   return j;
 }
 // has this email paid for Studio? Every Stripe customer with the email, every completed Checkout of theirs
+const isFree = (env, email) => (env.FREE_EMAILS || "").split(",").map(norm).filter(Boolean).includes(norm(email));
+// is this the master password? Both sides are hashed first, so the comparison takes the same time whatever was typed
+async function isMasterKey(env, key){
+  if(typeof key !== "string" || !env.MASTER_KEY) return false;
+  const [a, b] = await Promise.all([key, env.MASTER_KEY].map(k => crypto.subtle.digest("SHA-256", enc.encode(k)).then(h => new Uint8Array(h))));
+  let d = 0; for(let i = 0; i < a.length; i++) d |= a[i] ^ b[i];
+  return d === 0;
+}
 async function hasPaid(env, email){
-  if((env.FREE_EMAILS || "").split(",").map(norm).filter(Boolean).includes(norm(email))) return true;
+  if(isFree(env, email)) return true;
   const cs = await stripe(env, "customers?limit=10&email=" + encodeURIComponent(email));
   for(const c of cs.data){
     const ss = await stripe(env, "checkout/sessions?limit=100&status=complete&customer=" + c.id);
@@ -109,7 +118,13 @@ export default {
       }
       if(path === "/login" && req.method === "POST"){
         if(!validEmail(body.email)) return json({error:"Please enter your email address."}, 400);
-        await sendLink(env, norm(body.email)); return json({sent:true});
+        const email = norm(body.email);
+        if(env.MASTER_KEY && isFree(env, email)){   // the master account signs in with its password, not an email
+          if(!body.key) return json({key:true});
+          if(!await isMasterKey(env, body.key)){ await new Promise(r => setTimeout(r, 1500)); return json({error:"That password isn’t right."}, 401); }
+          return json(await session(env, email, true));
+        }
+        await sendLink(env, email); return json({sent:true});
       }
       if(path === "/session" && req.method === "POST"){
         const p = await verify(env, body.link, "link");
