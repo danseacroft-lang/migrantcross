@@ -124,6 +124,7 @@ h1{font:700 clamp(34px,6.4vw,60px)/1.04 var(--font); letter-spacing:-.025em; mar
 /* the end of the page: get the data, or go back to today's figures */
 .note{max-width:640px; margin:22px auto 0; padding:16px 20px; border-radius:20px; background:var(--fill); color:var(--label2); font-size:.92rem; line-height:1.55; text-align:center; text-wrap:pretty}
 .note strong{color:var(--label)}
+.note + .note{margin-top:10px}
 .cta{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:28px 0 0}
 .btn{display:inline-flex; align-items:center; gap:8px; min-height:48px; padding:0 22px; border-radius:999px; font:600 1rem/1 var(--font); letter-spacing:-.01em}
 .btn svg{width:18px; height:18px}
@@ -292,6 +293,7 @@ button,input,select,textarea{font:inherit}
         <p>No subscription. Your email is your account, so Studio unlocks on any device you sign in on. Payment is handled securely by Stripe.</p><span class="src">Payments by Stripe</span></div></article>
     </div>
     <p class="note"><strong>The figures themselves are free, and always will be.</strong> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. With Studio you pay for the way of seeing them: the same figures in more depth, in forms that are easier to understand.</p>
+    <p class="note"><strong>Where the money goes.</strong> Every penny received through Studio goes straight back into developing this site and our other projects.</p>
     <div class="cta">
       <a class="btn btn-p" href="./#studio">Open Studio</a>
       <a class="btn btn-s" href="./">See today's figures</a>
