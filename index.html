@@ -755,7 +755,6 @@ footer strong{color:var(--label);font-weight:600}
 .ft-nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:4px}
 @media (hover:hover){footer p a:hover,.ft-nav a:hover{text-decoration:underline}}
 /* the old row of share buttons: hidden, as the share sheet took its place (the script still fills in its links) */
-.ft-share{display:none}
 /* appearance switch: Auto, Day or Night (the same on every page) */
 .ft-theme{display:inline-flex;gap:2px;padding:3px;margin:2px 0 6px;border-radius:999px;background:var(--fill,rgba(118,118,128,.12))}
 .ft-theme button{appearance:none;border:0;background:none;color:var(--label2);display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 15px;border-radius:999px;font:500 14px/1 var(--font);letter-spacing:0;cursor:pointer;touch-action:manipulation;transition:background-color .2s ease,color .2s ease}
@@ -1889,7 +1888,6 @@ main .hero{border-radius:32px}
 
 
 <footer>
-  <div class="ft-share" role="group" aria-label="Share today's figures"><a class="sh sh-x" id="shX" href="https://x.com/intent/post?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener">Post on X</a><a class="sh sh-fb" id="shFb" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a><a class="sh sh-wa" id="shWa" href="https://wa.me/?text=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a><a class="sh sh-tg" id="shTg" href="https://t.me/share/url?url=https%3A%2F%2Fchannelcrossings.world%2F" target="_blank" rel="noopener" aria-label="Share on Telegram">Telegram</a><button type="button" class="sh sh-copy" id="shCopy">Copy link</button><button type="button" class="sh sh-more" id="shMore" hidden>More…</button></div>
   <div class="ft-theme" role="group" aria-label="Appearance"><button type="button" data-mode="auto" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 3.4a8.6 8.6 0 0 1 0 17.2z" fill="currentColor"/></svg>Auto</button><button type="button" data-mode="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>Day</button><button type="button" data-mode="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 14.7A8.5 8.5 0 1 1 9.3 3.5a7 7 0 0 0 11.2 11.2Z"/></svg>Night</button></div>
   <p><strong>About:</strong> Daily small boat arrivals across the Channel from official Home Office data. Checked for new figures every 15 minutes from noon each day, plus live Channel weather. Built by a concerned Restore voter <a href="https://x.com/XDanSeacroft" target="_blank" rel="noopener">@DanSeacroft</a></p>
   <nav class="ft-nav" aria-label="Site links"><a href="how-it-works.html">How it works</a><a href="privacy.html">Privacy Policy</a><a href="privacy.html#terms">Terms of Use</a><a href="data.csv" download="channel-crossings-daily.csv">Download data (CSV)</a></nav>
@@ -3908,26 +3906,18 @@ main .hero{border-radius:32px}
     s += " " + last.date.slice(0,4) + " so far: " + fmt(ytd) + ".";
     return s + " Source: Home Office.";
   }
-  // Share buttons in the footer: ready-made posts for each network (links only; nothing loads from them until clicked).
+  // The share card's buttons: ready-made posts for each network (links only; nothing loads from them until clicked).
   // Until the figures load they share just the link.
   function renderShare(){
     if(!sorted.length) return;
     const url = "https://channelcrossings.world/", text = shareText(), e = encodeURIComponent;
-    $("shX").href = "https://x.com/intent/post?text=" + e(text) + "&url=" + e(url);
-    $("shFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + e(url);
-    $("shWa").href = "https://wa.me/?text=" + e(text + " " + url);
-    $("shTg").href = "https://t.me/share/url?url=" + e(url) + "&text=" + e(text);
-    $("shMore").hidden = !navigator.share;
-    // the share card on the left gets the same posts
-    document.querySelectorAll(".side-share [data-net]").forEach(a => { a.href = $("sh" + {x:"X", fb:"Fb", wa:"Wa", tg:"Tg"}[a.dataset.net]).href; });
+    const href = {x:"https://x.com/intent/post?text=" + e(text) + "&url=" + e(url), fb:"https://www.facebook.com/sharer/sharer.php?u=" + e(url),
+      wa:"https://wa.me/?text=" + e(text + " " + url), tg:"https://t.me/share/url?url=" + e(url) + "&text=" + e(text)};
+    document.querySelectorAll(".side-share [data-net]").forEach(a => { a.href = href[a.dataset.net]; });
   }
-  ["shCopy", "ssCopy"].forEach(id => $(id).addEventListener("click", async ()=>{
+  $("ssCopy").addEventListener("click", async ()=>{
     try{ await navigator.clipboard.writeText((sorted.length ? shareText() + " " : "") + "https://channelcrossings.world/"); toast("Copied to clipboard"); }
     catch(e){ toast("Couldn't copy. Try your browser's share menu."); }
-  }));
-  $("shMore").addEventListener("click", async ()=>{   // only shown where the device has a share sheet
-    try{ await navigator.share({title:"Channel Crossings", text:shareText(), url:"https://channelcrossings.world/"}); }
-    catch(e){ /* the viewer closed the share sheet */ }
   });
 
   function renderPetitions(){
