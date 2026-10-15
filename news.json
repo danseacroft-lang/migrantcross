@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-15T05:43:22Z",
+ "checkedAt": "2026-10-15T07:02:43Z",
  "items": [
+  {
+   "title": "UK economy grew 0.1% in August ahead of Healey's first Budget",
+   "url": "https://www.bbc.co.uk/news/articles/ck8dz1me439no?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-15T06:42:13Z",
+   "breaking": true
+  },
   {
    "title": "New York City to ban horse-drawn carriage after Zohran Mamdani backs plans",
    "url": "https://www.gbnews.com/news/us/new-york-city-horse-drawn-carriage-ban-zohran-mamdani",
@@ -20,13 +27,6 @@
    "url": "https://www.gbnews.com/politics/chernobyl-britain-gives-ukraine-millions-russia",
    "source": "GB News",
    "published": "2026-10-15T05:00:52Z",
-   "breaking": true
-  },
-  {
-   "title": "British Army chef who built 'homemade cannon' jailed for terror-linked offences",
-   "url": "https://www.gbnews.com/news/british-army-chef-built-homemade-cannon-jailed-terror-linked-offences",
-   "source": "GB News",
-   "published": "2026-10-15T03:38:36Z",
    "breaking": true
   }
  ],
