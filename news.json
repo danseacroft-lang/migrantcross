@@ -1,18 +1,32 @@
 {
- "checkedAt": "2026-10-15T05:10:36Z",
+ "checkedAt": "2026-10-15T05:43:22Z",
  "items": [
+  {
+   "title": "New York City to ban horse-drawn carriage after Zohran Mamdani backs plans",
+   "url": "https://www.gbnews.com/news/us/new-york-city-horse-drawn-carriage-ban-zohran-mamdani",
+   "source": "GB News",
+   "published": "2026-10-15T05:33:28Z",
+   "breaking": true
+  },
+  {
+   "title": "Science breakthrough as biotech company announces progress toward resurrecting the extinct dodo",
+   "url": "https://www.gbnews.com/science/science-breakthrough-biotech-company-resurrecting-extinct-dodo",
+   "source": "GB News",
+   "published": "2026-10-15T05:04:52Z",
+   "breaking": true
+  },
+  {
+   "title": "Britain gives Ukraine \u00a317million to fund critical repairs to the Chernobyl power plant after Russia drone attack",
+   "url": "https://www.gbnews.com/politics/chernobyl-britain-gives-ukraine-millions-russia",
+   "source": "GB News",
+   "published": "2026-10-15T05:00:52Z",
+   "breaking": true
+  },
   {
    "title": "British Army chef who built 'homemade cannon' jailed for terror-linked offences",
    "url": "https://www.gbnews.com/news/british-army-chef-built-homemade-cannon-jailed-terror-linked-offences",
    "source": "GB News",
    "published": "2026-10-15T03:38:36Z",
-   "breaking": true
-  },
-  {
-   "title": "Half of adults would not go to war for the UK, poll suggests",
-   "url": "https://news.sky.com/story/half-of-adults-would-not-go-to-war-for-the-uk-poll-suggests-13599437",
-   "source": "Sky News",
-   "published": "2026-10-15T02:33:00Z",
    "breaking": true
   }
  ],
