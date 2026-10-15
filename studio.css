@@ -68,9 +68,11 @@
 /* ------------------------------------------------------------ locked: a look at the charts behind frosted glass, and the offer */
 .st-lock{position:relative;display:grid;min-width:0}
 .st-lock > *{grid-area:1 / 1}
-.st-peek img{display:block;width:100%;height:auto;min-height:760px;object-fit:cover;object-position:top}
+/* the picture fades out on every side, so it has no hard edges */
+.st-peek img{display:block;width:100%;height:auto;min-height:760px;object-fit:cover;object-position:top;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
 .st-peek{opacity:.75;pointer-events:none;user-select:none;max-height:1100px;overflow:hidden;
-  -webkit-mask:linear-gradient(#000 40%,transparent);mask:linear-gradient(#000 40%,transparent)}
+  -webkit-mask:linear-gradient(transparent,#000 8%,#000 40%,transparent);mask:linear-gradient(transparent,#000 8%,#000 40%,transparent)}
 .st-offer{align-self:start;justify-self:center;position:sticky;top:120px;z-index:2;width:min(440px,100%);margin-top:30px;padding:26px 24px 22px;text-align:center;
   border-radius:30px;background:color-mix(in srgb,var(--card) 84%,transparent);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);
   box-shadow:inset 0 0 0 .5px var(--glass-hi,rgba(255,255,255,.6)),0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 30px 70px -20px rgba(0,0,0,.35)}
