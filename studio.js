@@ -63,7 +63,7 @@
 
   /* ------------------------------------------------------------ what the visitor chose, remembered on this device */
   const prefs = Object.assign({style:"standard", measure:"people", range:"365", group:"week", ot:"bars", avg:true, rt:"lines", cal:"calendar", calY:null,
-    pat:"dow", patF:"bars", yr:"bars", who:"lastYear", whoF:"waffle", nat:"hbars", ret:"bars"}, store.get("prefs") || {});
+    pat:"dow", patF:"bars", yr:"bars", who:"lastYear", whoF:"waffle", nat:"hbars", ret:"bars", pb:"line"}, store.get("prefs") || {});
   const save = () => store.set("prefs", prefs);
 
   const isDark = () => docEl.dataset.theme === "dark" || (docEl.dataset.theme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
@@ -76,7 +76,7 @@
   }
 
   /* ------------------------------------------------------------ the data */
-  let D = [], gender = null, nats = null, rets = null, last = null;
+  let D = [], gender = null, nats = null, rets = null, perBoat = null, last = null;
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw r.status; return r.json(); });
   function measureOf(rows){   // people, boats, or people per boat (the year's people over its boats, not an average of averages)
     const m = sum(rows, r => r.migrants), b = sum(rows, r => r.boats);
@@ -377,7 +377,42 @@
       return s.out("Year by year");
     }});
 
-  // 6. Who is crossing: sex and age
+  // 6. People per boat, year by year: the year's people over its boats (perboat.json)
+  card({id:"pb", title:"People per boat", forms:[["line","Line"],["bars","Columns"],["seats","One boat"],["table","Table"]], key:"pb", people:true,
+    draw(el, T){
+      if(!perBoat) return '<p class="st-note">These figures are still loading.</p>';
+      const Y = perBoat.years, part = perBoat.partialYear, l90 = perBoat.last90, first = Y[0], lab = y => y.y + (y.y === part ? " so far" : "");
+      this.read = [fmt(l90.avg), "people a boat over the last 90 days, against " + fmt(first.avg) + " in " + first.y];
+      this.legend = prefs.pb === "table" ? "" : legend([["Whole year", T.c[0]], [part + " so far", T.c[1]]].concat(prefs.pb === "line" ? [["Last 90 days", T.ink2]] : []));
+      if(prefs.pb === "table") return table(["Year", "People a boat", "People", "Boats"], Y.slice().reverse().map(y => [lab(y), fmt(y.avg), fmt(y.people), fmt(y.boats)]));
+      const W = width(el), col = y => y.y === part ? T.c[1] : T.c[0], tip = y => "<b>" + fmt(y.avg) + " people a boat</b>" + esc(lab(y)) + "<br>" + fmt(y.people) + " people in " + fmt(y.boats) + " boats";
+      if(prefs.pb === "seats"){   // each year as one boat: a dot for every person in the average boat, in rows of ten
+        const L = 48, gap = 2.5, sz = W < 420 ? 6 : 7.5, step = sz + gap, across = Math.max(5, Math.min(20, Math.floor((W - L - 34) / step / 5) * 5));
+        let y0 = 2; const rows = Y.map(y => { const n = Math.ceil(y.avg / across), r = {y, top:y0, h:n * step - gap}; y0 += r.h + 12; return r; });
+        const s = new Svg(W, y0, T); this.pts = [];
+        rows.forEach(r => { s.text(L - 10, r.top + Math.min(r.h, sz) / 2 + 4, r.y.y, {a:"end", c:r.y.y === part ? T.ink : T.ink2, w:r.y.y === part ? 700 : 500});
+          for(let j = 0; j < r.y.avg; j++) s.add('<circle cx="' + (L + (j % across) * step + sz / 2).toFixed(1) + '" cy="' + (r.top + Math.floor(j / across) * step + sz / 2).toFixed(1) + '" r="' + (sz / 2).toFixed(1) + '" fill="' + col(r.y) + '"/>');
+          s.text(L + Math.min(r.y.avg, across) * step + 6, r.top + Math.min(r.h, sz) / 2 + 4, fmt(r.y.avg), {c:T.ink, w:600});
+          this.pts.push({x:W / 2, y:r.top + r.h / 2, tip:tip(r.y)}); });
+        this.mode = "y"; return s.out("People per boat, a dot a person");
+      }
+      const H = hFor(W, 260), s = new Svg(W, H, T), max = Math.max(...Y.map(y => y.avg), l90.avg, 1), f = frame(s, max), bw = (f.x1 - f.x0) / Y.length, xc = i => f.x0 + bw * (i + .5);
+      if(prefs.pb === "bars") Y.forEach((y, i) => { s.bar(xc(i) - bw * .32, f.y(y.avg), bw * .64, f.y0 - f.y(y.avg), col(y)); s.text(xc(i), f.y(y.avg) - 7, fmt(y.avg), {a:"middle", size:10, c:T.ink, w:600}); });
+      else {
+        const p = Y.map((y, i) => [xc(i), f.y(y.avg)]), id = s.id + "pa";
+        s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + T.c[0] + '" stop-opacity=".22"/><stop offset="1" stop-color="' + T.c[0] + '" stop-opacity="0"/></linearGradient>');
+        s.add('<path d="' + smooth(p) + "L" + p[p.length - 1][0].toFixed(1) + " " + f.y0 + "L" + p[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>');
+        s.add('<path d="' + smooth(p) + '" ' + s.stroke(T.c[0]) + "/>");
+        const y90 = f.y(l90.avg); s.add('<path d="M' + f.x0 + " " + y90.toFixed(1) + "H" + f.x1 + '" stroke="' + T.ink2 + '" stroke-width="1" stroke-dasharray="3 4"/>');
+        s.text(f.x0 + 4, y90 - 6, "Last 90 days: " + fmt(l90.avg), {size:10});
+        Y.forEach((y, i) => { s.add('<circle cx="' + p[i][0].toFixed(1) + '" cy="' + p[i][1].toFixed(1) + '" r="' + (y.y === part ? 5 : 3.5) + '" fill="' + col(y) + '" stroke="' + T.surface + '" stroke-width="1.5"/>'); if(W > 380 || i % 2 === 0 || i === Y.length - 1) s.text(p[i][0], p[i][1] - 10, fmt(y.avg), {a:"middle", size:10, c:T.ink, w:600}); });
+      }
+      Y.forEach((y, i) => s.text(xc(i), f.y0 + 16, W < 420 ? "’" + y.y.slice(2) : y.y, {a:"middle"}));
+      this.pts = Y.map((y, i) => ({x:xc(i), y:f.y(y.avg), tip:tip(y)})); this.mode = "x";
+      return s.out("People per boat, year by year");
+    }});
+
+  // 7. Who is crossing: sex and age
   card({id:"who", title:"Sex and age", forms:[["waffle","Squares"],["hbars","Bars"],["donut","Rings"],["table","Table"]], key:"whoF", people:true,
     opts(){ return seg("who", [["lastYear","Last 12 months"],["since2018","Since 2018"]]); },
     draw(el, T){
@@ -390,7 +425,7 @@
       return parts(el, T, [["By sex", sx], ["By age", ages]], g.total, prefs.whoF, this);
     }});
 
-  // 7. Nationalities
+  // 8. Nationalities
   card({id:"nat", title:"Nationalities", forms:[["hbars","Bars"],["tree","Treemap"],["donut","Ring"],["waffle","Squares"],["table","Table"]], key:"nat", people:true,
     draw(el, T){
       if(!nats) return '<p class="st-note">These figures are still loading.</p>';
@@ -401,7 +436,7 @@
       return parts(el, T, [[null, items]], nats.total, prefs.nat, this);
     }});
 
-  // 8. The UK–France returns deal, month by month
+  // 9. The UK–France returns deal, month by month
   card({id:"ret", title:"UK–France returns deal", forms:[["bars","Side by side"],["mirror","Mirror"],["line","Lines"],["table","Table"]], key:"ret", people:true,
     draw(el, T){
       if(!rets) return '<p class="st-note">These figures are still loading.</p>';
@@ -477,7 +512,7 @@
       + '<div class="st-row"><span class="st-lab">Show</span>' + seg("measure", [["people","People"],["boats","Boats"],["perboat","People a boat"]], "Show")
       + "</div></div>";
   }
-  const FORM_ICON = {calendar:"grid", waffle:"grid", vs:"area", rank:"hbars", lines:"line"};
+  const FORM_ICON = {calendar:"grid", waffle:"grid", vs:"area", rank:"hbars", lines:"line", seats:"people"};
   function shell(){
     let h = controls() + '<div class="st-grid">', head = false;
     CARDS.forEach(c => {
@@ -488,7 +523,7 @@
         + '<div class="st-forms" role="group" aria-label="Chart form">' + c.forms.map(([v, l]) => '<button type="button" data-k="' + c.key + '" data-v="' + v + '" aria-pressed="' + (prefs[c.key] === v) + '">' + svgI(FORM_ICON[v] || (ic[v] ? v : "bars")) + l + "</button>").join("") + "</div>"
         + '<div class="st-chart" data-chart></div><div data-legend></div></article>';
     });
-    return h + "</div>" + '<p class="foot">Home Office figures, provisional and sometimes revised. Who is crossing and the returns deal come from the Home Office’s quarterly statistics, so they don’t change with Show and Range. Contains public sector information licensed under the Open Government Licence v3.0.</p>';
+    return h + "</div>" + '<p class="foot">Home Office figures, provisional and sometimes revised. Who is crossing, people per boat and the returns deal don’t change with Show and Range. Contains public sector information licensed under the Open Government Licence v3.0.</p>';
   }
   function drawAll(){
     if(!D.length || locked) return;
@@ -505,7 +540,7 @@
     const r = el.querySelector(".st-read"); if(c.read){ r.firstChild.textContent = c.read[0]; r.lastChild.textContent = c.read[1]; }
     el.querySelectorAll(".st-forms button").forEach(b => b.setAttribute("aria-pressed", prefs[c.key] === b.dataset.v));
   }
-  const affects = {measure:"*", range:["ot"], style:"*", group:["ot"], avg:["ot"], ot:["ot"], rt:["rt"], cal:["cal"], calY:["cal"], pat:["pat"], patF:["pat"], yr:["yr"], who:["who"], whoF:["who"], nat:["nat"], ret:["ret"]};
+  const affects = {measure:"*", range:["ot"], style:"*", group:["ot"], avg:["ot"], ot:["ot"], rt:["rt"], cal:["cal"], calY:["cal"], pat:["pat"], patF:["pat"], yr:["yr"], who:["who"], whoF:["who"], nat:["nat"], ret:["ret"], pb:["pb"]};
   wrap.addEventListener("click", e => {
     const sw = e.target.closest(".st-sw");
     if(sw){ prefs.style = sw.dataset.style; save(); wrap.querySelectorAll(".st-sw").forEach(b => b.setAttribute("aria-pressed", b === sw)); drawAll(); return; }
@@ -652,8 +687,8 @@
     D = j.days || [];
     last = D.length ? D[D.length - 1].date : null; drawAll();
   }).catch(() => { wrap.querySelectorAll("[data-chart]").forEach(c => c.innerHTML = '<p class="st-note">The figures couldn’t be loaded. Check your connection and try again.</p>'); });
-  Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("returns.json")]).then(([g, n, r]) => {
-    gender = g.value || null; nats = n.value || null; rets = r.value || null; const T = theme(); CARDS.filter(c => c.people).forEach(c => D.length && drawCard(c, T));
+  Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("returns.json"), getJSON("perboat.json")]).then(([g, n, r, b]) => {
+    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); CARDS.filter(c => c.people).forEach(c => D.length && drawCard(c, T));
   });
 
   // redraw when the page changes width, or the visitor switches between day and night
