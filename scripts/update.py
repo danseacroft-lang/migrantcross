@@ -53,11 +53,18 @@ def to_int(v):
     return int(m.group(1).replace(",", "")) if m else 0
 
 
+def usable(d, figure):
+    """A real day with a figure: not a blank cell, a date outside 2018 to today, or a stray number read as a date."""
+    import pandas as pd
+    return not pd.isna(d) and pd.Timestamp("2018-01-01") <= d <= pd.Timestamp.now() and bool(re.search(r"\d", str(figure)))
+
+
 def fetch_last7():
     import pandas as pd
     import requests
-    html = requests.get(LAST7, headers=HEADERS, timeout=60).text
-    tables = pd.read_html(io.StringIO(html))
+    page = requests.get(LAST7, headers=HEADERS, timeout=60)
+    page.raise_for_status()                     # an error page has no tables: say what really went wrong
+    tables = pd.read_html(io.StringIO(page.text))
     out = {}
     for t in tables:
         cols = [str(c).lower() for c in t.columns]
@@ -70,8 +77,8 @@ def fetch_last7():
         ucol = next((t.columns[i] for i, c in enumerate(cols) if "uncontrolled" in c), None)
         for _, r in t.iterrows():
             d = pd.to_datetime(str(r[dcol]), errors="coerce", dayfirst=True)
-            if pd.isna(d) or not pd.Timestamp("2018-01-01") <= d <= pd.Timestamp.now() or not re.search(r"\d", str(r[mcol])):
-                continue                    # not a date, a date outside 2018 to today, or no figure in the cell yet
+            if not usable(d, r[mcol]):
+                continue                    # not a date, or no figure in the cell yet
             key = d.strftime("%Y-%m-%d")
             out[key] = {
                 "date": key,
@@ -110,8 +117,8 @@ def fetch_timeseries():
         bi = next((i for i, c in enumerate(cols) if "boat" in c), None)
         for _, r in body.iterrows():
             d = pd.to_datetime(r.iloc[di], errors="coerce", dayfirst=True)
-            if pd.isna(d):
-                continue
+            if not usable(d, r.iloc[mi]):
+                continue                    # a blank row for a day still to come would read as 0 people
             key = d.strftime("%Y-%m-%d")
             out[key] = {
                 "date": key,
@@ -136,12 +143,12 @@ def merge(data, ts, last7, today):
         print(f"Time series ignored: it would change {changes} days already held")
         ts = {}
 
-    for k, v in ts.items():
+    # Neither the spreadsheet nor (if its column goes) the 7-day page may wipe an uncontrolled landings figure we hold
+    for k, v in list(ts.items()) + list(last7.items()):
         prev = days.get(k, {})
-        if prev.get("uncontrolled") is not None:
-            v["uncontrolled"] = prev["uncontrolled"]
+        if v["uncontrolled"] is None and prev.get("uncontrolled") is not None:
+            v = {**v, "uncontrolled": prev["uncontrolled"]}
         days[k] = v
-    days.update(last7)
 
     revised = 0
     for k, d in days.items():
@@ -340,7 +347,7 @@ def write_status(data, now):
 def unchanged(data, last7, now):
     """True when the 7-day page matches what we hold and today's full update has already run."""
     held = {d["date"]: d for d in data.get("days", [])}
-    same = all(k in held and all(held[k].get(f) == v.get(f) for f in ("migrants", "boats", "uncontrolled"))
+    same = all(k in held and all(held[k].get(f) == v[f] for f in ("migrants", "boats", "uncontrolled") if v[f] is not None)
                for k, v in last7.items())
     return same and (data.get("checkedAt") or "")[:10] == now.strftime("%Y-%m-%d")
 

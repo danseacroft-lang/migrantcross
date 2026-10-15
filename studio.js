@@ -80,18 +80,18 @@
   /* ------------------------------------------------------------ the data */
   let D = [], gender = null, nats = null, rets = null, perBoat = null, last = null;
   const getJSON = u => fetch(u, {cache:"no-cache"}).then(r => { if(!r.ok) throw r.status; return r.json(); });
-  function measureOf(rows){   // people, boats, or people per boat (the year's people over its boats, not an average of averages)
-    const m = sum(rows, r => r.migrants), b = sum(rows, r => r.boats);
-    return prefs.measure === "boats" ? b : prefs.measure === "perboat" ? (b ? m / b : null) : m;
-  }
+  // people, boats, or people per boat (the year's people over its boats, not an average of averages)
+  const ofTotals = (m, b) => prefs.measure === "boats" ? b : prefs.measure === "perboat" ? (b ? m / b : null) : m;
+  const measureOf = rows => ofTotals(sum(rows, r => r.migrants), sum(rows, r => r.boats));
   const mName = () => ({people:"people", boats:"boats", perboat:"people a boat"})[prefs.measure];
-  function inRange(){
+  // the days in the chosen range, started at the beginning of a week or month when grouped by one, so the first bar is a whole one
+  function inRange(g){
     if(!D.length) return [];
     const r = prefs.range;
     if(r === "all") return D;
-    if(r === "ytd") return D.filter(d => d.date.slice(0, 4) === last.slice(0, 4));
-    const from = new Date(parse(last).getTime() - (+r - 1) * 864e5);
-    return D.filter(d => parse(d.date) >= from);
+    let from = r === "ytd" ? last.slice(0, 4) + "-01-01" : iso(new Date(parse(last).getTime() - (+r - 1) * 864e5));
+    if(g === "week") from = weekStart(from); else if(g === "month") from = from.slice(0, 8) + "01";
+    return D.filter(d => d.date >= from);
   }
   function weekStart(s){ const d = parse(s), w = (d.getUTCDay() + 6) % 7; return iso(new Date(d.getTime() - w * 864e5)); }
   function bucket(rows, g){
@@ -198,7 +198,7 @@
     opts(){ return (prefs.group === "year" ? "" : seg("range", [["30","1M"],["90","3M"],["365","1Y"],["ytd","This year"],["all","All"]], "Range"))
       + seg("group", [["day","Day"],["week","Week"],["month","Month"],["year","Year"]], "Group by") + (prefs.group === "year" ? "" : seg("avg", [[true,"Average"],[false,"No average"]], "Average")); },
     draw(el, T){
-      const rows = prefs.group === "year" ? D : inRange(), B = bucket(rows, prefs.group);
+      const rows = prefs.group === "year" ? D : inRange(prefs.group), B = bucket(rows, prefs.group);
       this.read = [fmt(measureOf(rows)), mName() + " · " + (rows.length ? bLabel(rows[0].date, "day", true) + " – " + bLabel(rows[rows.length - 1].date, "day", true) : "")];
       if(prefs.ot === "table") return table([prefs.group === "day" ? "Day" : prefs.group[0].toUpperCase() + prefs.group.slice(1), mName()[0].toUpperCase() + mName().slice(1)], B.slice().reverse().map(b => [bLabel(b.k, prefs.group, true), fmt(b.v)]));
       const W = width(el), H = hFor(W, 300), s = new Svg(W, H, T), max = Math.max(1, ...B.map(b => b.v || 0)), f = frame(s, max, {top:24});
@@ -214,7 +214,7 @@
           s.add('<path class="st-a" d="' + d + "L" + pts[n - 1][0].toFixed(1) + " " + f.y0 + "L" + pts[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>'); }
         s.add('<path d="' + d + '" ' + s.stroke(c, n > 400 ? Math.min(T.lw, 1.4) : T.lw) + "/>");
         // the latest value, with a soft halo, where the eye ends up
-        const e = pts[n - 1]; if(n > 1) s.add('<circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="8" fill="' + c + '" fill-opacity=".18"/><circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="3.8" fill="' + c + '" stroke="' + T.surface + '" stroke-width="1.6"/>');
+        const e = pts[n - 1]; if(n) s.add('<circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="8" fill="' + c + '" fill-opacity=".18"/><circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="3.8" fill="' + c + '" stroke="' + T.surface + '" stroke-width="1.6"/>');
       }
       // the peak, labelled
       if(n > 2){ let pk = 0; B.forEach((b, i) => { if((b.v || 0) > (B[pk].v || 0)) pk = i; });
@@ -236,12 +236,14 @@
   card({id:"rt", full:true, title:"Running total by year", forms:[["lines","Lines"],["vs","This year vs last"],["multi","Small multiples"],["rank","By this date"],["table","Table"]], key:"rt",
     draw(el, T){
       const years = [...new Set(D.map(d => d.date.slice(0, 4)))], cur = last.slice(0, 4), prev = String(+cur - 1), doyLast = doy(last);
-      const runs = years.map(y => { const rows = D.filter(d => d.date.slice(0, 4) === y); let acc = [], r = []; rows.forEach(d => { acc.push(d); r.push([doy(d.date), measureOf(acc)]); }); return {y, r, rows}; });
-      const atDate = run => { const p = run.r.filter(q => q[0] <= doyLast); return p.length ? p[p.length - 1][1] : 0; };
+      // each year's running total, day by day: [day of the year, total so far, month-day]
+      const runs = years.map(y => { let m = 0, b = 0; return {y, r:D.filter(d => d.date.slice(0, 4) === y).map(d => { m += d.migrants || 0; b += d.boats || 0; return [doy(d.date), ofTotals(m, b), d.date.slice(5)]; })}; });
+      // by the same date, not the same day of the year, which a leap year moves on by one
+      const md = last.slice(5), atDate = run => { const p = run.r.filter(q => q[2] <= md); return p.length ? p[p.length - 1][1] : 0; };
       const curRun = runs.find(r => r.y === cur), prevRun = runs.find(r => r.y === prev);
       this.read = [fmt(atDate(curRun)), mName() + " in " + cur + " by " + dShort.format(parse(last)) + (prevRun ? " · " + fmt(atDate(prevRun)) + " in " + prev : "")];
       const form = prefs.rt, colY = y => y === cur ? T.c[0] : y === prev ? T.c[1] : T.muted;
-      this.legend = form === "table" || form === "multi" ? "" : legend([[cur + " so far", T.c[0]], [prev, T.c[1]]].concat(form === "lines" ? [["2018–" + String(+prev - 1).slice(2), T.muted]] : []));
+      this.legend = form === "table" || form === "multi" ? "" : legend([[cur + " so far", T.c[0]], [prev, T.c[1]]].concat(form === "lines" && years[0] < prev ? [[years[0] + "–" + String(+prev - 1).slice(2), T.muted]] : []));
       if(form === "table") return table(["Year", "By " + dShort.format(parse(last)), "Whole year"], runs.slice().reverse().map(r => [r.y, fmt(atDate(r)), r.y === cur ? "–" : fmt(r.r[r.r.length - 1][1])]));
       const W = width(el);
       if(form === "rank"){
@@ -360,7 +362,7 @@
           return {x:cx + r * .7 * Math.sin(i * da + da / 2), y:cy - r * .7 * Math.cos(i * da + da / 2), tip:"<b>" + fmt(v) + "</b>" + esc(names[i]) + ", on average"}; });
         this.mode = "xy"; return s.out("Patterns as a rose");
       }
-      const H = hFor(W, 240), s = new Svg(W, H, T), f = frame(s, Math.max(...vals, 1), {left:34}), bw = (f.x1 - f.x0) / names.length, xc = i => f.x0 + bw * (i + .5);
+      const H = hFor(W, 240), s = new Svg(W, H, T), f = frame(s, Math.max(...vals, 1), {left:34, top:20}), bw = (f.x1 - f.x0) / names.length, xc = i => f.x0 + bw * (i + .5);
       vals.forEach((v, i) => {
         if(prefs.patF === "lolly"){ s.add('<path d="M' + xc(i).toFixed(1) + " " + f.y0 + "V" + f.y(v).toFixed(1) + '" stroke="' + T.grid + '" stroke-width="2"/>'); s.add('<circle cx="' + xc(i).toFixed(1) + '" cy="' + f.y(v).toFixed(1) + '" r="6" ' + s.fill(cAt(i)) + "/>"); }
         else s.bar(xc(i) - bw * .32, f.y(v), bw * .64, f.y0 - f.y(v), cAt(i));
@@ -380,10 +382,11 @@
       if(prefs.yr === "table") return table(["Year", mName()[0].toUpperCase() + mName().slice(1), "Change"], B.slice().reverse().map((b, i, a) => [b.k + (b.k === cur ? " (so far)" : ""), fmt(b.v), a[i + 1] && b.k !== cur && a[i + 1].v ? (b.v >= a[i + 1].v ? "+" : "") + Math.round((b.v / a[i + 1].v - 1) * 100) + "%" : "–"]));
       const W = width(el), col = b => b.k === cur ? T.c[1] : T.c[0], max = Math.max(...B.map(b => b.v || 0), 1);
       if(prefs.yr === "hbars" || prefs.yr === "people"){
-        const pic = prefs.yr === "people", unit = prefs.measure === "perboat" ? 1 : niceTicks(max / 40, 1).list[1] || 1, rowH = pic ? 30 : 26, L = 42, s = new Svg(W, B.length * rowH + (pic ? 24 : 6), T);
+        // the pictogram has two rows of dots a year, so each dot stands for enough that the biggest year fits (a whole number, never 2.5)
+        const pic = prefs.yr === "people", L = 42, per = Math.floor((W - L - 50) / 11), unit = niceUnit(max / (per * 2)), rowH = pic ? 30 : 26, s = new Svg(W, B.length * rowH + (pic ? 24 : 6), T);
         this.pts = B.map((b, i) => { const y = 3 + i * rowH;
           s.text(L - 8, y + rowH / 2 + 4, b.k, {a:"end", c:b.k === cur ? T.ink : T.ink2, w:b.k === cur ? 700 : 500});
-          if(pic){ const n = Math.round((b.v || 0) / unit), per = Math.floor((W - L - 50) / 11), sz = Math.min(9, (W - L - 50) / Math.max(per, 1) - 2);
+          if(pic){ const n = Math.round((b.v || 0) / unit), sz = Math.min(9, (W - L - 50) / Math.max(per, 1) - 2);
             for(let j = 0; j < Math.min(n, per * 2); j++) s.add('<circle cx="' + (L + 5 + (j % per) * (sz + 2.2)).toFixed(1) + '" cy="' + (y + (j < per ? 9 : 19)).toFixed(1) + '" r="' + (sz / 2).toFixed(1) + '" fill="' + col(b) + '"/>');
             s.text(L + 5 + Math.min(n, per) * (sz + 2.2) + 4, y + 13, fmt(b.v), {c:T.ink, w:600, size:10.5}); }
           else { const w = (W - L - 56) * (b.v || 0) / max; s.bar(L, y + 4, w, rowH - 8, col(b), {hor:true}); s.text(L + w + 6, y + rowH / 2 + 4, fmt(b.v), {c:T.ink, w:600}); }
@@ -411,7 +414,7 @@
         let y0 = 2; const rows = Y.map(y => { const n = Math.ceil(y.avg / across), r = {y, top:y0, h:n * step - gap}; y0 += r.h + 12; return r; });
         const s = new Svg(W, y0, T); this.pts = [];
         rows.forEach(r => { s.text(L - 10, r.top + Math.min(r.h, sz) / 2 + 4, r.y.y, {a:"end", c:r.y.y === part ? T.ink : T.ink2, w:r.y.y === part ? 700 : 500});
-          for(let j = 0; j < r.y.avg; j++) s.add('<circle cx="' + (L + (j % across) * step + sz / 2).toFixed(1) + '" cy="' + (r.top + Math.floor(j / across) * step + sz / 2).toFixed(1) + '" r="' + (sz / 2).toFixed(1) + '" fill="' + col(r.y) + '"/>');
+          for(let j = 0; j < Math.round(r.y.avg); j++) s.add('<circle cx="' + (L + (j % across) * step + sz / 2).toFixed(1) + '" cy="' + (r.top + Math.floor(j / across) * step + sz / 2).toFixed(1) + '" r="' + (sz / 2).toFixed(1) + '" fill="' + col(r.y) + '"/>');
           s.text(L + Math.min(r.y.avg, across) * step + 6, r.top + Math.min(r.h, sz) / 2 + 4, fmt(r.y.avg), {c:T.ink, w:600});
           this.pts.push({x:W / 2, y:r.top + r.h / 2, tip:tip(r.y)}); });
         this.mode = "y"; return s.out("People per boat, a dot a person");
@@ -440,7 +443,7 @@
       const g = gender[prefs.who] || gender.lastYear, sx = [["Men and boys", g.sex.Male, T.c[0]], ["Women and girls", g.sex.Female, T.c[1]], ["Not recorded", g.sex.Unknown, T.muted]];
       const ages = Object.entries(g.age).map(([k, v], i) => [k, v, k === "Unknown" ? T.muted : mix(T.surface, T.c[2], [.4, .6, .8, 1][Math.min(3, i)])]);
       this.read = [Math.round(g.adultMen / g.total * 100) + "%", "were adult men, " + (prefs.who === "lastYear" ? gender.period : "since 2018") + " (" + fmt(g.total) + " people)"];
-      this.legend = prefs.whoF === "table" ? "" : legend(sx.map(x => [x[0], x[2]])) + legend(ages.map(x => [x[0] === "Unknown" ? "Age not recorded" : x[0], x[2]]));
+      this.legend = prefs.whoF === "table" || prefs.whoF === "hbars" ? "" : legend(sx.map(x => [x[0], x[2]])) + legend(ages.map(x => [x[0] === "Unknown" ? "Age not recorded" : x[0], x[2]]));
       if(prefs.whoF === "table") return table(["Group", "People", "Share"], sx.concat(ages).map(x => [x[0], fmt(x[1]), (x[1] / g.total * 100).toFixed(1) + "%"]));
       return parts(el, T, [["By sex", sx], ["By age", ages]], g.total, prefs.whoF, this);
     }});
@@ -520,6 +523,9 @@
     return s.out("Shares as squares");
   }
 
+  // the smallest of 1, 2, 5, 10, 20, 50… that is at least x
+  function niceUnit(x){ const p = Math.pow(10, Math.floor(Math.log10(Math.max(x, 1)))); return [1, 2, 5, 10].map(k => k * p).find(k => k >= x); }
+
   function seg(key, opts, label){
     return '<div class="seg" role="group"' + (label ? ' aria-label="' + label + '"' : "") + ">" + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
   }
@@ -571,8 +577,8 @@
   };
   function drawHero(){
     const el = $("stHero"); if(!el || !D.length) return;
-    const cur = last.slice(0, 4), prev = String(+cur - 1), dl = doy(last), m = r => r.migrants || 0;
-    const yRows = D.filter(d => d.date.slice(0, 4) === cur), ytd = sum(yRows, m), pYtd = sum(D.filter(d => d.date.slice(0, 4) === prev && doy(d.date) <= dl), m);
+    const cur = last.slice(0, 4), prev = String(+cur - 1), md = last.slice(5), m = r => r.migrants || 0;
+    const yRows = D.filter(d => d.date.slice(0, 4) === cur), ytd = sum(yRows, m), pYtd = sum(D.filter(d => d.date.slice(0, 4) === prev && d.date.slice(5) <= md), m);
     const top = yRows.reduce((a, b) => m(b) > m(a) ? b : a, yRows[0] || D[D.length - 1]), td = parse(top.date);
     const from = iso(new Date(parse(last).getTime() - 29 * 864e5)), l30 = D.filter(d => d.date >= from), ch = pYtd ? Math.round((ytd / pYtd - 1) * 100) : null;
     const fmtDay = o => new Intl.DateTimeFormat("en-GB", Object.assign({timeZone:"UTC"}, o));
@@ -598,7 +604,7 @@
   function controls(){
     return '<div class="st-bar" id="stBar"><div class="st-styles" role="group" aria-label="Style">' + STYLES.map(s => { const c = isDark() ? s.dark : s.light;
       return '<button type="button" class="st-sw" data-style="' + s.id + '" aria-pressed="' + (prefs.style === s.id) + '"><i aria-hidden="true">' + c.slice(0, 3).map(x => '<b style="background:' + x + '"></b>').join("") + "</i>" + s.name + "</button>"; }).join("") + "</div>"
-      + '<div class="st-row"><span class="st-lab">Show</span>' + seg("measure", [["people","People"],["boats","Boats"],["perboat","People a boat"]], "Show")
+      + '<div class="st-row">' + seg("measure", [["people","People"],["boats","Boats"],["perboat","People a boat"]], "Show")
       + "</div></div>";
   }
   const FORM_ICON = {calendar:"grid", waffle:"grid", vs:"area", rank:"hbars", lines:"line", seats:"people"};
@@ -647,6 +653,7 @@
     if(op) op.innerHTML = c.opts();
     c.pts = null; c.legend = "";
     ch.innerHTML = c.draw(ch, T || theme()); c.svg = ch.querySelector("svg");
+    el.querySelector("[data-save]").disabled = !c.svg;   // a table or a note has no picture to save
     el.querySelector("[data-legend]").innerHTML = c.legend || "";
     const r = el.querySelector(".st-read"); if(c.read){ r.firstChild.textContent = c.read[0]; r.lastChild.textContent = c.read[1]; }
     el.querySelectorAll(".st-forms button").forEach(b => b.setAttribute("aria-pressed", prefs[c.key] === b.dataset.v));
@@ -712,13 +719,20 @@
   /* save a chart as a picture: the chart on the card's colour, with its title and where the figures come from */
   function savePicture(c){
     if(!c || !c.svg){ return; }
-    const T = theme(), svg = c.svg, W = +svg.getAttribute("width"), H = +svg.getAttribute("height"), P = 28, top = 70, bot = 44, el = wrap.querySelector('[data-card="' + c.id + '"]');
-    const inner = svg.outerHTML.replace("<svg ", '<svg x="' + P + '" y="' + top + '" ');
-    const ff = T.font.replace(/"/g, "'");
+    const T = theme(), svg = c.svg, W = +svg.getAttribute("width"), H = +svg.getAttribute("height"), P = 28, el = wrap.querySelector('[data-card="' + c.id + '"]');
+    const [big, sub] = c.read || ["", ""], ff = T.font.replace(/"/g, "'");
+    // words wrapped to the chart's width, so a phone-sized picture keeps all of its text
+    const ctx = document.createElement("canvas").getContext("2d"), wide = (s, f) => { ctx.font = f + " " + T.font; return ctx.measureText(s).width; };
+    const lines = (s, f) => s.split(" ").reduce((a, w) => { const t = a[a.length - 1] ? a[a.length - 1] + " " + w : w; if(a[a.length - 1] && wide(t, f) > W) a.push(w); else a[a.length - 1] = t; return a; }, [""]);
+    const beside = wide(big, "700 24px") + 8 + wide(sub, "500 13px") <= W, subL = beside ? [] : lines(sub, "500 13px"), footL = lines("channelcrossings.world · Home Office figures, Open Government Licence v3.0", "400 11px");
+    const top = 70 + subL.length * 17, bot = 29 + footL.length * 15;
+    const tl = (ls, x, y0, dy) => ls.map((l, i) => '<tspan x="' + x + '" y="' + (y0 + i * dy) + '">' + esc(l) + "</tspan>").join("");
+    const inner = svg.outerHTML.replace("<svg ", '<svg x="' + P + '" y="' + top + '" ').replace(/<circle class="st-mk"[^>]*>(<\/circle>)?/, "");   // without the tooltip's marker
     const doc = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (W + P * 2) + '" height="' + (H + top + bot) + '"><rect width="100%" height="100%" fill="' + T.surface + '"/>'
       + '<text x="' + P + '" y="' + (P + 6) + '" font-family="' + ff + '" font-size="15" font-weight="600" fill="' + T.ink2 + '">' + esc(c.title) + "</text>"
-      + '<text x="' + P + '" y="' + (P + 32) + '" font-family="' + ff + '" font-size="24" font-weight="700" fill="' + T.ink + '">' + esc((c.read || [""])[0]) + '<tspan font-size="13" font-weight="500" fill="' + T.ink2 + '" dx="8">' + esc((c.read || ["", ""])[1]) + "</tspan></text>"
-      + inner + '<text x="' + P + '" y="' + (H + top + bot - 16) + '" font-family="' + ff + '" font-size="11" fill="' + T.ink2 + '">channelcrossings.world · Home Office figures, Open Government Licence v3.0</text></svg>';
+      + '<text x="' + P + '" y="' + (P + 32) + '" font-family="' + ff + '" font-size="24" font-weight="700" fill="' + T.ink + '">' + esc(big) + (beside ? '<tspan font-size="13" font-weight="500" fill="' + T.ink2 + '" dx="8">' + esc(sub) + "</tspan>" : "") + "</text>"
+      + (subL.length ? '<text font-family="' + ff + '" font-size="13" font-weight="500" fill="' + T.ink2 + '">' + tl(subL, P, P + 52, 17) + "</text>" : "")
+      + inner + '<text font-family="' + ff + '" font-size="11" fill="' + T.ink2 + '">' + tl(footL, P, top + H + 28, 15) + "</text></svg>";
     const img = new Image(), url = URL.createObjectURL(new Blob([doc], {type:"image/svg+xml"}));
     img.onload = () => {
       const k = 2, cv = document.createElement("canvas"); cv.width = (W + P * 2) * k; cv.height = (H + top + bot) * k;
@@ -738,9 +752,11 @@
   let locked = true;   // only the worker's answer unlocks Studio, never what this device remembers
   const offer = document.createElement("div"); offer.className = "st-offer";
   const tick = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  // an error carries the worker's status (401: the sign-in has run out); no connection at all reads as plain English, not "Failed to fetch"
   function api(path, body, token){
     return fetch(API + path, {method:body ? "POST" : "GET", headers:Object.assign({"Content-Type":"application/json"}, token ? {Authorization:"Bearer " + token} : {}), body:body ? JSON.stringify(body) : undefined})
-      .then(r => r.json().catch(() => ({})).then(j => { if(!r.ok) throw new Error(j.error || "Something went wrong. Please try again."); return j; }));
+      .catch(() => { throw Object.assign(new Error("Studio couldn’t be reached. Check your connection and try again."), {offline:true}); })
+      .then(r => r.json().catch(() => ({})).then(j => { if(!r.ok) throw Object.assign(new Error(j.error || "Something went wrong. Please try again."), {status:r.status}); return j; }));
   }
   function renderOffer(mode, msg, err){
     const signedIn = acct && acct.token;
@@ -757,7 +773,7 @@
     else body = '<div class="st-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5h16M6.5 16V11M11 16V6M15.5 16v-7M20 16V4" stroke-width="2.4"/></svg></div>'
       + "<h3>Studio</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
       + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
-      + '<ul class="st-list"><li>' + tick + "<span>Every graph in six styles, from Standard to Graphite</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
+      + '<ul class="st-list"><li>' + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
       + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
       + (signedIn ? '<button type="button" class="st-buy" data-act="buy"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button>"
         : '<form data-form="buy"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address, for your account and receipt"><button class="st-buy" type="submit"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button></form>")
@@ -820,31 +836,34 @@
     const q = new URLSearchParams(location.search), cs = q.get("cs"), link = q.get("signin");
     const demo = window.CC_STUDIO_PREVIEW || (q.get("studio") === "demo" && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname));   // the preview, or trying the page out locally
     if(cs || link || q.has("studio")){ ["cs", "signin", "studio"].forEach(k => q.delete(k)); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + "#studio"); }
-    if(demo){ acct = {token:"", email:"", studio:true}; return Promise.resolve(); }
-    if(!API) return Promise.resolve();
-    if(cs){ renderOffer("offer", "Confirming your payment…"); return api("/claim", {session_id:cs}).then(signIn).catch(x => renderOffer("offer", x.message, true)); }
-    if(link){ renderOffer("offer", "Signing you in…"); return api("/session", {link}).then(signIn).catch(x => renderOffer("offer", x.message, true)); }
-    if(acct && acct.token){ renderOffer("offer", "Checking your account…"); return api("/me", null, acct.token).then(j => { acct.studio = !!j.studio; store.set("acct", acct); if(j.studio) setLocked(false); else renderOffer("offer"); })
-      .catch(x => { acct.studio = false; renderOffer("offer", x instanceof TypeError ? "Studio couldn’t check your account. Check your connection and reload." : x.message, true); }); }
+    if(demo){ acct = {token:"", email:"", studio:true}; setLocked(false); return; }
+    if(acct) acct.studio = false;   // what this device remembers never unlocks anything; only the worker's answer below does
+    if(!API) return;
+    if(cs){ renderOffer("offer", "Confirming your payment…"); api("/claim", {session_id:cs}).then(signIn).catch(x => renderOffer("offer", x.message, true)); return; }
+    if(link){ renderOffer("offer", "Signing you in…"); api("/session", {link}).then(signIn).catch(x => renderOffer("offer", x.message, true)); return; }
+    if(acct && acct.token){ renderOffer("offer", "Checking your account…"); api("/me", null, acct.token).then(j => { acct.studio = !!j.studio; store.set("acct", acct); if(j.studio) setLocked(false); else renderOffer("offer"); })
+      .catch(x => {
+        if(x.status === 401){ store.del("acct"); acct = null; }   // a sign-in that has run out: ask for a new one rather than keep a dead token
+        renderOffer("offer", x.offline ? "Studio couldn’t check your account. Check your connection and reload." : x.message, true); }); return; }
     acct = null;
-    return Promise.resolve();
   }
 
   /* ------------------------------------------------------------ start */
   wrap.innerHTML = shell();
   setLocked(locked);
-  arrivals().then(() => { if(acct && acct.studio && locked) setLocked(false); });   // the demo, on this computer only
+  arrivals();
   Promise.resolve(window.__data || getJSON("data.json")).catch(() => getJSON("data.json")).then(j => {
     D = j.days || [];
     last = D.length ? D[D.length - 1].date : null; drawAll();
   }).catch(() => { wrap.querySelectorAll("[data-chart]").forEach(c => c.innerHTML = '<p class="st-note">The figures couldn’t be loaded. Check your connection and try again.</p>'); });
   Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("returns.json"), getJSON("perboat.json")]).then(([g, n, r, b]) => {
-    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); CARDS.filter(c => c.people).forEach(c => D.length && drawCard(c, T)); if(D.length && !locked) drawHero();
+    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); if(D.length && !locked){ CARDS.filter(c => c.people).forEach(c => drawCard(c, T)); drawHero(); }
   });
 
   // redraw when the page changes width, or the visitor switches between day and night
   let rw = 0, rt = 0;
   addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const w = host.clientWidth; if(w && w !== rw){ rw = w; drawAll(); } }, 120); });
-  new MutationObserver(() => { if(locked) peek.innerHTML = peekPic(); wrap.querySelectorAll(".st-sw").forEach(b => { const s = STYLES.find(x => x.id === b.dataset.style); b.querySelectorAll("b").forEach((x, i) => x.style.background = (isDark() ? s.dark : s.light)[i]); }); drawAll(); }).observe(docEl, {attributes:true, attributeFilter:["data-theme"]});
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if(locked) peek.innerHTML = peekPic(); drawAll(); });
+  function retheme(){ if(locked) peek.innerHTML = peekPic(); wrap.querySelectorAll(".st-sw").forEach(b => { const s = STYLES.find(x => x.id === b.dataset.style); b.querySelectorAll("b").forEach((x, i) => x.style.background = (isDark() ? s.dark : s.light)[i]); }); drawAll(); }
+  new MutationObserver(retheme).observe(docEl, {attributes:true, attributeFilter:["data-theme"]});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
 })();
