@@ -6,22 +6,13 @@ jobs:
   probe:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v5
+        with: {ref: claude/project-thread-gg3te9}
       - uses: actions/setup-python@v6
         with: {python-version: "3.12"}
-      - run: pip install openpyxl requests odfpy pandas
+      - run: pip install -r requirements.txt
       - shell: python
         run: |
-          import io, re, requests, pandas as pd
-          page = requests.get("https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables", timeout=60).text
-          links = re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.(?:xlsx|ods)', page)
-          print("\n".join(l for l in links if "return" in l.lower()))
-          u = next(l for l in links if "return" in l.lower() and "summary" in l.lower())
-          print("USING", u)
-          xl = pd.read_excel(io.BytesIO(requests.get(u, timeout=180).content), sheet_name=None, header=None)
-          print(list(xl))
-          for name, df in xl.items():
-              if "06" in name or "6b" in name.lower():
-                  print("=== SHEET", name, df.shape)
-                  pd.set_option("display.width", 250); pd.set_option("display.max_columns", 30)
-                  print(df.head(60).to_string())
-                  print(df.tail(10).to_string())
+          import sys, json; sys.path.insert(0, "scripts")
+          import extras
+          extras.update_boat_returns(json.load(open("data.json"))["days"]); print(open("boatreturns.json").read())
