@@ -255,6 +255,59 @@ def update_asylum():
     print(f"Asylum outcomes: saved, arrivals to {last}, grant rate {total['grantRate']}%")
 
 
+# ------------------------------------------------------------ small boat arrivals returned from the UK
+
+def update_boat_returns(days):
+    """Returns of people who came by small boat, each quarter and by nationality (summary tables Ret_06a and Ret_06b)."""
+    import pandas as pd
+    page = requests.get(TABLES, headers=H, timeout=60).text
+    url = next(l for l in re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.(?:ods|xlsx)', page)
+               if re.search(r"returns-summary", l, re.I))
+    if unchanged("boatreturns.json", url):
+        print("Small boat returns: tables unchanged")
+        return
+    sheets = pd.read_excel(io.BytesIO(requests.get(url, headers=H, timeout=180).content), sheet_name=None, header=None)
+    a = next(df for name, df in sheets.items() if name.lower().startswith("ret_06a"))
+    b = next(df for name, df in sheets.items() if name.lower().startswith("ret_06b"))
+    quarters = []
+    for label, n in a.iloc[:, :2].itertuples(index=False):
+        m = re.fullmatch(r"(\d{4} Q[1-4])( \[p\])?", str(label).strip())
+        if m and pd.notna(n):
+            quarters.append({"q": m.group(1), "n": int(n), **({"p": True} if m.group(2) else {})})
+    top, total = [], 0
+    for label, n in b.iloc[:, :2].itertuples(index=False):
+        label = str(label).strip()
+        if pd.isna(n) or not re.fullmatch(r"\d+(\.0)?", str(n)):
+            continue
+        if label.lower() == "total":
+            total = int(n)
+        elif label.lower() != "other":
+            top.append({"name": label, "n": int(n)})
+    if len(quarters) < 12 or not total:
+        raise ValueError("figures look wrong")
+    year, before = sum(q["n"] for q in quarters[-4:]), sum(q["n"] for q in quarters[-8:-4])
+    if abs(year - total) > 5:
+        raise ValueError(f"quarters add to {year}, the nationality table to {total}")
+    last = quarters[-1]["q"]
+    y, qn = int(last[:4]), int(last[-1])           # the year ending with that quarter, for the arrivals over the same months
+    end = date(y, qn * 3, 1) + timedelta(days=31)
+    end = end.replace(day=1)
+    start = end.replace(year=end.year - 1)
+    arrived = sum(d.get("migrants") or 0 for d in days if start.isoformat() <= d["date"] < end.isoformat())
+    save("boatreturns.json", {
+        "source": url,
+        "latestQuarter": last,
+        "period": year_ending(last),
+        "year": year,
+        "change": round((year / before - 1) * 100) if before else None,
+        "arrived": arrived or None,
+        "quarters": quarters,
+        "top": top[:5],
+        "updatedAt": now_iso(),
+    })
+    print(f"Small boat returns: saved, {year} in the {year_ending(last)}")
+
+
 # ------------------------------------------------------------ people per boat (from the daily figures)
 
 def update_perboat(days):
@@ -414,6 +467,7 @@ def update_all(days=None):
     for name, job in (("sex and age", update_gender),
                       ("nationalities", update_nationalities),
                       ("asylum outcomes", update_asylum),
+                      ("small boat returns", lambda: update_boat_returns(days)),
                       ("people per boat", lambda: update_perboat(days)),
                       ("UK-France returns", lambda: update_returns(days)),
                       ("petitions", update_petitions)):

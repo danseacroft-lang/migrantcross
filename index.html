@@ -550,6 +550,9 @@ main{max-width:1180px;margin:0 auto}
 .sup-src{margin:12px 4px 0;font-size:.765rem;line-height:1.45;color:var(--label2)}
 .sup-src a{color:inherit}
 .sup-grid .vs span{display:block;margin-top:4px;line-height:1.35}
+.asy-years{display:grid;gap:7px;margin-top:10px}
+.asy-years div{display:grid;grid-template-columns:3.2em 1fr;align-items:center;gap:10px;font-size:.82rem;color:var(--label2)}
+.asy-years .sup-bar{margin:0;height:12px}
 @media (max-width:719px){.sup-grid{grid-template-columns:1fr}}
 .pred{display:flex;flex-direction:column}
 .pred-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
@@ -1859,6 +1862,28 @@ main .hero{border-radius:32px}
         </article>
       </div>
     </div>
+  </section>
+
+  <!-- ============================================================ ASYLUM CLAIMS: what happened to small boat arrivals' claims (asylum.json, from IER_D02 and IER_D03) -->
+  <section class="wide" aria-labelledby="hAsy" id="asySec" hidden>
+    <div class="section-h rv"><h2 id="hAsy">Asylum Claims</h2><p id="asyNote"></p></div>
+    <div class="sup-grid">
+      <article class="card rv">
+        <h3>What happened to their claims</h3>
+        <div class="val num" id="asyClaimed">–</div>
+        <div class="sub" id="asyClaimedS">&nbsp;</div>
+        <div class="sup-bar" id="asyBar" role="img"></div>
+        <ul class="sup-key" id="asyKey"></ul>
+      </article>
+      <article class="card rv">
+        <h3>Grant rate</h3>
+        <div class="val num" id="asyRate">–</div>
+        <div class="sub">of first decisions granted protection or leave to stay</div>
+        <div class="stack-h">By year of arrival</div>
+        <div class="asy-years" id="asyYears" role="img"></div>
+      </article>
+    </div>
+    <p class="sup-src rv" id="asySrc"></p>
   </section>
 
   <!-- ============================================================ ASYLUM SUPPORT: the Home Office's quarterly figures (Asy_D09). Update by hand when a new quarter is published -->
@@ -3328,6 +3353,26 @@ main .hero{border-radius:32px}
     if(r.arrivals) $("retNote").innerHTML = "Returns equal <b>" + (r.out / r.arrivals * 100).toFixed(1) + "%</b> of the " + fmt(r.arrivals) + " small boat arrivals over the same period.";
   }
 
+  // Asylum claims: of everyone who arrived by small boat, how many claimed asylum and what the first decision was
+  const ASY = [["granted", "Granted", "var(--viz3)"], ["refused", "Refused", "var(--viz4)"], ["withdrawn", "Withdrawn or closed", "var(--viz1b)"], ["waiting", "Still waiting", "var(--viz2b)"]];
+  const asyBar = o => ASY.map(([k, , c]) => o[k] ? '<i style="flex:' + o[k] + ' 1 0;background:' + c + '"></i>' : "").join("");   // shares of the row, so the gaps never push it past the end
+  function renderAsylum(a){
+    if(!a || !a.total || !a.total.claimed) return;
+    const t = a.total;
+    $("asyNote").textContent = "People who crossed by small boat, " + a.from + " to " + a.latestQuarter.slice(0, 4) + " · updated once a year";
+    countUp($("asyClaimed"), t.claimed);
+    $("asyClaimedS").textContent = "claimed asylum, " + Math.round(t.claimed / t.arrived * 100) + "% of the " + fmt(t.arrived) + " who arrived";
+    $("asyBar").innerHTML = asyBar(t);
+    $("asyBar").setAttribute("aria-label", ASY.map(([k, l]) => fmt(t[k]) + " " + l.toLowerCase()).join(", "));
+    $("asyKey").innerHTML = ASY.map(([k, l, c]) => '<li><span style="background:' + c + '"></span>' + l + '<b class="num">' + fmt(t[k]) + "</b></li>").join("");
+    $("asyRate").textContent = t.grantRate + "%";
+    const ys = a.years.filter(y => y.claimed >= 100);
+    $("asyYears").innerHTML = ys.map(y => '<div><span class="num">' + y.year + '</span><span class="sup-bar">' + asyBar(y) + "</span></div>").join("");
+    $("asyYears").setAttribute("aria-label", ys.map(y => y.year + ": " + Math.round(y.granted / y.claimed * 100) + "% granted, " + Math.round(y.waiting / y.claimed * 100) + "% still waiting").join("; "));
+    $("asySrc").innerHTML = 'The grant rate counts cases, as the Home Office does: a family is one case. Withdrawn includes claims closed for administrative reasons. Source: Home Office, <a href="' + a.source + '">Illegal entry routes to the UK detailed dataset</a>, tables IER_D02 and IER_D03.';
+    $("asySec").hidden = false;
+  }
+
   /* ---------------------------------------------------- records */
   const RIC = {
     trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6"/></svg>',
@@ -4097,8 +4142,8 @@ main .hero{border-radius:32px}
     if(list.length){ meta = d; days = list; }
   }
   async function loadExtras(){
-    const [g, n, pb, r] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json")]);
-    [() => renderWho(g.value, n.value), () => renderPerBoat(pb.value), () => renderReturns(r.value)].forEach(f => { try{ f(); }catch(e){} });   // one odd file doesn't stop the other boxes
+    const [g, n, pb, r, as] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json"), getJSON("asylum.json")]);
+    [() => renderWho(g.value, n.value), () => renderPerBoat(pb.value), () => renderReturns(r.value), () => renderAsylum(as.value)].forEach(f => { try{ f(); }catch(e){} });   // one odd file doesn't stop the other boxes
   }
   async function start(){
     statusAt = Date.now();
