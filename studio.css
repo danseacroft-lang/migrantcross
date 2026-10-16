@@ -2,12 +2,11 @@
    The page uses the site's own cards, segmented controls and large titles; only the marks inside the charts change with the style. */
 .st-wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:34px;min-width:0}
 
-/* the controls along the top: a toolbar of Liquid Glass, as in macOS Tahoe, floating over the page and staying under the tabs while you scroll.
-   Styles on the left, each a cluster of its three colours; what to show on the right; a lens of clear glass sits on the chosen one */
+/* the controls along the top: a flat bar that stays under the tabs while you scroll.
+   Styles on the left, each a cluster of its three colours; what to show on the right; the chosen one is filled in solid blue */
 .st-bar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 66px);z-index:5;justify-self:center;max-width:100%;box-sizing:border-box;
   display:flex;align-items:center;gap:6px;padding:5px;border-radius:999px;
-  background:var(--glass);-webkit-backdrop-filter:blur(28px) saturate(190%);backdrop-filter:blur(28px) saturate(190%);
-  box-shadow:inset 0 1px 0 var(--glass-hi),inset 0 0 0 .5px var(--glass-line),0 10px 30px -12px rgba(0,0,0,.28),0 2px 6px -2px rgba(0,0,0,.12)}
+  background:var(--card);box-shadow:inset 0 0 0 1px var(--sep)}
 .st-row{display:flex;align-items:center;gap:8px;flex:none;padding-left:8px;border-left:.5px solid var(--sep);margin-left:2px}
 .st-row .seg{flex:none;background:none;padding:0}
 .st-row .seg button{height:36px;padding:0 14px;font-size:.8rem;transition:background .25s,box-shadow .25s}
@@ -17,13 +16,13 @@
   font:600 .8rem/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",var(--font);letter-spacing:-.005em;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:background .25s ease,box-shadow .25s ease,transform .25s cubic-bezier(.3,1.4,.5,1)}
 .st-sw i{display:flex}
-.st-sw i b{display:block;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1.5px var(--card),inset 0 1px 1px rgba(255,255,255,.4)}
+.st-sw i b{display:block;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1.5px var(--card)}
 .st-sw i b + b{margin-left:-5px}
 @media (hover:hover){.st-sw:hover,.st-row .seg button:hover{background:var(--fill)}}
 .st-sw:active,.st-row .seg button:active{transform:scale(.96)}
-/* the lens: brighter glass with a rim of light, raised a little off the bar */
-.st-sw[aria-pressed="true"],.st-row .seg button[aria-pressed="true"]{background:color-mix(in srgb,var(--seg-on) 78%,transparent);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 0 0 .5px var(--glass-line),0 4px 12px -4px rgba(0,0,0,.25),0 1px 2px rgba(0,0,0,.08)}
+/* the chosen one: solid blue */
+.st-sw[aria-pressed="true"],.st-row .seg button[aria-pressed="true"]{background:var(--blue);color:#fff;box-shadow:none}
+.st-sw[aria-pressed="true"] i b{box-shadow:0 0 0 1.5px var(--blue)}
 @media (max-width:719px){
   .st-bar{top:calc(env(safe-area-inset-top,0px) + 60px);justify-self:stretch;flex-direction:column;align-items:stretch;gap:4px;border-radius:26px}
   .st-row{padding:4px 0 0;margin:0 4px;border-left:0;border-top:.5px solid var(--sep)}
@@ -72,15 +71,12 @@
 
 /* the tooltip that follows the finger or the pointer */
 .st-tip{position:fixed;z-index:60;pointer-events:none;padding:8px 11px;border-radius:12px;font:500 .765rem/1.35 var(--font);color:var(--label);max-width:220px;
-  background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
-  box-shadow:0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 10px 30px rgba(0,0,0,.18);opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
+  background:var(--card);box-shadow:inset 0 0 0 1px var(--sep);opacity:0;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
 .st-tip.on{opacity:1;transform:none}
 .st-tip b{display:block;font-weight:700;font-size:.882rem;font-variant-numeric:tabular-nums}
 
-/* Glass: the cards themselves take a faint tint of colour, as behind frosted glass */
-.st-wrap[data-style="glass"] .st-card{background:linear-gradient(140deg,color-mix(in srgb,var(--blue) 9%,var(--card)),var(--card) 45%,color-mix(in srgb,var(--pink) 7%,var(--card)))}
 
-/* ------------------------------------------------------------ locked: a look at the charts behind frosted glass, and the offer */
+/* ------------------------------------------------------------ locked: the big word, and the offer on a solid card over it */
 .st-lock{position:relative;display:grid;min-width:0}
 .st-lock > *{grid-area:1 / 1}
 /* the picture fades out on every side, so it has no hard edges */
@@ -89,27 +85,26 @@
 .st-peek{opacity:.75;pointer-events:none;user-select:none;max-height:1100px;overflow:hidden;
   -webkit-mask:linear-gradient(transparent,#000 8%,#000 40%,transparent);mask:linear-gradient(transparent,#000 8%,#000 40%,transparent)}
 .st-offer{align-self:center;justify-self:center;position:relative;z-index:2;width:min(480px,100%);margin-top:30px;padding:26px 24px 22px;text-align:center;
-  border-radius:30px;background:color-mix(in srgb,var(--card) 62%,transparent);-webkit-backdrop-filter:blur(34px) saturate(200%);backdrop-filter:blur(34px) saturate(200%);
-  box-shadow:inset 0 1px 0 var(--glass-hi,rgba(255,255,255,.6)),inset 0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 30px 70px -20px rgba(0,0,0,.35)}
-/* the big word: heavy, tightly set and as wide as the page, in the manner of a mobile network's posters; the offer's glass sits over its foot */
+  border-radius:30px;background:var(--card);box-shadow:inset 0 0 0 1px var(--sep)}
+/* the big word: heavy, tightly set and as wide as the page, in the manner of a mobile network's posters; the offer's card sits over its foot */
 .st-lock{container-type:inline-size;display:flex!important;flex-direction:column;align-items:center}
 .st-lock > *{grid-area:auto}
 .st-word{width:100vw;margin:clamp(6px,2vw,24px) calc(50% - 50vw) 0;text-align:center;font:900 34vw/.8 "Inter Tight",-apple-system,BlinkMacSystemFont,var(--font);letter-spacing:-.06em;
   padding-right:.06em;white-space:nowrap;user-select:none;position:relative;z-index:0;isolation:isolate}
 /* the letters overlap a little, each over the one before, in its own colour along the run from blue to orange */
-.st-word span{position:relative;padding:.06em .14em;margin:0 -.14em;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(-.012em 0 .02em rgba(0,0,0,.28))}
-.st-word span:nth-child(1){z-index:1;background-image:linear-gradient(160deg,#30A2FF,#0A7AFF)}
-.st-word span:nth-child(2){z-index:2;background-image:linear-gradient(160deg,#4C82FF,#3A5CF0)}
-.st-word span:nth-child(3){z-index:3;background-image:linear-gradient(160deg,#7A6BFF,#5E4FE6)}
-.st-word span:nth-child(4){z-index:4;background-image:linear-gradient(160deg,#C66BFF,#A34BEB)}
-.st-word span:nth-child(5){z-index:5;background-image:linear-gradient(160deg,#FF5FA0,#E8327A)}
-.st-word span:nth-child(6){z-index:6;background-image:linear-gradient(160deg,#FF6A4A,#FF9F0A)}
+.st-word span{position:relative}
+.st-word span:nth-child(1){z-index:1;color:#0A7AFF}
+.st-word span:nth-child(2){z-index:2;color:#3A5CF0}
+.st-word span:nth-child(3){z-index:3;color:#5E4FE6}
+.st-word span:nth-child(4){z-index:4;color:#A34BEB}
+.st-word span:nth-child(5){z-index:5;color:#E8327A}
+.st-word span:nth-child(6){z-index:6;color:#FF7A1A}
 .st-word + .st-offer{margin-top:-13vw}
-@media (max-width:719px){.st-word + .st-offer{margin-top:-11vw}}
+@media (max-width:719px){.st-word + .st-offer{margin-top:-6vw}}
 html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the window; a scrollbar's few pixels never make the page scroll sideways */
 #pg-studio.st-locked .lt-head{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .st-badge{width:58px;height:58px;margin:0 auto 14px;border-radius:16px;display:grid;place-items:center;color:#fff;
-  background:linear-gradient(160deg,#5AC8FA,#007AFF 55%,#5856D6);box-shadow:0 8px 20px -6px rgba(0,122,255,.6)}
+  background:#007AFF}
 .st-badge svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .st-offer h3{margin:0 0 6px;font:700 1.41rem/1.15 var(--font);letter-spacing:-.02em;color:var(--label)}
 .st-offer > p{margin:0 0 16px;color:var(--label2);font-size:.882rem;line-height:1.45}
@@ -135,31 +130,24 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
 .st-free b{color:var(--label);font-weight:600}
 
 /* ------------------------------------------------------------ the welcome, as an iPhone lock screen: a wallpaper of the Channel's water,
-   this year's total in large glass numerals, and four widgets on Liquid Glass (regular material, a bright rim, light bending at the edges) */
+   this year's total in large numerals, and four widgets on solid tiles, all in flat colour */
 .st-hero{--sf:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter Tight",var(--font);--sfr:-apple-system,BlinkMacSystemFont,"SF Pro Rounded","SF Pro Display","Inter Tight",var(--font);
   position:relative;isolation:isolate;overflow:hidden;border-radius:34px;color:#fff;
-  box-shadow:0 0 0 .5px rgba(255,255,255,.08),0 1px 0 rgba(255,255,255,.12) inset,0 30px 80px -36px rgba(0,30,90,.7),0 12px 30px -20px rgba(0,0,0,.35)}
+}
 .st-hero:empty{display:none}
 .st-hero-art{position:absolute;inset:0;z-index:-2}
 .st-hero-art svg{display:block;width:100%;height:100%}
-.st-hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(120% 70% at 50% 0%,rgba(255,255,255,.14),transparent 55%),linear-gradient(180deg,transparent 55%,rgba(0,8,30,.28))}
 .st-hero-in{display:flex;flex-direction:column;align-items:center;text-align:center;padding:46px 28px 28px}
-.st-hero-date{margin:0;font:600 1.12rem/1.2 var(--sf);letter-spacing:-.01em;opacity:.95;text-shadow:0 1px 2px rgba(0,30,90,.3),0 2px 18px rgba(0,30,90,.4)}
+.st-hero-date{margin:0;font:600 1.12rem/1.2 var(--sf);letter-spacing:-.01em;opacity:.95}
 .st-hero-big{margin:2px 0 0;line-height:1}
 .st-hero-big b{display:block;font:700 clamp(4.6rem,13vw,8.6rem)/.95 var(--sfr);letter-spacing:-.045em;font-variant-numeric:tabular-nums;
-  background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.72));-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 2px 1px rgba(0,30,80,.12)) drop-shadow(0 10px 30px rgba(0,20,70,.3))}
-.st-hero-sub{margin:10px auto 0;max-width:24em;font:500 1rem/1.35 var(--sf);letter-spacing:-.005em;opacity:.9;text-wrap:balance;text-shadow:0 1px 2px rgba(0,30,90,.3),0 2px 18px rgba(0,30,90,.4)}
+  color:#fff}
+.st-hero-sub{margin:10px auto 0;max-width:24em;font:500 1rem/1.35 var(--sf);letter-spacing:-.005em;opacity:.9;text-wrap:balance}
 .st-hero-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:100%;margin-top:clamp(34px,6vw,64px);text-align:left}
 
-/* the widgets: rounded squares of glass, as on the Home Screen */
+/* the widgets: rounded squares of solid colour, as on the Home Screen */
 .st-w{position:relative;min-width:0;display:flex;flex-direction:column;padding:14px 15px 15px;border-radius:24px;overflow:hidden;
-  background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.08) 55%,rgba(255,255,255,.14));
-  -webkit-backdrop-filter:blur(26px) saturate(180%) brightness(1.06);backdrop-filter:blur(26px) saturate(180%) brightness(1.06);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12),inset 0 0 0 .5px rgba(255,255,255,.32),0 14px 34px -16px rgba(0,10,40,.5)}
-.st-w::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;   /* the specular edge: light caught along the top left */
-  background:radial-gradient(90% 60% at 0% 0%,rgba(255,255,255,.28),transparent 60%);mix-blend-mode:overlay}
+  background:#14235A}
 .st-w-h{display:flex;align-items:center;gap:6px;font:600 .74rem/1.2 var(--sf);letter-spacing:.005em;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .st-w-ic{flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.22)}
 .st-w-ic svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
@@ -171,10 +159,10 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
 .st-w-bars em{font-style:normal;opacity:.8}
 .st-w-bars b{justify-self:end;font-weight:700}
 .st-w-bars i{grid-column:1/-1;position:relative;display:block;height:7px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden}
-.st-w-bars i::after{content:"";position:absolute;inset:0;width:calc(var(--w) * 100%);border-radius:inherit;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.5)}
+.st-w-bars i::after{content:"";position:absolute;inset:0;width:calc(var(--w) * 100%);border-radius:inherit;background:#fff}
 .st-w-bars .p i::after{background:rgba(255,255,255,.5);box-shadow:none}
 .st-w-calrow{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:10px}
-.st-w-date{flex:none;display:flex;flex-direction:column;align-items:center;width:62px;padding:7px 0 6px;border-radius:15px;background:#fff;color:#1C1C1E;box-shadow:0 6px 16px -8px rgba(0,0,0,.45)}
+.st-w-date{flex:none;display:flex;flex-direction:column;align-items:center;width:62px;padding:7px 0 6px;border-radius:15px;background:#fff;color:#1C1C1E}
 .st-w-date small{font:700 .62rem/1 var(--sf);letter-spacing:.04em;color:#FF3B30}
 .st-w-date small:last-child{margin-top:2px;color:#8E8E93;letter-spacing:0;font-weight:600}
 .st-w-date b{font:600 1.9rem/1.05 var(--sf);letter-spacing:-.03em}
@@ -191,9 +179,6 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
   .st-hero-big{animation-delay:.06s!important}.st-hero-sub{animation-delay:.12s!important}.st-hero-tiles{animation-delay:.2s!important}
 }
 @keyframes stRise{from{opacity:0;transform:translateY(14px) scale(.985)}}
-:root[data-theme="light"] .st-w{background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(8,40,110,.16) 55%,rgba(8,40,110,.24))}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .st-w{background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(8,40,110,.16) 55%,rgba(8,40,110,.24))}}
-@media (prefers-reduced-transparency:reduce){.st-w{background:rgba(20,40,90,.72);-webkit-backdrop-filter:none;backdrop-filter:none}}
 
 /* charts draw themselves in: bars grow from the baseline, lines trace across, squares and slices appear in a sweep */
 @media (prefers-reduced-motion:no-preference){
@@ -232,10 +217,13 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
 }
 .st-pick{position:relative;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 13px;border-radius:999px;background:var(--fill);color:var(--label);
   font:600 .82rem/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",var(--font);letter-spacing:-.005em;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;
-  box-shadow:inset 0 0 0 .5px var(--glass-line);transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+  transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
 .st-pick:active{transform:scale(.96)}
 .st-pick:focus-within{outline:2px solid var(--blue);outline-offset:2px}
 .st-pick > svg:not(.st-pick-c){width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .st-pick i{display:flex}.st-pick i b{display:block;width:13px;height:13px;border-radius:50%;box-shadow:0 0 0 1.5px var(--card)}.st-pick i b + b{margin-left:-5px}
 .st-pick-c{width:8px;height:13px;flex:none;fill:none;stroke:var(--label2);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-left:1px}
 .st-pick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;margin:0;padding:0;font-size:16px;cursor:pointer;-webkit-appearance:none;appearance:none}
+/* light: the tiles a deeper blue than the water behind */
+:root[data-theme="light"] .st-w{background:#0F4FBF}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .st-w{background:#0F4FBF}}
