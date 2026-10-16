@@ -94,11 +94,12 @@
 /* the big word: heavy, tightly set and as wide as the page, in the manner of a mobile network's posters; the offer's glass sits over its foot */
 .st-lock{container-type:inline-size;display:flex!important;flex-direction:column;align-items:center}
 .st-lock > *{grid-area:auto}
-.st-word{width:100%;margin:clamp(10px,3cqw,30px) 0 0;text-align:center;font:900 32cqw/.8 "Inter Tight",-apple-system,BlinkMacSystemFont,var(--font);letter-spacing:-.012em;
+.st-word{width:100vw;margin:clamp(6px,2vw,24px) calc(50% - 50vw) 0;text-align:center;font:900 33vw/.8 "Inter Tight",-apple-system,BlinkMacSystemFont,var(--font);letter-spacing:-.012em;
   padding-right:.05em;white-space:nowrap;user-select:none;
   background:linear-gradient(100deg,#0A84FF 8%,#5E5CE6 38%,#BF5AF2 60%,#FF375F 80%,#FF9F0A 98%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.st-word + .st-offer{margin-top:-9cqw}
-@media (max-width:719px){.st-word + .st-offer{margin-top:-7cqw}}
+.st-word + .st-offer{margin-top:-9vw}
+@media (max-width:719px){.st-word + .st-offer{margin-top:-6vw}}
+html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the window; a scrollbar's few pixels never make the page scroll sideways */
 #pg-studio.st-locked .lt-head{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .st-badge{width:58px;height:58px;margin:0 auto 14px;border-radius:16px;display:grid;place-items:center;color:#fff;
   background:linear-gradient(160deg,#5AC8FA,#007AFF 55%,#5856D6);box-shadow:0 8px 20px -6px rgba(0,122,255,.6)}
