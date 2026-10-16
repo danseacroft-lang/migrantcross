@@ -770,8 +770,7 @@
       + '<form data-form="signin"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address"><button class="st-buy" type="submit">Email me a sign-in link</button></form>'
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : "") + "</p>"
       + '<button type="button" class="st-link" data-act="back">Back</button>';
-    else body = '<div class="st-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5h16M6.5 16V11M11 16V6M15.5 16v-7M20 16V4" stroke-width="2.4"/></svg></div>'
-      + "<h3>Studio</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
+    else body = "<h3>Every chart, your way</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
       + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
       + '<ul class="st-list"><li>' + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
       + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
@@ -812,12 +811,15 @@
   const lockBox = document.createElement("div"); lockBox.className = "st-lock";
   // behind the offer, a blurred picture of Studio: never the charts themselves, which only an unlocked account gets
   const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("aria-hidden", "true");
+  // the offer page: the word "studio" as large as the page allows, in heavy type, with the offer on frosted glass across its foot
+  const word = document.createElement("p"); word.className = "st-word"; word.setAttribute("aria-hidden", "true"); word.textContent = "studio";
   const peekPic = () => '<img src="studio-peek-' + (isDark() ? "dark" : "light") + '.webp" alt="" width="464" height="550" decoding="async">';
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
   function setLocked(on){
     locked = on;
     if(!on && window.ccLive) window.ccLive(true);   // live updates across the site come with Studio
-    if(on){ renderOffer("offer"); peek.innerHTML = peekPic(); lockBox.append(peek, offer); host.replaceChildren(lockBox); showOut(); return; }
+    const pg = document.getElementById("pg-studio"); if(pg) pg.classList.toggle("st-locked", on);   // the page's own title steps aside for the big word
+    if(on){ renderOffer("offer"); lockBox.append(word, offer); host.replaceChildren(lockBox); showOut(); return; }
     else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = window.CC_STUDIO_PREVIEW && !(acct && acct.email) ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : ""; }
     showOut();
     requestAnimationFrame(drawAll);
