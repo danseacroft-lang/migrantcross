@@ -812,7 +812,7 @@
   // behind the offer, a blurred picture of Studio: never the charts themselves, which only an unlocked account gets
   const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("aria-hidden", "true");
   // the offer page: the word "studio" as large as the page allows, in heavy type, with the offer on frosted glass across its foot
-  const word = document.createElement("p"); word.className = "st-word"; word.setAttribute("aria-hidden", "true"); word.textContent = "studio";
+  const word = document.createElement("p"); word.className = "st-word"; word.setAttribute("aria-hidden", "true"); word.innerHTML = [..."studio"].map(c => "<span>" + c + "</span>").join("");   // a span a letter, so each can sit over the one before
   const peekPic = () => '<img src="studio-peek-' + (isDark() ? "dark" : "light") + '.webp" alt="" width="464" height="550" decoding="async">';
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
   function setLocked(on){
