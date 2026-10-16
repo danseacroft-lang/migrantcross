@@ -6,30 +6,22 @@ jobs:
   probe:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v5
-        with: {ref: claude/project-thread-gg3te9}
       - uses: actions/setup-python@v6
         with: {python-version: "3.12"}
-      - run: pip install -r requirements.txt
+      - run: pip install openpyxl requests odfpy pandas
       - shell: python
         run: |
-          import sys, json; sys.path.insert(0, "scripts")
-          import extras
-          extras.update_asylum(); print(open("asylum.json").read())
-      - shell: python
-        run: |
-          import io, re, requests, openpyxl
+          import io, re, requests, pandas as pd
           page = requests.get("https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables", timeout=60).text
-          u = next(l for l in re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.xlsx', page) if "returns" in l.lower() and "dataset" in l.lower())
-          print(u)
-          wb = openpyxl.load_workbook(io.BytesIO(requests.get(u, timeout=180).content), read_only=True, data_only=True)
-          from collections import Counter
-          for ws in wb.worksheets:
-              rows = list(ws.iter_rows(values_only=True))
-              print("=== SHEET", ws.title, len(rows))
-              for r in rows[:4]: print("  ", [c for c in r if c is not None][:16])
-              if ws.title.lower().startswith("data_"):
-                  head = rows[1]
-                  for j, h in enumerate(head):
-                      vals = Counter(r[j] for r in rows[2:] if r and len(r) > j)
-                      print("   ", h, dict(vals) if len(vals) < 30 else f"{len(vals)} distinct")
+          links = re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.(?:xlsx|ods)', page)
+          print("\n".join(l for l in links if "return" in l.lower()))
+          u = next(l for l in links if "return" in l.lower() and "summary" in l.lower())
+          print("USING", u)
+          xl = pd.read_excel(io.BytesIO(requests.get(u, timeout=180).content), sheet_name=None, header=None)
+          print(list(xl))
+          for name, df in xl.items():
+              if "06" in name or "6b" in name.lower():
+                  print("=== SHEET", name, df.shape)
+                  pd.set_option("display.width", 250); pd.set_option("display.max_columns", 30)
+                  print(df.head(60).to_string())
+                  print(df.tail(10).to_string())
