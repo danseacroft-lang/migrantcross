@@ -440,7 +440,7 @@
   card({id:"nat", title:"Nationalities", forms:[["hbars","Bars"],["tree","Treemap"],["donut","Ring"],["waffle","Squares"],["table","Table"]], key:"nat", people:true,
     draw(el, T){
       if(!nats) return '<p class="st-note">These figures are still loading.</p>';
-      const items = nats.top.map((n, i) => [n.name, n.n, T.c[i % 6]]).concat(nats.other ? [["Everyone else", nats.other, T.muted]] : []);
+      const F = window.CC_FLAGS || {}, items = nats.top.map((n, i) => [(F[n.name] ? F[n.name] + " " : "") + n.name, n.n, T.c[i % 6]]).concat(nats.other ? [["Everyone else", nats.other, T.muted]] : []);
       this.read = [nats.top[0].name, "the largest group, " + nats.top[0].pc + "% of " + fmt(nats.total) + " people, " + nats.period];
       this.legend = prefs.nat === "table" || prefs.nat === "hbars" ? "" : legend(items.map(x => [x[0], x[2]]));
       if(prefs.nat === "table") return table(["Nationality", "People", "Share"], items.map(x => [x[0], fmt(x[1]), (x[1] / nats.total * 100).toFixed(1) + "%"]));
@@ -497,7 +497,10 @@
       items.forEach(([k, v, c], i) => { const fr = v / rest, horiz = w >= h; let rw, rh;   // slice off each piece along the longer side
         if(i === items.length - 1){ rw = w; rh = h; } else if(horiz){ rw = w * fr; rh = h; } else { rw = w; rh = h * fr; }
         s.add('<rect class="st-d"' + s.delay(i / items.length) + ' x="' + (x + 1.5).toFixed(1) + '" y="' + (y + 1.5).toFixed(1) + '" width="' + Math.max(0, rw - 3).toFixed(1) + '" height="' + Math.max(0, rh - 3).toFixed(1) + '" rx="' + Math.min(T.r === 999 ? 14 : T.r * 2, 14) + '" ' + s.fill(c) + "/>");
-        if(rw > 70 && rh > 40){ s.text(x + 12, y + 22, k, {c:"#fff", w:600, size:12}); s.text(x + 12, y + 38, (v / sum(groups[0][1], q => q[1]) * 100).toFixed(1) + "%", {c:"rgba(255,255,255,.85)", size:11}); }
+        const pc = (v / sum(groups[0][1], q => q[1]) * 100).toFixed(1) + "%", fl = /^(\p{RI}\p{RI}) (.+)$/u.exec(k);
+        // a flag that won't fit beside the name sits on its own line above it
+        if(fl && rw - 24 < k.length * 7 && rw > 70 && rh > 62){ s.text(x + 12, y + 24, fl[1], {size:16}); s.text(x + 12, y + 44, fl[2], {c:"#fff", w:600, size:12}); s.text(x + 12, y + 60, pc, {c:"rgba(255,255,255,.85)", size:11}); }
+        else if(rw > 70 && rh > 40){ s.text(x + 12, y + 22, k, {c:"#fff", w:600, size:12}); s.text(x + 12, y + 38, pc, {c:"rgba(255,255,255,.85)", size:11}); }
         cardO.pts.push({x:x + rw / 2, y:y + rh / 2, tip:"<b>" + fmt(v) + "</b>" + esc(k)});
         if(horiz){ x += rw; w -= rw; } else { y += rh; h -= rh; } rest -= v; });
       return s.out("Shares as a treemap");
