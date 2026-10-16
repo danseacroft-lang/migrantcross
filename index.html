@@ -553,6 +553,16 @@ main{max-width:1180px;margin:0 auto}
 .asy-years{display:grid;gap:7px;margin-top:10px}
 .asy-years div{display:grid;grid-template-columns:3.2em 1fr;align-items:center;gap:10px;font-size:.82rem;color:var(--label2)}
 .asy-years .sup-bar{margin:0;height:12px}
+.br-grid{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.br-cols{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:18px}
+.br-cols i{flex:1;min-height:2px;border-radius:3px 3px 1px 1px;background:var(--viz1)}
+.br-cols i.p{opacity:.5}
+.br-yrs{display:flex;gap:3px;margin-top:6px;font-size:.72rem;color:var(--label2)}
+.br-yrs span{flex:4;text-align:center;border-top:.5px solid var(--sep);padding-top:4px}
+.br-top{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:10px;font-size:.88rem}
+.br-top li{display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+.br-top li i{grid-column:1 / -1;height:6px;border-radius:3px;background:var(--viz2);width:var(--w)}
+.br-top b{font-weight:600}
 @media (max-width:719px){.sup-grid{grid-template-columns:1fr}}
 .pred{display:flex;flex-direction:column}
 .pred-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
@@ -1783,6 +1793,25 @@ main .hero{border-radius:32px}
         <p class="foot rv" id="patNote"></p>
       </section>
   </div>
+  <!-- ============================================================ RETURNS OF SMALL BOAT ARRIVALS (boatreturns.json, from Ret_06a and Ret_06b) -->
+  <section class="mb wide" aria-labelledby="hBr" id="brSec" hidden>
+    <div class="section-h rv"><h2 id="hBr">Returned From the UK</h2><p id="brNote"></p></div>
+    <div class="sup-grid br-grid">
+      <article class="card rv">
+        <h3>People who came by small boat, returned</h3>
+        <div class="val num" id="brV">–</div>
+        <div class="sub" id="brS">&nbsp;</div>
+        <div class="br-cols" id="brCols" role="img"></div>
+        <div class="br-yrs" id="brYrs" aria-hidden="true"></div>
+      </article>
+      <article class="card rv">
+        <h3>Who was returned</h3>
+        <div class="sub" id="brTopS">&nbsp;</div>
+        <ul class="br-top" id="brTop"></ul>
+      </article>
+    </div>
+    <p class="sup-src rv" id="brSrc"></p>
+  </section>
   <!-- ============================================================ BETWEEN TWO DATES, QUIET SPELLS -->
   <section class="mb wide" aria-labelledby="hCalc">
     <div class="duo">
@@ -3373,6 +3402,25 @@ main .hero{border-radius:32px}
     $("asySec").hidden = false;
   }
 
+  // Returned from the UK: people who arrived by small boat, each quarter from 2022, and the most common nationalities
+  function renderBoatReturns(r){
+    if(!r || !r.quarters || !r.year) return;
+    const qs = r.quarters.filter(q => q.q >= "2022"), max = Math.max(...qs.map(q => q.n));
+    $("brNote").textContent = r.period[0].toUpperCase() + r.period.slice(1) + " · updated every three months";
+    countUp($("brV"), r.year);
+    $("brS").textContent = "in the " + r.period + (r.change != null ? ", " + Math.abs(r.change) + "% " + (r.change >= 0 ? "more" : "fewer") + " than the year before" : "")
+      + (r.arrived ? ". About 1 in " + Math.round(r.arrived / r.year) + " of the " + fmt(r.arrived) + " who arrived in the same months" : "");
+    $("brCols").innerHTML = qs.map(q => '<i' + (q.p ? ' class="p"' : "") + ' style="height:' + (q.n / max * 100).toFixed(1) + '%" title="' + q.q + ": " + fmt(q.n) + (q.p ? " (provisional)" : "") + '"></i>').join("");
+    $("brCols").setAttribute("aria-label", "Returns each quarter: " + qs.map(q => q.q + " " + fmt(q.n)).join(", "));
+    const yrs = [...new Set(qs.map(q => q.q.slice(0, 4)))];
+    $("brYrs").innerHTML = yrs.map(y => '<span style="flex:' + qs.filter(q => q.q.startsWith(y)).length + '">' + y + "</span>").join("");
+    const top = r.top || [];
+    $("brTopS").textContent = "Most common nationalities, " + r.period;
+    $("brTop").innerHTML = top.map(t => "<li>" + t.name + '<b class="num">' + fmt(t.n) + '</b><i style="--w:' + (t.n / top[0].n * 100).toFixed(1) + '%"></i></li>').join("");
+    $("brSrc").innerHTML = "Returns of people who arrived by small boat, in the quarter they left the UK. The paler columns are provisional and may be revised. Source: Home Office, <a href=\"" + r.source + "\">Returns summary tables</a>, Ret_06a and Ret_06b.";
+    $("brSec").hidden = false;
+  }
+
   /* ---------------------------------------------------- records */
   const RIC = {
     trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6"/></svg>',
@@ -4142,8 +4190,8 @@ main .hero{border-radius:32px}
     if(list.length){ meta = d; days = list; }
   }
   async function loadExtras(){
-    const [g, n, pb, r, as] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json"), getJSON("asylum.json")]);
-    [() => renderWho(g.value, n.value), () => renderPerBoat(pb.value), () => renderReturns(r.value), () => renderAsylum(as.value)].forEach(f => { try{ f(); }catch(e){} });   // one odd file doesn't stop the other boxes
+    const [g, n, pb, r, as, br] = await Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("perboat.json"), getJSON("returns.json"), getJSON("asylum.json"), getJSON("boatreturns.json")]);
+    [() => renderWho(g.value, n.value), () => renderPerBoat(pb.value), () => renderReturns(r.value), () => renderAsylum(as.value), () => renderBoatReturns(br.value)].forEach(f => { try{ f(); }catch(e){} });   // one odd file doesn't stop the other boxes
   }
   async function start(){
     statusAt = Date.now();
