@@ -88,9 +88,19 @@
   -webkit-mask:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
 .st-peek{opacity:.75;pointer-events:none;user-select:none;max-height:1100px;overflow:hidden;
   -webkit-mask:linear-gradient(transparent,#000 8%,#000 40%,transparent);mask:linear-gradient(transparent,#000 8%,#000 40%,transparent)}
-.st-offer{align-self:start;justify-self:center;position:sticky;top:120px;z-index:2;width:min(440px,100%);margin-top:30px;padding:26px 24px 22px;text-align:center;
-  border-radius:30px;background:color-mix(in srgb,var(--card) 84%,transparent);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);
-  box-shadow:inset 0 0 0 .5px var(--glass-hi,rgba(255,255,255,.6)),0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 30px 70px -20px rgba(0,0,0,.35)}
+.st-offer{align-self:center;justify-self:center;position:relative;z-index:2;width:min(480px,100%);margin-top:30px;padding:26px 24px 22px;text-align:center;
+  border-radius:30px;background:color-mix(in srgb,var(--card) 62%,transparent);-webkit-backdrop-filter:blur(34px) saturate(200%);backdrop-filter:blur(34px) saturate(200%);
+  box-shadow:inset 0 1px 0 var(--glass-hi,rgba(255,255,255,.6)),inset 0 0 0 .5px var(--glass-line,rgba(0,0,0,.1)),0 30px 70px -20px rgba(0,0,0,.35)}
+/* the big word: heavy, tightly set and as wide as the page, in the manner of a mobile network's posters; the offer's glass sits over its foot */
+.st-lock{container-type:inline-size;display:flex!important;flex-direction:column;align-items:center}
+.st-lock > *{grid-area:auto}
+.st-word{width:100vw;margin:clamp(6px,2vw,24px) calc(50% - 50vw) 0;text-align:center;font:900 33vw/.8 "Inter Tight",-apple-system,BlinkMacSystemFont,var(--font);letter-spacing:-.012em;
+  padding-right:.05em;white-space:nowrap;user-select:none;
+  background:linear-gradient(100deg,#0A84FF 8%,#5E5CE6 38%,#BF5AF2 60%,#FF375F 80%,#FF9F0A 98%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.st-word + .st-offer{margin-top:-9vw}
+@media (max-width:719px){.st-word + .st-offer{margin-top:-6vw}}
+html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the window; a scrollbar's few pixels never make the page scroll sideways */
+#pg-studio.st-locked .lt-head{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .st-badge{width:58px;height:58px;margin:0 auto 14px;border-radius:16px;display:grid;place-items:center;color:#fff;
   background:linear-gradient(160deg,#5AC8FA,#007AFF 55%,#5856D6);box-shadow:0 8px 20px -6px rgba(0,122,255,.6)}
 .st-badge svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
