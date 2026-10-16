@@ -11,17 +11,13 @@
      FREE_EMAILS  secret  optional: email addresses that always have Studio without paying, separated by commas (kept here, not in the
                           public code). They sign in with an emailed link, or with MASTER_KEY if it's set.
      MASTER_KEY   secret  optional: a long password. Signing in with one of the FREE_EMAILS then asks for it instead of sending an email.
-     ANTHROPIC_KEY secret optional: a Claude API key (console.anthropic.com → API keys). Lets Ask for a chart understand requests worded
-                          in ways the page's own reader doesn't. Without it, Ask for a chart still works for everything that reader knows.
 
    The page (studio.js) calls:
      POST /checkout {email}   → {url} a Stripe Checkout page for £1.99; or, if that email has already paid, emails a sign-in link → {paid, sent}
      POST /claim {session_id} → {token, email, studio} after paying, signs that device in (sessions under a day old only)
      POST /login {email}      → emails a sign-in link; for FREE_EMAILS when MASTER_KEY is set → {key:true}, and with {email, key} → {token, email, studio}
      POST /session {link}     → {token, email, studio} swaps the emailed link for a token kept on the device
-     GET  /me  (Bearer token) → {email, studio}
-     POST /ask {text} (Bearer token, paid accounts) → {request, ok, why} Claude rewords a chart request into the plain words the
-                          page understands; it never sees or makes up figures, which always come from the site's own files    */
+     GET  /me  (Bearer token) → {email, studio}                                                                       */
 
 const LINK_TTL = 30 * 60, TOKEN_TTL = 365 * 86400, CLAIM_TTL = 86400;
 const enc = new TextEncoder();
@@ -87,44 +83,6 @@ async function sendLink(env, email){
   if(!r.ok) throw new Error("The sign-in email couldn't be sent. Please try again.");
 }
 
-/* Ask for a chart: Claude Haiku turns a request in the visitor's own words into the plain wording studio-ask.js reads. Only the words
-   go to Claude, never the email or the figures, and the chart is still drawn on the page from the Home Office figures. */
-const ASK_SYSTEM = `You help visitors to Channel Crossings Studio, a site about small boats crossing the English Channel to the UK.
-A visitor typed a request for a chart. Rewrite it as ONE short plain request that the site's simple word reader understands, or say it can't be drawn.
-
-The site has these figures and nothing else:
-- people and boats detected crossing each day since 1 January 2018 (so: people, boats, people per boat)
-- nationalities of people arriving, by year
-- sex and age of people arriving
-- asylum decisions (granted, refused) by year of arrival
-- people who arrived by small boat and were later returned from the UK, by quarter
-- the UK–France "one in, one out" returns deal, month by month, since August 2025
-
-The reader understands requests built from these words:
-- what: people, boats, people per boat, nationalities, a country name (e.g. Afghans, Iran), women and children, asylum granted, asylum refused, returned, one in one out
-- grouping: each day, each week, each month, each quarter, each year
-- time: a year (2022), a range (2019 to 2022), since 2020, before 2021, last 30 days, last 6 months, this year, last year, a month and year (August 2022), a month alone (August, meaning every August)
-- shapes: busiest/quietest days/weeks/months (optionally top 5), running total, this year vs last, compare 2022 and 2024 (optionally by month), day of the week, time of year
-- forms: line, bars, table, ring (rings only for shares such as nationalities)
-
-Examples: "boats each month in 2022", "top nationalities since 2018", "busiest days ever", "this year vs last", "people per boat each year",
-"which day of the week is busiest", "Afghans each year", "compare 2022 and 2024 by month", "asylum granted by year", "people each week, last 6 months".
-
-If the visitor asks for something the figures can't show (deaths, costs, opinions, forecasts, anything not listed), set ok to false and give a short,
-kind reason in why, in plain British English. Never invent figures.`;
-async function rephrase(env, text){
-  const r = await fetch("https://api.anthropic.com/v1/messages", {method:"POST",
-    headers:{"x-api-key":env.ANTHROPIC_KEY, "anthropic-version":"2023-06-01", "Content-Type":"application/json"},
-    body:JSON.stringify({model:"claude-haiku-5-5", max_tokens:1024, output_config:{effort:"low", format:{type:"json_schema", schema:{type:"object",
-      properties:{ok:{type:"boolean"}, request:{type:"string"}, why:{type:"string"}}, required:["ok", "request", "why"], additionalProperties:false}}},
-      system:ASK_SYSTEM, messages:[{role:"user", content:text}]})});
-  const j = await r.json().catch(() => ({}));
-  if(!r.ok || j.stop_reason === "refusal") throw new Error("ask");
-  const t = (j.content || []).find(b => b.type === "text");
-  const o = JSON.parse(t ? t.text : "{}");
-  return {ok:!!o.ok, request:String(o.request || "").slice(0, 120), why:String(o.why || "").slice(0, 240)};
-}
-
 export default {
   async fetch(req, env){
     const cors = {"Access-Control-Allow-Origin":env.SITE, "Access-Control-Allow-Methods":"GET, POST, OPTIONS", "Access-Control-Allow-Headers":"Content-Type, Authorization", "Vary":"Origin"};
@@ -172,14 +130,6 @@ export default {
         const p = await verify(env, body.link, "link");
         if(!p) return json({error:"That sign-in link has expired. Please ask for a new one."}, 401);
         return json(await session(env, p.e, await hasPaid(env, p.e)));
-      }
-      if(path === "/ask" && req.method === "POST"){
-        if(!env.ANTHROPIC_KEY) return json({error:"Not switched on"}, 404);
-        if(!auth) return json({error:"Please sign in again."}, 401);
-        const text = typeof body.text === "string" ? body.text.trim().slice(0, 200) : "";
-        if(!text) return json({error:"Type what you’d like to see."}, 400);
-        if(!await hasPaid(env, auth.e)) return json({error:"Ask for a chart comes with Studio."}, 402);
-        return json(await rephrase(env, text));
       }
       if(path === "/me"){
         if(!auth) return json({error:"Please sign in again."}, 401);

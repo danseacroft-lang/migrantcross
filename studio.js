@@ -518,8 +518,7 @@
      studio-ask.js reads the words into a plan (what, when, grouped how, which shape); this draws the plan from the figures above,
      choosing the clearest form unless they named one. Nothing is sent anywhere: it all happens on this page. */
   const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"], cap = s => s[0].toUpperCase() + s.slice(1);
-  const ASK = {id:"ask", title:"", forms:[]}, askQ = {text:store.get("ask") || "", form:null, read:"", why:"", busy:false, n:0};
-  const askCtx = () => ({first:D[0].date, last, countries:natYears ? natYears.nats.map(n => n.name) : nats ? nats.top.map(n => n.name) : []});
+  const ASK = {id:"ask", title:"", forms:[]}, askQ = {text:store.get("ask") || "", form:null};
   let asylum = null, boatRet = null, natYears = null, askExtra = null;
   const askReady = () => askExtra || (askExtra = Promise.allSettled([getJSON("asylum.json"), getJSON("boatreturns.json"), getJSON("natyears.json")]).then(([a, b, n]) => {
     asylum = a.value || null; boatRet = b.value || null; natYears = n.value && n.value.nats ? n.value : null; }));
@@ -754,14 +753,14 @@
   function drawAsk(T){
     const box = wrap.querySelector("[data-ask-out]"); if(!box) return;
     if(!askQ.text || !window.ccAsk || !D.length){ box.hidden = true; return; }
-    const S = window.ccAsk.parse(askQ.read || askQ.text, askCtx());
+    const S = window.ccAsk.parse(askQ.text, {first:D[0].date, last, countries:natYears ? natYears.nats.map(n => n.name) : nats ? nats.top.map(n => n.name) : []});
     box.hidden = false; T = T || theme();
     const ch = box.querySelector("[data-chart]"), note = box.querySelector(".st-ask-note"), fm = box.querySelector(".st-forms");
     ASK.pts = null; ASK.legend = ""; ASK.svg = null; ASK.read = null;
-    if(askQ.busy || !S.understood){
-      ASK.title = askQ.busy ? "Working out what you mean…" : askQ.why ? "Not in the figures" : "Not sure what to show";
+    if(!S.understood){
+      ASK.title = "Not sure what to show";
       box.querySelector("h3").textContent = ASK.title; fm.innerHTML = ""; box.querySelector(".st-read").hidden = true;
-      ch.innerHTML = askQ.busy ? "" : '<p class="st-note">' + (askQ.why ? esc(askQ.why) + " " : "Nothing in “" + esc(askQ.text) + "” matched the figures. ") + 'Try asking about people, boats, people per boat, nationalities, sex and age, asylum decisions or returns, with a year or a time such as “each month”.</p>';
+      ch.innerHTML = '<p class="st-note">Nothing in “' + esc(askQ.text) + '” matched the figures. Try asking about people, boats, people per boat, nationalities, sex and age, asylum decisions or returns, with a year or a time such as “each month”.</p>';
       box.querySelector("[data-legend]").innerHTML = ""; note.textContent = ""; box.querySelector("[data-save]").disabled = true; menus(); return;
     }
     const R = askData(S, T); ASK.title = window.ccAsk.title(S);
@@ -786,7 +785,6 @@
     const rd = box.querySelector(".st-read"); rd.hidden = !R.read; if(R.read){ ASK.read = R.read; rd.firstChild.textContent = R.read[0]; rd.lastChild.textContent = R.read[1]; }
     box.querySelector("[data-save]").disabled = !ASK.svg;
     const said = S.notes.concat(R.notes || []);
-    if(askQ.read) said.unshift("Read as “" + askQ.read + "”.");
     if(S.unknown.length) said.push("Not used: " + S.unknown.map(w => "“" + w + "”").join(", ") + ".");
     note.textContent = said.join(" ");
     menus(); fadeRows();
@@ -821,17 +819,7 @@
   function ask(text){
     askQ.text = String(text || "").trim().slice(0, 200); askQ.form = null; store.set("ask", askQ.text);
     const i = wrap.querySelector(".st-ask-f input"); if(i && i.value !== askQ.text) i.value = askQ.text;
-    askQ.read = askQ.why = ""; const n = ++askQ.n;
-    (window.ccAsk ? askReady() : askScript).then(() => askReady()).then(() => {
-      if(n !== askQ.n || !window.ccAsk || !D.length) return drawAsk();
-      // words the page's own reader can't place go to Claude (through the Studio worker), which rewords them into ones it can
-      const S = window.ccAsk.parse(askQ.text, askCtx()), token = acct && acct.token;
-      if(!API || !token || (S.understood && S.unknown.length < 2)){ drawAsk(); play(ASK); return; }
-      askQ.busy = true; drawAsk();
-      api("/ask", {text:askQ.text}, token).then(o => { if(n !== askQ.n) return;
-        if(o.ok && o.request && window.ccAsk.parse(o.request, askCtx()).understood) askQ.read = o.request; else if(!o.ok) askQ.why = o.why || ""; })
-        .catch(() => {}).then(() => { if(n !== askQ.n) return; askQ.busy = false; drawAsk(); play(ASK); });
-    });
+    (window.ccAsk ? askReady() : askScript).then(() => askReady()).then(() => { drawAsk(); play(ASK); });
   }
 
   function seg(key, opts, label){
