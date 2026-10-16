@@ -1067,7 +1067,7 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 @media (hover:hover){.tb-x:hover{background:var(--fill)}}
 /* Appearance */
 .th-pop{width:min(300px,calc(100vw - 24px))}
-/* Studio's sign-out: the door button only on the Studio page, and a small alert of glass under it, as macOS asks before signing out */
+/* Studio's sign-out: the door button only on the Studio page, and a small flat alert under it, as macOS asks before signing out */
 :root:not([data-tab="studio"]) #outBtn{display:none}
 .tb-out .ar{transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
 @media (hover:hover){.tb-out:hover .ar{transform:translateX(1.6px)}}
@@ -1075,8 +1075,9 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .tb-btn[aria-expanded="true"] .ic-door .ar{animation:tbOutDoor .6s cubic-bezier(.3,1.5,.5,1) both}
 @keyframes tbOutDoor{0%{transform:none}45%{transform:translateX(3px)}100%{transform:none}}
 .out-pop{width:min(290px,calc(100vw - 24px));padding:22px 16px 14px!important;text-align:center}
+#outPop{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:inset 0 0 0 1px var(--sep)!important}
 .out-ic{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 12px;border-radius:50%;color:#fff;
-  background:radial-gradient(120% 100% at 30% 0%,#FF7A70,#FF3B30 55%,#D70015);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 2px rgba(0,0,0,.18),0 8px 20px -6px rgba(255,59,48,.55)}
+  background:#FF3B30}
 .out-ic svg{width:24px;height:24px}
 .out-pop h2{font-size:1.12rem!important}
 .out-who{margin:6px 4px 16px;color:var(--label2);font-size:.8rem;line-height:1.4;overflow-wrap:anywhere}
@@ -1088,16 +1089,14 @@ button.chip{position:relative}button.chip::after{content:"";position:absolute;in
 .out-no:focus-visible,.out-knob:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 /* slide to sign out, as on the iPhone's lock screen: drag the knob to the end of the track (a tap only nudges it; the keyboard presses it) */
 .out-slide{--x:0px;position:relative;height:56px;padding:4px;border-radius:999px;background:var(--fill);overflow:hidden;user-select:none;-webkit-user-select:none}
-.out-fill{position:absolute;left:4px;top:4px;bottom:4px;width:calc(48px + var(--x));border-radius:999px;background:linear-gradient(180deg,#FF5147,#FF3B30);opacity:.22}
+.out-fill{position:absolute;left:4px;top:4px;bottom:4px;width:calc(48px + var(--x));border-radius:999px;background:#FF3B30;opacity:.22}
 .out-txt{position:absolute;inset:0 0 0 52px;display:grid;place-items:center;font:500 .94rem/1 var(--font);letter-spacing:-.01em;opacity:calc(1 - var(--p, 0) * 1.6);
-  color:transparent;background:linear-gradient(100deg,var(--label2) 0 40%,var(--label) 50%,var(--label2) 60% 100%) 0 0/250% 100%;-webkit-background-clip:text;background-clip:text;animation:outShine 2.6s linear infinite}
-@keyframes outShine{from{background-position:100% 0}to{background-position:-150% 0}}
+  color:var(--label2)}
 .out-knob{position:relative;display:grid;place-items:center;width:48px;height:48px;padding:0;border:0;border-radius:50%;appearance:none;cursor:grab;touch-action:none;color:#fff;
-  background:linear-gradient(180deg,#FF5147,#FF3B30);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 12px -4px rgba(255,59,48,.8);transform:translateX(var(--x))}
+  background:#FF3B30;transform:translateX(var(--x))}
 .out-knob svg{width:22px;height:22px}
 .out-slide:not(.drag) .out-knob,.out-slide:not(.drag) .out-fill{transition:transform .45s cubic-bezier(.3,1.35,.5,1),width .45s cubic-bezier(.3,1.35,.5,1)}
 .out-slide.drag .out-knob{cursor:grabbing}
-@media (prefers-reduced-motion:reduce){.out-txt{animation:none;color:var(--label2)}}
 .th-list{display:grid;gap:2px;margin:0 -8px}
 .th-list button{display:flex;align-items:center;gap:12px;width:100%;padding:8px;border:0;border-radius:10px;background:none;color:var(--label);text-align:left;font:inherit;cursor:pointer}
 @media (hover:hover){.th-list button:hover{background:var(--fill)}}
@@ -1417,6 +1416,13 @@ main .hero{border-radius:32px}
 /* graphs: the scale sits on the trailing side, so the bars line up with the card's leading edge */
 .chart text{font-variant-numeric:tabular-nums}
 
+/* Studio is flat: on its page the tab bar, the toolbar buttons and their pop-ups are solid colour, with no glass and no blur behind them */
+:root[data-tab="studio"] :is(.tabs,.top-act,.tb-pop){background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:inset 0 0 0 1px var(--sep)!important}
+:root[data-tab="studio"] .edge-b{display:none}
+:root[data-tab="studio"] .edge-t{background:var(--bg);-webkit-mask-image:none;mask-image:none;-webkit-backdrop-filter:none;backdrop-filter:none;height:calc(env(safe-area-inset-top,0px) + 62px)}
+@media (max-width:719px){:root[data-tab="studio"] .edge-t{height:calc(env(safe-area-inset-top,0px) + 56px)}}
+:root[data-tab="studio"] .tabs::before{display:none}
+:root[data-tab="studio"] .tab-ind{background:var(--fill)!important;box-shadow:none!important}
 /* accessibility settings: Reduce Transparency makes the glass solid; Increase Contrast gives it a clear edge */
 @media (prefers-reduced-transparency:reduce){
   .tabs,.top-act,.tb-pop,.hero-in,.map-news,.ves-list{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}

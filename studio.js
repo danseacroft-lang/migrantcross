@@ -55,9 +55,9 @@
       seqL:["#D3DBE5","#9FB1C6","#6681A2","#2F4B6E","#1B2D45"], seqD:["#26364A","#3B5472","#5E7FA6","#9DB6D3","#D2DEEC"]},
     {id:"graphite", name:"Graphite", r:1.5, lw:1.6, light:["#1C1C1E","#FF3B30","#8E8E93","#48484A","#C7C7CC","#636366"], dark:["#F2F2F7","#FF453A","#8E8E93","#C7C7CC","#48484A","#AEAEB2"],
       seqL:["#E5E5EA","#C7C7CC","#8E8E93","#48484A","#1C1C1E"], seqD:["#2C2C2E","#48484A","#8E8E93","#C7C7CC","#F2F2F7"]},
-    {id:"glass", name:"Glass", r:7, lw:2.4, glass:true, light:["#3D8BFF","#FF8A3D","#7A6CF0","#2EC4D6","#FF4F7B","#3CCB7F"], dark:["#5AA2FF","#FFA052","#8E82FF","#4FD8E8","#FF6B92","#4FE08F"],
+    {id:"glass", name:"Bright", r:7, lw:2.4, light:["#3D8BFF","#FF8A3D","#7A6CF0","#2EC4D6","#FF4F7B","#3CCB7F"], dark:["#5AA2FF","#FFA052","#8E82FF","#4FD8E8","#FF6B92","#4FE08F"],
       seqL:["#DCE8FF","#B0CBFF","#7DA6FF","#4D7FFF","#3A4FD9"], seqD:["#1A2550","#26388A","#3A56C4","#5A82FF","#9DB8FF"]},
-    {id:"vivid", name:"Vivid", r:999, lw:3, glow:true, light:["#E5004A","#4DB300","#00A8C6","#FF8A00","#A23BEC","#0A84FF"], dark:["#FA114F","#92E82A","#1EEAEF","#FF9F0A","#BF5AF2","#64D2FF"],
+    {id:"vivid", name:"Vivid", r:999, lw:3, light:["#E5004A","#4DB300","#00A8C6","#FF8A00","#A23BEC","#0A84FF"], dark:["#FA114F","#92E82A","#1EEAEF","#FF9F0A","#BF5AF2","#64D2FF"],
       seqL:["#FFE0E9","#FFA3BE","#FF5C8A","#E5004A","#9E0033"], seqD:["#3A0716","#7A0D2E","#C40F45","#FA114F","#FF7DA3"]},
     {id:"ocean", name:"Ocean", r:4, lw:2.2, light:["#0B3C5D","#F28C28","#328CC1","#8A9BA8","#B5523B","#1D7874"], dark:["#5AA9E6","#FF9F0A","#7FC8F8","#A7B4BF","#E07A5F","#4FB3A9"],
       seqL:["#D5E5F0","#9EC3DD","#5A97C2","#22689A","#0B3C5D"], seqD:["#0E2A40","#164466","#236B9C","#4A9BD1","#9CCDF0"]}
@@ -115,18 +115,9 @@
   Svg.prototype.text = function(x, y, s, o){ o = o || {};
     return this.add('<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" fill="' + (o.c || this.T.ink2) + '" font-family=\'' + this.T.font + '\' font-size="' + (o.size || 11) + '" font-weight="' + (o.w || 500)
       + '" text-anchor="' + (o.a || "start") + '"' + (o.cls ? ' class="' + o.cls + '"' : "") + (o.base ? ' dominant-baseline="' + o.base + '"' : "") + ">" + esc(s) + "</text>"); };
-  // a fill for one mark: flat, or for Glass and Vivid a gradient of the colour, Vivid with a soft glow
-  Svg.prototype.fill = function(c, vertical){
-    const T = this.T; if(!T.glass && !T.glow) return 'fill="' + c + '"';
-    const id = this.id + "f" + (++this.n), v = vertical !== false;
-    this.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="' + (v ? 0 : 1) + '" y2="' + (v ? 1 : 0) + '"><stop offset="0" stop-color="' + c + '" stop-opacity="' + (T.glass ? .95 : 1) + '"/><stop offset="1" stop-color="' + c + '" stop-opacity="' + (T.glass ? .45 : .7) + '"/></linearGradient>');
-    return 'fill="url(#' + id + ')"' + (T.glass ? ' stroke="rgba(255,255,255,' + (T.dark ? .35 : .7) + ')" stroke-width="1"' : "") + (T.glow ? ' filter="url(#' + this.glowId() + ')"' : "");
-  };
-  Svg.prototype.glowId = function(){
-    if(!this.glow){ this.glow = this.id + "glow"; this.defs.push('<filter id="' + this.glow + '" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="' + (this.T.dark ? 3.5 : 2.5) + '" result="b"/><feColorMatrix in="b" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 ' + (this.T.dark ? .7 : .45) + ' 0"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>'); }
-    return this.glow;
-  };
-  Svg.prototype.stroke = function(c, w){ return 'class="st-l" pathLength="1" fill="none" stroke="' + c + '" stroke-width="' + (w || this.T.lw) + '" stroke-linecap="round" stroke-linejoin="round"' + (this.T.glow ? ' filter="url(#' + this.glowId() + ')"' : ""); };
+  // a fill for one mark: always a flat colour
+  Svg.prototype.fill = function(c){ return 'fill="' + c + '"'; };
+  Svg.prototype.stroke = function(c, w){ return 'class="st-l" pathLength="1" fill="none" stroke="' + c + '" stroke-width="' + (w || this.T.lw) + '" stroke-linecap="round" stroke-linejoin="round"'; };
   // a bar with rounded ends away from the baseline (bars that go down are rounded at the bottom)
   Svg.prototype.bar = function(x, y, w, h, c, o){
     o = o || {}; if(h <= 0 || w <= 0) return this;
@@ -210,8 +201,7 @@
       else if(form === "dots"){ const r = Math.max(1.4, Math.min(4.5, bw * .38)); B.forEach((b, i) => s.add('<circle cx="' + xc(i).toFixed(1) + '" cy="' + f.y(b.v || 0).toFixed(1) + '" r="' + r.toFixed(1) + '" fill="' + c + '" fill-opacity="' + (n > 300 ? .55 : .9) + '"/>')); }
       else {
         const d = form === "steps" ? stepP(pts) : form === "line" && n > 200 ? lin(pts) : smooth(pts);
-        if(form === "area" || T.glass){ const id = s.id + "a"; s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c + '" stop-opacity="' + (form === "area" ? .4 : .14) + '"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></linearGradient>');
-          s.add('<path class="st-a" d="' + d + "L" + pts[n - 1][0].toFixed(1) + " " + f.y0 + "L" + pts[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>'); }
+        if(form === "area") s.add('<path class="st-a" d="' + d + "L" + pts[n - 1][0].toFixed(1) + " " + f.y0 + "L" + pts[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="' + c + '" fill-opacity=".22"/>');   // a flat tint under the line
         s.add('<path d="' + d + '" ' + s.stroke(c, n > 400 ? Math.min(T.lw, 1.4) : T.lw) + "/>");
         // the latest value, with a soft halo, where the eye ends up
         const e = pts[n - 1]; if(n) s.add('<circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="8" fill="' + c + '" fill-opacity=".18"/><circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="3.8" fill="' + c + '" stroke="' + T.surface + '" stroke-width="1.6"/>');
@@ -273,8 +263,7 @@
       const ends = [];
       show.slice().sort((a, b) => (a.y === cur) - (b.y === cur) || (a.y === prev) - (b.y === prev)).forEach(run => {
         const p = run.r.map(q => [x(q[0]), f.y(q[1] || 0)]); if(!p.length) return; const c = colY(run.y), hi = run.y === cur || run.y === prev;
-        if(form === "vs"){ const id = s.id + "v" + run.y; s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + c + '" stop-opacity=".3"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></linearGradient>');
-          s.add('<path class="st-a" d="' + stepP(p) + "V" + f.y0 + "H" + p[0][0].toFixed(1) + 'Z" fill="url(#' + id + ')"/>'); }
+        if(form === "vs") s.add('<path class="st-a" d="' + stepP(p) + "V" + f.y0 + "H" + p[0][0].toFixed(1) + 'Z" fill="' + c + '" fill-opacity=".14"/>');
         s.add('<path d="' + stepP(p) + '" ' + (hi ? s.stroke(c, T.lw + (run.y === cur ? .6 : 0)) : 'class="st-l" pathLength="1" fill="none" stroke="' + c + '" stroke-width="1"') + "/>");
         const e = p[p.length - 1]; ends.push({x:e[0], y:e[1], run, hi, c});
       });
@@ -422,9 +411,8 @@
       const H = hFor(W, 260), s = new Svg(W, H, T), max = Math.max(...Y.map(y => y.avg), l90.avg, 1), f = frame(s, max), bw = (f.x1 - f.x0) / Y.length, xc = i => f.x0 + bw * (i + .5);
       if(prefs.pb === "bars") Y.forEach((y, i) => { s.bar(xc(i) - bw * .32, f.y(y.avg), bw * .64, f.y0 - f.y(y.avg), col(y)); s.text(xc(i), f.y(y.avg) - 7, fmt(y.avg), {a:"middle", size:10, c:T.ink, w:600}); });
       else {
-        const p = Y.map((y, i) => [xc(i), f.y(y.avg)]), id = s.id + "pa";
-        s.defs.push('<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + T.c[0] + '" stop-opacity=".22"/><stop offset="1" stop-color="' + T.c[0] + '" stop-opacity="0"/></linearGradient>');
-        s.add('<path class="st-a" d="' + smooth(p) + "L" + p[p.length - 1][0].toFixed(1) + " " + f.y0 + "L" + p[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="url(#' + id + ')"/>');
+        const p = Y.map((y, i) => [xc(i), f.y(y.avg)]);
+        s.add('<path class="st-a" d="' + smooth(p) + "L" + p[p.length - 1][0].toFixed(1) + " " + f.y0 + "L" + p[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="' + T.c[0] + '" fill-opacity=".16"/>');
         s.add('<path d="' + smooth(p) + '" ' + s.stroke(T.c[0]) + "/>");
         const y90 = f.y(l90.avg); s.add('<path d="M' + f.x0 + " " + y90.toFixed(1) + "H" + f.x1 + '" stroke="' + T.ink2 + '" stroke-width="1" stroke-dasharray="3 4"/>');
         s.text(f.x0 + 4, y90 - 6, "Last 90 days: " + fmt(l90.avg), {size:10});
@@ -530,34 +518,21 @@
     return '<div class="seg" role="group"' + (label ? ' aria-label="' + label + '"' : "") + ">" + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
   }
 
-  /* ------------------------------------------------------------ the welcome, in the manner of an iPhone lock screen: a wallpaper of the
-     Channel's water, this year's total in large glass numerals, and four widgets on Liquid Glass */
-  // the wallpaper: soft light behind, then ribbons of water, each with a bright edge along its crest, as Apple's own wallpapers are drawn
+  /* ------------------------------------------------------------ the welcome, in the manner of an iPhone lock screen: a flat picture of the
+     Channel's water, this year's total in large numerals, and four widgets on solid tiles */
+  // the wallpaper: a plain sky, then five bands of water in solid colour, each a little deeper than the one above
   function wallpaper(W, H, dk){
-    const P = dk ? {top:"#03061A", mid:"#0B1640", low:"#132A6B", glow:[["#5B3DF5", .55], ["#0A84FF", .5], ["#FF7A59", .18]],
-        bands:[["#1A2F86", "#3B2A9C", .9], ["#0C47B8", "#1C6FE0", .85], ["#0B7FD1", "#3DC2E8", .55], ["#2346C7", "#6E4BEF", .75], ["#081A55", "#0E2F86", .95]], rim:.32}
-      : {top:"#2F7BF5", mid:"#5AA9FF", low:"#9ED3FF", glow:[["#F2F8FF", .75], ["#7EE1FF", .6], ["#8C7BFF", .45]],
-        bands:[["#BFE6FF", "#FFFFFF", .7], ["#4FA6FF", "#7FD3FF", .85], ["#1E7BF0", "#33B6F5", .9], ["#1561D8", "#4A8BFF", .9], ["#0B3FA8", "#1A63D6", .95]], rim:.55};
-    const id = "wp" + (++uid), band = (i, y0, amp, ph) => {   // a ribbon across the width, its crest a smooth wave
+    const P = dk ? {sky:"#0B1640", bands:["#1A2F86", "#0C47B8", "#0B7FD1", "#2346C7", "#081A55"]}
+      : {sky:"#2F7BF5", bands:["#7FC4FF", "#4FA6FF", "#1E7BF0", "#1561D8", "#0B3FA8"]};
+    const band = (y0, amp, ph) => {   // a band across the width, its top a smooth wave
       const n = 4, pts = [];
       for(let k = 0; k <= n; k++){ const x = W * k / n; pts.push([x, y0 + amp * Math.sin(ph + k * 1.7) + amp * .45 * Math.cos(ph * 1.3 + k * 2.9)]); }
       let d = "M" + (-4) + " " + pts[0][1].toFixed(1);
       for(let k = 1; k <= n; k++){ const a = pts[k - 1], b = pts[k], cx = (a[0] + b[0]) / 2; d += "C" + cx.toFixed(1) + " " + a[1].toFixed(1) + " " + cx.toFixed(1) + " " + b[1].toFixed(1) + " " + (k === n ? W + 4 : b[0]).toFixed(1) + " " + b[1].toFixed(1); }
       return d;
     };
-    let g = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true"><defs>'
-      + '<linearGradient id="' + id + 's" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + P.top + '"/><stop offset=".55" stop-color="' + P.mid + '"/><stop offset="1" stop-color="' + P.low + '"/></linearGradient>'
-      + '<filter id="' + id + 'b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="' + Math.round(Math.max(W, H) / 14) + '"/></filter>'
-      + '<filter id="' + id + 'r" x="-5%" y="-50%" width="110%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>'
-      + P.bands.map((b, i) => '<linearGradient id="' + id + "g" + i + '" x1="0" y1="0" x2="1" y2=".35"><stop offset="0" stop-color="' + b[0] + '"/><stop offset="1" stop-color="' + b[1] + '"/></linearGradient>').join("")
-      + "</defs>" + '<rect width="100%" height="100%" fill="url(#' + id + 's)"/>'
-      + '<g filter="url(#' + id + 'b)">' + [[.82, .12, .34], [.12, .3, .3], [.55, .7, .38]].map((c, i) => '<circle cx="' + (W * c[0]).toFixed(0) + '" cy="' + (H * c[1]).toFixed(0) + '" r="' + (Math.max(W, H) * c[2]).toFixed(0) + '" fill="' + P.glow[i][0] + '" opacity="' + P.glow[i][1] + '"/>').join("") + "</g>";
-    // five ribbons, from the far water to the near, each a little lower and a little deeper
-    P.bands.forEach((b, i) => {
-      const y0 = H * (.34 + i * .13), amp = H * (.035 + i * .012), d = band(i, y0, amp, i * 2.1 + .6);
-      g += '<path d="' + d + "V" + (H + 4) + "H-4Z" + '" fill="url(#' + id + "g" + i + ')" opacity="' + b[2] + '"/>'
-        + '<path d="' + d + '" fill="none" stroke="#fff" stroke-width="' + (1.2 + i * .3).toFixed(1) + '" opacity="' + (P.rim * (1 - i * .14)).toFixed(2) + '" filter="url(#' + id + 'r)"/>';
-    });
+    let g = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true"><rect width="100%" height="100%" fill="' + P.sky + '"/>';
+    P.bands.forEach((c, i) => { g += '<path d="' + band(H * (.34 + i * .13), H * (.035 + i * .012), i * 2.1 + .6) + "V" + (H + 4) + 'H-4Z" fill="' + c + '"/>'; });
     return g + "</svg>";
   }
   // small pictures for the widgets
@@ -811,7 +786,7 @@
   const lockBox = document.createElement("div"); lockBox.className = "st-lock";
   // behind the offer, a blurred picture of Studio: never the charts themselves, which only an unlocked account gets
   const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("aria-hidden", "true");
-  // the offer page: the word "studio" as large as the page allows, in heavy type, with the offer on frosted glass across its foot
+  // the offer page: the word "studio" as large as the page allows, in heavy type, with the offer on a solid card across its foot
   const word = document.createElement("p"); word.className = "st-word"; word.setAttribute("aria-hidden", "true"); word.innerHTML = [..."studio"].map(c => "<span>" + c + "</span>").join("");   // a span a letter, so each can sit over the one before
   const peekPic = () => '<img src="studio-peek-' + (isDark() ? "dark" : "light") + '.webp" alt="" width="464" height="550" decoding="async">';
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
