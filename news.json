@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-16T21:44:03Z",
+ "checkedAt": "2026-10-16T22:11:22Z",
  "items": [
+  {
+   "title": "Data centre developers may build 'climate-wrecking' gas power plant next door",
+   "url": "https://www.bbc.co.uk/news/articles/c639mg9d1vp0o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-16T21:53:42Z",
+   "breaking": true
+  },
   {
    "title": "Man convicted of arson attacks against Keir Starmer deported from UK",
    "url": "https://news.sky.com/story/man-convicted-of-arson-attacks-against-sir-keir-starmer-deported-from-uk-home-office-says-13600071",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/politics/andy-burnham-class-war-labour-councils",
    "source": "GB News",
    "published": "2026-10-16T19:39:56Z",
-   "breaking": true
-  },
-  {
-   "title": "Reform councillor quits over offensive remarks",
-   "url": "https://www.bbc.co.uk/news/articles/c64g1803dkp7o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-16T18:53:47Z",
    "breaking": true
   }
  ],
