@@ -197,6 +197,64 @@ def update_nationalities():
     print(f"Nationalities: saved, top {ranked[0]} for {year_ending(quarters[-1])}")
 
 
+# ------------------------------------------------------------ what happened to their asylum claims
+
+GROUPS = {"grant of protection": "granted", "grant of other leave": "granted", "refused": "refused",
+          "withdrawn": "withdrawn", "administrative outcome": "withdrawn", "awaiting initial decision": "waiting"}
+
+
+def update_asylum():
+    """Claims and first decisions for small boat arrivals, by year of arrival (tables IER_D02 and IER_D03)."""
+    url = dataset_url()
+    if unchanged("asylum.json", url):
+        print("Asylum outcomes: dataset unchanged")
+        return
+    head, rows = find_table(("quarter", "asylum claim", "applicant type", "arrivals"), prefer="d02")
+    qc, cc, n = head.index("quarter"), head.index("asylum claim"), head.index("arrivals")
+    arrived, claimed = {}, {}
+    for r in rows:
+        if r is None or len(r) <= n or not re.fullmatch(r"\d{4} Q[1-4]", str(r[qc] or "").strip()):
+            continue
+        y, k = str(r[qc]).strip()[:4], int(r[n] or 0)
+        arrived[y] = arrived.get(y, 0) + k
+        if str(r[cc]).strip().lower() == "asylum claim raised":
+            claimed[y] = claimed.get(y, 0) + k
+
+    head, rows = find_table(("quarter", "asylum case outcome group", "applicant type", "outcomes"), prefer="d03")
+    qc, gc, ac, n = head.index("quarter"), head.index("asylum case outcome group"), head.index("applicant type"), head.index("outcomes")
+    years, quarters, main = {}, set(), {"granted": 0, "refused": 0}
+    for r in rows:
+        if r is None or len(r) <= n or not re.fullmatch(r"\d{4} Q[1-4]", str(r[qc] or "").strip()):
+            continue
+        g = GROUPS.get(str(r[gc]).strip().lower())
+        if not g:
+            raise ValueError(f"unknown outcome group {r[gc]!r}")
+        q, k = str(r[qc]).strip(), int(r[n] or 0)
+        quarters.add(q)
+        t = years.setdefault(q[:4], {"granted": 0, "refused": 0, "withdrawn": 0, "waiting": 0})
+        t[g] += k
+        if g in main and str(r[ac]).strip().lower() == "main applicant":
+            main[g] += k                               # the Home Office's grant rate counts cases, not people
+
+    out = [{"year": int(y), "arrived": arrived.get(y, 0), "claimed": claimed.get(y, 0), **years[y]} for y in sorted(years)]
+    total = {k: sum(y[k] for y in out) for k in ("arrived", "claimed", "granted", "refused", "withdrawn", "waiting")}
+    total["decided"] = total["granted"] + total["refused"]
+    total["grantRate"] = round(main["granted"] / (main["granted"] + main["refused"]) * 100)
+    if total["claimed"] < 10000 or abs(sum(total[k] for k in ("granted", "refused", "withdrawn", "waiting")) - total["claimed"]) > total["claimed"] * 0.02:
+        raise ValueError(f"figures look wrong: {total}")
+    last = max(quarters)
+    save("asylum.json", {
+        "source": url,
+        "from": out[0]["year"],
+        "latestQuarter": last,
+        "period": f"arrivals from {out[0]['year']} to the end of {last[:4]}" if last.endswith("Q4") else f"arrivals from {out[0]['year']} to {last}",
+        "total": total,
+        "years": out,
+        "updatedAt": now_iso(),
+    })
+    print(f"Asylum outcomes: saved, arrivals to {last}, grant rate {total['grantRate']}%")
+
+
 # ------------------------------------------------------------ people per boat (from the daily figures)
 
 def update_perboat(days):
@@ -355,6 +413,7 @@ def update_all(days=None):
     days = days or []
     for name, job in (("sex and age", update_gender),
                       ("nationalities", update_nationalities),
+                      ("asylum outcomes", update_asylum),
                       ("people per boat", lambda: update_perboat(days)),
                       ("UK-France returns", lambda: update_returns(days)),
                       ("petitions", update_petitions)):
