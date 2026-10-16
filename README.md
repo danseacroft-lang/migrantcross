@@ -19,7 +19,7 @@ A one-page site showing how many people cross the English Channel in small boats
 - `data.csv` – the same daily figures as a spreadsheet download, linked from the footer
 - `how-it-works.html` – where the figures come from
 - `embed.html` – the small "latest figure" box other sites can embed
-- `studio.js`, `studio.css` – Studio, the paid fourth tab: every graph in six styles and many chart forms, unlocked for £1.99; loaded only when the tab opens
+- `studio.js`, `studio.css` – Studio, the paid fourth tab: every graph in six styles and many chart forms, plus Ask for a chart (`studio-ask.js`), unlocked for £1.99; loaded only when the tab opens
 - `scripts/studio-worker.js` – the Cloudflare Worker behind Studio's accounts and payments (an account is an email address; Stripe is the only record of who has paid)
 - `404.html` – shown for any address that doesn't exist (including the retired beta, classic and Beach Radar pages); sends visitors to the homepage
 - `sw.js` – offline mode: keeps a copy of the site on visitors' devices

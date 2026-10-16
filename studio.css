@@ -227,3 +227,26 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
 /* light: the tiles a deeper blue than the water behind */
 :root[data-theme="light"] .st-w{background:#0F4FBF}
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .st-w{background:#0F4FBF}}
+
+/* ------------------------------------------------------------ Ask for a chart: a search field, a row of examples, and the one chart that answers */
+.st-ask{gap:14px}
+.st-ask-f{display:flex;align-items:center;gap:8px;height:52px;padding:0 6px 0 16px;border-radius:999px;background:var(--fill);transition:box-shadow .2s}
+.st-ask-f:focus-within{box-shadow:0 0 0 2px var(--blue)}
+.st-ask-f > svg{flex:none;width:19px;height:19px;fill:none;stroke:var(--label2);stroke-width:2.2;stroke-linecap:round}
+.st-ask-f input{flex:1;min-width:0;height:100%;border:0;background:none;color:var(--label);font:500 1.0625rem/1.2 var(--font);outline:none;-webkit-appearance:none;appearance:none}
+.st-ask-f input::placeholder{color:var(--label2);opacity:.85}
+.st-ask-f input::-webkit-search-cancel-button{display:none}
+.st-ask-f button{flex:none;appearance:none;border:0;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font:600 .9rem/1 var(--font);cursor:pointer;transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
+.st-ask-f button:active{transform:scale(.95)}
+.st-ask-eg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:-4px -18px 0;padding:0 18px}
+.st-ask-eg::-webkit-scrollbar{display:none}
+.st-ask-eg button{flex:none;appearance:none;border:0;height:30px;padding:0 12px;border-radius:999px;background:none;box-shadow:inset 0 0 0 1px var(--sep);color:var(--label2);font:500 .78rem/1 var(--font);cursor:pointer;white-space:nowrap}
+@media (hover:hover){.st-ask-eg button:hover{color:var(--label);background:var(--fill)}}
+.st-ask-out{display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:.5px solid var(--sep)}
+.st-ask-out[hidden]{display:none}
+.st-ask-out h3{color:var(--label)!important;font-size:1rem!important}
+.st-ask-note{margin:0;font-size:.8rem;line-height:1.45;color:var(--label2)}
+.st-ask-note:empty{display:none}
+.st-ask .st-forms:empty{display:none}
+@media (pointer:coarse){.st-ask-eg button{height:34px}}
+@media (max-width:719px){.st-ask-f{height:48px}.st-ask-f input{font-size:16px}}

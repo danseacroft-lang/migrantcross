@@ -514,6 +514,314 @@
   // the smallest of 1, 2, 5, 10, 20, 50… that is at least x
   function niceUnit(x){ const p = Math.pow(10, Math.floor(Math.log10(Math.max(x, 1)))); return [1, 2, 5, 10].map(k => k * p).find(k => k >= x); }
 
+  /* ------------------------------------------------------------ Ask for a chart: the visitor types what they want to see and gets one chart.
+     studio-ask.js reads the words into a plan (what, when, grouped how, which shape); this draws the plan from the figures above,
+     choosing the clearest form unless they named one. Nothing is sent anywhere: it all happens on this page. */
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"], cap = s => s[0].toUpperCase() + s.slice(1);
+  const ASK = {id:"ask", title:"", forms:[]}, askQ = {text:store.get("ask") || "", form:null};
+  let asylum = null, boatRet = null, natYears = null, askExtra = null;
+  const askReady = () => askExtra || (askExtra = Promise.allSettled([getJSON("asylum.json"), getJSON("boatreturns.json"), getJSON("natyears.json")]).then(([a, b, n]) => {
+    asylum = a.value || null; boatRet = b.value || null; natYears = n.value && n.value.nats ? n.value : null; }));
+  const cardById = id => id === "ask" ? ASK : CARDS.find(c => c.id === id);
+  const mOf = (rows, m) => { const p = sum(rows, r => r.migrants), b = sum(rows, r => r.boats); return m === "boats" ? b : m === "perboat" ? (b ? p / b : null) : p; };
+  const mWord = m => ({people:"people", boats:"boats", perboat:"people a boat"})[m];
+  const qKey = s => s.slice(0, 4) + " Q" + Math.ceil(+s.slice(5, 7) / 3);
+  const keyOf = g => g === "day" ? r => r.date : g === "week" ? r => weekStart(r.date) : g === "month" ? r => r.date.slice(0, 7) : g === "quarter" ? r => qKey(r.date) : r => r.date.slice(0, 4);
+  const startOf = (s, g) => g === "week" ? weekStart(s) : g === "month" ? s.slice(0, 8) + "01" : g === "quarter" ? s.slice(0, 5) + String((Math.ceil(+s.slice(5, 7) / 3) - 1) * 3 + 1).padStart(2, "0") + "-01" : g === "year" ? s.slice(0, 4) + "-01-01" : s;
+  function endOf(k, g){   // the last day of a bucket, to tell a part-done one (this month, this year) from a whole one
+    if(g === "day") return k; if(g === "week") return iso(new Date(parse(k).getTime() + 6 * 864e5));
+    if(g === "month") return iso(new Date(Date.UTC(+k.slice(0, 4), +k.slice(5, 7), 0, 12)));
+    if(g === "quarter") return iso(new Date(Date.UTC(+k.slice(0, 4), +k.slice(-1) * 3, 0, 12)));
+    return k + "-12-31";
+  }
+  const kLabel = (k, g, long) => g === "quarter" ? k.slice(-2) + " " + (long ? k.slice(0, 4) : "’" + k.slice(2, 4)) : bLabel(k, g, long);
+  // one bar or point a bucket: [{k, label, long, v, part, tip}]
+  function buckets(S, rows, g){
+    const key = keyOf(g), out = [], idx = {};
+    rows.forEach(r => { const k = key(r); if(!(k in idx)){ idx[k] = out.length; out.push({k, rows:[]}); } out[idx[k]].rows.push(r); });
+    return out.map(b => { const v = mOf(b.rows, S.measure), part = endOf(b.k, g) > last;
+      return {k:b.k, label:kLabel(b.k, g), long:kLabel(b.k, g, true) + (part ? " so far" : ""), v, part,
+        tip:"<b>" + fmt(v) + " " + esc(mWord(S.measure)) + "</b>" + esc(kLabel(b.k, g, true)) + (part ? " so far" : "") + (S.measure === "people" && g !== "day" ? "<br>" + fmt(sum(b.rows, r => r.boats)) + " boats" : S.measure === "boats" ? "<br>" + fmt(sum(b.rows, r => r.migrants)) + " people" : "")}; });
+  }
+  const daysIn = S => D.filter(d => d.date >= (S.from || "0") && d.date <= (S.to || "9"));
+
+  // columns (or a line, for many points): one series, the record labelled, a part-done period in the second colour
+  function askColumns(el, T, items, o){
+    o = o || {}; const W = width(el), H = hFor(W, 300), s = new Svg(W, H, T), n = items.length, max = Math.max(1, ...items.map(b => b.v || 0));
+    const f = frame(s, max, {top:24}), bw = (f.x1 - f.x0) / Math.max(n, 1), xc = i => f.x0 + bw * (i + .5), col = b => b.part ? T.c[1] : T.c[0];
+    const form = o.form || (n > 60 ? "line" : "bars"), pts = items.map((b, i) => [xc(i), f.y(b.v || 0)]);
+    if(form === "bars"){ const gap = bw > 6 ? Math.min(bw * .3, 8) : bw > 2.5 ? .6 : 0;
+      items.forEach((b, i) => { s.bar(f.x0 + bw * i + gap / 2, f.y(b.v || 0), Math.max(.6, bw - gap), f.y0 - f.y(b.v || 0), col(b)); if(n <= 14 && bw > 26) s.text(xc(i), f.y(b.v || 0) - 7, o.unit === "avg" ? fmt(b.v) : kfmt(b.v), {a:"middle", size:10.5, c:T.ink, w:600}); }); }
+    else if(n){ const d = n > 200 ? lin(pts) : smooth(pts);
+      if(form === "area") s.add('<path class="st-a" d="' + d + "L" + pts[n - 1][0].toFixed(1) + " " + f.y0 + "L" + pts[0][0].toFixed(1) + " " + f.y0 + 'Z" fill="' + T.c[0] + '" fill-opacity=".22"/>');
+      s.add('<path d="' + d + '" ' + s.stroke(T.c[0], n > 400 ? Math.min(T.lw, 1.4) : T.lw) + "/>");
+      const e = pts[n - 1]; s.add('<circle class="st-d" style="animation-delay:1s" cx="' + e[0].toFixed(1) + '" cy="' + e[1].toFixed(1) + '" r="4" fill="' + col(items[n - 1]) + '" stroke="' + T.surface + '" stroke-width="1.6"/>'); }
+    // the highest, named, when the bars don't each carry their own number
+    if(n > 2 && !(form === "bars" && n <= 14 && bw > 26)){ let pk = 0; items.forEach((b, i) => { if((b.v || 0) > (items[pk].v || 0)) pk = i; });
+      if(items[pk].v) s.text(Math.max(f.x0 + 40, Math.min(f.x1 - 40, xc(pk))), f.y(items[pk].v) - 10, "Highest " + fmt(items[pk].v) + ", " + items[pk].label, {a:"middle", c:T.ink, w:700, size:10.5, cls:"st-t"}); }
+    xLabels(s, f, items, xc, b => b.label);
+    ASK.pts = items.map((b, i) => ({x:xc(i), y:pts[i][1], tip:b.tip})); ASK.mode = "x";
+    ASK.legend = items.some(b => b.part) ? legend([[o.whole || "Whole " + (o.g || "period"), T.c[0]], [items.find(b => b.part).label + " so far", T.c[1]]]) : "";
+    return s.out(ASK.title);
+  }
+  // ranked bars, largest first, a row each
+  function askRank(el, T, items){
+    const W = width(el), rowH = 28, L = Math.min(150, Math.max(70, W * .3)), s = new Svg(W, items.length * rowH + 4, T), max = Math.max(1, ...items.map(b => b.v || 0));
+    ASK.pts = items.map((b, i) => { const y = 2 + i * rowH, w = (W - L - 64) * (b.v || 0) / max;
+      s.text(L - 8, y + rowH / 2 + 4, b.label, {a:"end", c:i ? T.ink2 : T.ink, w:i ? 500 : 700}); s.bar(L, y + 5, w, rowH - 10, b.part ? T.c[1] : T.c[0], {hor:true});
+      s.text(L + w + 6, y + rowH / 2 + 4, fmt(b.v), {c:T.ink, w:600}); return {x:W / 2, y:y + rowH / 2, tip:b.tip}; });
+    ASK.mode = "y"; ASK.legend = items.some(b => b.part) ? legend([["Whole period", T.c[0]], ["Still going", T.c[1]]]) : "";
+    return s.out(ASK.title);
+  }
+  // a few lines on one scale, each named at its end: [{name, vals, c}] against labels along the bottom
+  function askLines(el, T, series, labels, o){
+    o = o || {}; const W = width(el), H = hFor(W, 300), s = new Svg(W, H, T), max = Math.max(1, ...series.flatMap(x => x.vals.filter(v => v != null)));
+    const f = frame(s, max, {right:o.right || 52}), n = labels.length, x = i => f.x0 + (f.x1 - f.x0) * (n > 1 ? i / (n - 1) : .5), ends = [];
+    series.forEach(se => { const p = []; se.vals.forEach((v, i) => { if(v != null) p.push([x(i), f.y(v)]); }); if(!p.length) return;
+      s.add('<path d="' + (o.step ? stepP(p) : smooth(p)) + '" ' + (se.faint ? 'class="st-l" pathLength="1" fill="none" stroke="' + se.c + '" stroke-width="1"' : s.stroke(se.c)) + "/>");
+      if(!o.step && n <= 24 && !se.faint) p.forEach(q => s.add('<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="2.6" fill="' + se.c + '"/>'));
+      const e = p[p.length - 1]; ends.push({x:e[0], y:e[1], se}); });
+    ends.sort((a, b) => a.y - b.y); ends.forEach((e, i) => { e.ly = Math.max(e.y, i ? ends[i - 1].ly + 12 : f.y1); });
+    for(let i = ends.length - 1, lim = f.y0 + 2; i >= 0; i--){ ends[i].ly = Math.min(ends[i].ly, lim); lim = ends[i].ly - 12; }
+    ends.forEach(e => s.text(Math.min(e.x + 6, f.x1 + 4), e.ly + 3.5, e.se.name, {c:e.se.faint ? T.ink2 : T.ink, w:e.se.faint ? 500 : 700, size:10, cls:"st-t"}));
+    xLabels(s, f, labels, x, l => l);
+    ASK.pts = labels.map((l, i) => ({x:x(i), y:f.y((series.find(se => se.vals[i] != null && !se.faint) || {vals:[0]}).vals[i] || 0),
+      tip:"<b>" + esc(o.tipHead ? o.tipHead(i) : l) + "</b>" + series.filter(se => !se.faint || series.length <= 4).filter(se => se.vals[i] != null).map(se => esc(se.name) + ": " + fmt(se.vals[i])).join("<br>")}));
+    ASK.mode = "x"; ASK.legend = series.filter(x => !x.faint).length > 1 ? legend(series.filter(x => !x.faint).map(x => [x.name, x.c]).concat(series.some(x => x.faint) ? [["Other years", T.muted]] : [])) : "";
+    return s.out(ASK.title);
+  }
+  // two measures side by side in each period, such as returned and transferred
+  function askPairs(el, T, items, names){
+    const W = width(el), H = hFor(W, 280), s = new Svg(W, H, T), max = Math.max(1, ...items.flatMap(b => [b.a, b.b])), f = frame(s, max), bw = (f.x1 - f.x0) / items.length, xc = i => f.x0 + bw * (i + .5);
+    items.forEach((b, i) => { const w = Math.min(28, bw * .34); s.bar(xc(i) - w - 1, f.y(b.a), w, f.y0 - f.y(b.a), T.c[0]); s.bar(xc(i) + 1, f.y(b.b), w, f.y0 - f.y(b.b), T.c[1]); });
+    xLabels(s, f, items, xc, b => b.label);
+    ASK.pts = items.map((b, i) => ({x:xc(i), y:f.y(Math.max(b.a, b.b)), tip:"<b>" + esc(b.long) + "</b>" + esc(names[0]) + ": " + fmt(b.a) + "<br>" + esc(names[1]) + ": " + fmt(b.b) + (b.more || "")}));
+    ASK.mode = "x"; ASK.legend = legend([[names[0], T.c[0]], [names[1], T.c[1]]]); return s.out(ASK.title);
+  }
+
+  // the figures a plan asks for, as items or series, with the headline and anything worth saying about them
+  function askData(S, T){
+    const R = {notes:[]}, cur = +last.slice(0, 4);
+    if(S.topic === "crossings"){
+      const per = S.measure === "perboat";
+      if(S.shape === "series"){
+        let rows = daysIn(Object.assign({}, S, {from:startOf(S.from || D[0].date, S.group)}));
+        if(S.month){ rows = D.filter(d => +d.date.slice(5, 7) === S.month); }
+        let items = buckets(S, rows, S.group);
+        if(S.month) items.forEach(b => { b.long = cap(MONTHS[S.month - 1]) + " " + b.k + (b.part ? " so far" : ""); b.tip = b.tip.replace(/<\/b>[^<]*/, "</b>" + esc(b.long)); });
+        if(S.years) items = items.filter(b => S.years.includes(+b.k.slice(0, 4)));
+        R.items = items; R.kind = "cols"; R.g = S.month ? "month" : S.group;
+        const all = rows; R.read = [fmt(mOf(all, S.measure)), mWord(S.measure) + (per ? " on average" : " in all") + ", " + (S.month ? "every " + cap(MONTHS[S.month - 1]) + " since " + D[0].date.slice(0, 4) : S.rangeLabel)];
+        if(S.group === "day" && !per) R.read[1] += " · " + fmt(mOf(all, "boats")) + " boats";
+        return R;
+      }
+      if(S.shape === "compare" && S.group !== "date" && S.group !== "day" && S.group !== "year"){
+        const g = S.group, labs = g === "month" ? MON.slice() : g === "quarter" ? ["Q1", "Q2", "Q3", "Q4"] : Array.from({length:52}, (_, i) => "Wk " + (i + 1));
+        const at = r => g === "month" ? +r.date.slice(5, 7) - 1 : g === "quarter" ? Math.ceil(+r.date.slice(5, 7) / 3) - 1 : Math.min(51, Math.floor((doy(r.date) - 1) / 7));
+        R.series = S.years.slice().reverse().map((y, i) => { const rows = D.filter(d => +d.date.slice(0, 4) === y), by = labs.map(() => []); rows.forEach(r => by[at(r)].push(r));
+          return {name:String(y) + (y === cur ? " so far" : ""), c:T.c[i % 6], vals:by.map(b => b.length ? mOf(b, S.measure) : null)}; });
+        R.labels = labs; R.kind = "lines"; const tot = y => mOf(D.filter(d => +d.date.slice(0, 4) === y), S.measure), yl = S.years[S.years.length - 1];
+        R.read = [fmt(tot(yl)), mWord(S.measure) + (per ? " on average" : "") + " in " + yl + (yl === cur ? " so far" : "") + ", against " + S.years.slice(0, -1).map(y => fmt(tot(y)) + " in " + y).join(", ")];
+        return R;
+      }
+      if(S.shape === "compare" || S.shape === "cum"){
+        // a running total through the year for each year asked for, by the same date
+        const ys = S.years.slice().sort(), md = last.slice(5), labs = MON.slice();
+        const at = y => { const rows = D.filter(d => +d.date.slice(0, 4) === y); const vals = []; let p = 0, b = 0;
+          rows.forEach(r => { p += r.migrants || 0; b += r.boats || 0; vals[doy(r.date) - 1] = S.measure === "boats" ? b : per ? (b ? p / b : null) : p; }); return vals; };
+        const few = ys.length <= 4;
+        R.series = ys.slice().reverse().map((y, i) => ({name:String(y), y, c:few ? T.c[i] : i === 0 ? T.c[0] : i === 1 ? T.c[1] : T.muted, faint:!few && i > 1, vals:at(y)}));
+        R.kind = "cum"; R.labels = labs;
+        const byDate = y => { const rows = D.filter(d => +d.date.slice(0, 4) === y && d.date.slice(5) <= md); return mOf(rows, S.measure); };
+        R.read = ys.includes(cur) ? [fmt(byDate(cur)), mWord(S.measure) + " in " + cur + " by " + dShort.format(parse(last)) + (ys.includes(cur - 1) ? ", against " + fmt(byDate(cur - 1)) + " by then in " + (cur - 1) : "")]
+          : [fmt(mOf(D.filter(d => +d.date.slice(0, 4) === ys[ys.length - 1]), S.measure)), mWord(S.measure) + " in " + ys[ys.length - 1]];
+        if(per) R.notes.push("People per boat is shown as the year’s average so far, day by day.");
+        return R;
+      }
+      if(S.shape === "rank"){
+        const g = S.unit, rows = daysIn(S); let items = buckets(S, rows, g);
+        if(S.order === "asc"){ items = items.filter(b => !b.part); if(g === "day") R.notes.push("Many days have no crossings at all, so the quietest days are the days with the fewest people among those with any."), items = items.filter(b => b.v > 0); }
+        items.sort((a, b) => S.order === "asc" ? (a.v || 0) - (b.v || 0) : (b.v || 0) - (a.v || 0));
+        items = items.slice(0, S.n || items.length);
+        items.forEach(b => b.label = g === "day" ? dLong.format(parse(b.k)) : g === "week" ? "Week of " + dShort.format(parse(b.k)) + " " + b.k.slice(0, 4) : kLabel(b.k, g, true));
+        R.items = items; R.kind = "rank";
+        R.read = items.length ? [fmt(items[0].v), mWord(S.measure) + ", " + (g === "day" ? "on " : "in ") + items[0].label + ", the " + (S.order === "asc" ? "quietest" : "busiest") + " " + (g === "day" ? "day" : g) + " " + (S.rangeLabel.startsWith("since records") ? "on record" : "in " + S.rangeLabel)] : ["–", "nothing in that time"];
+        return R;
+      }
+      if(S.shape === "pattern"){
+        const rows = daysIn(S), dow = S.pattern === "dow", names = dow ? DOW : MON, gs = names.map(() => []);
+        rows.forEach(r => { const d = parse(r.date); gs[dow ? (d.getUTCDay() + 6) % 7 : d.getUTCMonth()].push(r); });
+        const vals = gs.map(g => g.length ? mOf(g, S.measure) / (per ? 1 : g.length) : 0), mi = vals.indexOf(Math.max(...vals));
+        const full = dow ? ["Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays","Sundays"] : MONTHS.map(cap);
+        R.items = names.map((nm, i) => ({k:nm, label:nm, long:full[i], v:vals[i], part:false, tip:"<b>" + fmt(vals[i]) + " " + esc(mWord(S.measure)) + (per ? "" : " a day") + "</b>" + esc(full[i]) + ", on average"}));
+        R.kind = "cols"; R.unit = "avg"; R.hi = mi;
+        R.read = [full[mi], "busiest, with " + fmt(vals[mi]) + " " + mWord(S.measure) + (per ? "" : " a day") + " on average, " + S.rangeLabel];
+        return R;
+      }
+    }
+    if(S.topic === "nat"){
+      const N = natYears;
+      if(!N){
+        if(!nats) return {msg:"The nationality figures are still loading."};
+        R.notes.push("Nationalities year by year arrive with the next update of the figures. For now this is " + nats.period + ".");
+        if(S.country){ const hit = nats.top.find(x => x.name === S.country); if(!hit){ return {msg:S.country + " isn’t among the five largest nationalities for " + nats.period + ", the only period this page has figures for so far. Year-by-year figures for every nationality arrive with the next update."}; } }
+        R.kind = "share"; R.items = nats.top.map((x, i) => [x.name, x.n, T.c[i % 6]]).concat(nats.other ? [["Everyone else", nats.other, T.muted]] : []); R.total = nats.total;
+        R.title = "Nationalities, " + nats.period; const one = S.country && nats.top.find(x => x.name === S.country) || nats.top[0];
+        R.read = S.country ? [fmt(one.n), "people from " + one.name + ", " + one.pc + "% of everyone, " + nats.period] : [one.name, "the largest group, " + one.pc + "% of " + fmt(nats.total) + " people, " + nats.period];
+        return R;
+      }
+      const yIdx = N.years.map((y, i) => [+y, i]).filter(([y]) => (!S.from || y >= +S.from.slice(0, 4)) && (!S.to || y <= +S.to.slice(0, 4)) && (!S.years || S.years.includes(y)));
+      const part = Object.keys(N.partial || {})[0], pnote = part && yIdx.some(([y]) => String(y) === part) ? part + " covers " + N.partial[part] + " quarter" + (N.partial[part] > 1 ? "s" : "") + " so far." : "";
+      if(pnote) R.notes.push("Nationality figures come in every three months; " + pnote);
+      const span = yIdx.length ? (yIdx[0][0] === yIdx[yIdx.length - 1][0] ? String(yIdx[0][0]) : yIdx[0][0] + " to " + yIdx[yIdx.length - 1][0]) : "";
+      if(S.shape === "natOne"){
+        const nt = N.nats.find(x => x.name === S.country);
+        if(!nt) return {msg:"There aren’t separate figures for " + S.country + ": it is in “everyone else”, with the smaller nationalities."};
+        R.items = yIdx.map(([y, i]) => ({k:String(y), label:String(y), long:String(y), v:nt.n[i], part:String(y) === part, tip:"<b>" + fmt(nt.n[i]) + " people</b>" + y + (String(y) === part ? " so far" : "") + "<br>" + (N.total[i] ? (nt.n[i] / N.total[i] * 100).toFixed(1) + "% of everyone that year" : "")}));
+        R.kind = "cols"; R.g = "year"; const tot = sum(yIdx, ([, i]) => nt.n[i]), all = sum(yIdx, ([, i]) => N.total[i]);
+        R.read = [fmt(tot), "people from " + S.country + ", " + span + " (" + (all ? (tot / all * 100).toFixed(1) : 0) + "% of everyone)"];
+        return R;
+      }
+      const totals = N.nats.map(nt => [nt.name, sum(yIdx, ([, i]) => nt.n[i])]).sort((a, b) => b[1] - a[1]), all = sum(yIdx, ([, i]) => N.total[i]);
+      if(S.shape === "natTrend"){
+        const top = totals.slice(0, 5).map(x => x[0]);
+        R.series = top.map((nm, k) => ({name:nm, c:T.c[k], vals:yIdx.map(([, i]) => N.nats.find(x => x.name === nm).n[i])}));
+        R.labels = yIdx.map(([y]) => String(y)); R.kind = "lines"; R.read = [top[0], "the largest group over " + span];
+        return R;
+      }
+      const top = totals.slice(0, S.n || 8);
+      R.kind = "share"; R.items = top.map((x, i) => [x[0], x[1], T.c[i % 6]]).concat([["Everyone else", all - sum(top, x => x[1]), T.muted]]); R.total = all;
+      if(top.length > 6) R.items.forEach((x, i) => { if(i >= 6 && x[0] !== "Everyone else") x[2] = mix(T.surface, T.c[i % 6], .55); });
+      R.read = [top[0][0], "the largest group, " + (top[0][1] / all * 100).toFixed(1) + "% of " + fmt(all) + " people, " + span];
+      return R;
+    }
+    if(S.topic === "who"){
+      if(!gender) return {msg:"These figures are still loading."};
+      const since = S.from && S.from.slice(0, 4) < String(cur - 1), g = since ? gender.since2018 : gender.lastYear;
+      R.kind = "who"; R.g = g; R.read = [Math.round(g.adultMen / g.total * 100) + "%", "were adult men, " + (since ? "since 2018" : gender.period) + " (" + fmt(g.total) + " people)"];
+      if(S.from && !since) R.notes.push("Sex and age are for " + gender.period + "; ask “since 2018” for every year together.");
+      return R;
+    }
+    if(S.topic === "deal"){
+      if(!rets) return {msg:"These figures are still loading."};
+      R.kind = "pairs"; R.names = ["Returned to France", "Transferred to the UK"];
+      R.items = rets.months.map(m => ({label:MON[+m.month.slice(5) - 1] + " ’" + m.month.slice(2, 4), long:MON[+m.month.slice(5) - 1] + " " + m.month.slice(0, 4), a:m.out, b:m.in}));
+      R.read = [fmt(rets.out), "returned to France and " + fmt(rets.in) + " transferred to the UK, to " + dLong.format(parse(rets.to))];
+      return R;
+    }
+    if(S.topic === "asylum"){
+      if(!asylum) return {msg:"The asylum figures couldn’t be loaded."};
+      const Y = asylum.years.filter(y => (!S.from || y.year >= +S.from.slice(0, 4)) && (!S.to || y.year <= +S.to.slice(0, 4)));
+      if(!Y.length) return {msg:"The asylum figures cover people who arrived from " + asylum.years[0].year + " to " + asylum.years[asylum.years.length - 1].year + "."};
+      R.notes.push("Counted by the year people arrived, " + asylum.period + ". Claims withdrawn or still waiting aren’t in the bars; recent years still have decisions to come.");
+      const tipY = y => "<br>Withdrawn: " + fmt(y.withdrawn) + "<br>Still waiting: " + fmt(y.waiting);
+      if(S.outcome){ const k = S.outcome; R.kind = "cols"; R.g = "year";
+        R.items = Y.map(y => ({k:String(y.year), label:String(y.year), long:String(y.year), v:y[k], part:false, tip:"<b>" + fmt(y[k]) + " " + k + "</b>arrived in " + y.year + (y.granted + y.refused ? "<br>" + Math.round(y.granted / (y.granted + y.refused) * 100) + "% of decisions were grants" : "")}));
+        R.read = [fmt(sum(Y, y => y[k])), k + ", for people who arrived " + (Y.length > 1 ? Y[0].year + " to " + Y[Y.length - 1].year : "in " + Y[0].year)];
+      } else {
+        R.kind = "pairs"; R.names = ["Granted", "Refused"];
+        R.items = Y.map(y => ({label:String(y.year), long:"Arrived in " + y.year, a:y.granted, b:y.refused, more:tipY(y)}));
+        const g = sum(Y, y => y.granted), r = sum(Y, y => y.refused);
+        R.read = [Math.round(g / Math.max(1, g + r) * 100) + "%", "of decisions were grants, for people who arrived " + (Y.length > 1 ? Y[0].year + " to " + Y[Y.length - 1].year : "in " + Y[0].year) + " (" + fmt(g) + " granted, " + fmt(r) + " refused)"];
+      }
+      return R;
+    }
+    if(S.topic === "removed"){
+      if(!boatRet) return {msg:"These figures couldn’t be loaded."};
+      let Q = boatRet.quarters.filter(q => (!S.from || q.q >= S.from.slice(0, 4)) && (!S.to || q.q.slice(0, 4) <= S.to.slice(0, 4)));
+      const byYear = S.group === "year" || (!S.group && Q.length > 16), lq = boatRet.quarters[boatRet.quarters.length - 1].q;
+      let items = byYear ? Object.values(Q.reduce((o, q) => { const y = q.q.slice(0, 4); (o[y] = o[y] || {k:y, v:0, n:0}).v += q.n; o[y].n++; return o; }, {})).map(y => ({k:y.k, label:y.k, long:y.k, v:y.v, part:y.n < 4}))
+        : Q.map(q => ({k:q.q, label:q.q.slice(-2) + " ’" + q.q.slice(2, 4), long:q.q, v:q.n, part:false}));
+      items.forEach(b => b.tip = "<b>" + fmt(b.v) + " returned</b>" + esc(b.long) + (b.part ? " so far" : ""));
+      R.kind = "cols"; R.g = byYear ? "year" : "quarter"; R.items = items;
+      R.read = [fmt(sum(items, b => b.v)), "small boat arrivals returned from the UK, " + (items.length ? items[0].long + " to " + (byYear ? lq : items[items.length - 1].long) : "")];
+      R.notes.push("Returns are counted when they happen, not when people arrived. Figures to " + lq + ".");
+      return R;
+    }
+    return {msg:"That couldn’t be drawn."};
+  }
+
+  // the forms the answer can switch between: the clear default first
+  function askForms(S, R){
+    if(R.kind === "share") return [["hbars", "Bars"], ["donut", "Ring"], ["table", "Table"]];
+    if(R.kind === "who") return [["hbars", "Bars"], ["waffle", "Squares"], ["table", "Table"]];
+    if(R.kind === "rank") return [["bars", "Bars"], ["table", "Table"]];
+    if(R.kind === "lines" || R.kind === "cum") return [["line", "Lines"], ["table", "Table"]];
+    if(R.kind === "pairs") return [["bars", "Bars"], ["table", "Table"]];
+    const n = (R.items || []).length; return n > 60 ? [["line", "Line"], ["area", "Area"], ["bars", "Bars"], ["table", "Table"]] : [["bars", "Bars"], ["line", "Line"], ["table", "Table"]];
+  }
+  function drawAsk(T){
+    const box = wrap.querySelector("[data-ask-out]"); if(!box) return;
+    if(!askQ.text || !window.ccAsk || !D.length){ box.hidden = true; return; }
+    const S = window.ccAsk.parse(askQ.text, {first:D[0].date, last, countries:natYears ? natYears.nats.map(n => n.name) : nats ? nats.top.map(n => n.name) : []});
+    box.hidden = false; T = T || theme();
+    const ch = box.querySelector("[data-chart]"), note = box.querySelector(".st-ask-note"), fm = box.querySelector(".st-forms");
+    ASK.pts = null; ASK.legend = ""; ASK.svg = null; ASK.read = null;
+    if(!S.understood){
+      ASK.title = "Not sure what to show";
+      box.querySelector("h3").textContent = ASK.title; fm.innerHTML = ""; box.querySelector(".st-read").hidden = true;
+      ch.innerHTML = '<p class="st-note">Nothing in “' + esc(askQ.text) + '” matched the figures. Try asking about people, boats, people per boat, nationalities, sex and age, asylum decisions or returns, with a year or a time such as “each month”.</p>';
+      box.querySelector("[data-legend]").innerHTML = ""; note.textContent = ""; box.querySelector("[data-save]").disabled = true; menus(); return;
+    }
+    const R = askData(S, T); ASK.title = window.ccAsk.title(S);
+    if(R.title) ASK.title = R.title; else if(R.kind === "share" && !S.rangeLabel) ASK.title = "Nationalities, all years";
+    box.querySelector("h3").textContent = ASK.title;
+    const forms = R.msg ? [] : askForms(S, R), form = forms.some(f => f[0] === askQ.form) ? askQ.form : forms.some(f => f[0] === S.form) ? S.form : forms.length ? forms[0][0] : null;
+    fm.innerHTML = forms.length > 1 ? forms.map(([v, l]) => '<button type="button" data-ask-form="' + v + '" aria-pressed="' + (v === form) + '">' + svgI(v === "line" ? "line" : v === "area" ? "area" : v === "table" ? "table" : v === "donut" ? "donut" : v === "waffle" ? "grid" : v === "hbars" ? "hbars" : "bars") + l + "</button>").join("") : "";
+    let html;
+    if(R.msg) html = '<p class="st-note">' + esc(R.msg) + "</p>";
+    else if(form === "table") html = askTable(R, S);
+    else if(R.kind === "cols") html = askColumns(ch, T, R.items, {form, unit:R.unit, g:R.g === "date" ? "period" : R.g, whole:R.g ? "Whole " + R.g : null});
+    else if(R.kind === "rank") html = askRank(ch, T, R.items);
+    else if(R.kind === "lines") html = askLines(ch, T, R.series, R.labels);
+    else if(R.kind === "cum") html = askLines(ch, T, R.series.map(se => Object.assign({}, se, {vals:monthEnds(se.vals, se.y)})), MON, {step:false, tipHead:i => "By the end of " + MONTHS[i]});
+    else if(R.kind === "pairs") html = askPairs(ch, T, R.items, R.names);
+    else if(R.kind === "share") html = parts(ch, T, [[null, R.items]], R.total, form, ASK);
+    else if(R.kind === "who"){ const g = R.g; html = parts(ch, T, [["By sex", [["Men and boys", g.sex.Male, T.c[0]], ["Women and girls", g.sex.Female, T.c[1]], ["Not recorded", g.sex.Unknown, T.muted]]],
+      ["By age", Object.entries(g.age).map(([k, v], i) => [k === "Unknown" ? "Age not recorded" : k, v, k === "Unknown" ? T.muted : mix(T.surface, T.c[2], [.4, .6, .8, 1][Math.min(3, i)])])]], g.total, form, ASK); }
+    if(R.kind === "share" && form !== "hbars" && form !== "table") ASK.legend = legend(R.items.map(x => [x[0], x[2]]));
+    ch.innerHTML = html; ASK.svg = ch.querySelector("svg");
+    box.querySelector("[data-legend]").innerHTML = ASK.legend || "";
+    const rd = box.querySelector(".st-read"); rd.hidden = !R.read; if(R.read){ ASK.read = R.read; rd.firstChild.textContent = R.read[0]; rd.lastChild.textContent = R.read[1]; }
+    box.querySelector("[data-save]").disabled = !ASK.svg;
+    const said = S.notes.concat(R.notes || []);
+    if(S.unknown.length) said.push("Not used: " + S.unknown.map(w => "“" + w + "”").join(", ") + ".");
+    note.textContent = said.join(" ");
+    menus(); fadeRows();
+  }
+  // a running total read at the end of each month (or the latest day, in the month still going), so a year is twelve points
+  function monthEnds(vals, y){
+    return MON.map((m, i) => { const endD = doy(y + "-" + String(i + 1).padStart(2, "0") + "-" + String(new Date(Date.UTC(y, i + 1, 0)).getUTCDate()).padStart(2, "0")); let v = null;
+      for(let d = Math.min(endD, vals.length) - 1; d >= 0; d--) if(vals[d] != null){ v = vals[d]; break; }
+      return y === +last.slice(0, 4) && i > +last.slice(5, 7) - 1 ? null : v; });
+  }
+  function askTable(R, S){
+    const M = cap(mWord(S.measure));
+    if(R.kind === "cols") return table(["", R.unit === "avg" && S.measure !== "perboat" ? M + " a day, on average" : M], (R.unit === "avg" ? R.items : R.items.slice().reverse()).map(b => [b.long, fmt(b.v)]));
+    if(R.kind === "rank") return table(["", "When", M], R.items.map((b, i) => [String(i + 1), b.label, fmt(b.v)]));
+    if(R.kind === "lines") return table([""].concat(R.series.map(s => s.name)), R.labels.map((l, i) => [l].concat(R.series.map(s => fmt(s.vals[i])))));
+    if(R.kind === "cum") return table(["By the end of"].concat(R.series.map(s => s.name)), MON.map((m, i) => [MONTHS[i]].concat(R.series.map(s => fmt(monthEnds(s.vals, s.y)[i])))));
+    if(R.kind === "pairs") return table(["", R.names[0], R.names[1]], R.items.slice().reverse().map(b => [b.long, fmt(b.a), fmt(b.b)]));
+    if(R.kind === "share") return table(["Nationality", "People", "Share"], R.items.map(x => [x[0], fmt(x[1]), (x[1] / R.total * 100).toFixed(1) + "%"]));
+    if(R.kind === "who"){ const g = R.g; return table(["Group", "People", "Share"], Object.entries(g.sex).concat(Object.entries(g.age)).map(([k, v]) => [{Male:"Men and boys", Female:"Women and girls", Unknown:"Not recorded"}[k] || k, fmt(v), (v / g.total * 100).toFixed(1) + "%"])); }
+    return "";
+  }
+  function askHTML(){
+    return '<section class="card st-card st-ask st-full" data-card="ask" aria-label="Ask for a chart">'
+      + '<form class="st-ask-f" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>'
+      + '<input type="search" name="q" enterkeyhint="go" autocomplete="off" spellcheck="false" placeholder="Ask for a chart, like “boats each month in 2022”" aria-label="Ask for a chart" value="' + esc(askQ.text) + '"><button type="submit">Show</button></form>'
+      + '<div class="st-ask-eg" role="group" aria-label="Try one of these"></div>'
+      + '<div class="st-ask-out" data-ask-out hidden><div class="st-top"><div><h3></h3><div class="st-read"><b>–</b><span>&nbsp;</span></div></div>'
+      + '<div class="st-acts"><button type="button" class="st-act" data-save="ask" aria-label="Save this chart as a picture" title="Save as a picture">' + svgI("save") + "</button></div></div>"
+      + '<div class="st-forms" role="group" aria-label="Chart form"></div>'
+      + '<div class="st-chart" data-chart></div><div data-legend></div><p class="st-ask-note"></p></div></section>';
+  }
+  function ask(text){
+    askQ.text = String(text || "").trim().slice(0, 200); askQ.form = null; store.set("ask", askQ.text);
+    const i = wrap.querySelector(".st-ask-f input"); if(i && i.value !== askQ.text) i.value = askQ.text;
+    (window.ccAsk ? askReady() : askScript).then(() => askReady()).then(() => { drawAsk(); play(ASK); });
+  }
+
   function seg(key, opts, label){
     return '<div class="seg" role="group"' + (label ? ' aria-label="' + label + '"' : "") + ">" + opts.map(([v, l]) => '<button type="button" data-k="' + key + '" data-v="' + v + '" aria-pressed="' + (String(prefs[key]) === String(v)) + '">' + l + "</button>").join("") + "</div>";
   }
@@ -587,7 +895,7 @@
   const ORDER = ["ot", "rt", "pat", "yr", "cal", "pb", "ret", "who", "nat"];
   CARDS.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
   function shell(){
-    let h = '<section class="st-hero" id="stHero" aria-label="The latest figures"></section>' + controls() + '<div class="st-grid">', head = false;
+    let h = '<section class="st-hero" id="stHero" aria-label="The latest figures"></section>' + controls() + askHTML() + '<div class="st-grid">', head = false;
     CARDS.forEach(c => {
       if(c.people && !head){ head = true; h += '</div><div class="section-h" style="margin-bottom:-10px"><h2>Who is crossing</h2></div><div class="st-grid">'; }
       h += '<article class="card st-card' + (c.full ? " st-full" : "") + '" data-card="' + c.id + '"><div class="st-top"><div><h3>' + esc(c.title) + '</h3><div class="st-read"><b>–</b><span>&nbsp;</span></div></div>'
@@ -602,7 +910,7 @@
     if(!D.length || locked) return;
     const T = theme(); wrap.dataset.style = T.id;
     drawHero();
-    CARDS.forEach(c => drawCard(c, T));
+    CARDS.forEach(c => drawCard(c, T)); drawAsk(T);
     watchCards(); fadeRows(); menus();
   }
   // a chart animates in the first time it scrolls into view, and again whenever the visitor changes it; never on a resize or a live update
@@ -650,7 +958,7 @@
     wrap.querySelectorAll("[data-card]").forEach(el => {
       const forms = el.querySelector(".st-forms"), list = [[forms, "Chart form"]];
       el.querySelectorAll(".st-opts .seg").forEach(g => list.push([g, g.getAttribute("aria-label") || "Options"]));
-      fill(el, {anchor:el.querySelector(".st-opts") || forms, list});
+      const anchor = el.querySelector(".st-opts") || forms; fill(anchor.parentElement, {anchor, list});
     });
   }
   wrap.addEventListener("change", e => {
@@ -662,7 +970,7 @@
   wrap.addEventListener("click", e => {
     const sw = e.target.closest(".st-sw");
     if(sw){ prefs.style = sw.dataset.style; save(); wrap.querySelectorAll(".st-sw").forEach(b => b.setAttribute("aria-pressed", b === sw)); drawAll(); CARDS.forEach(play); return; }
-    const sv = e.target.closest("[data-save]"); if(sv){ savePicture(CARDS.find(c => c.id === sv.dataset.save)); return; }
+    const sv = e.target.closest("[data-save]"); if(sv){ savePicture(cardById(sv.dataset.save)); return; }
     const b = e.target.closest("button[data-k]"); if(!b) return;
     const k = b.dataset.k, v = b.dataset.v; prefs[k] = v === "true" ? true : v === "false" ? false : v; save();
     b.parentElement.querySelectorAll("button[data-k]").forEach(x => x.setAttribute("aria-pressed", x === b));
@@ -673,7 +981,7 @@
   const tip = document.createElement("div"); tip.className = "st-tip"; tip.setAttribute("aria-hidden", "true"); document.body.appendChild(tip);
   function hover(e){
     const ch = e.target.closest && e.target.closest("[data-chart]"); if(!ch) return;
-    const c = CARDS.find(x => x.id === ch.closest("[data-card]").dataset.card), svg = ch.querySelector("svg");
+    const c = cardById(ch.closest("[data-card]").dataset.card), svg = ch.querySelector("svg");
     if(!c || !c.pts || !c.pts.length || !svg){ hideTip(); return; }
     const r = svg.getBoundingClientRect(), k = (+svg.getAttribute("width")) / r.width, px = (e.clientX - r.left) * k, py = (e.clientY - r.top) * k;
     let best = null, bd = Infinity;
@@ -747,7 +1055,7 @@
       + '<button type="button" class="st-link" data-act="back">Back</button>';
     else body = "<h3>Every chart, your way</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
       + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
-      + '<ul class="st-list"><li>' + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
+      + '<ul class="st-list"><li>' + tick + "<span><b>New:</b> ask for any chart in your own words, like “boats each month in 2022”, with figures back to when records began in 2018</span></li><li>" + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
       + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
       + (signedIn ? '<button type="button" class="st-buy" data-act="buy"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button>"
         : '<form data-form="buy"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address, for your account and receipt"><button class="st-buy" type="submit"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button></form>")
@@ -825,6 +1133,16 @@
     acct = null;
   }
 
+  // Ask for a chart: typing, the examples, and switching the answer's form
+  wrap.addEventListener("submit", e => { if(!e.target.matches(".st-ask-f")) return; e.preventDefault(); const i = e.target.q; i.blur(); ask(i.value); });
+  wrap.addEventListener("click", e => {
+    const eg = e.target.closest("[data-ask]"); if(eg){ ask(eg.dataset.ask); return; }
+    const f = e.target.closest("[data-ask-form]"); if(f){ askQ.form = f.dataset.askForm; drawAsk(); play(ASK); }
+  });
+  // the words-to-chart reader, studio-ask.js, fetched alongside
+  const askScript = new Promise(res => { if(window.ccAsk) return res(); const sc = document.createElement("script"); sc.src = "studio-ask.js"; sc.onload = sc.onerror = () => res(); document.head.appendChild(sc); })
+    .then(() => { const eg = wrap.querySelector(".st-ask-eg"); if(eg && window.ccAsk) eg.innerHTML = window.ccAsk.EXAMPLES.map(e => '<button type="button" data-ask="' + esc(e) + '">' + esc(e) + "</button>").join(""); fadeRows(); });
+
   /* ------------------------------------------------------------ start */
   wrap.innerHTML = shell();
   setLocked(locked);
@@ -832,9 +1150,10 @@
   Promise.resolve(window.__data || getJSON("data.json")).catch(() => getJSON("data.json")).then(j => {
     D = j.days || [];
     last = D.length ? D[D.length - 1].date : null; drawAll();
+    if(askQ.text) ask(askQ.text);
   }).catch(() => { wrap.querySelectorAll("[data-chart]").forEach(c => c.innerHTML = '<p class="st-note">The figures couldn’t be loaded. Check your connection and try again.</p>'); });
   Promise.allSettled([getJSON("gender.json"), getJSON("nationalities.json"), getJSON("returns.json"), getJSON("perboat.json")]).then(([g, n, r, b]) => {
-    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); if(D.length && !locked){ CARDS.filter(c => c.people).forEach(c => drawCard(c, T)); drawHero(); }
+    gender = g.value || null; nats = n.value || null; rets = r.value || null; perBoat = b.value && b.value.years && b.value.years.length ? b.value : null; const T = theme(); if(D.length && !locked){ CARDS.filter(c => c.people).forEach(c => drawCard(c, T)); drawHero(); drawAsk(T); }
   });
 
   // redraw when the page changes width, or the visitor switches between day and night
