@@ -518,7 +518,8 @@
      studio-ask.js reads the words into a plan (what, when, grouped how, which shape); this draws the plan from the figures above,
      choosing the clearest form unless they named one. Nothing is sent anywhere: it all happens on this page. */
   const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"], cap = s => s[0].toUpperCase() + s.slice(1);
-  const ASK = {id:"ask", title:"", forms:[]}, askQ = {text:store.get("ask") || "", form:null};
+  const ASK = {id:"ask", title:"", forms:[]}, askQ = {text:store.get("ask") || "", form:null, read:"", why:"", busy:false, n:0};
+  const askCtx = () => ({first:D[0].date, last, countries:natYears ? natYears.nats.map(n => n.name) : nats ? nats.top.map(n => n.name) : []});
   let asylum = null, boatRet = null, natYears = null, askExtra = null;
   const askReady = () => askExtra || (askExtra = Promise.allSettled([getJSON("asylum.json"), getJSON("boatreturns.json"), getJSON("natyears.json")]).then(([a, b, n]) => {
     asylum = a.value || null; boatRet = b.value || null; natYears = n.value && n.value.nats ? n.value : null; }));
@@ -753,14 +754,14 @@
   function drawAsk(T){
     const box = wrap.querySelector("[data-ask-out]"); if(!box) return;
     if(!askQ.text || !window.ccAsk || !D.length){ box.hidden = true; return; }
-    const S = window.ccAsk.parse(askQ.text, {first:D[0].date, last, countries:natYears ? natYears.nats.map(n => n.name) : nats ? nats.top.map(n => n.name) : []});
+    const S = window.ccAsk.parse(askQ.read || askQ.text, askCtx());
     box.hidden = false; T = T || theme();
     const ch = box.querySelector("[data-chart]"), note = box.querySelector(".st-ask-note"), fm = box.querySelector(".st-forms");
     ASK.pts = null; ASK.legend = ""; ASK.svg = null; ASK.read = null;
-    if(!S.understood){
-      ASK.title = "Not sure what to show";
+    if(askQ.busy || !S.understood){
+      ASK.title = askQ.busy ? "Working out what you mean…" : askQ.why ? "Not in the figures" : "Not sure what to show";
       box.querySelector("h3").textContent = ASK.title; fm.innerHTML = ""; box.querySelector(".st-read").hidden = true;
-      ch.innerHTML = '<p class="st-note">Nothing in “' + esc(askQ.text) + '” matched the figures. Try asking about people, boats, people per boat, nationalities, sex and age, asylum decisions or returns, with a year or a time such as “each month”.</p>';
+      ch.innerHTML = askQ.busy ? "" : '<p class="st-note">' + (askQ.why ? esc(askQ.why) + " " : "Nothing in “" + esc(askQ.text) + "” matched the figures. ") + 'Try asking about people, boats, people per boat, nationalities, sex and age, asylum decisions or returns, with a year or a time such as “each month”.</p>';
       box.querySelector("[data-legend]").innerHTML = ""; note.textContent = ""; box.querySelector("[data-save]").disabled = true; menus(); return;
     }
     const R = askData(S, T); ASK.title = window.ccAsk.title(S);
@@ -785,6 +786,7 @@
     const rd = box.querySelector(".st-read"); rd.hidden = !R.read; if(R.read){ ASK.read = R.read; rd.firstChild.textContent = R.read[0]; rd.lastChild.textContent = R.read[1]; }
     box.querySelector("[data-save]").disabled = !ASK.svg;
     const said = S.notes.concat(R.notes || []);
+    if(askQ.read) said.unshift("Read as “" + askQ.read + "”.");
     if(S.unknown.length) said.push("Not used: " + S.unknown.map(w => "“" + w + "”").join(", ") + ".");
     note.textContent = said.join(" ");
     menus(); fadeRows();
@@ -819,7 +821,17 @@
   function ask(text){
     askQ.text = String(text || "").trim().slice(0, 200); askQ.form = null; store.set("ask", askQ.text);
     const i = wrap.querySelector(".st-ask-f input"); if(i && i.value !== askQ.text) i.value = askQ.text;
-    (window.ccAsk ? askReady() : askScript).then(() => askReady()).then(() => { drawAsk(); play(ASK); });
+    askQ.read = askQ.why = ""; const n = ++askQ.n;
+    (window.ccAsk ? askReady() : askScript).then(() => askReady()).then(() => {
+      if(n !== askQ.n || !window.ccAsk || !D.length) return drawAsk();
+      // words the page's own reader can't place go to Claude (through the Studio worker), which rewords them into ones it can
+      const S = window.ccAsk.parse(askQ.text, askCtx()), token = acct && acct.token;
+      if(!API || !token || (S.understood && S.unknown.length < 2)){ drawAsk(); play(ASK); return; }
+      askQ.busy = true; drawAsk();
+      api("/ask", {text:askQ.text}, token).then(o => { if(n !== askQ.n) return;
+        if(o.ok && o.request && window.ccAsk.parse(o.request, askCtx()).understood) askQ.read = o.request; else if(!o.ok) askQ.why = o.why || ""; })
+        .catch(() => {}).then(() => { if(n !== askQ.n) return; askQ.busy = false; drawAsk(); play(ASK); });
+    });
   }
 
   function seg(key, opts, label){
@@ -1055,7 +1067,7 @@
       + '<button type="button" class="st-link" data-act="back">Back</button>';
     else body = "<h3>Every chart, your way</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
       + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
-      + '<ul class="st-list"><li>' + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
+      + '<ul class="st-list"><li>' + tick + "<span><b>New:</b> ask for any chart in your own words, like “boats each month in 2022”, with figures back to when records began in 2018</span></li><li>" + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
       + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
       + (signedIn ? '<button type="button" class="st-buy" data-act="buy"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button>"
         : '<form data-form="buy"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address, for your account and receipt"><button class="st-buy" type="submit"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button></form>")
