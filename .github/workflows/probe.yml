@@ -6,26 +6,30 @@ jobs:
   probe:
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v5
+        with: {ref: claude/project-thread-gg3te9}
       - uses: actions/setup-python@v6
         with: {python-version: "3.12"}
-      - run: pip install openpyxl requests
+      - run: pip install -r requirements.txt
       - shell: python
         run: |
-          import io, requests, openpyxl
-          u = "https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx"
+          import sys, json; sys.path.insert(0, "scripts")
+          import extras
+          extras.update_asylum(); print(open("asylum.json").read())
+      - shell: python
+        run: |
+          import io, re, requests, openpyxl
+          page = requests.get("https://www.gov.uk/government/statistical-data-sets/immigration-system-statistics-data-tables", timeout=60).text
+          u = next(l for l in re.findall(r'https://assets\.publishing\.service\.gov\.uk/[^"\']+\.xlsx', page) if "returns" in l.lower() and "dataset" in l.lower())
+          print(u)
           wb = openpyxl.load_workbook(io.BytesIO(requests.get(u, timeout=180).content), read_only=True, data_only=True)
-          for ws in wb.worksheets:
-              print("=== SHEET", ws.title)
-              for i, r in enumerate(ws.iter_rows(values_only=True)):
-                  if i > 14: break
-                  print(i, r)
           from collections import Counter
-          for code in ("d02", "d03"):
-              ws = next(s for s in wb.worksheets if code in s.title.lower())
+          for ws in wb.worksheets:
               rows = list(ws.iter_rows(values_only=True))
-              hi = next(i for i, r in enumerate(rows) if r and sum(1 for c in r if c) > 5)
-              head = rows[hi]; print("HEAD", code, head)
-              for j, h in enumerate(head):
-                  vals = Counter(r[j] for r in rows[hi+1:] if r and len(r) > j)
-                  if len(vals) < 40: print(" ", h, dict(vals))
-                  else: print(" ", h, len(vals), "distinct, e.g.", list(vals)[:8])
+              print("=== SHEET", ws.title, len(rows))
+              for r in rows[:4]: print("  ", [c for c in r if c is not None][:16])
+              if ws.title.lower().startswith("data_"):
+                  head = rows[1]
+                  for j, h in enumerate(head):
+                      vals = Counter(r[j] for r in rows[2:] if r and len(r) > j)
+                      print("   ", h, dict(vals) if len(vals) < 30 else f"{len(vals)} distinct")
