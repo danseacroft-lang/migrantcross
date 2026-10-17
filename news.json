@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-17T14:52:13Z",
+ "checkedAt": "2026-10-17T15:18:09Z",
  "items": [
   {
    "title": "Major car brand demands new European Union rules as UK risks isolation - 'Makes us weaker'",
    "url": "https://www.gbnews.com/lifestyle/cars/major-car-brand-european-union-uk-toyota",
    "source": "GB News",
    "published": "2026-10-17T14:33:40Z",
+   "breaking": true
+  },
+  {
+   "title": "Man and woman charged over 'arson attack' in Ireland that killed family",
+   "url": "https://www.gbnews.com/news/world/waterford-man-woman-charged-arson-attack-ireland-killed-family",
+   "source": "GB News",
+   "published": "2026-10-17T14:29:38Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cmd6dglnvq63o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-17T12:27:38Z",
-   "breaking": true
-  },
-  {
-   "title": "Iranian fishermen swarm Strait of Hormuz in scramble for iPhones and luxury perfume after cargo ship sinks",
-   "url": "https://www.gbnews.com/news/world/iran-strait-of-hormuz-iphones-perfume-ship",
-   "source": "GB News",
-   "published": "2026-10-17T12:16:01Z",
    "breaking": true
   }
  ],
