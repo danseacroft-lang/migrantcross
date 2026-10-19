@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-19T17:23:59Z",
+ "checkedAt": "2026-10-19T17:56:40Z",
  "items": [
+  {
+   "title": "Minister says Mahmood\u2019s migration policy will \u2018prolong integration\u2019",
+   "url": "https://www.theguardian.com/politics/2026/oct/19/migration-energy-secretary-mahmood-fahnbulleh",
+   "source": "The Guardian",
+   "published": "2026-10-19T17:35:17Z",
+   "breaking": true
+  },
   {
    "title": "BBC calls riots across France \u2018mostly peaceful\u2019 while showing masked looters torching cars and clashing with police",
    "url": "https://www.gbnews.com/news/world/france-riots-bbc-mostly-peaceful-looters-torching-cars-police",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/politics/amanda-bland-reform-uk-msp-labour-holyrood-scottish-politics",
    "source": "GB News",
    "published": "2026-10-19T15:44:17Z",
-   "breaking": true
-  },
-  {
-   "title": "Troubles legacy bill is not an amnesty for soldiers - NI secretary",
-   "url": "https://www.bbc.co.uk/news/articles/cm93zkqj7z39o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-19T15:40:06Z",
    "breaking": true
   }
  ],
