@@ -1,18 +1,32 @@
 {
- "checkedAt": "2026-10-19T07:21:45Z",
+ "checkedAt": "2026-10-19T08:11:15Z",
  "items": [
+  {
+   "title": "Northern Ireland Troubles Bill to be debated in House of Commons",
+   "url": "https://www.bbc.co.uk/news/articles/cm93zkqj7z39o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-19T08:03:27Z",
+   "breaking": true
+  },
+  {
+   "title": "Burnham says youth employment and training crisis is a 'moral failure'",
+   "url": "https://www.bbc.co.uk/news/articles/cq0melgpre23o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-19T07:58:30Z",
+   "breaking": true
+  },
+  {
+   "title": "Australian MP left with severe injuries after being struck by car outside office",
+   "url": "https://www.gbnews.com/news/world/helen-haines-australian-mp-severe-injuries-struck-car-outside-office",
+   "source": "GB News",
+   "published": "2026-10-19T07:58:25Z",
+   "breaking": true
+  },
   {
    "title": "Emmanuel Macron refuses Interior Minister's offer to resign after another night of widespread rioting",
    "url": "https://www.gbnews.com/news/world/emmanuel-macron-refuses-laurent-nunez-resignation",
    "source": "GB News",
    "published": "2026-10-19T05:33:37Z",
-   "breaking": true
-  },
-  {
-   "title": "Yorkshire residents living in fear as asylum centre residents arrested for rape and child sex assault",
-   "url": "https://www.gbnews.com/news/yorkshire-residents-fear-asylum-centre-rape",
-   "source": "GB News",
-   "published": "2026-10-19T05:00:01Z",
    "breaking": true
   }
  ],
