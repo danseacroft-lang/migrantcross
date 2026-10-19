@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-19T16:05:00Z",
+ "checkedAt": "2026-10-19T16:47:05Z",
  "items": [
+  {
+   "title": "BBC calls riots across France \u2018mostly peaceful\u2019 while showing masked looters torching cars and clashing with police",
+   "url": "https://www.gbnews.com/news/world/france-riots-bbc-mostly-peaceful-looters-torching-cars-police",
+   "source": "GB News",
+   "published": "2026-10-19T16:42:03Z",
+   "breaking": true
+  },
+  {
+   "title": "Reform MSP quits party to sit as independent",
+   "url": "https://www.bbc.co.uk/news/articles/cq398dgkdg8xo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-19T16:28:27Z",
+   "breaking": true
+  },
   {
    "title": "Reform UK MSP quits as Labour becomes second biggest party in blow to Nigel Farage",
    "url": "https://www.gbnews.com/politics/amanda-bland-reform-uk-msp-labour-holyrood-scottish-politics",
@@ -16,24 +30,10 @@
    "breaking": true
   },
   {
-   "title": "Reform MSP quits party to sit as independent",
-   "url": "https://www.bbc.co.uk/news/articles/cq398dgkdg8xo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-19T15:27:08Z",
-   "breaking": true
-  },
-  {
    "title": "Prime minister visits Aberfan ahead of 60th anniversary of 'horrifying tragedy'",
    "url": "https://www.bbc.co.uk/news/articles/cm70px2d1ynlo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-19T15:02:05Z",
-   "breaking": true
-  },
-  {
-   "title": "PM says youth unemployment is a 'catastrophe and a moral failure'",
-   "url": "https://www.bbc.co.uk/news/articles/cq0melgpre23o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-19T14:59:32Z",
    "breaking": true
   }
  ],
