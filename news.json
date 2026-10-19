@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-19T04:28:05Z",
+ "checkedAt": "2026-10-19T05:07:47Z",
  "items": [
+  {
+   "title": "Yorkshire residents living in fear as asylum centre residents arrested for rape and child sex assault",
+   "url": "https://www.gbnews.com/news/yorkshire-residents-fear-asylum-centre-rape",
+   "source": "GB News",
+   "published": "2026-10-19T05:00:01Z",
+   "breaking": true
+  },
   {
    "title": "Tony Hall has lived in the UK for 50 years. Why is the Home Office trying to deport him?",
    "url": "https://www.theguardian.com/uk-news/2026/oct/19/tony-hall-has-lived-in-the-uk-for-50-years-why-is-the-home-office-trying-to-deport-him",
    "source": "The Guardian",
    "published": "2026-10-19T04:00:18Z",
+   "breaking": true
+  },
+  {
+   "title": "Dog owners urged to start training pets as fireworks anxiety grips nearly 10 million British dogs",
+   "url": "https://www.gbnews.com/news/dog-owners-urged-start-training-pets-fireworks-anxiety",
+   "source": "GB News",
+   "published": "2026-10-19T03:40:22Z",
    "breaking": true
   },
   {
@@ -20,13 +34,6 @@
    "url": "https://www.gbnews.com/news/world/canadian-forces-base-wainwright-mark-carney-fire",
    "source": "GB News",
    "published": "2026-10-19T02:09:43Z",
-   "breaking": true
-  },
-  {
-   "title": "Burnham says youth employment and training crisis is a 'moral failure'",
-   "url": "https://www.bbc.co.uk/news/articles/cq0melgpre23o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-19T01:40:53Z",
    "breaking": true
   }
  ],
