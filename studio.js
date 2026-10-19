@@ -809,7 +809,7 @@
   function askHTML(){
     return '<section class="card st-card st-ask st-full" data-card="ask" aria-label="Ask for a chart">'
       + '<form class="st-ask-f" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>'
-      + '<input type="search" name="q" enterkeyhint="go" autocomplete="off" spellcheck="false" placeholder="Ask for a chart, like “boats each month in 2022”" aria-label="Ask for a chart" value="' + esc(askQ.text) + '"><button type="submit">Show</button></form>'
+      + '<input type="search" name="q" enterkeyhint="go" autocomplete="off" spellcheck="false" placeholder="Ask for any chart" aria-label="Ask for a chart" value="' + esc(askQ.text) + '"><button type="submit">Show</button></form>'
       + '<div class="st-ask-eg" role="group" aria-label="Try one of these"></div>'
       + '<div class="st-ask-out" data-ask-out hidden><div class="st-top"><div><h3></h3><div class="st-read"><b>–</b><span>&nbsp;</span></div></div>'
       + '<div class="st-acts"><button type="button" class="st-act" data-save="ask" aria-label="Save this chart as a picture" title="Save as a picture">' + svgI("save") + "</button></div></div>"

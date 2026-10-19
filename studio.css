@@ -238,8 +238,7 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
 .st-ask-f input::-webkit-search-cancel-button{display:none}
 .st-ask-f button{flex:none;appearance:none;border:0;height:40px;padding:0 18px;border-radius:999px;background:var(--blue);color:#fff;font:600 .9rem/1 var(--font);cursor:pointer;transition:transform .2s cubic-bezier(.3,1.4,.5,1)}
 .st-ask-f button:active{transform:scale(.95)}
-.st-ask-eg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:-4px -18px 0;padding:0 18px}
-.st-ask-eg::-webkit-scrollbar{display:none}
+.st-ask-eg{display:flex;flex-wrap:wrap;gap:6px;margin-top:-4px}
 .st-ask-eg button{flex:none;appearance:none;border:0;height:30px;padding:0 12px;border-radius:999px;background:none;box-shadow:inset 0 0 0 1px var(--sep);color:var(--label2);font:500 .78rem/1 var(--font);cursor:pointer;white-space:nowrap}
 @media (hover:hover){.st-ask-eg button:hover{color:var(--label);background:var(--fill)}}
 .st-ask-out{display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:.5px solid var(--sep)}
@@ -249,4 +248,5 @@ html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the win
 .st-ask-note:empty{display:none}
 .st-ask .st-forms:empty{display:none}
 @media (pointer:coarse){.st-ask-eg button{height:34px}}
-@media (max-width:719px){.st-ask-f{height:48px}.st-ask-f input{font-size:16px}}
+@media (max-width:379px){.st-ask-f{padding-left:18px}.st-ask-f > svg{display:none}}
+@media (max-width:719px){.st-ask-f{height:48px}.st-ask-f input{font-size:16px}.st-ask-eg button:nth-child(n+5){display:none}}
