@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-20T14:46:09Z",
+ "checkedAt": "2026-10-20T15:26:52Z",
  "items": [
   {
    "title": "Paddy Power cuts 1,400 jobs and blames betting tax rises",
    "url": "https://www.bbc.co.uk/news/articles/cqzrdpkm3g84o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-20T14:23:02Z",
+   "published": "2026-10-20T14:53:02Z",
+   "breaking": true
+  },
+  {
+   "title": "Labour will not have the courage to cut spending, says Badenoch",
+   "url": "https://www.bbc.co.uk/news/articles/cry835v68dq9o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-20T14:46:46Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/news/world/spain-weather-four-dead-rain-flooding-valencia",
    "source": "GB News",
    "published": "2026-10-20T13:22:30Z",
-   "breaking": true
-  },
-  {
-   "title": "Labour will not have the courage to cut spending, says Badenoch",
-   "url": "https://www.bbc.co.uk/news/articles/cry835v68dq9o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-20T13:22:03Z",
    "breaking": true
   }
  ],
