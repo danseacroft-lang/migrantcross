@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-20T07:50:29Z",
+ "checkedAt": "2026-10-20T08:26:58Z",
  "items": [
+  {
+   "title": "Chancellor rejects calls to raise Capital Gains Tax in Budget",
+   "url": "https://www.bbc.co.uk/news/articles/c50me4w4x1vyo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-20T08:06:17Z",
+   "breaking": true
+  },
   {
    "title": "Burnham vows end to 'rip-off parking charges' under new rules",
    "url": "https://www.bbc.co.uk/news/articles/ck87ze7wl4qno?at_medium=RSS&at_campaign=rss",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/politics/afghanistan-row-downing-street-hits-back-pete-hegseth-slams-role-britain",
    "source": "GB News",
    "published": "2026-10-20T07:09:25Z",
-   "breaking": true
-  },
-  {
-   "title": "Chancellor rejects calls to raise Capital Gains Tax in Budget",
-   "url": "https://www.bbc.co.uk/news/articles/c50me4w4x1vyo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-20T06:50:52Z",
    "breaking": true
   }
  ],
