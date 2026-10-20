@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-20T15:26:52Z",
+ "checkedAt": "2026-10-20T16:05:12Z",
  "items": [
+  {
+   "title": "Eleven missing people feared to have been eaten by sharks after boat capsized off coast of Mexico",
+   "url": "https://www.gbnews.com/news/world/shark-attack-eleven-missing-boat-mexico",
+   "source": "GB News",
+   "published": "2026-10-20T16:02:44Z",
+   "breaking": true
+  },
+  {
+   "title": "Reform leader accuses MSP of 'squatting' in seat after resignation",
+   "url": "https://www.bbc.co.uk/news/articles/c674p99x7ngpo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-20T15:57:07Z",
+   "breaking": true
+  },
   {
    "title": "Paddy Power cuts 1,400 jobs and blames betting tax rises",
    "url": "https://www.bbc.co.uk/news/articles/cqzrdpkm3g84o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-20T14:53:02Z",
+   "published": "2026-10-20T15:53:13Z",
    "breaking": true
   },
   {
@@ -20,20 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cmx2q5dw5p90o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-20T13:57:01Z",
-   "breaking": true
-  },
-  {
-   "title": "UK to deploy jets to defend Saudi Arabia from Houthi attacks",
-   "url": "https://www.bbc.co.uk/news/articles/ckr5yqe1r1llo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-20T13:54:35Z",
-   "breaking": true
-  },
-  {
-   "title": "At least four people dead and thousands evacuated as torrential rainfall and flooding batter Spain",
-   "url": "https://www.gbnews.com/news/world/spain-weather-four-dead-rain-flooding-valencia",
-   "source": "GB News",
-   "published": "2026-10-20T13:22:30Z",
    "breaking": true
   }
  ],
