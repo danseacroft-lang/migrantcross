@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-20T04:24:52Z",
+ "checkedAt": "2026-10-20T05:00:15Z",
  "items": [
+  {
+   "title": "The Papers: 'The French correction' and 'Labour cuts \u00a32bn from Army'",
+   "url": "https://www.bbc.co.uk/news/articles/c6r7y0vkz2yno?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-20T04:47:29Z",
+   "breaking": true
+  },
   {
    "title": "Serious criminals detained in hospital to no longer receive benefits",
    "url": "https://www.gbnews.com/news/serious-criminals-detained-hospital-benefits-valdo-calocane",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/politics/us/donald-trump-nato-blames-migrants-france-chaos-civil-unrest",
    "source": "GB News",
    "published": "2026-10-20T02:02:41Z",
-   "breaking": true
-  },
-  {
-   "title": "Chancellor rejects calls to raise Capital Gains Tax in Budget",
-   "url": "https://www.bbc.co.uk/news/articles/c50me4w4x1vyo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-20T01:31:09Z",
    "breaking": true
   }
  ],
