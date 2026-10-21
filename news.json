@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-21T01:13:15Z",
+ "checkedAt": "2026-10-21T01:50:23Z",
  "items": [
+  {
+   "title": "US student protesters look to repeal law on onion futures trading",
+   "url": "https://www.gbnews.com/news/us/university-chicago-student-protesters-onion-futures-trading-repeal-law",
+   "source": "GB News",
+   "published": "2026-10-21T01:44:25Z",
+   "breaking": true
+  },
   {
    "title": "Ryanair chief warns Europe faces 'biggest increase in airfares in history'",
    "url": "https://www.gbnews.com/money/ryanair-chief-europe-biggest-increase-airfares-michael-o-leary",
@@ -20,13 +27,6 @@
    "url": "https://www.gov.uk/government/news/drivers-to-save-up-to-300-when-installing-ev-chargers-at-home-as-government-slashes-unnecessary-red-tape",
    "source": "GOV.UK",
    "published": "2026-10-20T23:01:05Z",
-   "breaking": true
-  },
-  {
-   "title": "Tory MP questions government advisor's position after wife's Palestine Action post",
-   "url": "https://www.bbc.co.uk/news/articles/cke8r0me3y9vo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-20T22:29:24Z",
    "breaking": true
   }
  ],
