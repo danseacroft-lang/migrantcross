@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-21T10:26:17Z",
+ "checkedAt": "2026-10-21T11:02:47Z",
  "items": [
   {
-   "title": "Cabinet split widens as minister refuses to back Shabana Mahmood 15-year policy",
+   "title": "Cabinet split widens as minister refuses to back Shabana Mahmood\u2019s immigration plans",
    "url": "https://www.theguardian.com/uk-news/2026/oct/21/cabinet-split-shabana-mahmood-immigration-plans-labour-miatta-fahnbulleh",
    "source": "The Guardian",
    "published": "2026-10-21T10:21:18Z",
+   "breaking": true
+  },
+  {
+   "title": "Faisal Islam: Inflation and borrowing figures illustrate chancellor's Budget challenge",
+   "url": "https://www.bbc.co.uk/news/articles/cm3wv9pn22e5o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-21T10:20:15Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/opinion/jackdaw-approval-victory-common-sense-rosebanks",
    "source": "GB News",
    "published": "2026-10-21T08:49:51Z",
-   "breaking": true
-  },
-  {
-   "title": "Chris Mason: Jackdaw approved but tricky energy trade-offs remain",
-   "url": "https://www.bbc.co.uk/news/articles/cked35dz47y7o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-21T08:49:44Z",
    "breaking": true
   }
  ],
