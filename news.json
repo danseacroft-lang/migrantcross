@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-21T05:01:23Z",
+ "checkedAt": "2026-10-21T05:43:10Z",
  "items": [
+  {
+   "title": "Lawyer caught offering to make illegal-worker fine go away",
+   "url": "https://www.bbc.co.uk/news/articles/c30rln4pz58xo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-21T05:00:35Z",
+   "breaking": true
+  },
   {
    "title": "Firefighting planes and BBQ bans needed to combat Britain's wildfire risk, MPs warn",
    "url": "https://news.sky.com/story/britain-woefully-unprepared-to-tackle-wildfires-and-needs-new-fire-fighting-planes-and-bbq-bans-needed-mps-warn-13601469",
@@ -27,13 +34,6 @@
    "url": "https://www.gbnews.com/news/prison-crisis-coats-blankets-instant-noodles-hmp-wandsworth",
    "source": "GB News",
    "published": "2026-10-21T04:03:51Z",
-   "breaking": true
-  },
-  {
-   "title": "'Cosmetic cowboys' to face fines if they carry out risky procedures",
-   "url": "https://news.sky.com/story/cosmetic-cowboys-to-face-fines-if-they-carry-out-risky-procedures-13601360",
-   "source": "Sky News",
-   "published": "2026-10-21T02:33:00Z",
    "breaking": true
   }
  ],
