@@ -1,8 +1,15 @@
 {
- "checkedAt": "2026-10-21T11:44:47Z",
+ "checkedAt": "2026-10-21T12:15:59Z",
  "items": [
   {
-   "title": "Reform UK reports ITV and its undercover reporters to the police after undercover sting",
+   "title": "Andy Burnham considers scrapping \u00a3108 energy bill charge paid by millions of Britons",
+   "url": "https://www.gbnews.com/money/andy-burnham-energy-bill-standing-charge-scrap",
+   "source": "GB News",
+   "published": "2026-10-21T11:39:49Z",
+   "breaking": true
+  },
+  {
+   "title": "Reform UK reports ITV and its reporters to the police after undercover sting",
    "url": "https://www.gbnews.com/politics/reform-uk-itv-police-report-undercover-sting",
    "source": "GB News",
    "published": "2026-10-21T11:37:44Z",
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/c6gel2xv4493o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-21T10:16:17Z",
-   "breaking": true
-  },
-  {
-   "title": "Protesters descend on Department of Energy after Labour's Jackdaw approval",
-   "url": "https://www.gbnews.com/politics/video-protesters-descend-department-energy-labour-jackdaw-approval",
-   "source": "GB News",
-   "published": "2026-10-21T08:52:18Z",
    "breaking": true
   }
  ],
