@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-22T16:28:27Z",
+ "checkedAt": "2026-10-22T17:05:37Z",
  "items": [
   {
-   "title": "UK needs to be ready for emergencies and hostile acts, warns Streeting",
+   "title": "Prepare for supply chain disruption from cyber or climate emergencies, Streeting warns",
    "url": "https://www.bbc.co.uk/news/articles/cwd094x57p32o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-22T16:02:38Z",
+   "published": "2026-10-22T16:40:38Z",
+   "breaking": true
+  },
+  {
+   "title": "Britons advised to prepare for emergencies in attempt to 'bring UK into line with European allies'",
+   "url": "https://www.gbnews.com/politics/britons-advised-prepare-emergency-attempt-align-european-allies",
+   "source": "GB News",
+   "published": "2026-10-22T16:33:22Z",
    "breaking": true
   },
   {
@@ -27,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/cvze4692lxp1o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-22T15:35:09Z",
-   "breaking": true
-  },
-  {
-   "title": "PM puts communities first in government investment rules shake up",
-   "url": "https://www.gov.uk/government/news/pm-puts-communities-first-in-government-investment-rules-shake-up",
-   "source": "GOV.UK",
-   "published": "2026-10-22T15:34:37Z",
    "breaking": true
   }
  ],
