@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-22T11:16:31Z",
+ "checkedAt": "2026-10-22T12:01:05Z",
  "items": [
   {
-   "title": "Government websites taken offline amid cyber security threat",
+   "title": "'Neighbour from hell' migrant finally moves out as retirement home residents celebrate",
+   "url": "https://www.gbnews.com/news/neighbour-row-migrant-retirement-home-residents-celebrate",
+   "source": "GB News",
+   "published": "2026-10-22T12:00:13Z",
+   "breaking": true
+  },
+  {
+   "title": "UK Government websites taken offline amid cyber security threat",
    "url": "https://www.gbnews.com/politics/cyber-security-threat-government-websites-taken-offline-potential-php-issues",
    "source": "GB News",
    "published": "2026-10-22T11:15:27Z",
+   "breaking": true
+  },
+  {
+   "title": "Streeting launches new push to prepare UK for emergencies and hostile acts",
+   "url": "https://news.sky.com/story/government-launches-new-push-to-prepare-uk-for-emergencies-and-hostile-acts-13602203",
+   "source": "Sky News",
+   "published": "2026-10-22T10:09:00Z",
    "breaking": true
   },
   {
@@ -20,20 +34,6 @@
    "url": "https://www.gbnews.com/news/world/sinn-fein-adolf-hitler-micheal-martin-irish-politics",
    "source": "GB News",
    "published": "2026-10-22T09:52:21Z",
-   "breaking": true
-  },
-  {
-   "title": "'Sickening' video of man spitting on statue of murdered MP David Amess sparks police investigation",
-   "url": "https://www.gbnews.com/news/david-amess-statue-spat-on-pro-palestine-activist-video",
-   "source": "GB News",
-   "published": "2026-10-22T09:41:40Z",
-   "breaking": true
-  },
-  {
-   "title": "MI5 spied on NHS founder Nye Bevan for more than 20 years, newly released files show",
-   "url": "https://www.bbc.co.uk/news/articles/c3n049jr2ge5o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-22T09:35:34Z",
    "breaking": true
   }
  ],
