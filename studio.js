@@ -440,7 +440,7 @@
   card({id:"nat", title:"Nationalities", forms:[["hbars","Bars"],["tree","Treemap"],["donut","Ring"],["waffle","Squares"],["table","Table"]], key:"nat", people:true,
     draw(el, T){
       if(!nats) return '<p class="st-note">These figures are still loading.</p>';
-      const items = nats.top.map((n, i) => [n.name, n.n, T.c[i % 6]]).concat(nats.other ? [["Everyone else", nats.other, T.muted]] : []);
+      const F = window.CC_FLAGS || {}, items = nats.top.map((n, i) => [(F[n.name] ? F[n.name] + " " : "") + n.name, n.n, T.c[i % 6]]).concat(nats.other ? [["Everyone else", nats.other, T.muted]] : []);
       this.read = [nats.top[0].name, "the largest group, " + nats.top[0].pc + "% of " + fmt(nats.total) + " people, " + nats.period];
       this.legend = prefs.nat === "table" || prefs.nat === "hbars" ? "" : legend(items.map(x => [x[0], x[2]]));
       if(prefs.nat === "table") return table(["Nationality", "People", "Share"], items.map(x => [x[0], fmt(x[1]), (x[1] / nats.total * 100).toFixed(1) + "%"]));
@@ -497,7 +497,10 @@
       items.forEach(([k, v, c], i) => { const fr = v / rest, horiz = w >= h; let rw, rh;   // slice off each piece along the longer side
         if(i === items.length - 1){ rw = w; rh = h; } else if(horiz){ rw = w * fr; rh = h; } else { rw = w; rh = h * fr; }
         s.add('<rect class="st-d"' + s.delay(i / items.length) + ' x="' + (x + 1.5).toFixed(1) + '" y="' + (y + 1.5).toFixed(1) + '" width="' + Math.max(0, rw - 3).toFixed(1) + '" height="' + Math.max(0, rh - 3).toFixed(1) + '" rx="' + Math.min(T.r === 999 ? 14 : T.r * 2, 14) + '" ' + s.fill(c) + "/>");
-        if(rw > 70 && rh > 40){ s.text(x + 12, y + 22, k, {c:"#fff", w:600, size:12}); s.text(x + 12, y + 38, (v / sum(groups[0][1], q => q[1]) * 100).toFixed(1) + "%", {c:"rgba(255,255,255,.85)", size:11}); }
+        const pc = (v / sum(groups[0][1], q => q[1]) * 100).toFixed(1) + "%", fl = /^(\p{RI}\p{RI}) (.+)$/u.exec(k);
+        // a flag that won't fit beside the name sits on its own line above it
+        if(fl && rw - 24 < k.length * 7 && rw > 70 && rh > 62){ s.text(x + 12, y + 24, fl[1], {size:16}); s.text(x + 12, y + 44, fl[2], {c:"#fff", w:600, size:12}); s.text(x + 12, y + 60, pc, {c:"rgba(255,255,255,.85)", size:11}); }
+        else if(rw > 70 && rh > 40){ s.text(x + 12, y + 22, k, {c:"#fff", w:600, size:12}); s.text(x + 12, y + 38, pc, {c:"rgba(255,255,255,.85)", size:11}); }
         cardO.pts.push({x:x + rw / 2, y:y + rh / 2, tip:"<b>" + fmt(v) + "</b>" + esc(k)});
         if(horiz){ x += rw; w -= rw; } else { y += rh; h -= rh; } rest -= v; });
       return s.out("Shares as a treemap");
@@ -1054,15 +1057,15 @@
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : "") + "</p>"
       + '<button type="button" class="st-link" data-act="back">Back</button>';
     else body = "<h3>Every chart, your way</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
-      + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
-      + '<ul class="st-list"><li>' + tick + "<span><b>New:</b> ask for any chart in your own words, like “boats each month in 2022”, with figures back to when records began in 2018</span></li><li>" + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
-      + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
+      + '<p class="st-free"><b>The figures are free, and always will be.</b> Studio is the same Home Office figures in more depth, in forms that are easier to understand.</p>'
+      + '<ul class="st-list"><li>' + tick + "<span><b>New:</b> ask for any chart in your own words</span></li><li>" + tick + "<span>Every graph in six styles</span></li><li>" + tick + "<span>Lines, rings, roses, calendars and more</span></li><li>"
+      + tick + "<span>People, boats or people a boat</span></li><li>" + tick + "<span>Save charts as pictures or tables</span></li><li>" + tick + "<span>Live updates without reloading</span></li></ul>"
       + (signedIn ? '<button type="button" class="st-buy" data-act="buy"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button>"
         : '<form data-form="buy"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address, for your account and receipt"><button class="st-buy" type="submit"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button></form>")
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : API ? "" : "Payments open soon.") + "</p>"
       + (signedIn ? '<p class="st-fine">Signed in as ' + esc(acct.email) + ' · <button type="button" class="st-link" style="padding:0;font-size:inherit" data-act="out">Sign out</button></p>'
         : '<button type="button" class="st-link" data-act="signin">Already paid? Sign in</button>')
-      + '<p class="st-fine">One payment, no subscription. Your email is your account: it unlocks Studio on any device you sign in on. Payment is handled securely by Stripe. Figures: Home Office, Open Government Licence v3.0.</p>';
+      + '<p class="st-fine">One payment, no subscription, paid securely through Stripe. Your email unlocks Studio on any device. Figures: Home Office, Open Government Licence v3.0.</p>';
     offer.innerHTML = body;
   }
   let keyFor = "";   // the email of an account that signs in with a password
@@ -1094,16 +1097,20 @@
   const lockBox = document.createElement("div"); lockBox.className = "st-lock";
   // behind the offer, a blurred picture of Studio: never the charts themselves, which only an unlocked account gets
   const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("aria-hidden", "true");
-  // the offer page: the word "studio" as large as the page allows, in heavy type, with the offer on a solid card across its foot
-  const word = document.createElement("p"); word.className = "st-word"; word.setAttribute("aria-hidden", "true"); word.innerHTML = [..."studio"].map(c => "<span>" + c + "</span>").join("");   // a span a letter, so each can sit over the one before
   const peekPic = () => '<img src="studio-peek-' + (isDark() ? "dark" : "light") + '.webp" alt="" width="464" height="550" decoding="async">';
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
+  // the offer starts just under the bar at the top, wherever the site notice above it leaves that bar
+  function placeLock(){ const r = document.querySelector(".top-row"); if(r && lockBox.isConnected) lockBox.style.paddingTop = Math.round(r.getBoundingClientRect().bottom + (innerWidth < 720 ? 10 : 18)) + "px"; }
+  addEventListener("resize", placeLock);
+  const busy = document.getElementById("busyNote"); if(busy) busy.addEventListener("toggle", placeLock);
+  new MutationObserver(() => requestAnimationFrame(placeLock)).observe(document.documentElement, {attributes:true, attributeFilter:["data-tab"]});
   function setLocked(on){
     locked = on;
     if(!on && window.ccLive) window.ccLive(true);   // live updates across the site come with Studio
-    const pg = document.getElementById("pg-studio"); if(pg) pg.classList.toggle("st-locked", on);   // the page's own title steps aside for the big word
-    if(on){ renderOffer("offer"); lockBox.append(word, offer); host.replaceChildren(lockBox); showOut(); return; }
-    else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = window.CC_STUDIO_PREVIEW && !(acct && acct.email) ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : ""; }
+    const pg = document.getElementById("pg-studio"); if(pg) pg.classList.toggle("st-locked", on);   // the page's own title steps aside for the offer
+    // the offer covers the whole window, so it hangs off the body, clear of the page's own box; it shows only while Studio is the open tab
+    if(on){ renderOffer("offer"); lockBox.append(offer); host.replaceChildren(); document.body.append(lockBox); placeLock(); showOut(); return; }
+    else { lockBox.remove(); host.replaceChildren(acctLine, wrap); acctLine.innerHTML = window.CC_STUDIO_PREVIEW && !(acct && acct.email) ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : ""; }
     showOut();
     requestAnimationFrame(drawAll);
   }

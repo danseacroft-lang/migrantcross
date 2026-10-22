@@ -568,6 +568,7 @@ main{max-width:1180px;margin:0 auto}
 .br-top li{display:grid;grid-template-columns:1fr auto;gap:4px 10px}
 .br-top li i{grid-column:1 / -1;height:6px;border-radius:3px;background:var(--viz2);width:var(--w)}
 .br-top b{font-weight:600}
+.br-top .br-fl{margin-right:8px;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif}
 @media (max-width:719px){.sup-grid{grid-template-columns:1fr}}
 .pred{display:flex;flex-direction:column}
 .pred-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
@@ -3319,7 +3320,8 @@ main .hero{border-radius:32px}
   }
 
   /* ---------------------------------------------------- who is crossing, per boat, returns */
-  const FLAGS = {Eritrea:"🇪🇷", Sudan:"🇸🇩", Afghanistan:"🇦🇫", Iran:"🇮🇷", Iraq:"🇮🇶", Syria:"🇸🇾", Vietnam:"🇻🇳", Somalia:"🇸🇴", Ethiopia:"🇪🇹", Egypt:"🇪🇬", Albania:"🇦🇱", Turkey:"🇹🇷", Kuwait:"🇰🇼", Yemen:"🇾🇪", Chad:"🇹🇩", "South Sudan":"🇸🇸", Libya:"🇱🇾", India:"🇮🇳", Pakistan:"🇵🇰"};
+  // the flag shown beside each nationality, here and in Studio
+  const FLAGS = window.CC_FLAGS = {Eritrea:"🇪🇷", Sudan:"🇸🇩", Afghanistan:"🇦🇫", Iran:"🇮🇷", Iraq:"🇮🇶", Syria:"🇸🇾", Vietnam:"🇻🇳", "Viet Nam":"🇻🇳", Somalia:"🇸🇴", Ethiopia:"🇪🇹", Egypt:"🇪🇬", Albania:"🇦🇱", Turkey:"🇹🇷", "Türkiye":"🇹🇷", Kuwait:"🇰🇼", Yemen:"🇾🇪", Chad:"🇹🇩", "South Sudan":"🇸🇸", Libya:"🇱🇾", India:"🇮🇳", Pakistan:"🇵🇰", Bangladesh:"🇧🇩", "Sri Lanka":"🇱🇰", Georgia:"🇬🇪", Nigeria:"🇳🇬", Morocco:"🇲🇦", Algeria:"🇩🇿", Tunisia:"🇹🇳", Palestine:"🇵🇸", Jordan:"🇯🇴", Lebanon:"🇱🇧", Guinea:"🇬🇳", Mali:"🇲🇱", Senegal:"🇸🇳", Gambia:"🇬🇲", "Ivory Coast":"🇨🇮", Cameroon:"🇨🇲", "DR Congo":"🇨🇩", Burundi:"🇧🇮", China:"🇨🇳", Ukraine:"🇺🇦", Romania:"🇷🇴", Poland:"🇵🇱", Brazil:"🇧🇷", Nepal:"🇳🇵", Myanmar:"🇲🇲"};
   function onReveal(el, fn){ const c = el.closest(".rv"); if(c.classList.contains("on") || reduced) fn(); else c.addEventListener("reveal", fn, {once:true}); }
   function renderWho(g, nat){
     if(g && g.lastYear){
@@ -3427,7 +3429,7 @@ main .hero{border-radius:32px}
     $("brYrs").innerHTML = yrs.map(y => '<span style="flex:' + qs.filter(q => q.q.startsWith(y)).length + '">' + y + "</span>").join("");
     const top = r.top || [];
     $("brTopS").textContent = "Most common nationalities, " + r.period;
-    $("brTop").innerHTML = top.map(t => "<li>" + t.name + '<b class="num">' + fmt(t.n) + '</b><i style="--w:' + (t.n / top[0].n * 100).toFixed(1) + '%"></i></li>').join("");
+    $("brTop").innerHTML = top.map(t => '<li><span>' + (FLAGS[t.name] ? '<span class="br-fl" aria-hidden="true">' + FLAGS[t.name] + "</span>" : "") + t.name + '</span><b class="num">' + fmt(t.n) + '</b><i style="--w:' + (t.n / top[0].n * 100).toFixed(1) + '%"></i></li>').join("");
     $("brSrc").innerHTML = "Returns of people who arrived by small boat, in the quarter they left the UK. The paler columns are provisional and may be revised. Source: Home Office, <a href=\"" + r.source + "\">Returns summary tables</a>, Ret_06a and Ret_06b.";
     $("brSec").hidden = false;
   }
