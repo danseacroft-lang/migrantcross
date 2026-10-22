@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-22T10:44:05Z",
+ "checkedAt": "2026-10-22T11:16:31Z",
  "items": [
+  {
+   "title": "Government websites taken offline amid cyber security threat",
+   "url": "https://www.gbnews.com/politics/cyber-security-threat-government-websites-taken-offline-potential-php-issues",
+   "source": "GB News",
+   "published": "2026-10-22T11:15:27Z",
+   "breaking": true
+  },
   {
    "title": "'500 new vulnerabilities' found in government, says AI minister",
    "url": "https://www.bbc.co.uk/news/videos/c6y8lvg2p50po?at_medium=RSS&at_campaign=rss",
@@ -16,24 +23,17 @@
    "breaking": true
   },
   {
-   "title": "Pro-Palestine activist shares video of man spitting on David Amess statue as police called to investigate 'sickening act'",
+   "title": "'Sickening' video of man spitting on statue of murdered MP David Amess sparks police investigation",
    "url": "https://www.gbnews.com/news/david-amess-statue-spat-on-pro-palestine-activist-video",
    "source": "GB News",
    "published": "2026-10-22T09:41:40Z",
    "breaking": true
   },
   {
-   "title": "MI5 spied on Nye Bevan for more than 20 years, newly released files show",
+   "title": "MI5 spied on NHS founder Nye Bevan for more than 20 years, newly released files show",
    "url": "https://www.bbc.co.uk/news/articles/c3n049jr2ge5o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-22T09:35:34Z",
-   "breaking": true
-  },
-  {
-   "title": "Who is Chancellor John Healey? Labour veteran who quit as defence secretary",
-   "url": "https://www.bbc.co.uk/news/articles/ce85y9lm81no?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-22T09:35:25Z",
    "breaking": true
   }
  ],
