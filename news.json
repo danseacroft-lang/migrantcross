@@ -1,6 +1,20 @@
 {
- "checkedAt": "2026-10-22T10:09:30Z",
+ "checkedAt": "2026-10-22T10:44:05Z",
  "items": [
+  {
+   "title": "'500 new vulnerabilities' found in government, says AI minister",
+   "url": "https://www.bbc.co.uk/news/videos/c6y8lvg2p50po?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-22T10:08:44Z",
+   "breaking": true
+  },
+  {
+   "title": "'Sinn Fein backed Adolf Hitler to spite Britain in WW2', Irish PM claims",
+   "url": "https://www.gbnews.com/news/world/sinn-fein-adolf-hitler-micheal-martin-irish-politics",
+   "source": "GB News",
+   "published": "2026-10-22T09:52:21Z",
+   "breaking": true
+  },
   {
    "title": "Pro-Palestine activist shares video of man spitting on David Amess statue as police called to investigate 'sickening act'",
    "url": "https://www.gbnews.com/news/david-amess-statue-spat-on-pro-palestine-activist-video",
@@ -20,13 +34,6 @@
    "url": "https://www.bbc.co.uk/news/articles/ce85y9lm81no?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-22T09:35:25Z",
-   "breaking": true
-  },
-  {
-   "title": "Tougher punishments for criminals who refuse to attend sentencing backed by victim's family",
-   "url": "https://www.bbc.co.uk/news/articles/cr74p0zkd4jjo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-22T09:28:04Z",
    "breaking": true
   }
  ],
