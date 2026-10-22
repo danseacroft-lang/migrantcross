@@ -76,7 +76,7 @@
 .st-tip b{display:block;font-weight:700;font-size:.882rem;font-variant-numeric:tabular-nums}
 
 
-/* ------------------------------------------------------------ locked: the big word, and the offer on a solid card over it */
+/* ------------------------------------------------------------ locked: the offer on a solid card over a frosted screen */
 .st-lock{position:relative;display:grid;min-width:0}
 .st-lock > *{grid-area:1 / 1}
 /* the picture fades out on every side, so it has no hard edges */
@@ -86,22 +86,39 @@
   -webkit-mask:linear-gradient(transparent,#000 8%,#000 40%,transparent);mask:linear-gradient(transparent,#000 8%,#000 40%,transparent)}
 .st-offer{align-self:center;justify-self:center;position:relative;z-index:2;width:min(480px,100%);margin-top:30px;padding:26px 24px 22px;text-align:center;
   border-radius:30px;background:var(--card);box-shadow:inset 0 0 0 1px var(--sep)}
-/* the big word: heavy, tightly set and as wide as the page, in the manner of a mobile network's posters; the offer's card sits over its foot */
-.st-lock{container-type:inline-size;display:flex!important;flex-direction:column;align-items:center}
+/* the offer page: a blank frosted screen over the whole window, with the offer near the top, so nothing needs scrolling */
+.st-lock{position:fixed;inset:0;z-index:48;display:flex!important;flex-direction:column;align-items:center;overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(var(--busy-h,0px) + env(safe-area-inset-top,0px) + 78px) 16px calc(env(safe-area-inset-bottom,0px) + 24px);
+  background:color-mix(in srgb,var(--bg) 62%,transparent);-webkit-backdrop-filter:blur(40px) saturate(160%);backdrop-filter:blur(40px) saturate(160%)}
 .st-lock > *{grid-area:auto}
-.st-word{width:100vw;margin:clamp(6px,2vw,24px) calc(50% - 50vw) 0;text-align:center;font:900 34vw/.8 "Inter Tight",-apple-system,BlinkMacSystemFont,var(--font);letter-spacing:-.06em;
-  padding-right:.06em;white-space:nowrap;user-select:none;position:relative;z-index:0;isolation:isolate}
-/* the letters overlap a little, each over the one before, in its own colour along the run from blue to orange */
-.st-word span{position:relative}
-.st-word span:nth-child(1){z-index:1;color:#0A7AFF}
-.st-word span:nth-child(2){z-index:2;color:#3A5CF0}
-.st-word span:nth-child(3){z-index:3;color:#5E4FE6}
-.st-word span:nth-child(4){z-index:4;color:#A34BEB}
-.st-word span:nth-child(5){z-index:5;color:#E8327A}
-.st-word span:nth-child(6){z-index:6;color:#FF7A1A}
-.st-word + .st-offer{margin-top:-13vw}
-@media (max-width:719px){.st-word + .st-offer{margin-top:-6vw}}
-html:has(.st-word){overflow-x:clip}   /* the word runs the full width of the window; a scrollbar's few pixels never make the page scroll sideways */
+.st-lock .st-offer{margin-top:0;padding:22px 22px 18px}
+:root[data-tab="studio"]:has(.st-lock){overflow:hidden}
+:root:not([data-tab="studio"]) .st-lock{display:none!important}
+:root[data-tab="studio"]:has(.st-lock) .busy-note{position:relative;z-index:49}   /* the site notice stays readable above the frost */
+@media (max-width:719px){
+  .st-lock{padding-top:calc(var(--busy-h,0px) + env(safe-area-inset-top,0px) + 66px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 84px)}
+  .st-lock .st-offer{padding:18px 18px 14px;border-radius:26px}
+  .st-lock .st-offer h3{font-size:1.24rem}
+  .st-lock .st-offer > p{margin-bottom:12px}
+  .st-lock .st-offer > p.st-free{margin-bottom:12px;padding:10px 12px}
+  .st-lock .st-list{gap:6px;margin-bottom:14px}
+}
+@media (min-width:560px){.st-lock .st-list{grid-template-columns:1fr 1fr;gap:9px 14px}}
+/* short screens: the lines tighten and the intro line steps aside, so the whole offer still fits without scrolling */
+@media (max-height:760px) and (max-width:719px){
+  .st-lock .st-offer > p:not([class]){display:none}
+  .st-lock .st-offer h3{margin-bottom:10px}
+  .st-lock .st-offer > p.st-free{font-size:.765rem;padding:9px 11px;margin-bottom:10px}
+  .st-lock .st-list{font-size:.824rem;gap:4px;margin-bottom:12px}
+  .st-lock .st-field{height:42px;margin-bottom:8px}
+  .st-lock .st-buy{height:46px}
+  .st-lock .st-link{padding-top:9px}
+  .st-lock .st-offer > p.st-fine{margin-top:6px}
+  .st-lock .st-offer{padding:14px 16px 10px}
+  .st-lock .st-offer h3{font-size:1.12rem;margin-bottom:8px}
+  .st-lock .st-list{gap:3px}
+}
+@media (max-height:620px) and (max-width:719px){.st-lock .st-offer > p.st-free{display:none}}
 #pg-studio.st-locked .lt-head{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .st-badge{width:58px;height:58px;margin:0 auto 14px;border-radius:16px;display:grid;place-items:center;color:#fff;
   background:#007AFF}

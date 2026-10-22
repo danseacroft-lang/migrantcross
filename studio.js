@@ -1057,15 +1057,15 @@
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : "") + "</p>"
       + '<button type="button" class="st-link" data-act="back">Back</button>';
     else body = "<h3>Every chart, your way</h3><p>Every chart on Channel Crossings, and new ones, drawn the way you want to see them.</p>"
-      + '<p class="st-free"><b>The figures are free, and always will be.</b> They are published by the Home Office on GOV.UK, and everything on Today, Trends and People stays free. Studio is what you pay for: the same figures in more depth, in forms that are easier to understand.</p>'
-      + '<ul class="st-list"><li>' + tick + "<span><b>New:</b> ask for any chart in your own words, like “boats each month in 2022”, with figures back to when records began in 2018</span></li><li>" + tick + "<span>Every graph in six styles, from Standard to Ocean</span></li><li>" + tick + "<span>Each chart in its own forms: lines, areas, rings, roses, calendars and more</span></li><li>"
-      + tick + "<span>People, boats or people a boat, over any range</span></li><li>" + tick + "<span>Save any chart as a picture, or read it as a table</span></li><li>" + tick + "<span>Live updates: new figures, weather, news and boats appear on the page without reloading</span></li></ul>"
+      + '<p class="st-free"><b>The figures are free, and always will be.</b> Studio is the same Home Office figures in more depth, in forms that are easier to understand.</p>'
+      + '<ul class="st-list"><li>' + tick + "<span><b>New:</b> ask for any chart in your own words</span></li><li>" + tick + "<span>Every graph in six styles</span></li><li>" + tick + "<span>Lines, rings, roses, calendars and more</span></li><li>"
+      + tick + "<span>People, boats or people a boat</span></li><li>" + tick + "<span>Save charts as pictures or tables</span></li><li>" + tick + "<span>Live updates without reloading</span></li></ul>"
       + (signedIn ? '<button type="button" class="st-buy" data-act="buy"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button>"
         : '<form data-form="buy"><input class="st-field" type="email" name="email" required autocomplete="email" placeholder="Email address" aria-label="Email address, for your account and receipt"><button class="st-buy" type="submit"' + (API ? "" : " disabled") + ">Unlock for " + PRICE + "</button></form>")
       + '<p class="st-msg' + (err ? " err" : "") + '" role="status">' + (msg ? esc(msg) : API ? "" : "Payments open soon.") + "</p>"
       + (signedIn ? '<p class="st-fine">Signed in as ' + esc(acct.email) + ' · <button type="button" class="st-link" style="padding:0;font-size:inherit" data-act="out">Sign out</button></p>'
         : '<button type="button" class="st-link" data-act="signin">Already paid? Sign in</button>')
-      + '<p class="st-fine">One payment, no subscription. Your email is your account: it unlocks Studio on any device you sign in on. Payment is handled securely by Stripe. Figures: Home Office, Open Government Licence v3.0.</p>';
+      + '<p class="st-fine">One payment, no subscription, paid securely through Stripe. Your email unlocks Studio on any device. Figures: Home Office, Open Government Licence v3.0.</p>';
     offer.innerHTML = body;
   }
   let keyFor = "";   // the email of an account that signs in with a password
@@ -1097,16 +1097,20 @@
   const lockBox = document.createElement("div"); lockBox.className = "st-lock";
   // behind the offer, a blurred picture of Studio: never the charts themselves, which only an unlocked account gets
   const peek = document.createElement("div"); peek.className = "st-peek"; peek.setAttribute("aria-hidden", "true");
-  // the offer page: the word "studio" as large as the page allows, in heavy type, with the offer on a solid card across its foot
-  const word = document.createElement("p"); word.className = "st-word"; word.setAttribute("aria-hidden", "true"); word.innerHTML = [..."studio"].map(c => "<span>" + c + "</span>").join("");   // a span a letter, so each can sit over the one before
   const peekPic = () => '<img src="studio-peek-' + (isDark() ? "dark" : "light") + '.webp" alt="" width="464" height="550" decoding="async">';
   const acctLine = document.createElement("p"); acctLine.className = "st-acct";
+  // the offer starts just under the bar at the top, wherever the site notice above it leaves that bar
+  function placeLock(){ const r = document.querySelector(".top-row"); if(r && lockBox.isConnected) lockBox.style.paddingTop = Math.round(r.getBoundingClientRect().bottom + (innerWidth < 720 ? 10 : 18)) + "px"; }
+  addEventListener("resize", placeLock);
+  const busy = document.getElementById("busyNote"); if(busy) busy.addEventListener("toggle", placeLock);
+  new MutationObserver(() => requestAnimationFrame(placeLock)).observe(document.documentElement, {attributes:true, attributeFilter:["data-tab"]});
   function setLocked(on){
     locked = on;
     if(!on && window.ccLive) window.ccLive(true);   // live updates across the site come with Studio
-    const pg = document.getElementById("pg-studio"); if(pg) pg.classList.toggle("st-locked", on);   // the page's own title steps aside for the big word
-    if(on){ renderOffer("offer"); lockBox.append(word, offer); host.replaceChildren(lockBox); showOut(); return; }
-    else { host.replaceChildren(acctLine, wrap); acctLine.innerHTML = window.CC_STUDIO_PREVIEW && !(acct && acct.email) ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : ""; }
+    const pg = document.getElementById("pg-studio"); if(pg) pg.classList.toggle("st-locked", on);   // the page's own title steps aside for the offer
+    // the offer covers the whole window, so it hangs off the body, clear of the page's own box; it shows only while Studio is the open tab
+    if(on){ renderOffer("offer"); lockBox.append(offer); host.replaceChildren(); document.body.append(lockBox); placeLock(); showOut(); return; }
+    else { lockBox.remove(); host.replaceChildren(acctLine, wrap); acctLine.innerHTML = window.CC_STUDIO_PREVIEW && !(acct && acct.email) ? 'Preview: only devices with the preview link see Studio until payments are switched on · <button type="button">Show the offer</button>' : ""; }
     showOut();
     requestAnimationFrame(drawAll);
   }
