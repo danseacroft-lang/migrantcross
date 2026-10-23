@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-23T08:46:42Z",
+ "checkedAt": "2026-10-23T09:26:55Z",
  "items": [
+  {
+   "title": "Oil prices hit five-month high as Middle East conflict fears intensify",
+   "url": "https://www.gbnews.com/money/oil-prices-high-middle-east-conflict",
+   "source": "GB News",
+   "published": "2026-10-23T08:58:43Z",
+   "breaking": true
+  },
   {
    "title": "Israel orders army to prepare full closure of West Bank as tensions soar after shooting",
    "url": "https://www.gbnews.com/news/world/israel-orders-army-full-closure-west-bank-tensions-soar-shooting-palestine",
@@ -13,20 +20,6 @@
    "url": "https://www.bbc.co.uk/news/articles/c6x2zrjl7kjno?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-23T08:14:04Z",
-   "breaking": true
-  },
-  {
-   "title": "Mounjaro rollout on NHS needs 'urgent' boost, say MPs",
-   "url": "https://news.sky.com/story/mounjaro-rollout-on-nhs-needs-urgent-boost-say-mps-13602553",
-   "source": "Sky News",
-   "published": "2026-10-23T06:01:00Z",
-   "breaking": true
-  },
-  {
-   "title": "Eritrean migrant rapist back behind bars after claiming he didn't understand English to officers",
-   "url": "https://www.gbnews.com/news/eritrean-migrant-rapist-back-behind-bars-after-claiming-he-didn-t-understand-english-to-officers",
-   "source": "GB News",
-   "published": "2026-10-23T05:54:30Z",
    "breaking": true
   }
  ],
