@@ -1,11 +1,18 @@
 {
- "checkedAt": "2026-10-23T04:03:12Z",
+ "checkedAt": "2026-10-23T04:43:23Z",
  "items": [
   {
    "title": "The Papers: 'Prepare for the worst' and 'Covid report fallout'",
    "url": "https://www.bbc.co.uk/news/articles/cwly393mj7y3o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-10-23T01:55:03Z",
+   "published": "2026-10-23T04:28:29Z",
+   "breaking": true
+  },
+  {
+   "title": "Over 50,000 people died of heat-related causes across Europe in 'deadliest Summer on record'",
+   "url": "https://www.gbnews.com/news/over-50000-people-died-of-heat-related-causes-across-europe-in-deadliest-summer-on-record",
+   "source": "GB News",
+   "published": "2026-10-23T04:07:06Z",
    "breaking": true
   },
   {
@@ -13,13 +20,6 @@
    "url": "https://www.gbnews.com/news/manchester-news-houses-multiple-occupation-targeted-pigs-head-stop-the-boats-graffiti",
    "source": "GB News",
    "published": "2026-10-23T01:50:49Z",
-   "breaking": true
-  },
-  {
-   "title": "Military aircraft to be equipped to fight wildfires",
-   "url": "https://news.sky.com/story/military-aircraft-to-be-equipped-to-fight-wildfires-government-says-13602524",
-   "source": "Sky News",
-   "published": "2026-10-23T01:11:00Z",
    "breaking": true
   }
  ],
