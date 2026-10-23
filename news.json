@@ -1,18 +1,32 @@
 {
- "checkedAt": "2026-10-22T23:56:08Z",
+ "checkedAt": "2026-10-23T00:32:15Z",
  "items": [
+  {
+   "title": "The Papers: 'Prepare for the worst' and 'Covid report fallout'",
+   "url": "https://www.bbc.co.uk/news/articles/cwly393mj7y3o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-22T23:54:53Z",
+   "breaking": true
+  },
+  {
+   "title": "Britain only has one vessel capable of repairing crucial undersea cables threatened by Russia",
+   "url": "https://www.gbnews.com/news/britain-crucial-undersea-cables-russia-threat",
+   "source": "GB News",
+   "published": "2026-10-22T23:19:17Z",
+   "breaking": true
+  },
+  {
+   "title": "Give more people weight loss jabs on the NHS, say MPs",
+   "url": "https://www.bbc.co.uk/news/articles/cm4g1pkwxdqwo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-22T23:06:04Z",
+   "breaking": true
+  },
   {
    "title": "UK to draft in military aircraft to fight wildfires, Burnham says",
    "url": "https://www.bbc.co.uk/news/articles/cwvgd7d4p2vmo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-22T21:35:21Z",
-   "breaking": true
-  },
-  {
-   "title": "Prepare for supply chain disruption from cyber or climate emergencies, Streeting warns",
-   "url": "https://www.bbc.co.uk/news/articles/cwd094x57p32o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-22T21:29:44Z",
    "breaking": true
   }
  ],
