@@ -1,6 +1,13 @@
 {
- "checkedAt": "2026-10-23T06:29:18Z",
+ "checkedAt": "2026-10-23T07:20:59Z",
  "items": [
+  {
+   "title": "Mounjaro rollout on NHS needs 'urgent' boost, say MPs",
+   "url": "https://news.sky.com/story/mounjaro-rollout-on-nhs-needs-urgent-boost-say-mps-13602553",
+   "source": "Sky News",
+   "published": "2026-10-23T06:01:00Z",
+   "breaking": true
+  },
   {
    "title": "Eritrean migrant rapist back behind bars after claiming he didn't understand English to officers",
    "url": "https://www.gbnews.com/news/eritrean-migrant-rapist-back-behind-bars-after-claiming-he-didn-t-understand-english-to-officers",
@@ -9,7 +16,14 @@
    "breaking": true
   },
   {
-   "title": "Chancellor plans to cut 'pointless paperwork' to save businesses up to \u00a3800m",
+   "title": "Don't leave AI to tech bros and oligarchs, UK's AI minister says",
+   "url": "https://www.bbc.co.uk/news/articles/ck7vp8g38y7vo?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-23T05:00:50Z",
+   "breaking": true
+  },
+  {
+   "title": "Chancellor says he will cut 'pointless paperwork' to save businesses up to \u00a3800m",
    "url": "https://www.bbc.co.uk/news/articles/cm5ynpywq1e3o?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
    "published": "2026-10-23T05:00:32Z",
@@ -19,20 +33,6 @@
    "title": "Imagine if, for once, Labour decided to tell the truth about immigration | Gaby Hinsliff",
    "url": "https://www.theguardian.com/commentisfree/2026/oct/23/labour-truth-immigration-economy-nhs-home-secretary",
    "source": "The Guardian",
-   "published": "2026-10-23T05:00:02Z",
-   "breaking": true
-  },
-  {
-   "title": "Tories push for 'national resilience' vote to ban solar panels from prime agricultural land",
-   "url": "https://www.gbnews.com/politics/politics-news-victoria-atkins-national-resilience-vote-solar-farms",
-   "source": "GB News",
-   "published": "2026-10-23T05:00:02Z",
-   "breaking": true
-  },
-  {
-   "title": "Government slashes red tape and tariffs to give businesses breathing space",
-   "url": "https://www.gov.uk/government/news/government-slashes-red-tape-and-tariffs-to-give-businesses-breathing-space",
-   "source": "GOV.UK",
    "published": "2026-10-23T05:00:02Z",
    "breaking": true
   }
