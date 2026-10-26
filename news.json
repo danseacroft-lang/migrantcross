@@ -1,32 +1,39 @@
 {
- "checkedAt": "2026-10-26T05:20:43Z",
+ "checkedAt": "2026-10-26T11:23:50Z",
  "items": [
   {
-   "title": "Serbia's streets ERUPT after conservative leader concedes election defeat to student-led movement",
-   "url": "https://www.gbnews.com/news/world/serbia-election-streets-erupt-aleksandar-vucic-concedes-student-list",
+   "title": "Funding set to double for plan to get rough sleepers off streets by Christmas",
+   "url": "https://www.bbc.co.uk/news/articles/c3n04yxn2yqro?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-10-26T11:21:04Z",
+   "breaking": true
+  },
+  {
+   "title": "I would like to rejoin EU, says Burnham, but \u2018British public are the bosses\u2019 \u2013 UK politics live",
+   "url": "https://www.theguardian.com/politics/live/2026/oct/26/andy-burnham-labour-brexit-eu-homelessness-immigration-budget-rosebank-reform-latest-news-updates",
+   "source": "The Guardian",
+   "published": "2026-10-26T11:16:42Z",
+   "breaking": true
+  },
+  {
+   "title": "Government response to SSAC Occasional Paper 27: The influence of the social security system on educational and vocational decision-making at age 16",
+   "url": "https://www.gov.uk/government/publications/government-response-to-ssac-occasional-paper-27-the-influence-of-the-social-security-system-on-educational-and-vocational-decision-making-at-age-16",
+   "source": "GOV.UK",
+   "published": "2026-10-26T11:00:03Z",
+   "breaking": true
+  },
+  {
+   "title": "Sadiq Khan accused of 'playing dumb' over London grooming gangs as Tory mayor hopeful demands answers",
+   "url": "https://www.gbnews.com/watch/originals/video-sadiq-khan-accused-playing-dumb-london-grooming-gangs",
    "source": "GB News",
-   "published": "2026-10-26T04:25:28Z",
+   "published": "2026-10-26T10:58:43Z",
    "breaking": true
   },
   {
-   "title": "Fireworks heard as BBC reports Lula's victory in S\u00e3o Paulo",
-   "url": "https://www.bbc.co.uk/news/videos/cq1kdl12y9rdo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-26T03:29:55Z",
-   "breaking": true
-  },
-  {
-   "title": "Fl\u00e1vio Bolsonaro calls for elections to be annulled",
-   "url": "https://www.bbc.co.uk/news/videos/cmd6dw9l8ygvo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-26T03:26:30Z",
-   "breaking": true
-  },
-  {
-   "title": "Election victory was 'defeat of lies', says Lula",
-   "url": "https://www.bbc.co.uk/news/videos/cmrlye70nxnlo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-26T02:30:30Z",
+   "title": "Britons warned reservoirs could run dry within weeks as secret 'Day Zero' plans drawn up",
+   "url": "https://www.gbnews.com/news/reservoirs-run-dry-secret-day-zero-plans",
+   "source": "GB News",
+   "published": "2026-10-26T10:38:33Z",
    "breaking": true
   }
  ],
