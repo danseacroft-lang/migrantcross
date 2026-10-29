@@ -1,11 +1,25 @@
 {
- "checkedAt": "2026-10-28T23:54:02Z",
+ "checkedAt": "2026-10-29T04:41:52Z",
  "items": [
   {
-   "title": "What does John Healey's budget mean for Scotland?",
-   "url": "https://www.bbc.co.uk/news/videos/cqd09rdxd78go?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-10-28T21:22:11Z",
+   "title": "Veterans win first stage of court battle over MoD's 'unfair and irrational' LGBT compensation scheme",
+   "url": "https://www.gbnews.com/news/lgbt-veterans-court-battle-compensation-scheme",
+   "source": "GB News",
+   "published": "2026-10-29T04:01:17Z",
+   "breaking": true
+  },
+  {
+   "title": "'Isis terrorist' shot dead after knife attack outside Israeli embassy in Serbia",
+   "url": "https://www.gbnews.com/news/world/isis-terrorist-shot-dead-knife-attack-israeli-embassy-serbia",
+   "source": "GB News",
+   "published": "2026-10-29T03:57:53Z",
+   "breaking": true
+  },
+  {
+   "title": "Nigel Farage says Reform UK cannot police its own members over Tommy Robinson support",
+   "url": "https://www.gbnews.com/politics/nigel-farage-reform-uk-tommy-robinson",
+   "source": "GB News",
+   "published": "2026-10-29T01:42:21Z",
    "breaking": true
   }
  ],
