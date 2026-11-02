@@ -1,11 +1,39 @@
 {
- "checkedAt": "2026-11-02T09:59:06Z",
+ "checkedAt": "2026-11-02T20:14:05Z",
  "items": [
   {
-   "title": "Britain 'exposed' to economic and national security risks from Beijing as Labour accused of 'making up China policy as it goes'",
-   "url": "https://www.gbnews.com/politics/labour-china-beijing-new-report",
+   "title": "UK Germany Defence Ministerial Council Joint Statement",
+   "url": "https://www.gov.uk/government/news/uk-germany-defence-ministerial-council-joint-statement--2",
+   "source": "GOV.UK",
+   "published": "2026-11-02T19:50:01Z",
+   "breaking": true
+  },
+  {
+   "title": "How will UK immigration rules change under Shabana Mahmood\u2019s latest plans?",
+   "url": "https://www.theguardian.com/uk-news/2026/nov/02/uk-immigration-rules-shabana-mahmood-latest-plans",
+   "source": "The Guardian",
+   "published": "2026-11-02T19:46:56Z",
+   "breaking": true
+  },
+  {
+   "title": "Migrant benefits crackdown abandoned as Shabana Mahmood drops plans to block welfare access",
+   "url": "https://www.gbnews.com/politics/migrant-benefits-crackdown-abandoned-welfare-shabana-mahmood",
    "source": "GB News",
-   "published": "2026-11-02T08:29:38Z",
+   "published": "2026-11-02T19:40:25Z",
+   "breaking": true
+  },
+  {
+   "title": "Shabana Mahmood softens immigration plans in face of cabinet backlash",
+   "url": "https://www.theguardian.com/uk-news/2026/nov/02/shabana-mahmood-softens-immigration-plans-cabinet-backlash-leave-to-remain",
+   "source": "The Guardian",
+   "published": "2026-11-02T19:06:40Z",
+   "breaking": true
+  },
+  {
+   "title": "Inside Trump's America: What voters REALLY think ahead of the Midterms",
+   "url": "https://www.gbnews.com/politics/us/video-donald-trump-america-voters-midterms",
+   "source": "GB News",
+   "published": "2026-11-02T19:01:10Z",
    "breaking": true
   }
  ],
