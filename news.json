@@ -1,11 +1,39 @@
 {
- "checkedAt": "2026-11-09T10:07:02Z",
+ "checkedAt": "2026-11-09T20:44:04Z",
  "items": [
   {
-   "title": "Government's EV targets expected to be reduced this week",
-   "url": "https://www.bbc.co.uk/news/articles/cqkg5g2970epo?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-11-09T09:24:03Z",
+   "title": "Iran blamed for hacking supermarket fridges in 'unprecedented' attack as millions of pounds of food ruined",
+   "url": "https://www.gbnews.com/news/world/iran-hacking-supermarket-fridges-france",
+   "source": "GB News",
+   "published": "2026-11-09T19:44:41Z",
+   "breaking": true
+  },
+  {
+   "title": "Major London bridge CLOSED in both directions after multiple vehicle crash",
+   "url": "https://www.gbnews.com/news/london-traffic-major-london-bridge-closed-both-directions-multiple-vehicle-crash",
+   "source": "GB News",
+   "published": "2026-11-09T19:19:18Z",
+   "breaking": true
+  },
+  {
+   "title": "Labour's trans conversion therapy bill is 'contrary to rule of law', warns former top prosecutor",
+   "url": "https://www.gbnews.com/politics/labour-trans-conversion-therapy-bill-warning",
+   "source": "GB News",
+   "published": "2026-11-09T19:14:34Z",
+   "breaking": true
+  },
+  {
+   "title": "Britons believe Andy Burnham is covering up migrant crime data amid court battle",
+   "url": "https://www.gbnews.com/news/migrant-crisis-andy-burnham-migrant-crime-data",
+   "source": "GB News",
+   "published": "2026-11-09T18:50:02Z",
+   "breaking": true
+  },
+  {
+   "title": "Civil servant who juggled FIVE Whitehall jobs found guilty",
+   "url": "https://www.gbnews.com/news/civil-servant-five-whitehall-jobs",
+   "source": "GB News",
+   "published": "2026-11-09T18:49:34Z",
    "breaking": true
   }
  ],
