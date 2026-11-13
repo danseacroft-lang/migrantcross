@@ -1,11 +1,39 @@
 {
- "checkedAt": "2026-11-13T02:55:45Z",
+ "checkedAt": "2026-11-13T10:39:43Z",
  "items": [
   {
-   "title": "Military base asylum plans granted planning approval",
-   "url": "https://www.bbc.co.uk/news/articles/c58j4798874go?at_medium=RSS&at_campaign=rss",
+   "title": "Piddington to bring legal challenge over asylum base plans",
+   "url": "https://www.bbc.co.uk/news/articles/ckzd91jqvm0lo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-11-13T02:31:02Z",
+   "published": "2026-11-13T10:30:13Z",
+   "breaking": true
+  },
+  {
+   "title": "GPs, police and pharmacies among UK services affected by Microsoft outage",
+   "url": "https://www.bbc.co.uk/news/articles/c6vg2ljjpj32o?at_medium=RSS&at_campaign=rss",
+   "source": "BBC News",
+   "published": "2026-11-13T10:12:52Z",
+   "breaking": true
+  },
+  {
+   "title": "White working-class pupils buck education trend as school achieves outstanding grades",
+   "url": "https://www.gbnews.com/news/sunderland-news-white-working-class-grades",
+   "source": "GB News",
+   "published": "2026-11-13T10:12:04Z",
+   "breaking": true
+  },
+  {
+   "title": "Migrants offered \u00a3100,000 fake portfolios to cheat fast-track UK visa scheme in major immigration scandal",
+   "url": "https://www.gbnews.com/news/immigration-scandal-migrants-offered-fake-portfolios-cheat-fast-track-uk-visa-scheme",
+   "source": "GB News",
+   "published": "2026-11-13T09:25:14Z",
+   "breaking": true
+  },
+  {
+   "title": "Piddington Betrayed: Villagers warn Andy Burnham HE will be to blame for any migrant sex attacks",
+   "url": "https://www.gbnews.com/politics/migrant-crisis-labour-blame-piddington-approval",
+   "source": "GB News",
+   "published": "2026-11-13T08:43:18Z",
    "breaking": true
   }
  ],
