@@ -1,34 +1,27 @@
 {
- "checkedAt": "2026-11-14T21:11:32Z",
+ "checkedAt": "2026-11-15T01:04:30Z",
  "items": [
   {
-   "title": "UK ethics watchdog chief steps back from role over sexual misconduct claims",
-   "url": "https://www.bbc.co.uk/news/articles/cmewv2kzq2e5o?at_medium=RSS&at_campaign=rss",
-   "source": "BBC News",
-   "published": "2026-11-14T20:47:02Z",
+   "title": "Andy Burnham faces his biggest Labour rebellion as 75 MPs oppose Rosebank oilfield",
+   "url": "https://www.gbnews.com/politics/rosebank-andy-burnham-faces-biggest-labour-rebellion",
+   "source": "GB News",
+   "published": "2026-11-15T00:12:12Z",
    "breaking": true
   },
   {
-   "title": "Paris engulfed in violence AGAIN as thousands of left-wing protesters wreak havoc in French capital",
-   "url": "https://www.gbnews.com/news/world/paris-riots-left-wing-protests",
+   "title": "Labour accused of using taxpayer cash to fund 'pro-EU propaganda' at UK universities championing 'European values'",
+   "url": "https://www.gbnews.com/politics/labour-eu-propaganda-uk-universities",
    "source": "GB News",
-   "published": "2026-11-14T20:43:26Z",
+   "published": "2026-11-14T22:43:29Z",
    "breaking": true
   },
   {
-   "title": "Debt-ridden council 'proudly' hoists Palestine flag in 'warped activism' after snubbing Remembrance Day",
-   "url": "https://www.gbnews.com/news/surrey-news-flag-row-palestine-remembrance-day-woking-council",
-   "source": "GB News",
-   "published": "2026-11-14T18:30:13Z",
+   "title": "90,000 young people furthest from work to be given guaranteed job, no matter where they live",
+   "url": "https://www.gov.uk/government/news/90000-young-people-furthest-from-work-to-be-given-guaranteed-job-no-matter-where-they-live",
+   "source": "GOV.UK",
+   "published": "2026-11-14T22:30:03Z",
    "breaking": true
   }
  ],
- "reported": {
-  "date": "2026-11-14",
-  "title": "Channel migrant found dead on French beach after failed small boat crossing",
-  "url": "https://www.gbnews.com/news/channel-migrant-found-dead-french-beach-failed-small-boat-crossing",
-  "source": "GB News",
-  "published": "2026-11-14T13:11:25Z",
-  "ground": false
- }
+ "reported": null
 }
