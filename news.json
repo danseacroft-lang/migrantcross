@@ -1,11 +1,39 @@
 {
- "checkedAt": "2026-11-24T08:44:16Z",
+ "checkedAt": "2026-11-24T19:44:07Z",
  "items": [
   {
-   "title": "State failing to keep public safe, warns victims' commissioner",
-   "url": "https://www.bbc.co.uk/news/articles/cr0jx7dw234jo?at_medium=RSS&at_campaign=rss",
+   "title": "Donald Trump made $15 million from Nvidia shares after Jensen Huang's return",
+   "url": "https://www.gbnews.com/news/us/donald-trump-15-million-nvidia-shares-jensen-huang-return",
+   "source": "GB News",
+   "published": "2026-11-24T19:27:36Z",
+   "breaking": true
+  },
+  {
+   "title": "'Even the French have had enough!' Andy Burnham's EU rejoin plot faces fresh challenge",
+   "url": "https://www.gbnews.com/politics/andy-burnham-france-referendum-rejoin-eu",
+   "source": "GB News",
+   "published": "2026-11-24T18:17:06Z",
+   "breaking": true
+  },
+  {
+   "title": "Keir Starmer given Order of Merit by Friedrich Merz to celebrate Anglo-German friendship",
+   "url": "https://www.gbnews.com/politics/keir-starmer-order-of-merit-friedrich-merz-friendship",
+   "source": "GB News",
+   "published": "2026-11-24T18:02:18Z",
+   "breaking": true
+  },
+  {
+   "title": "Exiting the UK may be a bit of a turn-off | Brief letters",
+   "url": "https://www.theguardian.com/uk-news/2026/nov/24/exiting-the-uk-may-be-a-bit-of-a-turn-off",
+   "source": "The Guardian",
+   "published": "2026-11-24T17:59:27Z",
+   "breaking": true
+  },
+  {
+   "title": "Businesses supporting Ukraine told to 'act now' to protect against Russian sabotage",
+   "url": "https://www.bbc.co.uk/news/articles/ckpdw4d0z2dwo?at_medium=RSS&at_campaign=rss",
    "source": "BBC News",
-   "published": "2026-11-24T06:02:10Z",
+   "published": "2026-11-24T17:39:32Z",
    "breaking": true
   }
  ],
