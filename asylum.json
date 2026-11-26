@@ -1,5 +1,5 @@
 {
- "source": "https://assets.publishing.service.gov.uk/media/6a85c41d3d82f78d5c514551/illegal-entry-routes-to-the-uk-dataset-jun-2026.xlsx",
+ "source": "https://assets.publishing.service.gov.uk/media/6afd7e47f24e0dfc46aa7f75/illegal-entry-routes-to-the-uk-dataset-sep-2026.xlsx",
  "from": 2018,
  "latestQuarter": "2025 Q4",
  "period": "arrivals from 2018 to the end of 2025",
@@ -87,5 +87,5 @@
    "waiting": 4508
   }
  ],
- "updatedAt": "2026-10-16T08:04:54Z"
+ "updatedAt": "2026-11-26T19:55:46Z"
 }
